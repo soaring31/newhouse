@@ -1,0 +1,89 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{% set detail = ident.detail.data[0]|default('') %}
+{% set aid = app.request.get('aid', detail.id|default('')) %}
+{% set topic = app.request.get('topic', 0) %}
+{% set id = app.request.get('id', detail.id|default('')) %}
+{% set submit_id = app.request.get('submit_id', 'yuyue') %}
+{% set cate_pushs = app.request.get('cate_pushs', 'syixiang') %}
+{% set models = app.request.get('models', 'rent') %}
+{% set formattr = app.request.get('formattr') %}
+{% set formflag = app.request.get('formflag') %}
+	
+{% block result %}
+{{- core_mobile_forms.forms({
+    aid: aid|default(id),
+    topic: topic,
+    form: form|default(''),
+    submit_id: submit_id,
+    cate_pushs: cate_pushs,
+    models: models,
+    formattr: formattr
+}) -}}
+
+{% if formflag == 'register' %}
+	<script type="text/javascript">
+		seajs.use([''], function () {
+			// 短信验证码
+	        $('#codeNew').removeAttr('required').attr('disable', true);
+	        // 邮箱验证码
+	        $('#mailcode').removeAttr('required').attr('disable', true);
+
+	        var isTel = /((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)/;
+
+	        var isEmail = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+	        
+	        $('#username').off('.register').on('input propertychange.register', function(){
+	        	var value = $(this).val().trim();
+		        var username = this;
+		        if (isTel.test(value) || isEmail.test(value)) {
+		        	$('input[name=tel],input[name=email]').val('');
+		        	if (isTel.test(value)) {
+		        		$('.telcode').removeClass('hidden');
+		                $('.captcha, .mailcode').addClass('hidden');
+		                $('#codeNew').attr({'disable':false, 'required': 'required'});
+		                $('#codeText').removeAttr('required').attr('disable', true);
+		                $('#mailcode').removeAttr('required').attr('disable', true);
+		                $('input[name=tel]').val($('#username').val())
+		        	};
+		        	if (isEmail.test(value)) {
+		        		$('.mailcode').removeClass('hidden');
+		                $('.codeNew, .captcha').addClass('hidden');
+		                $('#mailcode').attr({'disable':false, 'required': 'required'});
+		                $('#codeNew').removeAttr('required').attr('disable', true);
+		                $('#codeText').removeAttr('required').attr('disable', true);
+		                $('input[name=email]').val($('#username').val());
+		        	};
+		        } else {
+		        	$('input[name=tel],input[name=email]').val('');
+		        	$('#codeNew').removeAttr('required').attr('disable', true);
+		            $('#mailcode').removeAttr('required').attr('disable', true);
+		            $('#codeText').attr({'disable':false, 'required': 'required'});
+		            $('.captcha').removeClass('hidden');
+		            $('.telcode, .mailcode').addClass('hidden');
+		        };
+	        })
+		})
+	</script>
+{% elseif formflag == 'login' %}
+	<script type="text/javascript">
+		seajs.use([''], function () {
+			function loginType() {
+				var value = $('input#type').val();
+				if (value == 1) {
+					$('.password').addClass('hidden');
+					$('#passWord').removeAttr('required').attr('disable', true);
+					$('.telcode').removeClass('hidden');
+					$('#vcode').attr({'disable':false, 'required': 'required'});
+				} else {
+					$('.password').removeClass('hidden');
+					$('#passWord').attr({'disable':false, 'required': 'required'});
+					$('.telcode').addClass('hidden');
+					$('#vcode').removeAttr('required').attr('disable', true);
+				};
+			}
+			$(document).on('selectModal', loginType);
+			loginType();
+		})
+	</script>
+{% endif %}
+{% endblock result %}

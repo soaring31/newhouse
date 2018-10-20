@@ -1,0 +1,266 @@
+ManageBundle\Entity\Pushs:
+    type: entity
+    table: pushs
+    indexes:
+        fromid:
+            columns:
+                - fromid
+        cate_pushs:
+            columns:
+                - cate_pushs
+        models:
+            columns:
+                - models
+        start_time:
+            columns:
+                - start_time
+        end_time:
+            columns:
+                - end_time
+        sort_fixed:
+            columns:
+                - sort_fixed
+        uid:
+            columns:
+                - uid
+        area:
+            columns:
+                - area
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        fromid:
+            options:
+                comment: 文档id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        cate_pushs:
+            options:
+                comment: 推荐分类
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        models:
+            options:
+                comment: 模型
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        checked:
+            options:
+                comment: 状态
+                unsigned: false
+                default: '1'
+            nullable: false
+            default: '1'
+            type: smallint
+            length: 2
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+                default: '99'
+            nullable: false
+            default: '99'
+            type: integer
+            length: 5
+        start_time:
+            options:
+                comment: 生效时间
+                unsigned: false
+            nullable: false
+            type: date
+            length: 10
+        end_time:
+            options:
+                comment: 到期时间
+                unsigned: false
+            nullable: false
+            type: date
+            length: 10
+        sort_fixed:
+            options:
+                comment: 固位
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        name:
+            options:
+                comment: 标题
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        url:
+            options:
+                comment: 链接
+                unsigned: false
+            nullable: false
+            type: string
+            length: 500
+        thumb:
+            options:
+                comment: 图片
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        flash:
+            options:
+                comment: flash
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        ad:
+            options:
+                comment: 广告标记
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+        html:
+            options:
+                comment: html
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        pid:
+            options:
+                comment: 父级
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        urlparams:
+            options:
+                comment: 链接参数
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        menuid:
+            options:
+                comment: 栏目id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        navicon:
+            options:
+                comment: 填写图标样式名
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        abstract:
+            options:
+                comment: 说明
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        uid:
+            options:
+                comment: 用户id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        area:
+            options:
+                comment: 地区
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        clicks:
+            options:
+                comment: 点击
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        active:
+            options:
+                comment: 主导航高亮
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        thumbsm:
+            options:
+                comment: 背投广告小图
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        style:
+            options:
+                comment: 背投广告显示类型
+                unsigned: false
+            nullable: false
+            type: string
+            length: 10
+        target:
+            options:
+                comment: 链接打开方式
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

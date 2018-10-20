@@ -1,0 +1,36 @@
+{% import "HousemobileBundle:Macro:global.html.twig" as house_mobile_global %}
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+{% import "HouseBundle:Macro:global.html.twig" as house_global %}
+{% spaceless %}
+{% block list %}
+{# 说明 
+* ajax回传字符串的结构包含  每组数据之前用(,)分隔
+* 注意： 如果列表存在既使用ajax加载，又使用include调用的情况需要把前三个条件用if条件判断一下,且此值最好是统一使用include_list
+* 0： 列表总数
+* 1： 列表每页显示数量
+* 2： 列表当前分页
+* 3： 当前分页数据
+* ``` 例如
+* {% if include_list|default('1') %} //查看注意
+* {{list.pageCount|default('')}},
+* {{list.pageSize|default('')}},
+* {{list.pageIndex|default('')}},
+* {% endif %}  //查看注意
+* {% if list.data is defined %}
+*     {% for item in list.data %}
+*         <li>
+*             {{item.name|default('')}}
+*         </li>
+*     {% endfor %}
+* {% else %}
+*     <li class='mobile-list-none'>暂无数据</li>
+* {% endif %}
+* ```
+#}
+{% endblock list %}
+<script type="text/javascript">
+	seajs.use(['getcounts'] , function (getcounts) {
+		getcounts.init({url: BASE_URL + '/' + BASE_THEME + '/igetcounts/index'});
+	});
+</script>	
+{% endspaceless %}

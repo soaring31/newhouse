@@ -1,0 +1,287 @@
+<script>
+seajs.use("{{bundlepath}}/js/controllertemplate.js",function(l){
+	//js入口	    
+	l.init('ident');
+});
+</script>
+<table class="popup-table" style="width:100%;">
+	<tbody>
+		<tr>
+			<th class="w100 rtd txtright">标识名称</th>
+			<td class="txtleft"><input type="button" id="nodeAdd_node_{{ controller }}" class="search-btn" value="添加标识" /></td>
+		</tr>
+		<tr id="dataHeared_0" class="hide">
+			<th class="rtd txtright"></th>
+			<td class="txtleft"><input type="button" id="nodeDel_node_0" class="search-btn" value="删除标识" /></td>
+		</tr>
+		<tr id="dataToggle_0" class="hide">
+		    <td colspan="2">
+                <table class="popup-table">
+                    {# 表字段集 #}
+                    {% set identTypeName = ''|identTypeName %}
+                    {% for name, item1 in identTypeName %}
+                    <tr>
+                        <td class="w80 txtright"><span title="{{ name }}">{{ name|identTypeName|raw }}：</span></td>
+                        <td>
+                            {#字段别名#}
+                            {% if name=='alias' %}
+                            <div>
+                                <div>
+                                    <input type="button" id="nodeAdd_alias_0_{{ controller }}" class="search-btn" value="添加别名" />
+                                </div>
+                            </div>
+                            {#查询参数#}
+                            {% elseif name=='query' %}
+                            <div>
+                                <div>
+                                    <input type="button" id="nodeAdd_query_0_{{ controller }}" class="search-btn" value="添加查询" />
+                                </div>
+                            </div>
+                            {#关联查询#}
+                            {% elseif name=='join' %}
+                            <div>
+                                <div style="border-bottom:1px solid rgba(0, 0, 0, 0.4);margin-bottom:5px;">
+                                    <div>
+                                        <span title="tableName">关联表名称：</span>
+                                        <input type="text" class="w100" id="joinName_0_0" />
+                                    </div>
+                                    {% for paramName, paramVal in identTypeName %}
+                                    {% if paramName=='alias' or paramName=='query' or paramName=='joinType' or paramName=='aliasName' %}
+                                    {% set joinIndex = loop.index  %}
+                                    <table class="ident-table">
+                                        <tr>
+                                            <td class="w80 txtright"><span title="{{ paramName }}">{{ paramName|identTypeName|raw }}：</span></td>
+                                            <td>                                            
+                                                {#字段别名#}
+                                                {% if paramName=='alias' %}
+                                                <div>
+                                                    <div>
+                                                        <input type="button" id="nodeAdd_joinalias_0_{{ joinIndex }}_{{ controller }}" class="search-btn" value="添加别名" />
+                                                    </div>
+                                                </div>
+                                                {#查询参数#}
+                                                {% elseif paramName=='query' %}
+                                                <div>
+                                                    <div>
+                                                        <input type="button" id="nodeAdd_joinquery_0_{{ joinIndex }}_{{ controller }}" class="search-btn" value="添加查询" />
+                                                    </div>
+                                                </div>
+                                                {#关联类型#}
+                                                {% elseif paramName=='joinType' %}
+                                                <select id="joinList_0_{{ joinIndex }}_{{ paramName }}">
+                                                    <option value="join">join</option>
+                                                </select>
+                                                {# 其它 #}
+                                                {% elseif paramName=='aliasName' %}
+                                                <input type="text" class="w100" id="joinList_0_{{ joinIndex }}_{{ paramName }}" />
+                                                {% endif %}                                            
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <div>
+                                    <input type="button" id="nodeAdd_join_0_{{ controller }}" class="search-btn" value="添加关联表" />
+                                </div>
+                            </div>
+                            {#存储类型#}
+                            {% elseif name=='storagetype' %}
+                            <select id="dataList_0_{{ name }}">
+                                {% set storagetype = ''|storageTypes %}
+                                {% for storageId, storageName in storagetype %}
+                                <option value="{{ storageId }}" {{ item1|isSelected(storageId) }}>{{ storageName }}</option>
+                                {% endfor %}
+                            </select>
+                            {#排序#}
+                            {% elseif name=='orderBy' %}
+                            <select id="dataList_0_{{ name }}">
+                                <option value="asc" {{ item1|isSelected('asc') }}>升序</option>
+                                <option value="desc" {{ item1|isSelected('desc') }}>降序</option>
+                            </select>
+                            {% else %}
+                            <input type="text" class="w100" id="dataList_0_{{ name }}"  />
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>		
+		    </td>
+		</tr>
+		
+		{% if identInfo is defined %}
+		
+		{#操作符号集#}
+		{% set operationSymbol = ''|operationSymbol %}
+		{% for identname, item in identInfo %}
+		{% set indexNum = loop.index %}
+		<tr id="dataHeared_{{ indexNum }}">
+			<th class="rtd txtright">{{ identname }}</th>
+			<td class="txtleft"><input type="button" id="nodeDel_node_{{ indexNum }}" class="search-btn" value="删除标识" /></td>
+		</tr>
+		<tr id="dataToggle_{{ indexNum }}">
+		    <td colspan="2">
+                <table class="popup-table">
+                    <tr>
+            			<td class="w80 txtright"><span title="{{ identname }}">{{ 'identName'|identTypeName|raw }}：</span></td>
+            			<td class="txtleft"><input type="text" class="w100" id="dataList_{{ indexNum }}_identName" value="{{ identname }}" /></td>
+            		</tr>
+                    {# 表字段集 #}
+                    {% set tableColumn = item.tableName|tableColumn %}
+                    {% for name, item1 in item %}
+                    <tr>
+                        <td class="w80 txtright"><span title="{{ name }}">{{ name|identTypeName|raw }}：</span></td>
+                        <td>
+                            {#字段别名#}
+                            {% if name=='alias' %}
+                            <div>
+                                {% for aliasname, aliasdb in item1 %}
+                                <div>
+                                    <input type="text" class="w100" id="dataAliasK_{{ indexNum }}_{{ loop.index }}" value="{{ aliasname }}" />-
+                                    <select id="dataAliasV_{{ indexNum }}_{{ loop.index }}">
+                                        <option value="">&nbsp;</option>
+                                        {% for columnkey, columnval in tableColumn %}
+                                        <option value="{{ columnkey }}" {{ aliasdb|isSelected(columnkey) }}>{{ columnval }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <input type="button" id="nodeDel_alias_{{ indexNum }}_{{ loop.index }}" class="search-btn" value="删除" />
+                                </div>
+                                {% endfor %}
+                                <div>
+                                    <input type="button" id="nodeAdd_alias_{{ indexNum }}_{{ controller }}" class="search-btn" value="添加别名" />
+                                </div>
+                            </div>
+                            {#查询参数#}
+                            {% elseif name=='query' %}
+                            <div>
+                                {% for aliasname, aliasdb in item1 %}
+                                {% set queryIndex = loop.index  %}
+                                <div>
+                                    <select id="dataQueryS_{{ indexNum }}_{{ queryIndex }}">
+                                        <option value="">&nbsp;</option>
+                                        {% for columnkey, columnval in tableColumn %}
+                                        <option value="{{ columnkey }}" {{ aliasname|isSelected(columnkey) }}>{{ columnval }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    {% for symbolK, symbolN in aliasdb  %}
+                                    <select id="dataQueryK_{{ indexNum }}_{{ queryIndex }}">
+                                        {% for symbolKey, symbolName in operationSymbol %}
+                                        <option value="{{ symbolKey }}" {{ symbolK|isSelected(symbolKey) }}>{{ symbolName }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <input type="text" class="w100"  id="dataQueryV_{{ indexNum }}_{{ queryIndex }}" value="{{ symbolN }}" />
+                                    <input type="button" id="nodeDel_query_{{ indexNum }}_{{ queryIndex }}" class="search-btn" value="删除" />
+                                    {% endfor %}
+                                </div>
+                                {% endfor %}
+                                <div>
+                                    <input type="button" id="nodeAdd_query_{{ indexNum }}_{{ controller }}" class="search-btn" value="添加查询" />
+                                </div>
+                            </div>
+                            {#关联查询#}
+                            {% elseif name=='join' %}
+                            <div>
+                                {% for joinTableName, joinTableParam in item1 %}
+                                {% set joinIndex = loop.index  %}
+                                
+                                {# 表字段集 #}
+                                {% set joinTableColumn = joinTableName|tableColumn %}
+                                <div>
+                                    <span title="tableName">{{ 'tableName'|identTypeName|raw }}：</span>
+                                    <input type="text" class="w100"  id="joinName_{{ indexNum }}_{{ joinIndex }}" value="{{ joinTableName }}" />
+                                </div>
+                                {% for paramName, paramVal in joinTableParam %}
+                                <table class="popup-table">
+                                    <tr>
+                                        <td class="w80 txtright"><span title="{{ paramName }}">{{ paramName|identTypeName|raw }}：</span></td>
+                                        <td>                                            
+                                            {#字段别名#}
+                                            {% if paramName=='alias' %}
+                                            <div>
+                                                {% for aliasname, aliasdb in paramVal %}
+                                                <div>
+                                                    <input type="text" class="w100" id="joinAliasK_{{ indexNum }}_{{ joinIndex }}_{{ loop.index }}" value="{{ aliasname }}" />-
+                                                    <select id="joinAliasV_{{ indexNum }}_{{ joinIndex }}_{{ loop.index }}">
+                                                        <option value="">&nbsp;</option>
+                                                        {% for columnkey, columnval in joinTableColumn %}
+                                                        <option value="{{ columnkey }}" {{ aliasdb|isSelected(columnkey) }}>{{ columnval }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    <input type="button" id="nodeDel_joinalias_{{ indexNum }}_{{ joinIndex }}_{{ loop.index }}" class="search-btn" value="删除" />
+                                                </div>
+                                                {% endfor %}
+                                                <div>
+                                                    <input type="button" id="nodeAdd_joinalias_{{ indexNum }}_{{ joinIndex }}_{{ controller }}" class="search-btn" value="添加别名" />
+                                                </div>
+                                            </div>
+                                            {#查询参数#}
+                                            {% elseif paramName=='query' %}
+                                            <div>
+                                                {% for aliasname, aliasdb in paramVal %}
+                                                {% set joinqueryIndex = loop.index  %}
+                                                <div>
+                                                    <select id="joinQueryS_{{ indexNum }}_{{ joinIndex }}_{{ joinqueryIndex }}">
+                                                        <option value="">&nbsp;</option>
+                                                        {% for columnkey, columnval in joinTableColumn %}
+                                                        <option value="{{ columnkey }}" {{ aliasname|isSelected(columnkey) }}>{{ columnval }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    {% for symbolK, symbolN in aliasdb  %}
+                                                    <select id="joinQueryK_{{ indexNum }}_{{ joinIndex }}_{{ joinqueryIndex }}">
+                                                        {% for symbolKey, symbolName in operationSymbol %}
+                                                        <option value="{{ symbolKey }}" {{ symbolK|isSelected(symbolKey) }}>{{ symbolName }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    <input type="text" class="w100"  id="joinQueryV_{{ indexNum }}_{{ joinIndex }}_{{ joinqueryIndex }}" value="{{ symbolN }}" />
+                                                    <input type="button" id="nodeDel_joinquery_{{ indexNum }}_{{ joinIndex }}_{{ joinqueryIndex }}" class="search-btn" value="删除" />
+                                                    {% endfor %}
+                                                </div>
+                                                {% endfor %}
+                                                <div>
+                                                    <input type="button" id="nodeAdd_joinquery_{{ indexNum }}_{{ joinIndex }}_{{ controller }}" class="search-btn" value="添加查询" />
+                                                </div>
+                                            </div>
+                                            {#关联类型#}
+                                            {% elseif paramName=='joinType' %}
+                                            <select id="joinList_{{ indexNum }}_{{ joinIndex }}_{{ paramName }}">
+                                                <option value="join">join</option>
+                                            </select>
+                                            {# 其它 #}
+                                            {% else %}
+                                            <input type="text" class="w100" id="joinList_{{ indexNum }}_{{ joinIndex }}_{{ paramName }}" value="{{ paramVal }}" />
+                                            {% endif %}                                            
+                                        </td>
+                                    </tr>
+                                </table>
+                                {% endfor %}
+                                {% endfor %}
+                            </div>
+                            {#存储类型#}
+                            {% elseif name=='storagetype' %}
+                            <select id="dataList_{{ indexNum }}_{{ name }}">
+                                {% set storagetype = ''|storageTypes %}
+                                {% for storageId, storageName in storagetype %}
+                                <option value="{{ storageId }}" {{ item1|isSelected(storageId) }}>{{ storageName }}</option>
+                                {% endfor %}
+                            </select>
+                            {#排序#}
+                            {% elseif name=='orderBy' %}
+                            <select id="dataList_{{ indexNum }}_{{ name }}">
+                                <option value="asc" {{ item1|isSelected('asc') }}>升序</option>
+                                <option value="desc" {{ item1|isSelected('desc') }}>降序</option>
+                            </select>
+                            {% else %}
+                            <input type="text" class="w100" id="dataList_{{ indexNum }}_{{ name }}" value="{{ item1 }}" />
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>		
+		    </td>
+		</tr>
+		{% endfor %}
+		{% endif %}
+	</tbody>
+</table>
+<div class="popup-submit"><input type="button" id="nodeBtn_{{ controller }}" class="search-btn" value="保存" /></div>
+<br />

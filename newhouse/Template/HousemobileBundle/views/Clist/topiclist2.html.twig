@@ -1,0 +1,47 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+** ajax调用：专题
+#}
+{% block result %}
+{% set list = ident.list %}
+{% if app.request.get('json', 0) %}
+{
+    "pageCount": "{{list.pageCount|default(0)}}"
+}
+{% else %}
+    {% spaceless %}
+    {% if list.data is defined and list.pageCount|default('') != 0 %}
+        {% for item in list.data %}
+            <li style="border:1px solid #fff" {% if loop.last %}data-page="{
+                    pageIndex: {{list.pageIndex}},
+                    pageCount: {{list.pageCount}},
+                    pageSize: {{list.pageSize}}
+                 }"{% endif %}>
+               <div class="card demo-card-header-pic p-card">
+                    <div valign="bottom" class="card-header color-white no-border no-padding">
+                        <a class='card-cover p-img external' href="{{('topic/detail')|UU({id:item.id|default('')})}}">
+                            {{core_global.img({
+                                src: item.thumb|default(''),
+                                title: item.name|default('')
+                            })}}   
+                        </a>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-content-inner">
+                            <p class="color-gray">发表于 {{item.create_time|default('')|date('Y-m-d')}}</p>
+                            <p>
+                                <span class="color-gray external" href="{{('topic/detail')|UU({id:item.id|default('')})}}">
+                                    {{core_global.substr(item.name|default(''), 20, 1)}}
+                                </span>
+                            </p>
+                      </div>
+                    </div>
+               </div>
+            </li>
+        {% endfor %}
+    {% else %}
+        <li class="mobile-list-none">暂无看房团</li>
+    {% endif %}
+    {% endspaceless %}
+{% endif %}
+{% endblock result %}

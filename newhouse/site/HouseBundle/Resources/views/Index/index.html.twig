@@ -1,0 +1,1208 @@
+{% extends 'HouseBundle::base.html.twig' %}
+{# 说明
+* indexnewsmodule: 资讯模块是否显示
+* sydt: 商业动态(商业地产右侧)
+* nav_act: 导航高亮
+* jdt: 轮播图(全屏广告)
+* nav_data: 快速链接
+* houseindexhdp: 资讯左侧幻灯片
+* zxtj1: 资讯推荐1
+* toutiao: 头条
+* zxtj2: 头条底下推荐
+* jxzt: 专题精选
+* thzq: 特惠专区
+* mxlp: 明星楼盘
+* rxlp: 热销楼盘
+* kft: 看房团已报名
+* index_xftg: 新房团购
+* index_kft: 看房团
+* index_tejiafang: 特价房
+* index_zhuanyongjin:赚佣金
+* fczx: 房产资讯(特惠楼盘右侧)
+* cate_pushs_fczx: 房产资讯名称
+* index_dazheyouhui: 打折优惠
+* index_xhxtz: 小户型投资
+* index_jiaoyudichan: 教育地产
+* index_lvyoudichan: 旅游地产
+* index_yijishengtai: 宜居生态
+* index_dimijisuo: 低密居所
+* index_gydc: 公园地产
+* zxkp: 最新开盘
+* rqlp: 人气楼盘
+* adxptjy: 广告轮播转换(新盘推荐右侧)
+#}
+{# 导航高亮 #}
+{% set nav_act = 1 %}
+
+{% block key_des %}
+<meta name="keywords" content="{{ core_global.mconfig({name: 'cmskeyword', ename: 'mwebset'}) }}" />
+<meta name="description" content="{{ core_global.mconfig({name: 'cmsdescription', ename: 'mwebset'}) }}" />
+{% endblock key_des %}
+
+{% block default_title %}
+    {{- core_global.mconfig({name: 'cmstitle', ename: 'mwebset'}) -}}
+{% endblock default_title %}
+
+{% block css %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/index.css')}}
+{% endblock css %}
+
+{% block body %}
+    <!-- img slide -->
+    {# 焦点图、特惠楼盘、明星楼盘、热销楼盘、精选专题、经纪公司、最新开盘、人气楼盘、楼盘推荐 #}
+    {% set lpArr = ('jdt,thzq,mxlp,rxlp,jxzt,zxkp,rqlp,jjgs,index_house_tj')|getPushMuti(5) %}
+    {% set jdt = lpArr['jdt']|default({}) %}
+    <div id="slider-wrap" class="slider-wrap" data-tag="jdt">
+        <div class="jqDuang ma" data-duang="1" data-nextbtn=".next-btn" data-prevbtn=".prev-btn" data-cell=".small-btn" data-obj=".slider">
+            <div class="slider-content">
+                {% for item in jdt %}
+                <div class="slider house-ad right-top">
+                    <a href="{{item.url|default('')}}" style="background: url({{ core_global.img_url({
+                            height: 450,
+                            src: item.thumb,
+                            type: 0
+                        }) }}) center 0 no-repeat" target="_blank">
+                        {% if item.ad|default('') %}
+                            <div class="ad-txt"></div>
+                        {% endif %}
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="small-btn"></div>
+            <div class="prev-btn">
+                <i class="font-ico-arwl"></i>
+            </div>
+            <div class="next-btn">
+                <i class="font-ico-arwr"></i>
+            </div>
+        </div>
+        <!-- 表单 -->
+        <div class="search-form" id="search-form">
+            <form action="{{ ('houses/list')|U }}" target="_blank">
+                <p class="logo">
+                    {{
+                        core_global.img({
+                            width : 146,
+                            height: 28,
+                            src   : core_global.mconfig({name: 'sealogo', ename: 'mvariables_user'}),
+                            type  : 0,
+                            alt   : core_global.mconfig({name: 'hostname', ename: 'mwebset'})
+                        })
+                    }}
+
+                </p>
+                <div class="clearfix fl search-cate">
+                    <a class="act" href="{{ ('houses/list')|U }}" data-pama='{"searchword":"{{'请输入楼盘名称/地址/拼音'|trans }}"}'>
+                        {{'新房'|trans }}<i class="font-icons-1"></i>
+                    </a>
+                    <a href="{{ ('sale/list')|U }}" data-pama='{"searchword":"{{'请输入二手/小区'|trans }}"}'>
+                        {{'二手房'|trans }}<i class="font-icons-1"></i>
+                    </a>
+                    <a href="{{ ('rent/list')|U }}" data-pama='{"searchword":"{{'请输入出租/小区'|trans }}"}'>
+                        {{'租房'|trans }}
+                        <i class="font-icons-1"></i>
+                    </a>
+                    <a href="{{ ('news/list')|U }}" data-pama='{"searchword":"{{'请输入资讯关键字'|trans }}", "autocomplete": 0}'>
+                        {{'资讯'|trans }}
+                        <i class="font-icons-1"></i>
+                    </a>
+                    <a href="{{ ('sale/xqlist')|U }}" data-pama='{"searchword":"{{'请输入小区关键字'|trans }}", "autocomplete": 0}'>
+                        {{'查'|trans }}{{'房价'|trans }}
+                        <i class="font-icons-1"></i>
+                    </a>
+                </div>
+                <p class="fr">
+                    <a href="{{('download/index')|U}}" title="{{'手机找房'|trans }}" target="_blank" class="quick">
+                        <i class="font-icons-9"></i>
+                        {{'手机找房'|trans }}
+                    </a>
+                    <a  href="{{('map/index')|U}}" title="{{'地图找房'|trans }}" target="_blank" class="quick">
+                        <i class="font-icons-8"></i>
+                        {{'地图找房'|trans }}
+                    </a>
+                </p>
+                <div class="search-wrap ma clearfix">
+                    {{ core_global.search_input({
+                        autocomplete : 1,
+                        placeholderie: 1,
+                        placeholder  : "请输入楼盘名称/地址/拼音"|trans
+                    }) }}
+                    <input type="submit" value="&#xEA0F;" class="search-btn fl font-service-search"/>
+                </div>
+
+            </form>
+        </div>
+        <!-- /表单 -->
+    </div>
+    <!-- /img slide -->
+    <!--menu-->
+    <div class="menu clearfix" data-tag="zhudaohang">
+        <div class="container ma">
+            {% set nav_data = ('house.navs')|getTree({cate_pushs: 'zhudaohang', checked: 1, pageSize: 50}) %}
+            {% for item in nav_data.data %}
+            <dl class="clearfix">
+                <dt>
+                    <a href="{{ item.menu.url in ['javascript:;', '#'] ? item.menu.url : (item.menu.url)|U(item.menu.urlparams|getQuery) }}" title="{{ item.menu.name }}" target="_blank">{{ item.menu.name }}</a>
+                </dt>
+                <dd class="clearfix">
+                    {% for item2 in item.nodes %}
+                    <a href="{{item2.menu.url == 'javascript:;' ? item2.menu.url : (item2.menu.url)|U(item2.menu.urlparams|getQuery) }}" title="{{ item2.menu.name }}" target="_blank">{{ item2.menu.name }}</a>
+                    {% endfor %}
+                </dd>
+            </dl>
+            {% endfor %}
+        </div>
+    </div>
+    <!--/menu-->
+
+    <!-- container -->
+    <div class="container ma">
+        <div class="blank30"></div>
+
+        {# 背投广告 #}
+        {{ core_global.ads_pop({tag: 'btgg', width:1200, height:300}) }}
+        <!-- house ad -->
+        {# 广告合集 广告头条上、资讯广告下、广告特惠楼盘上、广告新盘推荐上、广告商业地产上、经纪公司下 #}
+        {% set adsAttr = ('jjgsx,adesfs,adsydcs,adxptjs,adthlps,zxxad,adtts')|getPushMuti(10) %}
+
+        {{ core_global.ads({lazy: 1, data: adsAttr['adtts']|default({}), tag: 'adtts'}) }}
+        <!-- /house ad -->
+        <!-- 资讯 -->
+        {% if core_global.mconfigtostring({name: 'indexnewsmodule', ename: 'mabled'}).__toString == 1 %}
+        <div class="blank30"></div>
+        <div class="house-news">
+            <div class="aside">
+                {% set houseindexhdp = ('houseindexhdp')|getPush(12) %}
+                <!-- banner切换 -->
+                <div data-tag="houseindexhdp" class="focus" data-duang="1" data-obj="li" data-prevbtn=".focusBtnL" data-nextbtn=".focusBtnR" data-effect="left" data-lazyload="src" data-cell=".foucsTit" data-actclass="on">
+                    <div>
+                        <ul class="focusImgs">
+                            {% for item in houseindexhdp %}
+                            <li class="house-ad right-top">
+                                {% if item.ad|default('') %}
+                                    <div class="ad-txt"></div>
+                                {% endif %}
+                                <a href="{{item.url|default('')}}" title="{{item.name|default('')}}" target="_blank">
+                                    {{ core_global.data_src_img({
+                                        width: 300,
+                                        height: 220,
+                                        type: 2,
+                                        src: item.thumb|default(''),
+                                        alt: item.name|default('')
+                                    }) }}
+                                </a>
+                                <h3 class="tit yh f18">
+                                    <a href="{{item.url|default('')}}" title="{{item.name|default('')}}" target="_blank">{{item.name|default('')}}</a>
+                                </h3>
+                                <div class="bg"></div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="foucsTit"></div>
+                    <!-- 编辑不需要修改 -->
+                    <div class="focusBtnL">
+                        <span class="font-icons-11"></span>
+                    </div>
+                    <div class="focusBtnR">
+                        <span class="font-icons-12"></span>
+                    </div>
+                    <!-- 编辑不需要修改 -->
+                </div>
+                <!-- /banner切换 -->
+                <div class="blank13"></div>
+                {# 商业动态、资讯推送 #}
+                {% set newsAttr = ('sydt,zxtj1')|getPushMuti(7) %}
+                {% set zxtj1 = newsAttr['zxtj1']|default({}) %}
+                <ul class="news-panel clearfix" data-tag="zxtj1">
+                    {% if zxtj1 is defined %}
+                        {% for item in zxtj1 %}
+                            {% if loop.index == 1 %}
+                                <li class="top">
+                                    {% if item.category is defined %}
+                                        {% set zx1cate = item.category|getCategoryById() %}
+                                        <a href="{{('news/list')|U({category: zx1cate.id|default('')})}}" title="{{zx1cate.name|default('')}}" target="_blank" class="cate">{{zx1cate.name|default('')}}</a>
+                                    {% else %}
+                                        <a href="{{('news/index')|U}}" title="{{'资讯'|trans}}" target="_blank" class="cate">{{'资讯'|trans}}</a>
+                                    {% endif %}
+                                    <a href="{{item.url}}" title="{{item.name|trans}}" target="_blank" class="tit-w200">{{item.name|trans}}</a>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <a href="{{item.url}}" title="{{item.name|trans}}" target="_blank">
+                                        <i></i>
+                                        {{item.name|trans}}
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="content">
+                <div class="content-inner">
+                    {% set toutiao = ('toutiao')|getPush(3) %}
+                    <!-- head-lines -->
+                    <div class="head-lines" data-tag="toutiao">
+                        <div class="tit">{{'今日头条'|trans }}
+                            <div class="arrow font-service-arrow"></div>
+                        </div>
+                        <p>
+                        {% if toutiao is defined %}
+                            {% for item in toutiao %}
+                                {% if loop.index == 1 %}
+                                <a href="{{item.url}}" title="{{item.name|trans}}" target="_blank" class="txt">{{item.name|trans}}</a>
+                                {% else %}
+                                <a href="{{item.url}}" title="{{item.name|trans}}" target="_blank">
+                                    [{{core_global.substr(item.name|default('')|trans, 13, 1)}}]
+                                </a>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        </p>
+                    </div>
+                    <!-- /head-lines -->
+                    <div class="blank20 line"></div>
+                    <div class="blank20"></div>
+                    {% set zxtj2 = ('zxtj2')|getPush(18) %}
+                    <div  data-tag="zxtj2">
+                        <ul class="news-panel clearfix">
+                        {% set loopnum = 0 %}
+                        {% if zxtj2 is defined %}
+                            {% for item in zxtj2 %}
+                                {% if loop.index % 10 == 0 %}
+                                    {% set loopnum = loopnum + 1 %}
+                                    </ul>
+                                    <div class="blank5"></div>
+                                    <ul class="news-panel clearfix">
+                                {% endif %}
+                                {% if loop.index % 9 == 1 %}
+                                    <li class="top">
+                                        {% if item.category is defined %}
+                                            {% set zx2cate = item.category|getCategoryById() %}
+                                            <a href="{{('news/list')|U({category: zx2cate.id|default('')})}}" title="{{zx2cate.name|default('')|trans}}" target="_blank" class="cate">{{zx2cate.name|default('')|trans}}</a>
+                                        {% else %}
+                                            <a href="{{('news/index')|U}}" title="{{'资讯'|trans}}" target="_blank" class="cate">{{'资讯'|trans}}</a>
+                                        {% endif %}
+                                        <a href="{{item.url}}" title="{{item.name|trans}}" target="_blank" class="tit-w470">{{item.name|trans}}</a>
+                                    </li>
+                                {% else %}
+                                    <li {% if ( loop.index + loopnum ) % 2 == 0 %}class="news-panel-left"{% endif %}>
+                                        <a href="{{item.url}}" title="{{item.name|trans}}" target="_blank">
+                                            <i></i>
+                                            {{item.name|trans}}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="aside1">
+                {{ core_global.ads({lazy: 1, tag: 'adtty', width: 300, height: 230, pageSize: 2}) }}
+            </div>
+        </div>
+        <div class="blank10"></div>
+        {{ core_global.ads({lazy: 1, data: adsAttr['zxxad']|default({}), tag: 'zxxad'}) }}
+        {% endif %}
+        <!-- /资讯 -->
+
+        <div class="blank20"></div>
+
+        <!--recommend-->
+        <div class="recommend jqDuang" data-lazyload="src" data-tag="jxzt,thzq,mxlp,rxlp" data-autoplay="0" data-obj=".item" data-cell=".tab-header ul">
+            <!--title-->
+            <div class="tab-header">
+                <ul class="clearfix">
+                    <li class="act">{{'特惠专区'|trans}}</li>
+                    <li>{{'明星楼盘'|trans}}</li>
+                    <li>{{'热销楼盘'|trans}}</li>
+                    <li>{{'精选专题'|trans}}</li>
+                </ul>
+            </div>
+            <!--body-->
+            <div class="tab-body">
+                {# 特惠专区 #}
+                {{house_global.index_thzq_recommend({
+                    list: lpArr['thzq']|default('')
+                })}}
+                {# 明星楼盘 #}
+                {{house_global.index_thzq_recommend({
+                    list: lpArr['mxlp']|default('')
+                })}}
+                {# 热销楼盘 #}
+                {{house_global.index_thzq_recommend({
+                    list: lpArr['rxlp']|default('')
+                })}}
+                {# 精选专题 #}
+                {{house_global.index_thzq_recommend({
+                    list: lpArr['jxzt']|default(''),
+                    topic: 1
+                })}}
+            </div>
+        </div>
+        <!--/recommend-->
+
+        <div class="blank15"></div>
+        <!-- house ad -->
+        {{ core_global.ads({lazy: 1, data: adsAttr['adthlps']|default({}), tag: 'adthlps'}) }}
+        <!-- /house ad -->
+
+        <div class="blank15"></div>
+
+        <!-- floor1 -->
+        <div class="panel floor1 jqDuang" data-tag="index_xftg,index_kft,index_tejiafang,index_zhuanyongjin" data-lazyload="src" data-obj=".item1" data-objex=".thlp_count" data-cell=".floor-tab-header" data-autoplay="0">
+            <!-- 标题 -->
+            <div class="panel-title clearfix">
+                <h2 class="fl">{{'特惠楼盘'|trans}}</h2>
+                <div class="floor-tab-header">
+                    <a href="{{('groupbuy/list')|U}}" class="act" target="_blank">
+                        <span>{{'新房团购'|trans}}</span>
+                    </a>
+                    <a href="{{('topic/group')|U({category: 82})}}" target="_blank">
+                        <span>{{'看房团'|trans}}</span>
+                    </a>
+                    <a href="{{('special/list')|U}}" target="_blank">
+                        <span>{{'特价房'|trans}}</span>
+                    </a>
+                    <a href="{{('fenxiao/list')|U}}" target="_blank">
+                        <span>{{'赚佣金'|trans}}</span>
+                    </a>
+                </div>
+                <div class="fr thlp_count">{{'共有'|trans}}
+                    <span class="num">
+                        {{ core_global.count({
+                            models: 'groupbuy',
+                            sql_opt: {
+                                checked: 1
+                            }
+                        }) }}
+                    </span>
+                    {{'个新房团购'|trans}}
+                </div>
+                <div class="fr thlp_count">{{'共有'|trans}}
+                    <span class="num">
+                        {{ core_global.count({
+                            service: 'house',
+                            models: 'topic',
+                            sql_opt: {
+                                category: 82,
+                                checked: 1
+                            }
+                        }) }}
+                    </span>
+                {{'个看房团'|trans}}
+                </div>
+                <div class="fr thlp_count">{{'共有'|trans}}
+                    <span class="num">
+                        {{ core_global.count({
+                            models: 'special',
+                            sql_opt: {
+                                checked: 1
+                            }
+                        }) }}
+                    </span>
+                {{'个特价房'|trans}}
+                </div>
+                <div class="fr thlp_count">{{'共有'|trans}}
+                    <span class="num">
+                        {{ core_global.count({
+                            models: 'sell',
+                            sql_opt: {
+                                checked: 1
+                            }
+                        }) }}
+                    </span>
+                    {{'个赚佣金'|trans}}
+                </div>
+            </div>
+            <!-- /标题 -->
+            <!-- 内容 -->
+            <div class="panel-body clearfix">
+                <!--aside-menu-->
+            {# 首页看房团报名 #}
+            {% set indexArr = ('index_kft,index_xftg,index_tejiafang,index_zhuanyongjin,index_dazheyouhui,index_xhxtz,index_jiaoyudichan,index_lvyoudichan,index_yijishengtai,index_dimijisuo,index_gydc,index_shangpuloupan,index_xiezilouloupan,index_ershoufang,index_chuzufangyuan,index_remenxiaoqu,index_remenshangquan')|getPushMuti(6) %}
+            {% set index_kft = indexArr['index_kft']|default('') %}
+
+            {% if index_kft|length > 0 %}
+                {% set index_kft0 = index_kft[0]|default('') %}
+                <div class="aside-menu fl" data-tag="index_kft">
+                    <!--看房团报名-->
+                    <div class="kanfang">
+                        <h4 class="fl">{{'看房报名'|trans}}</h4>
+                        <div class="fr">{{'已有'|trans}}
+                            <span class="num">{% if index_kft0.fromid > 0 %}<i data-counts="{models: 'topic', field:'enroll', id: {{index_kft0.fromid|default(0)}} }"></i>{% else %}0{% endif %}</span>
+                            {{'人报名'|trans}}
+                        </div>
+                        <div id="bmtip"></div>
+                    </div>
+                    {% if index_kft0.fromid > 0 %}
+                        <!-- 表单 -->
+                        {{house_global.modal_layout({
+                            type: 'load',
+                             ajax: "
+                                ajax: {
+                                    data : {
+                                        formflag: 'view_showingsnews',
+                                        formcls: 'common-form-control',
+                                        formvalidstyle: 'single',
+                                        topic:  '" ~ index_kft0.fromid|default("") ~ "',
+                                        type: 'kft',
+                                        models: 'topic'
+                                    }
+                                }"
+                        })}}
+                        <!--/看房团报名-->
+                        {# 看房团报名人 #}
+                        {% set kft = ('house.showingsnews')|getAll({checked:1, topic: index_kft0.fromid|default(0), pageSize:8}) %}
+                        {% set kftname = ('house.topic')|getOne('name',{checked:1, id: index_kft0.fromid|default(0)}) %}
+                        {% if kft.data is defined and kft.data|length > 0%}
+                            <div class="kf-list jqDuang" data-steps="1" data-visible="3" data-effect="weibo" data-obj="li">
+                                <ul>
+                                {% for item in kft.data %}
+                                    <li>
+                                        {{core_global.substr(item.username|default('某'|trans), 1, 0)}}**
+                                        &nbsp; {{'报名了'|trans}}
+                                        <a href="{{('topic/detail')|U({id:item.topic})}}" class="" target="_blank" title="{{kftname|default('')|trans}}">{{kftname|default('')|trans}}</a>
+                                    </li>
+                                {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            {% endif %}
+
+                <!--/aside-menu-->
+
+                <!--body-->
+                <div class="floor-tab-body fl">
+                    {# 新房团购 #}
+                    {{house_global.index_lp_recommend({
+                        show: 1,
+                        set_models: 1,
+                        list: indexArr['index_xftg']|default(''),
+                        models: 'groupbuy',
+                        controller: 'groupbuy/detail'
+                    })}}
+                    {# 看房团 #}
+                    {{house_global.index_lp_recommend({
+                        list: indexArr['index_kft']|default(''),
+                        models: 'kft'
+                    })}}
+                    {# 特价房 #}
+                    {{house_global.index_lp_recommend({
+                        set_models: 1,
+                        list: indexArr['index_tejiafang']|default(''),
+                        controller: 'special/detail'
+                    })}}
+                    {# 赚佣金 #}
+                    {{house_global.index_lp_recommend({
+                        set_models: 1,
+                        list: indexArr['index_zhuanyongjin']|default(''),
+                        models: 'fenxiao',
+                        controller: 'fenxiao/detail'
+                    })}}
+                </div>
+                <!--/body-->
+                <!--aside-->
+                {% set fczx = ('fczx')|getPush(12) %}
+                {% set cate_pushs_fczx = ('house.cate_pushs')|getRow({ename: 'fczx'}) %}
+                <div class="aside fr" data-tag="fczx">
+                    <div class="aside-news-hd">
+                        {{ core_global.push_title({
+                            tag: 'fczx',
+                            url: ('news/index')|U
+                        }) }}
+                    </div>
+                    <div class="blank10"></div>
+                    <ul class="aside-news">
+                        {% if fczx is defined %}
+                            {% for item in fczx %}
+                                {% if loop.index == 1 or loop.index == 7 %}
+                                    {% if loop.index == 7 %}
+                                        </ul>
+                                        <div class="blank10"></div>
+                                        <ul class="aside-news">
+                                    {% endif %}
+                                    <li class="first">
+                                {% else %}
+                                    <li>
+                                        <i></i>
+                                        {% if item.category is defined %}
+                                        {% set fczxcate1 = item.category|getCategoryById() %}
+                                        <a href="{{('news/list')|U({category: fczxcate1.id|default('')})}}" title="{{fczxcate1.name|default('')|trans}}" target="_blank">{{fczxcate1.name|default('')|trans}}</a>
+                                        |
+                                        {% endif %}
+                                {% endif %}
+                                    <a href="{{item.url}}" title="{{item.name|trans}}" target="_blank">{{item.name|trans}}</a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--/floor1-->
+
+        <div class="blank15"></div>
+        <!-- house ad -->
+        {{ core_global.ads({lazy: 1, data: adsAttr['adxptjs']|default({}), tag: 'adxptjs'}) }}
+        <!-- /house ad -->
+        <div class="blank15"></div>
+
+        <!-- floor2 -->
+        <div class="panel floor1 jqDuang" data-tag="index_dazheyouhui,index_xhxtz,index_jiaoyudichan,   index_lvyoudichan,index_yijishengtai,index_dimijisuo,index_gydc" data-lazyload="src" data-obj=".floor-tab-body .item" data-cell=".floor-tab-header" data-autoplay="0">
+            <!-- 标题 -->
+            <div class="panel-title clearfix">
+                <h2 class="fl">{{'新盘推荐'|trans}}</h2>
+                <a href="{{('map/index')|U}}" title="" target="_blank" class="fl map">
+                    <i class="font-icons-10"></i>{{'地图找房'|trans}}
+                </a>
+                <div class="floor-tab-header">
+                    <a href="{{('houses/list')|U({tslp: 1})}}" target="_blank" class="act">
+                        <span>{{'打折优惠'|trans}}</span>
+                    </a>
+                    <a href="{{('houses/list')|U({tslp: 2})}}" target="_blank">
+                        <span>{{'小户型投资'|trans}}</span>
+                    </a>
+                    <a href="{{('houses/list')|U({tslp: 3})}}" target="_blank">
+                        <span>{{'教育地产'|trans}}</span>
+                    </a>
+                    <a href="{{('houses/list')|U({tslp: 4})}}" target="_blank">
+                        <span>{{'旅游地产'|trans}}</span>
+                    </a>
+                    <a href="{{('houses/list')|U({tslp: 5})}}" target="_blank">
+                        <span>{{'宜居生态'|trans}}</span>
+                    </a>
+                    <a href="{{('houses/list')|U({tslp: 6})}}" target="_blank">
+                        <span>{{'低密居所'|trans}}</span>
+                    </a>
+                    <a href="{{('houses/list')|U({tslp: 7})}}" target="_blank">
+                        <span>{{'公园地产'|trans}}</span>
+                    </a>
+                </div>
+                <div class="fr">{{'共有'|trans}}
+                    <span class="num">
+                        {{ core_global.count({
+                            service: 'house',
+                            models: 'houses',
+                            sql_opt: {
+                                checked: 1,
+                                type: 0
+                            }
+                        }) }}
+                    </span>
+                    {{'个'|trans}}{{'楼盘'|trans}}
+                </div>
+            </div>
+            <!-- /标题 -->
+            <!-- 内容 -->
+            <div class="panel-body clearfix">
+                <!--aside-menu-->
+                <div class="aside-menu fl">
+                    {# 商业地产配置 #}
+                    {{house_global.filter_cfg2({
+                        tag: 'index_houses_filter',
+                        action: 'houses/list',
+                    })}}
+                    <dl style="border-bottom:1px solid #ddd;">
+                        <dt>
+                            <h4>{{'楼盘'|trans}}{{'推荐'|trans}}</h4>
+                        </dt>
+                        <dd>
+                            {% set index_house_tj = lpArr['index_house_tj']|default({}) %}
+                            {% if index_house_tj is defined %}
+                                {% for item in index_house_tj %}
+                                    <a href="{{item.url|default('')}}" target="_blank">
+                                        {{item.name|default('')}}
+                                    </a>
+                                {% endfor %}
+                            {% endif %}
+                        </dd>
+                    </dl>
+                </div>
+                <!--/aside-menu-->
+                <!--body-->
+                <div class="floor-tab-body fl">
+                    {# 打折优惠 #}
+                    {{house_global.index_lp_recommend({
+                        show: 1,
+                        list: indexArr['index_dazheyouhui']|default(''),
+                    })}}
+                    {# 小户型投资 #}
+                    {{house_global.index_lp_recommend({
+                        list: indexArr['index_xhxtz']|default(''),
+                    })}}
+                    {# 教育地产 #}
+                    {{house_global.index_lp_recommend({
+                        list: indexArr['index_jiaoyudichan']|default(''),
+                    })}}
+                    {# 旅游地产 #}
+                    {{house_global.index_lp_recommend({
+                        list: indexArr['index_lvyoudichan']|default(''),
+                    })}}
+                    {# 宜居生态 #}
+                    {{house_global.index_lp_recommend({
+                        list: indexArr['index_yijishengtai']|default(''),
+                    })}}
+                    {# 低密居所 #}
+                    {{house_global.index_lp_recommend({
+                        list: indexArr['index_dimijisuo']|default(''),
+                    })}}
+                    {# 公园地产 #}
+                    {{house_global.index_lp_recommend({
+                        list: indexArr['index_gydc']|default(''),
+                    })}}
+                </div>
+                <!--/body-->
+                <!--aside-->
+                <div class="aside fr">
+
+                    <!--new-property-->
+
+                    {% set zxkp = lpArr['zxkp']|default({}) %}
+                    {% set rqlp = lpArr['rqlp']|default({}) %}
+                    <div class="new-property jqDuang" data-tag="zxkp,rqlp" data-autoplay="0" data-obj=".item" data-cell=".tab-header ul">
+                        <!--title-->
+                        <div class="tab-header">
+                            <ul class="clearfix">
+                                <li class="act">{{'最新开盘'|trans}}</li>
+                                <li>{{'人气'|trans}}{{'楼盘'|trans}}</li>
+                            </ul>
+                        </div>
+                        <!--body-->
+                        <div class="tab-body clearfix">
+                            <div class="item" style="display:block;">
+                                <ul class="clearfix">
+                                    {% if zxkp is defined %}
+                                        {% for item in zxkp %}
+                                            <li>
+                                                <span class="fr">{{core_global.time_date({time: item.kpdate.date|default('')})}}</span>
+                                                <a href="{{item.url|default('')}}" target="_blank">
+                                                    {{item.name|default('')|trans}}
+                                                    <span>
+                                                        {{core_global.region({id: item.region|default('')})}}
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    {% endif %}
+                                </ul>
+                            </div>
+                            <div class="item">
+                                <ul class="clearfix">
+                                    {% if rqlp is defined %}
+                                        {% for item in rqlp %}
+                                            <li>
+                                                <span class="fr">
+                                                    {{core_global.if_dw({value: item.dj|default(''), danwei: ('元')|trans~'/m&sup2', default_tips: '待定'|trans})}}
+                                                </span>
+                                                <a href="{{item.url|default('')}}" target="_blank">
+                                                    {{item.name|default('')}}
+                                                    <span>{{core_global.region({id: item.region|default('')})}}</span>
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/new-property-->
+
+                    <!--广告图转换-->
+                    <div class="house-ad-slider jqDuang" data-obj=".house-ad" data-cell=".small-btn" data-tag="adxptjy">
+                        <div class="big-img">
+                            {{ core_global.ads({lazy: 1, tag: 'adxptjy', width: 300, height: 160, pageSize: 6}) }}
+                        </div>
+                        <!--btn-->
+                        <div class="small-btn"></div>
+                    </div>
+                    <!--/广告图转换--> </div>
+                <!--/aside--> </div>
+            <!-- /内容 --> </div>
+        <!--/floor2-->
+
+        <div class="blank15"></div>
+        <!-- house ad -->
+        {{ core_global.ads({lazy: 1, data: adsAttr['adsydcs']|default({}), tag: 'adsydcs'}) }}
+        <!-- /house ad -->
+        {% set tpl_businessmodule = core_global.mconfigtostring({name: 'businessmodule', ename: 'mabled'}).__toString|default('') %}
+        {% if tpl_businessmodule == 1 %}
+        <div class="blank15"></div>
+        <!-- floor3 -->
+        <div class="panel floor1 jqDuang" data-tag="index_shangpuloupan,index_xiezilouloupan" data-lazyload="src" data-obj=".item" data-objex=".thlp_count" data-cell=".floor-tab-header" data-autoplay="0">
+            <!-- 标题 -->
+            <div class="panel-title clearfix">
+                <h2 class="fl">{{'商业地产'|trans}}</h2>
+                <div class="floor-tab-header">
+                    <a href="{{('business/slist')|U}}" target="_blank" class="act">
+                        <span>{{'商铺楼盘'|trans}}</span>
+                    </a>
+                    <a href="{{('business/list')|U}}" target="_blank">
+                        <span>{{'写字楼楼盘'|trans}}</span>
+                    </a>
+                    <a href="{{('business/ssalelist')|U}}" target="_blank">
+                        <span>{{'商铺出售'|trans}}</span>
+                    </a>
+                    <a href="{{('business/xsalelist')|U}}" target="_blank">
+                        <span>{{'写字楼出售'|trans}}</span>
+                    </a>
+                    <a href="{{('business/srentlist')|U}}" target="_blank">
+                        <span>{{'商铺出租'|trans}}</span>
+                    </a>
+                    <a href="{{('business/xrentlist')|U}}" target="_blank">
+                        <span>{{'写字楼出租'|trans}}</span>
+                    </a>
+                </div>
+            </div>
+            <!-- /标题 -->
+            <!-- 内容 -->
+            <div class="panel-body clearfix">
+                <!--aside-menu-->
+                <div class="aside-menu fl">
+                    {# 商业地产配置 #}
+                    {{house_global.filter_cfg2({
+                        tag: ['region', 'shoptype', 'dj'],
+                        exclass: 'thlp_count',
+                        action: 'business/list',
+                    })}}
+
+                    {# 商业地产配置 #}
+                    {{house_global.filter_cfg2({
+                        tag: ['region', 'officetype', 'dj'],
+                        exclass: 'thlp_count',
+                        action: 'business/list',
+                    })}}
+
+                    <dl style="border-bottom:1px solid #ddd;">
+                        <dt>
+                            <h4>{{'热门商圈'|trans}}</h4>
+                        </dt>
+                        <dd>
+                            {% set index_remenshangquan = indexArr['index_remenshangquan']|default({}) %}
+                            {% if index_remenshangquan is defined %}
+                                {% for item in index_remenshangquan %}
+                                    {% if item.fromid|default('') > 0 %}
+                                        {% set item_url = ('business/list')|U({cate_circle: item.fromid|default('')}) %}
+                                    {% else %}
+                                        {# 手动加载优先读取手动加载添加的链接，否则默认以标题搜索写字楼 #}
+                                        {% set item_url = item.url|default('') ? item.url|default('') : ('business/list')|U({name: item.name|default('')|trans}) %}
+                                    {% endif %}
+                                    <a href="{{item_url|default('')}}" target="_blank">
+                                        {{item.name|default('')|trans}}
+                                    </a>
+                                {% endfor %}
+                            {% endif %}
+                        </dd>
+                    </dl>
+                </div>
+                <!--/aside-menu-->
+                <!--body-->
+                <div class="floor-tab-body fl">
+                    {# 商铺楼盘 #}
+                    {{house_global.index_lp_recommend({
+                        show: 1,
+                        set_models: 1,
+                        list: indexArr['index_shangpuloupan']|default(''),
+                        controller: 'business/detail'
+                    })}}
+                    {# 写字楼楼盘 #}
+                    {{house_global.index_lp_recommend({
+                        set_models: 1,
+                        list: indexArr['index_xiezilouloupan']|default(''),
+                        controller: 'business/detail'
+                    })}}
+                </div>
+                <!--/body-->
+                <!--aside-->
+                {% set sydt = newsAttr['sydt']|default({}) %}
+                <div class="aside fr">
+                    <ul class="aside-news" data-tag="sydt">
+                        {% if sydt is defined %}
+                            {% for item in sydt %}
+                                {% if loop.index == 1 %}
+                                    <li class="first">
+                                {% else %}
+                                    <li>
+                                        <i></i>
+                                {% endif %}
+                                <a href="{{item.url}}" title="{{item.name|trans}}" target="_blank">{{item.name|trans}}</a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                    <div class="blank30"></div>
+                    {{ core_global.ads({lazy: 1, tag: 'adsydcy', width: 300, height: 160, pageSize: 1}) }}
+                </div>
+            </div>
+        </div>
+        <!--/floor3-->
+        <div class="blank15"></div>
+        {% endif %}
+        <!-- house ad -->
+        {{ core_global.ads({lazy: 1, data: adsAttr['adesfs']|default({}), tag: 'adesfs'}) }}
+        <!-- /house ad -->
+        <div class="blank15"></div>
+
+        <!-- floor4 -->
+        <div class="panel floor1 jqDuang" data-tag="index_ershoufang,index_chuzufangyuan,index_remenxiaoqu,jpjjr,jjgs" data-lazyload="src" data-obj=".item" data-objex=".thlp_count" data-cell=".floor-tab-header" data-autoplay="0">
+            <!-- 标题 -->
+            <div class="panel-title clearfix">
+                <h2 class="fl">{{'二手房出租'|trans}}</h2>
+                <div class="floor-tab-header">
+                    <a href="{{('sale/list')|U}}" target="_blank" class="act">
+                        <span>{{'二手房'|trans}}</span>
+                    </a>
+                    <a href="{{('rent/list')|U}}" target="_blank">
+                        <span>{{'出租房'|trans}}</span>
+                    </a>
+                    <a href="{{('sale/xqlist')|U}}" target="_blank">
+                        <span>{{'热门小区'|trans}}</span>
+                    </a>
+                    <a href="{{('member/j_list')|U}}" target="_blank">
+                        <span>{{'经纪人'|trans}}</span>
+                    </a>
+                    <a href="{{('member/list')|U}}" target="_blank">
+                        <span>{{'经纪公司'|trans}}</span>
+                    </a>
+                    <a href="{{('demand/list')|U({category: 298})}}" target="_blank">
+                        <span>{{'求租'|trans}}</span>
+                    </a>
+                    <a href="{{('demand/list')|U}}" target="_blank">
+                        <span>{{'求购'|trans}}</span>
+                    </a>
+                </div>
+            </div>
+            <!-- /标题 -->
+            <!-- 内容 -->
+            <div class="panel-body clearfix">
+                <div class="fl">
+                    <!--aside-menu-->
+                    <div class="aside-menu fl">
+                        {# 二手配置 #}
+                        {{house_global.filter_cfg2({
+                            tag: 'index_sale_filter',
+                            exclass: 'thlp_count',
+                            action: 'sale/list',
+                        })}}
+                        {# 二手配置 #}
+                        {{house_global.filter_cfg2({
+                            tag: 'index_rent_filter',
+                            exclass: 'thlp_count',
+                            action: 'rent/list',
+                        })}}
+                        <div class="blank8"></div>
+                        <div style="background:#fafafa;height:50px;"></div>
+                    </div>
+                    <!--/aside-menu-->
+                    <!--body-->
+                    <div class="floor-tab-body fl">
+                        {# 二手房 #}
+                        {{house_global.index_lp_recommend({
+                            show: 1,
+                            list: indexArr['index_ershoufang']|default(''),
+                            models: 'sale'
+                        })}}
+                        {# 出租房 #}
+                        {{house_global.index_lp_recommend({
+                            list: indexArr['index_chuzufangyuan']|default(''),
+                            models: 'rent'
+                        })}}
+                        {# 热门小区 #}
+                        {{house_global.index_lp_recommend({
+                            set_models: 1,
+                            list: indexArr['index_remenxiaoqu']|default(''),
+                            controller: 'sale/qdetail',
+                            models: 'xiaoqu'
+                        })}}
+                    </div>
+                    <!--/body-->
+                    {% set jjgs = lpArr['jjgs']|default({}) %}
+                    {% set jjgs_fromid = '' %}
+                    {% if jjgs is defined %}
+                        {% for item in jjgs %}
+                            {% if loop.index != 1 %}
+                                {% set dh = ',' %}
+                            {% endif %}
+                            {% set jjgs_fromid = jjgs_fromid ~ dh|default('') ~ item.fromid %}
+                        {% endfor %}
+
+                        {% set push_jjgs = ('db.userinfo')|getAll({uid: 'in|' ~ jjgs_fromid}) %}
+
+                        {% set push_jjgs_attr = {} %}
+
+                        {% for item in push_jjgs.data %}
+                            {% set push_jjgs_attr = {
+                                ('nicename' ~ item.uid): item.nicename,
+                                ('image' ~ item.uid): item.image
+                            }|merge(push_jjgs_attr) %}
+                        {% endfor %}
+                    <div class="partner" data-tag="jjgs">
+                        <div class="partner-inner">
+                            {% for item in jjgs %}
+                                {% set item_user_name = push_jjgs_attr['nicename' ~ item.fromid]|default(item.username|default('')) %}
+                                <a href="{{ core_global.url(item|merge({ controller: 'member/detail', set_models: 1 })) }}" target="_blank" title="{{item_user_name|default('')}}">
+                                    {{core_global.lazy_img({
+                                        src: push_jjgs_attr['image' ~ item.fromid]|default(item.thumb|default('')),
+                                        alt: item_user_name|default(''),
+                                        height: 70,
+                                        width: 150,
+                                        type: 2
+                                    })}}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                <!--aside-->
+                <div class="aside fr">
+                    <!--发布消息-->
+                    {# 获取是否开启短信功能 #}
+                    {% set smsconfig = ('sms_api')|C|default('') %}
+                    {% if smsconfig is empty or app.user.id|default(0)>0 %}
+                        {# 会员中心链接 #}
+                        {% set index_fb_url = {
+                            'sale': path('house_main') ~ '#/default/52',
+                            'rent': path('house_main') ~ '#/default/53',
+                            'demandsale': path('house_main') ~ '#/default/54/0',
+                            'denamdrent': path('house_main') ~ '#/default/54/1',
+                            'wthouse': path('house_main') ~ '#/default/57/0',
+                            'wtbuy': path('house_main') ~ '#/default/57/1'
+                        } %}
+                    {% else %}
+                        {# 前台发布链接 #}
+                        {% set index_fb_url = {
+                            'sale': ('release/usale')|U({models: 'sale', esflx: 194}),
+                            'rent': ('release/urent')|U({models: 'rent', czlx: 126}),
+                            'demandsale': ('release/usdemand')|U({models: 'demand'}),
+                            'denamdrent': ('release/urdemand')|U({models: 'demand'}),
+                            'wthouse': ('release/wthouse')|U({models: 'rent'}),
+                            'wtbuy': ('release/wtbuy')|U({models: 'sale'})
+                        } %}
+                    {% endif %}
+                    <div class="release-news clearfix">
+                        <a href="{{index_fb_url.sale|default('')}}" title="" target="_blank">
+                            <i class="font-index-1"></i>{{'发布二手'|trans}}
+                        </a>
+                        <a href="{{index_fb_url.rent|default('')}}" title="" target="_blank">
+                            <i class="font-index-2"></i>{{'发布出租'|trans}}
+                        </a>
+                        <a href="{{index_fb_url.demandsale|default('')}}" title="" target="_blank">
+                            <i class="font-index-3"></i>{{'发布求购'|trans}}
+                        </a>
+                        <a href="{{index_fb_url.denamdrent|default('')}}" title="" target="_blank">
+                            <i class="font-index-4"></i>{{'发布求租'|trans}}
+                        </a>
+                        <a href="{{index_fb_url.wthouse|default('')}}" title="" target="_blank">
+                            <i class="font-index-5"></i>{{'委托出租'|trans}}
+                        </a>
+                        <a href="{{index_fb_url.wtbuy|default('')}}" title="" target="_blank">
+                            <i class="font-index-6"></i>{{'委托出售'|trans}}
+                        </a>
+                    </div>
+                    <!--/发布消息-->
+                    <!--经纪人-->
+                    {% set jpjjr = ('jpjjr')|getPush(4) %}
+                    {% set jpjjr_fromid = '' %}
+
+                    {% if jpjjr is defined and jpjjr|default('') %}
+
+                        {% for item in jpjjr %}
+                            {% if loop.index != 1 %}
+                                {% set dh = ',' %}
+                            {% endif %}
+                            {% set jpjjr_fromid = jpjjr_fromid ~ dh|default('') ~ item.fromid %}
+                        {% endfor %}
+
+                        {% set push_jpjjr = ('db.userinfo')|getAll({uid: 'in|' ~ jpjjr_fromid}) %}
+
+                        {% set push_jpjjr_attr = {} %}
+
+                        {% for item in push_jpjjr.data %}
+                            {% set push_jpjjr_attr = {
+                                ('nicename' ~ item.uid): item.nicename,
+                                ('rents' ~ item.uid): item.rents,
+                                ('sales' ~ item.uid): item.sales,
+                                ('image' ~ item.uid): item.image
+                            }|merge(push_jpjjr_attr) %}
+                        {% endfor %}
+                    <ul class="broker" data-tag="jpjjr">
+                        {% for item in jpjjr %}
+                            {% set item_user_name = push_jpjjr_attr['nicename' ~ item.fromid]|default(item.username|default('')) %}
+                            {% if item.fromid|default('') %}
+                                {% set item_url = ('member/j_detail')|U({id: item.fromid|default('')}) %}
+                            {% else %}
+                                {% set item_url = 'javascript:;' %}
+                            {% endif %}
+                            <li>
+                                <a href="{{item_url|default('')}}" target="_blank">
+                                    {{core_global.lazy_img({
+                                        src: push_jpjjr_attr['image' ~ item.fromid]|default(''),
+                                        alt: item_user_name|default(''),
+                                        height: 56,
+                                        width: 56,
+                                        type: 2
+                                    })}}
+                                </a>
+                                <div>
+                                    <p>
+                                        <a href="{{item_url|default('')}}" target="_blank" class="f-color">
+                                            {{item_user_name|default('')}}
+                                        </a>
+                                    </p>
+                                    <p>{{'手机'|trans}}：{{item.tel|default('')}}</p>
+                                    <p>{{'售'|trans}}
+                                        <span class="f-color">
+                                            {{push_jpjjr_attr['sales' ~ item.fromid]|default('')}}
+                                        </span>{{'套'|trans}}，{{'租'|trans}}
+                                        <span class="f-color">
+                                            {{push_jpjjr_attr['rents' ~ item.fromid]|default('')}}
+                                        </span>{{'套'|trans}}
+                                    </p>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                    <!--/经纪人-->
+                 <div class="blank10"></div>
+                    <a href="{{('member/j_list')|U}}" target="_blank" class="more-broker">{{'更多经纪人'|trans}}</a>
+                </div>
+                <!--/aside--> </div>
+            <!-- /内容 --> </div>
+        <!--/floor4-->
+
+        <div class="blank15"></div>
+        <!-- house ad -->
+        {{ core_global.ads({lazy: 1, data: adsAttr['jjgsx']|default({}), tag: 'jjgsx'}) }}
+        <!-- /house ad -->
+        <div class="blank20"></div>
+
+        <!--daquan-->
+        <div class="daquan jqDuang" data-tag="xflpdq,esfxqdq,zfxqdq,xzldq,spdq" data-autoplay="0" data-obj=".item" data-cell=".tab-header ul">
+            <!--title-->
+            <div class="tab-header">
+                <ul class="clearfix">
+                    <li class="act">{{'新房楼盘大全'|trans}}</li>
+                    <li>{{'二手房小区大全'|trans}}</li>
+                    <li>{{'租房小区大全'|trans}}</li>
+                    <li>{{'写字楼大全'|trans}}</li>
+                    {% if tpl_businessmodule == 1 %}
+                    <li>{{'商铺大全'|trans}}</li>
+                    {% endif %}
+                </ul>
+            </div>
+            <!--body-->
+            <div class="tab-body clearfix">
+                {# 大全、友情链接合集 #}
+                {% set dqArr = ('xflpdq,esfxqdq,zfxqdq,xzldq,spdq,yqlj')|getPushMuti(50) %}
+                {# 新房楼盘大全 #}
+                {{house_global.index_dq_recommend({
+                    list: dqArr['xflpdq']|default(''),
+                    show: 1,
+                    models: 'houses'
+                })}}
+                {# 二手房小区大全 #}
+                {{house_global.index_dq_recommend({
+                    list: dqArr['esfxqdq']|default(''),
+                    models: 'xq'
+                })}}
+                {# 租房小区大全 #}
+                {{house_global.index_dq_recommend({
+                    list: dqArr['zfxqdq']|default(''),
+                    models: 'xq'
+                })}}
+                {# 写字楼大全 #}
+                {{house_global.index_dq_recommend({
+                    list: dqArr['xzldq']|default(''),
+                    models: 'office'
+                })}}
+                {% if tpl_businessmodule == 1 %}
+                    {# 商铺大全 #}
+                    {{house_global.index_dq_recommend({
+                        list: dqArr['spdq']|default(''),
+                        models: 'shop'
+                    })}}
+                {% endif %}
+            </div>
+        </div>
+        <!--daquan-->
+    </div>
+    <!--/container-->
+
+    <!--友情链接-->
+    <div class="blank30"></div>
+
+    <h2 class="f-link-tit container">{{'友情链接'|trans}}</h2>
+    <div class="blank8"></div>
+    <div class="f-link">
+        {% set yqlj = dqArr['yqlj']|default('') %}
+        <div class="container" data-tag="yqlj">
+            {% for item in yqlj|default('') %}
+            <a href="{{item.url|default('#')}}" target="_blank">{{item.name|default('')|trans}}</a>
+            {% endfor %}
+        </div>
+    </div>
+    <div id="ss"></div>
+    <!--/友情链接-->
+    <!-- 演示入口 -->
+    {% include 'HouseBundle:Index:yanshi.html.twig' ignore missing %}
+    <!-- /演示入口 -->
+{% endblock body %}
+
+{% block js %}
+    <script type="text/javascript">
+         /*
+            = jqhoverS:左侧详情筛选
+            = jqduang：幻灯片、选项卡、slider
+            = placeholder：兼容低版本输入框文字提示
+            = autocomplete：搜索框自动补全提示
+        */
+        seajs.use([
+            'jqhoverS',
+            'jqduang',
+            'advertise',
+            'lazyload'
+            ], function (jqhoverS, jqduang, advertise, lazyload) {
+            //搜索选择
+            $('.search-cate').on('mouseover', 'a', function() {
+                var $this = $(this);
+                var pama = $this.data("pama");
+                var $searchInput = $(pama.target || '.search-input');
+                var url = $this.attr('href');
+                $this.addClass("act").siblings().removeClass("act")
+                    .closest('form').attr('action', url);
+
+                $searchInput
+                    .val('')
+                    .attr('placeholder', pama.searchword)
+                    .autocomplete('hide')
+                    // 是否启用自动完成
+                if (pama.autocomplete === 0) {
+                    $searchInput.autocomplete('disable');
+                } else {
+                    $searchInput.autocomplete('enable')
+                        .autocomplete('setOptions', {
+                            serviceUrl: url
+                        });
+                };
+            });
+
+            //slider左右箭头的显示隐藏
+            $("#slider-wrap").hover(function() {
+                $(this).find(".prev-btn,.next-btn").css("opacity", ".8");
+            }, function() {
+                $(this).find(".prev-btn,.next-btn").css("opacity", "0");
+            });
+
+            // 背投广告
+            advertise.init({showing: 20000});
+        });
+    </script>
+{% endblock js %}

@@ -1,0 +1,59 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+ * url_id: 获取url传过来的ID
+ * tpl_id: 模板变量
+ #}
+{% set url_id = app.request.get("id", tpl_id|default('')) %}
+
+{% block result %}
+<div class="popup popup-ask">
+    <header class="bar bar-nav">
+        {{core_mobile_global.go_back({class: 'icon font-f-21 pull-left close-popup', href: 'javascript:;'})}}
+        {{core_mobile_global.title({title: ' ', class: 'search-popup'})}}
+    </header>
+    <div class="content bg-white">
+        <div class="panel-block">
+            {{housemobile_global.panel_title({title: '答案'})}}            
+        </div>
+        {{ render(controller('HouseBundle:Bundlebindforms:askcomment', {
+            _isApp: url_isApp, 
+            formName: 'view_answer',
+            ask: url_id|default(''),
+            models: 'ask'
+        })) }}
+        {# <div id="askcomment"></div> #}
+        <div class="list-block panel-block">
+            {{housemobile_global.panel_title({title: '其他答案'})}}
+            <div class="answers comment-list">
+            </div>
+            <div class="infinite-scroll-preloader">
+                <div >加载更多</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ render(controller('HouseBundle:Bundlebindforms:saleaction', {
+    _isApp: url_isApp,
+    formName: 'view_ask_report', 
+    aid: url_id|default(''),
+    popup : 'popup-report',
+    title: '举报',
+    models: 'ask'
+})) }}
+<div id="saleaction"></div>
+{% if tpl_js|default('') %}
+<script type="text/javascript">
+    seajs.use(['comment', 'vote', 'collect', 'ajax'], function(comment, vote, collect, ajax){
+        collect.init();
+        vote.init({
+             saveUrl: '{{("viewinter/vote")|U({})}}'
+        });
+        comment.init({
+            list: '.comment-list',
+            url: '{{("intercomment/asklist")|U({checked: 1, ask: detail.id|default("")})}}'
+        });
+    });
+</script>
+{% endif %}
+{% endblock result %}

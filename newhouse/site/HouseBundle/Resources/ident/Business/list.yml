@@ -1,0 +1,26 @@
+list:
+    tableName: houses
+    subTableName: ''
+    aliasName: f
+    listGrid: {  }
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 12
+    groupBy: ''
+    order: 'top|desc,id'
+    orderBy: desc
+    searchFun: EXISTS
+    dataModel: 0
+    autoQuery: '1'
+    alias: {  }
+    query:
+        checked:
+            eq: '1'
+        cate_type:
+            find: '105'
+        name:
+            orX: 'name,like,%[name]%'
+    query1: {  }
+    attribute: '0'

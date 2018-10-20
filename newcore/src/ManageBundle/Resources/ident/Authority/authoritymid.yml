@@ -1,0 +1,28 @@
+info:
+    tableName: users
+    subTableName: ''
+    aliasName: p
+    listGrid:
+        - 'ids:|txtcenter w30'
+        - 'username:帐号|txtleft w150'
+        - 'nicename:昵称|txtleft w150'
+        - 'userdb:所属库|txtleft w150'
+        - 'email:邮箱|txtleft w150'
+        - 'locale:语言|txtleft  w200'
+        - 'remark:备注|txtleft'
+        - 'id:操作|txtcenter w100:[EDIT]修改|btn,[DELETE]删除|btn'
+    listDesc: 创始人
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    order: username
+    orderBy: asc
+    dataModel: 0
+    alias: {  }
+    query:
+        mid:
+            eq: '1'
+        id:
+            neq: '<id>'
+    query1: {  }

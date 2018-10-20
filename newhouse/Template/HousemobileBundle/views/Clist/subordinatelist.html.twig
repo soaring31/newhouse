@@ -1,0 +1,78 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+ * ajax调用：我的下级分销列表
+#}
+{% set url_name = app.request.get('name') %}
+
+{% set url_update_time = app.request.get('update_time') %}
+
+{% set url_next = app.request.get('next') %}
+
+{% set user_id = app.user.id %}
+
+{% set update_time_opt = url_update_time ? {
+    update_time: 'lt|' ~ url_update_time
+} : {} %}
+
+{# 下级经纪人 #}
+{% set fx_jjr =  ('db.userinfo')|getCol('uid', {fxpid: user_id|default('')})|default('9999999999')|join(',') %}
+{# 下级经纪人分销 #}
+{% set fx_list = ('house.recommend')|getAll({ uid: 'in|' ~ fx_jjr|default(''), status: 4, _multi: 1, name: 'orX|name,like,%' ~ url_name ~ '%|tel,like,%' ~ url_name ~ '%', findType: 1 }|merge(update_time_opt)) %}
+{% if url_next|default('') %}
+    {% set list = fx_list %}
+{% elseif ident.info is defined %}
+    {% set list = ident.info %}
+    {% set tpl_now = 'now'|date('U') %}
+{% endif %}
+{% block result %}
+    {% spaceless %}        
+        {% if list.data is defined and list.pageCount|default(0) != 0 %}
+            {% for item in list.data %}
+                {# 楼盘id #}
+                {% set vo_houses = ('house.sell')|getOne('aid', {id: item.aid|default('')}) %}
+                {% set user_nicename = ('db.userinfo')|getOne('nicename', {uid: item.uid}) %}
+                {% set user_username = ('db.users')|getOne('username', {id: item.uid}) %}
+                <li   {% if loop.last %}data-page="{
+                    pageIndex: {{list.pageIndex}},
+                    pageCount: {{list.pageCount}},
+                    pageSize: {{list.pageSize}}
+                 }"{% endif %}>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title-row"> 
+                             <div class="item-title p-gray">      
+                                    经纪人：{{ user_nicename|default(user_username|default('-')) }}
+                             </div>
+                                <div class="item-after">
+                                    佣金: 
+                                    {{core_global.if_dw({value: item.yongjin / 100 * ('db.mconfig')|getOne('value', {name: 'sellrate'}) , danwei: '元', class: "p-red"})}}
+                                </div>
+                            </div>
+                            <div class="item-subtitle item-subtitle-ex">
+                                被推荐人姓名:
+                                {{item.name|default('')}}
+                            </div>
+                            <div class="item-subtitle item-subtitle-ex">
+                                楼盘名称：
+                                {{ ('house.houses')|getOne('name', {id: vo_houses}) }}
+                            </div>
+                            <div class="item-subtitle item-subtitle-ex">
+                                结算时间：{{item.create_time|default('')|date('Y-m-d')}}
+                            </div>
+                            <div class="item-subtitle item-subtitle-ex">
+                                联系电话：{{item.tel|default('')}}
+                            </div>
+                            <div class="row mt5">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        {% else %}
+            <li class="mobile-list-none">暂无更多数据</li>
+        {% endif %}
+    {% endspaceless %}
+    <script type="text/javascript">
+        seajs.use(['formattime'])
+    </script>
+{% endblock result %}

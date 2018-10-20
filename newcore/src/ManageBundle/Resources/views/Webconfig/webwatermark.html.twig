@@ -1,0 +1,49 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+seajs.use("{{ bundlepath }}/js/controllers",function(c){
+	//js入口	    
+	c.init('main');
+});
+</script>
+{% endblock %}
+{% block tableMain %}
+<span class="tableDesc">
+       水印方案列表>><input type="button" id="btnfun_edit_{{ action }}" data="{{(action~'/show')|U}}" class="btn" value="新增水印方案" />&nbsp;&nbsp;
+  <input type="text" id="search_name" value="{{ app.request.get('name','') }}" data-source="{{ app.request.get('name','') }}" />
+</span>
+<table class="right-table">
+	<tbody>
+		<tr>
+			<th class="w30"></th>
+            <th class="txtleft">方案名称</th>
+            <th class="w130 txtleft">水印类型</th>
+            <th class="w130 txtleft">是否可用</th>
+			<th class="w200">操作</th>
+		</tr>
+		{% if info is defined %}
+		{% for key,vo in info %}
+		<tr>
+		    <td></td>
+			<td>{{ vo.name }}</td>
+			<td>{{ vo.type  }}</td>
+			<td>{{ vo.status }}</td>
+			<td class="txtcenter">
+				<input type="button" id="btnfun_edit_{{key}}" data="{{ (action~'/show')|U('id='~key) }}" class="btn" value="修改" />&nbsp;&nbsp;
+				<input type="button" id="btnfun_delete_{{key}}" data="{{ (action~'/delete')|U('id='~key) }}" class="btn" value="删除" />
+			</td>
+			<td></td>
+		</tr>
+		{% endfor %}
+		{% endif %}
+	</tbody>
+</table>
+{% endblock %}
+{% block submit %}{% endblock %}
+{% if iterator is defined %}
+{% block pageIndex %}{{ iterator.pageIndex|default(1) }}{% endblock %}
+{% block pageCount %}{{ iterator.pageCount|default(1) }}{% endblock %}
+{% endif %}
+{% block promptUl %}
+	<li>水印设置说明</li>
+{% endblock %}

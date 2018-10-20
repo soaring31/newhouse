@@ -1,0 +1,101 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+
+{% block js %}
+  {{parent()}}
+<script type="text/javascript">
+
+</script>
+{% endblock %}
+{% block mainMenu %}
+    {{ parent() }}
+    {{core_manage.mainMenu(action, '区域')}}
+    {{ core_manage.show({
+            title: '<i class="font-ico-31 mr5"></i>重置区域结构',
+            url: ('marea/mareareset')|U({}) ,
+        })
+    }}
+{% endblock %}
+
+{% block tableMain %}
+<section class="maincontent" data-param="{
+    defUrl    : '{{ (action)|U }}',
+    showUrl   : '{{ (action ~ "/show")|U }}',
+    submitUrl : '{{ (action ~ "/save")|U }}',
+    deleteUrl : '{{ (action ~ "/delete")|U }}',
+    fixed     : '.filter',
+    list      : '.list-con',
+    data      : {}
+}">
+{{ core_manage.filter([
+  {
+    method: 'search',
+    field: 'name',
+    title: '请搜索栏目名称',
+  }
+  ]) }}
+{# {{dump(ident.info)}} #}
+<section class="list-con">
+  <div class="list">
+  <table data-level="top" data-type="singleToggle" class="right-table table-hover">
+    <tbody>
+        <tr data-id>
+            <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+            <th width="50" data-role="sort" data-sort="id" class="sort">ID</th>
+            <th width="40">&nbsp;</th>
+            <th >区域名称</th>
+            {# <th width="120">审核</th> #}
+            <th width="80" data-role="sort" data-sort="sort" class="sort">排序</th>
+            <th width="200" class="tac">操作</th>
+        </tr>
+    {% set pageIndex = app.request.get('pageIndex')|default(1) %}
+    {% set name = app.request.get('name')|default('') %}
+    {% set area_data1 = ('db.area')|getAll({level: 1, pageSize: 50, pageIndex: pageIndex, name: 'orX|name,like,%' ~ name ~ '%', orderBy: 'asc',order: 'id'}) %}
+
+{# {% set area_data1 = ('db.area')|getAll({level: 1, pageSize: 50, pageIndex: pageIndex, name: 'orX|name,like,%' ~ name ~ '%', order: 'id', orderBy: 'asc'}) %} #}
+    {% if area_data1.data is defined and area_data1.pageCount|default(0) != 0 %}
+    {# 一级 #}
+        {% for key,item in area_data1.data %}
+            <tr data-level="1" data-id="{{item.id}}" data-ajax="{{ ('mareamanage/children')|U({pid: item.id}) }}">
+                {# {{ dump(area_data1) }} #}
+                <td width="40" class="tac">{{core_manage.checkbox()}}</td>
+                <td class="tac">{{item.id}}</td>
+                <td class="tac {% if item.notes %}plusico{% endif %}">&nbsp;</td>
+                <td><span data-role="itemEdit" data-item-edit="name" class="edit">{{item.name}}</span></td>
+                {# <td width="120">{{ core_global.formField({value: item.checked}) }} </td> #}
+                <td width="80">
+                    <span data-role="itemEdit" data-name="sort" class='edit'>{{item.sort|default(0)}}</span>
+                </td>
+                <td width="200"> {{core_manage.show()}}
+                    {{core_manage.delete()}}
+                    {{core_manage.show({
+                    url: (action ~ '/show')|U('pid='~item.id),
+                        title: '添加子区域'
+                    })}}
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="8" class="tac">
+                暂无数据
+            </td>
+        </tr>
+    {% endif %}
+    </tbody>
+
+  </table>
+</div>
+{{core_manage.page(area_data1)}}
+</section>
+</section>
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    }
+]) }}
+{% endblock %}
+
+{% block promptUl %}
+注意：最多只能添加五级地区
+{% endblock promptUl %}

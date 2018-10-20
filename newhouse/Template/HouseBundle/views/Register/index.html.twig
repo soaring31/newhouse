@@ -1,0 +1,188 @@
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+{% if core_global.mconfigtostring({name: 'siteopenreg', ename: 'mvisit'}).__toString == 1 %}
+    {% set tpl_extends = 'HouseBundle:Main:login.html.twig' %}
+{% else %}
+    {% set tpl_content = core_global.mconfig({name: 'regcloreason', ename: 'mvisit'})|default('系统维护中，关闭注册功能') %}
+    {% set tpl_extends = "CoreBundle:Dispatch:jump.html.twig" %}
+{% endif %}
+
+{% extends tpl_extends %}
+
+{% set _form_id = app.request.get('_form_id') %}
+{% set login_url = ('login/index')|U({},true) %}
+
+{% block title %}注册{% endblock title %}
+
+{% block body %}
+{# 手机短信状态 #}
+<div class="container">
+
+<div class="regter">
+    {% block regter_left %}
+    <!-- 左侧注册 -->
+    <div class="register">
+        <div class="register-head">
+            <a class="active" href="{{('register/index')|U}}">普通注册</a>
+            <a href="{{('/connect/weixin')|U}}">微信注册</a>
+        </div>
+        <!-- tag -->
+        <div class="tag">
+            <!-- 普通注册 -->
+            {# {{dump(form)}} #}
+            {# 需求特殊，参考ajaxform手动渲染 #}
+            <div data-view-form="1" class="tag-son tag-email common-form common-form-lg">
+            	{% if form.children is defined %}
+                <form data-jumpurl="{{login_url}}" class="" action="{{ form.vars.action }}" method="post">
+                    {% set mem_group = ('db.mem_types')|getAll({allow: 1}) %}
+			        <!-- 用户类型 -->
+                    <div class="checks">
+                        {% if mem_group.data is defined %}
+                        {% for item in mem_group.data %}
+                        <label class="active">
+                            <input type="radio" name="usertype" value="{{ item.id }}"/>
+                            <div class="icon ">
+                                <i class="font-re-{{ loop.index }}"></i>
+                                {{ item.name }}
+                                <span></span>
+                            </div>
+                        </label>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                    <ul>
+			        {% for v in form.children if v.vars.id != 'usertype' %}
+                    {% set vars = v.vars %}
+                    {# 表单类型 #}
+                    {% set type = v.vars.block_prefixes[v.vars.block_prefixes|length == 3 ? 1 : 2] %}
+                    {% set type = type == 'text' ? 'text1' : type %}
+                    {# 短信和邮箱验证码先隐藏 #}
+                    {% set type = type in ['mailcode', 'telcode'] ? type ~ ' hidden' : type %}
+
+		            <li class="item {{type}}">
+                    	<div class="label">{{ form_label(v) }}</div>
+                        <div class="field">
+                            {% if type == 'submit' %}
+                                <label><input type="checkbox" checked="checked" value="" id="yhxxInput" />我已看过并同意<a class="btn-jqModal" href="#yhxx">《本网站用户使用协议》</a></label><br><br>
+                            {% endif %}
+                        	{{ form_widget(v) }}
+                        </div>
+	                </li>
+					{% endfor %}
+                    </ul>
+                </form>
+				{% endif %}
+            </div>
+        </div>
+    </div>
+    <div id="yhxx" data-head="本网站用户使用协议" data-animate="zoomIn" data-drag="2" data-css='{"width": 800}' style="display: none; max-height: 300px; overflow: auto;">
+        {{core_global.mconfig({name: 'register_statement', ename: 'mbasecfg'})}}
+    </div>
+	{% endblock regter_left %}
+
+    <!-- 右侧登录 -->
+    <div class="regter-aside">
+        <div class="login-header">
+            <span>已有账号，请直接</span>
+            <a href="{{('login/index')|U}}">登 录</a>
+        </div>
+        <p>您也可以使用合作网站一键快速注册登录 :</p>
+        <div class="row">
+            {% if core_global.mconfigtostring({name: 'sinalogin', ename: 'mloginset'}).__toString == 1 %}
+            <div class="icon ">
+                <a href="{{('/connect/weibo')|U}}"><span class="pic1 pic font-re-sina"  title="微博"></span>微博</a>
+            </div>
+            {% endif %}
+            {% if core_global.mconfigtostring({name: 'qqlogin', ename: 'mloginset'}).__toString == 1 %}
+            <div class="icon ">
+                <a href="{{('/connect/qq')|U}}"><span class="pic2 pic font-re-QQ" title="QQ"></span>QQ</a>
+            </div>
+            {% endif %}
+        </div>
+        <div class="row">
+            {% if core_global.mconfigtostring({name: 'wxlogin', ename: 'mloginset'}).__toString == 1 %}
+            <div class="icon ">
+                <a href="{{('/connect/weilogin')|U}}"><span class="pic3 pic font-re-weix"  title="微信"></span>微信</a>
+            </div>
+            {% endif %}
+        </div>
+        <!-- 手机注册 -->
+        <div class="phone">
+           <h3>温馨提示 : &nbsp;电子邮箱或手机号码将用来找回登录密码和其它便捷服务，</h3>
+           <h4>输入手机号或邮箱注册时, 则直接将密码发至所填手机或邮箱，</h4>
+           <h4>本网站平台保证用户信息不被泄露和挪作其他用途，请放心注册使用！</h4>
+        </div>
+    </div>
+</div>
+<!-- end -->
+</div>
+
+<script>
+seajs.use(['validate','jqmodal'], function(validate,jqmodal){
+
+    // 表单验证
+    var validator = $('[data-view-form]').find('form').validate();
+
+    $(function(){
+        // 短信验证码
+        $('#codeNew').removeAttr('required').attr('disable', true);
+        // 邮箱验证码
+        $('#mailcode').removeAttr('required').attr('disable', true);
+         // 协议
+        $(document).on('click', '#yhxxInput', function () {
+            var $this = $(this);
+            if ($this.prop('checked')) {
+                $('.btn[data-role="submit"]').prop('disabled', '')
+            } else {
+                $('.btn[data-role="submit"]').prop('disabled', 'disabled');
+                $.jqModal.tip('必须同意协议！', 'error');
+            };
+        })
+    });
+
+    var isTel = function(value, username) {
+        return value ? $.validator.methods.isTel.call($.validator.prototype, value, username) : false;
+    };
+    var isEmail = function(value, username) {
+        return value ? $.validator.methods.email.call($.validator.prototype, value, username) : false;
+    };
+
+    $('#username').off('.register').on('input propertychange.register', function(){
+        var value = $(this).val().trim();
+        var username = this;
+        if(isTel(value, username) || isEmail(value, username)){
+            // $('#password').removeAttr('required').attr('disable', true);
+            //  $('#repassword').removeAttr('required').attr('disable', true);
+            // $('.password').hide();
+            // $('.repassword').hide();
+            if(isTel(value, username)){
+                $('.telcode').removeClass('hidden');
+                $('.captcha, .mailcode').addClass('hidden');
+                $('#codeNew').attr({'disable':false, 'required': 'required'});
+                $('#codeText').removeAttr('required').attr('disable', true);
+                $('#mailcode').removeAttr('required').attr('disable', true);
+                $('input[name=tel]').val($('#username').val())
+            }
+             if(isEmail(value, username)){
+                $('.mailcode').removeClass('hidden');
+                $('.codeNew, .captcha').addClass('hidden');
+                $('#mailcode').attr({'disable':false, 'required': 'required'});
+                $('#codeNew').removeAttr('required').attr('disable', true);
+                $('#codeText').removeAttr('required').attr('disable', true);
+                $('input[name=email]').val($('#username').val());
+            }
+        }else{
+            // $('#password').attr({'disable':false, 'required': 'required'});
+            //  $('#repassword').attr({'disable':false, 'required': 'required'});
+            // $('.password').show();
+            // $('.repassword').show();
+            $('#codeNew').removeAttr('required').attr('disable', true);
+            $('#mailcode').removeAttr('required').attr('disable', true);
+            $('#codeText').attr({'disable':false, 'required': 'required'});
+            $('.captcha').removeClass('hidden');
+            $('.telcode, .mailcode').addClass('hidden');
+
+        }
+    })
+});
+</script>
+{% endblock %}

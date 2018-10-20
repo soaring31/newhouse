@@ -1,0 +1,103 @@
+ {# *说明：
+** url_id:获取当前id
+** detail： 获取当前数据
+** category_detail: 当前分类数据
+** sort_category_service：获取同分类下的相关阅读
+#}
+{% set detail = detail|default(cident.detail.data[0]|default('')) %}
+
+{% set sort_category_service = ('house.service')|getAll({category: detail.category|default(''), checked: 1, pageSize: 10}) %}
+
+{% set category_detail = (detail.category|default(''))|getCategoryById() %}
+
+{% extends detail ? 'HouseBundle:Service:list.html.twig' : 'CoreBundle:Dispatch:errorcontent.html.twig' %}
+
+{% block title %}&nbsp;{{detail.name}}{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" Content="{{detail.keywords|default('')}}"/>
+<meta name="description" content="{{detail.abstract|default('')}}"/>
+{% endblock key_des %}
+
+{% block service_nav %}
+
+    {# 导航判断 #}
+    {% set category = category_detail|default('') %}
+    {% if category.pid|default('') != 7 %}
+        {% set nav_service_act = category.pid|default('') %}
+    {% else %}
+        {% set nav_service_act = category.id|default('') %}
+    {% endif %}
+
+    {{parent()}}
+
+{% endblock service_nav %}
+
+{% block service_left %}
+
+    {# 左侧 #}
+    {% set category = category_detail|default('') %}
+    {{parent()}}
+{% endblock service_left %}
+
+{% block service_current %}
+    {# 当前位置 #}
+    {% set category_parents = ('house.category')|getParents(detail.category|default('')) %}
+    {{parent()}}
+    <span>&gt;</span>
+    {{detail.name|default('')}}
+{% endblock service_current %}
+
+{% block service_right %}
+    <div class="body fr">
+        <!--相关内容-->
+        {% if detail.category not in [307, 308] %}
+        <div class="related-information">
+            <h2 class="title-h2">相关内容</h2>
+            <ul class="clearfix">
+                {# 获取相关问题 #}
+                {% if sort_category_service.data is defined %}
+                    {% for item in sort_category_service.data %}
+                        <li class="{% if item.id == detail.id|default('') %}cur{% endif %}">
+                            <a href="{{('Service/detail')|U({id: item.id})}}" title="{{item.name}}">
+                                {{item.name}}
+                            </a>
+                        </li>
+                    {% endfor %}
+                    {# 当数据大于6条的时候才会出现展开更多 #}
+                    {% if sort_category_service.data|length > 6 %}
+                        <li class="btn" data-toggle="expand">
+                            <span>展开全部问题列表>></span>
+                        </li>
+                    {% endif %}
+                {% endif %}
+            </ul>
+        </div>
+        {% endif %}
+        <!--/相关内容-->
+        <!--热点问题-->
+        <h1 class="title-h1">{{detail.name|default('')}}</h2>
+        <div class="issues-content">
+            {{core_global.content({content: detail.content|default('')})}}
+        </div>
+        <!--/热点问题-->
+    </div>
+{% endblock service_right %}
+
+{% block js_service %}
+    <script type="text/javascript">
+        seajs.use([], function() {
+            $(".related-information").on("click",".btn",function() {
+                var $this = $(this);
+                var $toggle = $this.data("toggle");
+                if ($toggle == "expand") {
+                    $this.data("toggle", "collapse").css("position", "static").html("收起全部问题列表>>")
+                        .parent("ul").css("height", "auto");
+                } else {
+                    $this.data("toggle", "expand").css("position", "absolute").html("展开全部问题列表>>")
+                        .parent("ul").css("height", "60px");
+                };
+            });
+        });
+    </script>
+{% endblock js_service %}

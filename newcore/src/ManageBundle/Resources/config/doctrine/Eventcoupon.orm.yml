@@ -1,0 +1,203 @@
+ManageBundle\Entity\Eventcoupon:
+    type: entity
+    table: eventcoupon
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        keyword:
+            options:
+                comment: 只能写一个关键词，用户输入此关键词将会触发此活动
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        title:
+            options:
+                comment: 请不要多于50字
+                unsigned: false
+            nullable: false
+            type: string
+            length: 50
+        abstract:
+            options:
+                comment: 活动介绍
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        statdate:
+            options:
+                comment: 活动开始时间
+                unsigned: false
+            nullable: false
+            type: date
+            length: 10
+        enddate:
+            options:
+                comment: 活动结束时间
+                unsigned: false
+            nullable: false
+            type: date
+            length: 10
+        content:
+            options:
+                comment: 活动说明
+                unsigned: false
+            nullable: false
+            type: text
+            length: 255
+        endtitle:
+            options:
+                comment: 活动结束标题
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        endinfo:
+            options:
+                comment: 活动结束说明
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        setcardid:
+            options:
+                comment: 参考活动的会员卡类型
+                unsigned: false
+                default: '1'
+            nullable: false
+            default: '1'
+            type: smallint
+            length: 2
+        set1title:
+            options:
+                comment: 活动一等奖名称
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        set1num:
+            options:
+                comment: 设置活动一等奖数量
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        set2title:
+            options:
+                comment: 设置活动二等奖名称
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        set2num:
+            options:
+                comment: 设置活动二等奖数量
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        set3title:
+            options:
+                comment: 设置活动三等奖名称
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        set3num:
+            options:
+                comment: 设置活动三等奖数量
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        allnum:
+            options:
+                comment: '预计活动人数直接影响抽奖概率：中奖概率 = 奖品总数/(预估活动人数*每人抽奖次数)'
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        cannum:
+            options:
+                comment: 每人可参加次数
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        cashcode:
+            options:
+                comment: 兑奖密码
+                unsigned: false
+            nullable: false
+            type: string
+            length: 15
+        mustreg:
+            options:
+                comment: 是否注册后才能参与
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        checked:
+            options:
+                comment: 是否审核
+                unsigned: false
+            nullable: false
+            type: boolean
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

@@ -1,0 +1,50 @@
+{% block css %}{% endblock %}
+{# <script type="text/javascript">
+seajs.use(["{{ bundlepath }}/js/main.js","core"],function(l,core){
+    //图片上传、图片预览、选择文件
+    core.generalEvent.initViewImg();
+    core.generalEvent.initUploadImg();
+});
+</script> #}
+{# 导入宏 #}
+{# {{dump()}} #}
+{% set pid = app.request.get('pid')|default('') %}
+{% import "HouseBundle:Macro:forms.html.twig" as forms %}
+{% import "HouseBundle:Macro:lists.html.twig" as lists %}
+{% import "HouseBundle:Macro:utils.html.twig" as utils %}
+{% block js %}{% endblock %}
+{% block mainleft %}{% endblock %}
+<div class="main-through">
+    {% if pid is empty -%}
+    <section id="main-hd" class="main-hd" data-target=".main-bd">
+        {# <nav class="nav">
+            <i class="font-ico-local fz14"></i>
+            当前位置：{{navurl.data.name|default('')}}
+        </nav> -#}
+        <menu class="sub-menu">            
+            {% block mainMenu %}
+            {% if navurl.childs is defined -%}
+            {% for item in navurl.childs %}
+            {% set url = (item.menu.bundle~"/"~item.menu.controller~"/"~item.menu.action)|U(item.menu.urlparams) %}
+            {{ forms.jump({
+                url: url, 
+                title: '<i class="font-ico-' ~ item.menu.remark ~ '"> </i>' ~ item.menu.name,
+                class: action == item.menu.action ? 'on' : '',
+               
+            }) }}
+            {% endfor %}
+            {% endif %}
+            {% endblock mainMenu %}
+        </menu>
+    </section>
+    {% endif %}
+    <section class="main-bd">
+    {% block tableMain %}{% endblock %}
+    <div class="prompt">
+        <div class="promptTitle">提示说明</div>
+        <ul class="promptUl">
+            {% block promptUl %}{% endblock %}
+        </ul>
+    </div>
+    </section>
+</div>

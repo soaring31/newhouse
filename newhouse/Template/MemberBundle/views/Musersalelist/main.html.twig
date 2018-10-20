@@ -1,0 +1,24 @@
+{% extends "MemberBundle::layout.html.twig" %}
+{% block title %}后台管理{% endblock %}
+{% block css %}
+
+<link rel="stylesheet" href="{{ asset('bundles/' ~ themespath ~ '/css/relform.css', absolute=true) }}" />
+{% endblock %}
+{% block js %}
+<script>
+seajs.config({
+    preload: ['ueditor.conf', 'codemirror'], // 预加载项
+});
+seajs.use(["{{ asset('bundles/' ~ themespath ~ '/js/manage.js') }}"], function(manage) {
+    //js入口      
+    manage.init('main');
+});
+seajs.use('', function() {
+		
+	})	
+</script>
+{% endblock %}
+{% block body %}
+{{ render(controller('HouseBundle:Main:topmenu', {'channel':0})) }}
+
+{% endblock %}

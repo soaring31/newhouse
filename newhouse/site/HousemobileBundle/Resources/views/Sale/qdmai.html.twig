@@ -1,0 +1,46 @@
+{% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:salelist.html.twig' : 'HousemobileBundle:Sale:qdetail.html.twig' %}
+{# 说明 
+* detail：小区详情数据
+#}
+{% set detail = cident.xq_detail.data[0]|default('') %}
+	
+{% block title %}
+    {{detail.name|default('')}}二手房出售信息-{{detail.name|default('')}}小区网
+{% endblock title %}
+
+{% block key_des %}
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<meta name="keywords" content="{{detail.name|default('')}}二手房出售信息、{{detail.name|default('')}}二手房、{{detail.name|default('')}}二手房" />
+<meta name="description" content="{{detail.name|default('')}}小区网是为{{cur_area_data|default('')}}{{detail.name|default('')}}小区居民服务的网站,{{detail.name|default('')}}二手房出售信息主要为您提供最新、最真实的{{detail.name|default('')}}二手房、{{detail.name|default('')}}二手房出售信息、,每天更新大量优质{{detail.name|default('')}}二手房房源，100%审核。" />
+{% endblock key_des %}
+
+{% block header_title %}
+    {{core_mobile_global.title({title: '小区二手房'})}}
+{% endblock header_title %}
+
+{% set nav_houses_act = 2 %}
+
+{% block container %}
+    {# 检索 #}
+    {% set list_header %}
+    <div class="filter" data-block="{
+        ajax: {
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                tpl: 'Common:filter',
+                tag: 'xq_sale'
+            }
+        }
+    }"></div>
+    {% endset %}
+
+    {# 列表链接 js调用列表需要 #}
+    {% set list_url = ('sale/qdmai')|U({ajax: 1, id: detail.id|default(0)}) %}
+
+    {{core_mobile_global.list_scroll({
+	    url: list_url|default(''),
+        list_header: list_header|default('')
+	})}}
+{% endblock container %}
+
+{% block popup %}{% endblock popup %}

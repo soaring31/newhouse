@@ -1,0 +1,106 @@
+@CHARSET "UTF-8";
+.loginlay{width:200px;margin:50px auto;}
+.loginlay table{width:100%;}
+.loginlay table td{height:25px;}
+.loginlay table td input{border:1px solid #ccc;height:22px;color:#666;}
+.loginlay table td input:hover{border-color:red;}
+
+body{width:100%;background:url(../images/back3.jpg) no-repeat;background-position:50% 50%;background-size:100%;color:#333;line-height:35px;}
+#loginBody #loginBezel{ 
+	width:500px;
+	height:300px;
+	margin:0px auto;
+	margin-top:130px;
+	border:1px solid #000;
+	border-radius:4px;
+	-moz-border-radius:4px; /* Old Firefox */
+	box-shadow: 30px 30px 50px ;   /* for IE */
+	background:#FFF;
+	background:rgba(255,255,255,0.3);  /* 登录主窗口半透明*/
+	font:bold 18px 宋体;
+}
+#loginBody #loginChildTop{
+	width:100%;
+	height:20%;
+	background:#333;
+	color:#FFF;
+	font:bold 20px 宋体;
+	line-height:60px;
+	cursor:pointer;
+	border-radius:4px;
+	-moz-border-radius:4px; /* Old Firefox */
+}
+#loginBody #loginChildBottom{
+	width:100%;
+	height: 240px;
+}
+#loginBody .rememberMe{font-size:12px;vertical-align: middle;}
+#loginBody table{
+	text-align:center;
+	padding:10px auto;
+	margin-top:10px;
+	color:#000;
+}
+#loginBody .inputUP{
+	width:200px;
+	height:35px;
+	line-height:35px;
+	padding:0px 5px;
+	border:1px solid #999;
+	border-radius:4px;
+	-moz-border-radius:4px; /* Old Firefox */
+}
+.onFocus{
+	box-shadow:0 0 10px #2D46AE;   /* for IE */
+}
+#loginBody #codeText{
+	width:80px;
+	height:35px;
+	line-height:35px;
+	padding:0px 5px;
+	border:1px solid #999;
+	border-radius:4px;
+	-moz-border-radius:4px; /* Old Firefox */
+}
+
+#loginBody #checkNumResult{}
+
+#loginBody #loginBtn
+,#loginBody #loginBtn1{
+	width:100px;
+	height:35px;
+	font-size:15px;
+	color:#FFFFFF;
+	border-radius:4px;
+	-moz-border-radius:4px; /* Old Firefox */
+	cursor:pointer;
+	background-color: #2a2525;
+	background: rgba(0,0,0,0.4); 
+	border:1px solid rgba(0,0,0,0.4);
+}
+#loginBody #checkSpan{
+	border:1px solid red;
+	margin-top:100px;
+}
+
+#loginBody #codeImg{
+	width:100px;
+	height:35px;
+	border:1px solid #999;
+	border-radius:4px;
+	cursor:pointer;
+}
+#loginBody #pointerOpen{
+	width:30px;
+	height:30px;
+	margin:200px auto;
+	border:1px #000 solid;
+	border-radius:15px;
+	-moz-border-radius:4px; /* Old Firefox */
+	display:none;
+	cursor:pointer;
+}
+
+.view-form .code-item{
+	width: auto;
+}

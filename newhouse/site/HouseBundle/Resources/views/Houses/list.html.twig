@@ -1,0 +1,104 @@
+{% set tpl_extends = 'HouseBundle:Houses:lp_list_layout.html.twig' %}
+
+{% set tpl_extends_data = {
+    'search': 'HouseBundle:Houses:search.html.twig',
+    'ajax': 'HouseBundle:Clist:houseslist.html.twig'
+} %}
+{% for k,v in tpl_extends_data %}
+    {% if app.request.get(k) or app.request.headers.get(k) %}
+        {% set tpl_extends = v %}
+    {% endif %}
+{% endfor %}
+{% extends tpl_extends|default('') %}
+{# # 说明
+* tpl_models: 区域找房变量
+* sort_data_opt:重新排序变量
+* tpl_rednum: 红包选项卡高亮
+* 以下是筛选区域数据定义
+*      1、filter_opt：筛选条件数据
+*      2、filter_circle: 开启商圈
+*      2、filter_subway: 开启地铁、地铁站
+#}
+{# 标题 #}
+{% block title %}【{{cur_area_data|default('')}}楼盘】_{{cur_area_data|default('')}}新楼盘_{{cur_area_data|default('')}}房价{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" Content="{{'now'|date('Y')}}{{cur_area_data|default('')}}楼盘信息,{{'now'|date('Y')}}{{cur_area_data|default('')}}新楼盘信息"/>
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}新房网为您提供最真实的{{cur_area_data|default('')}}新房出售信息及最新{{cur_area_data|default('')}}楼盘，新楼盘价格信息。大量优质最新楼盘信息实时更新，为您创造最佳新房购房体验。"/>
+{% endblock key_des %}
+
+{% block css %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/quyu.css')}}
+{% endblock css %}
+
+{# 当前位置 #}
+{% block current_houses %}<span>区域找房</span>{% endblock current_houses %}
+
+{% block container %}
+    {# 检索数据源 #}
+    {% set cate_data = house_global.cate_data({ 
+                    tag: 'houses',
+                    switch: {
+                        cate_circle: 1,
+                        cate_line: 1,
+                        hxs: 1
+                    }
+                }).__toString|json_decode %}
+    {% set show_selected = 1 %}
+    {{ parent() }}
+{% endblock container %}
+
+{# 列表头 #}
+{% block list_head %}
+    {{ parent() }}
+{% endblock list_head %}
+
+{# 排序 #}
+{% block list_sort %}
+    {% set sort_data = {
+        def: {
+            title: '默认'
+        },
+        dj: {
+            title: '楼盘价格'
+        },
+        kpdate: {
+            title: '开盘时间'
+        },
+        clicks: {
+            title: '人气',
+            value: 'desc'
+        }
+    } %}
+    {{ parent() }}
+{% endblock list_sort %}
+
+{# 列表内容 #}
+{% block container_houses_list %}
+<div class="lp-list" data-tag="lplist">
+    <ul data-list="1">
+        {{house_global.houses_list({
+            list: ident.list
+        })}}
+    </ul>
+</div>
+{% endblock container_houses_list %}
+
+{# js 楼盘对比，图片懒加载 #}
+{% block js %}
+    {% if '/houses/list' in (action)|U %}
+        <script type="text/javascript">
+         seajs.use(['listPjax'], function(listPjax) {
+            listPjax.init({
+                url: "{{('houses/list')|U}}",
+                list: '[data-list]',
+                page: '.p-bar a',
+                filterShow: '[data-filter-show]',
+                next: {
+                    url: '{{ ("bundlebindforms/ajax")|U({tpl: "Common:filter_next"}) }}'
+                }
+            });
+         })
+        </script>
+    {% endif %}
+{% endblock js %}

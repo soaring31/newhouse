@@ -1,0 +1,45 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+** ajax调用：学区列表
+* sale/xlist
+#}
+{% block result %}
+    {% if ident.list is defined %}
+        {% set list = ident.list %}
+    {% endif %}
+    {% spaceless %}
+   {% if list.data is defined and list.pageCount|default('') != 0 %}
+        {% for item in list.data %}
+            <li {% if loop.last %}data-page="{
+                                pageIndex: {{list.pageIndex}},
+                                pageCount: {{list.pageCount}}
+                            }"{% endif %}>
+    			<a href="{{('sale/xdetail')|UU({id: item.id|default('')})}}" class="item-content p-default">
+    				<div class="item-media">
+    					{{- core_global.img({
+                            src: item.thumb|default(''),
+                            alt: item.name|default(''),
+                            width: 104,
+                            height: 80,
+                            type: 2
+                        }) -}}
+    				</div>
+    				<div class="item-inner xlist">
+                        {{housemobile_global.list_title({title: item.name|default('')})}}
+    					<div class="item-subtitle item-subtitle-ex mt5">
+                            {{item.address|default('')}}
+    					</div>
+    					<div class="item-subtitle">
+    					 	{{- core_global.formfield({value: item.school_type|default('1'), form: 'around_school', field: 'school_type', tpl: '<span class="button button-sm btn-1">%title%</span>'}) -}} 
+                         	{{- core_global.formfield({value: item.leibie|default(''), form: 'around', field: 'leibie', tpl: '<span class="button button-sm btn-2">%title%</span>'}) -}}
+                        	{{- core_global.formfield({value: item.jibie|default(''), form: 'around', field: 'jibie', tpl: '<span class="button button-sm btn-3">%title%</span>'}) -}}
+    					</div>
+    				</div>
+    			</a>
+            </li>
+        {% endfor %}
+    {% else %}
+        <li class="mobile-list-none">暂无学校</li>
+    {% endif %}
+    {% endspaceless %}
+{% endblock result %}

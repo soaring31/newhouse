@@ -1,0 +1,112 @@
+ManageBundle\Entity\Wxmenus:
+    type: entity
+    table: wxmenus
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        appid:
+            options:
+                comment: 公众号ID
+                unsigned: false
+            nullable: false
+            type: string
+            length: 255
+        kno:
+            options:
+                comment: 菜单序号
+                unsigned: false
+            nullable: false
+            type: string
+            length: 2
+        title:
+            options:
+                comment: 菜单名称
+                unsigned: false
+            nullable: false
+            type: string
+            length: 24
+        type:
+            options:
+                comment: 类型
+                unsigned: false
+                default: click
+            nullable: false
+            default: click
+            type: string
+            length: 48
+        keyword:
+            options:
+                comment: 关键字
+                unsigned: false
+            nullable: false
+            type: string
+            length: 255
+        pid:
+            options:
+                comment: pid
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        checked:
+            options:
+                comment: 是否审核
+                unsigned: false
+            nullable: false
+            type: boolean
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

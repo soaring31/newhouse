@@ -1,0 +1,63 @@
+{% extends 'HouseBundle::base.html.twig' %}
+
+{% block top_search %}{% endblock top_search %}
+{% block title %}
+    {{"法律与免责声明"|default('')}}{% block title_houses %}{% endblock title_houses %}
+{% endblock title %}
+{# 样式 #}
+{% block css %}
+    {{ core_global.linkcss('static/' ~ bundlepath ~ '/css/lp-detail.css') }}
+    {{ core_global.linkcss('static/' ~ bundlepath ~ '/css/newhouse-details/public.css') }}
+    {{ core_global.linkcss('static/' ~ bundlepath ~ '/css/newhouse-details/newhouse-common.css') }}
+    {{ core_global.linkcss('static/' ~ bundlepath ~ '/css/newhouse-details/newhouseDetail.css') }}
+{% endblock css %}
+{% block body %}
+{#详情页公共头部#}
+ {% block logo_header %}
+     <div class="user-header-search header-search">
+         <div class="header-search-box">
+             <i class="header-search-logo"></i>
+             <div class="nav_go_wrap">
+                 <div class="nav_go">
+                     <a href="/">{{ city.data[0].name~"房地产网" }}</a>
+                     <span>&gt;</span>
+                     <span class="now_span">法律与免责声明</span>
+                 </div>
+             </div>
+         </div>
+     </div>
+
+ {% endblock logo_header %}
+{% block container %}
+    <div class="container">
+        {% block container_houses %}
+            <div class="user-statement">
+                <h5 class="user-title">
+                    法律与免责声明
+                </h5>
+                <div class="user-content">
+                    <p>1、本页面所含信息、搜索结果系源于互联网公开信息，未经人工筛选、校对、核实，信息真实性、完整性请浏览者慎重查阅原始信息来源或链接；</p>
+                    <p>2、本页面所含部分图片系注册用户上传 <a class="yonghu-statement">（点击查阅《用户声明》）</a></p>
+                    <p>3、如认为存在任何侵犯贵方知识产权或其他任何权利者，请浏览者及时告知；</p>
+                    <p>4、为保护个人数据隐私（除非经用户授权），对于个人电话信息本页面采取技术处理，如浏览者发现任何未完善问题，欢迎提出意见或建议。</p>
+                </div>
+            </div>
+        {% endblock container_houses %}
+    </div>
+{% endblock container %}
+{% endblock %}
+{% block js %}
+    <script>
+        seajs.use([],function () {
+            $(".yonghu-statement").click(function () {
+                var host= window.location.host;
+                var url = " http://"+ host +"/houses/declaration ";
+                $(".yonghu-statement").attr("href",url)
+            });
+        })
+
+    </script>
+{% endblock js %}
+
+
+

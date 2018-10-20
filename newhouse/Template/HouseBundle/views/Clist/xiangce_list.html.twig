@@ -1,0 +1,26 @@
+{% extends 'HouseBundle::base_list.html.twig' %}
+{# 说明
+** ajax调用：图库列表 clist/
+* 1、分销详情 Fenxiao\detail.html.twig
+* 2、楼盘图库 Clist\photolist.html.twig
+ #}
+{% set tpl_content_default = '相册'|trans({}) %}
+{% set tpl_lazy = 0 %} 
+{% block list %}
+{% spaceless %}
+{% if list.data is defined and list.pageCount|default('0') != 0 %}
+    {% for item in list.data %}
+        <li data-src="{{- core_global.img_url({src: item.thumb|default(''),watermark: 'giffun'}) -}}" data-sub-html="<h4>{{item.name|default('')}}</h4><p>{{item.abstract|default('')}}</p>" {% if loop.index == 1 %}data-pagecount="{{list.pageCount|default(0)}}" data-pagesize="{{list.pageSize|default(0)}}" data-noinfo="0"{% endif %}>
+            <a href="javascript:;">
+                <div class="item-img">
+                    <img class="img-responsive"  src="{{- core_global.img_url({type: 2, height: 134, width: 184, src: item.thumb|default(''), alt: item.name|default('')|trans({})}) -}}">
+                </div>
+                <em>{{item.name|default('')|trans({})}}</em>
+            </a>
+        </li>               
+    {% endfor %}
+{% else %}
+    <li style="width: 100%; padding: 0" class="noinfo" data-noinfo="1">{{tpl_noinfo|default('')}}</li>
+{% endif %}
+{% endspaceless %}
+{% endblock list %}

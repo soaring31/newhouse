@@ -1,0 +1,64 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+** ajax调用：特价房
+#}
+{% block result %}
+	{% if ident.list is defined %}
+		{% set list = ident.list %}
+	{% endif %}
+    {% spaceless %}
+        {% if list.data is defined and list.pageCount|default(0) != 0 %}
+            {% for item in list.data %}
+                <li {% if loop.last %}data-page="{
+			                pageIndex: {{list.pageIndex}},
+			                pageCount: {{list.pageCount}},
+			                pageSize: {{list.pageSize}}
+                       			}" {% endif %}>
+		            <a href="{{('special/detail')|UU({id:item.id|default('')})}}" class="item-content p-default">
+		                <div class="item-media por">
+		                    {{- core_global.img({
+		                        src: item.thumb|default(''),
+		                        alt: item.name|default(''),
+		                        type: 2,
+		                        width: 107,
+		                        height: 80
+		                    }) -}}
+		                    {% if item.top|default('') == 159 %}
+		                        <div class="item-zd">顶</div>
+		                    {% endif %}
+		                </div>
+		                <div class="item-inner">
+		                    <div class="item-title-row">
+		                        {{housemobile_global.list_title({title: item.name|default('')})}}
+		                        <div class="item-after ml5">
+		                            {{house_global.if_wy({value: item.zj|default(''),class: 'l p-red'})}}
+		                        </div>
+		                    </div>
+		                    <div class="item-title-row">
+		                    	<div class="item-title item-title-p0">
+		                    		{{- core_global.formData({form: 'house.houses', value: item.aid|default(''), tpl: '%value%'}) -}}
+		                    	</div>
+		                        <div class="item-after">
+		                        	{{house_global.if_mj({value: item.mj|default('')})}}
+		                        </div>
+		                    </div>
+		                    <div class="item-subtitle item-subtitle-ex">
+		                    	{{- house_global.huxing({data: item|default(''), tpl: '%shi%%ting%%wei%|'}) -}}
+		                    	{% if item.szlc|default('') and item.zlc|default('') %}
+		                    	{{item.szlc|default('-')}}/{{item.zlc|default('')}}层 
+		                    	{% endif %}
+		                    </div>
+		                    <div class="item-subtitle">
+		                    	{{core_global.region({id: item.region|default(''), tpl: '<span class="button button-sm btn-1">%value%</span>'})}}
+		                        {{core_global.formData({value: item.cate_status|default(''), tpl: '<span class="button button-sm btn-2">%value%</span>'})}}
+		                        {{ core_global.formData({value: item.zxcd|default(''), tpl: '<span class="button button-sm btn-3">%value%</span>'}) }}
+		                        {{ core_global.formField({value: item.louxing|default(''), form: 'houses_bargain', field:'louxing', tpl: '<span class="button button-sm btn-4">%title%</span>'}) }}
+		                    </div>
+		                </div>
+		            </a>
+                </li>
+            {% endfor %}
+        {% else %}
+        {% endif %}
+    {% endspaceless %}
+{% endblock result %}

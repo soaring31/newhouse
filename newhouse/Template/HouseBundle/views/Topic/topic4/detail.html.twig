@@ -1,0 +1,202 @@
+{% extends 'HouseBundle:Topic:extend.html.twig' %}
+
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% set block_loupan = ('house.topic_arc')|getBlock({ename:'loupan'},{checked: 1, aid: detail.id|default(''), pageSize: 20}) %}
+
+{% block key_des %}
+<meta name="keywords" content="{{ detail.keywords|default('') }}" />
+<meta name="description" content="{{ detail.abstract|default('') }}" />
+{% endblock key_des%}
+
+{% block title %}专题模板4{% endblock title %}
+
+{% block css %}
+    {{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/special-4.css')}}
+{% endblock css %}
+
+{% block body %}
+
+<body class="w1210">
+<div class="banner"></div>
+<div class="daoyu"> <i></i>
+    {{core_global.substr(detail.abstract|default(''),200,1)}}
+</div>
+<div class="title">
+    <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-4/title_1.png'}) -}}" alt="优质户型的几大特征"></div>
+<div class="tezheng">
+    <ul>
+        <li style="background: #5d026b"> <i><img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-4/tz_1.png'}) -}}"></i>
+            <p class="right">
+                <img src="" onclick="clickMe(0)">
+                <br>开间&amp;进深</p>
+            <p>主采光面称为开间（面宽），与其垂直的称为进深。</p>
+            <span>
+                也可根据房间门的朝向来确定开间和进深，房门进入的方向的距离为进深，左右两边距离为开间。开间狭窄，进深过深不利于采光通风，一般来讲，开间应该越大越好，进深总数值应该越小越好。
+            </span>
+            <span>
+                根据《住宅建筑模数协调标准》（GBJ100-87）规定：住宅建筑的开间常采用下列参数：2.1米、2.4米、2.7米、3.0米、3.3米、3.6米、3.9米、 4.2米。
+            </span>
+            <br class="cl"></li>
+        <li style="background: #5d026b">
+            <i><img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-4/tz_2.png'}) -}}"></i>
+            <p class="right">
+                <img src="" onclick="clickMe(1)">
+                <br>动静分区</p>
+            <p>动区：客厅、餐厅、厨房、次卫等；静区：卧室、书房、主卫等。</p>
+            <span>动区是人们活动较为频繁的区域，应该靠近入户门设置，尤其是厨房；</span>
+            <span>静区主要供居住者休息，相对比较安静，应当尽量布置在户型内侧。</span>
+            <br class="cl"></li>
+        <li style="background: #560063">
+            <i>
+                <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-4/tz_3.png'}) -}}"></i>
+            <p class="right">
+                <img src="" onclick="clickMe(2)">
+                <br>通透良好</p>
+            <p>户型最好有两面可以采光和通风。</p>
+            <span>相对两面采光通风最佳（如南北、东西），其次是相邻两面采光（如东和南、南和西、西和北等），只有一面采光通风效果最差。</span>
+            <span>厨房、厕所是湿气比较重的两个区域，要尽量做到独立采光通风，也就是避免暗厨、暗卫。</span>
+            <br class="cl"></li>
+        <li style="background: #4a0255">
+            <i>
+                <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-4/tz_4.png'}) -}}"></i>
+            <p class="right">
+                <img src="" onclick="clickMe(3)">
+                <br>动线合理</p>
+            <p>动线是指人们在户内活动的路线。</p>
+            <span>
+                动线流畅与否将影响人们进行各种活动时能否实现顺利转换。好的动线能够提升小户型利用率，而差的动线会使大户型变得“大而无当”，浪费空间。
+            </span>
+            <span>户内主要动线有三类，分别是居住动线、家务动线、来客动线。</span>
+            <br class="cl"></li>
+        <li style="background: #44024e">
+            <i>
+                <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-4/tz_5.png'}) -}}"></i>
+            <p class="right">
+                <img src="" onclick="clickMe(4)">
+                <br>尺寸不合理</p>
+            <span style="margin-top:20px">客厅开间不宜小于3.6米。</span>
+            <span>
+                主卧一般采用3.3×3.6、3.6×3.9.3.9×4.2或4.5等几个尺寸，最小不得小于3.0×3.3。 次卧一般采用3.0×3.3、3.3×3.6。
+            </span>
+            <span>书房可以比次卧更小一点，面积6-10㎡就可以，进深开间要求没那么高。</span>
+            <span>厨房净长不宜小于2.1米，净宽不宜小于1.5米。</span>
+            <span>卫生间一般4平米左右，尺寸多为2×2、1.8×2.2。</span>
+            <br class="cl"></li>
+    </ul>
+</div>
+<div class="cl"></div>
+
+<div class="title">
+    <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-4/title_2.png'}) -}}" alt="如何选择合适的面积"></div>
+<div class="mianji">
+    <p>在户型选择中，考虑家庭人口因素也是比较重要的。</p>
+    ① 二室二厅一厨一卫，建筑面积在80-100平方米的适合两口之家或新婚夫妇居住；
+    ② 三室二厅一厨双卫，建筑面积在100-120平方米之间 ，适合三口之家，子女在12岁以上的居住，适当考虑书房和公用卫生间；
+    ③ 对于四五口人家，考虑到父母随子女住，需要增加老人住房或专用卫生间，建筑面积应考虑在140-150平方米之间，具体为四室二厅一厨双卫；
+    ④ 对于两代或三代同住，经济收入又比较高，应考虑六室三厅三卫一厨或跃层或别墅。
+    <span>
+        当然，人们对户型的要求还会因以下因素的变化而变化：一是随家庭人口的变化而变化，二是随家庭经济收入的变化而变化，三是随家庭主人职业地点的变化而变化 。
+    </span>
+</div>
+<div class="cl"></div>
+
+<div class="title">
+    <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-4/title_3.png'}) -}}" alt="户型中的风水问题"></div>
+<div class="fenshui">
+    <ul>
+        <li>
+            <p>门</p>
+            <span>户外、户内的任何2个门不能直接相对。房间进门的时候，不能直接从床位直视床头。进屋子的时候不能直接看到洗手间</span>
+        </li>
+        <li>
+            <p>房</p>
+            <span>床头上吊顶不能有横梁压床而过，厨厕最好不要相邻，床尾不能朝北（需注意户型设计时卧室门的位置）</span>
+        </li>
+        <li>
+            <p>灶</p>
+            <span>水火不同线（最好是L型）；不可避免的话（小户型），则水火不相邻；门不对灶</span>
+        </li>
+        <li>
+            <p>洗手间</p>
+            <span>洗手间的们不要正对大门，不与大门相邻，不居于户型中央，不与厨相邻。</span>
+        </li>
+    </ul>
+</div>
+<div class="cl"></div>
+
+<div class="title">
+    <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-4/title_4.png'}) -}}" alt="挑选户型的几大误区"></div>
+<div class="wuqu">
+    <ul>
+        <li>
+            <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-4/wuqu_1.gif'}) -}}">
+            <p>
+                错层发展至今，不仅有进深方向的前后错，也出现了开间方向的左右错，这种不分场合的滥用，浪费了高度或面积，同时也降低了抗震要求。错层接连要通过楼梯来完成，但过多的扶栏，处理不好会使室内显得很凌乱。
+            </p>
+        </li>
+        <li>
+            <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-4/wuqu_2.gif'}) -}}">
+            <p>
+                虽然“大”带来的舒适程度提高，但不少大户型在性价比上没有得到有效保证，“大”在客厅、主卧、阳台，而厨卫的面积和一些空间的功能没有得到实质改善，并不实用。
+            </p>
+        </li>
+        <li>
+            <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-4/wuqu_3.gif'}) -}}">
+            <p>
+                窗户直接关系到居住者的健康。过大的玻璃窗会降低保温性能，热量散失过快。飘窗可以增大采光、观景的视觉，但位于北侧、西北侧居室，飘窗增加了迎风面，使该居室与其他侧的居室温差变大。
+            </p>
+        </li>
+        <li>
+            <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-4/wuqu_4.gif'}) -}}">
+            <p>
+                阳台从基本功能上分为生活阳台和服务阳台。一般生活阳台6-8平方米，服务阳台3-5平方米，再大就有些累赘。而且，卧室外侧设置阳台会对采光产生遮蔽，阳台上的悬挂和摆放对室内的视觉也会有影响。
+            </p>
+        </li>
+    </ul>
+</div>
+<div class="cl"></div>
+
+<div class="title title_list">
+    <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-4/title_5.png'}) -}}" alt="结束语">
+    <p>热门户型列表</p>
+</div>
+<div class="jieshu">
+    <p></p>
+    选户型只看户型图是远远不够的，应当有个全方位多层次的考虑——地理位置、规划设计、经济价值、物业管理、居住理念等。否则一切都只是“纸上谈兵”。小二搜罗全城热门户型，为您献上最细致最全面的户型解析。让你自己来感受户型·行不行。
+    <div class="house">
+        {% if block_loupan.data is defined %}
+            {% for item in block_loupan.data %}
+                {% set lpitem = ('house.houses')|getRow({id: item.fromid|default(''), checked: 1, findType: 1}) %}
+                <a href= "{{('houses/detail')|U({id:lpitem.id|default('')})}}" target="_blank" class="hx">
+                    {{core_global.img({
+                        width: 200,
+                        height: 200,
+                        src: lpitem.thumb|default(''),
+                        alt: lpitem.name|default(''),
+                        type: 2
+                    })}}
+                    <b>{{lpitem.name|default('')}}</b>
+                    {{core_global.formField({value: lpitem.lcs|default(''), form: 'lcs', field: 'lcs', tpl: '%title%&nbsp;'})}}
+                    {{lpitem.attributes.zdmj.value|default('')}}
+                    {# 户型 #}
+                     {{- house_global.huxing({aid: lpitem.id|default(''),pagesize: 1, tpl: '%shi%%ting%%wei%%mj%m&sup2;'}) -}}
+                </a>
+            {% endfor %}
+        {% endif %}
+    <div class="cl"></div>
+</div>
+</div>
+
+<div class="cl"></div>
+
+<!--查看图片大图-->
+<div class="blackBg"></div>
+<div class="tanPic">
+    <div class="bigPic">
+        <img src="" alt="大图"></div>
+    <div class="bigPicClose"></div>
+</div>
+
+</body>
+{% endblock body %}

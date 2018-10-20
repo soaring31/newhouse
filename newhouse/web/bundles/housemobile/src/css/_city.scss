@@ -1,0 +1,27 @@
+// 城市切换
+.city-main {
+    padding: 0 14px;
+}
+.city-rmcs .button{
+    background: #fff;
+    border-color: #fff;
+    color: #565c67;
+    height: 32px;
+    line-height: 32px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    &.btn_act {
+        background: #1685E1;
+        color: #fff;
+    }
+}
+.city-block-title {
+    font-size: 14px;
+    color: #83868f;
+    padding-top: 20px;
+}
+.all-city {
+    background: #fff;
+    padding: 6px 0;
+    border-radius: 4px;
+}

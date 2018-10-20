@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title>form</title>    
+    <style type="text/css">
+
+    .img-form-1,
+    .img-form-2,
+    .img-form-3 {
+        display: inline-block;
+        *zoom: 1;
+        *display: inline;
+        background-image: url(form.png);
+    }
+
+    .img-form-1 {
+        width: 15px;
+        height: 16px;
+        background-position: 0 0;
+    }
+
+    .img-form-2 {
+        width: 15px;
+        height: 16px;
+        background-position: -25px 0;
+    }
+
+    .img-form-3 {
+        width: 15px;
+        height: 16px;
+        background-position: -50px 0;
+    }
+
+
+    * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    .container {
+        font-family: microsoft yahei;
+        width: 1200px;
+        margin: 20px auto;
+    }
+    li {
+        float: left;
+        padding: 5px;
+        margin: 5px;
+        border: 1px solid #eee;
+        text-align: center;
+        font-family: arial;
+        color: #fff;
+        height: 74px;
+        width: 25px;
+        min-width: 80px;
+        line-height: 1.5;
+        background-color: #272822;
+        position: relative;
+    }
+    .class {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 48px;
+        width: 100%;
+        cursor: pointer;
+    }
+    pre {
+        margin: 15px 0;
+        color: #FD8520;
+        font-family: Consolas;
+        font-size: 14px;
+        padding: 15px;
+        background-color: #272822;
+    }
+    .bg i {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        margin-left: 10px;
+        cursor: pointer;
+        float: right;
+        border: 2px solid #fff;
+    }
+
+    .bg i.act {
+        border-color: #f00;
+    }
+
+    
+    
+    .bg i:nth-child(1) {
+        background-color: #22D5BB;
+    }
+    
+    .bg i:nth-child(2) {
+        background-color: #E1F4D8;
+    }
+    
+    .bg i:nth-child(3) {
+        background-color: #8B9D37;
+    }
+    
+    .bg i:nth-child(4) {
+        background-color: #FE842E;
+    }
+    
+    .bg i:nth-child(5) {
+        background-color: #272822;
+    }
+        
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <h2>调用方式</h2>
+
+        <h3>css</h3>
+<pre class="text">
+@import 'img-form'; //导入css 标识-文件名
+@include img-form($img-form); //调用全部样式， 标识-文件名($标识-文件名);
+</pre>
+        <h3>html</h3>
+<pre>
+&lt;i class=&quot;img-demo-home&quot;&gt;&lt;/i&gt;; //class 标识+合成后文件名+单个文件名
+</pre>
+
+        <h3><span class="fr bg"><i></i><i></i><i></i><i></i><i class="act"></i></span>详细代码</h3>
+        点击下面文字直接复制到剪切板
+    </div>
+</div>
+<ul>
+
+
+    <li>
+        <i class="img-form-1"></i>
+        <div class="class">img-form-1</div>
+    </li>
+
+    <li>
+        <i class="img-form-2"></i>
+        <div class="class">img-form-2</div>
+    </li>
+
+    <li>
+        <i class="img-form-3"></i>
+        <div class="class">img-form-3</div>
+    </li>
+
+</ul>
+<script type="text/javascript">
+    var BASE_URL = window.location.href.replace('./images/form.html'.replace('./', ''), '') + '/';
+</script>
+<script type="text/javascript">document.write('<script src="' + BASE_URL + '/js/seajs.js"><\/script>');</script>
+
+<script type="text/javascript">
+if (BASE_URL.indexOf('http') == 0) {
+    seajs.use(['clipboard'], function() {
+        $(function() {
+            $('.index').click(function(event) {
+                location.href = BASE_URL;
+            });
+            var $icons = $('.class, .text');
+            $('body').on('copy', '.class, .text', function(e) {
+                    $icons.removeAttr('style');
+                    e.clipboardData.clearData();
+                    e.clipboardData.setData("text/plain", $(this).css({color:'#f00'}).text());
+                    e.preventDefault();
+                })
+                .on('click', '.bg i', function() {
+                    $(this).addClass('act').siblings('i').removeClass('act')
+                    $('li').css({
+                        backgroundColor: $(this).css('background-color'),
+                    })
+                })
+        });
+    })
+};
+</script>
+</body>
+</html>

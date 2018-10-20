@@ -1,0 +1,93 @@
+{% extends 'HouseBundle:Msale:mpay.html.twig' %}
+
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+{% set aid = app.request.get('aid') %}
+{% set usertype = app.request.get('usertype') %}
+{% set rmb = app.user.currency.rmb|default('0') %}     
+
+
+{% block js %}
+
+{% endblock %}
+
+{% block content %}
+{{ core_global.payment({ consume: 2, aid: aid, models: models, type:2 }) }}
+<script type="text/javascript">
+   seajs.use(['manage'], function (manage) {
+        $(function(){
+            var $rmb = {{rmb}};   // 余额
+            var $total = $('input[name=total_fee]');
+            var $day = $('input[name=day]').val()
+            $('.handref').on('click','input[type=radio]',function(){
+                $total.val($(this).data('price'))
+                $('.quit-pay-money').html($(this).data('price'));
+                $('#quit-all-pay').html($(this).data('price'));
+                balance()
+            })
+            $('.choice-item').on('click','li',function(){
+                $('.choice-item li').removeClass('on');
+                $(this).addClass('on');
+                $('input[name=paytype]').val($(this).attr('data-paytype'))
+            })
+            function balance(){
+               var $total = $('input[name=total_fee]').val(); 
+               if($('input[name=balance]').prop('checked')){
+                   if($rmb > $total){
+                       $('#quit-all-pay').html(0); // 支付金额  
+                  }else{
+                       $('#quit-all-pay').html($total - $rmb); // 支付金额      
+                  }
+               }else{
+                   $('#quit-pay-money').html($total);// 总计金额
+                   $('#quit-all-pay').html($total); // 支付金额      
+               }
+            }    
+            $('input[name=balance]').on('click',function(){
+                balance();
+            })
+            $('input[name=day]').on('keyup',function(){
+                $tval = $(this).val();
+                $tsum = $total.data('sum')||0;
+                $total.val($tval * $tsum);
+                $('.quit-pay-money').html($tval*$tsum);
+                $('#quit-all-pay').html($tval*$tsum);
+            
+                balance();
+            })
+            $('.mszd-btn').on('click',function(){
+                var $this = $(this);
+                if($('input[name=total_fee]').val() == 0){
+                    $.jqModal.tip('金额为0','error');
+                    return false;
+                }
+                $.jqModal.confirm({
+                    text: '已支付成功请按确定, 重新支付请按取消',
+                    accept: function(){
+                        $this.closest('.jq-modal').jqModal('hide');
+                        manage.flush();
+                    }
+                });
+               // return false;
+            })
+            // $('.handref').on('click','input[type=checkbox]',function(){
+            //     var strSel='';
+            //       $('.handref').find('input:checked').each(function(index, element) {
+            //              strSel += $(this).val() + ",";
+            //          });
+            //       console.log(strSel)
+            //         $('input[name=times]').val(strSel)
+            // })
+           // $('.mszd-btn').on('click',function(){
+           //     var $number = $('input[name=number]').val()
+           //     if ( $number<0 ) {
+//
+           //     };
+           //  //console.log($('form').serialize())
+           //  return false;
+           // })
+            
+            })
+    })
+</script>
+{% endblock %}

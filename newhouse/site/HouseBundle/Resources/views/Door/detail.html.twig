@@ -1,0 +1,224 @@
+{% set door_detail = cident.detail.data[0]|default('') %}
+
+{% set detail_houses = ('house.houses')|getRow({checked: 1, id: door_detail.aid|default(''), findType: 1}) %}
+
+{% set tpl_type = detail_houses.type|default('') %}
+{% extends tpl_type ? 'HouseBundle:Sale:qdplanintro.html.twig' : 'HouseBundle:Houses:dplanintro.html.twig' %}
+{# #说明
+* door_detail: 户型图详情
+* detail_houses: 所属楼盘数据
+* tpl_type: 判断是新房的户型还是小区的户型
+* detail_tuji: 图集数据
+* detail_topic_arc_aid: 看房团id
+* detail_topic: 楼盘所在看房线路
+#}
+
+{% set detail_tuji = door_detail.tujis|default('')|sourceImg %}
+
+{% block title %}{{door_detail.name|default('')}}户型图{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{door_detail.name|default('')}}户型,{{door_detail.name|default('')}}户型图,{{door_detail.name|default('')}}户型大全" />
+<meta name="description" content="{{door_detail.name|default('')}}户型图,{{cur_area_data|default('')}}{{door_detail.name|default('')}}小区网为您提供最新、最全的{{door_detail.name|default('')}}户型图，包含一居室户型、二居室户型、三居室户型等所有大小户型图，查找{{door_detail.name|default('')}}户型图就上{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}。 "/>
+{% endblock key_des %}
+
+{% block css %}
+    {{parent()}}
+    {% if tpl_type == 0 %}
+        {{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/hx.css')}}
+    {% endif %}
+{% endblock css %}
+
+{# 继承覆盖变量 #}
+{% block body %}
+    {% set detail = detail_houses|default('') %}
+    {{parent()}}
+{% endblock body %}
+
+{% block container_houses %}
+<div class="container">
+    {% if tpl_type == 0 %}
+    <div class="blank20"></div>
+    <div class="lp-hx-menu clearfix jqDuang" data-obj='li' data-effect="left" data-visible="10" data-steps="10" data-autoplay="0" data-prevbtn=".hx-left" data-nextbtn=".hx-right">
+        <ul>
+            {{- house_global.huxing({aid: door_detail.aid|default(''), models: 'door', tpl: "<li><a href='%url%' class='%class%'><p>%shi%%ting%%wei%</p><p>%mj%m&sup2;</p><i></i></a></li>"}) -}}
+        </ul>
+        <span class="hx-left hx-menu-btn"><i class="font-icons-11"></i></span>
+        <span class="hx-right hx-menu-btn"><i class="font-icons-12"></i></span>
+    </div>
+    {% endif %}
+    <div class="blank20"></div>
+
+    <div class="clearfix">
+        <div class="focus fl">
+            {% if tpl_type %}
+            <h3 class="picshowtxt-h3">
+                {{door_detail.name|default('')}}
+                {{- house_global.huxing({data: door_detail|default(''), models: 'door', tpl: ' - %shi%%ting%%wei% - %mj%M&sup2;'}) -}}
+            </h3>
+            {% endif %}
+            <!--图片特效内容-->
+            <div class="piccontext">
+                <a href="javascript:void(0);" class="view-pic bd-gray fr" data-href="ssss" target="_blank">
+                    <i class="font-lp-27"></i>
+                    原图
+                </a>
+                <!--大图展示-->
+                <div class="picshow">
+                    <div class="picshowtop">
+                  <div style="height:100%;" id="pic1">
+                    <span class="pic1-middle"></span>
+                  </div>
+                  <a id="preArrow" href="javascript:void(0)" class="contextDiv" title="上一张">
+                    <span id="preArrow_A"></span>
+                  </a>
+                  <a id="nextArrow" href="javascript:void(0)" class="contextDiv" title="下一张">
+                    <span id="nextArrow_A"></span>
+                  </a>
+                    </div>
+                    <div class="picshowlist">
+                  <div class="picshowlist_mid">
+                    <div class="picmidleft" id="preArrow_B">
+                        <i class="font-icons-11"></i>
+                    </div>
+                    <div class="picmidmid">
+                      <ul id="lightgallery">
+                        {% for item in detail_tuji %}
+                            <li data-src="{{assetImg(item.source|default('bundles/house/images/nopic.gif'), {type: 0, height: 440, width: 800,watermark: 'giffun'})}}">
+                              <a href="javascript:void(0);" class="img-responsive">
+                                {{- core_global.img({
+                                    src: item.href|default(''),
+                                    alt: item.desc|default(''),
+                                    type: 2,
+                                    width: 106,
+                                    height: 66
+                                }) -}}
+                                <i class="arrow"></i>
+                                <span class="index">
+                                    {{loop.index}}/{{detail_tuji|default('')|length}}
+                                </span>
+                              </a>
+                            </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                    <div class="picmidright" id="nextArrow_B">
+                        <i class="font-icons-12"></i>
+                    </div>
+                  </div>
+                    </div>
+                </div>
+            </div>
+            <!--/图片特效内容-->
+        </div>
+        {% if tpl_type == 0 %}
+        <!--aside info-->
+        <div class="hx-detail fr">
+            <div class="blank20"></div>
+            <div class="hx-detail-tit">
+                <h3>
+                    {{door_detail.name|default('')}}
+                </h3>
+                {{ house_global.lptag({value: door_detail|default(''), tpl: '<span>|</span><span class="ml5 mr5">%value%</span>', con: 'cate_status,cate_type'}) }}
+            </div>
+            <div class="blank20"></div>
+            <div class="hx-detail-info clearfix">
+                <div class="fr">
+                    {{house_global.if_dj({value: door_detail.dj|default(''), class: 'total-price'})}}
+                </div>
+                <span>
+                    {{house_global.if_mj({value: door_detail.mj|default('')})}}
+                </span>
+            </div>
+            <div class="hx-detail-info clearfix">
+                {{- house_global.huxing({id: door_detail.id|default(''), models: 'door', tpl: '%shi%%ting%%chu%%wei%'}) -}}
+                <a href="{{('tools/index')|U}}" title="" target="_blank" class="ico-word jsq fr">
+                    <i class="font-lp-24"></i>房贷计算器&gt;&gt;
+                </a>
+            </div>
+            <div class="blank20"></div>
+            <div class="line"></div>
+            {% set detail_topic_arc_aid = ('house.topic_arc')|getCol('aid', { checked: 1, fromid: door_detail.aid|default(''), cate_pushs: 'loupan', pageSize: 1000, orderBy: 'desc', order: 'id' }) %}
+
+            {% set detail_topic = ('house.topic')|getAll({id: 'in|' ~ detail_topic_arc_aid|join(','), category: 82, checked: 1, pageSize: 1}).data[0]|default('') %}
+
+            {% if detail_topic|default('') %}
+            <div class="hx-detail-info clearfix">
+                <div class="fr">
+                    已有<span><i data-counts="{models: 'topic', id: '{{detail_topic.id|default('')}}', field: 'enroll'}"></i></span>人报名
+                </div>
+                <i>
+                    <i class="font-lp-26 fz22"></i>
+                    {{detail_topic.name|default('-')}}
+                </i>
+            </div>
+            <div class="hx-detail-info clearfix">
+                集合时间：{{detail_topic.time.date|default('')}}
+            </div>
+            <div class="blank20"></div>
+            <div class="hx-detail-info clearfix tac">
+                <a href="{{('topic/detail')|U({id: detail_topic.id|default('')})}}" target="_blank" class="btn fill-btn">
+                    组团报名
+                </a>
+            </div>
+            <div class="blank20"></div>
+            <div class="line"></div>
+            {% endif %}
+            <p class="tel ico-word">
+                <i class="font-lp-13 "></i>
+                {{detail_houses.tel|default('待定')}}
+            </p>
+            <div class="blank10"></div>
+            <div class="blank10"></div>
+            <div class="share">
+                <div class="bdsharebuttonbox">
+                    <a href="#" data-cmd="more" class="ico-word">
+                        <i class="font-share-5"></i>
+                        分享到：
+                    </a>
+                    <a href="#" data-cmd="sqq" class="ico-word">
+                        <i class="font-share-1"></i>
+                        QQ
+                    </a>
+                    <a href="#" data-cmd="tsina" class="ico-word">
+                        <i class="font-share-4"></i>
+                        新浪
+                    </a>
+                    <a href="#" data-cmd="bdhome" class="ico-word">
+                        <i class="font-share-6"></i>
+                        百度
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!--/aside info-->
+    {% endif %}
+    </div>
+    <div class="blank30"></div>
+</div>
+{% endblock container_houses %}
+
+{% block js %}
+{% if tpl_type %}
+<script>
+    seajs.use(['gallery'], function() {
+        $('.focus').gallery({
+            maxW: 1000,
+            maxH: 570,
+            viewPic:'.view-pic',
+        });
+    });
+</script>
+{% else %}
+<script>
+seajs.use(['share', 'gallery', 'jqduang', 'formattime'], function(share, gallery, jqduang, formattime) {
+    $('.focus').gallery({
+        maxW: 800,
+        maxH: 440,
+        viewPic:'.view-pic'
+    });
+    share.init();
+});
+</script>
+{% endif %}
+{% endblock js %}

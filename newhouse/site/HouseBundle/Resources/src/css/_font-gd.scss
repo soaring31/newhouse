@@ -1,0 +1,37 @@
+$font-gd-fz: inherit !default;
+
+@font-face {
+	font-family: "gd";
+    font-weight: normal;
+    font-style: normal;
+	src: url('../fonts/gd.eot');
+	src: url('../fonts/gd.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/gd.woff') format('woff');//,
+		//url('../fonts/gd.ttf') format('truetype'),
+		//url('../fonts/gd.svg#gd') format('svg');
+}
+$font-gd-fz: inherit !default;
+$font-gd-fl: none !default;
+$font-gd-m: 0 !default;
+$font-gd-va: -.25em !default;
+[class^="font-gd-"],
+[class*=" font-gd-"] {
+	font-family: "gd";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-size: $font-gd-fz;
+	float: $font-gd-fl;
+	margin: $font-gd-m;
+	vertical-align: $font-gd-va;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; only necessary if not using the private unicode range (firstdata option) 
+	text-decoration: none;
+	text-transform: none;
+}
+.font-gd-p:before {
+	content: "\EA01";
+}.font-gd-s:before {
+	content: "\EA02";
+}

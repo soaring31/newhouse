@@ -1,0 +1,471 @@
+/*!
+ * @name <%= name %>
+ * @author <%= author %>
+ * @date <%= date %>
+ */
+$major-color: #27b346;
+@import 'static/ats';
+
+@import 'img-gd'; //导入css 标识-文件名
+@include img-gd($img-gd); //调用全部样式， 标识-文件名($标识-文件名);
+
+@import 'font-gd'; //导入css 标识-文件名
+@import 'top-search';
+
+$screen: 1200px;
+
+body {
+	
+	background: #f4f4f4;
+}
+
+.top-bar {
+	padding-top: 0;
+	background: #fff;
+}
+.current-location i {
+	color: $major-color;
+}
+
+input {
+	outline: none;
+}
+
+.container {
+	margin: 0 auto;
+}
+
+a:hover {
+	text-decoration: none;
+	color: $major-color;
+}
+
+.s-head {
+	width: 100%;
+	min-width: $screen;
+	height: 68px;
+	background: #fff;
+	line-height: 68px;
+	
+	.list {
+		display: inline-block;
+		margin-left: 70px;
+		vertical-align: top;
+
+		li {
+			height: 58px;
+			margin-top: 0;
+			
+
+		a {	
+			line-height: 58px;
+			word-spacing: 1px;
+			font-size: 14px;
+			color: #525252;
+			margin-right: 15px;
+		}
+
+		a:hover {
+			color: $major-color;
+		}	
+			
+		}
+		
+
+	}
+
+	
+
+	
+}
+// 分页
+.p-bar {
+	.current,
+    a:hover{
+    	background: $major-color;
+    	border-color: $major-color
+    }
+}
+.search-bar {
+	width: 502px;
+	height: 44px;
+	border: 1px solid $major-color;
+	display: inline-block;
+	font-size: 0;
+
+	margin-top: 12px;
+	margin-left: 10px;
+
+	.search-input {
+		padding: 0;
+		width: 432px;
+		height: 44px;
+		display: inline-block;
+		line-height: 46px;
+		font-size: 13px;
+		color: #a9a9a9;
+		text-indent: 10px;
+		border: none;
+		vertical-align: top;
+	}
+
+	.search-btn {
+		margin-right: 0;
+		width: 70px;
+		height: 44px;
+		display: inline-block;
+		border: none;
+		background-color: $major-color;
+		vertical-align: top;
+	}
+}
+
+.path {
+	word-spacing: 0.5px;
+	line-height: 16px;
+	padding-left: 10px;
+	color: #a89999;
+	margin-top: 19px;
+
+	i {
+		height: 16px;
+		width: 18px;
+		display: inline-block;
+		vertical-align: bottom;
+	}
+
+	a {
+		color: #2c2c2c;
+		font-size: 13px;
+	}
+
+	a:hover {
+		color: $major-color;
+	}	
+}
+
+
+
+
+.guide {
+
+.main {
+	
+	margin-top: 22px;
+	width: 100%;
+}
+
+.test {
+	width: 100%;
+	position: relative;
+}
+
+.lmenu {
+	float: left;
+	width: 300px;
+}
+.lmenu-bg{
+	float: left !important;
+}
+
+.m-head {
+	position: relative;
+	width: 246px;
+	height: 45px;
+	padding: 0 27px;
+	background: $major-color;
+
+	li {
+		float: left;
+		height: 45px;
+		font-size: 14px;
+
+	}
+
+	span {
+		position: absolute;
+		bottom: 0;
+		left: 67px;
+		@include triangle(12px, #fff, up);
+	}
+
+	a {
+		display: block;
+		height: 100%;
+		line-height: 45px;
+		padding: 0 15px;
+		color: #fff;
+	}
+
+	
+
+
+	 .active {
+	 	font-size: 16px;
+		
+	}
+
+}
+
+.m-con {
+	padding-top: 5px;
+	padding-bottom: 40px;
+	width: 100%;
+	background: #fff;
+	cursor: pointer;
+
+	h5 {
+		
+		padding-left: 40px;
+		line-height: 1;
+		font-size: 17px;
+		color: #333;
+		margin-top: 25px;
+	}
+
+	.first {
+		margin-top: 24px;
+	}
+
+	.arrow-r {
+		@include triangle(8px, #666, right);
+	}
+
+	.open {
+		.arrow-r{
+			@include triangle(8px, #666, down);			
+		}
+	}
+
+	i {
+		
+		display: inline-block;
+		vertical-align: middle;
+		margin-right: 10px;
+	}
+
+	.img-f-4 {
+		width: 4px;
+		height: 7px;
+	}
+
+	.img-f-6 {
+		width: 7px;
+		height: 4px;
+	}
+
+	ul {
+		display: none;
+		margin-left: 56px;
+	}
+
+	li {
+		margin-top: 15px;
+		height: 14px;
+	}
+
+	a {
+		font-size: 14px;
+		color: #666;
+	}
+
+	a:hover {
+		color: $major-color;
+	}
+
+	.active {
+		color: $major-color;
+	}
+
+	span {
+		height: 2px;
+		width: 2px;
+		display:inline-block;
+		vertical-align: middle;
+		margin-right: 7px;
+	}
+}
+
+
+.content {
+	width: 880px;
+	float: right;
+
+}
+
+.banner {
+	width: 860px;
+	height: 280px;
+	border: 10px solid #fff;
+	overflow: hidden;
+	position: relative;
+
+	ul {
+		width: 9999px;
+		height:100%;
+		position: absolute;
+		left: 0;
+		top: 0;
+
+		li {
+			width: 860px;
+			height: 280px;
+			float: left;
+		}
+	}
+
+	ol {
+		position: absolute;
+		height: 10px;
+		// width: 64px;
+		right: 0;
+		bottom: 10px;
+
+		i {
+			cursor: pointer;
+			height: 10px;
+			width: 10px;
+			border-radius: 50%;
+			background: #fff;
+			float: left;
+			margin-right: 10px;
+			text-indent: -999999px;
+		}
+
+		img {
+			width: 100%;
+			height: auto;
+		}
+	}
+
+	.active {
+		background: #ee4433;
+	}
+
+}
+
+.list {
+	width: 100%;
+
+	.no {
+		font-size: 16px;
+		text-align: center;
+		line-height: 2;
+	}
+
+} 
+
+.l-head {
+	height: 45px;
+	width: 100%;
+	background: $major-color;
+	
+
+	h2 {
+		font-size: 16px;
+		text-indent: 20px;
+		color: #fff;
+		line-height: 45px;
+	}
+}
+
+.l-wrap {
+	width: 858px;
+	padding-left: 20px;
+	border: 1px solid #eee;
+	background: #fff;
+
+}
+
+.list-b {
+	margin-top: 18px;
+	padding-bottom: 18px;
+	width: 100%;
+	border-bottom: 1px solid #f7f7f7;
+	@extend %clearfix;
+	img {
+		float: left;
+	}
+}
+
+.tbox {
+	margin-left: 148px;
+    padding-right: 15px;
+    word-break: break-all;
+
+	h3 {
+		font-size: 16px;
+		line-height: 20px;
+		text-indent: 5px;
+		color: #333;
+	}
+	p {
+		/*添加样式*/ 
+		color: #bbb;  
+		margin-top: 3px;
+	}
+}
+
+.ls-btn {
+	margin-top: 12px;
+	font-size: 0;
+	a {
+		display: inline-block;
+		height: 22px;
+		padding: 0 8px;
+		background: #e7e7e7;
+		color: #666;
+		line-height: 22px;
+		border-radius: 2px;
+		margin-right: 5px;
+		font-size: 13px;
+	}
+
+	a:hover {
+		background: $major-color;
+		color: #fff;
+	}
+
+	.active {
+		background: $major-color;
+		color: #fff;
+	}
+}
+
+.point {
+	height: 18px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	padding-right:30px;
+	@extend %clearfix;
+}
+
+.p-row {
+	cursor: pointer;
+	float: right;
+	margin-right: 28px;
+	height: 100%;
+	color: #ccc;
+	font-size: 13px;
+	i {
+		color: #ccc;
+		display: inline-block;
+		font-size: 13px;
+		vertical-align: top;
+	}
+
+}
+
+
+}
+/*修改样式*/
+.fs-style {
+	font-size: 15px;
+	text-decoration: none;
+	vertical-align: middle;
+}
+
+.link{
+	margin-top: 48px;
+}
+

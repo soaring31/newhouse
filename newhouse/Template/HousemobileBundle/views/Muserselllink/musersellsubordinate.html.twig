@@ -1,0 +1,21 @@
+{% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:yqmxlist.html.twig': 'HousemobileBundle::list_layout.html.twig' %}
+
+{% block title %}
+    【{{cur_area_data|default('')}}邀请下线明细|{{cur_area_data|default('')}}邀请】_{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}我的下级
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data|default('')}}邀请下线明细,{{cur_area_data|default('')}}邀请下线明细" />
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}二手房网为您提供快速全面的{{cur_area_data|default('')}}二手房信息及新发布{{cur_area_data|default('')}}二手房价格。大量优质二手房实时更新，为您创造舒适二手房购房体验。" />
+{% endblock key_des %}
+
+{% set zhu_nav = 2 %}
+
+{% block header_title %}
+{{core_mobile_global.title({title: '我的下级'})}}
+{% endblock header_title %}
+
+{% block container %}
+    {% set list_url = ('muserselllink/musersellsubordinate')|U({ajax: 1}) %}
+    {{ parent() }}
+{% endblock container %}

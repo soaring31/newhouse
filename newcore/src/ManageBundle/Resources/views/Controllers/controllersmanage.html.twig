@@ -1,0 +1,60 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+seajs.use("{{ bundlepath }}/js/controllers",function(c){
+	//js入口
+	c.init('main');
+});
+</script>
+{% endblock %}
+{% block tableMain %}
+<span class="tableDesc">
+       控制器列表>><input type="button" id="btnfun_edit_{{ action }}" data="{{ (action~'/show')|U('searchName='~searchName) }}" class="search-btn" value="新增控制器" />&nbsp;&nbsp;
+  <select id="selectsearch_bundlename">
+      {% if bundles is defined %}
+      {% for key,vo in bundles %}
+      <option value="{{ key }}" {{ searchName|default('')|isSelected(key) }}>{{ key }}</option>
+      {% endfor %}
+      {% endif %}
+  </select>
+  <input type="text" id="search_name" value="{{ app.request.get('name','') }}" data-source="{{ app.request.get('name','') }}" />
+</span>
+<table class="right-table">
+	<tbody>
+		<tr>
+			<th class="w30"></th>
+            <th class="w200 txtleft">控制器名称</th>
+            <th class="w100 txtleft">创建日期</th>
+			<th class="txtleft">控制器路径</th>
+			<th class="w300">操作</th>
+		</tr>
+		{% if iterator.data is defined %}
+		{% for key,vo in iterator.data %}
+		<tr>
+		    <td></td>
+			<td>{{ vo.basename }}</td>
+			<td>{{ vo.cTime|date('Y-m-d')  }}</td>
+			<td>{{ vo.realpath }}</td>
+			<td class="txtcenter">
+				<input type="button" id="btnfun_preview_{{key}}" data="{{ (action~'/preview')|U('name='~vo.basename~'&searchName='~searchName) }}" class="btn" value="预览" />&nbsp;
+				<input type="button" id="btnfun_jump_{{key}}" data="{{ ('controllerstemplate')|U('name='~vo.basename~'&searchName='~searchName) }}" class="btn" value="模板" />&nbsp;
+				<input type="button" id="btnfun_createaction_{{key}}" data="{{ (action~'/createaction')|U('name='~vo.basename~'&searchName='~searchName) }}" class="btn" value="方法" />&nbsp;
+				<input type="button" id="btnfun_jump_{{key}}a" data="{{ ('controllersident')|U('controllerName='~vo.basename~'&bundleName='~searchName) }}" class="btn" value="通用标识" />
+                <input type="button" id="btnfun_jump_{{key}}b" data="{{ ('controllerstplident')|U('controllerName='~vo.basename~'&bundleName='~searchName) }}" class="btn" value="模板标识" />
+			</td>
+			<td></td>
+		</tr>
+		{% endfor %}
+		{% endif %}
+	</tbody>
+</table>
+{% endblock %}
+{% block submit %}{% endblock %}
+{% if iterator is defined %}
+{% block pageIndex %}{{ iterator.pageIndex|default(1) }}{% endblock %}
+{% block pageCount %}{{ iterator.pageCount|default(1) }}{% endblock %}
+{% endif %}
+{% block promptUl %}
+	<li>通用标识：绑定在控制器上的标识，可在当前控制器下所有模板中调用，cident</li>
+	<li>模板(方法)标识：绑定在模板(方法)上的标识，只能在当前模板(方法)中调用，ident</li>
+{% endblock %}

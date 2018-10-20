@@ -1,0 +1,306 @@
+
+.cp {
+    cursor: pointer;
+}
+.pr {
+    position: relative;
+}
+.mt10 {
+    margin-top: 10px;
+}
+
+body {
+    line-height: 22px !important;
+}
+.popmask {
+    position: fixed;
+    z-index: 10000;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    opacity: .8;
+    background: #000;
+
+    filter: alpha(opacity=80);
+}
+
+.pophb {
+    position: fixed;
+    z-index: 10001;
+    top: 50%;
+    left: 50%;
+
+    width: 574px;
+    height: 411px;
+    margin-top: -205px;
+    margin-left: -287px;
+
+    background: url(../images/hb/popBg.png) no-repeat;
+}
+
+.pophb .left {
+    width: 487px;
+    height: 294px;
+    margin: 160px 0 0 34px;
+
+    text-align: center;
+}
+
+.baoming {
+    padding-top: 80px;
+    width: 380px;
+}
+
+
+.getSuc {
+    font-size: 28px;
+
+    margin-top: 123px;
+
+    color: #fff;
+}
+
+.pophb .right {
+    width: 48px;
+    height: 47px;
+    margin: 160px 0 0 0;
+
+    background: url(../images/closebtn.jpg) no-repeat;
+}
+
+.monyehead {
+    width: 100%;
+    height: 407px;
+    margin: 0 auto;
+
+    background: url(../images//hb/takemoney1.jpg) center no-repeat;
+}
+
+.monyebody {
+    width: 100%;
+    height: 430px;
+    margin: 0 auto;
+
+    background: url(../images/hb/takemoney2.jpg) center no-repeat;
+}
+
+.ptfont {
+    color: #ff8b8b;
+}
+
+
+.ckhb {
+    font-size: 22px;
+    line-height: 52px;
+
+    display: inline-block;
+
+    width: 300px;
+    height: 52px;
+    margin-top: 25px;
+
+    text-align: center;
+
+    color: #c00;
+    background: #ff0;
+}
+.ckhb:hover {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.logCont {
+    font-size: 20px;
+
+    margin-top: 3px;
+    margin-left: 37px;
+}
+
+.logCont .left,
+.logCont .left1 {
+    width: 21px;
+    height: 213px;
+    margin-top: 50px;
+
+    background: url(../images/hb/lines.jpg);
+}
+
+.logCont .left1 {
+    background: url(../images/hb/lines1.jpg) 0 6px no-repeat;
+}
+
+.logCont li {
+    clear: both;
+    overflow: hidden;
+    min-height: 95px;
+    .error {
+        display: block;
+    }
+}
+
+.logCont li span {
+    line-height: 55px;
+
+    height: 55px;
+
+    color: #7c3c3c;
+}
+
+.bottomHb {
+    line-height: 22px;
+
+    width: 448px;
+    margin-top: 18px;
+    margin-left: 87px;
+
+   
+}
+
+.humNum {
+    width: 100%;
+    margin-top: 10px;
+
+    text-align: center;
+
+    color: #ff9a9a;
+}
+
+.logHbCont {
+    width: 598px;
+    height: 392px;
+    margin-top: 0;
+    margin-left: -27px;
+
+    background: url(../images/hb/hongbao02.png) no-repeat;
+}
+
+.hname {
+    font-size: 24px;
+
+    width: 100%;
+    margin-top: 64px;
+
+    text-align: center;
+
+    color: #fff;
+}
+
+.mongyNum {
+    font-size: 52px;
+    font-weight: bold;
+    line-height: 52px;
+
+    width: 100% ;
+    margin-top: 130px;
+
+    text-align: center;
+
+    color: #f83923;
+}
+
+label.phprt {
+    line-height: 55px;
+
+    position: absolute;
+    top: 0;
+    left: 14px;
+
+    overflow: hidden;
+
+    width: 281px;
+    height: 55px;
+
+    cursor: text;
+
+    color: #cdcbcb;
+}
+.pr {
+    .hbInputStyle {
+        font-size: 20px;
+        line-height: 47px;
+
+        width: 281px;
+        height: 47px;
+        padding: 0 10px;
+
+        border: 4px solid #ebd5ac;
+        border-radius: 5px;
+        background: #fff;
+    }
+}
+
+.monyefoot {
+    width: 100%;
+    height: 804px;
+    margin: 0 auto;
+
+    background: url(../images/hb/takemoney3.jpg) center no-repeat;
+}
+
+.detailsCont {
+    line-height: 23px;
+
+    width: 964px;
+    height: 680px;
+    margin: 0 auto;
+    padding-right: 55px;
+    padding-left: 60px;
+
+    color: #6f2727;
+    background: url(../images/hb/hbcont_new.png) no-repeat;
+}
+
+.detailsCont dl dt {
+    font-weight: bold;
+}
+
+.detailsCont dl dd {
+    // text-indent: 18px;
+    padding-left: 18px;
+}
+
+.head {
+    font-size: 18px;
+    font-weight: bold;
+
+    width: 293px;
+    margin-left: 318px;
+    padding-top: 36px;
+    text-align: center;
+}
+
+.loghbsub {
+    font-size: 26px;
+    line-height: 60px;
+
+    width: 212px;
+    height: 60px;
+    margin-top: 10px;
+    margin-left: 80px;
+
+    cursor: pointer;
+
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    background: #cc0605;
+}
+.loghbsub:hover {
+    background: #a10706;
+}
+.monyefoot dl {
+    width: 910px;
+}
+.fwhite {
+    color: #fff;
+}
+.w1150 {
+    width: 1150px;
+    margin: 0 auto;
+}

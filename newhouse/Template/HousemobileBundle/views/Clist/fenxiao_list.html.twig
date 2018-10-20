@@ -1,0 +1,77 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+ * ajax调用：分销列表
+ * item_time: 截止时间
+ * item_tuijian: 推荐按钮
+ * item_goufang: 我要购房按钮
+#}
+
+{% block result %}
+{% if ident.list is defined %}
+    {% set list = ident.list %}
+    {% set tpl_now = 'now'|date("U") %} 
+{% endif %}
+    {% spaceless %}        
+        {% if ident.list.data is defined and ident.list.pageCount|default(0) != 0 %}
+            {% for item in ident.list.data %}
+                {% if item.enddate.date|default('')|date('U') > tpl_now %}
+
+                    {% set item_time = '<span class="time format-time" data-endtime="' ~ item.enddate.date|default('') ~ '" data-noend="永久有效！" data-end="活动结束" data-text="剩余时间: " data-type="1" data-timetype="1">截止日期: ' ~ item.enddate.date|default('') ~ '</span>' %}
+
+                    {% set item_tuijian = '<a href="' ~ ('fenxiao/earn')|UU({id: item.id|default('')}) ~ '" class="col-50 button button-fill button-success">推荐朋友</a>' %}
+
+                    {% set item_goufang = '<a href="' ~ ('fenxiao/earn')|UU({id: item.id|default(''), myself: 1}) ~ '" class="col-50 button button-fill button-cancel">我要购房</a>' %}
+                {% else %}
+
+                    {% set item_time = '<span class="c-e43">活动结束</span>' %}
+
+                    {% set item_tuijian = '<a href="javascript:;" class="col-50 button button-disable">推荐朋友</a>' %}
+
+                    {% set item_goufang = '<a href="javascript:;" class="col-50 button button-disable">我要购房</a>' %}
+                {% endif %}
+                <li {% if loop.last %}data-page="{
+                                    pageIndex: {{list.pageIndex}},
+                                    pageCount: {{list.pageCount}}
+                                }"{% endif %}>
+                    <a href="{{('fenxiao/detail')|UU({id: item.id|default('')})}}" class="fenxiao-tu">
+                        {{core_global.img({
+                            src: item.thumb|default(''),
+                            alt: item.name|default(''),
+                            type: 0
+                        })}}
+                    </a>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <a href="{{('fenxiao/detail')|UU({id: item.id|default('')})}}" class="item-list-title item-title item-title-p0 p-default">
+                                    {{item.name|default('')}}
+                                </a>
+                                <div class="item-after">
+                                    佣金:{{core_global.if_dw({value: item.yongjin, danwei: '元', class: "p-red"})}}
+                                </div>
+                            </div>
+                            <div class="item-subtitle item-subtitle-ex">
+                                楼盘位置：{{('house.houses')|getOne('address', {checked: 1, id: item.aid|default('')})}}
+                            </div>
+                            <div class="item-subtitle item-subtitle-ex">
+                                开盘时间：{{item.kpsj|default('')|date('Y-m-d')}}
+                            </div>
+                            <div class="item-subtitle item-subtitle-ex">
+                                {{item_time|raw}}
+                            </div>
+                            <div class="row mt5">
+                                {{item_tuijian|raw}}
+                                {{item_goufang|raw}}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        {% else %}
+            <li class="mobile-list-none">暂无更多分销</li>
+        {% endif %}
+    {% endspaceless %}
+    <script type="text/javascript">
+        seajs.use(['formattime'])
+    </script>
+{% endblock result %}

@@ -1,0 +1,243 @@
+{% extends 'HouseBundle::base.html.twig' %}
+{# *说明
+** category_video:获取video的分类
+** (局部变量)videoList:每个分类下的所有视频
+** url_category:获取当前url中的category参数
+** category:根据url中的category的值获取当前分类的属性
+** shipinmokuaiguanggao: 广告推送
+** push_videohdp:头部幻灯片推荐视频
+** push_video1:头部视频推荐（一般4条）
+** push_clsptj: 侧栏视频推送
+#}
+
+{% set url_category = app.request.get("category", 16) %}
+
+{% set category = (url_category)|getCategoryById() %}
+
+{% set category_video = ('house.category')|getAll({models: 'video', checked: 1}) %}
+
+{% set sort_clicks_video = ('house.video')|getAll({checked: 1, orderBy: 'desc', order: 'clicks', pageSize: 10, findType: 1}) %}
+
+{% block title %}{{category.name|default('')}}{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" Content="{{category.keywords|default('')}}"/>
+<meta name="description" content="{{category.description|default('')}}"/>
+{% endblock key_des %}
+
+{% block css %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/video.css')}}
+{% endblock css %}
+
+{% block body %}
+    <!--header-->
+    <div class="video-header container clearfix">
+        <img src="{{core_global.img_url({src: core_global.mconfig({name: 'videoslogo', ename: 'mvariables_user'}), type: 0, height: 35})}}" alt="视频logo" class='videos-logo' height="35" />
+        {% block top_search %}
+            {{ core_global.search({
+                action: 'video/list',
+                placeholder: '请输入视频关键词',
+            }) }}
+        {% endblock top_search %}
+    </div>
+    <div class="blank3 color999"></div>
+    <!--/header-->
+    <!-- nav -->
+    <div class="video-nav">
+        {{core_global.detail_nav({
+            class: 'container',
+            nav_detail_act: nav_video_act|default(16),
+            controller: 'video',
+            first_name: '视频首页',
+            data: category_video.data
+        })}}
+    </div>
+    <!-- /nav -->
+
+    <div class="container mt10 mb10">
+        {{ core_global.ads({tag: 'shipinmokuaiguanggao', default_tag: 'dbtsbs'}) }}
+    </div>
+
+    <!--container-->
+    <div class="container video clearfix" style="padding-bottom:40px;">
+        {% block current %}{% endblock current %}
+        <div class="body fl">
+            {% block container %}
+                <div class="section1 clearfix">
+                    <!--focus-->
+                    {% set push_videohdp = ('videohdp')|getPush(12) %}
+                    <div class="video-focus fl jqDuang" data-obj="li" data-cell=".thumb" data-effect="leftLoop" data-tag="videohdp" data-lazyload="src">
+                        <div>
+                            <ul>
+                                {% if push_videohdp is defined and push_videohdp|default('') %}
+                                    {% for item in push_videohdp %}
+                                    <li {% if item.ad|default('') %}class="house-ad right-top"{% endif %}>
+                                        {% if item.ad|default('') %}
+                                            <div class="ad-txt"></div>
+                                        {% endif %}
+                                        <a href="{{item.url|default('#')}}" title="{{item.name|default('')}}" target="_blank">
+                                            {{- core_global.data_src_img({
+                                                src: item.thumb|default(''),
+                                                alt: item.name|default(''),
+                                                width:425 ,
+                                                height: 320,
+                                                type: 0
+                                            }) -}}
+                                            <div class="focus-title clearfix">
+                                                <div class="title-icon fl">
+                                                    <i class="font-video-1"></i>
+                                                </div>
+                                                <div class="title-text fl">
+                                                    {{item.name|default('')}}
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                {% else %}
+                                    <li>
+                                        {{- core_global.data_src_img({
+                                            src: '',
+                                            alt: '视频',
+                                            width:425 ,
+                                            height: 320,
+                                            type: 0
+                                        }) -}}
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        <div class="thumb">
+                        </div>
+                    </div>
+                    <!--/focus-->
+                    {% set push_video1 = ('video1')|getPush(4) %}
+                    <div class="video-push fl" style="width:425px; overflow:hidden;" data-tag="video1">
+                        <ul class="clearfix video-list" style="width:444px;">
+                            {% if push_video1 is defined %}
+                                {% for item in push_video1 %}
+                                <li {% if item.ad|default('') %}class="house-ad left-top"{% endif %}>
+                                    {% if item.ad|default('') %}
+                                        <div class="ad-txt"></div>
+                                    {% endif %}
+                                    <a href="{{item.url|default('#')}}" target="_blank">
+                                        {{- core_global.img({
+                                            src: item.thumb|default(''),
+                                            alt: item.name|default(''),
+                                            type: 2,
+                                            width: 195,
+                                            height: 130
+                                        }) -}}
+                                        {% if item.dujia|default('') == 1 %}
+                                            <div class="list-tag">独家</div>
+                                        {% endif %}
+                                        {# <p class="list-title">{{item.name|default('')}}</p> #}
+                                    </a>
+                                    <a href="{{item.url|default('#')}}" target="_blank">
+                                        <p class="list-desc" title="{{item.name|default('')}}">{{item.name|default('')}}</p>
+                                    </a>
+                                </li>
+                                {% endfor %}
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+                {% for category in category_video.data %}
+                    {% if not loop.first %}
+                        {% set video_data = ("house.video")|getAll({category: category.id, pageSize: 4, checked: 1, findType: 1, order: 'id', orderBy: 'desc'}) %}
+                        {{house_global.video_list({
+                            list: video_data,
+                            category: category.id,
+                            title: category.name
+                        })}}
+                        <div class="blank10"></div>
+                    {% endif %}
+                {% endfor %}
+            {% endblock container %}
+        </div>
+        <div class="aside fr">
+            {% set push_clsptj = ('clsptj')|getPush(10) %}
+            {% if push_clsptj|default('') %}
+                <!--推荐视频-->
+                <div class="panel aside-floor"  data-tag="clsptj">
+                    <div class="panel-title">
+                        <h2>推荐视频</h2>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="aside-video-push">
+                            {% for item in push_clsptj %}
+                                <li class="clearfix{% if item.ad|default('') %} house-ad left-top{% endif %}">
+                                    {% if item.ad|default('') %}
+                                        <div class="ad-txt"></div>
+                                    {% endif %}
+                                    <a href="{{item.url|default('#')}}" title="{{item.name|default('')}}" target="_blank">
+                                        {{- core_global.img({
+                                            src: item.thumb|default(''),
+                                            alt: item.name|default(''),
+                                            type: 2,
+                                            width: 100,
+                                            height:67 ,
+                                            attr:'class="push-img"',
+                                        }) -}}
+                                    </a>
+                                    <h4 class="push-title">
+                                        <a href="{{item.url|default('#')}}" title="{{item.name|default('')}}" target="_blank">{{item.name|default('')}}</a>
+                                    </h4>
+                                    <p class="push-time">
+                                        更新：{{item.update_time|date("Y-m-d")}}
+                                    </p>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <!--/推荐视频-->
+            {% endif %}
+
+            <!--热播排行-->
+            {% if sort_clicks_video.data is defined and sort_clicks_video.pageCount|default(0) != 0 %}
+                <div class="blank20"></div>
+                <div class="panel aside-floor" data-tag="clicks">
+                    <div class="panel-title">
+                        <h2>热播排行</h2>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="aside-video-push">
+                            {% for item in sort_clicks_video.data %}
+                                <li class="clearfix {% if loop.index == 1 %}first-step{% endif %}">
+                                    <i class="{% if loop.index <= 3 %}hot{% endif %}">{% if loop.index == 1 %}NO.{% endif %}{{loop.index}}</i>
+                                    <a href="{{('video/detail')|U({id:item.id|default('')})}}" title="{{item.name|default('')}}" target="_blank">
+                                    {{- core_global.img({
+                                        src: item.thumb|default(''),
+                                        alt: item.name|default(''),
+                                        type: 2,
+                                        width: 100,
+                                        height:67 ,
+                                        attr: 'class="push-img"',
+                                    }) -}}
+                                    </a>
+                                    <h4 class="push-title">
+                                        <a href="{{('video/detail')|U({id:item.id|default('')})}}" title="{{item.name|default('')}}" target="_blank">
+                                            {{item.name|default('')}}
+                                        </a>
+                                    </h4>
+                                    <p class="push-time">
+                                        点击：{{item.clicks|default('-')}}
+                                    </p>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <!--/热播排行-->
+            {% endif %}
+        </div>
+    </div>
+    <!--/container-->
+{% endblock body %}
+
+{% block js %}
+<script>
+seajs.use(['jqduang'],function(jqduang){})
+</script>
+{% endblock js %}

@@ -1,0 +1,11 @@
+{{'{% extends "HouseBundle::base_show.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+	seajs.use(\'dialog\', function(dialog) {
+		window.dialog = dialog;
+	})	
+</script>
+{% endblock %}
+{% block body %}
+{{ cmg.form(form|default(\'\'),\'form\', \'house.news\') }}
+{% endblock %}'}}

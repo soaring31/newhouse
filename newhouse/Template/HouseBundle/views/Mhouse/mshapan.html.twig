@@ -1,0 +1,106 @@
+{# 电子沙盘 #}
+{% extends 'HouseBundle::base_show.html.twig' %}
+{% set aid = app.request.get('aid') %}
+
+{% set build = ('house.build')|getAll({aid: aid, checked: 1,pageSize: 100}) %}
+
+{% set map = ('house.houses')|getOne('dzsp', {id: aid}) %}
+
+{% block css %}
+    {{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/shapan.css')}}
+{% endblock css %}
+
+{% block mainMenu %}
+   {{ core_manage.show({
+        url: ( "mhousemanage/mshapanedit")|U({id: aid, _id:aid}),
+        title: '<i class="font-ico-tp mr5"></i>添加/修改沙盘图片'
+     }) }}
+   {{ core_manage.show({
+        url: ("mhouse/mbuildmanage") | U({
+            cate_pushs: 'loudong',
+            form: 'houses_build',
+            form_id: 75,
+            aid: aid
+        }),
+        'data-reload': 1,
+        title: '<i class="font-ico-24 mr5"></i>添加/修改楼栋'
+     }) }} 
+{% endblock %}
+
+{% block body %}
+    <div data-param="{
+        defUrl    : '{{ (action)|U({aid: aid}) }}',
+        showUrl   : '{{ ( "mshapanedit/show")|U }}',
+        submitUrl : '{{ (action ~ "/save")|U }}',
+        deleteUrl : '{{ (action ~ "/delete")|U }}',
+        data : {
+        }
+    }">
+       <form  id="newform"  enctype="multipart/form-data" >
+            <input type="hidden" name="_08_hash" value="" />
+
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" class=" tb tb2 bdbot">
+                <tr>
+                    <td class="txt txtright fB" width="10%">楼栋</td>
+                    <td class="txt txtleft">
+                        {% if build.data is defined %}
+                            {% for item in build.data %}
+                               <input type='checkbox' id='shapan_{{item.id|default('0')}}' name='shapan_{{item.id|default('0')}}' value='{{item.seat|default('0,0')}}' data-xszt='{{item.cate_status|default('0')}}' data-ox="{{item.id|default('0')}},{{item.name|default('')}} {# {{item.unit|default('')}} #},{{loop.index}}">{{item.name|default('')}} {# {{item.unit|default('')}}  #} &nbsp;&nbsp;  
+                            {% endfor %}
+                        {% endif %}
+                    </td>     
+                </tr>
+                <tr>
+                    <td class="txt txtright fB" width="10%">沙盘图</td>
+                    <td class="txt txtleft">
+                        <div id='shapan' style="overflow:hidden; width:640px; height:480px;position:relative;border:2px solid #CAE4F7;z-index: 1;">
+                            <div id='shapan-i'>
+                                {% set img_opt = {
+                                    src: map,
+                                    type: 0
+                                } %}
+                                {# 没有图片时给一个默认大小 #}
+                                {% if map is empty %}
+                                {% set img_opt = img_opt|merge({
+                                    width: 640,
+                                    height: 480
+                                }) %}
+                                {% endif %}
+
+                                {{core_global.img(img_opt)}}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            {% set form = (309)|getForm %}
+            {{ form_widget(form.csrf_token) }}
+        </form>
+        <script type="text/javascript">
+        {# js 一定要放list-con里面，否则reload时不会执行 #}
+            seajs.use(['jqmodal', 'shapan'], function(jqmodal, shapan) {
+                shapan.init({
+                    url: "{{ ('mbuildmanage/save')|U }}",
+                    csrf: $('input[name="csrf_token"]').val()
+                });
+            });
+        </script>
+    </div>
+    <style type="text/css">
+    #newform {
+        min-height: auto !important;
+    }
+    </style>
+{% endblock body %}
+
+{% block promptUl %}
+// @require('markdown')
+1. 编辑楼栋：在区块那里的楼栋进行编辑。
+1. 移动楼栋：鼠标左键点击楼栋图标，一直按着鼠标左键拖动，即可移动楼栋。
+1. 添加删除楼栋：点击楼栋前面方框，即可把楼栋图标从沙盘图上添加或者删除。
+{% endblock %}
+
+
+
+
+

@@ -1,0 +1,49 @@
+{% extends "TripodManageBundle::mainlayout.html.twig" %}
+{% block tableMain %}
+<span class="tableDesc">内容列表{% if action|isPermission('save')%}>><input type="button" id="btnfun_detail_{{ action }}" class="search-btn" value="新增内容" />{% endif %}</span>
+<table class="right-table">
+	<tbody>
+		<tr>
+			<th class="w70">ID</th>
+			<th class="txtleft">标题</th>
+			<th class="w80 txtleft">车类目</th>
+			<th class="w120 txtleft">地区</th>
+			<th class="w80 txtleft">审核</th>
+			<th class="w80 txtleft">点击数</th>
+			<th class="w80 txtleft">添加日期</th>
+			<th class="w80 txtleft">评论</th>
+			<th class="w80 txtleft">更多</th>
+			<th class="w100">操作</th>
+		</tr>
+		{% if tableData is defined and tableData.data is defined %}
+		{% for key,item in tableData.data %}
+		<tr id="channeldata_{{item.coid}}_tr">
+			<td class="txtcenter">{{item.coid}}</td>
+			<td><span id='cfcotypes_{{item.coid}}_cname' class='editspan'>{{item.cname}}</span></td>			
+			<td><span id='cfcotypes_{{item.coid}}_sname' class='editspan'>{{item.sname}}</span></td>
+			<td><span id='cfcotypes_{{item.coid}}_remark' class='editspan'>{{item.remark}}</span></td>
+			<td><span id='cfcotypes_{{item.coid}}_vieworder' class='editspan'>{{item.vieworder}}</span></td>
+			<td class="txtleft">coclass{{item.coid?item.coid:''}}</td>
+			<td class="txtcenter" data="{{item.coid?item.coid:0}}">
+				{#判断是否有字段权限#}
+				{% if action|isPermission('fields')%}
+				<input type="button" id="btnfun_fields_{{action}}" class="search-btn" value="字段" />
+				{% endif %}
+				{#判断是否有查看权限#}
+				{% if action|isPermission('details')%}
+				<input type="button" id="btnfun_details_{{action}}" class="search-btn" value="查看" />
+				{% endif %}
+			</td>
+		</tr>
+		{% endfor %}
+		{% endif %}
+	</tbody>
+</table>
+{% endblock %}
+{% block submit %}{% endblock %}
+{% if tableData is defined %}
+{% block pageIndex %}{% if tableData.pageIndex is defined %}{{tableData.pageIndex}}{% endif %}{% endblock %}
+{% block pageCount %}{% if tableData.pageCount is defined %}{{tableData.pageCount}}{% endif %}{% endblock %}
+{% endif %}
+{% block promptUl %}
+{% endblock %}

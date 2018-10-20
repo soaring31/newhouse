@@ -1,0 +1,8 @@
+oauth_connect:
+    path: /oauth
+    defaults:
+        _controller: 'OAuthBundle:Connect:connect'
+# oauth_checkweibo:
+#     path: /checkweibo
+#     defaults:
+#         _controller: 'OAuthBundle:Oauth:checkweibo'

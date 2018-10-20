@@ -1,0 +1,14 @@
+{% extends "HouseBundle::base_show.html.twig" %}
+{% block js %}
+
+
+<script>
+seajs.use("{{ bundlepath }}/js/controllers",function(c){
+	//js入口
+	c.init('show');
+});
+</script>
+{% endblock %}
+{% block body %}
+{{ core_manage.form(form|default(''),'form') }}
+{% endblock %}

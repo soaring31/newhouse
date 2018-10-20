@@ -1,0 +1,33 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+{# 说明 
+* detail: 求租数据
+#}
+{% set detail = ident.detail.data[0]|default('') %}
+
+{% block title %}
+    {{detail.name|default('')}}
+{% endblock title %}
+
+{% block key_des %}
+    <meta name="keywords" content="{{detail.keywords|default('')}}" />
+    <meta name="description" content="{{detail.description|default('')}}" />
+{% endblock key_des%}
+
+{% block header_title %}
+{{core_mobile_global.title({title: '详情'})}}
+{% endblock header_title %}
+
+{% block container %}
+    {# 主体内容 #}
+    <div data-block="{
+        bParams: true,
+        ajax:{
+            url: '{{ ('demand/detail')|U }}',
+            data: {
+                id: '{{ detail.id|default('') }}',
+                tpl: 'Demand:detailblock'
+            }
+        }
+    }"></div>
+{% endblock container %}

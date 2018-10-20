@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title>share</title>    
+    <style type="text/css">
+
+    .img-share-QQ16,
+    .img-share-QQwb16,
+    .img-share-QQzone16,
+    .img-share-arrow-up,
+    .img-share-coment-hover,
+    .img-share-coment,
+    .img-share-qq18-hover,
+    .img-share-qq18,
+    .img-share-qqwb18-hover,
+    .img-share-qqwb18,
+    .img-share-qqzone18-hover,
+    .img-share-qqzone18,
+    .img-share-share-btn-hover,
+    .img-share-share-btn,
+    .img-share-slide-btn-hover,
+    .img-share-slide-btn,
+    .img-share-wb16,
+    .img-share-wb18-hover,
+    .img-share-wb18,
+    .img-share-wx18-hover,
+    .img-share-wx18 {
+        display: inline-block;
+        *zoom: 1;
+        *display: inline;
+        background-image: url(share.png);
+    }
+
+    .img-share-QQ16 {
+        width: 16px;
+        height: 16px;
+        background-position: -112px -78px;
+    }
+
+    .img-share-QQwb16 {
+        width: 16px;
+        height: 16px;
+        background-position: -112px -52px;
+    }
+
+    .img-share-QQzone16 {
+        width: 16px;
+        height: 16px;
+        background-position: -112px -26px;
+    }
+
+    .img-share-arrow-up {
+        width: 10px;
+        height: 7px;
+        background-position: 0 -112px;
+    }
+
+    .img-share-coment-hover {
+        width: 18px;
+        height: 18px;
+        background-position: -84px -28px;
+    }
+
+    .img-share-coment {
+        width: 18px;
+        height: 18px;
+        background-position: 0 -28px;
+    }
+
+    .img-share-qq18-hover {
+        width: 18px;
+        height: 18px;
+        background-position: -56px 0;
+    }
+
+    .img-share-qq18 {
+        width: 18px;
+        height: 18px;
+        background-position: -56px -28px;
+    }
+
+    .img-share-qqwb18-hover {
+        width: 18px;
+        height: 18px;
+        background-position: -28px -56px;
+    }
+
+    .img-share-qqwb18 {
+        width: 18px;
+        height: 18px;
+        background-position: -56px -56px;
+    }
+
+    .img-share-qqzone18-hover {
+        width: 18px;
+        height: 18px;
+        background-position: 0 0;
+    }
+
+    .img-share-qqzone18 {
+        width: 18px;
+        height: 18px;
+        background-position: -84px -56px;
+    }
+
+    .img-share-share-btn-hover {
+        width: 18px;
+        height: 18px;
+        background-position: 0 -84px;
+    }
+
+    .img-share-share-btn {
+        width: 18px;
+        height: 18px;
+        background-position: -28px -84px;
+    }
+
+    .img-share-slide-btn-hover {
+        width: 18px;
+        height: 18px;
+        background-position: -56px -84px;
+    }
+
+    .img-share-slide-btn {
+        width: 18px;
+        height: 18px;
+        background-position: -84px -84px;
+    }
+
+    .img-share-wb16 {
+        width: 16px;
+        height: 16px;
+        background-position: -112px 0;
+    }
+
+    .img-share-wb18-hover {
+        width: 18px;
+        height: 18px;
+        background-position: -84px 0;
+    }
+
+    .img-share-wb18 {
+        width: 18px;
+        height: 18px;
+        background-position: 0 -56px;
+    }
+
+    .img-share-wx18-hover {
+        width: 18px;
+        height: 18px;
+        background-position: -28px -28px;
+    }
+
+    .img-share-wx18 {
+        width: 18px;
+        height: 18px;
+        background-position: -28px 0;
+    }
+
+
+    * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    .container {
+        font-family: microsoft yahei;
+        width: 1200px;
+        margin: 20px auto;
+    }
+    li {
+        float: left;
+        padding: 5px;
+        margin: 5px;
+        border: 1px solid #eee;
+        text-align: center;
+        font-family: arial;
+        color: #fff;
+        height: 76px;
+        width: 28px;
+        min-width: 80px;
+        line-height: 1.5;
+        background-color: #272822;
+        position: relative;
+    }
+    .class {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 48px;
+        width: 100%;
+        cursor: pointer;
+    }
+    pre {
+        margin: 15px 0;
+        color: #FD8520;
+        font-family: Consolas;
+        font-size: 14px;
+        padding: 15px;
+        background-color: #272822;
+    }
+    .bg i {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        margin-left: 10px;
+        cursor: pointer;
+        float: right;
+        border: 2px solid #fff;
+    }
+
+    .bg i.act {
+        border-color: #f00;
+    }
+
+    
+    
+    .bg i:nth-child(1) {
+        background-color: #22D5BB;
+    }
+    
+    .bg i:nth-child(2) {
+        background-color: #E1F4D8;
+    }
+    
+    .bg i:nth-child(3) {
+        background-color: #8B9D37;
+    }
+    
+    .bg i:nth-child(4) {
+        background-color: #FE842E;
+    }
+    
+    .bg i:nth-child(5) {
+        background-color: #272822;
+    }
+        
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <h2>调用方式</h2>
+
+        <h3>css</h3>
+<pre class="text">
+@import 'img-share'; //导入css 标识-文件名
+@include img-share($img-share); //调用全部样式， 标识-文件名($标识-文件名);
+</pre>
+        <h3>html</h3>
+<pre>
+&lt;i class=&quot;img-demo-home&quot;&gt;&lt;/i&gt;; //class 标识+合成后文件名+单个文件名
+</pre>
+
+        <h3><span class="fr bg"><i></i><i></i><i></i><i></i><i class="act"></i></span>详细代码</h3>
+        点击下面文字直接复制到剪切板
+    </div>
+</div>
+<ul>
+
+
+    <li>
+        <i class="img-share-QQ16"></i>
+        <div class="class">img-share-QQ16</div>
+    </li>
+
+    <li>
+        <i class="img-share-QQwb16"></i>
+        <div class="class">img-share-QQwb16</div>
+    </li>
+
+    <li>
+        <i class="img-share-QQzone16"></i>
+        <div class="class">img-share-QQzone16</div>
+    </li>
+
+    <li>
+        <i class="img-share-arrow-up"></i>
+        <div class="class">img-share-arrow-up</div>
+    </li>
+
+    <li>
+        <i class="img-share-coment-hover"></i>
+        <div class="class">img-share-coment-hover</div>
+    </li>
+
+    <li>
+        <i class="img-share-coment"></i>
+        <div class="class">img-share-coment</div>
+    </li>
+
+    <li>
+        <i class="img-share-qq18-hover"></i>
+        <div class="class">img-share-qq18-hover</div>
+    </li>
+
+    <li>
+        <i class="img-share-qq18"></i>
+        <div class="class">img-share-qq18</div>
+    </li>
+
+    <li>
+        <i class="img-share-qqwb18-hover"></i>
+        <div class="class">img-share-qqwb18-hover</div>
+    </li>
+
+    <li>
+        <i class="img-share-qqwb18"></i>
+        <div class="class">img-share-qqwb18</div>
+    </li>
+
+    <li>
+        <i class="img-share-qqzone18-hover"></i>
+        <div class="class">img-share-qqzone18-hover</div>
+    </li>
+
+    <li>
+        <i class="img-share-qqzone18"></i>
+        <div class="class">img-share-qqzone18</div>
+    </li>
+
+    <li>
+        <i class="img-share-share-btn-hover"></i>
+        <div class="class">img-share-share-btn-hover</div>
+    </li>
+
+    <li>
+        <i class="img-share-share-btn"></i>
+        <div class="class">img-share-share-btn</div>
+    </li>
+
+    <li>
+        <i class="img-share-slide-btn-hover"></i>
+        <div class="class">img-share-slide-btn-hover</div>
+    </li>
+
+    <li>
+        <i class="img-share-slide-btn"></i>
+        <div class="class">img-share-slide-btn</div>
+    </li>
+
+    <li>
+        <i class="img-share-wb16"></i>
+        <div class="class">img-share-wb16</div>
+    </li>
+
+    <li>
+        <i class="img-share-wb18-hover"></i>
+        <div class="class">img-share-wb18-hover</div>
+    </li>
+
+    <li>
+        <i class="img-share-wb18"></i>
+        <div class="class">img-share-wb18</div>
+    </li>
+
+    <li>
+        <i class="img-share-wx18-hover"></i>
+        <div class="class">img-share-wx18-hover</div>
+    </li>
+
+    <li>
+        <i class="img-share-wx18"></i>
+        <div class="class">img-share-wx18</div>
+    </li>
+
+</ul>
+<script type="text/javascript">
+    var BASE_URL = window.location.href.replace('./images/share.html'.replace('./', ''), '') + '/';
+</script>
+<script type="text/javascript">document.write('<script src="' + BASE_URL + '/js/seajs.js"><\/script>');</script>
+
+<script type="text/javascript">
+if (BASE_URL.indexOf('http') == 0) {
+    seajs.use(['clipboard'], function() {
+        $(function() {
+            $('.index').click(function(event) {
+                location.href = BASE_URL;
+            });
+            var $icons = $('.class, .text');
+            $('body').on('copy', '.class, .text', function(e) {
+                    $icons.removeAttr('style');
+                    e.clipboardData.clearData();
+                    e.clipboardData.setData("text/plain", $(this).css({color:'#f00'}).text());
+                    e.preventDefault();
+                })
+                .on('click', '.bg i', function() {
+                    $(this).addClass('act').siblings('i').removeClass('act')
+                    $('li').css({
+                        backgroundColor: $(this).css('background-color'),
+                    })
+                })
+        });
+    })
+};
+</script>
+</body>
+</html>

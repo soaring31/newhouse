@@ -1,0 +1,407 @@
+/*!
+ * @name <%= name %>
+ * @author <%= author %>
+ * @date <%= date %>
+ */
+
+@import 'static/ats'; // 工具类, 每个文件都要导入
+@import 'img-lo'; //导入css 标识-文件名
+@include img-lo($img-lo); //调用全部样式， 标识-文件名($标识-文件名);
+
+@import 'font-lo'; //导入css 标识-文件名
+
+@import 'img-re'; //导入css 标识-文件名
+@include img-re($img-re); //调用全部样式， 标识-文件名($标识-文件名);
+
+@import 'img-p'; //导入css 标识-文件名
+@include img-p($img-p); //调用全部样式， 标识-文件名($标识-文件名);
+
+ @import 'font-re'; //导入css 标识-文件名
+
+// 登录样式
+.log {
+
+    @extend %clearfix;
+
+    html,body {
+        height: 100%;
+    }
+
+    input {
+        outline: none;
+    }
+
+
+    .bg {
+        float: left;
+        width: 758px;
+        height: 560px;
+        background: url(../images/login_bg.jpg) 0 0 no-repeat; 
+    }
+
+    .login {
+        float: right;
+        width: 400px;
+        margin-top:32px;
+        position: relative;
+    }
+
+    .login-head {
+        width:100%;
+        height:47px;
+        border-bottom: 1px solid #e3e3e3;
+        font-size:0;
+        line-height:2.4;
+        text-align:center;
+
+        a {
+            height: 47px;
+            width: 200px;
+            display: inline-block;
+            font-size: 20px;
+            text-decoration: none;
+            color: #999;
+        }
+
+        li {
+            float:left
+        }
+        .active,.act {
+            height: 46px;
+            border-bottom: 2px solid #999;
+            color: #333;
+        }
+
+    }
+
+    .tag {
+        display: block;
+        // width: 100%;
+        position: relative;
+    }
+
+    .tag-form {
+        display: block;
+        position: absolute;
+        top: 30px;
+        left: 0;
+        width: 100%;
+        
+        
+        .btn {
+            background:#ee4433;
+            }
+
+    }
+
+    .auto {
+        margin-bottom: 12px;
+        padding-right: 10px;
+        @extend %clearfix;
+        
+        input {
+           height: 12px;
+            width: 12px; 
+            display: inline;
+            vertical-align: middle;
+            margin-right:10px;
+            margin-left: 5px;
+        }
+        
+        a {
+            text-decoration: none;
+            margin: 0 5px;
+        }
+
+        .smart {
+            color: #aaa;
+            font-size: 16px;
+            margin-right: 3px;
+        }
+        
+
+    }
+
+    .one-login {
+        position: absolute;
+        left: 0;
+        top: 406px;
+        width: 100%;
+        font-size:13px;
+        @extend %clearfix;
+        .one {
+            float: left;
+            width:70px;
+            line-height: 54px;
+            color: #4b4b4b;
+            font-size: 13px;
+        }
+
+        p {
+            margin-top: -5px;
+            display: inline-block;
+            margin: 0 5px;
+        }
+        
+        a {
+            color: #999;
+            &:hover {
+                text-decoration: none;
+                color: #e40;
+            }
+        }
+        span {
+            font-size: 29px;
+            margin-right: 5px;
+            &.font-lo-QQ {
+                color: #43acd9;
+            }
+            &.font-lo-sina {
+                color: #eb7464;
+            }
+            &.font-lo-baidu {
+                color: #5d61ab;
+            }
+            &.font-lo-weixin {
+                color: #3EB135;
+            }
+        }   
+
+    }
+
+    .type {
+        display: none;
+    }
+}
+
+.common-form-lg .item {
+    height: 80px !important;
+}
+
+// 注册样式
+
+.regter {
+    $lable-w: 90px; // label 宽
+    $input-h: 46px; // 行高
+    @extend %clearfix ;
+    padding: 0 50px;
+    input {
+        outline: none;
+    }
+    .register {
+        margin-top: 32px;
+        width: 500px;
+        float: left;
+    }
+    .register-head {
+        font-size: 0;
+        line-height: 2.4;
+
+        width: 100%;
+        height: 47px;
+
+        border-bottom: 1px solid #e3e3e3;
+        a {
+            text-align: center;
+            font-size: 20px;
+
+            display: inline-block;
+
+            width: 33.33%;
+            height: 47px;
+
+            text-decoration: none;
+
+            color: #999;
+        }
+        .active {
+            height: 46px;
+
+            color: #2ea821;
+            border-bottom: 2px solid #999;
+        }
+    }
+    .checks {
+        position: relative;
+
+        margin: 20px -250px 20px 0;
+
+        @extend %clearfix;
+        label {
+            float: left;
+
+            margin-right: 15px;
+            padding: 0 15px;
+
+            cursor: pointer;
+            font-size: 13px;
+            line-height: 40px;
+
+            position: relative;
+
+
+            color: #666;
+            border: 1px solid #ddd;
+
+            input {
+                display: none;
+            }
+            i {
+                font-size: 18px;
+                display: inline-block;
+
+                margin-right: 4px;
+            }
+            span {
+                position: absolute;
+                right: 0;
+                bottom: 0;
+
+                display: inline-block;
+
+                width: 14px;
+                height: 14px;
+            }
+        }
+        .active {
+            color: #2ea821;
+            border: 1px solid #2ea821;
+            span {
+                @extend .img-re-5;
+            }
+        }
+        .mess {
+            position: absolute;
+            top: 13px;
+            left: 422px;
+
+            display: none;
+
+            width: 17px;
+            height: 17px;
+        }
+    }
+
+    .item.submit .field {
+        width: 80%;
+        .btn {
+            width: 100%;
+        }
+    }
+    form input.btn, 
+    form button.btn, 
+    form input[type="number"], 
+    form input[type="text"], 
+    form input[type="password"], 
+    form input.text,
+    .code-wrap-outer {
+        width: 80%;
+    }
+ 
+    
+    // 右侧
+    &-aside {
+        float: right;
+        width: 440px;
+        height: 460px;
+        margin-top: 102px;
+        padding-left: 60px;
+
+        background: url(../images/ri_bg.png) 0 0 no-repeat;
+        p {
+            font-size: 14px;
+
+            margin: 20px 0 30px 0;
+
+            color: #535353;
+        }
+        h3 {
+            font-size: 14px;
+
+            margin-top: 30px;
+
+            color: #999;
+        }
+        h4 {
+            font-size: 14px;
+
+            display: block;
+
+            margin-top: 18px;
+
+            color: #999;
+        }
+        .email {
+            display: none;
+        }
+        .phone {
+            display: block;
+        }
+    }
+    .login-header {
+        font-size: 15px;
+        line-height: 2;
+
+        height: 30px;
+        span {
+            margin-right: 10px;
+
+            color: #999;
+        }
+        a {
+            display: inline-block;
+
+            width: 95px;
+            height: 30px;
+
+            text-align: center;
+            text-decoration: none;
+
+            color: #fff;
+            background: #d63333;
+        }
+    }
+    .row {
+        margin: 15px;
+
+        @extend %clearfix;
+        .icon {
+            line-height: 45px;
+
+            float: left;
+
+            width: 130px;
+        }
+        a {
+            font-size: 14px;
+            color: #333;
+            &:hover {
+                text-decoration: none;
+                color: #e40;
+            }
+        }
+        .pic {
+            font-size: 45px;
+            margin-right: 10px;
+            vertical-align: -15px;
+        }
+        .pic1 {
+            color: #eb7464;
+        }
+        .pic2 {
+            color: #3aabd9;
+        }
+        .pic3 {
+            color: #4b9c36;
+        }
+        .pic4 {
+            color: #5b61ab;
+        }
+    }
+}
+
+.resetpwd {
+    .register-head {
+        margin-bottom: 30px;
+    }
+}

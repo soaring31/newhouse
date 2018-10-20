@@ -1,0 +1,100 @@
+{% extends 'MemberBundle::base_manage_block.html.twig' %}
+{% set user_id = app.user.id|default('') %}
+{% set info_money = 0 %}
+
+
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }}
+{% endblock %}
+
+{% block mainleft %}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ core_manage.filter([
+    {
+        title: '订单日期',
+        attr: {
+            'data-selectdate': {
+                unix: 1
+            }
+        },
+        data: [
+                {
+                    id: '1M',
+                    name: '一个月前'
+                },
+                {
+                    id: '3M',
+                    name: '三个月前'
+                }
+            ],
+        field: 'update_time',
+        method: 'selectFilter'
+    },
+    {
+        method: 'search',
+        title: '请输入被推荐人电话/名称',
+    }
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+           
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="50" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="120">被推荐人姓名</th>
+                    <th width="120">联系电话</th>
+                    <th width="120">楼盘名称</th>
+                    <th width="120">佣金(元)</th>
+                    <th width="120">结算时间</th>
+                    <th width="120">备注</th>
+                </tr>
+
+                {% if ident.info.data is defined and ident.info.pageCount|default('0') != 0 %}
+                    {% for k, vo in ident.info.data %}
+                        {# 楼盘id #}
+                        {% set vo_houses = ('house.sell')|getOne('aid', {id: vo.aid|default('')}) %}
+                        <tr data-id="{{ vo.id }}">
+                            <td class="tac" >{{core_manage.checkbox()}}</td>
+                            <td >{{vo.name|default('')}}</td>
+                            <td >{{vo.tel|default('')}}</td>
+                            <td >
+                                {{ ('house.houses')|getOne('name', {id: vo_houses}) }}
+                            </td>
+                            <td >{{ vo.yongjin|default('') }}</td>
+                            <td >{{ vo.update_time|default('')|date('Y-m-d H:m:s') }}</td>
+                            <td>
+                                {{ vo.yongjin }} * 100% 
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                <tr><td colspan="7" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+{% endblock %}
+
+{% block promptUl %}
+{# 提示说明 #}
+{% endblock %}

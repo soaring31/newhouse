@@ -1,0 +1,56 @@
+{% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:videolist.html.twig' : 'HousemobileBundle::list_layout.html.twig' %}
+{# 说明 
+ * search_action: 搜索链接配置
+ * url_category: url传递的category值
+ * category: 当前分类属性
+#}
+
+{% set search_action = ('video/list')|UU %}
+
+{% set url_category = app.request.get("category", 16) %}
+
+{% set category = ('house.category')|getRow({id:url_category,checked: 1}) %}
+
+{% block title %}
+    {{category.name|default('视频')}}
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" Content="{{category.keywords|default('')}}"/>
+<meta name="description" content="{{category.description|default('')}}"/>
+{% endblock key_des %}
+
+
+{% block header_title %}
+    {{core_mobile_global.title({title: category.name|default('视频')})}}
+{% endblock header_title %}
+
+{# 头部右边追加 #}
+{% block header_right %}
+{{ core_mobile_global.bar_nav_btn({
+    title: '搜索',
+    icon: 'font-f-8',
+    popup: {
+        title: '视频搜索',
+        popup: '.popup-search',
+    }
+}) }}
+{% endblock header_right %}
+
+
+{% block container %}
+{% set list_header %}
+<div class="filter" data-block="{
+    ajax: {
+        url: '{{ ('bundlebindforms/ajax')|U }}',
+        data: {
+            tpl: 'Common:filter',
+            tag: 'video'
+        }
+    }
+}"></div>
+{% endset %}
+    <div class="blank10"></div>
+    {% set list_url = ('video/list')|U({ajax: 1}) %}
+    {{parent()}}
+{% endblock container %}

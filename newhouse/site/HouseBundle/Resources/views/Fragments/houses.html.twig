@@ -1,0 +1,12 @@
+{% set tpl = app.request.get('tpl', 1) %}
+{% if tpl == 1 %}
+	{% set controller = app.request.get('controller') %}
+	{% set action = app.request.get('action') %}
+	{% set models = app.request.get('models') %}
+	{% set url = controller|default(models|default('houses')) ~ '/' ~ action|default('detail') %}
+	document.write('<ul class="08cmsFrame">{% for item in ident.info.data %} <li><a href="{{(url)|U({id: item.id|default('')}, true)}}">{{item.name}}</a></li> {% endfor %}</ul>')
+{% elseif tpl == 2 %}
+	document.write('<div class="08cmsFrame">{% for item in ident.info.data %} <li><a href="{{(url)|U({id: item.id|default('')}, true)}}">{{item.id}}</a></li> {% endfor %}</div>')
+{% elseif tpl == 3 %}
+	document.write('自定义模板，同时也可继续增加模板类型')
+{% endif %}

@@ -1,0 +1,22 @@
+{% set frmid = app.request.get('frmid') %}
+<script type="text/javascript">
+seajs.use(['map'],function(){
+});
+</script>
+
+<div data-map="{
+        point: {
+            lng: 113.760128,
+            lat: 23.023205
+        },
+        zoom: 14
+    }"  data-popinfo="#popinfo" style="z-index:333; height:100%;"></div>
+{# 提示框模板 #}
+<script type="text/html" id="popinfo">
+	<div class="info">确定标记在这个位置吗？</div>
+	<div class="blank10"></div>
+	<div class="form">
+		<a class="btn btn-xs mr5" data-map-submit="1">确定</a>
+		<a class="btn btn-xs btn-danger " data-map-cancel="1" >取消</a>
+	</div>
+</script>

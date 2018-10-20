@@ -1,0 +1,67 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+ * ajax调用：我的分销列表
+#}
+
+{% block result %}
+{% if ident.info is defined %}
+    {% set list = ident.info %}
+    {% set tpl_now = 'now'|date('U') %}
+{% endif %}
+    {% spaceless %}        
+        {% if list.data is defined and list.pageCount|default(0) != 0 %}
+            {% for item in list.data %}
+                <li {% if loop.last %}data-page="{
+                    pageIndex: {{list.pageIndex}},
+                    pageCount: {{list.pageCount}},
+                    pageSize: {{list.pageSize}}
+                 }"{% endif %}>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                 <div class="item-title p-gray">
+                                    推荐人：{{item.name|default('')}}
+                                 </div>
+                                <div class="item-after">
+                                    预估佣金:{{core_global.if_dw({value: item.yongjin, danwei: '元', class: "p-red"})}}
+                                </div>
+                            </div>
+                            <div class="item-title-row">
+                                <div class="item-title p-gray">
+                                    推荐状态：<font color="{{ {5: 'red', 4: 'green'}[(item.status)]|default('blue') }}">{{ core_global.formField({ value: item.status, form: 'recommend', field: 'status' }) }}</font>
+                                    
+                                </div>
+                                <div class="item-after">
+                                    佣金:
+                                    {% if item.status == 4 %}
+                                        {{core_global.if_dw({value: item.yongjin, danwei: '元', class: "p-red"})}}
+                                    {% else %}
+                                        0
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="item-subtitle item-subtitle-ex">
+                                 {% set vo_houses = ('house.sell')|getOne('aid', {id: item.aid|default('')}) %}
+                                推荐楼盘：
+                                {{ ('house.houses')|getOne('name', {id: vo_houses, checked: 1})|default('-') }}
+                            </div>
+                            <div class="item-subtitle item-subtitle-ex">
+                                推荐时间：{{item.create_time|default('')|date('Y-m-d')}}
+                            </div>
+                            <div class="item-subtitle item-subtitle-ex">
+                                联系电话：{{item.tel|default('')}}
+                            </div>
+                            <div class="row mt5">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        {% else %}
+            <li class="mobile-list-none">暂无更多数据</li>
+        {% endif %}
+    {% endspaceless %}
+    <script type="text/javascript">
+        seajs.use(['formattime'])
+    </script>
+{% endblock result %}

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="232px" height="232px" viewBox="0 0 232 232" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
+    <title>网站平台</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="1" y="1" width="230" height="230"></rect>
+        <polygon id="path-2" points="0 0 11.2432432 0 11.2432432 24.0833333 5.62162162 29.75 0 24.0833333"></polygon>
+        <path d="M118,98.6 L126.4,98.6 L126.4,98.6 C130.265993,98.6 133.4,101.734007 133.4,105.6 L133.4,105.6 L111,105.6 L111,105.6 L111,105.6 C111,101.734007 114.134007,98.6 118,98.6 Z" id="path-3"></path>
+        <rect id="path-4" x="0.4" y="0.6" width="123.2" height="89.6" rx="5.6"></rect>
+        <rect id="path-5" x="7.4" y="7.6" width="109.2" height="67.2" rx="5.6"></rect>
+        <polygon id="path-6" points="52.2 88.8 71.8 88.8 74.6 100 49.4 100"></polygon>
+        <path d="M41,98.6 L83,98.6 L83,98.6 C86.8659932,98.6 90,101.734007 90,105.6 L90,105.6 L34,105.6 L34,105.6 L34,105.6 C34,101.734007 37.1340068,98.6 41,98.6 Z" id="path-7"></path>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="开放平台" transform="translate(-835.000000, -2981.000000)">
+            <g id="客户可以干什么" transform="translate(120.000000, 2354.000000)">
+                <g id="网站平台" transform="translate(422.000000, 627.000000)">
+                    <g transform="translate(293.000000, 0.000000)">
+                        <g id="Rectangle-69-Copy">
+                            <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                            <rect stroke="#DDDDDD" stroke-width="1" x="0.5" y="0.5" width="231" height="231"></rect>
+                        </g>
+                        <rect id="Rectangle-70-Copy-3" fill="#FF8400" x="0" y="0" width="232" height="2"></rect>
+                        <path d="M46.7179287,167.127367 C13.8501353,163.018893 12.3386536,122.97818 26.4744156,110.350917 C40.30526,97.207465 53.5147891,101.328631 49.532054,64.1564373 C45.549319,26.9842433 79.0577154,25.0530009 118.566129,53.5358104 C143.37385,69.9188879 163.994659,74.9149467 180.428556,68.5239869 C205.079401,58.9375471 227.490792,80.8494094 204.209439,108.239237 C181.709377,134.709898 165.86368,134.259574 180.428556,176.713807 C186.594099,194.685357 159.016223,209.5816 137.10436,186.300246 C115.192498,163.018893 79.585722,171.235841 46.7179287,167.127367 Z" id="Path-8-Copy" fill="#F7F7F7"></path>
+                        <g id="笔" transform="translate(30.000000, 133.000000)">
+                            <g id="Group-17" transform="translate(16.826292, 16.280832) rotate(-45.000000) translate(-16.826292, -16.280832) translate(9.326292, 1.280832)">
+                                <g id="Rectangle-47">
+                                    <use fill="#BBBBBB" fill-rule="evenodd" xlink:href="#path-2"></use>
+                                    <path stroke="#333333" stroke-width="1.4" d="M0.7,0.7 L0.7,23.7950188 L5.62162162,28.7560764 L10.5432432,23.7950188 L10.5432432,0.7 L0.7,0.7 Z"></path>
+                                </g>
+                                <rect id="Rectangle-48" fill="#333333" x="0" y="18.4166667" width="11.2432432" height="1.41666667"></rect>
+                                <rect id="Rectangle-48-Copy" fill="#333333" transform="translate(5.621622, 24.791667) rotate(-90.000000) translate(-5.621622, -24.791667) " x="2.10810811" y="24.0833333" width="7.02702703" height="1.41666667"></rect>
+                                <rect id="Rectangle-48-Copy-2" fill="#333333" transform="translate(13.351351, 8.500000) rotate(-90.000000) translate(-13.351351, -8.500000) " x="7.72972973" y="7.79166667" width="11.2432432" height="1.41666667"></rect>
+                                <rect id="Rectangle-49" fill="#333333" x="9.83783784" y="2.83333333" width="4.21621622" height="1.41666667"></rect>
+                            </g>
+                            <path d="M27.3297197,29.3481703 C30.0412415,33.5072281 34.1267609,34.994202 39.5862781,33.8090918 C47.7755539,32.0314266 41.4933238,23.7316672 38.6448277,27.5391952 C35.7963316,31.3467232 42.8408803,37.3270271 52.8752589,28.7130654" id="Path-3" stroke="#333333" stroke-width="1.4"></path>
+                        </g>
+                        <g id="Group-2" transform="translate(57.000000, 57.000000)">
+                            <g id="Rectangle-40">
+                                <use fill="#BBBBBB" fill-rule="evenodd" xlink:href="#path-3"></use>
+                                <path stroke="#333333" stroke-width="1.4" d="M111.73845,104.9 L132.66155,104.9 C132.313339,101.750035 129.642788,99.3 126.4,99.3 L118,99.3 C114.757212,99.3 112.086661,101.750035 111.73845,104.9 Z"></path>
+                            </g>
+                            <path d="M13,7.6 L111,7.6 L111,7.6 C114.092795,7.6 116.6,10.1072054 116.6,13.2 L116.6,18.8 L7.4,18.8 L7.4,13.2 L7.4,13.2 C7.4,10.1072054 9.9072054,7.6 13,7.6 Z" id="Rectangle-36" fill="#F1F1F1"></path>
+                            <g id="Rectangle-32">
+                                <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-4"></use>
+                                <rect stroke="#333333" stroke-width="1.4" x="1.1" y="1.3" width="121.8" height="88.2" rx="5.6"></rect>
+                            </g>
+                            <g id="Rectangle-32-Copy">
+                                <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-5"></use>
+                                <rect stroke="#333333" stroke-width="1.4" x="8.1" y="8.3" width="107.8" height="65.8" rx="5.6"></rect>
+                            </g>
+                            <g id="Rectangle-33">
+                                <use fill="#BBBBBB" fill-rule="evenodd" xlink:href="#path-6"></use>
+                                <path stroke="#333333" stroke-width="1.4" d="M52.7465435,89.5 L50.2965435,99.3 L73.7034565,99.3 L71.2534565,89.5 L52.7465435,89.5 Z"></path>
+                            </g>
+                            <g id="Rectangle-34">
+                                <use fill="#BBBBBB" fill-rule="evenodd" xlink:href="#path-7"></use>
+                                <path stroke="#333333" stroke-width="1.4" d="M34.7384501,104.9 L89.2615499,104.9 C88.9133389,101.750035 86.2427876,99.3 83,99.3 L41,99.3 C37.7572124,99.3 35.0866611,101.750035 34.7384501,104.9 Z"></path>
+                            </g>
+                            <circle id="Oval-12" fill="#BBBBBB" cx="15.1" cy="13.9" r="2.1"></circle>
+                            <circle id="Oval-12-Copy" fill="#BBBBBB" cx="22.1" cy="13.9" r="2.1"></circle>
+                            <circle id="Oval-12-Copy-2" fill="#BBBBBB" cx="29.1" cy="13.9" r="2.1"></circle>
+                            <rect id="Rectangle-38" fill="#F1F1F1" x="66.2" y="23" width="39.2" height="25.2" rx="1.4"></rect>
+                            <rect id="Rectangle-39" fill="#E2E2E2" x="15.8" y="25.8" width="44.8" height="2.8"></rect>
+                            <rect id="Rectangle-39-Copy" fill="#E2E2E2" x="15.8" y="31.4" width="44.8" height="2.8"></rect>
+                            <rect id="Rectangle-39-Copy-2" fill="#E2E2E2" x="15.8" y="37" width="44.8" height="2.8"></rect>
+                            <rect id="Rectangle-39-Copy-3" fill="#E2E2E2" x="15.8" y="42.6" width="44.8" height="2.8"></rect>
+                            <rect id="Rectangle-39-Copy-5" fill="#E2E2E2" x="66.2" y="52.4" width="39.2" height="5.6"></rect>
+                            <rect id="Rectangle-39-Copy-6" fill="#E2E2E2" x="66.2" y="60.8" width="39.2" height="5.6"></rect>
+                            <path d="M87.8029275,32.5855115 L90.7870035,37.0616256 L90.7870035,37.0616256 C91.215897,37.7049657 91.0420536,38.5741828 90.3987134,39.0030762 C90.1687389,39.1563926 89.8985281,39.2382058 89.6221331,39.2382058 L83.653981,39.2382058 L83.653981,39.2382058 C82.8807823,39.2382058 82.253981,38.6114045 82.253981,37.8382058 C82.253981,37.5618109 82.3357942,37.2916001 82.4891106,37.0616256 L85.4731866,32.5855115 L85.4731866,32.5855115 C85.9020801,31.9421713 86.7712972,31.7683279 87.4146373,32.1972213 C87.5684305,32.2997501 87.7003987,32.4317183 87.8029275,32.5855115 Z" id="Triangle-3" fill="#BBBBBB" transform="translate(86.638131, 35.600074) rotate(90.000000) translate(-86.638131, -35.600074) "></path>
+                            <circle id="Oval-15" stroke="#333333" stroke-width="1.4" cx="62" cy="81.8" r="3.5"></circle>
+                            <rect id="Rectangle-41" fill="#E2E2E2" x="15.8" y="52.4" width="14" height="14" rx="1.4"></rect>
+                            <rect id="Rectangle-41-Copy" fill="#E2E2E2" x="31.2" y="52.4" width="14" height="14" rx="1.4"></rect>
+                            <rect id="Rectangle-41-Copy-2" fill="#E2E2E2" x="46.6" y="52.4" width="14" height="14" rx="1.4"></rect>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

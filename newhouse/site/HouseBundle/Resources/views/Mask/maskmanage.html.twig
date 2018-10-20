@@ -1,0 +1,146 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set category = app.request.get('category') %}
+{% set category_data = ('house.category')|getRow({id: category, findType: 1}) %}
+{% set models = category_data.models|default('') %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }}
+    {{ core_manage.jump(
+        {
+            title: '<i class="font-ico-10 mr5"></i>答案',
+            url: ('manswer/manswermanage')|U,    
+            class: ''
+        }
+    ) }}
+    {{ core_manage.jump(
+        {
+            title: '<i class="font-ico-33 mr5"></i>举报',
+            url: ('maskreport/maskreportmanage')|U,    
+            class: ''
+        }
+    ) }}
+{% endblock %}
+
+{% block tableMain %}
+{% set filter_opt = [
+   {
+        method: 'selectFormField',
+        title: '审核',
+        form: 'checked',
+        field: 'checked',
+    },
+    {
+        method: 'selectFormField',
+        title: '解决状态',
+        form: 'ask',
+        field: 'solved',
+    },
+    {
+        method: 'search',
+        field: 'name',
+        title: '请搜索ID/标题',
+    }
+] %}
+{% if category_data.is_next|default(false) == false %}
+    {% set filter_opt = [{
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增问答'
+    }]|merge(filter_opt) %}
+{% endif %}
+{{ core_manage.filter(filter_opt) }}
+
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ "/show")|U }}',
+        submitUrl : '{{ (action ~ "/save")|U }}',
+        deleteUrl : '{{ (action ~ "/delete")|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            models: '{{ models }}',
+            category: '{{ category }}'
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                    <th>标题</th>
+                    <th width="60">举报</th>
+                    <th width="60">答案</th>
+                    <th width="70">栏目</th>
+                   {#  <th width="70">高额悬赏</th> #}
+                    <th width="70">解决状态</th>
+                    <th width="70">审核</th>
+                    <th width="70" data-role="sort" data-sort="clicks" class="sort">点击</th>
+                    <th width="80" data-role="sort" data-sort="create_time" class="sort">添加时间</th>
+                    <th width="120" class="tac">操作</th>
+                </tr>
+                {% if ident.info.data is defined  and ident.info.pageCount|default('') != 0 %}
+                {% for k, vo in ident.info.data %}
+                    {# {{dump(vo)}} #}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td>{{ vo.id }}</td>
+                    <td class="tov" title="{{ vo.name|default('') }}"><a href="{{ 'ask/detail'|U({id: vo.id}) }}" target="_blank">{% if vo.thumb %}<i class="font-ico-tp mr5 fcr"></i>{% endif %}{{ vo.name }}</a></td>
+                    <td><a data-role="show" title="{{vo.name}}的举报" href="{{('maskreport/maskreportmanage')|U({aid: vo.id})}}">[{{core_global.count({ models: 'ask_report', sql_opt: {aid: vo.id} })}}]</a></td>
+                    <td><a data-role="show" title="{{vo.name}}的答案" href="{{('manswer/manswermanage')|U({ask: vo.id})}}">[{{core_global.count({ models: 'answer', sql_opt: {ask: vo.id} })}}]</a></td>
+                    <td>{{core_global.formData({value: vo.category})}}</td>
+                   {#  <td class="tac">{{ vo.currency }}</td> #}
+                    <td>{{ core_global.formField({value: vo.solved, form: 'ask', field:'solved'}) }} </td>
+                    <td>{{ core_global.formField({value: vo.checked}) }} </td>
+                    <td>{{ vo.clicks|default('0') }}</td>
+                    <td>{{ vo.create_time|default('0')|date('Y-m-d') }}</td>
+                    <td class="tar pr10">
+                        {{ core_manage.show() }}
+                        {{ core_manage.delete() }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="12" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownCate',
+        field: 'category',
+        service: 'house.category',
+        where: {
+            models: models
+        }
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'checked',
+        title: '审核',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'solved',
+        form: 'ask',
+        title: '解决状态',
+    }
+]) }}
+
+{% endblock %}
+
+{% block promptUl %}
+{# 提示说明 #}
+{% endblock %}

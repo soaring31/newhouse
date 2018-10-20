@@ -1,0 +1,1515 @@
+{#列表页模板macro 调用说明开始#}
+
+{# {% import "HouseBundle:Macro:global.html.twig" as house_global %} #}
+{# {{house_global.around_count({})}} #}
+{# 调用说明结束 #}
+
+    {# 说明
+* 总参数说明
+* 1：selected  已选条件数据合集
+* 2：filter_rows：默认值：4，横向显示搜索条件条数
+* 3：filter_action 默认值：action（当前路径） 搜索跳转路径
+* 4：filter_url_opt  附加已选条件 键值对格式
+* 5: filter_relate: 是否调用商圈、地铁筛选条件
+* 6：filter_opt 搜索数据 结构如下说明
+* 7：filter_hd 搜索栏头部数据
+* 8：filter_type  搜索结构
+*    可选值 {
+*       0：地图所用搜索结构
+*       1：默认值 普通列表所用搜索结构
+*       2：首页筛选分类所用筛选结构
+*    }
+*
+*
+* 数据结构说明
+* {% set filter_opt = {
+*     area: {
+*         title: '区域',
+*         src: 'db.area',
+*         relate: 'cate_circle',
+*         sql_opt: {
+*             pid: app.session.get('area')|default(0)
+*         }
+*     },
+*     cate_circle: {
+*         title: '商圈',
+*         src: 'house.cate_circle',
+*         type: 'relate',
+*         p_relate: 'area',
+*         sql_opt: {
+*             pid: app.request.get('area'),
+*             pageSize: 30
+*         }
+*     },
+*     zj: {
+*         title: '总价',
+*     },
+*     fwpt: {
+*         title: '房屋配套',
+*         src: 'srv_common',
+*         type: 'form'
+*     }
+* } %}
+* 方式一：relate表示所要关联的分类
+* 方式二：type类型为relate的时候说明这只是一个关联搜索，p_relate表示所关联的父级字段
+* 方式三：从分类表（house.category）中获取分类
+* 方式四：从表单中获取分类，需定义type类型为form，src就是该字段所在的表单
+*
+*
+* 参数说明
+* 1：type 类型
+*    可选值 {
+*       form: 表示从表单中获取数据
+*       relate: 表示关联字段类型，标注了此类型的字段不可独立使用，需配合p_relate中定义的属性一同使用
+*    }
+* 2: src 路径
+*    可选值 {
+*       house.category: 默认值，分类表
+*       house.XX or db.XX: 从数据库中获取分类
+*       form名称： 填写表单名称，从表单中获取分类
+*    }
+* 3：title 标题
+* 4：sql_opt  查找条件
+*    可选值 {
+*       pageSize: 15,ename: k, pid: 'neq|0', order: 'sort|asc', 默认值， 最多获取条数为15条，父级id为0，升序排序
+*       附加条件： 附加条件的数据形式必须是一个键值对的对象，如{pid: 12},如额外添加的条件中的key值与默认的相同，则会覆盖默认的，如不同，则会重新增加一个搜索条件
+*    }
+* 5：add  联合搜索
+*    可选值 {
+*       1：默认值，开启联合搜索
+*       0: 关闭联合搜索，意思是此个条件除了当前选择筛选之外，其余情况都会清零
+*    }
+* 6：p_relate 所关联的父级字段
+* 7：relate 所关联的子级字段
+#}
+{% macro cate_opt(opt) %}
+    {% set _opt = {
+            arr: []
+        }|merge(opt) %}
+
+    {# 检索配置 #}
+    {% set cate_opt = {
+        region: {
+            title: '区域',
+            src: 'db.area',
+            children: {
+                    title: '商圈',
+                    name: 'cate_circle',
+                    src: 'house.cate_circle',
+                    sql_opt: {
+                        pid: app.request.get('region', 0),
+                        order: 'id|asc'
+                    }
+                },
+            sql_opt: {
+                pid: app.session.get('area')|default(0)
+            },
+            value: null,
+            icon: 'font-f-15'
+        },
+        cate_line: {
+            title: '地铁',
+            src: 'house.cate_line',
+            children: {
+                title: '地铁站',
+                name: 'cate_metro',
+                src: 'house.cate_metro',
+                sql_opt: {
+                    pid: 'find|' ~ app.request.get('cate_line', 0),
+                    order: 'id|asc'
+                },
+                value: null
+            },
+        },
+        cate_type: {
+            title: '类型',
+            icon: 'font-f-47'
+        },
+        zj: {
+            title: '总价',
+            icon: 'font-f-26'
+        },
+        dj: {
+            title: '价格',
+            icon: 'font-f-26'
+        },
+        czj: {
+            title: '租价',
+            icon: 'font-f-26'
+        },
+        shoptype: {
+            title: '类型',
+        },
+        officetype: {
+            title: '类型'
+        },
+        mj: {
+            title: '面积',
+            icon: 'font-f-87'
+        },
+        fl: {
+            title: '房龄',
+            icon: 'font-f-88'
+        },
+        cx: {
+            title: '朝向',
+        },
+        esflx: {
+            title: '用途',
+        },
+        czlx: {
+            title: '类型',
+            icon: 'font-f-47'
+        },
+        zxcd: {
+            title: '装修程度',
+        },
+        fwjg: {
+            title: '房屋结构',
+        },
+        shi: {
+            title: '室',
+        },
+        ting: {
+            title: '厅',
+        },
+        chu: {
+            title: '厨',
+        },
+        wei: {
+            title: '卫',
+        },
+        fwpt: {
+            title: '房屋配套',
+            src: 'srv_common',
+            type: 'form'
+        },
+        hxs: {
+            title: '环线',
+            name: 'hxs',
+            type: 'form',
+            src: 'hxs',
+            value: null
+        },
+        lcs: {
+            title: '楼层',
+            type: 'form',
+            src: 'lcs',
+        },
+        cate_status: {
+            title: '状态',
+        },
+        tslp: {
+            title: '特色',
+            type: 'form',
+            src: 'houses_common',
+        },
+        school_type: {
+            title: '分类',
+            src: 'around_school',
+            type: 'form'
+        },
+        fkfs: {
+            title: '付款方式',
+            type: 'form',
+            src: 'rent'
+        },
+        zlfs: {
+            title: '方式',
+            type: 'form',
+            src: 'rent'
+        },
+        syzj: {
+            title: '总价',
+        },
+        syczj: {
+            title: '租金',
+        },
+        spczj: {
+            title: '租金',
+        }
+    } %}
+    {% set _data = [] %}
+    {#
+        arr = ['region', 'cate_line']
+        arr = {
+            category: {
+                title: '环线',
+                name: 'category',
+                type: 'form',
+                src: 'hxs',
+                value: null
+            }
+        }
+     #}
+    {# 按标记生成配置 #}
+    {% if _opt.arr[0]|default('') %}
+        {% for item in _opt.arr if item in cate_opt|keys %}
+            {% set _data = _data|merge({(item): cate_opt[item]}) %}
+        {% endfor %}
+    {% else %}
+    {# 直接获取传过来的配置 #}
+        {% set _data = _opt.arr %}
+    {% endif %}
+    {# 输出 #}
+    {{ _data|json_encode|raw }}
+{% endmacro cate_opt %}
+{% macro cate_data(opt) %}
+    {% from 'CoreBundle:Macro:global.html.twig' import mconfigtostring %}
+    {#
+        houses                : 新房
+        sale                  : 二手房
+        rent                  : 出租
+        special               : 特价房
+        office_houses         : 写字楼新房
+        sp_lp                 : 商铺新房
+        index_houses_filter   : 首页新房
+        index_sale_filter     : 首页二手
+        index_rent_filter     : 首页出租
+        region                : 区域筛选
+        xq_sale               : 小区二手
+        xq_rent               : 小区出租
+        xzl_sale              : 写字楼出售
+        xzl_rent              : 写字楼出租
+        sp_sale               : 商铺出售
+        sp_rent               : 商铺出租
+        xuequ                 : 学区
+        news                  : 资讯
+        map_location          : 附近找房
+        door                  : 户型
+        member_jjgs_sale      : 经纪公司出售
+        member_jjgs_rent      : 经纪公司出售
+     #}
+    {% set _opt = {
+        url_opt: [],
+        selected: [],
+        tag: 'sale',
+        arr_tags: {
+            houses: ['region','cate_line', 'dj', 'cate_type', 'tslp', 'cate_status', 'zxcd', 'lcs', 'hxs','name' ],
+            special: ['region', 'zj', 'mj', 'cate_status', 'shi', 'ting', 'chu', 'wei', 'zxcd', 'cx', 'lcs'],
+            sale: ['region', 'cate_line', 'zj', 'mj', 'fl', 'cx', 'esflx', 'zxcd', 'fwjg', 'shi', 'ting', 'chu', 'wei', 'fwpt', ],
+            rent: ['region','cate_line', 'mj', 'czj', 'zlfs', 'shi', 'ting', 'chu', 'wei', 'fl', 'czlx', 'fwpt', 'zxcd', 'cx', 'fkfs',],
+            index_houses_filter: ['region', 'dj', 'cate_type'],
+            index_sale_filter: ['region', 'zj', 'mj', 'fl'],
+            index_rent_filter: ['region', 'czj', 'mj', 'czlx'],
+            xq_sale: ['zj', 'mj', 'esflx', 'shi'],
+            xq_rent: ['czj', 'mj', 'czlx', 'shi'],
+            office_houses: ['region', 'officetype', 'dj'],
+            xzl_sale: ['region', 'syzj', 'mj', 'fl'],
+            xzl_rent: ['region', 'syczj', 'mj', 'fl'],
+            sp_lp: ['region', 'shoptype', 'dj'],
+            sp_sale: ['region', 'syzj', 'mj', 'fl'],
+            sp_rent: ['region', 'spczj', 'mj', 'fl'],
+            xuequ: ['region', 'school_type'],
+            region: ['region'],
+            door: ['region', 'mj', 'cate_type', 'shi', 'cate_status'],
+            member_jjgs_sale: ['shi', 'zj', 'mj'],
+            member_jjgs_rent: ['shi', 'czj', 'mj'],
+            map_location: {
+                models: {
+                    title: '类型',
+                    type: 'myself',
+                    data: {
+                        0: {name:'新房', id:'houses'},
+                        1: {name:'二手房', id:'sale'},
+                        2: {name:'出租', id:'rent'}
+                    }
+                },
+                ranges: {
+                    title: '附近',
+                    type: 'myself',
+                    data: {
+                       0: {name: '一公里', id:'1000'},
+                       1: {name: '两公里', id:'2000'},
+                       2: {name: '三公里', id:'3000'},
+                       3: {name: '五公里', id:'5000'},
+                       4: {name: '十公里', id:'10000'}
+                    }
+
+                }
+            },
+            news: {
+                category: {
+                    title: '资讯分类',
+                    sql_opt: {
+                        pid: 1
+                    }
+                }
+            },
+            photos: {
+                category: {
+                    title: '图库分类',
+                    sql_opt: {
+                        pid: 23
+                    }
+                }
+            },
+            video: {
+                category: {
+                    title: '视频分类',
+                    sql_opt: {
+                        pid: 16
+                    }
+                }
+            },
+            web_ask: {
+                category: {
+                    title: '服务中心分类',
+                    sql_opt: {
+                        models: 'ask',
+                        pid: 'neq|0',
+                    }
+                }
+            },
+            web_server: {
+                category: {
+                    title: '服务中心分类',
+                    sql_opt: {
+                        models: 'service',
+                        pid: 'neq|0',
+                        id: 'neq|12'
+                    }
+                }
+            },
+            web_zyzn: {
+                category: {
+                    title: '置业指南',
+                    sql_opt: {
+                        pid: 36
+                    }
+                }
+            },
+        },
+        switch: {}
+    }|merge(opt|default('')) %}
+
+    {# 开关 #}
+    {% set switch = {
+        cate_circle: 0,
+        cate_line: 0,
+        hxs: 0,
+    }|merge(_opt.switch) %}
+
+    {% set _switch = {
+        cate_circle: mconfigtostring({name: 'closesqcircle', ename: 'mother'}).__toString ? switch.cate_circle : 0,
+        cate_line: mconfigtostring({name: 'closesubway', ename: 'mother'}).__toString ? switch.cate_line : 0,
+        hxs: mconfigtostring({name: 'closeloop', ename: 'mother'}).__toString ? switch.hxs : 0,
+    } %}
+
+    {% set arr_close = [] %}  {# 用于保存要关闭的内容 #}
+    {% for k, v in _switch if v == 0 %}
+        {% set arr_close = arr_close|merge([k]) %}
+    {% endfor %}
+
+    {# 分类配置 #}
+    {% set cate_opt = _self.cate_opt({
+            arr: _opt.tag|is_array ? _opt.tag : _opt.arr_tags[_opt.tag],
+        }).__toString|json_decode %}
+    {# url参数配置 #}
+    {% set url_opt = _opt.url_opt %}
+
+    {# 已选择项目 #}
+    {% set selected = _opt.selected %}
+    {# 处理一系列的配置 #}
+    {% set new_cate_opt = [] %}
+    {% for k, v in cate_opt if k not in arr_close %}
+        {# 默认参数 #}
+        {% set sql_opt = {pageSize: 50, ename: k, order: 'sort|asc', checked: 1}|merge(v.sql_opt|default({})) %}
+
+        {% set src = v.src|default('house.category') %}
+        {# add==0 时 不参与联合搜索 #}
+        {% set add = v.add|default(1) %}
+        {# /默认参数 #}
+
+        {# url_opt #}
+        {# 当前值 #}
+        {% set value = app.request.get(k) %}
+        {# 已选择项 #}
+        {% if value and add %}
+            {% set url_opt = url_opt|merge({(k): value}) %}
+        {% endif %}
+        {# /url_opt #}
+
+        {# children #}
+        {% set children_opt = [] %}
+        {% set v1 = v.children|default({}) %} {# 等于循环了一次 #}
+        {% set k1 = v1.name|default('') %}
+        {% if v1 and k1 not in arr_close %}
+            {% set sql_opt1 = {pageSize: 50, ename: k1, order: 'sort|asc', checked: 1}|merge(v1.sql_opt|default({})) %}
+            {% set src1 = v1.src|default('house.category') %}
+            {% set add1 = v1.add|default(1) %}
+            {# url_opt #}
+            {# 当前值 #}
+            {% set value1 = app.request.get(k1) %}
+            {# 已选择项 #}
+            {% if value1 and add1 %}
+                {% set url_opt = url_opt|merge({(k1): value1}) %}
+            {% endif %}
+            {# /url_opt #}
+
+            {% set data1 = (src1)|getAll(sql_opt1).data %}
+                {# 重新整理数据 #}
+            {% set n_data1 = [] %}
+            {% for item in data1 %}
+                {# 处理自动类系 #}
+                {% set item_value1 = item.sqlstr|default('') ? : item.id %}
+                {# 组装一组新数据 #}
+                {% set item_data1 = {value: item_value1, name: item.name} %}
+                {# 当传过来的值与循环值相等保存数据 #}
+                {% if value1 == item_value1 %}
+                    {% set selected = selected|merge({(k1): item_data1}) %}
+                {% endif %}
+                {% set n_data1 = n_data1|merge([item_data1]) %}
+            {% endfor %}
+            {#  #}
+            {% set children_opt = v1|merge({data: n_data1, value:  value1 == 'no' ? null : value1}) %}
+        {% endif %}
+        {# /children #}
+        {# data #}
+    {# 来自表单属性 #}
+    {% set data = [] %}
+    {% if v.type|default('') == 'form' %}
+        {% set data = (src)|getFormField(k) %}
+    {% elseif v.type|default('') == 'myself' %}
+        {% set data = v.data %}
+    {% else %}
+        {% if v.src|default('') or k == 'category' %}
+            {# 来自分类 #}
+            {% set data = (src)|getAll(sql_opt).data %}
+        {% else %}
+            {% set data = k|getCategory() %}
+        {% endif %}
+    {% endif %}
+        {# /data #}
+    {# 新数据容器 #}
+    {% set n_data = [] %}
+    {# 处理数据 #}
+
+    {% for item in data %}
+        {# 处理自动类系 #}
+        {% set item_value = item.sqlstr|default('') ? : item.id %}
+        {# 组装一组新数据 #}
+        {% set item_data = {value: item_value, name: item.name, map: item.map|default('')} %}
+        {# 当传过来的值与循环值相等保存数据 #}
+        {% if value == item_value %}
+            {% set selected = selected|merge({(k): item_data}) %}
+        {% endif %}
+        {% set n_data = n_data|merge([item_data]) %}
+    {% endfor %}
+
+
+    {# 保存到配置变量里 #}
+    {# {% set new_cate_opt = new_cate_opt|merge({(k): cate_opt[(k)]}) %} #}
+    {% set kv = cate_opt[(k)]|merge({data: n_data, value: value == 'no' ? null : value, children: children_opt}) %}
+
+    {% set new_cate_opt = new_cate_opt|merge({(k): kv}) %}
+{% endfor %}
+    {#关键词搜索#}
+    {%  set name = app.request.get("name")|default('') %}
+    {% if name %}
+        {% set url_opt = url_opt|merge({"name":name}) %}
+        {% set selected = selected|merge({"name":{"value":name,"name":name}}) %}
+    {% endif %}
+
+
+{% set cate_data = {
+    cate_opt: new_cate_opt,
+    selected: selected,
+    url_opt: url_opt,
+} %}
+{# 输出 #}
+{{ cate_data|json_encode|raw }}
+{% endmacro cate_data %}
+
+
+
+{# 筛选html架子 #}
+{%- macro filter_cfg(opt) -%}
+    {% import "CoreBundle:Macro:global.html.twig" as core_global %}
+    {# 默认值 #}
+    {% set _opt = {
+        tag: '',
+        action: '',
+        rows: 4,
+        cate_opt: [],
+        search: {},
+        url_opt: {},
+        cate_data: {},
+        head_data: [],
+        selected: {},
+        show_selected: 0,
+        class: 'container',
+    }|merge(opt|default({})) %}
+
+    {% set filter_url_opt = _opt.url_opt %}
+    {% set selected       = _opt.selected %}
+    {% set filter_action  = _opt.action %}
+    {% set filter_hd      = _opt.head_data %}
+    {% set filter_search  = _opt.search %}
+    <div class="{{_opt.class}}">
+        {# 筛选头部 #}
+        {% if filter_hd %}
+        <div class="head-search">
+           <div class="h-s-btns">
+            {% for k, vo in filter_hd|default('') %}
+               <a class="btn1 btn1-{{loop.index}}" href="{{vo.url|default('')}}" {% if vo.target|default('') %}target="{{vo.target|default('')}}"{% endif %}><i class="fz16 {{vo.icons|default('')}}"></i>
+                {% if vo.url|default('') == filter_action|U %}
+                <i class="tri"></i>
+                {% endif %}
+                {{vo.title|default('')}}</a>
+            {% endfor %}
+           </div>
+           {% if filter_search %}
+           {{core_global.search(filter_search)}}
+           {% endif %}
+        </div>
+        {% endif %}
+        {# 没有数据就不显示列表 #}
+        {% if _opt.cate_opt %}
+        {# 列表 #}
+        <div class="list-screen-box clearfix">
+            <!-- 区域 地铁 切换 开始 -->
+            {#判断城区商圈展示#}
+            {% set isarea = 1 %}
+            {% set issuy = 0 %}
+            {% if _opt.url_opt|default({}) and _opt.url_opt.cate_line|default({}) and _opt.url_opt.cate_line != 'no' %}
+                {% set isarea = 0 %}
+                {% set issuy = 1 %}
+            {% else %}
+                {% set isarea = 1 %}
+                {% set issuy = 0 %}
+            {% endif %}
+            <div class="list-screen-tab-box">
+                <b>位置：</b>
+                {#区域#}
+                {% if _opt.cate_opt and _opt.cate_opt.region and _opt.cate_opt.region.data and _opt.cate_opt.region.data|length > 0  %}
+                    <a href="javascript:;" class="area_btn {% if isarea == 1 %}hover{% endif %} newhouse_qyzf"><span class="iconfont icon-quyu"></span>按区域查询<i class="icon-sanjiao {% if isarea == 1 %}now{% endif %}"></i></a>
+                {% endif %}
+                {#地铁#}
+                {% if _opt.cate_opt and _opt.cate_opt.cate_line|default({}) and _opt.cate_opt.cate_line.data and  _opt.cate_opt.cate_line.data|length > 0 %}
+                    <a href="javascript:;" class="subway_btn {% if issuy == 1 %}hover{% endif %} newhouse_dtzf" ><span class="iconfont icon-ditie"></span>按地铁查询<i class="icon-sanjiao{% if issuy == 1 %}now{% endif %}"></i></a>
+                {% endif %}
+            </div>
+            <!-- 区域 地铁 切换 结束 -->
+
+            <!--body-->
+            <div class="filter-bd">
+                <!--筛选条件-->
+                {{ _self.filter_item(_opt) }}
+                <!--/筛选条件-->
+                <!--cur-->
+                {# {% if selected|length %} #}
+                {% if _opt.show_selected %}
+                <div data-filter-show="1" class="end-screen-box clearfix" style="display:{% if selected|length %}block {% else %}none{% endif %}">
+                <b class="">当前条件：</b>
+                    {#{{ dump(selected) }}#}
+                    {% for k, v in selected %}
+                    {% if k == 'region' %}
+                        {% set url_opt = filter_url_opt|merge({(k): null})|merge({cate_circle:null}) %}
+                    {% elseif  k == 'cate_line' %}
+                        {% set url_opt = filter_url_opt|merge({(k): null})|merge({cate_metro:null}) %}
+                    {#
+                    {% elseif k == 'name' %}
+                        {% set url_opt = '' %}
+                    #}
+                    {% else %}
+                        {% set url_opt = filter_url_opt|merge({(k): null}) %}
+                    {% endif %}
+                        <a href="{{ (filter_action)|U(url_opt) }}" data-clear="{{k}}" title="{{ v.name }}" class="end-screen-link">
+                            <span>{{ v.name }}</span>
+                            <i class=""></i>
+                        </a>
+                    {% endfor %}
+                <a href="{{ (filter_action)|U }}" data-clear="all" title="取消所有" class="clear-link">清除全部条件</a>
+                </div>
+                {% endif %}
+
+                <!--/cur-->
+            </div>
+            <!--/body-->
+        </div>
+        {% endif %}
+    </div>
+     {#</div>#}
+{%- endmacro filter_cfg -%}
+
+{# 筛选条件 城区商圈 地铁站 地铁线 价格 类型 #}
+{% macro filter_item(o) %}
+    {% from "CoreBundle:Macro:global.html.twig" import h5_attr %}
+    {# 默认值 #}
+    {% set _opt = {
+        action: '',
+        rows: 4,
+        select_num: 8,
+        reserve: 0,
+    }|merge(o|default({})) %}
+
+    {% set filter_opt     = _opt.cate_opt %}
+    {% set filter_url_opt = _opt.url_opt %}
+    {% set selected       = _opt.selected %}
+    {% set filter_rows    = _opt.rows %}
+    {% set filter_action  = _opt.action %}
+    {#{{ dump(selected) }}#}
+    <div class="filter-item">
+        {#判断城区商圈展示#}
+        {% set isarea = 1 %}
+        {% set issuy = 0 %}
+        {% if _opt.url_opt and _opt.url_opt.cate_line|default({}) and _opt.url_opt.cate_line != 'no' %}
+            {% set isarea = 0 %}
+            {% set issuy = 1 %}
+        {% else %}
+            {% set isarea = 1 %}
+            {% set issuy = 0 %}
+        {% endif %}
+    {% if _opt.reserve == 0 %}
+         {# 默认列表 #}
+        {#{{ dump(filter_opt[ : filter_rows]) }}#}
+        {% for k, vo in filter_opt[ : filter_rows] %}
+            {% block filter_item_list %}
+            {% if loop.first %}
+        <div data-filter-item-list="1" class="clearfix" i={{loop.first }}>
+            {% endif %}
+            {% set children = vo.children|default('') %}
+            {# 下级标记及配置，给ajax用 #}
+            {% if children %}
+            {% set next %}
+                {{ h5_attr({
+                    'data-next': {
+                        name: children.name,
+                        title: children.title,
+                    }
+                }) }}
+            {% endset %}
+            {% endif %}
+            {% set child_select = vo.children.name|default('') ? {(vo.children.name): ''} : {} %}
+            <!-- 城区 商圈 地铁线路 地铁站点 -->
+            {% if k == 'region' or k == 'cate_line' %}
+                <!-- 城区 地铁线路 筛选 开始 -->
+                {% if k == 'region' %}
+                    <div class="area_box" style="{% if isarea == 0 %}display:none;{% endif %}" {{ next|default('') }}>
+                    {% set url_opt = filter_url_opt|merge({(k): null})|merge(child_select) %}
+                    {% set url_opt = url_opt|merge({cate_line:'',cate_metro:''})%}
+                {% elseif k == 'cate_line'%}
+                    <div class="subway_box" style="{% if issuy == 0 %}display:none;{% endif %}" {{ next|default('') }}>
+                    {% set url_opt = filter_url_opt|merge({(k): null})|merge(child_select) %}
+                    {% set url_opt = url_opt|merge({region:'',cate_circle:''})%}
+                {% endif %}
+
+                    <a href="{{ (filter_action)|U(url_opt) }}" data-value="" class="list-screen-link {% if vo.value is null %}hover{% endif %} default" data-name="{{k}}" >不限</a>
+                    {% for vo1 in vo.data %}
+                    {% if k == 'region' %}
+                        {% set url_opt = filter_url_opt|merge({(k): vo1.value})|merge(child_select) %}
+                        {% set url_opt = url_opt|merge({cate_line:'',cate_metro:''})%}
+                    {% elseif k == 'cate_line' %}
+                        {% set url_opt = filter_url_opt|merge({(k): vo1.value})|merge(child_select) %}
+                        {% set url_opt = url_opt|merge({region:'',cate_circle:''})%}
+                    {% endif %}
+
+                    <a href="{{ (filter_action)|U(url_opt) }}" data-title="{{vo1.name|default('')}}" data-value="{{vo1.value}}" class="list-screen-link {% if vo.value == vo1.value %}hover{% endif %} " data-name="{{k}}">{{vo1.name}}</a>
+                    {% endfor %} {# /vo.data #}
+                    {% if vo.extend is defined %}
+                        {{ attribute(form, vo.extend, {0: k, 1: vo, action: filter_action}) }}
+                    {% endif %}
+                </div>
+                <!-- 城区 地铁线路 筛选 结束 -->
+
+                <!-- 商圈 地铁站 筛选 开始 -->
+                {% if children.data|default('')|length and app.request.get(k, 'no') != 'no' %}
+                    {% if children.name == 'cate_circle' %}
+                        <div class="list-screen-sumy-box {{children.name}}  area_box" style="{% if isarea == 0 %}display:none;{% endif %}">
+                    {% elseif children.name == 'cate_metro' %}
+                        <div class="list-screen-sumy-box {{children.name}}  subway_box"  style="{% if issuy == 0 %}display:none;{% endif %}">
+                    {% endif %}
+                    {% for vo2 in children.data %}
+                        {% set url_opt = filter_url_opt|merge({(children.name|default('')): vo2.value|default('')}) %}
+                        <a href="{{ (filter_action)|U(url_opt) }}" data-title="{{vo2.name|default('')}}" data-value="{{vo2.value}}"  class="list-screen-link {% if children.value == vo2.value %}hover{% endif %}" data-name="{{children.name|default('')}}">{{vo2.name|default('')}}</a>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+                <!-- 商圈 地铁站 筛选 结束 -->
+            {% elseif k == 'dj' or k == 'cate_type' %}
+                <div class="clearfix list-screen-item-box {{k}}" {{ next|default('') }}>
+                    <b>{{vo.title}}：</b>
+                    {% set url_opt = filter_url_opt|merge({(k): null})|merge(child_select) %}
+                    <a href="{{ (filter_action)|U(url_opt) }}" data-value="" class="list-screen-link {% if vo.value is null %}hover{% endif %} default" data-name="{{k}}">不限</a>
+                    {% for vo1 in vo.data %}
+                    {% set url_opt = filter_url_opt|merge({(k): vo1.value})|merge(child_select) %}
+                    <a href="{{ (filter_action)|U(url_opt) }}" data-title="{{vo1.name|default('')}}" data-value="{{vo1.value}}" class="list-screen-link {% if vo.value == vo1.value %}hover{% endif %}" data-name="{{k}}">{{vo1.name}}</a>
+                    {% endfor %} {# /vo.data #}
+                    {% if vo.extend is defined %}
+                        {{ attribute(form, vo.extend, {0: k, 1: vo, action: filter_action}) }}
+                    {% endif %}
+                </div>
+            {% endif %}
+            {% if loop.last %}
+        </div>
+            {% endif %}
+            {% endblock filter_item_list %}
+        {% endfor %}
+        {# 更多 #}
+        {% for k, vo in filter_opt[filter_rows : ] %}
+            {% if  k == 'tslp' %}
+
+                {% block filter_item_select %}
+                {% if loop.first %}
+                <div data-filter-item-select="1" class="clearfix">
+                {% endif %}
+                <div class="clearfix list-screen-item-box {{k}}" {{ next|default('') }}>
+                    <b>{{vo.title}}：</b>
+                    {% set url_opt = filter_url_opt|merge({(k): null}) %}
+                    <a href="{{ (filter_action)|U(url_opt) }}" data-value="" class="list-screen-link {% if vo.value is null %}hover{% endif %} default" data-name="{{k}}">不限</a>
+                    {% for vo1 in vo.data %}
+                    {% set url_opt = filter_url_opt|merge({(k): vo1.value}) %}
+                    <a href="{{ (filter_action)|U(url_opt) }}" data-title="{{vo1.name|default('')}}" data-value="{{vo1.value}}" class="list-screen-link {% if vo.value == vo1.value %}hover{% endif %}" data-name="{{k}}">{{vo1.name}}</a>
+                    {% endfor %} {# /vo.data #}
+                    {% if vo.extend is defined %}
+                        {{ attribute(form, vo.extend, {0: k, 1: vo, action: filter_action}) }}
+                    {% endif %}
+                </div>
+                {% if loop.last %}
+                </div>
+                {% endif %}
+                {% endblock filter_item_select %}
+            {% endif %}
+        {% endfor %}
+        {# /默认列表 #}
+    {% else %}
+        {# 反转列表 地图用 #}
+        {% for k, vo in filter_opt[ : filter_rows] %}
+            {{ block('filter_item_select') }}
+        {% endfor %}
+        {% for k, vo in filter_opt[filter_rows : ] %}
+            {{ block('filter_item_list') }}
+        {% endfor %}
+        {# /反转列表 #}
+    {% endif %}
+    </div>
+{% endmacro filter_item %}
+{# 新房列表 #}
+{%- macro houses_list(o) -%}
+    {% import "CoreBundle:Macro:global.html.twig" as core_global %}
+    {% set opt = {
+    }|merge(o) %}
+    {% spaceless %}
+        {% if opt.list.data is defined and opt.list.pageCount|default(0) != 0 %}
+            {# 获取当前列表id #}
+            {% set ids = '' %}
+            {% for item in opt.list.data %}
+                {% if loop.index != 1 %}
+                    {% set dh = ',' %}
+                {% endif %}
+                {% set ids = ids ~ dh|default('') ~ item.id %}
+            {% endfor %}
+            {# 获取资讯 #}
+            {% set lpdt_ids = ('house.houses_arc')|getCol('id', {aid: 'in|' ~ ids, cate_pushs: 'lpdt', order: 'id', orderBy: 'asc'}) %}
+            {% set block_lpdt = ('house.houses_arc')|getBlock({ename: 'lpdt'}, {pageSize: lpdt_ids|length, checked: 1, id: 'in|' ~ lpdt_ids|default(0)|join(','), order: 'id', orderBy: 'desc'}) %}
+            {% set block_lpdt_list = {} %}
+            {% for item in block_lpdt.data %}
+                {% set block_lpdt_list = {
+                    ('lpdt' ~ item.aid): {
+                        "name": item.name,
+                        "fromid": item.fromid|default(0)
+                    }
+                }|merge(block_lpdt_list) %}
+            {% endfor %}
+            {# 获取团购 #}
+            {% set tuangou_ids = ('house.groupbuy')|getCol('id', {aid: 'in|' ~ ids, order: 'id', orderBy: 'asc'}) %}
+            {% set tuangou_id = ('house.groupbuy')|getAll() %}
+            {% set block_tuangou = ('house.groupbuy')|getAll({pageSize: tuangou_ids|length, checked: 1, id: 'in|' ~ tuangou_ids|default(0)|join(','), order: 'id', orderBy: 'desc'}) %}
+
+            {% set block_tuangou_list = {} %}
+
+            {% for item in block_tuangou.data %}
+                {% set block_tuangou_list = {
+                    ('tuangou' ~ item.aid): {
+                        "name": item.name,
+                        "id": item.id
+                    }
+                }|merge(block_tuangou_list) %}
+            {% endfor %}
+            {# 获取户型 #}
+            {% set huxings_ids = ('house.door')|getCol('id', {checked: 1, aid: 'in|' ~ ids, order: 'id', orderBy: 'asc', zlhx: 1 }) %}
+
+            {% set block_huxings = ('house.door')|getAll({pageSize: huxings_ids|length, checked: 1, id: 'in|' ~ huxings_ids|default(0)|join(','), order: 'id', orderBy: 'desc'}) %}
+            {% set block_huxings_list = {} %}
+
+
+
+            {% for item in block_huxings.data %}
+                {% set block_huxings_list = {
+                    ('huxing' ~ item.aid ~ '_' ~ item.id): {
+                        value: core_global.formData({value: item.shi|default(''), default: ''}) ~ core_global.formData({value: item.ting|default(''), default: ''}) ~ _self.if_mj({value: item.mj|default(''), tpl: '%value%%danwei%'}),
+                        id: item.id
+                    }
+                }|merge(block_huxings_list) %}
+            {% endfor %}
+            {% for item in opt.list.data %}
+                {# 资讯 #}
+                {% set item_block_lpdt = block_lpdt_list['lpdt' ~ item.id]|default('') %}
+                {# 团购 #}
+                {% set item_block_tuangou = block_tuangou_list['tuangou' ~ item.id]|default('') %}
+                {# 评分 #}
+                {% set pingfen = ('house.inter_housescomment')|getAll({aid: item.id}) %}
+
+                <li class="list-item clearfix">
+                    <div class="pic fl mleft0">
+                        <a href="{{('houses/detail')|U({id:item.id|default('')})}}" target="_blank" class="newhouse_list_picture_{{loop.index}}">
+                            {{- core_global.lazy_img({
+                                src: item.thumb|default(''),
+                                alt: item.name|default(''),
+                                type: 2,
+                                width:360 ,
+                                height: 270
+                            }) -}}
+                            {% if item.top|default('') == 159 %}
+                                {# 置顶 #}
+                                {{core_global.formData({value: item.top|default(''), tpl: '<i>%value%</i>'})}}
+                            {% endif %}
+                             {% if item.rednum > 0 %}
+                                <img class="hongbao" src="{{- core_global.img_url({src: 'bundles/house/images/hogbao.png'}) -}}" alt="红包">
+                            {% endif %}
+                        </a>
+                        {% if item.xkzh and item.xkzh != '0' %}
+                         <p class="list-pre-sale">预售证</p>
+                         <a class="list-pre-sale-cont" href="{{('houses/detail')|U({id:item.id|default('')})}}" target="_blank"><p>预售证号：{{item.xkzh|default('')}}</p></a>
+                        {% endif %}
+                    </div>
+                    <div class="info fl">
+                        <h3>
+                            <a href="{{('houses/detail')|U({id:item.id|default('')})}}" target="_blank" class="tit newhouse_list_text_{{loop.index}}">{{item.name|default('')}}
+                            {% if item.cate_status != '' %}
+                                {# 销售状态 #}
+                                {% set sale_status = ('house.category')|getOne('name', {id:item.cate_status}) %}
+                                <span class="tag on-sale-{{item.cate_status}}">
+                                    {{ sale_status }}
+                                </span>
+                            {% endif %}
+                           </a>
+                           {% if pingfen.data and pingfen.data|length > 0 %}
+                           <input type="hidden" value="{{pingfen.data[0].overall}}" class="j_pingfen">
+                           {#<input type="hidden" value="4.5" class="j_pingfen">#}
+                           {#
+                           <div class="list-grade">
+                               {% for i in 0..4 %}
+                               <div class='list-star-box'>
+                               <span key='{{i}}' class="star iconfont icon-zhian j_solid-star"></span>
+                               <span key='{{i}}' class="star iconfont icon-zhianxiankuang"></span>
+                               </div>
+                               {% endfor %}
+                           </div>
+                           #}
+                           {% endif %}
+                        </h3>
+                        <p class="add">
+                            {% set catyarea_name = ('db.area')|getRow({id: item.region,checked:1}) %}
+                            {% set catyarea2_name = ('house.cate_circle')|getRow({id: item.cate_circle,checked:1}) %}
+                            {% if catyarea_name.name|default('') or catyarea2_name.name|default('') %}
+                                [ {{catyarea_name.name|default('')}} {% if catyarea_name.name|default('') and catyarea2_name.name|default('')  %} - {% endif %} {{catyarea2_name.name|default('')}} ]
+
+                            {% endif %}
+                            {{item.address}}
+                        </p>
+                        {#{% if item.wyf!='' and item.wyf!='0' %}
+                        <p class="wyf">
+                           物业费 ：{{ item.wyf }}
+                        </p>
+                        {% endif %}#}
+
+                        <p class="type j_roomdata" {% for k,v in block_huxings_list|default({}) if ('huxing' ~ item.id|default('') ~ '_') in k %} style="display:block" key='1' {% endfor %}>
+                           {% for k,v in block_huxings_list|default({}) if ('huxing' ~ item.id|default('') ~ '_') in k %}
+                                <a class='mr10' href='{{('door/detail')|U({id: v.id})}}' target='_blank'>
+                                    {{v.value|raw}}
+                                </a>
+                            {% endfor %}
+                        </p>
+                        {% if item.kpdate.date!='' %}
+                        <p class="wyf ">
+                        {% set kpdateArr = item.kpdate.date|split(' ') %}
+                            {% if kpdateArr[0] == "1970-01-01" %}
+                            开盘时间：待定
+                            {% else %}
+                            开盘时间：{{ kpdateArr[0] }}
+                            {% endif %}
+                        </p>
+                        {% endif %}
+                        <p class="tags pt5">
+                            {#{% if item.cate_type %}
+                                <span>{{ ('house.category')|getOne('name', {id: item.cate_type|default('')}) }}</span>
+                            {% endif %}
+
+                            {% if item.zxcd %}
+                                <span>{{ ('house.category')|getOne('name', {id: item.zxcd|default('')}) }}</span>
+                            {% endif %}
+
+                            {% if item.tslp %}
+                                {% set lpts = item.tslp|split(',') %}
+                                {% for item in lpts %}
+                                    {% if  ('house.category')|getOne('name', {id: item|default('')}) %}
+                                        <span>
+                                    {{ ('house.category')|getOne('name', {id: item|default('')}) }}
+                                </span>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}#}
+                            {{_self.lptag({value: item, tpl: '<span>%value%</span>', con: 'cate_type,zxcd,tslp'})}}
+                        </p>
+                    </div>
+                    <div class="other fr">
+                        <p class="dj">
+                            {% if item.dj|default('') %}
+                                {{_self.if_dj({value: item.dj|default(''), tpl: '<em class="arial">%value%</em>%danwei%'})}}
+                            {% elseif item.tdj|default('') %}
+                                <em class="arial">{{item.tdj|default('')}}</em>万元/套起
+                            {% else %}
+                                <em class="arial">待定</em>
+                            {% endif %}
+
+                        </p>
+                        {% if item.bdsm|default('') != '' %}
+                        {#<p>
+                            <span class="preferential" title="{{item.bdsm|default('')}}">
+                                {{ core_global.substr(item.bdsm|default(''), 15, 1) }}
+                            </span>
+                        </p>#}
+                        {% endif %}
+                        <p class="ico-word tel j_tel">
+                        {% if item.pc_tel|default('') %}
+                            {{item.pc_tel|default('')}}
+                        {% elseif item.tel|default('') %}
+                            {{item.tel|default('')}}
+                        {% endif %}
+                        </p>
+                    </div>
+                    <div class="blank20"></div>
+                    <div class="blank8"></div>
+                </li>
+
+            {% endfor %}
+        {% else %}
+            <li class="noinfo">{{_self.list_tips('新房'|trans({}))}}</li>
+        {% endif %}
+        <div class="blank30"></div>
+        {{core_global.page(opt.list)}}
+        <div class="blank30"></div>
+        {# 图片加载 #}
+        {{core_global.lazyload()}}
+        {# 对比 #}
+        {{_self.compare_tpl({
+            chid: 4,
+            title: '新房对比'
+        })}}
+    {% endspaceless %}
+{%- endmacro -%}
+
+{%- macro cy_list(o) -%}
+    {% import "CoreBundle:Macro:global.html.twig" as core_global %}
+    {% set opt = {
+    }|merge(o) %}
+    {% spaceless %}
+        {% if opt.list.data is defined and opt.list.pageCount|default(0) != 0 %}
+            {# 获取当前列表id #}
+            {% set ids = '' %}
+            {% for item in opt.list.data %}
+                {% if loop.index != 1 %}
+                    {% set dh = ',' %}
+                {% endif %}
+                {% set ids = ids ~ dh|default('') ~ item.id %}
+            {% endfor %}
+            {# 获取资讯 #}
+            {% set lpdt_ids = ('house.houses_arc')|getCol('id', {aid: 'in|' ~ ids, cate_pushs: 'lpdt', order: 'id', orderBy: 'asc'}) %}
+            {% set block_lpdt = ('house.houses_arc')|getBlock({ename: 'lpdt'}, {pageSize: lpdt_ids|length, checked: 1, id: 'in|' ~ lpdt_ids|default(0)|join(','), order: 'id', orderBy: 'desc'}) %}
+            {% set block_lpdt_list = {} %}
+            {% for item in block_lpdt.data %}
+                {% set block_lpdt_list = {
+                    ('lpdt' ~ item.aid): {
+                        "name": item.name,
+                        "fromid": item.fromid|default(0)
+                    }
+                }|merge(block_lpdt_list) %}
+            {% endfor %}
+            {# 获取团购 #}
+            {% set tuangou_ids = ('house.groupbuy')|getCol('id', {aid: 'in|' ~ ids, order: 'id', orderBy: 'asc'}) %}
+            {% set tuangou_id = ('house.groupbuy')|getAll() %}
+            {% set block_tuangou = ('house.groupbuy')|getAll({pageSize: tuangou_ids|length, checked: 1, id: 'in|' ~ tuangou_ids|default(0)|join(','), order: 'id', orderBy: 'desc'}) %}
+
+            {% set block_tuangou_list = {} %}
+
+            {% for item in block_tuangou.data %}
+                {% set block_tuangou_list = {
+                    ('tuangou' ~ item.aid): {
+                        "name": item.name,
+                        "id": item.id
+                    }
+                }|merge(block_tuangou_list) %}
+            {% endfor %}
+            {# 获取户型 #}
+            {% set huxings_ids = ('house.door')|getCol('id', {checked: 1, aid: 'in|' ~ ids, order: 'id', orderBy: 'asc', zlhx: 1 }) %}
+
+            {% set block_huxings = ('house.door')|getAll({pageSize: huxings_ids|length, checked: 1, id: 'in|' ~ huxings_ids|default(0)|join(','), order: 'id', orderBy: 'desc'}) %}
+            {% set block_huxings_list = {} %}
+
+
+
+            {% for item in block_huxings.data %}
+                {% set block_huxings_list = {
+                    ('huxing' ~ item.aid ~ '_' ~ item.id): {
+                        value: core_global.formData({value: item.shi|default(''), default: ''}) ~ core_global.formData({value: item.ting|default(''), default: ''}) ~ _self.if_mj({value: item.mj|default(''), tpl: '%value%%danwei%'}),
+                        id: item.id
+                    }
+                }|merge(block_huxings_list) %}
+            {% endfor %}
+            {% for item in opt.list.data %}
+                {# 资讯 #}
+                {% set item_block_lpdt = block_lpdt_list['lpdt' ~ item.id]|default('') %}
+                {# 团购 #}
+                {% set item_block_tuangou = block_tuangou_list['tuangou' ~ item.id]|default('') %}
+                {# 评分 #}
+                {% set pingfen = ('house.inter_housescomment')|getAll({aid: item.id}) %}
+
+                <li class="list-item clearfix">
+                    <div class="pic fl mleft0">
+                        <a href="{{('houses/detail')|U({id:item.id|default('')})}}" target="_blank" class="newhouse_ad_list_picture_{{loop.index}}">
+                            {{- core_global.lazy_img({
+                                src: item.thumb|default(''),
+                                alt: item.name|default(''),
+                                type: 2,
+                                width:540 ,
+                                height: 405
+                            }) -}}
+                            {% if item.top|default('') == 159 %}
+                                {# 置顶 #}
+                                {{core_global.formData({value: item.top|default(''), tpl: '<i>%value%</i>'})}}
+                            {% endif %}
+                            {% if item.rednum > 0 %}
+                                <img class="hongbao" src="{{- core_global.img_url({src: 'bundles/house/images/hogbao.png'}) -}}" alt="红包">
+                            {% endif %}
+                        </a>
+                        {% if item.xkzh and item.xkzh != '0' %}
+                            <p class="list-pre-sale">预售证</p>
+                            <a class="list-pre-sale-cont" href="{{('houses/detail')|U({id:item.id|default('')})}}" target="_blank"><p>预售证号：{{item.xkzh|default('')}}</p></a>
+                        {% endif %}
+                    </div>
+                    <div class="info fl">
+                        <h3>
+                            <a href="{{('houses/detail')|U({id:item.id|default('')})}}" target="_blank" class="tit newhouse_ad_list_text_{{loop.index}}">{{item.name|default('')}}
+                                {% if item.cate_status != '' %}
+                                    {# 销售状态 #}
+                                    <span class="tag on-sale-{{item.cate_status}}">
+                        {{ core_global.formData({value: item.cate_status|default('')}) }}
+                    </span>
+                                {% endif %}
+                            </a>
+                            {% if pingfen.data and pingfen.data|length > 0 %}
+                                <input type="hidden" value="{{pingfen.data[0].overall}}" class="j_pingfen">
+                                {#<input type="hidden" value="4.5" class="j_pingfen">#}
+                                <div class="list-grade">
+                                    {% for i in 0..4 %}
+                                        <div class='list-star-box'>
+                                            <span key='{{i}}' class="star iconfont icon-zhian j_solid-star"></span>
+                                            <span key='{{i}}' class="star iconfont icon-zhianxiankuang"></span>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </h3>
+                        <p class="add">
+                            {% set catyarea_name = ('db.area')|getRow({id: item.region,checked:1}) %}
+                            {% set catyarea2_name = ('house.cate_circle')|getRow({id: item.cate_circle,checked:1}) %}
+                            {% if catyarea_name.name|default('') or catyarea2_name.name|default('') %}
+                                [ {{catyarea_name.name|default('')}} {% if catyarea_name.name|default('') and catyarea2_name.name|default('')  %} - {% endif %} {{catyarea2_name.name|default('')}} ]
+
+                            {% endif %}
+                            {{item.address}}
+                        </p>
+                        {#{% if item.wyf!='' and item.wyf!='0' %}
+                        <p class="wyf">
+                           物业费 ：{{ item.wyf }}
+                        </p>
+                        {% endif %}#}
+
+                        <p class="type j_roomdata" {% for k,v in block_huxings_list|default({}) if ('huxing' ~ item.id|default('') ~ '_') in k %} style="display:block" key='1' {% endfor %}>
+                            {% for k,v in block_huxings_list|default({}) if ('huxing' ~ item.id|default('') ~ '_') in k %}
+                                <a class='mr10' href='{{('door/detail')|U({id: v.id})}}' target='_blank'>
+                                    {{v.value|raw}}
+                                </a>
+                            {% endfor %}
+                        </p>
+                        {% if item.kpdate.date!='' %}
+                            <p class="wyf">
+                                {% set kpdateArr = item.kpdate.date|split(' ') %}
+                                {% if kpdateArr[0] == "1970-01-01" %}
+                                开盘时间：待定
+                                {% else %}
+                                开盘时间：{{ kpdateArr[0] }}
+                                {% endif %}
+                            </p>
+                        {% endif %}
+                        <p class="tags pt5">
+                            {#{% if item.cate_type %}#}
+                                {#<span>{{ ('house.category')|getOne('name', {id: item.cate_type|default('')}) }}</span>#}
+                            {#{% endif %}#}
+
+                            {#{% if item.zxcd %}#}
+                                {#<span>{{ ('house.category')|getOne('name', {id: item.zxcd|default('')}) }}</span>#}
+                            {#{% endif %}#}
+
+                            {#{% if item.tslp %}#}
+                                {#{% set lpts = item.tslp|split(',') %}#}
+                                {#{% for item in lpts %}#}
+                                    {#{% if  ('house.category')|getOne('name', {id: item|default('')}) %}#}
+                                        {#<span>#}
+                                    {#{{ ('house.category')|getOne('name', {id: item|default('')}) }}#}
+                                {#</span>#}
+                                    {#{% endif %}#}
+                                {#{% endfor %}#}
+                            {#{% endif %}#}
+                            {{_self.lptag({value: item, tpl: '<span>%value%</span>', con: 'cate_type,zxcd,tslp'})}}
+                        </p>
+                    </div>
+                    <div class="other fr">
+                        <p class="dj">
+                            {% if item.dj|default('') %}
+                                {{_self.if_dj({value: item.dj|default(''), tpl: '<em class="arial">%value%</em>%danwei%'})}}
+                            {% elseif item.tdj|default('') %}
+                                <em class="arial">{{item.tdj|default('')}}</em>万元/套起
+                            {% else %}
+                                <em class="arial">待定</em>
+                            {% endif %}
+                        </p>
+                        {% if item.bdsm|default('') != '' %}
+                            {#<p>
+                                <span class="preferential" title="{{item.bdsm|default('')}}">
+                                    {{ core_global.substr(item.bdsm|default(''), 15, 1) }}
+                                </span>
+                            </p>#}
+                        {% endif %}
+                        <p class="ico-word tel j_tel">
+                        {% if item.pc_tel|default('') %}
+                            {{item.pc_tel|default('')}}
+                        {% elseif item.tel|default('') %}
+                            {{item.tel|default('')}}
+                        {% endif %}
+                        </p>
+                    </div>
+                    <span style="display:inline-block;width:41px;height:23px;border:1px solid #d6d6d6;text-align:center;
+                    color:#b6b6b6;font-size:12px;line-height:21px;position:absolute;bottom:40px;right:5px;">广告</span>
+                    <div class="blank20"></div>
+                    <div class="blank8"></div>
+                </li>
+
+            {% endfor %}
+        {% else %}
+            <li class="noinfo">{{_self.list_tips('新房'|trans({}))}}</li>
+        {% endif %}
+    {% endspaceless %}
+{%- endmacro -%}
+
+
+{#
+/**
+ * @method if_mj(o)
+ * @description 面积类数据显示隐藏  其他参数可参考`core-global`中的 `if_dw(o)`
+ * @param {String} o.danwei=m&sup2; - 单位
+ * @param {String} o.default_tips=- - 默认值
+ * @example 调用
+ * ```twig
+ * {{house_global.if_mj({value: item.mj|default('')})}}
+ * ```
+ */
+ #}
+{%- macro if_mj(o) -%}
+{% spaceless %}
+    {% import "CoreBundle:Macro:global.html.twig" as core_global %}
+    {% if o.value|default('') and o.value|default(0) != 0 %}
+        {{core_global.if_dw({danwei: 'm&sup2;', default_tips: o.default_tips|default('-')}|merge(o))}}
+    {% else %}
+        {{o.default_tips|default('')}}
+    {% endif %}
+{% endspaceless %}
+{%- endmacro -%}
+
+{#
+/**
+ * @method lptag(o)
+ * @description 楼盘属性, con里面包含要显示的值必须在`field`和`service`这两个变量中存在，否则不会显示
+ * @param {Array} o.value - 所属数据
+ * @param {string} o.con - 要显示的字段，多个字段之间使用(,)分隔如(zxcd,cate_type)
+ * @param {string} o.tpl - 模板
+ * @param {Object} field - 内部变量，需要从表单中获取数据的字段，增加规则为，key=要显示的字段名称,value=需要在哪个表单中查找该字段
+ * @param {Object} service - 内部变量，需要从数据库中获取数据的字段，增加规则为，key=要显示的字段名称，value=表示需要查询的数据表名，默认分类表(house.category)
+ * @example
+ * ```twig
+ * {{- house_global.lptag({value: detail, tpl:'<span>%value%</span>' con: 'zxcd,cate_type'}) -}}
+ * ```
+ */
+ #}
+ {%- macro lptag(o) -%}
+{% spaceless %}
+    {% import "CoreBundle:Macro:global.html.twig" as core_global %}
+    {% set opt = {
+        tpl: '%value%'
+    }|merge(o) %}
+
+    {% set tag = opt.value %}
+    {#
+        表单字段：k 表示需要查询的字段，v 表示需要查询的表单名称
+    #}
+    {% set field = {
+        'tslp': 'houses_common',
+        'lcs': 'houses_common',
+        'louxing': 'houses_common',
+        'office_ts': 'office_ts',
+        'shops_ts': 'shops_ts',
+        'buildingfacilities': 'houses_attr_common'
+    } %}
+    {#
+        数据库查询：k 表示需要查询的字段，v 表示需要查询的数据表名，默认分类表'house.category'
+    #}
+    {% set service = {
+        'cate_line': 'house.cate_line',
+        'cate_metro': 'house.cate_metro',
+        'cate_status': '',
+        'zxcd': '',
+        'cx': '',
+        'cate_type': '',
+        'officetype': '',
+        'officelevel': '',
+        'shoptype': '',
+        'shopindustry': ''
+    } %}
+    {% for item in opt.con|default('')|split(',') %}
+        {% for k, v in field %}
+            {# 表单查询 #}
+            {% if tag[k]|default('') and item == k %}
+                {{core_global.formField(o|merge({
+                        value: tag[k]|default(''),
+                        form: v,
+                        field: k,
+                        tpl: opt.tpl|replace({'%value%': '%title%'})
+                    })
+                )}}
+            {% endif %}
+        {% endfor %}
+
+        {% for k,v in service %}
+            {# 数据库 #}
+            {% if tag[k]|default('') and item == k %}
+                {{core_global.formData(o|merge({
+                        value: tag[k]|default(''),
+                        form: v|default('house.category'),
+                        tpl: opt.tpl
+                    })
+                )}}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+{% endspaceless %}
+ {%- endmacro -%}
+ {#
+/**
+ * @method if_dj(o)
+ * @description 以元/m&sup2;为单位的价格 其他参数可参考`core-global`中的 `if_dw(o)`
+ * @param {String} o.danwei=元/m&sup2; - 单位
+ * @param {String} o.default_tips=待定 - 默认值
+ * @example 调用
+ * ```twig
+ * {{house_global.if_dj({value: item.czj|default('')})}}
+ * ```
+ */
+ #}
+
+{%- macro if_dj(o) -%}
+    {% import "CoreBundle:Macro:global.html.twig" as core_global %}
+    {% if '万' in o.value %}
+        {# 为了兼容每套多少钱的标记，也就是说如果要以套为单位的情况下，填写的价钱必须包含`万`字 #}
+        {% set dj_opt = {
+            danwei: '万元/套',
+            default_tips: '待定',
+            value: o.value|abs
+        } %}
+    {% else %}
+        {% set dj_opt = {
+            danwei: '元/平',
+            default_tips: '待定'
+        }|merge(o) %}
+    {% endif %}
+    {{core_global.if_dw(dj_opt)}}
+{%- endmacro -%}
+{#
+/**
+ * @method compare_btn(o)
+ * @description 对比按钮
+ * @param {String} o.target=label - 标签
+ * @param {String} o.class - 样式
+ * @param {String} o.tpl - 模板
+ * @param {String} o.title - 标题
+ * @param {Number} o.id - id
+ * @param {Number} o.url - 链接
+ * @example
+ * ```twig
+ * {{- house_global.compare_btn({
+ *      id: item.id,
+ *      title: item.name,
+ *      url: ('rent/detail')|U({id: item.id})
+ * }) -}}
+ * ```
+ */
+ #}
+{%- macro compare_btn(o) -%}
+    {% set opt = {
+        target: 'label',
+        class: 'compare ico-word',
+        tpl: '<i class="font-lp-8"></i>对比',
+    }|merge(o) %}
+    <{{opt.target}} class="compare ico-word" {{opt.attr|default('')|raw}} for="pro_{{o.id|default('')}}">
+        <input type="checkbox" data-contrast="1" data-contrast-cfg="{obj: this, pro_name:'{{opt.title|default("")}}', pro_link: '{{opt.url|default("")}}', pro_id: '{{opt.id|default("")}}'}" value="" name="" id="pro_{{opt.id|default('')}}">
+        {{opt.tpl|raw}}
+    </{{opt.target}}>
+{%- endmacro compare_btn -%}
+
+{# 对比 #}
+{#
+/**
+ * @method compare_tpl(o)
+ * @description 对比模板
+ * @param {String} o.title - 标题
+ * @param {Number} o.chid=2 - 对比分类  2: 出租，3: 出售，4: 新房
+ * @example
+ * ```twig
+ * {{- house_global.compare_tpl({
+ *      chid: 2,
+ *      title: '出租'
+ * }) -}}
+ * ```
+ */
+ #}
+{%- macro compare_tpl(o) -%}
+    <script id="compBox" type="text/html">
+        <div id="comp_box">
+            <form action="" method="get" target="_blank">
+                <div id="comp_top">
+                    <a class="close font-icons-28" href="javascript:;" data-role="hidden"></a>
+                    <div class="top_l">[<b id="comp_num">0</b>/5]<%= data.otit%>对比</div>
+                </div>
+                <ul id="comp_items"></ul>
+                <div id="comp_boot">
+                    <input type="submit" class="prosubmit" value="{{o.title|default('楼盘对比')}}">
+                    <a class="clear" data-role="clear-all" href="javascript:;">
+                        <i class="font-icons-29 fz16 mr5"></i>清空
+                    </a>
+                    <input id="subid_obj" name="subcatid" type="hidden" value="4">
+                </div>
+            </form>
+        </div>
+    </script>
+
+    <script id="compItem" type="text/html">
+        <li id="<%= data.id%>">
+            <a class="icon font-icons-28" data-role="clear-one" data-id="<%= data.pro_id%>" href="javascript:;"></a>
+            <p class="title">
+                <a href="<%= data.pro_link%>" title="<%= data.pro_title %>" target="_blank"><%= data.pro_title %></a>
+            </p>
+              <input type="hidden" name="pro_id[]" value="<%= data.pro_id%>">
+        </li>
+    </script>
+
+    <script id="btnShow" type="text/html">
+        <a class="btnshow" data-role="show"><i class="font-icons-35"></i></a>
+    </script>
+
+    <script type="text/javascript">
+         // 对比配置
+         var comp_boxMXY = [1,0,300];
+         var chid = '{{o.chid|default(2)}}';
+         var comp_action= '{{("houses/contrast")|U({fid: 8})}}' + '&chid=' + chid + '#/';
+         seajs.use(['contrast'], function (contrast) {
+             contrast.onload();
+         })
+    </script>
+{%- endmacro compare_tpl -%}
+
+
+
+{# 列表提示 #}
+{%- macro list_tips(tips) -%}
+    {# 搜索判断 #}
+    {% set url_name = url_name|default(app.request.get('name')) %}
+    {# 分类判断 #}
+    {% set url_category = url_category|default(app.request.get('category')) %}
+
+    {% set category = url_category|getCategoryById() %}
+
+    {% set category_name = category.name|default('') %}
+
+    {# 普通列表使用 #}
+    {% if url_name|default('') %}
+        {# 搜索 #}
+        {% set tpl_noinfo_content = url_name %}
+    {% elseif url_category|default('') and tpl_category|default(1) %}
+        {# 分类 #}
+        {% set tpl_noinfo_content = category_name %}
+    {% else %}
+        {# 自定义 #}
+        {% set tpl_noinfo_content = tips|default('') %}
+    {% endif %}
+    {# 分类列表使用 #}
+    {% set tpl_noinfo = '暂无' ~ tpl_noinfo_content ~ '数据' %}
+
+    {% spaceless %}
+        {{tpl_noinfo|default('')}}
+    {% endspaceless %}
+{%- endmacro -%}
+{#排序#}
+{%- macro sort(o) -%}
+    {# 默认配置 #}
+    {% set o = {
+        act: 'act',
+        asc: 'desc',
+        desc: 'asc',
+        tpl: '<a href ="%url%" data-name="order" data-value="%value%" data-sort="%field%" class="sort-btn %cls%">%title%<i class="up font-lp-12"></i><i class="down font-lp-11"></i></a>',
+        data: {
+            def: {
+                title: '默认'
+            }
+        },
+        url_opt: {}
+    }|merge(o) %}
+
+    {% set order = app.request.get('order')|split('|') %}
+    {% set sort = order[1]|default('') == 'asc' ? 'desc' : 'asc' %}
+    {% set filter_url_opt = o.url_opt %}
+
+    {% for k, v in o.data %}
+
+        {# 默认按钮 #}
+        {% if k == 'def' %}
+            {% set cls = (order[0] ? null : o.act) ~ ' def default' %}
+            {% set order1 = null %}
+            {% set tpl = '<a href="%url%" data-name="order" data-value data-sort="1" class="sort-btn %cls%">%title%</a>' %}
+            {{ tpl|replace({
+                '%url%': (o.action)|U(filter_url_opt|default({})|merge({order: order1})),
+                '%title%': v.title,
+                '%cls%': cls
+            })|raw }}
+        {% else %}
+            {# 有排序 #}
+            {% if order[0] %}
+                {% set order1 = k ~ '|' ~ (order[0] == k ? sort : 'asc') %}
+                {% set sort1 = sort == 'asc' ? 'desc' : 'asc' %}
+                {% set cls = order[0] == k  ? o.act ~ ' ' ~ o[sort1] : null %}
+            {# 无排序 #}
+            {% else %}
+                {% set cls = null %}
+                {% set order1 = k ~ '|asc' %}
+            {% endif %}
+            {{ o.tpl|replace({
+                '%url%': (o.action)|U(filter_url_opt|default({})|merge({order: order1})),
+                '%title%': v.title,
+                '%cls%': cls,
+                '%value%': v.value|default('asc'),
+                '%field%': k
+            })|raw }}
+
+        {% endif %}
+    {% endfor %}
+{%- endmacro -%}

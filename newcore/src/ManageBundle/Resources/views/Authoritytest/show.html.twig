@@ -1,0 +1,17 @@
+{% extends "ManageBundle::poplayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+
+</script>
+{% endblock %}
+{% block body %}
+{# {{ dump(form) }}#}
+{# {% for child in form %}#}
+{#     {{- form_row(child) -}}#}
+{# {% endfor %}#}
+{# {{ form_start(form) }}#}
+{# {{ form_widget(form) }}#}
+{# {{ form_end(form) }}#}
+{% import "ManageBundle:Form:popedit.html.twig" as forms %}
+{{ forms.popEdit(form|default(''),'form') }}
+{% endblock %}

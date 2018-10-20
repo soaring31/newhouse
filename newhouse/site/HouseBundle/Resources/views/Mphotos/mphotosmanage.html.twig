@@ -1,0 +1,111 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set category = app.request.get('category')|split(',')[0] %}
+{% set category_data = ('house.category')|getRow({id: category, findType: 1}) %}
+{% set models = category_data.models|default('photos') %}
+{% set modelsTable = ('db.models')|getOne('name', {id: models}) %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }}
+    {{ core_manage.jump({
+        title: '<i class="font-ico-10 mr5"></i>评论',
+        url: 'mintercomment/mintercommentmanage'|U
+    }) }}
+{% endblock %}
+
+{% block mainleft %}
+    {{ core_manage.main_left({triggerNext : 1}) }}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{% set filter_opt = [
+    
+    {
+        method: 'selectFormField',
+        title: '审核',
+        form: 'checked',
+        field: 'checked',
+    },
+    {
+        method: 'search',
+        field: 'name',
+        title:'请搜索ID/名称'
+    }
+] %}
+{% if category_data.is_next|default(false) == false %}
+    {% set filter_opt = [{
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增图片'
+    }]|merge(filter_opt) %}
+{% endif %}
+{{ core_manage.filter(filter_opt) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ "/show")|U }}',
+        submitUrl : '{{ (action ~ "/save")|U }}',
+        deleteUrl : '{{ (action ~ "/delete")|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            models: '{{ models }}',
+            category: '{{ category }}'
+        }
+    }">
+    <div class="list list-thumb">
+        <ul>
+            {% if ident.info.data is defined and ident.info.pageCount|default('') != 0 %}
+            {% for k, vo in ident.info.data %}
+            <li data-id="{{ vo.id }}">
+                <div data-role="checkbox" class="img">
+                    <img src="{{assetImg(vo.thumb, {type: 1, width: 135, height: 135})}}">
+                    <i class="font-ico-1"></i>
+                </div>
+                <div class="bar">
+                    <span class="text">{{ vo.id|default('') }}</span>
+                    <a title="{{vo.name|default('')}} 编辑" data-role="show" href="{{(action ~ "/show")|U}}" class="font-ico-2 is-edit"></a>
+                    <a title="删除" data-role="delete" href="#" class="font-ico-3"></a>
+                    <a title="{{vo.name}}的评论" data-role="show" href="{{('mintercomment/mintercommentmanage')|U({aid: vo.id, toid: 0})}}" class="font-ico-14"></a>
+                </div>
+                <a target="_blank" href="{{ ('photos/detail')|U({id: vo.id}) }}" class="list-thumb-name" title="{{vo.name|default('')}}">[{{ core_global.formField({value: vo.checked}) }}]{{ vo.name|default('') }}</a>
+            </li>
+            {% endfor %}
+            {% else %}
+            <li class="tac">没有数据！</li>
+            {% endif %}
+        </ul>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'checked',
+        title: '审核',
+    },
+    {
+        method: 'dropdownCate',
+        field: 'category',
+        service: 'house.category',
+        where: {
+            models: models
+        }
+    }
+]) }}
+{% endblock %}
+
+
+{% block promptUl %}
+{# 提示说明 #}
+{% endblock %}
+
+
+

@@ -1,0 +1,43 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% import "ManageBundle:Form:lists.html.twig" as lists %}
+{% block mainMenu %}
+<li id="mainmenu_91b702ae89e2454319f6f7805e5da93d279419a62ca91c3279119e74d3c10fc0" data-url="{{('models/modelsform')|U()}}">
+	<a href="javascript:void(0);">
+		表单管理
+	</a>
+</li>
+<li title='{{ (action)|U('id='~app.request.get('_id')) }}' class="on">
+    <a href="javascript:void(0);">表单项管理</a>
+</li>
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+seajs.use("{{ bundlepath }}/js/models",function(m){
+	//js入口	    
+	m.init('main');
+});
+</script>
+{% endblock %}
+
+{% block tableMain %}
+<span class="tableDesc">
+              表单项列表>>
+    {{ lists.EDIT({'fid':app.request.get('_id')|default(0)},{'field':'id','params':{0:'新增表单项',1:'search-btn'}},action,'fid') }}
+</span>
+
+{# 列表 #}
+{{ lists.list(ident.info|default('')) }}
+{% endblock %}
+
+{#提交按钮#}
+{% block submit %}{% endblock %}
+
+{# 翻页参数 #}
+{% block page %}
+{{ lists.page(ident.info) }}
+{% endblock %}
+
+{# 提示说明 #}
+{% block promptUl %}
+	<li></li>
+{% endblock %}

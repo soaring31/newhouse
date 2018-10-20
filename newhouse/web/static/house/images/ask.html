@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title>ask</title>    
+    <style type="text/css">
+
+    .img-ask-7,
+    .img-ask-01,
+    .img-ask-02,
+    .img-ask-03,
+    .img-ask-04,
+    .img-ask-05,
+    .img-ask-06 {
+        display: inline-block;
+        *zoom: 1;
+        *display: inline;
+        background-image: url(ask.png);
+    }
+
+    .img-ask-7 {
+        width: 36px;
+        height: 40px;
+        background-position: 0 0;
+    }
+
+    .img-ask-01 {
+        width: 23px;
+        height: 45px;
+        background-position: 0 -50px;
+    }
+
+    .img-ask-02 {
+        width: 23px;
+        height: 45px;
+        background-position: -46px 0;
+    }
+
+    .img-ask-03 {
+        width: 23px;
+        height: 45px;
+        background-position: -79px 0;
+    }
+
+    .img-ask-04 {
+        width: 23px;
+        height: 45px;
+        background-position: -112px 0;
+    }
+
+    .img-ask-05 {
+        width: 7px;
+        height: 7px;
+        background-position: -112px -55px;
+    }
+
+    .img-ask-06 {
+        width: 7px;
+        height: 7px;
+        background-position: -112px -72px;
+    }
+
+
+    * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    .container {
+        font-family: microsoft yahei;
+        width: 1200px;
+        margin: 20px auto;
+    }
+    li {
+        float: left;
+        padding: 5px;
+        margin: 5px;
+        border: 1px solid #eee;
+        text-align: center;
+        font-family: arial;
+        color: #fff;
+        height: 103px;
+        width: 46px;
+        min-width: 80px;
+        line-height: 1.5;
+        background-color: #272822;
+        position: relative;
+    }
+    .class {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 48px;
+        width: 100%;
+        cursor: pointer;
+    }
+    pre {
+        margin: 15px 0;
+        color: #FD8520;
+        font-family: Consolas;
+        font-size: 14px;
+        padding: 15px;
+        background-color: #272822;
+    }
+    .bg i {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        margin-left: 10px;
+        cursor: pointer;
+        float: right;
+        border: 2px solid #fff;
+    }
+
+    .bg i.act {
+        border-color: #f00;
+    }
+
+    
+    
+    .bg i:nth-child(1) {
+        background-color: #22D5BB;
+    }
+    
+    .bg i:nth-child(2) {
+        background-color: #E1F4D8;
+    }
+    
+    .bg i:nth-child(3) {
+        background-color: #8B9D37;
+    }
+    
+    .bg i:nth-child(4) {
+        background-color: #FE842E;
+    }
+    
+    .bg i:nth-child(5) {
+        background-color: #272822;
+    }
+        
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <h2>调用方式</h2>
+
+        <h3>css</h3>
+<pre class="text">
+@import 'img-ask'; //导入css 标识-文件名
+@include img-ask($img-ask); //调用全部样式， 标识-文件名($标识-文件名);
+</pre>
+        <h3>html</h3>
+<pre>
+&lt;i class=&quot;img-demo-home&quot;&gt;&lt;/i&gt;; //class 标识+合成后文件名+单个文件名
+</pre>
+
+        <h3><span class="fr bg"><i></i><i></i><i></i><i></i><i class="act"></i></span>详细代码</h3>
+        点击下面文字直接复制到剪切板
+    </div>
+</div>
+<ul>
+
+
+    <li>
+        <i class="img-ask-7"></i>
+        <div class="class">img-ask-7</div>
+    </li>
+
+    <li>
+        <i class="img-ask-01"></i>
+        <div class="class">img-ask-01</div>
+    </li>
+
+    <li>
+        <i class="img-ask-02"></i>
+        <div class="class">img-ask-02</div>
+    </li>
+
+    <li>
+        <i class="img-ask-03"></i>
+        <div class="class">img-ask-03</div>
+    </li>
+
+    <li>
+        <i class="img-ask-04"></i>
+        <div class="class">img-ask-04</div>
+    </li>
+
+    <li>
+        <i class="img-ask-05"></i>
+        <div class="class">img-ask-05</div>
+    </li>
+
+    <li>
+        <i class="img-ask-06"></i>
+        <div class="class">img-ask-06</div>
+    </li>
+
+</ul>
+<script type="text/javascript">
+    var BASE_URL = window.location.href.replace('./images/ask.html'.replace('./', ''), '') + '/';
+</script>
+<script type="text/javascript">document.write('<script src="' + BASE_URL + '/js/seajs.js"><\/script>');</script>
+
+<script type="text/javascript">
+if (BASE_URL.indexOf('http') == 0) {
+    seajs.use(['clipboard'], function() {
+        $(function() {
+            $('.index').click(function(event) {
+                location.href = BASE_URL;
+            });
+            var $icons = $('.class, .text');
+            $('body').on('copy', '.class, .text', function(e) {
+                    $icons.removeAttr('style');
+                    e.clipboardData.clearData();
+                    e.clipboardData.setData("text/plain", $(this).css({color:'#f00'}).text());
+                    e.preventDefault();
+                })
+                .on('click', '.bg i', function() {
+                    $(this).addClass('act').siblings('i').removeClass('act')
+                    $('li').css({
+                        backgroundColor: $(this).css('background-color'),
+                    })
+                })
+        });
+    })
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set models = app.request.get('models') %}
+
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+{% block mainleft %}
+    
+{% endblock mainleft %}
+
+{% block mainMenu %}
+    {# {{ parent() }} #}
+{% endblock mainMenu %}
+
+{% block tableMain %}
+   {% set filterOpt = [
+        {
+            method: 'selectFormField',
+            title: '审核',
+            form: 'checked',
+            field: 'checked',
+        },
+        {
+            method: 'selectFilter',
+            attr: {
+                'data-selectdate': {
+                    unix: 1
+                }
+            },
+            data: [
+                {
+                    id: '1M',
+                    name: '一个月前'
+                },
+                {
+                    id: '3M',
+                    name: '三个月前'
+                }
+            ],
+            field: 'create_time',
+            title: '添加时间'
+        },
+        {
+            method: 'selectFormField',
+            field: 'jbaotype',
+            form: 'sale_report',
+            title: '类型',
+        }
+    ] %}
+{{ core_manage.filter(filterOpt) }}
+
+<section class="list-con"  data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ "/show")|U }}',
+        submitUrl : '{{ (action ~ "/save")|U }}',
+        deleteUrl : '{{ (action ~ "/delete")|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            models: '{{models}}'
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    {# <tr data-id> #}
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                    <th width="100">举报人</th>
+                    <th>举报房源</th>
+                    <th width="100">举报类型</th>
+                    <th width="50">审核</th>
+                    <th width="100" data-role="sort" data-sort="create_time" class="sort">添加时间</th>
+                    <th width="150" class="tac">操作</th>
+                {# </tr> #}
+                </tr>
+                {% if ident.info.data is defined and ident.info.data|length != 0 %}
+                {% for k, vo in ident.info.data %}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td>{{ vo.id }}</td>
+                    <td class="tov" title="{{ vo.name|default('') }}">
+                        <span data-role="itemEdit" data-name="name" class="edit">
+                            {{('db.users')|getOne('username', {id: vo.uid, checked: 1})}}
+                        </span>
+                    </td>
+                    <td>
+                    {{('house.'~ models|default('sale') )|getOne('name', {id: vo.aid, checked: 1})}}
+                    </td>
+                    <td class="tov" title="{{ vo.tel|default('') }}">
+                        {{ core_global.formField({value: vo.jbaotype, form: 'sale_report', field: 'jbaotype'}) }}
+                    </td>
+                    <td>{{ core_global.formField({value: vo.checked}) }}</td>
+                    <td>{{ vo.create_time|default('0')|date('Y-m-d') }}</td>
+                    <td class="tac">
+                        {{ core_manage.show({url: (action ~ "/show")|U({id: vo.id}) }) }}
+                            {{ core_manage.delete() }}
+                    </td>
+                </tr>
+                {% endfor %}
+                    {% else %}
+                <tr>
+                    <td colspan="10" class="tac">没有数据！</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+ {{ core_manage.oprate([
+        {
+            method: 'delete',
+            title: ' <i class="font-ico-del mr5"></i>批量删除',
+        },
+        {
+            method: 'dropdownFormField',
+            field: 'checked',
+            form: 'checked',
+            title: '审核',
+        },
+        {
+            method: 'dropdownFormField',
+            field: 'jbaotype',
+            form: 'sale_report',
+            title: '类型',
+        }
+    ]) }}
+
+{% endblock  %}
+
+{% block promptUl %}
+{% endblock %}

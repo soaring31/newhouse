@@ -1,0 +1,9 @@
+services:
+    oauth.wechat:
+        class: OAuthBundle\Services\WeChat\WeChat
+        public: false
+        arguments: ['@service_container']
+    oauth.wechat_user:
+        class: OAuthBundle\Services\WeChat\WeChatUser
+        parent: 'oauth.wechat'
+        public: true

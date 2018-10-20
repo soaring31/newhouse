@@ -1,0 +1,7 @@
+<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" width="200" height="200" viewBox="0 0 200 200"><defs><style type="text/css"><![CDATA[
+@font-face {
+  font-family: "ifont";
+  src: url("//at.alicdn.com/t/font_1442373896_4754455.eot?#iefix") format("embedded-opentype"), url("//at.alicdn.com/t/font_1442373896_4754455.woff") format("woff"), url("//at.alicdn.com/t/font_1442373896_4754455.ttf") format("truetype"), url("//at.alicdn.com/t/font_1442373896_4754455.svg#ifont") format("svg");
+}
+
+]]></style></defs><g class="transform-group"><g transform="scale(0.1953125, 0.1953125)"><path d="M508 35.2C246.4 35.2 35.2 246.4 35.2 508c0 261.6 212 472.8 472.8 472.8s472.8-212 472.8-472.8C980.8 246.4 769.6 35.2 508 35.2zM508 910.4c-222.4 0-402.4-180-402.4-402.4 0-222.4 180-402.4 402.4-402.4s402.4 180 402.4 402.4C910.4 730.4 730.4 910.4 508 910.4zM688.8 475.2 444.8 334.4c-24.8-14.4-56.8 4-56.8 32.8l0 282.4c0 28.8 31.2 47.2 56.8 32.8l244-140.8C713.6 526.4 713.6 489.6 688.8 475.2z" fill="#272636"></path></g></g></svg>

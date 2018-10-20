@@ -1,0 +1,58 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% block js %}
+<script>
+seajs.use("{{ bundlepath }}/js/bundles",function(c){
+	//js入口	    
+	c.init('fsynmod');
+});
+</script>
+{% endblock %}
+{% block mainMenu %} 
+{{ parent() }}
+<li class="on"><a href="javascript:void(0);">同步Models</a></li>
+{% endblock %}
+
+{% block tableMain %}
+
+<style type="text/css">
+.mitem{display:inline-block;width:200px;height:35px;padding:0px 5px;overflow:hidden;}
+</style>
+<form class="form" name="formsyn" id="formsyn" action="{{ ('bundles/synmods')|U({'id':app.request.get('id')}) }}" method="post">
+<table class="right-table">
+	<tbody>
+		<tr>
+			<td colspan="3">
+				{% for key,vo in minfos %}
+					<label class="mitem">
+					<input type="checkbox" name="model_ids" id='mid_{{vo['id']}}' value="{{vo['id']}}">
+					({{vo['id']}}){{vo['name']}}-{{vo['title']}}
+					</label>
+				{% endfor %}
+			</td>
+		</tr>
+		<tr>
+		    <td></td>
+		    <td>选择以上模型 同步到：</td>
+			<td class="txtleft">
+				<select name="tobid" id="tobid">
+			    	<option value="0">-请选择-</option>
+			    	{% for key,vo in bundles %}
+			    		<option value="{{key}}" {% if key==nowbundle %}disabled{% endif %}>{{key}}</option>
+			    	{% endfor %}
+			    </select>
+			    <input class="submit-btn ajax-post confirm" target-form="form" value="同步" id="synmods" type="button">
+			</td>
+		</tr>
+	</tbody>
+</table>
+</form>
+{% endblock %}
+
+{% block page %}{% endblock %}
+
+{% block submit %}{% endblock %}
+{% block promptUl %}
+提示说明
+{% endblock %}
+
+

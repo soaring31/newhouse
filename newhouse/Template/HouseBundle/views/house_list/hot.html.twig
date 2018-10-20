@@ -1,0 +1,69 @@
+{#楼盘热评榜#}
+{{core_global.linkcss('static/house/css/newhouse-details/public.css?time=201804201145')}}
+{{core_global.linkcss('static/house/css/newhouse-details/newhouse-common.css?time=201804201145')}}
+{{core_global.linkcss('static/house/css/newhouse-details/newhouseDetail.css?time=201804201145')}}
+<style>
+    /*.list-star-box{color:#FF5C36;}*/
+    .hot-pingjia .pic>span{background:#636363;text-align:center;color:#fff;font-size:12px;}
+    .hot-pingjia .pic>span.first{background:#FF5C36;}
+    .right-list{padding:20px 15px 10px!important;}
+    .right-list h2{margin-right:0!important;margin-bottom:0!important;}
+    .list-item .list-grade{position: relative;margin-left:0;width: 110px;height: 30px;float: left;}
+    .list-star-box{float: left;margin-right: 4px;width: 16px;height: 16px;position: relative;}
+    .list-star-box span{overflow: hidden;position: absolute;display: block;font-size: 16px;color: #ff8400;top: 0;left: 0;}
+    .list-star-box.auto{width:auto;}
+    .icon-zhian{width:0;}
+</style>
+<div id="hotpingjia">
+    <div class="right-list">
+        <h2><a href="">楼盘热评榜</a></h2>
+        <ul class="hot-pingjia">
+            {% for item in rqlp %}
+                {% set catyarea_name = ('db.area')|getRow({id: item.region,checked:1}) %}
+                {% set catyarea2_name = ('house.cate_circle')|getRow({id: item.cate_circle,checked:1}) %}
+            <li>
+                <div class="pic" style="background:url({{ asset(item.thumb) }}) center center no-repeat;background-size:cover;">
+                    <span {% if loop.index<4 %}class="first"{% endif %}>{{ loop.index }}</span>
+                </div>
+                <div class="text list-item">
+                    <h4>{{ item.name }}</h4>
+                    <p>区域： {{ catyarea_name.name|default }} {{ catyarea2_name.name|default }}</p>
+                    <div class="list-grade">
+                        <input type="hidden" value="{{ ('house.inter_housescomment')|getOne("overall",{aid:item.id})|default('暂无') }}" class="j_pingfen">
+                        {% for i in 0..4 %}
+                        <div class='list-star-box'>
+                            <span key='{{ i }}' class="star iconfont icon-zhian j_solid-star"></span>
+                            <span key='{{ i }}' class="star iconfont icon-zhianxiankuang"></span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+
+<script>
+    seajs.use([],function () {
+        function evaluate(a, b) {
+            $(a).each(function () {
+                var evaNum = $(this).find(b).val();
+                var parseIntNum = parseInt(evaNum);
+                if(evaNum != '暂无') {
+                    var arr = evaNum.split('.');
+                    $(this).find('.j_solid-star:lt(' + parseIntNum + ')').width('100%');
+                    if (arr[1]) {
+                        var w = arr[1] * 10 + '%';
+                        $(this).find('.j_solid-star:eq(' + parseIntNum + ')').width(w)
+                    }
+                }else{
+                    $(this).children('.list-star-box').addClass('auto').text('暂无评分');
+                    $(this).children('.list-star-box:gt(0)').remove();
+        }
+            })
+        }
+        evaluate('.list-grade', '.j_pingfen');
+    })
+</script>

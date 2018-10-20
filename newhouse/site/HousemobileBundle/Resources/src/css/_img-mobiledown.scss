@@ -1,0 +1,32 @@
+
+$img-mobiledown-01:(536px,80px,-243px,0,img-mobiledown-01);
+
+$img-mobiledown-02:(168px,42px,-243px,-90px,img-mobiledown-02);
+
+$img-mobiledown-03:(168px,42px,-421px,-90px,img-mobiledown-03);
+
+$img-mobiledown-04:(168px,42px,-599px,-90px,img-mobiledown-04);
+
+$img-mobiledown-05:(233px,219px,0,0,img-mobiledown-05);
+
+$img-mobiledown: ($img-mobiledown-01,$img-mobiledown-02,$img-mobiledown-03,$img-mobiledown-04,$img-mobiledown-05,);
+
+@mixin img-mobiledown($sprites) {
+  %icomobiledown {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/mobiledown.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+      @extend %icomobiledown;
+    }
+  }
+}

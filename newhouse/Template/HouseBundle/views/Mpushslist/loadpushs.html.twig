@@ -1,0 +1,164 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set cate_pushs = app.request.get('cate_pushs') %}
+{% set models = app.request.get('models') %}
+{% set form = app.request.get('form') %}
+{% set level = app.request.get('level') %}
+
+{% block js %}
+{% endblock %}
+
+{% block mainleft %}{% endblock mainleft %}
+
+{% block mainMenu %}
+    {# {{ parent() }} #}
+{% endblock %}
+
+{% block tableMain %}
+
+{# 模型对应的分类 #}
+{% set cate_pushs_data = ('house.cate_pushs')|getRow({ename: cate_pushs}) %}
+    {% set filterOpt = [
+        {
+            method: 'search',
+            field: 'name',
+            title: '请输入标题/ID'
+        }
+    ] %}
+    {% set arr_models = cate_pushs_data.models|split(',') %}
+    {% set arr_cates = cate_pushs_data.cates|split(',') %}
+    {% if arr_models is defined and arr_models|length and cate_pushs_data.cates %}
+        {# category,cata_area|xxx #}
+        {% if arr_models|length > 1 %}
+            {% for m in arr_models if m == models %}
+                {% set cates = arr_cates[loop.index]|split('|') %}
+                {% for i in cates %}
+                    {% set filterOpt = [{
+                                            method: 'selectCate',
+                                            field: i,
+                                            service: 'house.' ~ i,
+                                            where: {
+                                                models: models
+                                            }
+                                        }]|merge(filterOpt) %}
+                {% endfor %}
+            {% endfor %}
+        {% else %}
+            {% set filterOpt = [{
+                                    method: 'selectCate',
+                                    field: cate_pushs_data.cates,
+                                    service: 'house.' ~ cate_pushs_data.cates,
+                                    where: {
+                                        models: models
+                                    }
+                                }]|merge(filterOpt) %}
+        {% endif %}
+    {% endif %}
+    {# 查询参数 #}
+    {% set params = cate_pushs_data.urlparams|getQuery %}
+
+    {% if models == 'users' %}
+        {# 获取分类 #}
+        {% set category_name = ('db.mem_types')|getOne('name', {id: app.request.get('usertype')}) %}
+
+        {# 先找pushs里面已存在的数据 #}
+        {% set pushs_loaded = ('db.pushs')|getCol('fromid', {cate_pushs: cate_pushs}) %}
+
+        {# 再根据分类查找数据 #}
+        {% set pushs_userinfo = ('db.userinfo')|getCol('uid', {uid: 'notIn|' ~ pushs_loaded|join(',')}|merge(params)) %}
+        
+        {# 最后查找数据本身 #}
+        {% set pushs_data = ('db.users')|getAll({id: 'in|' ~ pushs_userinfo|join(','), pageIndex: app.request.get('pageIndex', 1), pageSize: 10,  _multi: 1, username: 'orX|username,like,%' ~ app.request.get('name') ~ '%'}) %}
+    {% else %}
+        {% set pushs_data = ident.info %}
+    {% endif %}
+
+    {{ core_manage.filter(filterOpt|default('')) }}  
+    {% spaceless %}
+    <div class="list-con"  data-param="{
+            defUrl    : '{{ (action)|U }}',
+            showUrl   : '{{ (action ~ "/show")|U }}',
+            submitUrl : '{{ ('mpushslist/save')|U }}',
+            deleteUrl : '{{ (action ~ "/delete")|U }}',
+            fixed     : '.filter',
+            list      : '.list-con',
+            data      : {
+                {%- for k, v in params %}{{k}}:{% if v|is_array %} {% for k1, v1 in v %}'{{k1 ~ '|' ~ v1}}'{% endfor %}{% else %}'{{v}}'{% endif %},{% endfor -%}
+                cate_pushs: '{{ cate_pushs }}',
+                form: '{{ form }}',
+                models: '{{ models }}',
+                checked: 1,
+                level: '{{level}}'
+            }
+        }">
+        {% endspaceless %}
+        <div class="list">
+            <table title="{{app.request.get('models')}}" class="right-table right-table1 table-hover table-nobtn">
+                <tbody>
+                    <tr data-id>
+                        <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                        <th width="60" data-role="sort" data-sort="id" class="sort">ID</th>
+                        <th>标题</th>
+                        <th width="80">分类</th>
+                        <th width="100" data-role="sort" data-sort="create_time" class="sort">添加时间</th>
+                    </tr>
+                    {% if pushs_data.data is defined and pushs_data.pageCount|default('') != 0 %}
+                        {% for k, vo in pushs_data.data %}
+                            {% set username = vo.nicename|default('') ? : vo.username|default('') %}
+                            {% if models == 'hotkeywords' %}
+                                {% set vo_name = core_global.substr(vo.keyword|default(''), 20, 1) %}
+                            {% else %}
+                                {% set vo_name = core_global.substr(username ? : vo.name|default(''), 20, 1) %}
+                            {% endif %}
+                            <tr data-id="{{ vo.id }}" data-name='{{ vo_name }}'>
+                                <td class="tac">{{core_manage.checkbox()}}</td>
+                                <td>{{ vo.id }}</td>
+                                <td>
+                                    {% if vo.thumb|default(0) %}<i class="font-ico-tp mr5 fcr"></i>{% endif %}
+                                    {{vo_name}}
+                                </td>
+                                <td>
+                                    {% if models == 'users' %}
+                                        {{category_name|default('')}}
+                                    {% else %}
+                                        {{core_global.formData({value: vo.category|default('') ? : vo.cate_type|default('') })}}
+                                    {% endif %}
+                                </td>
+                                <td>{{ vo.create_time|default('0')|date('Y-m-d') }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        {{core_manage.page(pushs_data)}}
+        <div class="blank10"></div>
+    </div>
+    <div class="tac">
+    {{ core_manage.oprate([
+        {
+            method: 'submit',
+            title: '确定加载',
+            attr: {
+                'data-add': {
+                    fromid: 'id',
+                    name: 'name'
+                }
+            },
+            params: {
+                models: models, 
+                cate_pushs: cate_pushs, 
+                checked: 1, 
+                uid: app.user.id|default(0), 
+                end_time: ('now')|date_modify("+1 year")|date('Y-m-d')
+            },
+            class: 'fz12'
+        }
+    ]) }} 
+    </div>
+{% endblock %}
+
+{% block promptUl %}
+{% endblock %}
+

@@ -1,0 +1,83 @@
+﻿/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+*/
+
+@import 'static/ats';
+// 工具类 每个文件都要导入
+@import 'lp';
+// 楼盘公用样式
+@import 'lp-list';
+// 楼盘公用列表样式
+@import 'lp-compare';
+// 对比弹窗样式
+
+
+// 区域找房列表
+
+.list-item {
+    padding-top: 20px;
+    .info {
+        width: 470px;
+        h3 {
+            height: 36px;
+            line-height: 36px;
+        }
+        .tag {
+            line-height: normal;
+        }
+        p {
+            height: 24px;
+            line-height: 2;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+    }
+    .mleft0 {
+        margin-left: 0;
+    }
+    .pic {
+        .hongbao {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            height: 50px;
+            width: 50px;
+        }
+    }
+    .other {
+        margin-right: 15px;
+        width: 240px;
+        .dj {
+            height: 36px;
+            em {
+                color: #f50;
+                font-size: 30px;
+            }
+        }
+        .tel {
+            margin-right: 0;
+        }
+    }
+    .preferential {
+        // background: $major-color;
+        border-radius: 3px;
+        color: #f50;
+        font-size: 12px;
+        height: 22px;
+        line-height: 22px;
+        padding: 0 5px;
+    }
+    .compare {
+        cursor: pointer;
+        input {
+            position: absolute;
+            left: -9999999px;
+        }
+    }
+}
+/*添加样式*/
+.lp-tj-item .tag a {
+   margin-right: 2px;
+}

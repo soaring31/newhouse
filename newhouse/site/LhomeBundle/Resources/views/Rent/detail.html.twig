@@ -1,0 +1,537 @@
+{% extends 'LhomeBundle:Rent:list.html.twig' %}
+
+{% set detail = detail|default(cident[tpl_getrow|default('detail')].data[0]|default('')) %} 
+{% set list = ('house.rent')|getAll({ region: detail.region|default(''),  pageSize: 6, checked: 1,orderBy: 'desc', order: 'id'}) %}
+{# 幻灯片 #}
+{% set detail_tujis = detail.tujis|default('')|sourceImg %}
+{# 会员 #}
+{% set item_user_info = ('db.userinfo')|getRow({uid: detail.uid|default(''),checked: 1}) %}
+{% set user_type = ('db.mem_group')|getRow({aid: item_user_info.usertype|default(''),checked: 1}) %}
+{# 同一经纪公司下的经纪人 #}
+{% set user_com = ('db.userinfo')|getAll({cid: item_user_info.cid|default(''),pageSize: 6,checked: 1,usertype: item_user_info.usertype|default(15)}) %}
+ 
+{% block css %}
+{{core_global.linkcss('bundles/LhomeBundle/css/newdetail.css')}}
+{{core_global.linkcss('bundles/LhomeBundle/css/newzufang.css')}}
+{{core_global.linkcss('bundles/LhomeBundle/font/fwpt.html')}}
+{% endblock css %}
+
+{% block title %}{{detail.lpmc|default('')}}小区租房,{{- house_global.huxing({data: detail|default(''), tpl: '%shi%%ting%%wei%'}) -}},{{detail.name|default('')}}, {{detail.address|default('')}}租房{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" Content="{{core_global.region({id: detail.region|default(''), tpl: '%value%'})}}租房网,{{core_global.region({id: detail.region|default(''), tpl: '%value%'})}}租房,{{detail.lpmc|default('')}}租房"/>
+<meta name="description" content="{{core_global.region({id: detail.region|default(''), tpl: '%value%'})}}{{detail.lpmc|default('')}}小区{{- house_global.huxing({data: detail|default(''), tpl: '%shi%%ting%%wei%'}) -}}出租,{{ core_global.formField({value: detail.zlfs|default(''), form: 'rent', field:'zlfs'}) }},租金{{detail.czj|default('')}}元/月,{{house_global.lptag({value: detail|default(''), tpl: '%value%', con: 'zxcd'})}},{{detail.mj|default('')}}㎡,小区地址：{{detail.address|default('')}}。房子{{house_global.lptag({value: detail|default(''), tpl: '%value%', con: 'zxcd'})}}"/>
+{% endblock key_des %}
+
+{% block content %}
+<div class="intro clear" mod-id="lj-common-bread">
+    <div class="container">
+        <div class="fl l-txt"> <i class="icon"></i>
+            <a href="{{('index/index')|U}}">首页</a>
+                <span class="stp">&nbsp;&gt;&nbsp;</span>
+                <a href="{{('rent/list')|U}}">{{cur_area_data|default('')}}租房</a>
+                {# 区域 #}
+                {% if detail.region %}
+                    <span class="stp">&nbsp;&gt;&nbsp;</span>
+                    <a href="{{('rent/list')|U({region: detail.region|default(0)})}}">{{core_global.region({id: detail.region|default(0), tpl: '%value%'})}}租房</a>
+                {% endif %}
+                {# 商圈 #}
+                {% if detail.cate_circle|default('') %}
+                    <span class="stp">&nbsp;&gt;&nbsp;</span>
+                    <a href="{{('rent/list')|U({cate_circle: detail.cate_circle|default(0)})}}">{{core_global.formData({value: detail.cate_circle, form: 'house.cate_circle'})}}租房</a>
+                {% endif %}
+                <span class="stp">&nbsp;&gt;&nbsp;</span>
+                <span>{{detail.name|default('')}}</span>
+        </div>
+    </div>
+</div>
+    <div class="content-wrapper mb15">
+        <div class="title-wrapper">
+            <div class="content">
+                <div class="title">
+                    <h1 class="main">{{detail.name|default('')}}</h1>
+                    {# <div class="sub">{{detail.content|default('')|raw}}</div> #}
+                </div>
+                <div class="btnContainer ">              
+                {{core_global.collect_btn({
+                    aid: detail.id,
+                    models: 'rent',
+                    class: 'collectbtn',
+                    text: '关注房源'
+                })}}
+                </div>
+            </div>
+
+            <!--   <i><div class="barcode">
+                <img src="picture/38ea07d8ea5a4af99dcd407012224a3b.gif" alt="">
+                <div class="des">发送到手机</div>
+            </div></i> 
+        -->
+    </div>
+    <div class="overview">
+        <div class="img jqDuang" data-obj=".item" data-cell=".smallpic" data-prevbtn=".pre" data-nextbtn=".next" data-effect="left" >
+            <div class="imgContainer">
+                {% if detail_tujis|default('') %}
+                {% for item in detail_tujis %}
+                    <div class="item">
+                        {{- core_global.img({
+                            src: item.href|default(''),
+                            alt: item.desc|default(''),
+                            height: 300,
+                            width: 454,
+                            type: 2
+                        }) -}}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            </div>
+            <div class="thumbnail">
+                <ul class="smallpic">
+                    {% if detail_tujis|default('') %}
+                        {% for item in detail_tujis %}
+                            <li>
+                                {{- core_global.img({
+                                    src: item.href|default(''),
+                                    alt: item.desc|default(''),
+                                    type: 2
+                                }) -}}
+                            </li>
+                        {% endfor %}
+                    {% else %}
+                        <li>
+                            {{- core_global.img({
+                                src: '',
+                                alt: '暂无图片',
+                                type: 2
+                            }) -}}
+                        </li>
+                    {% endif %}
+                </ul>
+                <div class="pre"><</div>
+                <div class="next">></div>
+            </div>
+    </div>
+
+ <script type="text/javascript">
+            seajs.use(['jqduang','jqmodal'], function (jqduang,jqmodal) {})
+        </script>
+
+                <div class="content zf-content">
+                    <div class="price ">
+                        <span class="total">{{house_global.if_czj({value: detail.czj|default('')})}}</span>
+                     
+
+                        <span class="tips decoration">{{ core_global.formData({value: detail.zxcd|default('')}) }}</span>
+                        <div class="removeIcon"></div>
+                    </div>
+                    <div class="zf-room">
+                        <p class="lf">
+                            <i>面积：</i>
+                            {{house_global.if_mj({value: detail.mj|default(''), tpl: '%value%%danwei%',default_tips: '-'})}}
+                        </p>
+                        <p class="lf">
+                            <i>房屋户型：</i>
+                           {{- house_global.huxing({data: detail|default(''), tpl: '%shi%%ting%%wei%'}) -}} &nbsp;{{core_global.formField({value: detail.zlfs|default(''), field: 'zlfs', form: 'rent'})}}
+                        </p>
+                        <p class="lf">
+                            <i>楼层：</i>
+                            {{detail.szlc|default('-')}}/{{detail.zlc|default('-')}}层
+                        </p>
+                        <p class="lf">
+                            <i>房屋朝向：</i>
+                            {{ core_global.formData({value: detail.cx|default('')}) }}
+                        </p>
+                        <div class="clear"></div>
+                        <p>
+                            <i>地铁：</i>
+                            --
+                        </p>
+                        <p>
+                            <i>小区：</i>
+                            <a href="{{('houses/detail')|U({id:detail.id})}}" target="_blank">{{detail.lpmc|default('')}}</a>
+                        </p>
+                        <p>
+                            <i>位置：</i>
+                            {{detail.address|default('')}}
+                        </p>
+                        <p class="lf">
+                            <i>时间：</i>
+                            {{item.update_time|default('')|date('Y-m-d')}}
+                        </p>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="brokerInfo" log-mod="zufang_detail_diamond-first">
+                        <a href="{{('member/j_d_ds')|U({id: item_user_info.uid|default('')})}}" >
+                            {{- core_global.img({
+                                    src: item_user_info.image|default(''),
+                                    type: 2
+                            }) -}}
+                        </a>
+                        <div class="brokerInfoText">
+                            <div class="brokerName"  >
+                                <a  class="name LOGCLICK" href="{{('member/j_d_ds')|U({id: item_user_info.uid|default('')})}}" >{{detail.xingming|default('游客')}}</a>
+                                <span class="tag " >{{user_type.name|default('')}}</span>
+                            </div>
+                            <div class="phone">
+                                {{detail.tel|default('更新中')}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="houseRecord">
+                        <div class="right btn-jqModal-ex" href="#jbao">
+                            <a href="javascript:;" class="report">虚假房源举报</a>
+                        </div>
+                    </div>
+                    {{ house_global.modal_layout({ id: 'jbao', title: '举报房源', ajax: "ajax: { data : { formflag: 'view_sale_report', aid: ' {{ detail.id}} ', models: 'sale', cate_pushs: 'sreport', type: 'sale', formcls: 'common-form-lg common-form-control' } }" })}}
+                </div>
+            </div>
+        </div>
+        <div class="detailPageTab panel-tab clickTargetBox jqScrollspy">
+            <ul >
+                <li>
+                    <a href="#introduction" class="act">房源介绍</a>
+                </li>
+                <li>
+                    <a href="#brokerList">联系经纪人</a>
+                </li>
+                <li>
+                    <a href="#around">周边配套</a>
+                </li>
+            </ul>
+        </div>
+         <script type="text/javascript">
+        seajs.use(['jqscrollspy', 'fixed'],function ( jqscrollspy,fixed ){
+            $(".panel-tab").scrollToFixed({
+        });
+        })
+    </script>
+        <div class="content-wrapper introduction-wrapper" id="introduction">
+            <div class="introduction">
+                <div class="title">房源介绍</div>
+                <div class="introContent">
+                    <div class="base">
+                        <div class="name">基本属性</div>
+                        <div class="content">
+                            <ul>
+                                <li>
+                                    <span class="label">租赁方式：</span>
+                                   {{core_global.formField({value: detail.zlfs|default(''), field: 'zlfs', form: 'rent'})}}
+                                </li>
+                                <li>
+                                    <span class="label">付款方式：</span>
+                                    {{core_global.formField({value: detail.fkfs|default(''), field: 'fkfs', form: 'rent'})}}
+                                </li>
+                                <li>
+                                    <span class="label">房屋类型：</span>
+                                   {{ core_global.formData({value: detail.czlx|default('')}) }}
+                                </li>
+                                <li>
+                                    <span class="label">区&nbsp;域:</span>
+                                    {{core_global.region({id: detail.region|default(''), tpl: '%value%'})}}
+                                </li>
+                                
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <div class="name">房源特色</div>
+                        <div class="zf-tag">
+                              {% set fwpt = ('srv_common')|getFormField('fwpt') %}
+                              {# {{ dump(detail.fwpt) }} #}
+                              {% set fwpts = (detail.fwpt|split(',')) %}
+                               <ul class="se clearfix rfwpts">
+                                {% for item in fwpt %}
+                                    <li class="tag1 tags {% if item.id in fwpts %} act {% endif %} ">
+                                        <i class="font-fwpt-{{item.id}}"></i>
+                                        <p>{{ item.name }}</p>
+                                    </li>
+                                {% endfor %}
+                                </ul>
+                                 {% if detail.fwpt|default('') %}
+                                {# <ul class="se clearfix">
+                                    {{- core_global.formField({value: detail.fwpt|default(''), form: 'srv_common', field:'fwpt', tpl: '
+                                    <li class="tag1 tags"> <i class="font-fwpt-%value%"></i>
+                                        %title%
+                                    </li>
+                                    '}) -}}
+                                </ul> #}
+                                {% else %}
+                                <div class="noinfo">暂无相关配套</div>
+                                {% endif %}
+                            <div class="clear"></div>
+                        </div>
+                        <div class="featureContent">
+                            {# <ul>
+                                <li>
+                                    <span class="label">房源亮点：</span>
+                                    <span class="text">东南向两居室，户型方正，南向采光好，家具家电都有，业主自住保持都挺好。</span>
+                                </li>
+                                <li>
+                                    <span class="label">户型介绍：</span>
+                                    <span class="text">两梯六户，客厅带阳台与主卧室朝南，次卧与厨房朝东 采光比较好全天无遮挡，户型比较方正，居住舒适。</span>
+                                </li>
+                                <li>
+                                    <span class="label">装修描述：</span>
+                                    <span class="text">房子是最初入住时的装修，这么多年保持的挺好，家具家电都可以正常使用，房间比较温馨。</span>
+                                </li>
+                                <li>
+                                    <span class="label">交通出行：</span>
+                                    <span class="text">小区门口是地铁14号线来广营站，公交站来广营路口西，多路公交直达。</span>
+                                </li>
+                                <li>
+                                    <span class="label">周边配套：</span>
+                                    <span class="text">有欧尚超市，建材城，百安居，爱家家居，星巴克，汉堡王，硬糖健身等。</span>
+                                </li>
+                                <li>
+                                    <span class="label">小区介绍：</span>
+                                    <span class="text">小区是2010年的小区，人车分流，24小时的保安和门禁系统，已年轻群体为主，主要是在望京及国贸上班，人文环境比较好。</span>
+                                </li>
+                            </ul> #}
+                            {{detail.content|default('')|raw}}
+                        </div>
+                    </div>
+                </div>
+                <div class="more">展开更多信息</div>
+            </div>
+        </div>
+        <div class="brokerList" id="brokerList" log-mod="zufang_detail_diamond-many">
+            <div class="content jqDuang" data-prevbtn=".pre" data-nextbtn=".next" data-obj="li" data-visible="3" data-steps="3" data-effect="left" data-lazyload="src"> 
+                <div class="header">
+                    <span class="title">联系经纪人</span>
+                    <span class="subTitle">您大家都在发可以通过电话联系经纪人</span>
+
+                    <span class="btn">
+                        <span class="pre">
+                            <i></i>
+                        </span>
+                        <span class="next">
+                            <i></i>
+                        </span>
+                    </span>
+
+                </div>
+                <ul>
+                    {% if user_com.data is defined and user_com.pageCount|default(0) != 0 %}
+                    {% for item in user_com.data %}
+                        {% set user_name = ('db.users')|getRow({id: item.uid|default('')}) %}  
+                        {% set item_name = item.nicename|default(user_name.username|default('')) %}
+                        {% set user_com_uid = ('db.userinfo')|getRow({uid: item.uid|default('')}) %}
+                        {% set com_type = ('db.mem_group')|getRow({aid: user_com_uid.usertype|default('')}) %}
+                        <li>
+                            <ahref="{{('member/j_d_ds')|U({id: item_user_info.uid|default('')})}}" >
+                                {{- core_global.img({
+                                        src: item.image|default(''),
+                                        type: 2
+                                }) -}}
+                            </a>
+                            <div class="desc">
+                                <div class="title">
+                                    <a href="{{('member/j_d_ds')|U({id: item_user_info.uid|default('')})}}" class="name " >{{item_name|default('')}}</a>
+                                    <span class="level">{{com_type.name|default('')}}</span>
+                                </div>
+                                <div class="phone">{{user_name.tel|default('')}}</div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+       {#  <div class="record" id="record">
+            <div class="list">
+                <div class="title">
+                    看房记录
+                    <span class="next disable">
+                        <i></i>
+                    </span>
+                    <span class="pre disable">
+                        <i></i>
+                    </span>
+                </div>
+                <div class="content">
+                    <div class="header">
+                        <div class="item">带看时间</div>
+                        <div class="item">带看经纪人</div>
+                        <div class="item">本房总带看</div>
+                        <div class="phone">咨询电话</div>
+                    </div>
+                    <div class="row">
+                        <span class="noData">暂无看房记录</span>
+                    </div>
+                </div>
+            </div>
+            <div class="panel">
+                <div class="title">近7天带看次数</div>
+                <div class="count">0</div>
+                <div class="totalCount">
+                    - 总带看
+                    <span>0</span>
+                    次 -
+                </div>
+            </div>
+        </div> #}
+        {# <div  id="dealPrice"></div>
+        <div class="dealRecord">
+            <div class="title">
+                <span class="resblockDeal" data-target="#resblockDeal">同小区成交记录</span>
+                <span class="bizcircleDeal" data-target="#bizcircleDeal">同商圈成交记录</span>
+            </div>
+            <div id="bizcircleDeal"></div>
+            <div id="resblockDeal">
+                <div class="noData">暂无成交记录</div>
+            </div>
+        </div> #}
+        <div class="around" id="around">
+            <div class="dtbox">
+                <div id="dt">
+                {{
+                    lhome_global.map({
+                        detail: detail,
+                        data: detail,
+                        arr_round : [
+                            {ico: 42, name: '学校'},
+                            {ico: 43, name: '医院'},
+                            {ico: 44, name: '银行'},
+                            {ico: 45, name: '餐饮'},
+                            {ico: 46, name: '购物'},
+                            {ico: 47, name: '公交'},
+                            {ico: 49, name: '公园'},
+                            {ico: 50, name: '机场'},
+                            {ico: 51, name: '加油站'},
+                        ]
+
+                    })
+                }}
+            </div>
+            </div>
+        </div>
+        <div class="push" log-mod="zufang_detail_recommend-zufang">
+            <div  class="content jqDuang" data-prevbtn=".pre" data-nextbtn=".next" data-obj="li" data-visible="3" data-steps="3" data-effect="left" data-lazyload="src">
+                <div class="header">
+                    <span class="title">好房为你推荐</span>
+                    <span class="btn">
+                        <span class="pre">
+                            <i></i>
+                        </span>
+                        <span class="next">
+                            <i></i>
+                        </span>
+                    </span>
+                </div>
+                <ul>
+                    {% if list.data is defined and list.pageCount|default(0) != 0 %}
+                        {% for item in list.data%}
+                            <li>
+                                <div class="pic">
+                                    <a href="{{('rent/detail')|U({id: item.id|default('')})}}" class="LOGCLICK" data-bl="list" data-el="" data-log_index="1" data-log_id="30001">
+                                        {{- core_global.img({
+                                            src: item.thumb|default(''),
+                                            width: 251,
+                                            height:192 ,
+                                            type: 2,
+                                        }) -}}
+                                    </a>
+                                        {% if item.models|default('') == 'sale' %}
+                                            <p>{{house_global.if_wy({value: item.zj|default('')})}}</p>
+                                        {% else %}
+                                            <p>{{house_global.if_czj({value: item.czj|default('')})}}</p>    
+                                        {% endif %}
+                                </div>
+                                <div class="title">
+                                    <span class="name">
+                                        <a href="{{('houses/detail')|U({id: item.id|default('')})}}" >{{item.lpmc|default('')}}</a>
+                                    </span>
+                                    <span class="info">{{- house_global.huxing({data: item|default(''), tpl: '<span>%shi%%ting%</span>', default: ''}) -}}/{{- house_global.if_mj({value: item.mj|default(''), tpl: '<span>%value%%danwei%</span>'}) -}}</span>
+                                </div>
+                                <div class="desc">
+                                    <span class="front"></span>
+                                    <span class="back"></span>
+                                    <span class="info">综合条件和当前房源相似</span>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <div class="promise">
+            <div class="item zhen">
+                <a href="/">
+                    <i></i>
+                    <div class="text">
+                        <div class="title">真实房源</div>
+                        <div class="sub">真房源&nbsp;假一赔百元</div>
+                    </div>
+                </a>
+            </div>
+            <div class="item jianguan">
+                <a href="/">
+                    <i></i>
+                    <div class="text">
+                        <div class="title">交易资金监管</div>
+                        <div class="sub">保障交易安全</div>
+                    </div>
+                </a>
+            </div>
+            <div class="item huigou">
+                <a href="/">
+                    <i></i>
+                    <div class="text">
+                        <div class="title">最高原价回购</div>
+                        <div class="sub">辐射/凶宅</div>
+                    </div>
+                </a>
+            </div>
+            <div class="item dianfu">
+                <a href="/">
+                    <i></i>
+                    <div class="text">
+                        <div class="title">损失先行垫付</div>
+                        <div class="sub">物业欠费/签前查封</div>
+                    </div>
+                </a>
+            </div>
+            <span class="justify_fix"></span>
+        </div>
+        <div class="bigImg">
+            <div class="mask"></div>
+            <div class="list">
+                <img src="" alt="">
+                <div class="pre">
+                    <span></span>
+                </div>
+                <div class="next">
+                    <span></span>
+                </div>
+            </div>
+            <div class="close"></div>
+            <div class="slide">
+                <div class="desc"></div>
+                <ul>
+                    <li data-src="https://image1.ljcdn.com/110000-inspection/44a5e1bc-e353-4a3b-8911-fb3b53d010db.jpg.600x450.jpg" data-desc="厅">
+                        <img src="picture/44a5e1bc-e353-4a3b-8911-fb3b53d010db.jpg.600x450.jpg" alt=""></li>
+                    <li data-src="https://image1.ljcdn.com/110000-inspection/e1653333-c450-4fa8-9750-1356de99f10e.jpg.600x450.jpg" data-desc="厅">
+                        <img src="picture/e1653333-c450-4fa8-9750-1356de99f10e.jpg.600x450.jpg" alt=""></li>
+                    <li data-src="https://image1.ljcdn.com/110000-inspection/5815ec72-8949-42e6-bcf6-fd023f774ece.jpg.600x450.jpg" data-desc="卧室A">
+                        <img src="picture/5815ec72-8949-42e6-bcf6-fd023f774ece.jpg.600x450.jpg" alt=""></li>
+                    <li data-src="https://image1.ljcdn.com/x-se//hdic-frame/1a5ce992-28fa-4697-b77e-d8d66484634c.png.600x450.jpg" data-desc="户型图">
+                        <img src="picture/1a5ce992-28fa-4697-b77e-d8d66484634c.png.600x450.jpg" alt=""></li>
+                    <li data-src="https://image1.ljcdn.com/110000-inspection/74d5e0fd-cf05-40c8-b92f-cc56e43bb022.jpg.600x450.jpg" data-desc="卧室A">
+                        <img src="picture/74d5e0fd-cf05-40c8-b92f-cc56e43bb022.jpg.600x450.jpg" alt=""></li>
+                    <li data-src="https://image1.ljcdn.com/110000-inspection/52b7d163-64a1-4045-94eb-b294ac500a0e.jpg.600x450.jpg" data-desc="卧室B">
+                        <img src="picture/52b7d163-64a1-4045-94eb-b294ac500a0e.jpg.600x450.jpg" alt=""></li>
+                    <li data-src="https://image1.ljcdn.com/110000-inspection/c6864ea5-40f0-4862-b527-c98f5c9b2dd3.jpg.600x450.jpg" data-desc="厨房">
+                        <img src="picture/c6864ea5-40f0-4862-b527-c98f5c9b2dd3.jpg.600x450.jpg" alt=""></li>
+                    <li data-src="https://image1.ljcdn.com/110000-inspection/f9d822b2-d080-40f3-afec-16f2a5bad9f6.jpg.600x450.jpg" data-desc="卫生间">
+                        <img src="picture/f9d822b2-d080-40f3-afec-16f2a5bad9f6.jpg.600x450.jpg" alt=""></li>
+                    <!-- <li data-src="//image2.ljcdn.com/appro/group2/M00/B7/AA/rBAF7FX6sUqAeuhGAADSk3x5cr4639.jpg.1024x768.jpg" data-desc="客厅1">
+                    <img src="picture/rbaf7fx6suqaeuhgaadsk3x5cr4639.jpg.89x67.jpg" alt="客厅1"></li>
+                -->
+            </ul>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block js %}
+{% endblock js %}

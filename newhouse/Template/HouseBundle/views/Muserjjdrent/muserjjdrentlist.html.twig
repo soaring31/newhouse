@@ -1,0 +1,109 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+{% block mainMenu %}
+{% endblock %}
+{% block tableMain %}
+{{ core_manage.filter([
+    {
+        method: 'selectFormField',
+        title: '审核',
+        form: 'checked',
+        field: 'checked',
+    },
+    {
+        method: 'search',
+        field: 'name',
+        title: '请输入出租房名称'
+    }
+]) }}
+
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ ('mrentmanage/show')|U }}',
+        submitUrl : '{{ ('mrentmanage/save')|U }}',
+        deleteUrl : '{{ ('mrentmanage/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+                <tbody>
+                    <tr data-id>
+                        <th width="30" class="tac">{{core_manage.checkbox()}}</th>
+                        <th width="20">ID</th>
+                        <th width="160">名称</th>
+                        <th width="70">楼盘名称</th>
+                        <th width="50">区域</th>
+                        <th width="40">点击</th>
+                        <th width="40">审核</th>
+                        <th width="50">发布人</th>
+                        <th width="50" class="tac">操作</th>
+                    </tr>
+
+                    {% if ident.info.data is defined and ident.info.pageCount|default('') != 0 %}
+                    {% for k, vo in ident.info.data %}
+                        {# {{ dump(vo) }} #}
+                    <tr data-id="{{ vo.id }}">
+                        <td class="tac">{{core_manage.checkbox()}}</td>
+                        <td>{{vo.id}}</td>
+                        <td class="tov" title="{{ vo.name|default('') }}">
+                            <a href="{{('rent/detail')|U({id: vo.id})}}" target="_blank">{{core_global.substr(vo.name|default(''), 30, 1)}}</a>
+                        </td>
+                        <td>
+                            <a href="{{('houses/detail')|U({id: vo.aid})}}" target="_blank">{{ ('house.houses')|getOne('name', {id: vo.aid}) }}</a>
+                        </td>
+                        <td>{{  vo.region|getAreaName|default('') }}</td> 
+                        <td width="40"><span data-role="itemEdit" data-name="clicks" class="edit">{{ vo.clicks|default('0') }}</span></td>
+                        <td>{{ core_global.formField({ value: vo.checked }) }}</td>
+                        <td>{{('db.users')|getOne('username',{id: vo.uid})}}</td>
+                        <td class="tar pr10">
+                            {{ core_manage.show() }}
+                            {{ core_manage.delete() }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+
+</section>
+{% if app.user.usertplid is null %}
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'checked',
+        title: '审核',
+    },
+]) }}
+{% else %}
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    }
+]) }}    
+{% endif %}
+{% endblock %}
+
+{% block promptUl %}
+{# aaaasdaasd #}
+{% endblock %}
+
+
+
+

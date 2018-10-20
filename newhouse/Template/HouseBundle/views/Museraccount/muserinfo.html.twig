@@ -1,0 +1,15 @@
+{% extends 'HouseBundle::base_show.html.twig' %}
+{% block js %}
+
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }} 
+{% endblock %}
+
+{% block body %}
+    {# {{action}} #}
+{{ core_manage.form_cfg(form|default(''), action) }}
+{% endblock body %}
+
+{% block promptUl %}{% endblock %}

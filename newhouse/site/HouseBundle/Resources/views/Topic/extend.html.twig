@@ -1,0 +1,3 @@
+{% set detail = cident.detail.data[0]|default('') %}
+	
+{% extends detail|default('') ? 'HouseBundle:Topic:topic_layout.html.twig' : 'CoreBundle:Dispatch:errorcontent.html.twig' %}

@@ -1,0 +1,213 @@
+{% extends 'HouseBundle::base.html.twig' %}
+{# 手机框架公用宏 #}
+{% import "CoreBundle:Macro:mobile_global.html.twig" as core_mobile_global %}
+{% import "CoreBundle:Macro:mobile_forms.html.twig" as core_mobile_forms %}
+{# 房产手机独用宏 #}
+{% import "HousemobileBundle:Macro:global.html.twig" as housemobile_global %}
+
+{% set url_isApp = app.request.get('_isApp', 0) %}
+
+{% block doctype %}
+<!DOCTYPE html>
+{% endblock doctype %}
+
+{# 重置头部 #}
+{% block header %}{% endblock header %}
+
+{# 重置底部 #}
+{% block footer %}{% endblock footer %}
+
+{% block head_set %}
+        {# 手机端meta #}
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+         {# 禁止百度搜索抓取时转码 #}
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta http-equiv="Cache-Control" content="no-siteapp" />
+        {% set BASE_URL = app.request.getBaseUrl() %}
+        {# 先不启用 #}
+        {# {% set url_isApp = 0 %} #}
+        <script>
+            var url_isApp              = {{ url_isApp }};
+            var csrf_token             = "{{csrf_token}}";
+            var jsbase                 = "{{ url_isApp ? '../' : asset('bundles') }}";
+            var BASE_URL               = "{{ url_isApp ? core_global.get_http() ~ '://' ~  'maindomain'|C ~ BASE_URL : core_global.get_http() ~ '://' ~  'maindomain'|C }}";
+            var BASE_THEME             = "{{bundlepath}}";
+            // window.UEDITOR_HOME_URL = "{{ asset('bundles') }}/core/js/vendor/ueditor/";
+            var REMOTE_URL             = "{{'upload_type'|C == 'remote' ? 'up_remote_domainname'|C : '' }}"; // 远程图片路径拼接
+            // 供百度兼容https使用
+            var HOST_TYPE   = {{ core_global.get_http().__toString == 'https' ? 2 : 0 }};
+        </script>
+        {% block css_base %}
+            {{core_global.linkcss('bundles/' ~ bundlepath ~ 'mobile/css/sm.css')}}
+            {{core_global.linkcss('bundles/' ~ bundlepath ~ 'mobile/css/m.css')}}
+        {% endblock css_base %}
+        {% block css %}{% endblock css %}
+        <script type="text/javascript" src="{{ url_isApp ? '../housemobile/js/seajs.js' : asset('bundles/housemobile/js/seajs.js') }}"></script>
+        <script type="text/javascript">
+            // 试调使用方案2，上线使用方案1
+            /* 方案1 */
+            // {% if url_isApp %}
+            //     var crossDomain = true;
+            // {% else %}
+            //     var crossDomain = false;
+            // {% endif %}
+            /* 方案2 */
+            var crossDomain = false;
+
+            seajs.use([
+                'sm',
+                'touch',
+                'fx',
+                'common'
+            ], function (sm, touch, fx, common) {
+                $.config = {router: false};
+                // 详情页面的统计
+                /*common.dcounts({
+                    url: 'igetcounts/detailcounts'
+                });*/
+                common.getcounts({
+                    url: '{{("igetcounts/index")|U}}'
+                })
+                common.toTop();
+                // ajax调用内容
+                common.block('[data-block]');
+
+                common.adcount({
+                    saveUrl : '{{("viewinter/vote")|U}}'
+                });
+
+            });
+
+        </script>
+{% endblock head_set %}
+
+{% block js %}{% endblock js %}
+
+
+{% block body %}
+    <div class="page-group">
+        <div class="page page-current">
+            {# 当前page #}
+            {% block current_page %}
+                {# 底部导航 #}
+                {% block nav %}{% endblock nav %}
+                {# 顶部 #}
+                {% block header_wrap %}
+                    <header class="bar bar-nav {{header_class|default('')}}">
+                        {% block moblie_header %}
+                            {{core_mobile_global.go_back()}}
+                            {% block header_title %}{% endblock header_title %}
+                        {% endblock moblie_header %}
+                        {# 导航 #}
+                        {{ core_mobile_global.bar_nav_btn({
+                            title: '导航',
+                            icon: 'font-f-47',
+                            popup: {
+                                title: '频道导航',
+                                popup: '.popup-major-nav',
+                            }
+                        }) }}
+                        {% block header_right %} {% endblock header_right %}
+                    </header>
+                {% endblock header_wrap %}
+                {# 内容 #}
+                {% block secondary %}{% endblock secondary %}
+                {% block container %}{% endblock container %}
+                {# 回到顶部 #}
+                {% block toTop %}
+                    <div data-to-top="1" class="toTop">
+                        <span class="icon icon-up"></span>
+                    </div>
+                {% endblock toTop %}
+            {% endblock current_page %}
+        </div>
+        {# 其他page #}
+        {% block other_page %}{% endblock other_page %}
+        {# 导航 #}
+        {% block popup_nav %}
+            {{ housemobile_global.popup_nav({
+                current_nav: current_nav|default('')
+            }) }}
+        {% endblock popup_nav %}
+        {# 搜索 #}
+        {% block popup_search %}
+            {# {% include 'HousemobileBundle:Common:topsearch.html.twig' ignore missing %} #}
+            {# 内容的头 这里搜索框 #}
+            {% set content_bar %}
+            <form action="{{ search_action|default(app.request.get('appaction')) }}" class="form">
+                <div class="searchbar row">
+                    <div class="search-input">
+                        <input type="search" id='search' name="name" required="required" placeholder="输入关键字..." />
+                    </div>
+                    <a data-role="search" data-config="{tpl:'#history', list: '.search-list', listItem: '.search-item',text: '.text', clearBtn: '[data-clear]', size: 10}" class="button button-fill button-primary col-15 sousuo" href="javascript:;">
+                        <span class="icon icon-search"></span>
+                    </a>
+                </div>
+            </form>
+            {% endset %}
+            {# 实际内容 #}
+            {% set content %}
+            <div class="list-block list-block-search">
+                <div class="list-group">
+                    <ul>
+                        <li class="list-group-title">热门搜索</li>
+                        <li class="item-content">
+                            {% set hotKeys = ('mobilehotkey')|getPush(3) %}
+                            {{- housemobile_global.searchHot({data: hotKeys}) -}}
+                        </li>
+                    </ul>
+                </div>
+                <div class="list-group">
+                    <ul>
+                        <li class="list-group-title"><span data-clear="1" class="pull-right font-f-11"></span>历史搜索</li>
+                        <div class="search-list">
+
+                        </div>
+                    </ul>
+                </div>
+            </div>
+            <script type="text/javascript">
+                seajs.use(['search'], function() {
+                    $('.popup-search').on('opened', function() {
+                        var $this = $(this);
+                        var btnData = $($this.data('btn')).data();
+
+                        btnData.title && $this.find('.title ').text(btnData.title);
+                        btnData.placeholder && $this.find('[type="search"]').attr('placeholder', btnData.placeholder);
+                    })
+                })
+            </script>
+            <script id="history" type="text/html">
+            <% for(var i = 0; i < data.length; i++){ %>
+                <li class="item-content search-item">
+                    <div class="item-inner">
+                        <div class="item-title item-title-p0">
+                            <span class="icon font-f-13"></span>
+                            <span class="text"><%= data[i] %> </span>
+                        </div>
+                    </div>
+                </li>
+            <% } %>
+            </script>
+            {% endset %}
+
+            {{ housemobile_global.popup({
+                name: 'popup-search',
+                title: '搜索',
+                content_bar: content_bar,
+                content: content
+            }) }}
+        {% endblock popup_search %}
+
+        {# 第二个页面，e.g. 发布，点评 #}
+        {% block popup %}
+
+        {% endblock popup %}
+
+        {% block panel %}
+        <!-- 侧栏部分 -->
+        {% endblock panel %}
+    </div>
+{% endblock body %}

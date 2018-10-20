@@ -1,0 +1,33 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% import "ManageBundle:Form:lists.html.twig" as lists %}
+{% block js %}
+<script type="text/javascript">
+seajs.use("{{ bundlepath }}/js/models",function(m){
+	//js入口	    
+	m.init('main');
+});
+</script>
+{% endblock %}
+
+{% block tableMain %}
+<span class="tableDesc">
+             表单列表>>
+    {{ lists.EDIT({'id':0},{'field':'id','params':{0:'新增表单',1:'search-btn'}},action) }}
+    <input type="text" id="search_name" value="{{ app.request.get('name','') }}" data-source="{{ app.request.get('name','') }}" />
+</span>
+{# 列表 #}
+{{ lists.list(ident.info|default('')) }}
+{% endblock %}
+
+{#提交按钮#}
+{% block submit %}{% endblock %}
+
+{# 翻页参数 #}
+{% block page %}
+{{ lists.page(ident.info) }}
+{% endblock %}
+
+{# 提示说明 #}
+{% block promptUl %}
+	<li></li>
+{% endblock %}

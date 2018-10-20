@@ -1,0 +1,23 @@
+info:
+    tableName: smstpls
+    subTableName: ''
+    aliasName: p
+    listGrid:
+        - 'id:序号|txtcenter w60'
+        - 'tid:标识ID|txtleft w80'
+        - 'name:模版名称|txtleft w120'
+        - 'open[GETSTATUS]:启用状态|txtleft w60'
+        - 'id:操作|txtcenter w560:[EDIT]编辑|btn,[DELETE]删除|btn'
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 2
+    pageIndex: 1
+    pageSize: 8
+    order: ''
+    orderBy: asc
+    searchFun: EXISTS
+    dataModel: 0
+    autoQuery: '0'
+    alias: {  }
+    query: {  }
+    query1: {  }

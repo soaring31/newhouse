@@ -1,0 +1,462 @@
+@charset "UTF-8";
+/*!
+ * @name <%= name %>
+ * @author <%= author %>
+ * @date <%= date %>
+ */
+/**
+ * @method 清除浮动 %clearfix 
+ * @description 清除浮动
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %clearfix;
+ * }
+ * ```
+ * 
+ * ```css
+ * 	div {
+	    *zoom: 1;
+	}
+	div:after {
+	    display: block;
+	    clear: both;
+
+	    height: 0;
+
+	    content: '\20';
+	}
+ * ```
+ */
+/**
+ * @method 去掉虚线框 %outline 
+ * @description 去掉虚线框
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @ extend %outline;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		outline: thin dotted;
+		outline: 5px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
+ * ```
+ */
+/**
+ * @method 文字不换行后面加省略号 %text-overflow 
+ * @description 文字不换行后面加省略号
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %text-overflow;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+ * ```
+ */
+/**
+ * @method 透明层opacity 
+ * @description 透明层 内容也透明
+ * @param {number} $opacity - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include opacity(.5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+	  opacity: .5;
+	  filter: alpha(opacity=50);
+ * }
+ * ```
+ */
+/**
+ * @method 背景透明层transparent 
+ * @description 透明层只处理背景透明
+ * @param {string} $color - 背景透明层的颜色
+ * @param {number} $alpha - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include transparent(#000, .5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+ *    	background-color: transparent;
+		background-color: (0,0,0,.5);
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7fffffff, endColorstr=#7fffffff,);
+		zoom: 1;
+ * }
+ * ```
+ */
+/**
+ * @method triangle 
+ * @description 生成一个三角形图标
+ * @param {string} $size - 三角的大小
+ * @param {string} $color - 三角颜色
+ * @param {string} $direction - 三角的方向 up, down, left, right
+ * @example 调用
+ * 
+ * ```scss
+ * i {
+ *    @include triangle(5px, #bbb, up); 
+ * }
+ * ```
+ * 
+ * ```css
+ * i {
+ *    width: 0;
+      height: 0;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent;
+      border-bottom-color: #bbb;
+ * }
+ * ```
+ */
+/**
+* @method 水平线hr nav-divider 
+* @description 透明层 内容也透明
+* @param {string} $color=#e5e5e5 - 线的颜色
+* @param {string} $line-height-computed - 线的高度，空间
+* @example 调用
+* 
+* ```scss
+* div {
+*    @include nav-divider(#e5e5e5, 24px);
+* }
+* ```
+* 
+* ```css
+* div {
+	  height: 1px;
+	  margin: 11px 0;
+	  overflow: hidden;
+	  background-color: #e5e5e5;
+* }
+* ```
+*/
+.img-ju-1, .img-ju-2, .img-ju-3, .img-ju-4, .img-ju-5, .img-ju-6, .img-ju-7, .img-ju-8, .img-ju-9 {
+  display: inline-block;
+  *zoom: 1;
+  *display: inline;
+  vertical-align: middle;
+  line-height: 300px;
+  overflow: hidden;
+  background-image: url(../images/ju.png);
+}
+
+.img-ju-1 {
+  width: 206px;
+  height: 68px;
+  background-position: 0 0;
+}
+
+.img-ju-2 {
+  width: 39px;
+  height: 44px;
+  background-position: 0 -78px;
+}
+
+.img-ju-3 {
+  width: 39px;
+  height: 44px;
+  background-position: -49px -78px;
+}
+
+.img-ju-4 {
+  width: 39px;
+  height: 44px;
+  background-position: -98px -78px;
+}
+
+.img-ju-5 {
+  width: 39px;
+  height: 44px;
+  background-position: -147px -78px;
+}
+
+.img-ju-6 {
+  width: 39px;
+  height: 44px;
+  background-position: 0 -132px;
+}
+
+.img-ju-7 {
+  width: 39px;
+  height: 44px;
+  background-position: -49px -132px;
+}
+
+.img-ju-8 {
+  width: 39px;
+  height: 44px;
+  background-position: -98px -132px;
+}
+
+.img-ju-9 {
+  width: 21px;
+  height: 21px;
+  background-position: -147px -132px;
+}
+
+.jump html, .jump body {
+  height: 100%;
+}
+
+.jump .container {
+  width: 1200px;
+  height: 560px;
+  margin: 0 auto;
+  background: url(../images/jump-bg.png) 0 0 no-repeat;
+  position: relative;
+}
+
+.jump .tip {
+  height: 70px;
+  width: 206px;
+  position: absolute;
+  left: 295px;
+  top: 100px;
+  line-height: 70px;
+  font-size: 18px;
+  text-align: center;
+  color: #2c2c2c;
+}
+
+.jump .main, .jump .main2, .jump .main3, .jump .main4 {
+  position: absolute;
+  left: 513px;
+  top: 170px;
+  width: 320px;
+}
+
+.jump .title h3 {
+  line-height: 43px;
+}
+
+.jump .title i {
+  display: inline-block;
+  width: 40px;
+  height: 44px;
+  margin-left: 7px;
+  vertical-align: middle;
+  float: left;
+}
+
+.jump .title span {
+  font-size: 14px;
+  color: #898989;
+  margin-left: 4px;
+}
+
+.jump .title p {
+  color: #8c8c8c;
+  font-size: 12px;
+  text-indent: 55px;
+  margin-bottom: 35px;
+}
+
+.jump .title b {
+  font-weight: normal;
+  color: #f30;
+}
+
+.jump .btns {
+  font-size: 0;
+  width: 100%;
+}
+
+.jump .btns a {
+  display: inline-block;
+  width: 80px;
+  height: 28px;
+  border: 1px solid #e8e8e8;
+  border-radius: 3px;
+  line-height: 30px;
+  text-align: center;
+  color: #545454;
+  font-size: 14px;
+  margin-right: 19px;
+  background: url(../images/btn-bg.png) 0 0 repeat-x;
+}
+
+.jump .btns a:hover {
+  text-decoration: none;
+  background: url(../images/btn-bg2.png) 0 0 repeat-x;
+}
+
+.jump .btns .last {
+  margin-right: 0;
+}
+
+.jump .main2 .btns, .jump .main3 .btns, .jump .main4 .btns {
+  font-size: 0;
+  width: 100%;
+}
+
+.jump .main2 .btns a, .jump .main3 .btns a, .jump .main4 .btns a {
+  display: inline-block;
+  width: auto;
+  padding: 0 15px 0 13px;
+  height: 28px;
+  border: 1px solid #e8e8e8;
+  border-radius: 3px;
+  line-height: 30px;
+  text-align: center;
+  color: #545454;
+  font-size: 13px;
+  margin-left: 19px;
+  margin-right: 0;
+  background: url(../images/btn-bg.png) 0 0 repeat-x;
+}
+
+.jump .main2 .btns a:hover, .jump .main3 .btns a:hover, .jump .main4 .btns a:hover {
+  text-decoration: none;
+  background: url(../images/btn-bg2.png) 0 0 repeat-x;
+}
+
+.jump .main2 .btns .first, .jump .main3 .btns .first, .jump .main4 .btns .first {
+  margin-left: 17px;
+}
+
+.jump .main2 .btns .fst, .jump .main3 .btns .fst, .jump .main4 .btns .fst {
+  margin-left: 55px;
+}
+
+.jump .main2 .btns .efst, .jump .main3 .btns .efst, .jump .main4 .btns .efst {
+  margin-left: -12px;
+}
+
+.jump .main4 .btns {
+  margin-top: 50px;
+}
+
+.jump .mark {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.jump .Popup {
+  position: absolute;
+  width: 500px;
+  height: 376px;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  border-radius: 3px;
+  background: #fff url(../images/po-bg.png) 0 0 no-repeat;
+}
+
+.jump .po-header {
+  margin-top: 18px;
+}
+
+.jump .po-header h2 {
+  color: #2c2c2c;
+  font-size: 18px;
+  float: left;
+  margin-left: 49px;
+  line-height: 1;
+}
+
+.jump .po-header i {
+  cursor: pointer;
+  float: right;
+  height: 20px;
+  width: 20px;
+  margin-right: 19px;
+}
+
+.jump .po-title {
+  margin-top: 43px;
+}
+
+.jump .po-title h3 {
+  margin-left: 100px;
+  line-height: 43px;
+}
+
+.jump .po-title i {
+  display: inline-block;
+  width: 40px;
+  height: 44px;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+.jump .po-title span {
+  font-size: 14px;
+  color: #898989;
+  margin-left: 6px;
+}
+
+.jump .po-title p {
+  color: #8c8c8c;
+  font-size: 12px;
+  text-indent: 156px;
+  margin-bottom: 34px;
+}
+
+.jump .po-title b {
+  font-weight: normal;
+  color: #f30;
+}
+
+.jump .po-btns {
+  font-size: 0;
+  width: 100%;
+}
+
+.jump .po-btns a {
+  display: inline-block;
+  width: auto;
+  padding: 0 13px 0 12px;
+  height: 28px;
+  border: 1px solid #e8e8e8;
+  border-radius: 3px;
+  line-height: 30px;
+  text-align: center;
+  color: #545454;
+  font-size: 14px;
+  margin-left: 19px;
+  margin-right: 0;
+  background: url(../images/btn-bg.png) 0 0 repeat-x;
+}
+
+.jump .po-btns a:hover {
+  text-decoration: none;
+  background: url(../images/btn-bg2.png) 0 0 repeat-x;
+}
+
+.jump .po-btns .fst {
+  margin-left: 156px;
+}
+
+/*# sourceMappingURL=jump.css.map */

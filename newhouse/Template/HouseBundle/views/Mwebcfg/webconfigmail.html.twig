@@ -1,0 +1,136 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% block js %}
+
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }} 
+{% endblock %}
+
+{% block tableMain %}
+<script type="text/javascript">
+{# 加载JS #}
+seajs.use("manage/js/webconfig.js",function(l){
+    l.init('main');
+});
+</script>
+<section class="list-con table-inline" data-height="580" data-param='{
+        fixed     : ".filter",
+        list      : ".list-con",
+        data      : {
+        }
+    }'>
+    <div class="list">
+        <form class="form" action="{{ (action)|U }}" method="post" name="form">
+            <table class="popup-form-table" style="width:100%;">
+                <tr>
+                    <th colspan="2">Email设置</th>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div id="group_dysjset">
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright required" for="enable">Email发送方式</label>
+                                </div>
+                                <div class="form-errors">
+                                    
+                                </div>
+                                <div class="form-cell">
+                                    {# <input type="radio" name="mailer_transport" id="mailer_transport1" {{ 'mailer_transport'|C|isChecked('gmail') }} value="gmail" /><label for="mailer_transport1">gamil邮箱</label> #}
+                                    <input type="radio" name="mailer_transport" id="mailer_transport2" {{ 'mailer_transport'|C|isChecked('smtp') }} value="smtp" /><label for="mailer_transport2">smtp服务器</label>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright required" for="enable">SMTP 服务器</label>
+                                </div>
+                                <div class="form-errors"></div>
+                                <div class="form-cell">
+                                    <input class="w200" type="text" name="mailer_host" value="{{ 'mailer_host'|C  }}" />
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright required" for="enable">SMTP 端口</label>
+                                </div>
+                                <div class="form-errors"></div>
+                                <div class="form-cell">
+                                    <input class="w200" type="text" name="mailer_port" value="{{ 'mailer_port'|C }}" />
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright required" for="enable">发信人邮件地址</label>
+                                </div>
+                                <div class="form-errors"></div>
+                                <div class="form-cell">
+                                    <input class="w200" type="text" name="mailer_from" value="{{ 'mailer_from'|C }}" />
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright required" for="enable">SMTP 身份验证帐户</label>
+                                </div>
+                                <div class="form-errors"></div>
+                                <div class="form-cell">
+                                    <input class="w200" type="text" name="mailer_user" value="{{ 'mailer_user'|C }}" />
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright required" for="enable">SMTP 身份验证密码</label>
+                                </div>
+                                <div class="form-errors"></div>
+                                <div class="form-cell">
+                                    <input class="w200" type="password" name="mailer_password" value="{{ 'mailer_password'|C }}" />
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <div class="popup-submit"></div>
+            <div class="tac">
+                <div>
+                    <button type="submit" id="submit" name="submit" data-role="submit" class="btn font-ico-22 fz12">提交</button>
+                    <button id="mainsubmit_mail" data-url="{{ ("mwebconfigmail/mail")|U }}" class="submit-btn btn font-ico-file fz12" type="button">邮箱测试</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock tableMain %}
+
+{% block promptUl %}{% endblock %}

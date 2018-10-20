@@ -1,0 +1,98 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 看房团专题模板1 #}
+{# 说明 
+ * detail: 当前数据
+ * tpl_now: 当前时间
+ * block_loupan: 当前数据关联楼盘
+ * detail_enroll: 当前数据报名数据
+#}
+
+{% block result %}
+
+{% set tpl_now = 'now'|date('U') %}
+
+{% set block_loupan = ('house.topic_arc')|getBlock({ename: 'loupan'},{checked: 1, aid: detail.id|default(''), findType: 1, pageSize: 8}) %}
+
+{% set detail_enroll = ('house.showingsnews')|getAll({topic: detail.id|default(''), checked: 1, findType:1}) %}
+  
+{% if detail.show_time.date|default('')|date('U') > tpl_now|default('') %}
+    {% set detail_apply_class = 'open-popup' %}
+
+    {% set detail_time = '<span class="time format-time pull-left" data-endtime="' ~ detail.show_time.date|default('') ~ '" data-noend="永久有效！" data-end="活动结束" data-type="1" data-timetype="1">截止时间: ' ~ detail.show_time.date|default('')|date('Y-m-d') ~ '</span>' %}
+{% else %}
+    {% set detail_apply_class = 'color-6' %}
+
+    {% set detail_time = '<span class="c-e43">活动结束</span>' %}
+{% endif %}
+<nav class="bar bar-tab groupbuy-nav">
+    <a class="tab-item tel" href="{{core_mobile_global.tel({ value: detail.hotline|default('') })}}">
+        <span class="tab-label">打电话</span>
+    </a>
+    <a class="tab-item apply external {{detail_apply_class|default('')}}" href="javascript:;" data-popup='.popup-apply'>
+        <span class="tab-label">立即报名</span>
+    </a>
+</nav>
+
+<div class="content">
+	<div class="list-block list-block-rent list-block-rent-mt0">
+       <ul>
+           <li class="item-content">
+               <div class="item-inner">
+                   <div class="m">
+                       <div class="t">{{detail.name|default('')}}</div>
+                       <div class="p">
+                          地址：{{detail.venue|default('')}}
+                       </div>
+                       <div class="p p-gray">
+                            已报名{{ detail.enroll|default('')}}人
+                       </div>
+                       <div class="p">
+                           {{detail_time|default('')|raw}}
+                       </div>
+                   </div>
+               </div>
+           </li>
+       </ul>
+    </div>
+    <!-- Slider -->
+    <div class="list-block media-list s-list panel-block">
+        {{- housemobile_global.panel_title({title: '当日看房行程'})-}}
+        <ul>
+        	{{ render(controller('HouseBundle:Clist:houseslist', {_isApp: url_isApp, list: block_loupan|default('')})) }}
+        </ul>
+    </div>
+    {# 报名人数列表 #}
+    <div class="list-block panel-block">
+        {{- housemobile_global.panel_title({title: '看房团报名表'}) -}}
+        <table class="sign fz-12">
+            <tbody>
+                <tr>
+                    <th>报名时间</th>
+                    <th>联系方式</th>
+                    <th>姓名称呼</th>
+                </tr>
+                {% if detail_enroll.data is defined %}
+                    {% for item in detail_enroll.data %}
+                        <tr class="list">
+                            <td>{{item.create_time|default('')|date('m-d')}}</td>
+                            <td>{{core_global.phone({value: item.phone|default('')})}}</td>
+                            <td>{{item.username|default('')}}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {# 看房须知 #}
+    <div class="list-block">
+        {{- housemobile_global.panel_title({title: '看房团须知'}) -}}
+        <div class="content-padded mzsm">
+            <p>{{core_global.mconfig({name: 'kftnotice', ename: 'mvariables_user'})}}</p>
+        </div>
+    </div>
+    {{ render(controller('HouseBundle:Common:footer', {_isApp: url_isApp})) }}
+</div>
+<script type="text/javascript">
+    seajs.use('formattime', function (formattime) {})
+</script>
+{% endblock result %}

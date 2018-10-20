@@ -1,0 +1,23 @@
+/*!
+ * @name ats.css
+ * @author ahuing
+ * @date 2016-1-15
+ */
+
+@import 'static/reset'; // 重置，仅通用类文件引入，一般一个网站只导入一次
+@import 'static/ats'; // 工具类, 每个文件都要导入
+@import 'static/base'; // // 通用类，仅通用类文件引入，一般一个网站只导入一次
+
+@import 'jqmodal'; //弹窗
+@import 'autocomplete'; //自动完成
+@import 'popads'; //背投广告
+
+@import 'icheck'; //第三方按钮插件样式
+@import 'chosen'; // 下拉列表
+
+.LOADING {
+	background: url('../images/loading.gif') no-repeat center center;
+	display: inline-block;
+	height: 11px;
+	width: 11px;
+}

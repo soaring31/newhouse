@@ -1,0 +1,49 @@
+{# # 说明
+** webInfo: 获取页面底部快速链接区域 #}
+{# 默认读取服务中心按sort排序的前五条，网站信息的位置尽量不要修改，其他四个随意调整 #}
+{# {% set webInfo = ('house.category')|getAll({pid:7, pageSize: 5, order: 'sort', orderBy: 'asc'}) %} #}
+{% set webInfo = ('house.category')|getTree({models: 'service', pid: 'neq|0', pageSize: 5, order: 'sort', orderBy: 'asc',checked:1}) %}
+{% set webarc = ('house.service')|getAll({category:13,pageSize:4,checked:1,order: 'id', orderBy: 'asc'}).data %}
+
+<div class="blank20"></div>
+<div class="container">
+    <div class="web-info">
+        <a target="_blank" href="{{('map/list')|U}}">{{'网站地图'|trans({}) }}</a> |
+        {% if webInfo.data is defined %}
+            {% for item in webInfo.data %}
+                {# 网站提问链接调整 #}
+                {% if item.menu.id == 12 %}
+                    {% set item_url = ('service/ask')|U({category: item.menu.id}) %}
+                {% else %}
+                    {% set item_url = ('service/list')|U({category: item.menu.id}) %}
+                {% endif %}
+                {# 网站信息中的关于我们、联系我们解放 #}
+                {% if item.menu.id == 13 %}
+                    {% for item2 in webarc %}
+                        <a target="_blank" href="{{core_global.url(item2) }}">{{item2.name}}</a>
+                        |
+                    {% endfor %}
+                {% else %}
+                    <a target="_blank" href="{{item_url}}">{{item.menu.name}}</a>
+                    |
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        <a target="_blank" href="{{('download/index')|U}}">{{'手机版'|trans({}) }}</a>
+            <div class="switch-language">
+                <div class="switch-language-text" data-hover="hoverslider" data-delay="0"  data-direction="top">
+                    当前版本：
+                        {% if ismulticity == true %}
+                            多城市版
+                        {% else %}
+                            单城市版
+                        {% endif %}
+                </div>
+
+            </div>
+    </div>
+    <div class="copy-right">
+        {{core_global.mconfig({name: 'copyright', ename: 'mwebset'})}}
+        {{core_global.mconfig({name: 'Stat', ename: 'mwebset'})}}
+    </div>
+</div>

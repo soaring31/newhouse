@@ -1,0 +1,146 @@
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+{% set browser = core_global.browser().__toString %}
+{% set tpl_content = '您现在使用的浏览器版本过低，请使用IE8以上或极速模式的浏览器！' %}
+{% extends browser == 'quirks' ? 'CoreBundle:Dispatch:error.html.twig' : 'HouseBundle::base.html.twig' %}
+
+{% block css %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/login.css')}}
+{% endblock %}
+
+{% block title %}登录{% endblock title %}
+{% block meta %}
+    {# {{ dump(app.user) }} #}
+    {# <meta http-equiv="refresh"content="1;url=http://bbs.lampbrother.net"> #}
+{% endblock meta %}
+
+{% if url|default('') and url not in [('register/index')|U({},true),('login/index')|U({},true)]  %}
+    {% set login_url = url|default('') %}
+{% endif %}
+
+{% block js %}
+<script type="text/javascript">
+     seajs.use(['login', 'utils'], function (login, utils) {
+        // localstorage读取
+        var read_storage = utils.localStorage.getItem('remember');
+        // 记住密码
+        var $remember = $('input[name="rememberMe"]');
+        // 记住密码所属表单
+        var $form = $remember.closest('form');
+        // 用户名
+        var userName = $.trim($form.find('input[name="userName"]').val());
+        // 加载之后进行赋值
+        if (read_storage) {
+            $form.find('input[name="userName"]').val(read_storage.userName);
+            $form.find('input[name="passWord"]').val(read_storage.passWord);
+        };
+        // 如果第二次输入的账号密码不同，则更换storage
+        if (userName != read_storage.userName) {
+            $(document).on('done', function (result) {
+                var remember_storage = {
+                    userName: $.trim($form.find('input[name="userName"]').val()),
+                    passWord: $.trim($form.find('input[name="passWord"]').val())
+                };
+                if ($remember.prop("checked") == true) {
+                    // 设置缓存，时间30天
+                    utils.localStorage.setItem('remember', remember_storage, 30);
+                };
+            })
+        };
+    })
+</script>
+{% endblock js %}
+{% block body %}
+<div class="container">
+    <div class="log">
+        <!-- 左侧背景 -->
+        <div class="bg"></div>
+        <!-- 右侧登录 -->
+        <div data-login-wrap="1" class="login">
+            <div class="tab-header">
+                <div class="login-head">
+                    <ul class="clearfix">
+                        <li class="act" data-type="0"><a href="javascript:;">会员登录</a></li>
+                        {# 未开启手机短信时不能用手机动态登录 #}
+                        {% set smsconfig = ('sms_api')|C|default('') %}
+                        {% if smsconfig is empty %}<li></li>
+                        {% else %}
+                        <li data-type="1"><a href="javascript:;">手机动态登录</a></li>
+                        {% endif %} 
+                    </ul>
+                </div>
+            </div>
+            <!--body-->
+            <div class="tab-body">
+                 <div class="tag">
+                    <div data-view-form="1" class="tag-son tag-form common-form common-form-control common-form-lg">
+                        {# 需求特殊，参考ajaxform手动渲染 #}
+                        <form data-jumpurl="{{login_url|default('')}}" class="" action="{{ form.vars.action|U({loginflag: 1}, true) }}" method="post">
+                        <ul>
+                            {% for v in form.children %}
+                            {% set vars = v.vars %}
+                            {% set name = v.vars.name|default('') %}
+                            {# {% set type = vars.block_prefixes[1] %} #}
+                            {# {% set type = vars.block_prefixes[vars.block_prefixes|length == 3 ? 1 : 2] %} #}
+
+                            {% if name == 'submit' %}
+                                <div class="item">
+                                    <div class="auto ">
+                                        <div class="fl">
+                                            <label><input checked="checked" type="checkbox" name="rememberMe" />记住</label>
+                                        </div>
+                                        <div class="fr">
+                                            <a href="{{ ('register/resetpwd')|U }}"><span class="smart font-lo-1"></span> 忘记密码</a> | <a href="{{ ('register/index')|U }}"><span class="smart font-lo-2"></span> 注册新账号</a>
+                                        </div>
+                                    </div>
+                                    {{ form_widget(v) }}
+                                </div>
+                            {% elseif name in ['vcode', 'type'] %}
+                                <div class="item {{name}}" style="display: none;">
+                                     {{ form_widget(v) }}
+                                </div>
+                                {# {{ form_widget(v) }} #}
+                            {% else %}
+                                <div class="item {{ name }}">
+                                     {{ form_widget(v) }}
+                                </div>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% set qqlogin = core_global.mconfigtostring({name: 'qqlogin', ename: 'mloginset'}).__toString %}
+            {% set sinalogin = core_global.mconfigtostring({name: 'sinalogin', ename: 'mloginset'}).__toString %}
+            {% set mwxlogin = core_global.mconfigtostring({name: 'mwxlogin', ename: 'mloginset'}).__toString %}
+            <!-- 一键登录 -->
+            {% if mwxlogin or sinalogin or qqlogin %}
+            <div class="one-login">
+                <span class="one ">一键登录 :</span>
+                {% if qqlogin == 1 %}
+                <p class="p1">
+                    <a href="{{('/connect/qq')|U}}"> <span class="font-lo-QQ"></span>QQ登录</a>
+                </p>
+                {% endif %}
+                {% if sinalogin == 1 %}
+                <p class="p2">
+                    <a href="{{('/connect/weibo')|U}}"><span class="font-lo-sina"></span>微博登录</a>
+                </p>
+                {% endif %}
+                {% if mwxlogin == 1 %}
+                <p class="p3">
+                    <a  href="{{('/connect/weilogin')|U}}"><span class="font-lo-weixin"></span>微信登录</a>
+                </p>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+{# <!-- end --> #}
+    </div>
+</div>
+{% endblock body %}
+
+{% block footer %}
+    {% include 'HouseBundle:Common:webinfo.html.twig' %}
+{% endblock %}

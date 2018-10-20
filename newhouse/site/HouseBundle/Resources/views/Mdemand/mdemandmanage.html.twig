@@ -1,0 +1,190 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{# 获取当前时间 #}
+{% set ctime = ('now')|date('U') %}    
+{# 分类数据 #}
+{% set category_id = app.request.get('category') %}
+{% set category_data = ('house.category')|getRow({id: category_id, findType: 1}) %}
+{% set usertplid = ('db.mem_types')|getOne('usertplid',{ id: app.user.usertype })|default('') %}
+{% set utel = ('db.users')|getOne('tel', { id: app.user.id})|default('') %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+   {#  {{ parent() }}  #}
+{% endblock %}
+
+{% block mainleft %}
+    {{ core_manage.main_left({triggerNext : 1}) }}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{% set filter_opt = [
+    {
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增需求'
+    },
+    {
+        method: 'selectFormField',
+        title: '审核',
+        form: 'checked',
+        field: 'checked',
+    },
+    {
+        method: 'selectCate',
+        title: '区域',
+        field: 'region',
+        service: 'db.area',
+        where: {
+            pid: session_area|default(0)
+        }
+    },
+    {
+        method: 'search',
+        field: 'name',
+        title: '请搜索ID/标题',
+    }
+] %}
+
+
+{% if usertplid is not empty and utel is empty and ('sms_api')|C is not empty %}
+    <div class="mainBody-topDiv ml10 mt8" data-target="[data-content='1']">
+        <p class="mainBody-topDiv-fiP">
+            请认证手机号码, 再发布房源, <a href="{{- core_global.menu_url(496) -}}">点击认证手机</a>
+        </p>
+    </div>
+    <div class="blank10"></div>
+{% else %}
+{{ core_manage.filter(filter_opt) }}
+{% endif %}
+
+
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U({_form_id: category_data.form_id|default('')}) }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            category: {{category_id}}
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                    <th>标题</th>
+                    <th width="140" class="tac">区域</th>
+                    <th width="80" data-role="sort" data-sort="mj" class="sort">面积</th>
+                    <th width="80"  data-role="sort" data-sort="zj" class="sort">价格</th>
+                    <th width="80">审核</th>
+                    <th width="100" data-role="sort" data-sort="create_time" class="sort">添加时间</th>
+                    <th width="100" data-role="sort" data-sort="create_time" class="sort">过期时间</th>
+                    {# <th width="100" data-role="sort" data-sort="create_time" class="sort">失效时间</th> #}
+                    {% if usertplid is empty %}
+                    <th width="100" class="tac">发布人</th>
+                    {% endif %}
+                    <th width="150" class="tac">操作</th>
+                </tr>
+                {% if ident.info.data is defined  and ident.info.pageCount|default('') != 0 %}
+                {% for k, vo in ident.info.data %}
+                    {# {{dump(vo)}} #}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td>{{ vo.id }}</td>
+                    <td class="tov" title="{{ vo.name|default('') }}"><a href="{{ 'demand/detail'|U({id: vo.id}) }}" target="_blank">{{ vo.name }}</a></td> 
+                    <td class="tac">{{ vo.region|getAreaName|default('1')}}
+                    </td>
+                    <td>{% if vo.mj %}{{vo.mj}} ㎡ {% else %} -{% endif %}</td>
+                    <td>{% if vo.zj %}{{vo.zj}} {% if category_id == 297 %} 万元 {% else %} 元/月 {% endif %}  {% else %} -{% endif %}</td>
+                    <td>{{ core_global.formField({value: vo.checked}) }} </td>
+                    <td>{{ vo.create_time|default('0')|date('Y-m-d') }}</td>
+                    <td>{{ core_manage.valid_date(vo.valid, 'Y-m-d') }}</td>
+                    {# <td>{{ vo.enddate|default('0')|date('Y-m-d') }}</td> #}
+                    {% if usertplid is empty  %}
+                    <td class="tac">{{ ('db.users')|getOne('username', { id:vo.uid }) }}</td>
+                    {% endif %}
+                    <td class="tac">
+                        {{ core_manage.show() }}
+                        {{ core_manage.delete() }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="12" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+ {% if usertplid is empty %}
+        {% set list_oprate_opt = [
+        {
+            method: 'delete',
+            title: '<i class="font-ico-del mr5"></i>批量删除',
+        },
+        {
+            method: 'dropdownFormField',
+            field: 'checked',
+            form: 'checked',
+            title: '审核',
+        },
+        {
+            method: 'dropdownCate',
+            title: '区域',
+            field: 'region',
+            service: 'db.area',
+            where: {
+                pid: session_area|default(0)
+            }
+        },
+        {
+            method: 'dropdownFormField',
+            title: '上下架',
+            field: 'valid',
+            form: 'svalid',
+            params: '{ _form_id: 377 }'
+        }     
+    ] %}
+    {% else %}
+        {% set list_oprate_opt = [
+            {
+                method: 'delete',
+                title: '<i class="font-ico-del mr5"></i>批量删除',
+            },
+            {
+                method: 'dropdownCate',
+                title: '区域',
+                field: 'region',
+                service: 'db.area',
+                where: {
+                    pid: session_area|default(0)
+                }
+            },
+            {
+                method: 'dropdownFormField',
+                title: '上下架',
+                field: 'valid',
+                form: 'svalid',
+                params: '{ _form_id: 377 }'
+            }  
+        ] %}
+    {% endif %}
+    {{ core_manage.oprate(list_oprate_opt) }}
+
+{% endblock %}
+
+{% block promptUl %}
+{# 提示说明 #}
+{% endblock %}
+
+
+
+

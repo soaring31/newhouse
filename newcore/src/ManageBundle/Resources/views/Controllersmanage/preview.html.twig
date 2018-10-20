@@ -1,0 +1,28 @@
+{% extends "ManageBundle::poplayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+seajs.use(["codemirrorcss", "php", "javascript", "clike"],function(){
+	var codemirror_option = {
+			lineNumbers   :true,
+			matchBrackets :true,
+			mode          :"application/x-httpd-php",
+			indentUnit    :4,
+			gutter        :true,
+			fixedGutter   :true,
+			indentWithTabs:true,
+			readOnly	  :true,
+			lineWrapping  :true,
+			height		  :500,
+			enterMode     :"keep",
+			tabMode       :"shift",
+		};
+
+	var editor = CodeMirror.fromTextArea(document.getElementById("code"), codemirror_option);
+});
+</script>
+{% endblock %}
+{% block body%}
+<textarea id=code name=code style="display:none;">
+{{ tpl }}
+</textarea>
+{% endblock %}

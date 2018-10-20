@@ -1,0 +1,104 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% block js %}
+<script type="text/javascript">
+
+</script>
+
+{% endblock %}
+{% block mainMenu %}
+    {{ parent() }}
+
+{% endblock %}
+{% block mainleft %}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ core_manage.filter([
+    {
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增调用'
+    },
+    {
+        method: 'selectFormField',
+        title: '审核',
+        form: 'checked',
+        field: 'checked',
+    },
+    {
+        method: 'search',
+        field: 'name',
+        title: '请搜索标题/名称',
+    }
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                    <th>标题</th>
+                    <th width="350">使用模板</th>
+                    <th width="80">审核</th>
+                    <th width="80">预览</th>
+                    <th width="80">调用</th>
+                    <th width="100" class="tac">操作</th>
+                </tr>
+                {% if ident.info.data is defined and ident.info.pageCount|default('') != 0 %}
+                {% for k, vo in ident.info.data %}
+                    {# {{dump(vo)}} #}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td>{{ vo.id }}</td>
+                    <td>{{ vo.name }}</td>
+                    <td>
+                        {{'fragments/' ~ vo.ename|default('') ~ '.html.twig'}}
+                    </td>
+                    <td>{{ core_global.formField({value: vo.checked}) }}</td>
+                    <td>
+                        <a data-role="show" data-iframe="1" href="{{('mfragments/preview')|U({tpl: vo.ename})}}">[预览]</a>
+                    </td>
+                    <td>
+                        <a data-role="show" href="{{ ('mfragments/transfer')|U({tpl: vo.ename}) }}">[调用]</a>
+                    </td>
+                    <td class="tac">
+                        {{ core_manage.show() }}
+                        {{ core_manage.delete({issystem: vo.issystem|default('')}) }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="8" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'checked',
+        title: '审核',
+    }
+]) }}
+{% endblock %}
+
+{% block promptUl %}
+温馨提示：暂时创建调用之后，要在fragments文件夹下创建对应的 `标识.html.twig` 模板
+{% endblock %}

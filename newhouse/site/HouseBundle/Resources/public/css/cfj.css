@@ -1,0 +1,1318 @@
+@charset "UTF-8";
+/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+*/
+/**
+ * @method 清除浮动 %clearfix 
+ * @description 清除浮动
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %clearfix;
+ * }
+ * ```
+ * 
+ * ```css
+ * 	div {
+	    *zoom: 1;
+	}
+	div:after {
+	    display: block;
+	    clear: both;
+
+	    height: 0;
+
+	    content: '\20';
+	}
+ * ```
+ */
+.head-search {
+    *zoom: 1;
+}
+
+.head-search:after {
+    display: block;
+    clear: both;
+    height: 0;
+    content: '\20';
+}
+
+/**
+ * @method 去掉虚线框 %outline 
+ * @description 去掉虚线框
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @ extend %outline;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		outline: thin dotted;
+		outline: 5px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
+ * ```
+ */
+/**
+ * @method 文字不换行后面加省略号 %text-overflow 
+ * @description 文字不换行后面加省略号
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %text-overflow;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+ * ```
+ */
+/**
+ * @method 内容换行 %word-wrap 
+ * @description 内容换行
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %word-wrap;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+	    word-wrap: break-word;
+	    white-space: pre-wrap;
+	    word-break: break-all;
+	}
+ * ```
+ */
+/**
+ * @method 透明层opacity 
+ * @description 透明层 内容也透明
+ * @param {number} $opacity - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include opacity(.5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+	  opacity: .5;
+	  filter: alpha(opacity=50);
+ * }
+ * ```
+ */
+/**
+ * @method 背景透明层transparent 
+ * @description 透明层只处理背景透明
+ * @param {string} $color - 背景透明层的颜色
+ * @param {number} $alpha - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include transparent(#000, .5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+ *    	background-color: transparent;
+		background-color: (0,0,0,.5);
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7fffffff, endColorstr=#7fffffff,);
+		zoom: 1;
+ * }
+ * ```
+ */
+/**
+ * @method triangle 
+ * @description 生成一个三角形图标
+ * @param {string} $size - 三角的大小
+ * @param {string} $color - 三角颜色
+ * @param {string} $direction - 三角的方向 up, down, left, right
+ * @example 调用
+ * 
+ * ```scss
+ * i {
+ *    @include triangle(5px, #bbb, up); 
+ * }
+ * ```
+ * 
+ * ```css
+ * i {
+ *    width: 0;
+      height: 0;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent;
+      border-bottom-color: #bbb;
+ * }
+ * ```
+ */
+/**
+* @method 水平线hr nav-divider 
+* @description 透明层 内容也透明
+* @param {string} $color=#e5e5e5 - 线的颜色
+* @param {string} $line-height-computed - 线的高度，空间
+* @example 调用
+* 
+* ```scss
+* div {
+*    @include nav-divider(#e5e5e5, 24px);
+* }
+* ```
+* 
+* ```css
+* div {
+	  height: 1px;
+	  margin: 11px 0;
+	  overflow: hidden;
+	  background-color: #e5e5e5;
+* }
+* ```
+*/
+/*!
+ * @name lp.css
+ * @author xy
+ * @date 2016-8-5
+ */
+/*!
+ * @name cfj
+ * @author ahuing
+ * @date 2016-1-15
+ * @dec top toolbar popular search terms containing the search and
+ */
+/*
+top-bar
+*/
+.top-bar {
+    background: #f3f3f3;
+    min-width: 1200px;
+    padding: 15px 0 10px 0;
+}
+
+.top-bar .search-bar {
+    float: left;
+}
+
+.top-bar .list {
+    margin-left: 68px;
+}
+
+.top-bar .list li {
+    float: left;
+    margin-right: 22px;
+    font-size: 14px;
+    margin-top: 9px;
+    margin-top: 12px;
+    display: inline;
+    overflow: hidden;
+}
+
+.top-bar .list li a {
+    height: 20px;
+    line-height: 20px;
+    text-decoration: none;
+    color: #686465;
+    overflow: hidden;
+}
+
+.top-bar .list li a:hover {
+    color: #f00;
+}
+
+.top-bar .list li a i {
+    font-size: 20px;
+    float: left;
+    margin-right: 4px;
+    margin-top: 2px;
+}
+
+/*!
+ * @name sale-filter-hd.css
+ * @author xying
+ * @date 2016-8-24
+ * @dec common filter header for sale rent
+ * 出租、二手筛选分类头部样式
+ */
+.head-search {
+    height: 56px;
+    padding: 0 10px;
+    border: 1px solid #ddd;
+    margin-bottom: -1px;
+    background: #f7f7f7;
+}
+
+.head-search .search-bar {
+    margin-top: 10px;
+    float: right;
+}
+
+.head-search .search-bar .search-input {
+    width: 258px;
+    padding: 8px 10px;
+    border: 1px solid #e43;
+}
+
+.head-search .search-bar .search-btn {
+    width: 70px;
+    height: 38px;
+    line-height: 38px;
+    background: #e43;
+}
+
+.h-s-btns {
+    float: left;
+}
+
+.h-s-btns .btn1 {
+    float: left;
+    margin-top: 10px;
+    height: 36px;
+    padding: 0 16px;
+    border-radius: 3px;
+    margin-right: 10px;
+    font-size: 14px;
+    text-align: center;
+    line-height: 36px;
+    color: #fff;
+    text-decoration: none;
+    position: relative;
+    background: #5193d0;
+}
+
+.h-s-btns .btn1 .tri {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    right: 50%;
+    margin-left: -5px;
+    height: 0;
+    width: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px;
+    border-top-color: #5193d0;
+}
+
+.h-s-btns .btn1-1, .h-s-btns .btn1.active {
+    background: #e43;
+}
+
+.h-s-btns .btn1-1 .tri, .h-s-btns .btn1.active .tri {
+    border-top-color: #e43;
+}
+
+.h-s-btns .btn1-2, .h-s-btns .btn1.active {
+    background: #5193d0;
+}
+
+.h-s-btns .btn1-2 .tri, .h-s-btns .btn1.active .tri {
+    border-top-color: #5193d0;
+}
+
+.h-s-btns .btn1-3 {
+    background: #4cb471;
+}
+
+.h-s-btns .btn1-3 .tri {
+    border-top-color: #4cb471;
+}
+
+.h-s-btns .btn1-4 {
+    background: #fe5200;
+}
+
+.h-s-btns .btn1-4 .tri {
+    border-top-color: #fe5200;
+}
+
+.h-s-btns .btn1-5 {
+    background: #2e9ee6;
+}
+
+.h-s-btns .btn1-5 .tri {
+    border-top-color: #2e9ee6;
+}
+
+.h-s-btns a:hover {
+    color: #fff;
+    opacity: .8;
+}
+
+.h-s-btns i {
+    margin-right: 3px;
+    vertical-align: -1px;
+}
+
+/*!
+* @name filter.css
+* @author xying
+* @date 2016-8-5
+* @dec filter common css
+*/
+@font-face {
+    font-family: "filter";
+    font-weight: normal;
+    font-style: normal;
+    src: url("../fonts/filter.eot");
+    src: url("../fonts/filter.eot?#iefix") format("embedded-opentype"), url("../fonts/filter.woff") format("woff");
+}
+
+[class^="font-filter-"],
+[class*=" font-filter-"] {
+    font-family: "filter";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: inherit;
+    float: none;
+    margin: 0;
+    vertical-align: -0.25em;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    text-decoration: none;
+    text-transform: none;
+}
+
+.font-filter-1:before {
+    content: "\EA01";
+}
+
+.font-filter-10:before {
+    content: "\EA02";
+}
+
+.font-filter-11:before {
+    content: "\EA03";
+}
+
+.font-filter-2:before {
+    content: "\EA04";
+}
+
+.font-filter-3:before {
+    content: "\EA05";
+}
+
+.font-filter-4:before {
+    content: "\EA06";
+}
+
+.font-filter-5:before {
+    content: "\EA07";
+}
+
+.font-filter-6:before {
+    content: "\EA08";
+}
+
+.font-filter-7:before {
+    content: "\EA09";
+}
+
+.font-filter-8:before {
+    content: "\EA0A";
+}
+
+.font-filter-9:before {
+    content: "\EA0B";
+}
+
+/* filter-hd */
+@keyframes aAnimate {
+    0% {
+        transform: translateY(-5px);
+    }
+    50% {
+        transform: translateY(5px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.filter-hd {
+    border-left: 1px solid #ddd;
+    height: 35px;
+    line-height: 35px;
+    overflow: hidden;
+    position: relative;
+    z-index: 10;
+}
+
+.filter-hd a {
+    border: 1px solid #ddd;
+    color: #666;
+    float: left;
+    margin-left: -1px;
+    padding: 0 22px;
+}
+
+.filter-hd a i {
+    font-size: 18px;
+}
+
+.filter-hd a.act {
+    background-color: #fff;
+    font-weight: 700;
+}
+
+.filter-hd a.act, .filter-hd a:hover {
+    color: #e43;
+    text-decoration: none;
+}
+
+.filter-hd a:hover i {
+    animation: aAnimate 0.1s both;
+}
+
+.filter-hd a:first-child {
+    border-radius: 3px 0 0;
+}
+
+.filter-hd a:last-child {
+    border-radius: 0 3px 0 0;
+}
+
+/* filter-bd */
+.filter-bd {
+    border: 1px solid #ddd;
+    position: relative;
+    z-index: 9;
+    margin-top: -1px;
+}
+
+.filter-item-list {
+    padding-top: 10px;
+}
+
+.filter-item-list dl {
+    line-height: 28px;
+    overflow: hidden;
+    padding-left: 10px;
+    clear: both;
+    padding-bottom: 10px;
+    vertical-align: top;
+}
+
+.filter-item-list dt {
+    float: left;
+    text-align: right;
+    width: 43px;
+    white-space: nowrap;
+}
+
+.filter-item-list dd {
+    margin-left: 45px;
+}
+
+.filter-item-list dd a {
+    border-radius: 2px;
+    color: #666;
+    display: inline-block;
+    line-height: 28px;
+    margin-bottom: 5px;
+    margin-right: 2px;
+    padding: 0 5px;
+}
+
+.filter-item-list dd a:hover, .filter-item-list dd a.act {
+    background: #e43;
+    color: #fff;
+    text-decoration: none;
+}
+
+.filter-item-list .set {
+    margin-top: -7px;
+    padding: 7px 5px;
+    position: absolute;
+}
+
+.filter-item-list .set .txt {
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    height: 28px;
+    line-height: 28px;
+    text-indent: 10px;
+    width: 50px;
+}
+
+.filter-item-list .set .btn {
+    border: 1px solid #e43;
+    background: #e43;
+    border-radius: 3px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 12px;
+    height: 30px;
+    line-height: 28px;
+    padding: 0 10px;
+}
+
+.filter-item-select {
+    background: #fafafa;
+    border-top: 1px solid #ddd;
+    padding: 0 0 7px 10px;
+}
+
+.filter-item-select li {
+    float: left;
+    height: 28px;
+    line-height: 28px;
+    margin-top: 5px;
+    position: relative;
+    margin-right: 10px;
+}
+
+.filter-item-select li.open .more-hd {
+    border-color: #ddd;
+}
+
+.filter-item-select li.open .more-hd i {
+    transform: rotate(180deg);
+}
+
+.filter-item-select li.active .more-hd {
+    border-color: #e43;
+}
+
+.filter-item-select li .more-hd {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    text-indent: 10px;
+    width: 102px;
+    position: relative;
+}
+
+.filter-item-select li .more-hd i {
+    color: #999;
+    font-size: 15px;
+    position: absolute;
+    top: 1px;
+    right: 10px;
+    text-indent: 0;
+    transition: transform .3s;
+}
+
+.filter-item-select li .more-bd {
+    background: #fff;
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    display: none;
+    width: 103px;
+}
+
+.filter-item-select li .more-bd.last {
+    right: 0 !important;
+    left: auto !important;
+}
+
+.filter-item-select li .more-bd a {
+    border: 1px solid #e5e5e5;
+    color: #666;
+    height: 29px;
+    line-height: 29px;
+    margin-bottom: -1px;
+    margin-right: -1px;
+    vertical-align: top;
+    display: block;
+    font-size: 12px;
+    padding: 0 10px;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+.filter-item-select li .more-bd a:hover, .filter-item-select li .more-bd a.act {
+    background: #f4f4f4;
+    text-decoration: none;
+}
+
+.filter-item-select li .more-horizontal {
+    width: 360px;
+}
+
+.filter-item-select li .more-horizontal a {
+    float: left;
+    width: 99px;
+}
+
+.filter-item-select li.more-tit {
+    margin-right: 0;
+}
+
+/* filter-cur */
+.filter-cur {
+    background: #fff;
+    border-top: 1px solid #ddd;
+    line-height: 20px;
+    padding: 10px;
+}
+
+.filter-cur .tip {
+    float: left;
+    line-height: 22px;
+}
+
+.filter-cur a {
+    border: 1px solid #ddd;
+    background-color: #fff;
+    float: left;
+    margin-right: 5px;
+    padding: 1px 5px 0;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.filter-cur a:hover {
+    text-decoration: none;
+}
+
+.filter-cur a i {
+    color: #e43;
+    vertical-align: -1px;
+}
+
+/*!
+ * @name lp-aside.css
+ * @author xying
+ * @date 2016-8-5
+ * @dec common aside for lp
+ */
+.lp-aside {
+    width: 240px;
+}
+
+/*
+aside
+*/
+.lp-aside h2 {
+    font-size: 16px;
+    font-weight: 700;
+    height: 44px;
+    line-height: 44px;
+    text-indent: 15px;
+}
+
+.lp-tj-item {
+    color: #666;
+    line-height: 27px;
+    height: 250px;
+    overflow: hidden;
+    padding: 15px;
+    width: 210px;
+}
+
+.lp-tj-item .pic {
+    display: block;
+    height: 156px;
+    width: 210px;
+}
+
+.lp-tj-item .pic img {
+    height: 156px;
+    width: 210px;
+}
+
+.lp-tj-item a {
+    color: #666;
+}
+
+.lp-tj-item a:hover {
+    color: #e43;
+    text-decoration: none;
+}
+
+.lp-tj-item .tit {
+    height: 27px;
+    line-height: 27px;
+    margin-top: 8px;
+    overflow: hidden;
+}
+
+.lp-tj-item .tag {
+    margin-top: 5px;
+}
+
+.lp-tj-item .tag a {
+    border: 1px solid #ddd;
+    margin-right: 8px;
+    padding: 0 8px 2px;
+}
+
+.lp-tj-item .price span {
+    color: #f50;
+    margin-right: 2px;
+}
+
+.lp-tj-item:hover {
+    background: #f1f1f1;
+}
+
+@font-face {
+    font-family: "lp";
+    font-weight: normal;
+    font-style: normal;
+    src: url("../fonts/lp.eot");
+    src: url("../fonts/lp.eot?#iefix") format("embedded-opentype"), url("../fonts/lp.woff") format("woff");
+}
+
+[class^="font-lp-"],
+[class*=" font-lp-"] {
+    font-family: "lp";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: inherit;
+    float: none;
+    margin: 0;
+    vertical-align: -0.25em;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    text-decoration: none;
+    text-transform: none;
+}
+
+.font-lp-1:before {
+    content: "\EA01";
+}
+
+.font-lp-10:before {
+    content: "\EA02";
+}
+
+.font-lp-11:before {
+    content: "\EA03";
+}
+
+.font-lp-12:before {
+    content: "\EA04";
+}
+
+.font-lp-13:before {
+    content: "\EA05";
+}
+
+.font-lp-14:before {
+    content: "\EA06";
+}
+
+.font-lp-15:before {
+    content: "\EA07";
+}
+
+.font-lp-16:before {
+    content: "\EA08";
+}
+
+.font-lp-17:before {
+    content: "\EA09";
+}
+
+.font-lp-18:before {
+    content: "\EA0A";
+}
+
+.font-lp-19:before {
+    content: "\EA0B";
+}
+
+.font-lp-2:before {
+    content: "\EA0C";
+}
+
+.font-lp-20:before {
+    content: "\EA0D";
+}
+
+.font-lp-21:before {
+    content: "\EA0E";
+}
+
+.font-lp-22:before {
+    content: "\EA0F";
+}
+
+.font-lp-23:before {
+    content: "\EA10";
+}
+
+.font-lp-24:before {
+    content: "\EA11";
+}
+
+.font-lp-25:before {
+    content: "\EA12";
+}
+
+.font-lp-26:before {
+    content: "\EA13";
+}
+
+.font-lp-27:before {
+    content: "\EA14";
+}
+
+.font-lp-28:before {
+    content: "\EA15";
+}
+
+.font-lp-29:before {
+    content: "\EA16";
+}
+
+.font-lp-3:before {
+    content: "\EA17";
+}
+
+.font-lp-30:before {
+    content: "\EA18";
+}
+
+.font-lp-31:before {
+    content: "\EA19";
+}
+
+.font-lp-32:before {
+    content: "\EA1A";
+}
+
+.font-lp-33:before {
+    content: "\EA1B";
+}
+
+.font-lp-34:before {
+    content: "\EA1C";
+}
+
+.font-lp-35:before {
+    content: "\EA1D";
+}
+
+.font-lp-36:before {
+    content: "\EA1E";
+}
+
+.font-lp-37:before {
+    content: "\EA1F";
+}
+
+.font-lp-38:before {
+    content: "\EA20";
+}
+
+.font-lp-39:before {
+    content: "\EA21";
+}
+
+.font-lp-4:before {
+    content: "\EA22";
+}
+
+.font-lp-40:before {
+    content: "\EA23";
+}
+
+.font-lp-41:before {
+    content: "\EA24";
+}
+
+.font-lp-42:before {
+    content: "\EA25";
+}
+
+.font-lp-43:before {
+    content: "\EA26";
+}
+
+.font-lp-44:before {
+    content: "\EA27";
+}
+
+.font-lp-45:before {
+    content: "\EA28";
+}
+
+.font-lp-46:before {
+    content: "\EA29";
+}
+
+.font-lp-47:before {
+    content: "\EA2A";
+}
+
+.font-lp-48:before {
+    content: "\EA2B";
+}
+
+.font-lp-49:before {
+    content: "\EA2C";
+}
+
+.font-lp-5:before {
+    content: "\EA2D";
+}
+
+.font-lp-50:before {
+    content: "\EA2E";
+}
+
+.font-lp-51:before {
+    content: "\EA2F";
+}
+
+.font-lp-52:before {
+    content: "\EA30";
+}
+
+.font-lp-53:before {
+    content: "\EA31";
+}
+
+.font-lp-54:before {
+    content: "\EA32";
+}
+
+.font-lp-55:before {
+    content: "\EA33";
+}
+
+.font-lp-56:before {
+    content: "\EA34";
+}
+
+.font-lp-6:before {
+    content: "\EA35";
+}
+
+.font-lp-7:before {
+    content: "\EA36";
+}
+
+.font-lp-8:before {
+    content: "\EA37";
+}
+
+.font-lp-9:before {
+    content: "\EA38";
+}
+
+@font-face {
+    font-family: "tools";
+    font-weight: normal;
+    font-style: normal;
+    src: url("../fonts/tools.eot");
+    src: url("../fonts/tools.eot?#iefix") format("embedded-opentype"), url("../fonts/tools.woff") format("woff");
+}
+
+[class^="font-tools-"],
+[class*=" font-tools-"] {
+    font-family: "tools";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: inherit;
+    float: none;
+    margin: 0;
+    vertical-align: -0.25em;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    text-decoration: none;
+    text-transform: none;
+}
+
+.font-tools-1:before {
+    content: "\EA01";
+}
+
+.font-tools-2:before {
+    content: "\EA02";
+}
+
+.font-tools-3:before {
+    content: "\EA03";
+}
+
+.font-tools-4:before {
+    content: "\EA04";
+}
+
+.font-tools-5:before {
+    content: "\EA05";
+}
+
+.font-tools-6:before {
+    content: "\EA06";
+}
+
+.font-tools-7:before {
+    content: "\EA07";
+}
+
+.img-fj-1, .trend.i2, .img-fj-2, .trend.i0, .img-fj-3, .trend.i1 {
+    display: inline-block;
+    *zoom: 1;
+    *display: inline;
+    vertical-align: middle;
+    line-height: 300px;
+    overflow: hidden;
+    background-image: url(../images/fj.png);
+}
+
+.img-fj-1, .trend.i2 {
+    width: 11px;
+    height: 11px;
+    background-position: 0 0;
+}
+
+.img-fj-2, .trend.i0 {
+    width: 11px;
+    height: 11px;
+    background-position: -21px 0;
+}
+
+.img-fj-3, .trend.i1 {
+    width: 11px;
+    height: 11px;
+    background-position: 0 -21px;
+}
+
+.top-bar {
+    background: #fff;
+    margin-top: 20px\9;
+}
+
+body {
+    background: #f4f4f4;
+}
+
+.fj-container .container {
+    background: #fff;
+}
+
+.fj-tit {
+    font-size: 18px;
+    height: 42px;
+    line-height: 42px;
+}
+
+/* ==========
+箭头
+========== */
+.trend {
+    background-image: url("../images/fj/fj.gif");
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 11px;
+    overflow: hidden;
+    width: 11px;
+}
+
+/* ==========
+chart
+========== */
+.chart {
+    height: 400px;
+    margin-right: 26px;
+    width: 620px;
+}
+
+.chart-con {
+    padding: 40px 0;
+}
+
+#zst {
+    height: 260px;
+    width: 600px;
+}
+
+/* ==========
+data
+========== */
+.data,
+.compute {
+    width: 520px;
+}
+
+.data {
+    margin-bottom: 30px;
+}
+
+.data .duibi {
+    margin-left: 70px;
+}
+
+.data .price {
+    width: 250px;
+}
+
+.data em {
+    padding: 0 3px;
+}
+
+.data p {
+    line-height: 32px;
+    height: 32px;
+    overflow: hidden;
+}
+
+.data p .big {
+    font-weight: 800;
+}
+
+.data .blod {
+    font-weight: 700;
+}
+
+/* ==========
+compute
+========== */
+.compute ul {
+    margin-left: -20px;
+    margin-top: 10px;
+}
+
+.compute li {
+    float: left;
+    text-align: center;
+    width: 130px;
+}
+
+.compute .li03, .compute .li06 {
+    width: 114px;
+}
+
+.compute p.ico {
+    font-size: 22px;
+    height: 40px;
+    line-height: 40px;
+}
+
+.compute p.txt {
+    line-height: 40px;
+}
+
+.compute a:hover {
+    text-decoration: none;
+}
+
+/* ==========
+热销楼盘
+========== */
+.fj-area .item {
+    float: left;
+    height: 427px;
+    margin: 10px 30px 0;
+    overflow: hidden;
+    width: 340px;
+}
+
+.fj-area .fj-tit {
+    overflow: hidden;
+}
+
+.fj-area .fj-tit h3 {
+    border-bottom: 3px solid #f90303;
+    float: left;
+    font-size: 18px;
+    height: 40px;
+}
+
+.fj-area .con {
+    border-top: 1px solid #ddd;
+    height: 367px;
+    margin-top: -1px;
+}
+
+.fj-area .con li {
+    border-bottom: 1px dashed #ddd;
+    height: 45px;
+    line-height: 45px;
+    overflow: hidden;
+}
+
+.fj-area .ico,
+.fj-area .txt,
+.fj-area .price,
+.fj-area .trend {
+    display: block;
+    float: left;
+    overflow: hidden;
+}
+
+.fj-area .ico {
+    background: #b2b2b2;
+    height: 4px;
+    margin-top: 22px;
+    width: 4px;
+}
+
+.fj-area .txt {
+    margin-left: 12px;
+    width: 200px;
+}
+
+.fj-area .price {
+    margin-left: 6px;
+    width: 86px;
+}
+
+.fj-area .trend {
+    margin-top: 18px;
+}
+
+/* ==========
+推荐列表
+========== */
+.tj-wrap {
+    margin: 0 auto;
+    width: 1140px;
+}
+
+.tj-wrap .fj-tit {
+    text-indent: 10px;
+}
+
+.tj-list {
+    height: 220px;
+    overflow: hidden;
+}
+
+.tj-list ul {
+    margin-left: -7px;
+}
+
+.tj-list li {
+    float: left;
+    margin-left: 25px;
+    width: 200px;
+}
+
+.tj-list .img {
+    display: block;
+    height: 150px;
+    width: 200px;
+}
+
+.tj-list p {
+    line-height: 50px;
+    height: 50px;
+    overflow: hidden;
+}
+
+/*# sourceMappingURL=cfj.css.map */

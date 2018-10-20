@@ -1,0 +1,84 @@
+{% extends 'HouseBundle:Msale:mpay.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+{% set aid = app.request.get('aid') %}
+{% set usertype = app.request.get('usertype') %}
+{% set rmb = app.user.currency.rmb|default(0) %}     
+{% block mainMenu %}
+    {# {{ parent() }} #}
+   {{ core_manage.jump({
+        title: '<i class="font-ico-49 mr5"></i>定时刷新',
+        url: 'msale/refresh'|U({ aid: aid, models: models}),
+        target: '.mainpay'
+    }) }}
+    {{ core_manage.jump({
+        title: '<i class="font-ico-50 mr5"></i>智能刷新',
+        url: 'msale/intelref'|U({ aid: aid, models: models}),
+        target: '.mainpay'
+
+    }) }}
+    {{ core_manage.jump({
+        title: '<i class="font-ico-51 mr5"></i>手动刷新',
+        url: 'msale/handref'|U({ aid: aid, models: models }),
+        target: '.mainpay'
+    }) }}
+    <div class="blank5" style="border-bottom: 1px solid #ddd"></div>
+{% endblock %}
+{% block content %}
+{{ core_global.payment({ consume: 2, aid: aid, models: models, type:1 }) }}
+{% endblock content %}
+
+{% block innerjs %}
+{% set timrefresh = core_global.mconfig({name: 'timrefresh', ename: 'mother'}) %}
+<script type="text/javascript">
+   seajs.use(['manage'], function (manage) {
+            var $unit = {{ timrefresh|default(0)}}
+            var $total = $('input[name=total_fee]');
+           $('input[name=stimes],input[name=day]').on('input propertychange',function(){
+               if ($('input[name=stimes]').val() != 0 && $('input[name=day]').val() != 0) {
+                   sums()
+               };
+           })
+            function sums(){
+                var $stimes = $('input[name=stimes]').val()
+                var $str = ($stimes.substring($stimes.length-1)==',')?$stimes.substring(0,$stimes.length-1):$stimes;
+                var $arr = $str.split(',')
+                $alength = $arr.length
+                // console.log($arr)
+                $('input[name=times]').val($arr.join('-'))
+                $day = $('input[name=day]').val()
+                var $sum =  $unit*$day*$alength
+                $total.val( $sum );
+                $('.quit-pay-money').html( $sum );
+                $('#quit-all-pay').html( $sum );
+                 //if ($alength > 3) {
+                 //   $.jqModal.tip('最多填写三个时间','error');
+                 //   return false
+                //};
+                balance()
+            }
+           
+            $('.mszd-btn').on('click',function(){
+                var $this = $(this);
+                //if($('input[name=total_fee]').val() == 0){
+                //    $.jqModal.tip('金额为0','error');
+                //    return false;
+               // }
+               // if ($alength > 3) {
+               //     $.jqModal.tip('最多填写三个时间','error');
+               //     return false
+               // };
+                $.jqModal.confirm({
+                    text: '已支付成功请按确定, 重新支付请按取消',
+                    accept: function(){
+                        $('.jq-modal').jqModal('hide');
+                        manage.flush();
+                    }
+                });
+               // return false;
+            })
+   
+            
+    })
+  </script>
+{% endblock innerjs %} 

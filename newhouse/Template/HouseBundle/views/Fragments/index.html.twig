@@ -1,0 +1,9 @@
+{% spaceless %}
+{% set url_params = {} %}
+{% for k,v in app.request.query %}
+	{% set url_params = url_params|merge({
+		(k): v
+	}) %}
+{% endfor %}
+document.write('{% include url_params.tpl|default('') ignore missing with url_params %}')
+{% endspaceless %}

@@ -1,0 +1,42 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{%- block result -%}
+{# 底部 #}
+<footer class="footer">
+    {#<div class="row no-gutter">
+        <div data-block="{
+            ajax: {
+                url: '{{ ('bundlebindforms/ajax')|U }}',
+                data: {
+                    tpl: 'Main:username',
+                }
+            }
+        }" class="dn"></div>
+        {% if app.request.get('_isApp', 0) %}
+            <a href="{{('map/location')|UU }}" class="col-33">
+                <span>
+                    附近找房
+                </span>
+            </a>
+        {% else %}
+            <a href="{{('download/index')|UU }}" class="col-33">
+                <span>
+                    app下载
+                </span>
+            </a>
+        {% endif %}
+        <a href="{{ ('service/ask')|UU }}" class="col-33">
+            <span>
+                反馈
+            </span>
+        </a>
+    </div>
+    <div class="copyright">
+         © {{'maindomain'|C}}
+    </div>#}
+</footer>
+<script type="text/javascript">
+    seajs.use(['common'], function (common) {
+        common.block('[data-block]');
+    })
+</script>
+{% endblock result %}

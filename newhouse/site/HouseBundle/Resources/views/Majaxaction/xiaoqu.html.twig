@@ -1,0 +1,58 @@
+{% extends "CoreBundle::base_ajax.html.twig" %}
+{% set name = app.request.get("name") %}
+{# 默认值设置-1，是因为null的时候会判断为0的值 #}
+{% set tpl_type = app.request.get('type', '-1') %} 
+
+{% if tpl_type in [0, 1] %}
+	{% set type = {
+		type: tpl_type
+	} %}
+{% endif %}
+
+{% if tpl_type == 0 %}
+	{% set tpl_name = '楼盘' %}
+{% else %}
+	{% set tpl_name = '小区' %}
+{% endif %}
+	
+{% if name != '' %}
+	{% set xq = ('house.houses')|getAll({checked: 1, name: 'orX|name,like,%'~name~'%|address,like,%'~name~'%|ename,like,%'~name~'%|id,eq,' ~ name ~ '', findType: 1}|merge(type|default({}))) %}
+{% endif %}
+{% block result %}
+{% if xq.data is defined and xq.pageCount|default('') != 0 %}
+{
+	"query": "Unit",
+	"suggestions" :[
+	{% for item in xq.data %}
+		{% if loop.index != 1 %},{% endif %}{
+			"value" : "{{item.name|default('')}}",
+			"data" : {
+				"aid" : "{{item.id|default('')}}",
+				"name" : "{{item.name|default('')}}",
+				"address" : "{{item.address|default('')}}",
+				"isTrue" : 1,
+				"id" : "{{item.id|default('')}}",
+				"map": "{{item.map|default('')}}",
+				"lng": "{{item.lng|default('')}}",
+				"lat": "{{item.lat|default('')}}"
+				
+			}
+		}    
+	{% endfor %}]
+}
+{% else %}
+{
+	"query": "Unit",
+	"suggestions" :[{
+	
+			"value" : " ",
+			"data" : {
+				"name" : "没搜索到{{ tpl_name }}",
+				"address" : "",
+				"isTrue" : 0
+			}
+		 }]
+}
+{% endif %}
+
+{% endblock %}

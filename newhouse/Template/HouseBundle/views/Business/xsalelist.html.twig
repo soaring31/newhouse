@@ -1,0 +1,68 @@
+{% extends 'HouseBundle:Business:business_list_layout.html.twig' %}
+{# 说明
+ * tpl_list_title: 列表标题模板变量
+ * list_ident: 列表内容变量
+#}
+{% set tpl_list_title = '写字楼出售' %}
+
+{% block title %}【{{cur_area_data|default('')}}写字楼出售·办公楼出售信息】-{{cur_area_data|default('')}}写字楼网{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data|default('')}}写字楼出售,{{cur_area_data|default('')}}写字楼网" />
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}写字楼出售频道,为您提供丰富准确的{{cur_area_data|default('')}}写字楼出售,办公楼出租信息,上万条真实有效写字楼房源,帮助您快速找到理想的写字楼。找写字楼,上{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}写字楼网！"/>
+{% endblock key_des %}
+
+{% set list_ident = ident.list|default('') %}
+
+{% block top_search %}
+    {% set tpl_topsearch_action = 'business/xsalelist' %}
+    {% set tpl_topsearch_placeholder = '请输入写字楼名称/拼音' %}
+    {{ parent() }}
+{% endblock top_search %}
+
+{% set tpl_title = '写字楼出售' %}
+
+{# 当前位置 #}
+{% block current_container %}
+    <span>写字楼出售</span>
+{% endblock current_container %}
+
+{% block container %}
+    {# 检索数据源 #}
+    {% set cate_data = house_global.cate_data({ 
+                    tag: 'xzl_sale',
+                }).__toString|json_decode %}
+    {{ parent() }}
+{% endblock container %}
+
+{# 排序 #}
+{% block list_sort %}
+    {% set sort_data = {
+        def: {
+            title: '默认'
+        },
+        zj: {
+            title: '总价'
+        },
+        dj: {
+            title: '单价'
+        },
+        mj: {
+            title: '面积'
+        }
+    } %}
+    {{ parent() }}
+{% endblock list_sort %}
+
+{% block business_list %}
+<div class="xzu-list">
+    {{house_global.business_sale({
+        list: list_ident,
+        tips: '写字楼'
+    })}}
+</div>
+{% endblock business_list %}
+
+{% block business_aside %}
+    {{house_global.sale_aside({models: 'sale'})}}
+{% endblock business_aside %}

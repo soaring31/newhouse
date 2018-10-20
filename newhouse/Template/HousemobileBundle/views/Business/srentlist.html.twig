@@ -1,0 +1,42 @@
+{% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:business_list.html.twig' : 'HousemobileBundle:Business:list.html.twig' %}
+
+{% block title %}
+【{{cur_area_data|default('')}}商铺,门面出租转让】-{{cur_area_data|default('')}}商铺网
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data|default('')}}商铺出租,{{cur_area_data|default('')}}商铺转让,{{cur_area_data|default('')}}商铺网" />
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}商铺出租频道,为您提供丰富准确的{{cur_area_data|default('')}}商铺,门面,门脸房出租转让信息,上万条真实有效商铺房源,帮助您快速找到理想的商铺。找商铺,上{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}商铺网！"/>
+{% endblock key_des %}
+
+{% block header_title %}
+{{core_mobile_global.title({title: '商铺出租'})}}
+{% endblock header_title %}
+
+{% block header_search %}
+{{ core_mobile_global.bar_nav_btn({
+    title: '搜索',
+    icon: 'font-f-8',
+    popup: {
+        title: '商铺出租搜索',
+        popup: '.popup-search',
+    }
+}) }}
+{% endblock header_search %}
+
+{% block container %}
+    {% set list_header %}
+    <div class="filter" data-block="{
+        ajax: {
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                tpl: 'Common:filter',
+                tag: 'sp_rent'
+            }
+        }
+    }"></div>
+    {% endset %}
+    {# 列表链接 js调用列表需要 #}
+    {% set list_url = ('business/srentlist')|U({ajax: 1, b_models: 'srent', tpl_url: 'rdetail'}) %}
+    {{ parent() }}
+{% endblock container %}

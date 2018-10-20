@@ -1,0 +1,71 @@
+﻿/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+*/
+
+@import 'static/ats';
+// 工具类 每个文件都要导入
+body{
+    background-color: #eee;
+}
+.bg{
+    background: url(../images/download/bg.gif) no-repeat 0 0;
+    width: 100%;
+    min-height: 580px;
+    .banner{
+        margin-top: 70px;
+        margin-right: 130px;
+        h2{
+            font-size: 24px;
+        }
+        p{
+            font-size: 14px;
+        }
+        .download{
+            margin-top: 30px;
+            .ad,.ip{
+                width: 190px;
+                margin: 0 auto;
+                .img #ewm{
+                    width: 110px;
+                    height: 110px;
+                    margin-left: 32px;
+                }
+                p{
+                    margin-bottom: 16px;
+                    text-align: center;
+                }
+                a>img{
+                    padding-top: 20px;
+                    width: 189px;
+                    height: 40px;
+                } 
+                a>img:hover{
+                    opacity: 0.8;
+                    filter: alpha(opacity=0.8);
+                }
+            }
+            .ad{
+                margin-right: 30px;
+                padding-left: 10px;
+            }
+        }
+    }
+}
+body {
+    .container02 {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        margin-bottom: 50px;
+    }
+}
+
+
+
+
+
+
+

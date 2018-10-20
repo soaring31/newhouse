@@ -1,0 +1,40 @@
+{% extends 'HouseBundle:Houses:ddetail.html.twig' %}
+{# # 说明:
+** ident.list: 特价楼盘列表
+*#}
+
+{% block title_houses %}特价房{% endblock title_houses %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}特价房, {{detail.name|default('')}}特价新房, {{cur_area_data|default('')}}{{detail.name|default('')}}打折" />
+<meta name="description" content="{{detail.name|default('')}}相关特价房"/>
+{% endblock key_des %}
+
+{# 导航高亮 #}
+{% block nav_houses %}
+{% set nav_houses_act = 8 %}
+{{parent()}}
+{% endblock nav_houses %}
+
+{% block d_body %}
+    <!--特价房-->
+    <div class="d-spehouse">
+        <div class="lp-coltit">
+            <h3 class="tit1">
+                特价房
+            </h3>
+        </div>
+        <div class="bd-gray p15">
+            <ul class="arial tejia-list" data-tag="tejiafang">
+                {{house_global.specail_list({
+                    list: ident.list,
+                    tips: detail.name ~ '特价房'
+                })}}
+            </ul>
+            <!--page-->
+            <div class="blank20"></div>
+            {{- core_global.page(ident.list) -}}
+            <!--page-->
+        </div>
+    </div>
+{% endblock d_body %}

@@ -1,0 +1,132 @@
+{% extends 'HouseBundle:Sale:sale_layout.html.twig' %}
+{# 说明
+** sort_data: 默认重新排序定义
+** sort_data_opt: 自定义重新排序
+** filter_search: 筛选位置搜索
+** filter_hd: 标题
+** tpl_models: 当前所属
+** sort_data_opt:重新排序变量
+** 以下是筛选区域数据定义
+*      1、filter_rows： 横排显示筛选条件条数
+*      2、filter_opt：筛选条件数据
+#}
+
+{% block title %}【{{cur_area_data|default('')}}学校附近二手房出售|{{cur_area_data|default('')}}学校小区价格】{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data|default('')}}学校附近二手房，{{cur_area_data|default('')}}学校小区" />
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}二手房网为您提供快速全面的{{cur_area_data|default('')}}学校附近二手房出售信息及{{cur_area_data|default('')}}学校小区信息。大量优质教育房源实时更新，为您提供舒适教育房购房体验。" />
+{% endblock key_des %}
+
+{% block css %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/xuequ.css')}}
+{% endblock css %}
+{# 搜索 #}
+{% block top_search %}
+    {% set tpl_topsearch_action = 'sale/xlist' %}
+    {% set tpl_topsearch_placeholder = '请输入学校名称' %}
+    {{ parent() }}
+{% endblock top_search %}
+{# 当前位置 #}
+{% block current_container %}
+<a href="{{('sale/list')|U}}">学区列表</a>
+{% endblock current_container %}
+
+{% block container %}
+    {# 检索数据源 #}
+    {% set cate_data = house_global.cate_data({ 
+                    tag: 'xuequ',
+                }).__toString|json_decode %}
+
+    {{house_global.filter_cfg({
+        head_data: head_data,
+        action: action
+    }|merge(cate_data))}}
+    <div class="blank30"></div>
+    <div class="container">
+        <div class="main">
+            <div class="tag">
+                <div class="tag-head">
+                    {{house_global.fy_title({
+                        small_page: 0,
+                        data: [
+                            {
+                                name: '所有学校',
+                                url: (action)|U,
+                            }
+                        ]
+                    })}}
+                </div>
+            </div>
+            <div class="xq-body">
+                <div class="tuwen">
+                    <ul>
+                        {{house_global.school_list({
+                            list: ident.list
+                        })}}
+                    </ul>
+                    <div class="blank20"></div>
+                    <!--page-->
+                    {{- core_global.page(ident.list) -}}
+                    <!--page-->
+                </div>
+            </div>
+        </div>
+        {% block aside_school %}
+        <div class="xq-aside fr">
+            <!--标题-->
+            <div class="coltit3">
+                <h3 class="title">热门学校</h3>
+            </div>
+            <!--/标题-->
+            <!--热门学校-->
+            {% set sort_clicks_school = ('house.around')|getAll({checked: 1, orderBy: 'desc', order: 'clicks', pageSize: 10, category: 55, findType: 1}|merge(sort_clicks_school_opt|default({}))) %}
+            <div class="bd-gray p6-25 rmxx clearfix" data-tag="clicks">
+                <ul class="list">
+                    {% if sort_clicks_school.data is defined %}
+                        {% for item in sort_clicks_school.data %}
+                            <li>
+                                {{- core_global.formField({value: item.school_type|default(''), form: 'around_school', field: 'school_type', tpl: '<span  class="more arial"><i class="c2"><span>%title%</span></i></span>'}) -}}
+                                <a title="{{item.name|default('')}}" target="_blank" href="{{('sale/xdetail')|U({id: item.id|default('')})}}">{{item.name|default('')}}</a>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+            <!--/热门学校-->
+            <!--标题-->
+            <div class="coltit3 clearfix">
+                <a target="_blank" href="{{('sale/xlist')|U}}">
+                    <div class="fr gengduo"></div>
+                </a>
+                <h3 class="title">学区房学校推荐</h3>
+            </div>
+            <!--/标题-->
+            <!--学校推荐-->
+            {% set xqfxxtj = ('xqfxxtj')|getPush(10) %}
+            <ul class="tjtuw clearfix" data-tag='xqfxxtj'>
+                {% if xqfxxtj is defined %}
+                    {% for item in xqfxxtj %}
+                        <li>
+                            <a title="{{item.name|default('')}}" target="_blank" href="{{core_global.url(item|merge({controller: 'sale/xdetail', set_models: 1}))}}">
+                                {{- core_global.img({
+                                    src: item.thumb|default(''),
+                                    alt: item.name|default(''),
+                                    width: 126,
+                                    height: 90
+                                }) -}}
+                                <em>{{item.name|default('')}}</em>
+                            </a>
+                            <p>
+                                {{- core_global.formField({value: item.school_type|default(''), form: 'around_school', field: 'school_type', tpl: '<i class="ico">%title%</i>'}) -}}
+                                {{- core_global.formField({value: item.leibie|default(''), form: 'around', field: 'leibie', tpl: '%title%'}) -}}
+                            </p>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+        {% endblock aside_school %}
+    </div>
+    <div class="blank20"></div>
+{% endblock container %}

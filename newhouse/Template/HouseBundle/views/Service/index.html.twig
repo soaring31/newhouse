@@ -1,0 +1,256 @@
+{% extends 'HouseBundle::base.html.twig' %}
+{# #说明
+** url_category：获取url中的category参数，用以判断当前的页面位置
+** push_changjianfuwu: 常见服务
+** category_service: 导航数据
+** cjwta: 常见问题推送1,条件判断（checked：0，判断是否审核，pagesize：12，判断显示条数，is_delete：0，判断数据是否已被删除）
+** push_cjwtb: 常见问题推送2
+** push_cjwtc: 常见问题推送3
+** push_cjwtd: 常见问题推送4
+** push_cjwte: 常见问题推送5
+** push_cjwtf: 常见问题推送6
+** sort_clicks_service: 热门排行
+#}
+{% set url_category = app.request.get('category', 7) %}
+
+{% set category_service = ('house.category')|getTree({models: "service", checked: 1}|merge(other_sql|default({}))) %}
+
+{% set sort_clicks_service = ('house.service')|getAll({checked: 1, orderBy: 'desc', order: 'clicks', pageSize: 10, findType: 1}) %}
+
+{% block title %}服务中心{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" Content="帮助中心,服务中心,帮助"/>
+<meta name="description" content="服务"/>
+{% endblock key_des %}
+
+{% block css %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/service.css')}}
+{% endblock css %}
+
+{% block body %}
+
+    <div class="service-header container clearfix">
+        <img src="{{core_global.img_url({src: core_global.mconfig({name: 'servicelogo', ename: 'mvariables_user'}), type: 0, height: 30})}}" alt="服务中心logo" class='service-logo' height="30" />
+        <div class="fr"> <i class="font-service-home"></i>
+            <a href="{{('index/index')|U}}" title="返回首页" class="go-back">返回首页</a>
+        </div>
+    </div>
+    {# 导航 #}
+    {% block service_nav %}
+    <div class="service-nav">
+        <ul class="clearfix container">
+            {% if category_service.data is defined %}
+                {% for level1 in category_service.data %}
+                    <li class="{% if nav_service_act|default(level1.menu.id|default('')) == level1.menu.id|default('') %}hover{% endif %}">
+                        <a href="{{('service/index')|U}}" title="首页" data-hover="hoverslider">首页</a>
+                    </li>
+                    {% for level2 in level1.nodes %}
+                        {% if level2.menu.id|default('') == 12 %}
+                            {% set item_url = ('service/ask')|U({category: level2.menu.id|default('')}) %}
+                        {% else %}
+                            {% set item_url = ('service/list')|U({category: level2.menu.id|default('')}) %}
+                        {% endif %}
+                        <li class="{% if nav_service_act|default(level1.menu.id|default('')) == level2.menu.id|default('') %}hover{% endif %}">
+                            <a href="{{item_url|default('')}}" title="{{level2.menu.name|default('')}}" data-hover="hoverslider">{{level2.menu.name|default('')}}</a>
+                        </li>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+    {% endblock service_nav %}
+
+    {# 面包屑 #}
+    {% block service_bread %}
+
+    <div class="container">
+        {# {{block('search_block')}} #}
+    </div>
+    {% endblock service_bread %}
+
+    {# 主要内容 #}
+    <div class="container {{container_class|default('')}} clearfix">
+        {% block service_left %}
+            <div class="fl body">
+                {% set push_changjianfuwu = ('changjianfuwu')|getPush(8) %}
+                {% if push_changjianfuwu|default('') %}
+                <!--常见服务-->
+                <div class="service">
+                    <h1 class="title-h1">常见服务</h1>
+                    <div class="s-body">
+                        <ul class="clearfix">
+                                {% for item in push_changjianfuwu %}
+                                    <li>
+                                        <a href="{{core_global.url(item|merge({models: 'service', set_models: 1}))}}" class="item">
+                                            <div class="item-img">
+                                                <i class="{{item.navicon|default('font-service-register')}}"></i>
+                                            </div>
+                                            <h3>{{item.name|default('')}}</h3>
+                                        </a>
+                                        <p>{{item.abstract|default(item.content|default(''))|raw}}</p>
+                                    </li>
+                                {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <!--/常见服务-->
+                {% endif %}
+
+                {% set service_title_data = ('house.cate_pushs')|getAll({ename: 'in|cjwta,cjwtb,cjwtc,cjwtd,cjwte,cjwtf'}) %}
+
+                {% set service_title = {} %}
+
+                {% for item in service_title_data.data %}
+                    {% set service_title = {
+                        (item.ename): item.name
+                    }|merge(service_title) %}
+                {% endfor %}
+
+                {% set serviceAttr = ('cjwta,cjwtb,cjwtc,cjwtd,cjwte,cjwtf')|getPushMuti(12) %}
+
+                {% set push_cjwta = serviceAttr['cjwta']|default({}) %}
+
+                {% set push_cjwtb = serviceAttr['cjwtb']|default({}) %}
+
+                {% set push_cjwtc = serviceAttr['cjwtc']|default({}) %}
+
+                {% set push_cjwtd = serviceAttr['cjwtd']|default({}) %}
+
+                {% set push_cjwte = serviceAttr['cjwte']|default({}) %}
+
+                {% set push_cjwtf = serviceAttr['cjwtf']|default({}) %}
+                <div class="issues">
+                    <h1 class="title-h1">常见问题</h1>
+                    <div class="tab-wrap jqDuang" data-obj=".tab-item" data-cell=".tab-header" data-autoplay="0" data-speed="0" data-actclass="cur" data-tag="cjwta,cjwtb,cjwtc">
+                        <ul class="tab-header clearfix">
+                            <li class="cur">
+                                <a href="{{('service/list')|U({category: 8})}}">
+                                    {{service_title['cjwta']|default('')}}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{('service/list')|U({category: 9})}}">
+                                    {{service_title['cjwtb']|default('')}}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{('service/list')|U({category: 10})}}">
+                                    {{service_title['cjwtc']|default('')}}
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-body">
+                            {{house_global.service_index_recommend({
+                                list: push_cjwta,
+                                show: 1
+                            })}}
+                            {{house_global.service_index_recommend({
+                                list: push_cjwtb
+                            })}}
+                            {{house_global.service_index_recommend({
+                                list: push_cjwtc
+                            })}}
+                        </div>
+                    </div>
+                    <div class="tab-wrap jqDuang" data-obj=".tab-item" data-cell=".tab-header" data-autoplay="0" data-speed="0" data-actclass="cur" data-tag="cjwtd,cjwte,cjwtf">
+                        <ul class="tab-header clearfix">
+                            <li class="cur">
+                                <a href="{{('service/list')|U({category: 11})}}">
+                                    {{service_title['cjwtd']|default('')}}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{('service/list')|U({category: 13})}}">
+                                    {{service_title['cjwte']|default('')}}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{('service/list')|U({category: 14})}}">
+                                    {{service_title['cjwtf']|default('')}}
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-body">
+                            {{house_global.service_index_recommend({
+                                list: push_cjwtd,
+                                show: 1
+                            })}}
+                            {{house_global.service_index_recommend({
+                                list: push_cjwte
+                            })}}
+                            {{house_global.service_index_recommend({
+                                list: push_cjwtf
+                            })}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock service_left %}
+        {% block service_right %}
+            <div class="fr aside">
+                {{block('online_block')}}
+                <h2 class="title-h2">热点问题</h2>
+                <div class="hot-issues">
+                    <ul>
+                        {% if sort_clicks_service.data is defined %}
+                            {% for item in sort_clicks_service.data %}
+                            <li>
+                                <a href="{{('service/detail')|U({id:item.id})}}" title="{{item.name}}" target="_blank">
+                                    <i></i>
+                                    {{item.name}}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        {% else %}
+                        <li class="noinfo">暂无数据</li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        {% endblock service_right %}
+    </div>
+
+{% endblock body %}
+
+{% block footer %}
+    <div class="blank20"></div>
+    {% include 'HouseBundle:Common:webinfo.html.twig' %}
+    <div class="blank20"></div>
+{% endblock footer %}
+
+{# 搜索模块 #}
+{% block search_block %}
+    <div class="search-wrap clearfix">
+        {{ core_global.search({
+            action: 'service/list',
+            placeholder: o.placeholder|default('请输入问题关键词')
+        }) }}
+        <a href="{{('service/ask')|U({category: 12})}}" class="ask fl" target="_blank">
+            <i class="font-service-ask"></i>
+            我要提问
+        </a>
+    </div>
+{% endblock search_block %}
+
+{% block online_block %}
+    <h2 class="title-h2">在线服务</h2>
+    <!--在线帮助-->
+    <div class="online-service clearfix">
+        <i class="img-service-online"></i>
+        <dl>
+            <dt>客服电话</dt>
+            <dd>{{core_global.mconfig({name: 'user_user_tel', ename: 'mvariables_user'})|default('-')}}</dd>
+            <dt>投诉电话</dt>
+            <dd>{{core_global.mconfig({name: 'complaints_tel', ename: 'mvariables_user'})|default('-')}}</dd>
+            <dt>广告联系</dt>
+            <dd>{{core_global.mconfig({name: 'ad_tel', ename: 'mvariables_user'})|default('-')}}</dd>
+        </dl>
+    </div>
+{% endblock online_block %}
+
+{% block js %}
+    <script type="text/javascript">
+        seajs.use(['jqduang'])
+    </script>
+{% endblock js %}

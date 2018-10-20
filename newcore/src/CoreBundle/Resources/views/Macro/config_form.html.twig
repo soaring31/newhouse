@@ -1,0 +1,91 @@
+{# 调用说明开始 #}
+{# {{ 'qq'|trans({}, 'HomeBundle') }} #}
+{# {% import "IlvBundle:Form:config_form.html.twig" as forms %} #}
+{# {{ forms.popEdit(dbForm,'formclass') }} #}
+{# 调用说明结束 #}
+{% macro popEdit(form, option) %}
+{% if form is defined and form is not empty %}
+    {# {{dump(form)}} #}
+{% set id = app.request.get('id')|default(0) %}
+{% set option = app.request.get('option')|default({}) %}
+{# {% set pid = app.request.get('pid')|default(0) %} #}
+<form data-id="{{id}}" action="{{ form.vars.action }}" method="{{ form.vars.method }}" class="{{ option.formclass|default('form') }}" {{ form_enctype(form) }}>
+{% if form.vars.errors|length>0 %}
+<div class="alert alert-error">
+{% for error in form.vars.errors %}
+{% if loop.index>1 %}<br>{% endif %}
+{{ error.messageTemplate|trans(error.messageParameters, 'validators') }}
+{% endfor %}
+</div>
+{% endif %}
+
+
+{% for key,v in form.children %}
+{% if key != 'csrf_token' and key != 'submit' %}
+
+ {% if v.children and v.children.year is not defined and v.children.month is not defined %} 
+<table class="popup-form-table" style="width:100%;" {{v.vars.block_prefixes[1]|default('') }}>
+    <tbody>
+        <tr>
+           <th width="25%"  data>{{v.vars.label|trans({}) }}</th>
+        </tr>
+
+        <tr >
+            <td>
+               {% if option and key == option.name %}  
+                {{ form_widget(option.name, {value: option.value}) }}
+                {% else %}
+                {{ form_widget(v) }}    
+                {% endif %}
+            </td>
+           
+        </tr>
+        
+    </tbody>
+</table>
+{% else %}
+
+
+<table class=" popup-form-table" style="width:100%;" {{v.vars.block_prefixes[1]|default('') }}>
+    <tbody>
+        <tr >
+            <td >
+                <div>
+
+                    <div class="form-row">
+                        <div class="form-cell-label">{{v.vars.label|trans({}) }}</div>
+                        <div class="form-errors"></div>
+                        <div class="form-cell">
+                            {% if option and key == option.name %}  
+                            {{ form_widget(option.name, {value: option.value}) }}
+                            {% else %}
+                            {{ form_widget(v) }}    
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+
+            </td>
+
+        </tr>
+    </tbody>
+</table>
+
+
+
+
+
+{% endif %}
+
+
+
+{% endif %}
+{% endfor %}
+
+
+<div class="popup-submit">{{ forms.submit is defined?form_widget(form.submit):'' }}</div>
+<div class="tac">{{ form_rest(form) }}</div>
+</form>
+{% endif %}
+{% endmacro %}

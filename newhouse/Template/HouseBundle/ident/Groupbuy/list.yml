@@ -1,0 +1,44 @@
+list:
+    tableName: groupbuy
+    subTableName: ''
+    aliasName: g
+    listGrid: {  }
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 15
+    groupBy: ''
+    order: 'enddate,desc|id'
+    orderBy: desc
+    searchFun: EXISTS
+    dataModel: 0
+    attribute: '0'
+    autoQuery: '1'
+    alias: {  }
+    query:
+        checked:
+            eq: '1'
+    query1: {  }
+group_order:
+    tableName: group_order
+    subTableName: ''
+    aliasName: g
+    listGrid: {  }
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 10
+    groupBy: ''
+    order: id
+    orderBy: desc
+    searchFun: EXISTS
+    dataModel: 0
+    autoQuery: '0'
+    alias: {  }
+    query:
+        checked:
+            eq: '1'
+    query1: {  }
+    attribute: '0'

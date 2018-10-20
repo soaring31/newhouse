@@ -1,0 +1,66 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+** ajax调用：资讯列表
+#}
+{% block result %}
+{# 判断数据来源 #}
+{% set url_id = app.request.get('id') %}
+{% if url_id %}
+{# 楼盘动态 houses/dnews #}
+{% set block_zixun_lpdt = ('house.houses_arc')|getBlock({form: 'houses_news'}, {checked: 1, aid: url_id|default(''), pageIndex: app.request.get('pageIndex', 1), pageSize: 12, findType: 1, _multi: 1}) %}
+{% set list = ident.list|default(block_zixun_lpdt|default('')) %}
+{% else %}
+    {% set list = list|default(ident.list|default('')) %}
+{% endif %}
+    {% spaceless %}
+    {% if list.data is defined and list.pageCount|default('') != 0 %}
+        {% for item in list.data %} 
+          {% if item.fromid|default('-1') > 0 %}
+            {% set item_url = ('news/detail')|UU({id: item.fromid|default('')}) %}
+          {% elseif item.fromid|default('-1') == 0 %}
+            {% set item_url = '#' %}
+          {% else %}
+            {% set item_url = ('news/detail')|UU({id: item.id}) %}
+          {% endif %}
+          <li {% if loop.last %}data-page="{
+                    pageIndex: {{list.pageIndex}},
+                    pageCount: {{list.pageCount}},
+                    pageSize: {{list.pageSize}}
+                 }"{% endif %}>
+            <a href="{{item_url}}" class="item-content color-6">
+              <div class="item-media">
+                {{core_global.img({
+                      src: item.thumb|default(''),
+                      alt: item.name|default(''),
+                      type: 2,
+                      width:120 ,
+                      height: 80
+                  })}}
+              </div>
+              <div class="item-inner">
+                <div class="item-title-row">
+                  {{housemobile_global.list_title({title: item.name|default('')})}}
+                </div>
+                <div class="item-text" style="font-size:12px;line-height:20px">
+                  {{core_global.substr(item.abstract|default('')|raw , 30, 1)}}
+                </div>
+                <div class="publish_click_wrap" >
+                    <span class="publish_time"><i class="font-f-13"></i>{{item.create_time|default('')|date('Y-m-d')}}</span>
+                    <span class="user_clicks"><i class="font-f-16"></i><span data-counts="{models: 'news', field: 'clicks', id: '{{item.fromid|default(item.id)}}'}"></span>{# {{item.clicks|default(0)}} #}</span>
+                </div>
+              </div>
+            </a>
+          </li>
+        {% endfor %}
+    {% endif %}
+    
+    <script type="text/javascript">
+      seajs.use(['common'], function(common) {
+          common.getcounts({
+              container: 'li',
+              url: '{{("igetcounts/index")|U }}'
+          })
+      })  
+    </script>
+    {% endspaceless %}
+{% endblock result %}

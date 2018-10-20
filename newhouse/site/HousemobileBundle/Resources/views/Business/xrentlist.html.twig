@@ -1,0 +1,42 @@
+{% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:business_list.html.twig' : 'HousemobileBundle:Business:list.html.twig' %}
+
+{% block title %}
+【{{cur_area_data|default('')}}写字楼出租·办公楼出租信息】-{{cur_area_data|default('')}}写字楼网
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data|default('')}}写字楼出售,{{cur_area_data|default('')}}写字楼网" />
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}写字楼出租频道,为您提供丰富准确的{{cur_area_data|default('')}}写字楼出租,办公楼出租信息,上万条真实有效写字楼房源,帮助您快速找到理想的写字楼。找写字楼,上{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}写字楼网！"/>
+{% endblock key_des %}
+
+{% block header_title %}
+{{core_mobile_global.title({title: '写字楼出租'})}}
+{% endblock header_title %}
+
+{% block header_search %}
+{{ core_mobile_global.bar_nav_btn({
+    title: '搜索',
+    icon: 'font-f-8',
+    popup: {
+        title: '写字楼出租搜索',
+        popup: '.popup-search',
+    }
+}) }}
+{% endblock header_search %}
+
+{% block container %}
+    {% set list_header %}
+    <div class="filter" data-block="{
+        ajax: {
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                tpl: 'Common:filter',
+                tag: 'xzl_rent'
+            }
+        }
+    }"></div>
+    {% endset %}
+    {# 列表链接 js调用列表需要 #}
+    {% set list_url = ('business/xrentlist')|U({ajax: 1, tpl_url: 'rdetail', b_models: 'xrent'}) %}
+    {{ parent() }}
+{% endblock container %}

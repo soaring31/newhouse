@@ -1,0 +1,140 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set aid = app.request.get('aid') %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+{% block mainleft %}
+    
+{% endblock mainleft %}
+{% block mainMenu %}
+    {# {{ parent() }} #}
+{% endblock %}
+
+{% block tableMain %}
+{% set filter_opt = [
+    {
+        method: 'selectFilter',
+        attr: {
+            'data-selectdate': {
+                unix: 1
+            }
+        },
+        data: [
+            {
+                id: '1M',
+                name: '一个月前'
+            },
+            {
+                id: '3M',
+                name: '三个月前'
+            }
+        ],
+        field: 'create_time',
+        title: '添加时间'
+    },
+    {
+        method: 'search',
+        field: 'name',
+        title:'请搜索ID/名称'
+    }
+] %}
+{% if aid|default('') and  (action ~ '/show')|P %}
+    {% set filter_opt = [
+        {
+            method: 'show',
+            title: '<i class="font-ico-plus mr5"></i>新增意向'
+        }
+    ]|merge(filter_opt) %}
+{% endif %}
+        
+{{ core_manage.filter(filter_opt) }}
+<section class="list-con"  data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ "/show")|U }}',
+        submitUrl : '{{ (action ~ "/save")|U }}',
+        deleteUrl : '{{ (action ~ "/delete")|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            models: '{{ models }}',
+            aid: '{{ aid }}',
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                        <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                        <th>名称</th>
+                        {% if aid|default('') is empty %}
+                        <th width="300">
+                            {{ models == 'sale' ? '二手房' : '出租房'}}
+                        </th>
+                        {% endif %}
+                        <th width="100">电话</th>
+                        <th width="100" data-role="sort" data-sort="create_time" class="sort">添加时间</th>
+                        {% if  (action ~ '/show')|P %}
+                        <th width="120" class="tac">操作</th>
+                        {% endif %}
+                    </tr>
+                {% if ident.info.data is defined and ident.info.data|length != 0 %}
+                {% for k, vo in ident.info.data %}
+                <tr data-id="{{ vo.id }}">  
+                        <td class="tac">{{core_manage.checkbox()}}</td>
+                        <td>{{ vo.id }}</td>
+                        <td class="tov" title="{{ vo.name|default('') }}">
+                            <span data-role="itemEdit" data-name="name" class="edit">{{core_global.substr(vo.name|default(''), 15, 1)}}</span>
+                        </td>
+                        {% if aid|default('') is empty %}
+                        <td>
+                            {{ ('house.' ~ models)|getOne('name', {id: vo.aid}) }}
+                        </td>
+                        {% endif %}
+                        <td class="tov" title="{{ vo.tel|default('') }}">
+                            <span data-role="itemEdit" data-name="tel" class="edit">{{ vo.tel }}</span>
+                        </td>
+                        <td>{{ vo.create_time|default('0')|date('Y-m-d') }}</td>
+                        {% if  (action ~ '/show')|P %}
+
+                        <td class="tar pr10">
+                            {{ core_manage.show({url: (action ~ "/show")|U({id: vo.id}) }) }}
+                                {{ core_manage.delete() }}
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                        {% else %}
+                    <tr>
+                        <td colspan="10" class="tac">没有数据！</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+{% if  (action ~ '/delete')|P %}
+{{ core_manage.oprate([
+        {
+            method: 'delete',
+            title: '<i class="font-ico-del mr5"></i>批量删除',
+        }
+    ]) }}
+{% endif %}
+{% endblock %}
+
+{% block promptUl %}
+{% endblock %}
+
+
+
+
+
+
+
+

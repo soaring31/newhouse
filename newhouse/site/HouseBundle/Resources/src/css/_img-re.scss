@@ -1,0 +1,29 @@
+$img-re-1:(19px, 18px, 0, 0, img-re-1);
+$img-re-2:(19px, 18px, -29px, 0, img-re-2);
+$img-re-3:(19px, 18px, 0, -28px, img-re-3);
+$img-re-4:(19px, 18px, -29px, -28px, img-re-4);
+$img-re-5:(14px, 14px, 0, -56px, img-re-5);
+$img-re-6:(17px, 17px, -58px, 0, img-re-6);
+$img-re-7:(17px, 17px, -58px, -27px, img-re-7);
+
+$img-re: ($img-re-1,$img-re-2,$img-re-3,$img-re-4,$img-re-5,$img-re-6,$img-re-7);
+
+@mixin img-re($sprites) {
+  %icore {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/re.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+        @extend %icore;
+    }
+  }
+}

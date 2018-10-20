@@ -1,0 +1,334 @@
+@charset "UTF-8";
+/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+*/
+/**
+ * @method 清除浮动 %clearfix 
+ * @description 清除浮动
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %clearfix;
+ * }
+ * ```
+ * 
+ * ```css
+ * 	div {
+	    *zoom: 1;
+	}
+	div:after {
+	    display: block;
+	    clear: both;
+
+	    height: 0;
+
+	    content: '\20';
+	}
+ * ```
+ */
+/**
+ * @method 去掉虚线框 %outline 
+ * @description 去掉虚线框
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @ extend %outline;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		outline: thin dotted;
+		outline: 5px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
+ * ```
+ */
+/**
+ * @method 文字不换行后面加省略号 %text-overflow 
+ * @description 文字不换行后面加省略号
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %text-overflow;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+ * ```
+ */
+.t1 .t1-text h2 a {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/**
+ * @method 透明层opacity 
+ * @description 透明层 内容也透明
+ * @param {number} $opacity - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include opacity(.5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+	  opacity: .5;
+	  filter: alpha(opacity=50);
+ * }
+ * ```
+ */
+/**
+ * @method 背景透明层transparent 
+ * @description 透明层只处理背景透明
+ * @param {string} $color - 背景透明层的颜色
+ * @param {number} $alpha - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include transparent(#000, .5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+ *    	background-color: transparent;
+		background-color: (0,0,0,.5);
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7fffffff, endColorstr=#7fffffff,);
+		zoom: 1;
+ * }
+ * ```
+ */
+/**
+ * @method triangle 
+ * @description 生成一个三角形图标
+ * @param {string} $size - 三角的大小
+ * @param {string} $color - 三角颜色
+ * @param {string} $direction - 三角的方向 up, down, left, right
+ * @example 调用
+ * 
+ * ```scss
+ * i {
+ *    @include triangle(5px, #bbb, up); 
+ * }
+ * ```
+ * 
+ * ```css
+ * i {
+ *    width: 0;
+      height: 0;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent;
+      border-bottom-color: #bbb;
+ * }
+ * ```
+ */
+/**
+* @method 水平线hr nav-divider 
+* @description 透明层 内容也透明
+* @param {string} $color=#e5e5e5 - 线的颜色
+* @param {string} $line-height-computed - 线的高度，空间
+* @example 调用
+* 
+* ```scss
+* div {
+*    @include nav-divider(#e5e5e5, 24px);
+* }
+* ```
+* 
+* ```css
+* div {
+	  height: 1px;
+	  margin: 11px 0;
+	  overflow: hidden;
+	  background-color: #e5e5e5;
+* }
+* ```
+*/
+/*!
+ * @name list
+ * @author ahuing
+ * @date 2016-1-15
+ * @dec top toolbar popular search terms containing the search and
+ */
+/*
+top-bar
+*/
+.top-bar {
+    background: #f3f3f3;
+    min-width: 1200px;
+    padding: 15px 0 10px 0;
+}
+
+.top-bar .search-bar {
+    float: left;
+}
+
+.top-bar .list {
+    margin-left: 68px;
+}
+
+.top-bar .list li {
+    float: left;
+    margin-right: 22px;
+    font-size: 14px;
+    margin-top: 9px;
+    margin-top: 12px;
+    display: inline;
+    overflow: hidden;
+}
+
+.top-bar .list li a {
+    height: 20px;
+    line-height: 20px;
+    text-decoration: none;
+    color: #686465;
+    overflow: hidden;
+}
+
+.top-bar .list li a:hover {
+    color: #f00;
+}
+
+.top-bar .list li a i {
+    font-size: 20px;
+    float: left;
+    margin-right: 4px;
+    margin-top: 2px;
+}
+
+.con-head {
+    font-weight: bold;
+    font-size: 18px;
+    margin: 0px 0 20px 10px;
+}
+
+.con-head em {
+    color: #fe5200;
+    font-weight: normal;
+    font-size: 14px;
+    margin-left: 5px;
+}
+
+.t1 {
+    background-color: #f4f4f4;
+    height: 280px;
+    width: 1200px;
+    overflow: hidden;
+    margin-bottom: 40px;
+}
+
+.t1 a img {
+    display: block;
+}
+
+.t1 .time span {
+    background: #eee;
+    border-radius: 5px;
+    color: #e43;
+    display: inline-block;
+    font-weight: 700;
+    margin: 0 3px;
+    padding: 0 7px;
+    vertical-align: middle;
+}
+
+.t1 .t1-text {
+    margin-left: 60px;
+    margin-top: 12px;
+    width: 470px;
+}
+
+.t1 .t1-text h2 a {
+    color: #fc6700;
+    font-weight: bold;
+    font-size: 24px;
+    display: block;
+    padding-right: 15px;
+}
+
+.t1 .t1-text h3 {
+    color: #ff6400;
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+.t1 .t1-text .ad {
+    color: #343436;
+    border-bottom: 1px dashed #ddd;
+    margin-bottom: 12px;
+    padding-bottom: 5px;
+    line-height: 24px;
+}
+
+.t1 .t1-text .ad-text {
+    max-height: 48px;
+    overflow: hidden;
+}
+
+.t1 .t1-text .ad-text span {
+    float: left;
+    display: block;
+}
+
+.t1 .t1-text .ad-txt {
+    float: left;
+    width: 390px;
+}
+
+.t1 .t1-text .text-box p {
+    margin-bottom: 10px;
+}
+
+.t1 .t1-text .text-box p span {
+    color: red;
+    font-size: 16px;
+}
+
+.t1 .btn-detail {
+    text-decoration: none;
+    display: inline-block;
+    background-color: #f68014;
+    background: linear-gradient(to bottom, #f68014 0%, #f55e0b 100%);
+    border-radius: 2px;
+    color: #fff;
+    border: 1px solid #de2200;
+    width: 132px;
+    height: 46px;
+    font-size: 20px;
+    line-height: 48px;
+    text-align: center;
+    margin: 10px 8px 0 40px;
+}
+
+.btn {
+    display: inline-block;
+    font-size: 16px;
+    background-color: #1c78c1;
+    background: linear-gradient(to bottom, #31a2ee 0%, #1e79c2 100%);
+    border-radius: 2px;
+    padding: 1px 20px;
+    border-color: #1c78c1;
+    text-decoration: none;
+    height: 24px;
+    line-height: 24px;
+}
+
+/*# sourceMappingURL=list.css.map */
+

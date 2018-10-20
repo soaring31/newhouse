@@ -1,0 +1,48 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% block tableMain %}
+<form class="form" action="{{ (action)|U }}" method="post" name="form">
+<table class="right-table" width="100%">
+	<tbody>
+	    <tr>
+			<th colspan="2" class="conlist">站点参数</th>
+		</tr>
+		<tr>
+			<td class="txtright fB" width="20%">是否多库：</td>
+			<td class="txtleft">
+			    <label>
+					<input class="radio" name="multidb" value="1" {{ ('multidb')|C|isChecked(1) }} type="radio" />是
+				</label>
+				<label>
+					<input class="radio" name="multidb" value="0" {{ ('multidb')|C|isChecked(0) }} type="radio" />否
+				</label>
+				<span class="tips1">开启后一个用户只能在一个后台登录</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="txtright fB" width="20%">开启多人登陆：</td>
+			<td class="txtleft">
+			    <label>
+					<input class="radio" name="multip" value="1" {{ ('multip')|C|isChecked(1) }} type="radio" />是
+				</label>
+				<label>
+					<input class="radio" name="multip" value="0" {{ ('multip')|C|isChecked(0) }} type="radio" />否
+				</label>
+				<span class="tips1">开启后同一帐号能多人同时使用</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="txtright fB">顶级域名：</td>
+			<td class="txtleft">
+			    <input name="server_topdomain" value="{{ 'server_topdomain'|C }}" class="w200" type="text" />
+			    <span class="tips1">比如:baidu.com或者baidu.com.cn</span>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<div class="submit">
+	<input class="submit-btn ajax-post confirm" target-form="form" value="保存" type="submit">
+</div>
+</form>
+{% endblock %}
+{% block submit %}{% endblock %}
+{% block promptUl %}<li></li>{% endblock %}

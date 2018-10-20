@@ -1,0 +1,73 @@
+$font-news-fz: inherit !default;
+
+@font-face {
+	font-family: "news";
+    font-weight: normal;
+    font-style: normal;
+	src: url('../fonts/news.eot');
+	src: url('../fonts/news.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/news.woff') format('woff');//,
+		//url('../fonts/news.ttf') format('truetype'),
+		//url('../fonts/news.svg#news') format('svg');
+}
+$font-news-fz: inherit !default;
+$font-news-fl: none !default;
+$font-news-m: 0 !default;
+$font-news-va: -.25em !default;
+[class^="font-news-"],
+[class*=" font-news-"] {
+	font-family: "news";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-size: $font-news-fz;
+	float: $font-news-fl;
+	margin: $font-news-m;
+	vertical-align: $font-news-va;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; only necessary if not using the private unicode range (firstdata option) 
+	text-decoration: none;
+	text-transform: none;
+}
+.font-news-1:before {
+	content: "\EA01";
+}.font-news-10:before {
+	content: "\EA02";
+}.font-news-11:before {
+	content: "\EA03";
+}.font-news-12:before {
+	content: "\EA04";
+}.font-news-13:before {
+	content: "\EA05";
+}.font-news-14:before {
+	content: "\EA06";
+}.font-news-15:before {
+	content: "\EA07";
+}.font-news-16:before {
+	content: "\EA08";
+}.font-news-17:before {
+	content: "\EA09";
+}.font-news-18:before {
+	content: "\EA0A";
+}.font-news-19:before {
+	content: "\EA0B";
+}.font-news-2:before {
+	content: "\EA0C";
+}.font-news-20:before {
+	content: "\EA0D";
+}.font-news-3:before {
+	content: "\EA0E";
+}.font-news-4:before {
+	content: "\EA0F";
+}.font-news-5:before {
+	content: "\EA10";
+}.font-news-6:before {
+	content: "\EA11";
+}.font-news-7:before {
+	content: "\EA12";
+}.font-news-8:before {
+	content: "\EA13";
+}.font-news-9:before {
+	content: "\EA14";
+}

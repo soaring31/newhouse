@@ -1,0 +1,32 @@
+{% extends 'HouseBundle::base_list.html.twig' %}
+{# 说明
+** ajax调用：户型列表
+* 使用页面  1、clist/planintro.html.twig
+*           2、fenxiao/detail.html.twig
+*           3、houses\dplanintro
+*           4、sale\qdplanintro
+ #}
+{% set tpl_content_default = '相关户型' %}
+{% block list %}
+{% if list.data is defined and list.pageCount|default(0) != 0 %}
+    {% for item in list.data %}
+    <li class="por door-sale" {% if loop.index == 1 %}data-pagecount="{{list.pageCount|default(0)}}" data-pagesize="{{list.pageSize|default(0)}}" data-noinfo="0"{% endif %}>
+        <a href="{{('door/detail')|U({id: item.id|default('')})}}">
+            <span class="tag on-sale-{{item.cate_status|default('')}}">{{ core_global.formData({value: item.cate_status|default('') }) }}</span>
+            <div class="item-img">
+                {{- core_global.img({
+                    src: item.thumb|default(''),
+                    alt: item.name|default(''),
+                    width: 184,
+                    height: 134, 
+                    type: 2
+                }) -}}
+            </div>
+            <em>{{item.name|default('')}}</em>
+        </a>
+    </li>
+    {% endfor %}
+{% else %}
+    <li style="padding: 0; width: 100%;" class="noinfo" data-noinfo="1">{{tpl_noinfo|default('')}}</li>
+{% endif %}
+{% endblock list %}

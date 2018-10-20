@@ -1,0 +1,65 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+ * ajax调用：户型
+ * 调用： door/list
+ *        door/detailblock
+ *        houses\dplanintro
+ *        sale\qdplanintro
+#}
+{% block result %}
+	{% if ident.list is defined %}
+		{% set list = ident.list %}
+	{% endif %}
+    {% spaceless %}
+    	{% if list.data is defined and list.pageCount|default(0) != 0 %}
+    	    {% for item in list.data %}
+    	    	{% set houseForm = ('house.houses')|getRow({id: item.aid|default(''), checked: 1, findType: 1}) %}
+                <li {% if loop.last %}data-page="{
+			                pageIndex: {{list.pageIndex}},
+			                pageCount: {{list.pageCount}},
+			                pageSize: {{list.pageSize}}
+                       			}" {% endif %}>
+                	<a href="{{('door/detail')|UU({id:item.id|default('')})}}" class="item-content p-default">
+		                <div class="item-media">
+		                    {{- core_global.img({
+                                src: item.thumb|default(''),
+                                alt: item.name|default(''),
+                                type: 1,
+                                width:107 ,
+                                height: 80
+                            }) -}}
+		                </div>
+		                <div class="item-inner">
+		                	<div class="item-title-row">
+			                    {{housemobile_global.list_title({title: item.name|default('')})}}
+			                    <div class="item-after">
+			                    	{{house_global.if_dj({value: item.dj|default(''),class: 'l p-red'})}}			   
+			                    </div>
+		                    </div>
+		                    <div class="item-title-row">
+		                    	<div class="item-title item-title-p0">
+		                    		{{houseForm.name|default('')}}<br>
+		                    	</div>
+		                    	<div class="item-after">
+		                        	{{- house_global.huxing({data: item|default(''), tpl: '%shi%%ting%%wei%'}) -}}
+		                        </div>
+		                    </div>
+		                    <div class="item-subtitle item-subtitle-ex">
+		                       {{item.abstract|default('摘要')}}
+		                    </div>
+		                    <div class="item-subtitle">
+		                        {{ core_global.formData({value: item.cate_type|default(''), tpl: '<span class="button button-sm btn-1">%value%</span>'}) }}
+		                        {{ core_global.formData({value: item.cate_status|default(''), tpl: '<span class="button button-sm btn-2">%value%</span>'}) }}
+		                        {% if item.zlhx|default('') == 1 %}
+		                        	<span class="button button-sm btn-3">主力户型</span>
+		                        {% endif %}
+		                    </div>
+		                </div>
+		            </a>
+                </li>
+    	    {% endfor %}
+    	{% else %}
+    		{# <li class="mobile-list-none">暂无更多户型</li> #}
+    	{% endif %}
+    {% endspaceless %}
+{% endblock result %}

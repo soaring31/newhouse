@@ -1,0 +1,26 @@
+{% extends 'HousemobileBundle::base.html.twig' %}
+{# 说明
+** 列表页基模板
+** 下拉自动刷新列表
+#}
+
+{% block title %}
+    下拉自动刷新列表模板
+{% endblock title %}
+{% block header_right %} {% endblock header_right %}
+{% block header_bottom %} {% endblock header_bottom %}
+
+{% block nav %}{% endblock nav %}
+
+{% block container %}
+{{core_mobile_global.list_scroll({
+    list_header: list_header|default(''),
+    url: list_url|default('')
+})}}
+{% endblock container %}
+
+{% block js %}
+{% block list_pz %}<script type="text/javascript"> </script>{% endblock list_pz %}
+{% block list_inner_js %}{% endblock list_inner_js %}
+
+{% endblock js %}

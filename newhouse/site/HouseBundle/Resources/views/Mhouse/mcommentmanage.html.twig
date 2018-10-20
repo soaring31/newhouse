@@ -1,0 +1,144 @@
+{# 评论 #}
+{% extends 'HouseBundle:Mhouse:mhousesarc.html.twig' %}
+{% set create_time = app.request.get('create_time') %}
+{% set aid = app.request.get('aid') %}
+{% set toid = app.request.get('toid') %}
+{% set aid_opt = aid ? {aid: aid} : {} %}
+{% set toid_opt = toid ? {toid: toid} : {} %}
+{% set pageIndex = app.request.get('pageIndex')|default(1) %}
+{% set checked = app.request.get('checked') %}
+{% set time_opt = create_time ? {create_time: 'lt|' ~ create_time} : {} %}
+{% set checked_opt = (checked is not empty) ? {checked: checked} : {} %}
+{# 点评数据 #}
+{% set housescomment = ('house.inter_housescomment')|getAll({
+        toid: '',
+        pageSize: 10,
+        order: 'id|desc',
+        pageIndex: pageIndex,
+        _multi: 1,
+        findType: 1
+    }|merge(time_opt)|merge(checked_opt)|merge(aid_opt)|merge(toid_opt)) %}
+{% block mainleft %}
+{% endblock %}
+{% block tableMain %}
+   {{ core_manage.filter([
+        {
+            method: 'selectFormField',
+            title: '审核',
+            form: 'checked',
+            field: 'checked',
+        },
+        {
+            title: '添加时间',
+            attr: {
+                'data-selectdate': {
+                    unix: 1
+                }
+            },
+            data: [
+                {
+                    id: '1M',
+                    name: '一个月前'
+                },
+                {
+                    id: '3M',
+                    name: '三个月前'
+                }
+            ],
+            field: 'create_time',
+            method: 'selectFilter'
+        }
+    ]) }}
+    <section class="list-con" data-param="{{ params }}">
+        <div class="list">
+            {#{{ dump(housescomment) }}#}
+            <table class="right-table table-hover">
+                <tbody>
+                    <tr data-id>
+                        <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                        <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                        {% if toid is null %}
+                        <th width="80" data-role="sort" data-sort="overall" class="sort">综合评分</th>
+                        {% endif %}
+                        {% if aid|default('') is empty %}
+                        <th width="150">楼盘名称</th>
+                        {% endif %}
+                        <th>点评内容</th>
+                        {% if toid is null %}
+                        <th width="60">回复</th>
+                        {% endif %}
+                        <th width="50">审核</th>
+                        <th width="100" data-role="sort" data-sort="create_time" class="sort">添加时间</th>
+                        {% if (action ~ '/show')|P %}
+                        <th width="120" class="tac">操作</th>
+                        {% endif %}
+                    </tr>
+                    {% if housescomment.data|length %}
+                    {% for k, vo in housescomment.data %}
+                    {% set item_content = core_global.substr(vo.content|default(''), 20, 1) %}
+                    <tr data-id="{{ vo.id }}">
+                        <td class="tac">{{core_manage.checkbox()}}</td>
+                        <td>{{ vo.id }}</td>
+
+                        {% if toid is null %}
+                        <td>{{ vo.overall }}</td>
+                        {% endif %}
+                        {% if aid|default('') is empty %}
+                        <td>
+                            {{ ('house.houses')|getOne('name', {id: vo.aid|default('')}) }}
+                        </td>
+                        {% endif %}
+                        <td class="tov" title="{{ vo.content|default('') }}">{{item_content}}</td>
+                        {% if toid is null %}
+
+                        <td>
+                            {% if toid is null %}
+                            <a data-role="show" title="{{item_content}}的回复" href="{{('mhouse/mcommentmanage')|U({ toid:vo.id, aid: vo.aid, models: 'houses' })}}">
+                                [{{
+                             core_global.count({models: 'inter_housescomment', sql_opt: {
+                                    toid: vo.id
+                                }
+                            })}}]
+                            </a>
+                            {% endif %}
+                        </td>
+                    {% endif %}
+                        <td>{{ core_global.formField({value: vo.checked}) }} </td>
+                        <td>{{ vo.create_time|default('0')|date('Y-m-d') }}</td>
+                        {% if (action ~ '/show')|P %}
+                        <td class="tar pr10">
+                            {{ core_manage.show({url: (action ~ "/show")|U({id: vo.id}) }) }}
+                            {{ core_manage.delete() }}
+                        </td>
+                        {% endif %}
+
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr><td colspan="8" class="tac">没有数据！</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+      {{core_manage.page(housescomment)}}
+    </section>
+        {% if (action ~ '/show')|P %}
+        {{ core_manage.oprate([
+            {
+                method: 'delete',
+                title: '<i class="font-ico-del mr5"></i>批量删除',
+            },
+            {
+                method: 'dropdownFormField',
+                field: 'checked',
+                form: 'checked',
+                title: '审核',
+            }
+        ]) }}
+        {% endif %}
+{% endblock %}
+
+
+{% block promptUl %}
+
+{% endblock %}

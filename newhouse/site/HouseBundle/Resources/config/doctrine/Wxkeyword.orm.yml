@@ -1,0 +1,138 @@
+HouseBundle\Entity\Wxkeyword:
+    type: entity
+    table: wxkeyword
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        tips:
+            options:
+                comment: 规则名
+                unsigned: false
+            nullable: false
+            type: string
+            length: 120
+        keyword:
+            options:
+                comment: 关键字
+                unsigned: false
+            nullable: false
+            type: text
+            length: 255
+        replytype:
+            options:
+                comment: 回复类型
+                unsigned: false
+            nullable: false
+            type: string
+            length: 50
+        replytext:
+            options:
+                comment: 回复内容
+                unsigned: false
+            nullable: false
+            type: text
+            length: 255
+        token:
+            options:
+                comment: token
+                unsigned: false
+            nullable: false
+            type: string
+            length: 200
+        is_switch:
+            options:
+                comment: 是否全匹配
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        replyimage:
+            options:
+                comment: 回复图片
+                unsigned: false
+            nullable: false
+            type: string
+            length: 200
+        replyvoice:
+            options:
+                comment: 回复语音
+                unsigned: false
+            nullable: false
+            type: string
+            length: 200
+        replyvideo:
+            options:
+                comment: 回复视频
+                unsigned: false
+            nullable: false
+            type: string
+            length: 200
+        replynews:
+            options:
+                comment: 回复图文
+                unsigned: false
+            nullable: false
+            type: string
+            length: 200
+        checked:
+            options:
+                comment: 是否审核
+                unsigned: false
+            nullable: false
+            type: boolean
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

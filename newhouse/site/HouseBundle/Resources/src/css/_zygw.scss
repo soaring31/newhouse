@@ -1,0 +1,146 @@
+/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+*/
+// 置业顾问
+$advHeight: 65px;
+.advidser {
+    &-line {
+        height: 1px;
+        width: 100%;
+        border-bottom: 2px solid #eee;
+    }
+    &-text {
+        float: left;
+        height: $advHeight;
+        line-height: $advHeight;
+        font-size: 16px;
+        margin-right: 10px;
+    }
+    &-list {
+        min-height: $advHeight;
+        width: 550px;
+        float: left;
+        position: relative;
+        li {
+            float: left;
+            width: 50px;
+            height: $advHeight;
+            position: relative;
+            margin-top: 5px;
+            &.hover {
+                .advidser-more {
+                    display: block;
+                }
+            }
+        }
+    }
+    &-next {
+        height: $advHeight;
+        width: 20px;
+        position: absolute;
+        right: -20px;
+        top: 0;
+        line-height: $advHeight;
+        font-size: 20px;
+        text-align: center;
+        cursor: pointer;
+    }
+    &-img {
+        border: 1px solid #eee;
+        border-radius: 50%;
+        margin: 0 auto;
+        display: block;
+    }
+    &-name {
+        text-align: center;
+        height: 30px;
+        line-height: 30px;
+        overflow: hidden;
+        font-size: 12px;
+    }
+    &-more {
+        display: none;
+        position: absolute;
+        width: 210px;
+        height: 110px;
+        border: 4px solid #eee;
+        background: #fff;
+        z-index: 100;
+        top: -126px;
+        left: 50%;
+        margin-left: -105px;
+        // overflow: hidden;
+        &-content {
+            padding: 10px 15px 0;
+            height: 73px; 
+        }
+        dt img {
+            border: 1px solid #eee;
+            padding: 1px;
+            width: 45px;
+            height: 60px;
+            float: left;
+            margin-right: 15px;
+        }
+        &-footer {
+            border-top: 1px solid #eee;
+            text-align: center;
+            height: 28px;
+            line-height: 28px;
+            i {
+                vertical-align: middle;
+            }
+        }
+    }
+   &-arrow{
+        overflow: hidden;
+        // clear: both;
+        @extend %clearfix;
+        .arrow1{
+           @include triangle(16px, #fff, down);
+            z-index: 999;
+            position: absolute;
+            bottom: -13px;
+            left: 44%; 
+        }
+        .arrow2{
+           @include triangle(16px, #eee, down);
+            z-index: 990;
+            position: absolute;
+            bottom: -18px;
+            left: 44%;
+        }
+    }
+}
+// 报价说明
+.lp-bdsm {
+    display: inline-block;
+    &-content {
+        display: none;
+        background: #fff;
+        border: 4px solid #eee;
+        width: 300px;
+        padding: 10px;
+        font-size: 12px;
+        line-height: 20px;
+        position: relative;
+    }
+    .touch{
+        .touch1{
+            @include triangle(16px, #fff, up);
+            z-index: 999;
+            position: absolute;
+            top: -14px;
+            left: 10%;
+        }
+        .touch2{
+            @include triangle(16px, #eee, up);
+            z-index: 990;
+            position: absolute;
+            top: -19px;
+            left: 10%;
+        }
+    }
+}

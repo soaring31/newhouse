@@ -1,0 +1,56 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+
+{% block result %}
+{% set sess_area =  null|getIpArea %}
+{# 当前分站id #}
+<div class="content">
+    <div class="list-block panel-block list-block-m0">
+        <div class="item-content item-link">
+            {% if url_isApp %}
+                {% set tpl_url = 'javascript:;' %}
+            {% else %}
+                {% set tpl_url = '%url%' %}
+            {% endif %}
+            {{core_global.switch_area({
+                tpl: '<a href="' ~ tpl_url ~ '" class="item-inner"><div class="item-title item-title-p0"><i class="icon font-f-15 p-red mr5"></i><span class="p-gray">当前城市：</span>%name%</div><div class="item-after">进入</div></a>',
+                pageSize: 1,
+                sql_opt: {rulesarea: sess_area.area|default(0)}
+            })}}
+        </div>
+    </div>
+    <div class="city-main">
+        <div class="list-block-title">
+            城市切换
+        </div> 
+        <div class="list-block city-rmcs all-city">
+            <div class="row">
+                {% if url_isApp %}
+                {% set tpl_area = '<a href="javascript:;" class="button col-33 %act_class%" data-url="%url%" data-area="%rulesarea%">%name%</a>' %}
+                {% else %}
+                    {% set tpl_area = '<a href="%url%" class="button col-33 %act_class%">%name%</a>' %}
+                {% endif %}
+                {{core_global.switch_area({
+                    act_class: 'btn_act',
+                    tpl: tpl_area,
+                    is_manage: 1
+                })}}
+            </div>
+        </div>
+    </div>
+    {% if url_isApp %}
+        <script type="text/javascript">
+            seajs.use(['utils'], function (utils) {
+                $('.col-33').click(function (e) {
+                    var $this = $(this);
+                    var data = $this.data();
+                    utils.localStorage.setItem('_area', data.area, 30);
+                    setTimeout(function () {
+                        $('.back').click();
+                    }, 500)
+                });
+            })
+        </script>
+    {% endif %}
+    {{ render(controller('HouseBundle:Common:footer', {_isApp: url_isApp})) }}
+</div>
+{% endblock result %}

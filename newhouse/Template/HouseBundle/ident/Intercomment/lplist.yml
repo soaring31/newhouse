@@ -1,0 +1,30 @@
+info:
+    tableName: houses_arc
+    subTableName: ''
+    aliasName: h
+    listGrid: {  }
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 12
+    groupBy: ''
+    order: id
+    orderBy: desc
+    searchFun: EXISTS
+    dataModel: 0
+    autoQuery: '1'
+    alias: {  }
+    query:
+        aid:
+            eq: '[id]'
+        checked:
+            eq: '1'
+        form:
+            eq: houses_comment
+        cate_pushs:
+            eq: dianping
+        id:
+            eq: 'null'
+    query1: {  }
+    attribute: '0'

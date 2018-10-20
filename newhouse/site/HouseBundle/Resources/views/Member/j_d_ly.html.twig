@@ -1,0 +1,23 @@
+{% extends 'HouseBundle:Member:j_detail.html.twig' %}
+{# 标题 #}
+{% set title_users_act = '留言' %}
+{# 高亮导航 #}
+{% set nav_users_act = 4 %}
+
+{% block right %}
+  <div class="lyan">
+      <div class="subT">
+          <p><i></i>店铺留言</p>
+      </div>
+      <div class="tip">注意：联系人与联系电话，只有该经纪人才能看见</div>
+      <div class="blank10"></div>
+      {# 载入表单 #}
+      {{ render(controller('HouseBundle:Bundlebindforms:comment', {
+          title: '留言',
+          formflag: 'view_usermsg',
+          models: 'usermsg',
+          aid: detail.id|default(''),
+          reply: 0
+      })) }}
+  </div>
+{% endblock right %}

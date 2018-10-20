@@ -1,0 +1,140 @@
+ManageBundle\Entity\DataImport:
+    type: entity
+    table: data_import
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        dbcfg:
+            options:
+                comment: db连接配置
+                unsigned: false
+            nullable: false
+            type: string
+            length: 255
+        dbsql:
+            options:
+                comment: SQL
+                unsigned: false
+            nullable: false
+            type: text
+            length: 255
+        dbkey:
+            options:
+                comment: 主键字段
+                unsigned: false
+            nullable: false
+            type: string
+            length: 48
+        insvid:
+            options:
+                comment: 导入服务ID
+                unsigned: false
+            nullable: false
+            type: string
+            length: 48
+        inform:
+            options:
+                comment: 导入表单ID
+                unsigned: false
+            nullable: false
+            type: string
+            length: 12
+        oplimit:
+            options:
+                comment: 批次导入量
+                unsigned: false
+                default: '100'
+            nullable: false
+            default: '100'
+            type: integer
+            length: 10
+        charset:
+            options:
+                comment: db编码
+                unsigned: false
+            nullable: false
+            type: string
+            length: 24
+        name:
+            options:
+                comment: 标题
+                unsigned: false
+            nullable: false
+            type: string
+            length: 24
+        fromsql:
+            options:
+                comment: Fomid条件
+                unsigned: false
+            nullable: false
+            type: string
+            length: 255
+        omod:
+            options:
+                comment: 来源模型ID
+                unsigned: false
+            nullable: false
+            type: string
+            length: 24
+        checked:
+            options:
+                comment: 是否审核
+                unsigned: false
+            nullable: false
+            type: boolean
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

@@ -1,0 +1,110 @@
+{% extends 'HouseBundle:Photos:index.html.twig' %}
+{# # 说明
+** url_type:　url参数值
+** url_category: url参数值 
+** category: 当前分类数据
+** nav_photos_act: 导航高亮
+#}
+
+{% set url_type = app.request.get("type") %}
+
+{% set url_category = app.request.get("category", 23) %}
+
+{% set nav_photos_act = url_category|default('') %}
+
+{% block container %}
+<div class="blank30"></div>
+<div class="container">
+    <div class="lypic-box">
+        <div class="photo-hd">
+            <h2>
+                高清组图
+            </h2>
+            <ul class="pic-style" id="picStyle">
+                <li class="{% if url_type != 2 %}cur{% endif %}">
+                    <a href="{{('photos/list')|U({category: url_category|default(''), type: 1})}}" class="small">小图列表</a>
+                </li>
+                <li class="{% if url_type == 2 %}cur{% endif %}"> 
+                    <a href="{{('photos/list')|U({category: url_category|default(''), type: 2})}}" class="big">大图列表</a>
+                </li>
+            </ul>
+        </div>
+        <div class="body clearfix" id="mod-big-list">
+            {% if url_type != 2 %}
+                <ul class="lyp-list lyp-list-small clearfix">
+                    {% if ident.list.data is defined and ident.list.pageCount|default('0') != 0 %}
+                        {% for item in ident.list.data %}                    
+                            <li>
+                                <div class="item-tbody">
+                                    <a href="{{('photos/detail')|U({id:item.id})}}" target="_blank">
+                                    {{- core_global.img({
+                                        src: item.thumb|default(''),
+                                        alt: item.name|default(''),
+                                        type: 1,
+                                        width:251 ,
+                                        height: 194
+                                    }) -}}
+                                </div>
+                                <div class="item-header">
+                                    <h3>
+                                        <a href="{{('photos/detail')|U({id:item.id})}}" target="_blank">
+                                            {{item.name|default('')}}
+                                        </a> <em>（1/{{item.images|sourceImg|length|default('1')}}）</em>
+                                    </h3>
+                                    <p class="time">
+                                        {{item.create_time|default('')|date('Y-m-d')}}
+                                    </p>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    {% else %}
+                        <div class="noinfo">
+                            暂无数据
+                        </div>
+                    {% endif %}
+                </ul>
+            {% endif %}
+            {% if url_type == 2 %}
+                <ul class="lyp-list clearfix">
+                    {% if ident.list.data is defined and ident.list.pageCount|default('0') != 0 %}
+                        {% for item in ident.list.data %}
+                            <li>
+                                <div class="item-header">
+                                    <h3><a target="_blank" href="{{('photos/detail')|U({id:item.id})}}">{{item.name|default('')}}</a><em>（1/{{item.images|sourceImg|length|default('1')}}）</em></h3>
+                                    <dl class="big-list">
+                                        <dd>
+                                            <a class="pl" target="_blank" href="#"><i></i><i data-counts="{models: 'photos', field: 'comnum', id: '{{item.id|default('')}}'}"></i></a>
+                                        </dd>
+                                        <dd>
+                                            <a class="chakzt" target="_blank" href="{{('photos/detail')|U({id:item.id})}}"><i></i>查看组图</a>
+                                        </dd>
+                                    </dl>
+                                    <p class="time">{{item.create_time|default('')|date('Y-m-d')}}</p>
+                                </div>
+                                <div class="item-tbody">
+                                    <a target="_blank" href="{{('photos/detail')|U({id:item.id})}}">
+                                        {{- core_global.img({
+                                            src: item.thumb|default(''),
+                                            alt: item.name|default(''),
+                                            type: 0
+                                        }) -}}
+                                    </a>
+                                </div>
+                            </li>
+                        {% endfor %}
+                        {% else %}
+                            <li class="noinfo">
+                                暂无数据
+                            </li>
+                    {% endif %}
+                </ul>
+            {% endif %}
+            <!--page-->
+            <div class="blank20"></div>
+                {{core_global.page(ident.list)}}
+            <!--page-->
+        </div>
+    </div>
+</div>
+<div class="blank30"></div>
+{% endblock container %}

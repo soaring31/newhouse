@@ -1,0 +1,74 @@
+//guide style
+
+.btns{
+	padding:10px;
+	padding-top:0;
+	padding-bottom:0;
+	font-family: microsoft yahei;
+	display:inline-block;
+	height:22px;
+	line-height: 22px;
+	text-align: center;
+	font-size: 13px;
+	background:#27b346;
+	color:#fff;
+	border-radius:3px;
+}
+
+.btns2{
+	padding:10px;
+	padding-top:0;
+	padding-bottom:0;
+	font-family: microsoft yahei;
+	display:inline-block;
+	height:22px;
+	line-height: 22px;
+	text-align: center;
+	font-size: 13px;
+	background:#e7e7e7;
+	color:#333;
+	border-radius:3px;
+	margin-left:4px;
+}
+
+.btns3{
+	padding:10px;
+	padding-top:0;
+	padding-bottom:0;
+	font-family: microsoft yahei;
+	display:inline-block;
+	height:22px;
+	line-height: 22px;
+	text-align: center;
+	font-size: 13px;
+	background:#e7e7e7;
+	color:#333;
+	border-radius:3px;
+	margin-left:4px;
+}
+.anone{
+	display: inline-block;
+	color:#333;
+	width:100%;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	font-size: 15px;
+}
+
+.guide-list {
+	h4 {
+		border-bottom: 1px solid #ddd;
+		padding-bottom: 8px;
+	}
+
+	li {
+		border-bottom: 1px solid #ddd;
+		padding: 20px;
+		padding-top: 10px;
+		padding-bottom: 10px;
+	}
+
+	p {
+		padding-top:10px;
+	}
+}

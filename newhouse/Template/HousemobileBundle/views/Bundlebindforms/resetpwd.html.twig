@@ -1,0 +1,15 @@
+{% extends 'HousemobileBundle:Bundlebindforms:bundlebase.html.twig' %}
+
+{% block result %}
+{{core_mobile_forms.forms({
+    Form: Form,
+    formName: formName,
+    buttons: {
+        0: {
+            name: '立即找回',
+            class: ' button-big button-fill button-success',
+            attr: 'data-role="submit"'
+        }
+    },
+})}}
+{% endblock result %}

@@ -1,0 +1,199 @@
+.ys180 {
+    font-family: simsun;
+    font-size: 12px;
+
+    position: absolute;
+    z-index: 999999;
+    top: 42px;
+    right: 0;
+
+    width: 220px;
+
+    background: #fff;
+    h3 {
+        line-height: 30px;
+
+        height: 30px;
+        padding-left: 10px;
+
+        color: #fff;
+        border-bottom: 1px solid #d6d6d6;
+        background: #b00d0d;
+         .close {
+            float: right;
+            margin-right: 5px;
+            cursor: pointer;
+            &:before {
+                @extend .font-ico-28:before;
+                @extend [class^="font-ico-"];
+            }
+        }
+    }
+
+
+    dt,
+    dd i {
+        line-height: 25px;
+
+        height: 25px;
+        padding-left: 20px;
+        white-space: nowrap;
+    }
+    dt {
+        font-size: 14px;
+        font-weight: bold;
+        padding-left: 0;
+        margin-bottom: 3px;
+
+        cursor: pointer;
+
+        border-bottom: 1px solid #b00d0d;
+        background-color: #f8f8f8;
+        background-position: 5px -12px;
+        &:before {
+            font-size: 12px;
+            vertical-align: top;
+            @extend .font-ico-plus0:before;
+            @extend [class^="font-ico-"];
+        }
+        &.ico:before {
+            font-size: 12px;
+            vertical-align: top;
+            @extend .font-ico-plus:before;
+            @extend [class^="font-ico-"];
+        }
+    }
+    dt em {
+        font-size: 12px;
+        font-weight: normal;
+        color: #2c2c2c;
+    }
+    dd i {
+        display: block;
+
+        background-position: 9px -32px;
+    }
+    dt,
+    dt a {
+        color: #b00d0d;
+    }
+}
+
+
+.bb9a {
+    border: 2px solid #b00d0d;
+}
+.showys {
+    line-height: 15px;
+
+    position: absolute;
+    z-index: 9999;
+    top: 74px;
+    right: 0;
+
+    width: 14px;
+    padding: 5px;
+
+    cursor: pointer;
+    text-align: center;
+
+    color: #fff;
+    background-color: #b00d0d;
+    background-position: -32px 9px;
+    i {
+        font-family: simsun;
+        color: #ddd;
+        font-size: 12px;
+        margin-top: 5px;
+        display: block;
+    }
+}
+
+.dw {
+    font-size: 14px;
+    line-height: 30px;
+
+    position: absolute;
+    top: 5px;
+    left: 50%;
+
+    overflow: hidden;
+
+    width: 1198px;
+    height: 30px;
+    margin: 0 0 0 -600px;
+
+    text-align: center;
+
+    border: 1px solid #f3c16b;
+    background: #ffd;
+    .txt a {
+        padding: 0 10px;
+
+        color: #c00;
+    }
+    .close {
+        font-size: 18px;
+
+        position: absolute;
+        top: 0;
+        right: 6px;
+
+        cursor: pointer;
+
+        color: #e49621;
+    }
+    .close:hover {
+        text-decoration: none;
+    }
+}
+
+
+
+/* ==========
+vote
+========== */
+.vote-box {
+    position: fixed;
+    z-index: 999999;
+    bottom: 20px;
+    left: 20px;
+
+    width: 194px;
+    height: 165px;
+}
+.vote-img {
+    width: 100%;
+    height: 100%;
+
+    background: url('../images/hongbao.png') center center no-repeat;
+    background-size: 80% 80%;
+}
+
+.vote-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #fff;
+    line-height: 1.2;
+    cursor: pointer;
+    padding: 0 1px;
+    background-color: #ccc;
+    &:hover {
+        text-decoration: none;
+        color: #999;
+    }
+}
+.closebg {
+    position: fixed;
+    z-index: 1000000;
+    bottom: 50px;
+    left: 20px;
+
+    display: none;
+
+    width: 70px;
+    height: 65px;
+
+    background: url(../images/diaocha.png) no-repeat 0 0;
+}

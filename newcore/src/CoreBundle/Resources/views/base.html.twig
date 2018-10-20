@@ -1,0 +1,100 @@
+{# Core/Resources/views/layout.html.twig #}
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+
+{% block doctype %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+{% endblock doctype %}
+
+{% block html_tag %}
+<html lang="{{ app.request.locale }}">
+{% endblock html_tag %}
+
+{# 当前分站id #}
+{% set sess_area = app.session.get('area')|default(0) %}
+{# 当前分站名称 #}
+{% set cur_area_data = sess_area|getAreaName %}
+{% set City_id = ('db.auth_group_area')|getOne('id',{rulesarea:sess_area}) %}
+{% set cYCity_id = 100+City_id %}
+
+
+{% set url_is_app = app.request.get('_isApp') %}
+    <head>
+        <meta charset="{{ _charset }}" />
+        {# 启用极速模式 #}
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        {% block mate %}{% endblock mate %}
+        {%- block tkd -%}
+        <title>
+            {%- block title -%}
+               {{product}}
+            {%- endblock -%}
+            {%- block default_title -%} -
+               {{- core_global.mconfig({name: 'hostname', ename: 'mwebset'}) -}}
+            {%- endblock default_title -%}
+        </title>
+        {% block key_des %}
+        <meta name="keywords" content="{{ keyword }}" />
+        <meta name="description" content="{{ content }}" />
+        {% endblock key_des %}
+        {%- endblock tkd -%}
+
+        {% block ico %}
+        <link rel="icon" sizes="16x16" href="{{asset('favicon.ico')}}" />
+        {# <link rel="icon" sizes="16x16" href="{{ asset('favicon.ico', absolute=true) }}" /> #}
+        {% endblock ico %}
+
+{% block head_set %}
+        {% set BASE_URL = app.request.getBaseUrl() %}
+        <script>
+            var csrf_token          = "{{csrf_token}}";
+            var jsbase              = "{{ asset('bundles') }}";
+            var BASE_URL            = "{{ BASE_URL }}/";
+            var BASE_THEME          = "{{bundlepath}}";
+            window.UEDITOR_HOME_URL = "{{ asset('bundles') }}/core/js/vendor/ueditor/";
+            var REMOTE_URL          = "{{'upload_type'|C == 'remote' ? 'up_remote_domainname'|C : '' }}"; // 远程图片路径拼接
+            var VERSION = '{{ version }}';
+            // 供百度兼容https使用
+            var HOST_TYPE   = {{ core_global.get_http().__toString == 'https' ? 2 : 0 }};
+        </script>
+        {% block css_base -%}
+        {{core_global.linkcss('static/core/css/ats.css')}}
+        {% endblock css_base %}
+        {% block css %}{% endblock css %}
+        <script type="text/javascript" src="{{ asset(corepath ~ '/js/seajs.js') }}"></script>
+        {% block js_base %}{% endblock js_base %}
+{% endblock head_set %}
+
+    </head>
+    <body>
+    {% set debug = app.request.get('debug') %}
+    {% block header %}{% endblock header %}
+    {% block body %}{% endblock body %}
+    {% block footer %}
+    <div class="footer">{{ core_global.mconfig({name: 'copyright', ename: 'mwebset'}) }} {{core_global.mconfig({name: 'Stat', ename: 'mwebset'})}}</div>
+    {% endblock footer %}
+    <script type="text/javascript">
+    seajs.use(['common'{% if debug == 1 %}, '08cmsDoc'{% endif %}], function() {
+    });
+    </script>
+
+    {% block js %}{% endblock js %}
+    {% block backtop %}
+    <div data-gotop="1" class="return-top" style="display: none;">
+        <i class="font-icons-33"></i>
+    </div>
+    {% endblock backtop %}
+    {# 调试代码 #}
+    {% if debug == 2 %}
+    <script id="__bs_script__">//<![CDATA[
+        document.write("<script async src='http://HOST:3000/browser-sync/browser-sync-client.js?v=2.18.12'><\/script>".replace("HOST", location.hostname));
+//]]></script>
+    {% endif %}
+
+    {% if debug %}
+         {% set cityAdd = ('')|getIpArea() %}
+         <!--网络定位的城市是:{{cityAdd.city|default('-')}}-->
+        <!-- 模板路径：{{ bundlename ~ '/Resources/views/' ~ controller ~ '/' ~ action ~ '.html.twig' }} -->
+    {% endif %}
+    </body>
+</html>

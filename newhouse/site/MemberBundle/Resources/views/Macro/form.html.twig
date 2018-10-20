@@ -1,0 +1,30 @@
+{# 调用说明开始 #}
+{# {% import "HouseBundle:Macro:form.html.twig" as form %} #}
+{# {{ lists.input(type,name,class) }} #}
+{# 调用说明结束 #}
+{# 
+/**
+ * @name input 输入框
+ * @param {object} o
+ */
+ #}
+{% macro input(o) %}
+	<input type="{{o.type|default('text')}}" name="{{o.name|default('')}}" value="{{o.value|default('')}}" size="{{o.size|default('')}}" maxlength="{{o.len|default('')}}" class="{{o.class|default('')}}" id="{{o.id|default('')}}" placeholder="{{o.placeholder|default('')}}" />
+{% endmacro %}
+
+{# 
+/**
+ * @name search 分页
+ * @param {object} o
+ */
+ #}
+
+ {% macro search(o) %}
+ 	<div class="search-bar clearfix">
+ 		{{_self.input({
+ 			class: 'search-input fl',
+ 			placeholder: o.placeholder|default('')
+	 	})}}
+        <a href="{{(o.models|default(o.defaults|default('houses')) ~ '/list')|U({})}}" class="search-btn fl"><i class="font-icons-17"></i>{{o.text|default('')}}</a>
+    </div>
+ {% endmacro %}

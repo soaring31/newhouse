@@ -1,0 +1,65 @@
+$font-fwpt-fz: inherit !default;
+
+@font-face {
+	font-family: "fwpt";
+    font-weight: normal;
+    font-style: normal;
+	src: url('../fonts/fwpt.eot');
+	src: url('../fonts/fwpt.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/fwpt.woff') format('woff');//,
+		//url('../fonts/fwpt.ttf') format('truetype'),
+		//url('../fonts/fwpt.svg#fwpt') format('svg');
+}
+$font-fwpt-fz: inherit !default;
+$font-fwpt-fl: none !default;
+$font-fwpt-m: 0 !default;
+$font-fwpt-va: -.25em !default;
+[class^="font-fwpt-"],
+[class*=" font-fwpt-"] {
+	font-family: "fwpt";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-size: $font-fwpt-fz;
+	float: $font-fwpt-fl;
+	margin: $font-fwpt-m;
+	vertical-align: $font-fwpt-va;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; only necessary if not using the private unicode range (firstdata option) 
+	text-decoration: none;
+	text-transform: none;
+}
+.font-fwpt-1:before {
+	content: "\EA01";
+}.font-fwpt-10:before {
+	content: "\EA02";
+}.font-fwpt-11:before {
+	content: "\EA03";
+}.font-fwpt-12:before {
+	content: "\EA04";
+}.font-fwpt-13:before {
+	content: "\EA05";
+}.font-fwpt-14:before {
+	content: "\EA06";
+}.font-fwpt-15:before {
+	content: "\EA07";
+}.font-fwpt-16:before {
+	content: "\EA08";
+}.font-fwpt-2:before {
+	content: "\EA09";
+}.font-fwpt-3:before {
+	content: "\EA0A";
+}.font-fwpt-4:before {
+	content: "\EA0B";
+}.font-fwpt-5:before {
+	content: "\EA0C";
+}.font-fwpt-6:before {
+	content: "\EA0D";
+}.font-fwpt-7:before {
+	content: "\EA0E";
+}.font-fwpt-8:before {
+	content: "\EA0F";
+}.font-fwpt-9:before {
+	content: "\EA10";
+}

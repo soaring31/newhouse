@@ -1,0 +1,143 @@
+{% extends app.request.get('ajax', 0) ? 'HouseBundle:Door:huxings.html.twig' : 'HouseBundle:Houses:lp_list_layout.html.twig' %}
+
+{% block title %}{{cur_area_data|default('')}}{{'now'|date('Y')}}年最新户型图{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data|default('')}}{{'now'|date('Y')}}户型,{{cur_area_data|default('')}}{{'now'|date('Y')}}户型图,{{cur_area_data|default('')}}{{'now'|date('Y')}}户型大全" />
+<meta name="description" content="{{cur_area_data|default('')}}{{'now'|date('Y')}}户型图,{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}为您提供最新、最全的{{'now'|date('Y')}}年户型图，包含一居室户型、二居室户型、三居室户型等所有大小户型图，查找更多、更新、更全户型图就上{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}。 "/>
+{% endblock key_des %}
+
+{% block css %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/hx.css')}}
+{% endblock css %}
+
+{% block container %}
+    {# 检索数据源 #}
+    {% set cate_filter_data = house_global.cate_data({ 
+                    tag: 'door',
+                }).__toString|json_decode %}
+    {% set cate_data = {
+        search: {
+            placeholder: '请输入户型关键词',
+            name: 'keywords'
+        }
+    }|merge(cate_filter_data) %}
+    {{ parent() }}
+{% endblock container %}
+{% block current_houses %}
+    <span>户型</span>
+{% endblock current_houses %}
+
+{# 列表头 #}
+{% block list_head %}
+    <a class="act default"  href="{{(controller ~ '/' ~ action)|U}}">
+        <i class="font-lp-54 ico"></i>所有户型
+    </a>
+{% endblock list_head %}
+
+{# 排序 #}
+{% block list_sort %}
+    {% set sort_data = {
+        def: {
+            title: '默认'
+        },
+        mj: {
+            title: '面积'
+        },
+        clicks: {
+            title: '人气'
+        }
+    } %}
+    {{ parent() }}
+{% endblock list_sort %}
+{% block container_houses_list %}
+    <!--list-->
+    <div class="lp-list">
+        <ul data-tag="huxing">
+            {% include 'HouseBundle:Door:huxings.html.twig' ignore missing with {count_btn: 1} %}
+        </ul>
+    </div>
+    <div class="blank20"></div>
+    <!--page-->
+    {{core_global.page(ident.list)}}
+    <!--page-->
+    <!--/list-->
+    <div class="blank30"></div>
+{% endblock container_houses_list %}
+
+{% block js %}
+    <script type="text/javascript">
+        seajs.use(['lazyload', 'jqmodal'], function (lazyload, jqmodal) {
+            var door_loop = true;
+            // 户型对比
+            $('.lp-list').on('click', '[data-compare=1]', function() {
+                door_loop = false;
+                var $this = $(this);
+                var $parent = $this.parents('.list-item');
+                var $compared = $parent.find('.compared');
+                var length = $compared.find('li').length;
+
+                if (!$compared.is(':visible') && !length) {
+                    // 获取数据
+                    var _data = $this.data();
+                    var data = {shi: _data.shi, ting: _data.ting, id: _data.id, aid: _data.aid};
+                    // 获取相似户型
+                    $.ajax({
+                        url: '{{action|U({ajax: 1})}}',
+                        data: data,
+                        async: true,
+                        type: 'POST',
+                        beforeSend: function () {
+                            // $.jqModal.tip('加载中...', 'load');
+                            $.jqModal.progress();
+                        },
+                        complete: function() {
+                            $this.on('click', function () {
+                                //  隐藏
+                                $compared.slideUp();
+
+                                // 改变样式
+                                $this.find('i').addClass('font-icons-16').removeClass('font-icons-15')
+                            });
+                            door_loop = true;
+                            // 进度状态条
+                            $.jqModal.progress('100%');
+                        },
+                        success: function(data) {
+                            if (data != '') {
+
+                                // 添加数据，然后显示
+                                $compared.html(data).slideDown();
+
+                                // 改变样式
+                                $this.find('i').addClass('font-icons-15').removeClass('font-icons-16');
+                            }
+                        },
+                        error: function(XMLHttpRequest, textStatus, errorThrown) {
+                            
+                            console.log(XMLHttpRequest);
+
+                            door_loop = true;
+                        }
+                    })
+                } else {
+
+                    // 数据存在的时候执行
+                    if (!$compared.is(':visible')) {
+
+                        $compared.slideDown();
+
+                        $this.find('i').addClass('font-icons-15').removeClass('font-icons-16');
+
+                    } else {
+
+                        $compared.slideUp();
+
+                        $this.find('i').addClass('font-icons-16').removeClass('font-icons-15')
+
+                    };
+                };
+            });
+        })
+    </script>
+{% endblock js %}

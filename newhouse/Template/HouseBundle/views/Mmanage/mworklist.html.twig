@@ -1,0 +1,167 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set aid = app.request.get('aid') %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+ 
+{% endblock %}
+
+{% block mainleft %}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ core_manage.filter([
+   
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+           
+        }
+    }">
+    <div class="list">
+    {%- macro sums(o) -%}
+    {% spaceless %}
+        {% set sql_opt = o.sql_opt|default({}) %}
+        {% set value = (o.service|default('house') ~ '.' ~ o.form|default('news'))|getCol('clicks', sql_opt) %}
+        {% set sum = 0 %}
+        {% for v in value %}
+            {% set sum = sum + v %}
+        {% endfor %}
+        {{ sum }}
+    {% endspaceless %}
+{%- endmacro sums -%}
+
+
+
+
+
+   {#  {% macro sums(o) %}
+        {% set sum = 0 %}    
+        {% set clicks = ('service.form')|getCol('clicks', {uid: uid}) %}    
+        {% for value in clicks %}
+            {% set sum = sum + value %}
+        {% endfor %}
+        {{ sums }}
+    {% endmacro %} #}
+
+
+        {#  {% set data = ('db.system_log')|getCol('value', {uid: aid}) %}
+          {% set arr = [] %}  
+         {% for v in data %}
+            {% set value = v|json_decode() %}
+         {% endfor %}   #}    
+        
+
+        {# {% set aid = ('house.news')|getAll({uid: aid}) %}   #}
+       
+
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                  
+                    <th class="pl10">文档名称</th>
+                    <th width="100">添加数/点击</th>
+                   
+                </tr>
+                <tr>
+                    <td class="pl10">
+                        资讯
+                    </td>
+                    <td>
+                   
+                        {{core_global.count({models: 'news', service: 'house', sql_opt: {uid: aid} })}}/
+                        {{ _self.sums( {service: 'house', form: 'news',sql_opt: {uid: aid} })}}
+                    </td>
+                   
+                </tr>
+                <tr>
+                    <td class="pl10">
+                        楼盘
+                    </td>
+                    <td>
+                        {{core_global.count({models: 'houses', service: 'house', sql_opt: {uid: aid} })}}/{{ _self.sums( {service: 'house', form: 'houses',sql_opt: {uid: aid} })}}
+                    </td>
+                    </td>
+                   
+                </tr>
+                <tr>
+                    <td class="pl10">
+                        新房团购
+                    </td>
+                    <td>
+
+                          {{core_global.count({models: 'groupbuy', service: 'house', sql_opt: {uid: aid} })}}/{{ _self.sums( {service: 'house', form: 'groupbuy',sql_opt: {uid: aid } })}}
+                    </td>
+                   
+                </tr>
+                <tr>
+                    <td class="pl10">
+                        楼盘相册
+                    </td>
+                    <td>
+                      {{core_global.count({models: 'inter_album', service: 'house', sql_opt: {cate_pushs: 'xiangce' ,uid: aid} })}}/{{ _self.sums( {service: 'house', form: 'inter_album',sql_opt: {uid: aid, cate_pushs: 'xiangce' } })}}
+                    </td>
+                   
+                </tr>
+                <tr>
+                    <td class="pl10">
+                        户型
+                    </td>
+                    <td>
+                          {{core_global.count({models: 'door', service: 'house', sql_opt: {uid: aid} })}}/{{ _self.sums( {service: 'house', form: 'door',sql_opt: {uid: aid } })}}
+                    </td>
+                   
+                </tr>
+                <tr>
+                    <td class="pl10">
+                        楼盘分销
+                    </td>
+                    <td>
+                         {{core_global.count({models: 'sell', service: 'house', sql_opt: {uid: aid} })}}/{{ _self.sums( {service: 'house', form: 'sell',sql_opt: {uid: aid} })}}
+                    </td>
+                   
+                </tr>
+                 <tr>
+                    <td class="pl10">
+                        求购
+                    </td>
+                    <td>
+                         {{core_global.count({models: 'demand', service: 'house', sql_opt: {type: '1', uid: aid} })}}/{{ _self.sums( {service: 'house', form: 'demand',sql_opt: {uid: aid, type: '1' } })}}
+                    </td>
+                   
+                </tr>
+                <tr>
+                    <td class="pl10">
+                        求租
+                    </td>
+                    <td>
+                         {{core_global.count({models: 'demand', service: 'house', sql_opt: {type: '2', uid: aid} })}}/{{ _self.sums( {service: 'house', form: 'demand',sql_opt: {uid: aid, type: '2' } })}}
+                    </td>
+                   
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+</section>
+
+
+{% endblock %}
+
+{% block promptUl %}
+{# 提示说明 #}
+{% endblock %}
+
+
+
+

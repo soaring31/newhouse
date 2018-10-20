@@ -1,0 +1,5 @@
+{% extends "ManageBundle::poplayout.html.twig" %}
+{% block body %}
+{% import "ManageBundle:Form:popedit.html.twig" as forms %}
+{{ forms.popEdit(form|default(''),'form') }}
+{% endblock %}

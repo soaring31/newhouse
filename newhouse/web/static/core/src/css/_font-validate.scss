@@ -1,0 +1,37 @@
+$font-validate-fz: inherit !default;
+
+@font-face {
+	font-family: "validate";
+    font-weight: normal;
+    font-style: normal;
+	src: url('../fonts/validate.eot');
+	src: url('../fonts/validate.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/validate.woff') format('woff');//,
+		//url('../fonts/validate.ttf') format('truetype'),
+		//url('../fonts/validate.svg#validate') format('svg');
+}
+$font-validate-fz: inherit !default;
+$font-validate-fl: none !default;
+$font-validate-m: 0 !default;
+$font-validate-va: -.25em !default;
+[class^="font-validate-"],
+[class*=" font-validate-"] {
+	font-family: "validate";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-size: $font-validate-fz;
+	float: $font-validate-fl;
+	margin: $font-validate-m;
+	vertical-align: $font-validate-va;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; only necessary if not using the private unicode range (firstdata option) 
+	text-decoration: none;
+	text-transform: none;
+}
+.font-validate-13:before {
+	content: "\EA01";
+}.font-validate-33:before {
+	content: "\EA02";
+}

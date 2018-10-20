@@ -1,0 +1,101 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 评论列表 #}
+{% set toid = app.request.get('toid')|default('') %}
+{% set arc_models = app.request.get("arc_models")|default('') %}
+{% set models = app.request.get("models")|default('') %}
+{% set title = app.request.get('title')|default('') %}
+{% set aid = app.request.get('aid')|default('') %}
+{% set ask = app.request.get('ask')|default('') %}
+{% set service = app.request.get('service')|default('house') %}
+{% set order = app.request.get('order')|default('id|desc') %}
+{% set pageIndex = app.request.get('pageIndex')|default(1) %}
+{% set pageSize = app.request.get('pageSize')|default(10) %}
+{# 是否需要回复 #}
+{% set reply = app.request.get('reply') %}
+{# 是否需要查看回复 #}
+{% set checkreply = app.request.get('checkreply') %}
+
+{%- block result -%}
+{# 列表需要的参数 #}
+{% set params = {
+    aid: aid, 
+    checked: 1, 
+    order: order,
+    pageSize: pageSize,
+    pageIndex: pageIndex,
+    findType: 1,
+    ask: ask
+} %}
+
+{% if arc_models %}
+{% set params = params|merge({models: arc_models}) %}
+{% endif %}
+{# 注意数字0和字串0 #}
+{% set params = params|merge({toid: toid == '0' ? '' : toid}) %}
+{% set commment = (service ~ '.' ~ models)|getAll(params) %}
+{% if commment.data is defined and commment.data|length > 0 %}
+    {% for item in commment.data %}
+        {% set item_user = ('db.users')|getRow({id:item.uid|default(''),checked: 1}) %}
+        {% set item_user_info = ('db.userinfo')|getRow({uid: item.uid|default('')}) %}
+        {% set item_user_name = item_user_info.nicename|default(item_user.username|default('游客')) %}
+        <div class="answer-item" data-cid="{{item.id}}"  {% if loop.last and item.toid|default('') == '' %}data-page="{
+                    pageIndex: {{commment.pageIndex}},
+                    pageCount: {{commment.pageCount}},
+                    pageSize: {{commment.pageSize}}
+                 }"{% endif %}>
+            <div class="item-title">
+                <div class="item-img">
+                    {{- core_global.img({
+                        src: item_user_info.image|default(''),
+                        alt: item_user_name|default(''),
+                        type: 2,
+                        width: 34,
+                        height: 34,
+                        attr: 'class=image-radius'
+                    }) -}}
+                </div>
+                <div class="item-text">
+                    <p>
+                        <span>{{item_user_name|default('')}}</span>
+                    </p>
+                    <p>{{item.update_time|default(item.create_time|default(''))|date('Y-m-d')}}
+                        <span>&nbsp;{{ core_global.get_user_info(item.user_agent|default(''))}}</span>
+                    </p>
+                </div>
+            </div>
+            <div class="answer-con">
+                <p>{{ item.content|default('') }}</p>
+            </div>
+            <div class="raty-item-foot">
+                <span class="item" data-vote="{models: '{{models|default('')}}', id: {{item.id}}, field: 'vote'}">
+                    <i class="icon font-f-124"></i>
+                    点赞(<b data-vote-num="{{item.vote|default(0)}}">{{item.vote|default(0)}}</b>)
+                </span>
+                {% if item.toid|default('') == 0 %}
+                    {% if reply %}
+                        <span class="item reply">
+                            <i class="icon font-f-1"></i>
+                            回复
+                        </span>
+                    {% endif %}
+                    {% if checkreply %}
+                        <span class="item replys">
+                            <i class="icon font-f-47"></i>
+                            查看回复
+                        </span>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+    <script type="text/javascript">
+        seajs.use(['vote'], function(vote) {
+            // 顶
+            vote.init({
+                saveUrl: '{{("viewinter/vote")|U }}'
+            });
+        })  
+    </script>
+{% endif %}
+
+{%- endblock result -%} 

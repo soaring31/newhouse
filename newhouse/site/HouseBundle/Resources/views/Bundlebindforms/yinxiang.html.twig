@@ -1,0 +1,46 @@
+{% extends 'CoreBundle::base_ajax.html.twig' %}
+
+{% block result %}
+{% set formflag = app.request.get("formflag")|default('') %}
+{# 印象 #}
+{% set tableform = app.request.get("tableform")|default('') %}
+{% set aid = app.request.get("aid")|default('') %}
+{% set cate_pushs = app.request.get("cate_pushs")|default('') %}
+
+{% if formflag %}
+<form data-view-form="1"  method="post" class="form-control" action="{{ form.vars.action|default('') }}">
+   
+    {{ form_widget(form.form, {value: tableform }) }}
+    {{ form_widget(form.aid, {value: aid}) }}
+    {{ form_widget(form.cate_pushs, {value: cate_pushs }) }}
+    {{ form_widget(form.checked) }}
+    {{ form_widget(form.user_agent, {value: app.request.headers.get('user-agent') }) }}
+    {{ form_widget(form.uid) }}
+    {# {{ form_widget(form.area) }} #}
+    {{ form_widget(form.csrf_token) }}
+    <div class="search-group form form-bdrs">
+        <button disabled="disabled" class="btn submit" ><i class="font-icons-30"></i>
+            添加印象
+        </button>
+        <div class="txt-wrap">
+            <input type="text" placeholder="至多5个字" name="yinxiang" class="txt" id="yinxiang"></div>
+    </div>
+</form>
+<div class="blank15"></div>
+<div class="items clearfix" id="items"> </div>
+<script type="text/javascript">
+seajs.use(['yinxiang'], function(yinxiang){
+    // 启用按钮
+    $('.btn[disabled="disabled"]').prop('disabled', '');
+    // 印象
+    yinxiang.init({
+        list: '#items',
+        url: '{{ ("clist/yx_list")|U({aid: aid}) }}',
+        save_url: '{{ ("clist/yx_list")|U({aid: aid}) }}'
+    });
+})
+</script>
+{% else %}
+    <font color="#ff0000">请指定表单名称！</font>
+{% endif %}
+{% endblock result %}

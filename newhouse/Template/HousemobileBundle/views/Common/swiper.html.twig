@@ -1,0 +1,21 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+
+{% block result %}
+    
+    {% set tag = app.request.get('tag') %}
+    {% set attr = app.request.get('attr') %}
+    {% set class = app.request.get('class', 'swiper-index') %}
+    {% if tag %}
+        {% set pageSize = app.request.get('pageSize', 6) %}
+        {% set data = (tag)|getPush(pageSize)  %}
+        <style type="text/css">
+            .swiper-index {
+                height: 9rem;
+            }
+        </style>
+    {% else %}
+        {% set data = ident.list.data|default({}) %}
+    {% endif %}
+
+    {{core_mobile_global.swiper({value: data|default(''), id: tag, type: 0, class: class|default(''), otherdata: attr,})}}
+{% endblock result %}

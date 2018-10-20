@@ -1,0 +1,127 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+{% set aid = app.request.get('aid') %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {# {{ parent() }}  #}
+   
+{% endblock %}
+
+{% block mainleft %}
+{#  <section class="main-left" data-part=".main-right" data-target=".main-through">
+        <div data-level="top" class="level1">
+
+            {% set cateUser = ('reguserattr_1')|getFormField('usertype') %}
+            {% for item1 in cateUser %}
+              <a data-level="1"  href="{{(action)|U({usertype:item1.id})}}"  data-role="jump">{{ item1.name }}</a>
+            {% endfor %}
+        </div>
+</section> #}
+
+
+
+
+   
+{% endblock mainleft %}
+
+{% block tableMain %}
+{% set usertype =app.request.get('usertype') %}
+{# {% set formflag = usertype ? 'reguser_' ~ usertype : 'reguser_1' %}    #} 
+{{ core_manage.filter([
+    {
+        method: 'search',
+        field: 'name',
+        title: '请搜索ID/用户名/电话/邮箱',
+    }
+]) }}
+
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ "/show")|U }}',
+        submitUrl : '{{ (action ~ "/save")|U }}',
+        deleteUrl : '{{ (action ~ "/delete")|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            {# formflag: '{{ formflag }}', #}
+           {#  usertype:'{{usertype}}' #}
+
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                  <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="80" data-role="sort" data-sort="id" class="sort">ID</th>
+                    <th data-role="sort" data-sort="username" class="sort">用户名</th>
+                    <th>备注</th>
+                    <th width="100">会员组</th>
+                    <th width="100">昵称</th>
+                    <th width="100">手机</th>
+                    <th width="100" class="tac">操作</th>
+                </tr>
+                
+                {% if ident.info.data is defined and ident.info.pageCount|default('') != 0 %}
+                {% for k, vo in ident.info.data %}
+                {% set vo1 = vo.attributes %}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td>{{ vo.id }}</td>
+                    <td>{{ vo.username|default('') }}</td>
+                   
+                    <td>{{vo.remark}}</td>
+                    {# <td >{{ core_global.formField({value:vo.usertype,form:'reguserattr_1',field:'usertype'}) }}</td> #}
+                    <td>
+                        {% set gid = ('db.userinfo')|getOne( 'group_id',{ uid: vo.id}) %}
+                        {% set accname = ('db.mem_group')|getOne('name',{ id:gid }) %}
+                        {{ accname}}
+                    </td>
+                    <td><span data-role="itemEdit" data-name="nicename" class="edit">{{ vo.nicename|default('-') }}</span></td>
+                    <td><span data-role="itemEdit" data-name="tel" class="edit">{{ vo.tel|default('-') }}</span></td>
+                                                         
+                    <td class="tac">
+                        {{ core_manage.show() }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="8" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+{# {{ core_manage.oprate([
+    {
+        method: 'dropdownField',
+        field: 'status',
+        service: 'db.users',
+        title: '黑名单',
+    }
+]) }} #}
+
+{{ core_manage.oprate([
+        {
+            method: 'submit',
+            title: '取消黑名单',
+            params: '{ status: 1, _form_id: 360}',
+            class: 'btn-danger'
+        }
+    ]) }} 
+{% endblock %}
+
+{% block promptUl %}
+{# 提示说明  #}
+{% endblock %}
+
+
+

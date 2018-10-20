@@ -1,0 +1,323 @@
+{# 说明
+ * detail: 当前数据
+ * detail_info: 当前数据附加属性
+ * detail_usertype：当前数据用户类型
+ * tpl_extends：继承模板变量
+ * detail_name：当前数据名称，先读读取公司名称，再到昵称、最后用户名，默认-
+ * detail_jjgs_data: 当前经纪人所属经纪公司
+ * detail_jjgs_data_attr: 当前经纪人所属经纪公司属性
+ * detail_jjgs_data_name: 当前经纪人所属经纪公司名称
+ #}
+
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% set detail_info = cident.detailinfo.data[0]|default('') %}
+
+{% set detail_usertype = detail_info.usertype|default('1') %}
+
+{% if detail_usertype|default('') in [15, 17] %}
+    {% set tpl_extends = 'HouseBundle:Sale:sale_layout.html.twig' %}
+{% else %}
+    {% set tpl_content = '此用户没有开通店铺权限' %}
+    {% set tpl_abstract = '只有经纪人、经纪公司才有权限开通自己的店铺' %}
+    {% set tpl_extends = 'CoreBundle:Dispatch:jump.html.twig' %}
+{% endif %}
+
+{% extends tpl_extends|default('') %}
+
+{# 标题 #}
+{% block title %}{{detail_name|default('')}} - {{title_users_act|default('二手房')}}{% endblock title %}
+{# 样式 #}
+{% block css %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/esf-detail.css')}}
+{% endblock css %}
+
+{% set detail_name = detail_info.company|default(detail_info.nicename|default(detail.username|default('-'))) %}
+
+{% block body %}
+    {% if detail_info.banner|default('') %}
+        {% set tpl_banner_img = "background: url(" ~ core_global.img_url({src: detail_info.banner|default(''), height: 150, width: 1200, type: 0}) ~ ") no-repeat center top; background-size: 100% 150px;" %}
+    {% endif %}
+    <!-- 头部 -->
+    <div class="esf-header" style="{{tpl_banner_img|default('')}}">
+        <div class="warp">
+            {% if detail_usertype|default('') == 17 %}
+                <div class="esf-head-logo">
+                    {{- core_global.img({
+                        src: detail_info.image|default(''),
+                        alt: detail_name|default(''),
+                        type: 2,
+                        width:160 ,
+                        height: 70
+                    }) -}}
+                    <h1>{{detail_name|default('')}}</h1>
+                </div>
+            {% elseif detail_usertype|default('') == 15 %}
+                <div class="esf-head-logo head-logo2">
+                    {{- core_global.img({
+                        src: detail_info.image|default(''),
+                        alt: detail_name|default(''),
+                        width: 100,
+                        height: 130,
+                        type: 2
+                    }) -}}
+                    <div class="h-l-title">
+                        <p class="name">{{detail_name|default('')}}</p>
+                        <p class="tel">{{detail.tel|default('-')}}</p>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="esf-head-share">
+                {# 收藏按钮 #}
+                {{core_global.collect_btn({
+                    aid: detail.id|default(''),
+                    models: detail.models|default('users'),
+                    class: 'collect',
+                    text: '店铺收藏'
+                })}}
+                <span class="share bdsharebuttonbox">
+                    <a  data-cmd="more" class="bds_more"> <i class="font-icons-32"></i>
+                        分享
+                    </a>
+                </span>
+            </div>
+        </div>
+    </div>
+    <!-- 导航条 -->
+    <div class="container">
+        <div class=" esf-nav">
+            <ul class="nav-ul">
+                {# 导航条 #}
+                {% for item in nav_member %}
+                    <li>
+                        <a class="{% if nav_users_act|default(1) == loop.index %}active{% endif %}" href="{{item.url|default('')}}">{{item.name|default('')}}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            {% block search_member %}
+                <div class="nav-sort">
+                    {{ core_global.topSearch({
+                            action: searchUrl|default('member/j_detail'),
+                            action_opt: { 'id': detail.id|default('') },
+                            name: 'name',
+                            placeholder: '请输入关键词'
+                        })
+                    }}
+                </div>
+            {% endblock search_member %}
+        </div>
+    </div>
+
+    <div class="blank10"></div>
+    {# 当前位置 #}
+    <div class="container">
+        <!--current-->
+        <div class="current-location">
+            {{block('current_default')}}
+            {% block current_member %}{% endblock current_member %}
+        </div>
+        <!--/current-->
+    </div>
+    <div class="blank10"></div>
+
+    <div class="container">
+        <!-- 左侧 -->
+        <div class="left-side">
+            <div class="side-info">
+                {% if detail_usertype|default('') == 17 %}
+                    <!-- 个人信息 -->
+                    {{- core_global.img({
+                        src: detail_info.image|default(''),
+                        alt: detail_name|default(''),
+                        type: 2,
+                        width: 300,
+                        height: 200,
+                        attr: 'class="user-image"'
+                    }) -}}
+                    <h3>{{detail_name|default('')}}</h3>
+                    <p>
+                        电话&nbsp;:&nbsp;
+                        <span>{{detail.tel|default('')}}</span>
+                    </p>
+                    <p>
+                        地址&nbsp;:&nbsp;
+                        <span>{{detail_info.caddress|default('')}}</span>
+                    </p>
+                    <a data-head="发送商铺信息" href="#phone" data-css='{"width": 450}' class="phone btn-jqModal-ex">
+                        免费发短信到手机
+                    </a>
+                    {% set tel_code_data = ('db.smstpls')|getRow({ename: 'shopcode', open: 1}) %}
+                    {# 默认发送   如需增加其他数据，请另行在表单中添加，并在以下位置把数据传输过去
+                        * name 名称
+                        * address  地址
+                        * phone  电话
+                        * csales  在售房源
+                        * crents   出租房源
+                     #}
+                    {{house_global.modal_layout({
+                        id: 'phone',
+                        title: '发送信息',
+                        ajax: "ajax: {
+                            data : {
+                                formflag: 'smsshop',
+                                formcls: 'common-form-lg common-form-control',
+                                tpl: '" ~ tel_code_data.tid|default(tel_code_data.ename|default('shopcode')) ~ "',
+                                name: '" ~ detail_name ~ "',
+                                address: '" ~ detail_info.caddress|default('') ~ "',
+                                csales: '" ~ detail_info.csales|default(0) ~ "',
+                                crents: '" ~ detail_info.crents|default(0) ~ "',
+                                phone: '" ~ detail.tel|default('') ~ "'
+                            }
+                        }"
+                    })}}
+                {% elseif detail_usertype|default('') == 15 %}
+                    <h3 class="jjr-name">
+                        {{detail_name|default('')}}
+                        {{ house_global.publisher({
+                            id: detail.id|default(''),
+                            jjr_tpl: '&nbsp;&nbsp;%idcard%&nbsp;%license%'
+                        }) }}
+                    </h3>
+                    <p>
+                        服务等级&nbsp;:&nbsp;{{ house_global.publisher({
+                            id: detail.id|default(''),
+                            jjr_tpl: '<span>%fwdj%</span>'
+                        }) }}
+                    </p>
+                    <p>
+                        注册时间&nbsp;:&nbsp;
+                        <span>{{detail.create_time|default('')|date('Y-m-d')}}</span>
+                    </p>
+                    <p>
+                        积&nbsp;&nbsp;分&nbsp;:&nbsp;
+                        <span class="num">{{detail_info.jifen|default('0')}}</span>
+                        分
+                    </p>
+                    <p>
+                        上次登录&nbsp;:&nbsp;
+                        <span>{{detail.logintime|default('')|date('Y-m-d')}}</span>
+                    </p>
+                    <p>
+                        访&nbsp;问&nbsp;量&nbsp;:&nbsp;
+                        <span class="num">
+                            <i data-counts="{models: 'userinfo', service: 'db', field: 'clicks', id: '{{detail_info.id|default('')}}'}"></i>
+                        </span>
+                    </p>
+                {% endif %}
+            </div>
+            <!-- 店铺公告 -->
+            <div class="side-box">
+                <h2 class="side-title">店铺公告</h2>
+                <p>
+                    {{ core_global.content({ content: detail_info.dpgg|default(''), default: '暂无公告'}) }}
+                </p>
+            </div>
+            {% if detail_usertype|default('') == 17 %}
+                {# 经纪公司旗下经纪人 #}
+                {# {% set jjgs_aside_jjr = ('house.nexus_arc')|getAll({checked: 1, aid: detail.id|default(''), pageSize: 5}) %}
+                {% if jjgs_aside_jjr.data is defined and jjgs_aside_jjr.pageCount|default(0) != 0 %}
+                    <div class="side-jjr">
+                        <h2 class="side-title">经纪人</h2>
+                        <div class="jjr-box">
+                            {% for item in jjgs_aside_jjr.data %}
+                                {% set item_user = ('db.users')|getRow({checked: 1, id: item.mid|default('')}) %}
+                                {% set item_user_info = ('db.userinfo')|getRow({uid: item.mid|default('')}) %}
+                                {% set item_user_name = item_user_info.nicename|default(item_user.username|default('')) %}
+                                <div class="jjr-b-item">
+                                    <a href="{{('member/j_detail')|U({id: item_user.id|default('')})}}" target="_blank">
+                                        {{- core_global.img({
+                                            src: item_user_info.image|default(''),
+                                            alt: item_user_name|default(''),
+                                            type: 2,
+                                            width: 100,
+                                            height: 130
+                                        }) -}}
+                                    </a>
+                                    <p>
+                                        <a href="{{('member/j_detail')|U({id: item_user.id|default('')})}}" target="_blank">{{item_user_name|default('')}}</a>
+                                    </p>
+                                    <p>{{item_user.tel|default('-')}}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %} #}
+            {% elseif detail_usertype|default('') == 15 %}
+                <!-- 基本信息 -->
+                <div class="side-info">
+                    <h2 class="side-title">基本信息</h2>
+                    {% if detail_info.cid|default('') %}
+                    <p >
+                        {{house_global.publisher({id: detail.id|default(''), jjr_tpl: '<a class="place" href="%url%" target="_blank" title="%jjgs_name%">%jjgs_name%</a>'})}}
+                    </p>
+                    {% endif %}
+                    <p>
+                        服务区域&nbsp;:&nbsp;
+                        <span>{{core_global.region({id: detail_info.region|default(''), tpl: '%value%'})}}</span>
+                    </p>
+                    <p>
+                        &nbsp;QQ&nbsp;:&nbsp;
+                        <span>
+                            {% if detail_info.qq|default('') %}
+                                <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin={{detail_info.qq|default('')}}&amp;site=qq&amp;menu=yes">
+                                    <img src="http://wpa.qq.com/pa?p=2:{{detail_info.qq|default('')}}:41" alt="点击这里给我发消息" title="点击这里给我发消息" border="0" style="height: auto; width: auto">
+                                </a>
+                            {% endif %}
+                        </span>
+                    </p>
+                    <p>
+                        电子邮箱&nbsp;:&nbsp;
+                        <br/>
+                        <a href="mailto:{{detail.email|default('')}}" target="_blank">{{detail.email|default('')}}</a>
+                    </p>
+                    <p class="phone-num">
+                        <i></i><span>{{detail.tel|default('')}}</span>
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+        <!--右侧-->
+        <div class="right-main">
+            {% block right %}{% endblock right %}
+        </div>
+    </div>
+    <div class="blank20"></div>
+{% endblock body %}
+
+{% block js %}
+    <script type="text/javascript">
+        // seajs.use(['share', 'jqmodal'], function (share, jqmodal) {
+        //     $('[data-tel-btn="1"]').click(function () {
+        //         var $this = $(this);
+        //         var data = $this.data();
+        //         var params = data.params;
+        //         var tel_num = $('#' + data.tel).val();
+
+        //         if ($.trim(tel_num)) {
+        //             $.jqModal.tip('请填写手机号!');
+        //             return false;
+        //         } else {
+        //             params.tel = tel_num;
+        //         };
+
+        //         $.ajax({
+        //             url: data.src,
+        //             type: 'POST',
+        //             dataType: 'JSON',
+        //             data: params,
+        //         })
+        //         .done(function() {
+        //             $.jqModal.tip('短信发送成功!');
+        //         })
+        //         .fail(function() {
+        //             console.log("error");
+        //         })
+        //         .always(function() {
+        //             console.log("complete");
+        //         });
+        //         $("#phone").jqModal('hide');
+        //         return false;
+        //     })
+        // })
+    </script>
+{% endblock js %}

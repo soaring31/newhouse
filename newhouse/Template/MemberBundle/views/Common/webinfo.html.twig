@@ -1,0 +1,33 @@
+{# # 说明
+** webInfo: 获取页面底部快速链接区域 #}
+{% set webInfo = ('house.category')|getAll({pid:7}) %}
+{# {{dump(webInfo)}} #}
+<div class="blank20"></div>
+<div class="container">
+    <div class="web-info">
+        {% if webInfo.data is defined %}
+            {% for item in webInfo.data %}
+                <a target="_blank" href="{% if item.id == 12 %}{{('service/ask')|U({category:item.id})}}{% else %}{{('service/list')|U({category:item.id})}}{% endif %}">{{item.name}}</a>
+                |
+            {% endfor %}
+        {% endif %}
+        {# <a target="_blank" href="http://house.08cms.com/info/a-85.html">联系我们</a>
+        |
+        <a target="_blank" href="http://house.08cms.com/info/a-86.html">关于我们</a>
+        |
+        <a target="_blank" href="http://house.08cms.com/info.php?fid=102">网站提问</a>
+        |
+        <a target="_blank" href="http://house.08cms.com/help/">帮助中心</a>
+        | #}
+        <a target="_blank" href="http://house.08cms.com/info.php?fid=109">手机版</a>
+    </div>
+    <div class="copy-right">
+        Copyright &copy; 2010-2017
+        <a target="_blank" href="http://www.08cms.com/">08cms.com</a>
+        All rights reserved.
+        <br>
+        Powered by 08cms v7.0 粤ICP备
+        <a target="_balnk" href="http://www.miibeian.gov.cn/">09026950</a>
+        号
+    </div>
+</div>

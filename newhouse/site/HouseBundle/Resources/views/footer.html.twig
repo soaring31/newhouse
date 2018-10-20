@@ -1,0 +1,56 @@
+{# # 说明
+** index_dblp: 底部楼盘推送列表
+** dbes: 底部二手楼盘推送列表
+** dbsy: 底部商业动态推送列表
+** dbzx: 底部资讯推送列表
+** dbgj: 底部工具推送列表
+#}
+
+<!--footer-->
+<div class="footer">
+    <div class="container">
+        <div data-tag="dblp,dbes,dbsy,dbzx,dbgj,dbewm" class="footer-nav clearfix">
+            {{house_global.footer_recommend({
+                title: '楼盘',
+                tag: 'index_dblp'
+            })}}
+            {{house_global.footer_recommend({
+                title: '二手',
+                tag: 'dbes'
+            })}}
+            {{house_global.footer_recommend({
+                title: '商业',
+                tag: 'dbsy'
+            })}}
+            {{house_global.footer_recommend({
+                title: '资讯',
+                tag: 'dbzx'
+            })}}
+            {{house_global.footer_recommend({
+                title: '工具',
+                tag: 'dbgj'
+            })}}
+            <dl class="download-mobile" >
+                <dt>扫一扫</dt>
+                <dd>
+                    <p >
+                        <span data-qrcode="1" data-text="{{('download/index')|U({})}}"data-logo="{{core_global.img_url({src: core_global.mconfig({name: 'qrcodelogo', ename: 'mvariables_user'})})}}" data-size="100"></span><br>
+                        Android下载
+                    </p>
+                    <p>
+                        <span data-qrcode="1" data-text="{{('download/index')|U({})}}"data-logo="{{core_global.img_url({src: core_global.mconfig({name: 'qrcodelogo', ename: 'mvariables_user'})})}}" data-size="100"></span><br>
+                        iphone下载
+                    </p>
+                    <p>
+                        {{core_global.qrcode_pushs({
+                            ename: 'wxgzhts',
+                            tpl: '<span><img src="%url%" alt="%name%" style="height: 100px; width: 100px; display: inline-block;"></span><br>扫一扫，关注微信'
+                        })}}
+                    </p>
+                </dd>
+            </dl>
+        </div>
+        {% include 'HouseBundle:Common:webinfo.html.twig' %}
+    </div>
+</div>
+<!--/footer-->

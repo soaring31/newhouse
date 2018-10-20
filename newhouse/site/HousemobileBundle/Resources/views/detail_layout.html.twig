@@ -1,0 +1,23 @@
+{% extends 'HousemobileBundle::base.html.twig' %}
+{# 说明 
+** 详情页基模板
+#}
+
+{% block title %}
+    详情页
+{% endblock title %}
+
+{% block container %}
+<div class="content">
+    {% block d_container %}
+        
+    {% endblock d_container %}
+    {% include 'HousemobileBundle:Common:footer.html.twig' ignore missing %}
+</div> 
+{% endblock container %}
+
+{% block js %}
+{{parent()}}
+{% block inner_js %}
+{% endblock inner_js %}
+{% endblock js %}

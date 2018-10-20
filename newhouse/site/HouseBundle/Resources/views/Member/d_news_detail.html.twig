@@ -1,0 +1,16 @@
+{% extends 'HouseBundle:Member:d_news.html.twig' %}
+
+{% block title %}{{jjgs_news_detail.name|default('')}}{% endblock title %}
+
+{% set url_newid = app.request.get("newid") %}
+
+{% set jjgs_news_detail = ('house.news')|getRow({id: url_newid|default(''), checked: 1}) %}
+
+{% block jjgs_container %}
+	<div class="blank10"></div>
+	<h2 class="zuti">{{jjgs_news_detail.name|default('')}}</h2>
+	<p class="Date_info">发布时间:{{jjgs_news_detail.create_time|default('')|date('Y-m-d')}}</p>
+	<div class="p10">
+	    {{core_global.content({content: jjgs_news_detail.content|default('')})}}
+	</div>
+{% endblock jjgs_container %}

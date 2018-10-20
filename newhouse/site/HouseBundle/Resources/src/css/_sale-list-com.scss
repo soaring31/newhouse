@@ -1,0 +1,167 @@
+$textH: 34px !default;
+// 二手房列表
+.sale-list {
+	width: 100%;
+}
+.sale-list-item {
+	border-bottom: 1px solid #eaeaea;
+	background: #fff;
+	padding: 30px 0;
+	@extend %clearfix;
+	p {
+		color: #666;
+	}
+}
+.tu {
+	display: inline-block;
+	padding: 0 6px;
+	height: 24px;
+	font-size: 13px;
+	font-weight: 500;
+	text-align: center;
+	line-height: 24px;
+	color: #fff !important;
+	vertical-align: middle;
+	border-radius: 2px;
+	margin-left: 5px;
+	&.tu-1 {
+		background: #62ab00;
+	}
+	&.tu-2 {
+		background: #e43;
+	}
+	&.tu-3 {
+		background: #9509bb;
+	}
+	&.tu-4 {
+		background: #f60;
+	}
+}
+.sale-list-item:hover {
+	background: #f9f9f9;
+}
+// 二手房列表左边
+.sale-item-l {
+	float: left;
+}
+.sale-item-img {
+		position: relative;
+		float: left;
+		height: 135px;
+		width: 180px;
+	span {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		padding: 0 6px;
+		font-size: 13px;
+		color: #fff;
+		@include transparent(#000, .6);
+	}
+}
+.shou,.zu {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	line-height: 20px;
+	text-align: center;
+	border-radius: 2px;
+	font-size: 13px;
+	color: #fff;
+}
+
+.shou {
+	// margin-left: 26px;
+	background: #f06d07;
+}
+.zu {
+	margin-left: 30px;
+	background: #2d99d6;
+}
+.sale-item-text {
+	margin-left: 200px;
+	width: 460px;
+	h3 {
+		font-size: 16px;
+		line-height: $textH;
+		height: $textH;
+		@extend %text-overflow;
+		color: #c2c2c2;
+		font-weight: 700;
+		}
+	p {
+		height: auto;
+		line-height: 34px;
+		max-height: 34px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.fang {
+		color: #ccc;
+	}
+	span {
+		color: #666;
+	}
+	.new {
+		color: #ccc;
+	}
+	.new2 {
+		color: #333;
+	}
+	.ps-ico {
+		color: #f50;
+	}
+	.ps {
+		color: #666;
+	}
+}
+// 右边
+.sale-item-r {
+	float: right;
+	width: 170px;
+	margin-top: -8px;
+	p {
+		margin-bottom: 5px;
+	}
+	.buy {
+		color: #666;
+		margin-left:-10px;
+		a,label {
+			cursor:pointer;
+			height: 22px;
+			padding: 0 5px;
+			display: inline-block;
+			vertical-align: middle;
+			border: 1px solid #b3b3b3;
+			border-radius: 2px;
+			margin-left: 10px;
+			background: #efefef linear-gradient(#fdfdfd,#eaeaea);
+		}
+		input {
+			position: absolute;
+			left: -9999px;
+		}
+		a:hover {
+			text-decoration: none;
+			background: #fafafa;
+			color: #333;
+		}
+		label:hover {
+			background: #fafafa;
+		}
+		i{
+			margin-right: 3px;
+			vertical-align: -1px;
+			color: #f60;
+		}
+	}
+	span {
+		color: #fd6300;
+		font-size: 14px;
+	}
+	.big {
+		font-size: 30px;
+		font-weight: bold;
+	}
+}

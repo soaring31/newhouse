@@ -1,0 +1,51 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+
+{% set toid = app.request.get("toid") %}
+{% block result %}
+    {% if ident.info.data is defined and ident.info.data|length > 0 %}
+        {% for item in ident.info.data %}
+            {% set item_user = ('db.users')|getRow({id: item.uid|default('0'),checked: 1}) %}
+            {% set item_user_info = ('db.userinfo')|getRow({uid: item.uid|default('')}) %}
+            {% set item_user_name = item_user_info.nicename|default(item_user.username|default('')) %}
+
+            <div class="answer-item" data-cid="{{item.id}}" {% if loop.last and toid == '0' %}data-page-index="{{ident.info.pageIndex}}" data-page-count="{{ident.info.pageCount}}" data-page-size="{{ident.info.pageSize}}"{% endif %}>
+                <div class="item-title">
+                    <div class="item-img">
+                        {{- core_global.img({
+                            src: item_user_info.image|default(''),
+                            alt: item_user_name|default(''),
+                            type: 2,
+                            width: 34,
+                            height: 34,
+                            attr: 'class=image-radius'
+                        }) -}}
+                    </div>
+                    <div class="item-text">
+                        <p>
+                            <span>{{item_user_name|default('')}}</span>
+                        </p>
+                        <p>
+                            <span>{{item.update_time|default(item.create_time|default(''))|date('Y-m-d')}}</span>
+                            <span>&nbsp;{{ core_global.get_user_info(item.user_agent|default(''))}}</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="answer-con">
+                    <p>{{item.content|default('')|raw}}</p>
+                </div>
+                <div class="raty-item-foot">
+                    <a href="javascript:;" data-vote="{models: 'usermsg', id: {{item.id}}, field: 'vote'}">
+                        <span class="icon icon-star" ></span>
+                        点赞(<em  data-vote-num="{{item.vote|default(0)}}">{{item.vote|default(0)}}</em>)
+                    </a>
+                    {% if item.toid|default('') == 0 %}
+                        <a href="javascript:;" class="reply" href="javascript:;"><span class="icon font-f-1"></span>回复</a>
+                        <a href="javascript:;" class="replys" href="javascript:;"><span class="icon font-f-47"></span>查看回复</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="no-data">暂无评论</p>
+    {% endif %}
+{% endblock result %}

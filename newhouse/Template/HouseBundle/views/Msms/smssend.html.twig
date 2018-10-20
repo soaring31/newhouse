@@ -1,0 +1,67 @@
+{% extends 'HouseBundle::base_show.html.twig' %}
+{% block js %}
+
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }} 
+{% endblock %}
+
+{% block body %}
+<section data-param="{
+    defUrl    : '/msms/smssend'
+}">
+    <div class="list">
+        <table class="popup-form-table" style="width:100%;">
+            <tr>
+                <th colspan="2">接口信息</th>
+            </tr>
+            <tr>
+                <td>
+                    <div id="group_dysjset">
+                        <div class="form-row">
+                            <div class="form-cell-label">
+                                <label class="w150 rtd txtright" for="enable">接口信息</label>
+                            </div>
+                            <div class="form-errors">
+                                
+                            </div>
+                            <div class="form-cell">
+                                余额:({{blstr|default('')}})；接口名称:《{{api|default('')}}-{{name|default('')}}》{{site|default('')|raw}}
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        {{ core_manage.form_cfg(form|default(''), {ename: action}) }}
+    </div>
+</section>
+<script>
+    seajs.use('', function(){
+        $(document).off('.tpl').on('change.tpl', '#tpl', function(){
+            if($(this).val() == 'comcode'){
+                $('#id').val('smscode');
+            }else{
+                $('#id').val('');
+            }
+        });
+    });
+</script>
+{% endblock body %}
+{% block promptTitle %}错误代码对照表{% endblock %}
+{% block promptUl %}
+// require('markdown')
+{% if errInfo|default('') %}
+
+| 代码 | 说明 | 代码 | 说明 | 代码 | 说明 |
+| -- | -- | -- | -- | -- | -- |
+|{% for key, msg in errInfo %}
+    {% if loop.index % 3 == 1 and loop.index != 1 %}
+
+|{% endif %}
+`{{key}}` | {{msg}} |
+{%- endfor -%}
+
+{% endif %}
+{% endblock %}

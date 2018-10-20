@@ -1,0 +1,44 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+{# 说明 
+ * detail: 特价房详情数据
+#}
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% block title %}
+	{{detail.name|default('')}}
+{% endblock title %}
+
+{% block header_title %}
+    {{core_mobile_global.title({title: detail.name|default('')})}}
+{% endblock header_title %}
+
+{% block container %}
+	<div data-block="{
+        bParams: true,
+        ajax:{
+            url: '{{ ('around/detail')|U }}',
+            data: {
+                id: '{{ detail.id|default('') }}',
+                tpl: 'Around:detailblock'
+            }
+        }
+    }"></div>
+{% endblock container %}
+
+{% block popup %}
+	{{ housemobile_global.popup({
+	    name: 'popup-map',
+	    title: '周边地图',
+	    content: {
+	        bParams: true,
+	        ajax: {
+	            url: ('sale/detail')|U,
+	            data: {
+	                id: detail.id|default(''),
+	                tpl: 'Common:mapblock'
+	            }
+	        }
+	    }
+	}) }}
+{% endblock popup %}

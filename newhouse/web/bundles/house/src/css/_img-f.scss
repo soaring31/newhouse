@@ -1,0 +1,52 @@
+
+$img-f-1:(24px,24px,-34px,0,img-f-1);
+
+$img-f-2:(24px,24px,0,0,img-f-2);
+
+$img-f-3:(24px,24px,-68px,-68px,img-f-3);
+
+$img-f-4:(24px,24px,-102px,0,img-f-4);
+
+$img-f-5:(24px,24px,-102px,-34px,img-f-5);
+
+$img-f-6:(24px,24px,-102px,-68px,img-f-6);
+
+$img-f-7:(24px,24px,0,-102px,img-f-7);
+
+$img-f-8:(24px,24px,-34px,-102px,img-f-8);
+
+$img-f-9:(24px,24px,-68px,-102px,img-f-9);
+
+$img-f-10:(24px,24px,-34px,-68px,img-f-10);
+
+$img-f-11:(24px,24px,0,-34px,img-f-11);
+
+$img-f-12:(24px,24px,-34px,-34px,img-f-12);
+
+$img-f-13:(24px,24px,-68px,0,img-f-13);
+
+$img-f-14:(24px,24px,-68px,-34px,img-f-14);
+
+$img-f-15:(24px,24px,0,-68px,img-f-15);
+
+$img-f: ($img-f-1,$img-f-2,$img-f-3,$img-f-4,$img-f-5,$img-f-6,$img-f-7,$img-f-8,$img-f-9,$img-f-10,$img-f-11,$img-f-12,$img-f-13,$img-f-14,$img-f-15,);
+
+@mixin img-f($sprites) {
+  %icof {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/f.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+      @extend %icof;
+    }
+  }
+}

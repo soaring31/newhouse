@@ -1,0 +1,38 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default('Business:detail') ~ '.html.twig' %}
+{# 说明 
+* 
+#}
+{% block b_header %}
+    {{core_mobile_global.title({title: '详情'})}}
+{% endblock b_header %}
+
+{% set nav_business_act = 1 %}
+
+{% block b_title %}
+    基本信息,售楼处电话,物业费,物业电话,开发商
+{% endblock b_title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}售楼处地址,{{detail.name|default('')}}售楼电话,{{detail.name|default('')}}物业费电话,{{detail.name|default('')}}开发商" />
+<meta name="description" content="{{cur_area_data|default('')}}{{detail.name|default('')}}为您提供{{detail.name|default('')}}基本信息，包括售楼处地址，售楼电话，物业费，物业电话，开发商等{{detail.name|default('')}}楼盘相关信息，为您选房、买房提供参考!"/>
+{% endblock key_des %}
+
+{% block container %}
+<div data-block="{
+    bParams: true,
+    ajax:{
+        url: '{{ ('business/detail')|U }}',
+        data: {
+            id: '{{ detail.id|default('') }}',
+            tpl: 'Business:ddetailblock'
+        }
+    }
+}"></div>
+{% endblock container %}
+
+{% block secondary %}
+    {% set nav_active = 1 %}
+    {{ parent() }}
+{% endblock secondary %}
+{% block popup %}{% endblock popup %}

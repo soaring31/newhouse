@@ -1,0 +1,28 @@
+{% extends "HouseBundle::base_show.html.twig" %}
+{% set id =app.request.get("_id")|default('') %}
+{% block inner_js %}
+<script type="text/javascript">
+	seajs.use([ 'searchxq'], function ( searchxq) {
+		$(function(){
+			searchxq.search({
+				xq: '#lpmc',
+				url: '{{("majaxaction/xiaoqu")|U({type: 1})}}',
+				autofill: ['address', 'name', 'aid','map','lng','lat']
+			});
+			
+			searchxq.changeTitle({
+				offon: '{{id}}'
+			});
+			
+		});
+	})	
+</script>
+{% endblock %}
+{% block body %}
+{# {{ core_manage.form(form|default(''), {
+	data: {
+		models: 'rent'
+	}
+}) }} #}
+{{ core_manage.form(form|default('')) }}
+{% endblock %}

@@ -1,0 +1,111 @@
+#shapan-i {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+#shapan-i .sha-dot {
+  z-index: 999;
+  position: absolute;
+  white-space: nowrap;
+  line-height: 26px;
+  padding: 0 10px;
+  outline: none;
+  background: #FB841F;
+  color: #fff;
+  border-radius: 2px;
+}
+
+#shapan-i .sha-dot:hover {
+  text-decoration: none;
+}
+
+#shapan-i .sha-dot i {
+  position: absolute;
+  left: 5px;
+  top: 26px;
+  height: 0;
+  width: 0;
+  overflow: hidden;
+  border-color: #FB841F transparent transparent transparent;
+  border-style: solid dashed dashed dashed;
+  border-width: 10px 10px 10px 0;
+  position: absolute;
+}
+
+#shapan-i .sha-dot-114 {
+  background: #3393F5;
+}
+
+#shapan-i .sha-dot-114 i {
+  border-top-color: #3393F5;
+}
+
+#shapan-i .sha-dot-115 {
+  background: #0EBF8F;
+}
+
+#shapan-i .sha-dot-115 i {
+  border-top-color: #0EBF8F;
+}
+
+#shapan-i .sha-dot-116 {
+  background: #fb841f;
+}
+
+#shapan-i .sha-dot-116 i {
+  border-top-color: #fb841f;
+}
+
+#shapan-i .sha-dot-117 {
+  background: #D00404;
+}
+
+#shapan-i .sha-dot-117 i {
+  border-top-color: #D00404;
+}
+
+#shapan-i .sha-dot-118 {
+  background: #a9a9aa;
+}
+
+#shapan-i .sha-dot-118 i {
+  border-top-color: #a9a9aa;
+}
+
+.sha-dot b {
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  width: 15px;
+  height: 15px;
+  background: url("../images/close-ico.png") 0 0 no-repeat;
+  cursor: pointer;
+}
+
+.sha-dot b:hover {
+  background-position: 0 bottom;
+}
+
+.bdbot td {
+  border-bottom: 1px dashed #CAE4F7;
+}
+
+.tb th, .tb td {
+  padding: 5px;
+}
+
+.conlist1 {
+  float: left;
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  border-bottom: 1px dotted #aad6f6;
+  text-align: left;
+  font-weight: 600;
+  color: #134d9d;
+  text-indent: 12px;
+  background: #f1f7fd;
+}
+
+/*# sourceMappingURL=shapan.css.map */

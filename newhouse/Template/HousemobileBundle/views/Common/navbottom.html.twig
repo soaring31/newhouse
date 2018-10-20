@@ -1,0 +1,105 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{% set url_id = app.request.get('id') %}
+
+{% set url_class = app.request.get('class') %}
+
+{% set url_action = app.request.get('action', 1) %}
+
+{% set arr_nav_opt = {
+    xq_nav: [
+        {
+            name: '小区',
+            icon: 'font-f-2',
+            url: ('sale/qdetail')|UU({id: url_id|default('')})
+        },
+        {
+            name: '出售',
+            icon: 'font-f-100',
+            url: ('sale/qdmai')|UU({id: url_id|default('')})
+        },
+        {
+            name: '出租',
+            icon: 'font-f-68',
+            url: ('sale/qdzhu')|UU({id: url_id|default('')})
+        },
+        {
+            name: '户型',
+            icon: 'font-f-53',
+            url: ('sale/qdplanintro')|UU({id: url_id|default('')})
+        },
+        {
+            name: '图库',
+            icon: 'font-f-76',
+            url: ('sale/qdphotos')|UU({id: url_id|default('')})
+        },
+    ],
+    member_jjgs: [
+        {
+            name: '公司简介',
+            icon: 'font-f-49',
+            url: ('member/d_ds')|UU({id: id|default(app.request.get('id'))})
+        },
+        {
+            name: '出售',
+            icon: 'font-f-100',
+            url: ('member/detail')|UU({id: id|default(app.request.get('id'))})
+        },
+        {
+            name: '出租',
+            icon: 'font-f-68',
+            url: ('member/d_rent')|UU({id: id|default(app.request.get('id'))})
+        },
+        {
+            name: '经纪人',
+            icon: 'font-f-58',
+            url: ('member/d_jjr')|UU({id: id|default(app.request.get('id'))})
+        },
+        {
+            name: '公司动态',
+            icon: 'font-f-39',
+            url: ('member/d_news')|UU({id: id|default(app.request.get('id'))})
+        }
+    ],
+    member_jjr: [
+        {
+            name: '简介',
+            icon: 'font-f-58',
+            url: ('member/j_d_ds')|UU({id: id|default(app.request.get('id'))})
+        },
+        {
+            name: '出售',
+            icon: 'font-f-100',
+            url: ('member/j_detail')|UU({id: id|default(app.request.get('id'))})
+        },
+        {
+            name: '出租',
+            icon: 'font-f-68',
+            url: ('member/j_d_rent')|UU({id: id|default(app.request.get('id'))})
+        },
+        {
+            name: '店铺留言',
+            icon: 'font-f-23',
+            url: ('member/j_d_ly')|UU({id: id|default(app.request.get('id'))})
+        }
+    ]
+} %}
+
+{% set nav_opt_tag = app.request.get('nav_opt_tag')|default('xq_nav') %}
+
+{% set nav_data = arr_nav_opt[nav_opt_tag] %}
+{%- block result -%}
+    {% spaceless %}
+        <nav class="bar bar-tab {{url_class}}">
+            {% if nav_data is defined %}
+                {% for item in nav_data %}
+                    <a class="tab-item {{item.class|default('')}} {% if url_action == loop.index %}act{% endif %}" {{item.attr|default('')}} href="{{item.url|default('')}}" {% if item.popup|default('') %}data-popup="{{item.popup|default('')}}"{% endif %}>
+                        <span class="icon {{item.icon}}"></span>
+                        <span class="tab-label">
+                            {{item.name|default('')}}
+                        </span>
+                    </a>
+                {% endfor %}
+            {% endif %}
+        </nav>
+    {% endspaceless %}
+{%- endblock result -%}

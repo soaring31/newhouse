@@ -1,0 +1,151 @@
+HouseBundle\Entity\HousesTel:
+    type: entity
+    table: houses_tel
+    indexes:
+        uid:
+            columns:
+                - uid
+        broker_id:
+            columns:
+                - broker_id
+        area:
+            columns:
+                - area
+        aid:
+            columns:
+                - aid
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        uid:
+            options:
+                comment: 用户ID
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 11
+        broker_id:
+            options:
+                comment: 经纪人id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 11
+        area:
+            options:
+                comment: 城市ID
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 11
+        aid:
+            options:
+                comment: 楼盘ID
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 11
+        username:
+            options:
+                comment: 用户手机号
+                unsigned: false
+            nullable: false
+            type: string
+            length: 50
+        broker_username:
+            options:
+                comment: 经纪人手机号
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        broker_real_name:
+            options:
+                comment: 经纪人名字
+                unsigned: false
+            nullable: false
+            type: string
+            length: 50
+        platform_type:
+            options:
+                comment: '平台类型__3|0：未知 6： Wap 2：PC 3：IOS 4：Android 5：Windows Phone'
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 1
+        spread:
+            options:
+                comment: 来源
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        virtualPhone:
+            options:
+                comment: 楼盘开发商400电话
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        checked:
+            options:
+                comment: 是否审核
+                unsigned: false
+            nullable: false
+            type: boolean
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

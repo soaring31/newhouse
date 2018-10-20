@@ -1,0 +1,21 @@
+info:
+    tableName: auth_access
+    subTableName: ''
+    aliasName: a
+    listGrid: {  }
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    groupBy: ''
+    order: ''
+    orderBy: asc
+    searchFun: EXISTS
+    dataModel: 0
+    autoQuery: '0'
+    alias: {  }
+    query:
+        uid:
+            eq: '[id]'
+    query1: {  }

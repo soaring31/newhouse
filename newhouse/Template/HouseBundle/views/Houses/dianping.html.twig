@@ -1,0 +1,116 @@
+{% extends 'HouseBundle:Houses:ddetail.html.twig' %}
+
+{% block title_houses %}怎么样_{{detail.name|default('')}}评价{% endblock title_houses %}
+
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data|default('')}}{{detail.name|default('')}}怎么样，{{detail.name|default('')}}好不好，{{detail.name|default('')}}好吗" />
+<meta name="description" content="{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}提供{{detail.name|default('')}}房价、户型、质量、物业、附近交通、环境、配套等方面的点评，详细分析{{cur_area_data|default('')}}{{detail.name|default('')}}楼盘详情优缺点，为您买房置业提供参考信息。 "/>
+{% endblock key_des %}
+
+{# 导航高亮 #}
+{% block top_search %}{% endblock top_search %}
+{% block logo_header %}
+    {% set nav_houses_act = 8 %}
+    {{parent()}}
+{% endblock logo_header %}
+
+{% block d_body %}
+    {% set qwdp_data = ('house.inter_housescomment')|getAll({aid:detail.id,pageSize:100,pageIndex:1,order:'create_time|desc'}) %}
+
+    <div class="blank15"></div>
+	{#{{ render(controller('HouseBundle:Bundlebindforms:comment', {
+		title: '点评',
+		formflag: 'view_houses_comment', 
+		aid: detail.id|default(''),
+		models: 'inter_housescomment',
+		arc_models: 'houses'
+	})) }}#}
+
+
+    {% if qwdp_data and qwdp_data.data %}
+        <div name="navItem">
+            <div class="item_title">
+                <b>全网点评</b>
+            </div>
+            {#<ul class="evaluate-type">
+                <li>周边配套好</li>
+                <li>周边配套好</li>
+                <li>周边配套好</li>
+                <li>周边配套好</li>
+                <li>周边配套好</li>
+            </ul>#}
+            <ul class="appraise">
+                {#{{ dump(qwdp_data.data) }}#}
+                {% for item in qwdp_data.data %}
+                    <li>
+                        <div>
+                            <span class="user_name"><b>用户**********</b></span>
+                            <span class="creat_time">{{ item.create_time|date("Y-m-d") }}</span>
+                        </div>
+                        <p>
+                            {{ item.content }}
+                            <span>
+                                {% if item.source and  item.comment_source %}
+                                    （<i class="viewSource" channel="{{ item.comment_source|default }}" data="{{ item.source|default }}" rel="nofollow">查看来源</i>）
+                                {% endif %}
+                            </span>
+                        </p>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="dianping_btn"><a class="pc_new_dianping_b" href="javascritp:;">已展示全部点评数据</a></div>
+
+    {% endif %}
+
+
+    {#全网点评查看来源#}
+    <div id="source" class="broker-mask-layer" style="z-index:999999;">
+        <div class="feedback-main-mask">
+            <span>×</span>
+            <div class="header">
+                来源渠道：<span class="channel"></span>
+            </div>
+            <div class="content">
+                <textarea class="content_url" id="content_url"></textarea>
+                <span class="copy_url">点击复制链接</span>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        seajs.use([], function () {
+            sources($('.viewSource'));
+            function sources(sourceId) {
+                sourceId.each(function (index, value) {
+                    $(value).off('click').on('click', function () {
+                        $("body").addClass("fix");
+                        $("#source").show();
+                        var channel = $(value).attr('channel');
+                        var source_url = $(value).attr('data');
+                        $(".header .channel").html(channel);
+                        $(".content .content_url").html(source_url);
+                        $(".copy_url").off("click").on("click", function () {
+                            var Url = document.getElementById("content_url");
+                            Url.select(); // 选择对象
+                            document.execCommand("Copy"); // 执行浏览器复制命令
+                        });
+                    });
+                });
+                $(".feedback-main-mask").on('click', 'span', function () {
+                    $("body").removeClass("fix");
+                    $("#source").hide();
+                });
+                $(document).on("click", function (e) {
+                    if (!$(e.target).is($(".feedback-main-mask")) && $(e.target).is($(".broker-mask-layer"))) {
+                        $("body").removeClass("fix");
+                        $("#source").hide();
+                    }
+                });
+            }
+        });
+    </script>
+
+{% endblock d_body %}
+
+

@@ -1,0 +1,162 @@
+ManageBundle\Entity\Photos:
+    type: entity
+    table: photos
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        comnum:
+            options:
+                comment: 评论条数
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        name:
+            options:
+                comment: 标题
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        author:
+            options:
+                comment: 作者
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        source:
+            options:
+                comment: 来源
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        thumb:
+            options:
+                comment: 缩略图
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        models:
+            options:
+                comment: 模型
+                unsigned: false
+                default: photos
+            nullable: false
+            default: photos
+            type: string
+            length: 100
+        category:
+            options:
+                comment: 栏目id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        checked:
+            options:
+                comment: 审核
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        images:
+            options:
+                comment: 图片
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        keywords:
+            options:
+                comment: 关键词
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        abstract:
+            options:
+                comment: 摘要
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        tplcfg:
+            options:
+                comment: 模板
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        uid:
+            options:
+                comment: 用户id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        area:
+            options:
+                comment: 地区
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

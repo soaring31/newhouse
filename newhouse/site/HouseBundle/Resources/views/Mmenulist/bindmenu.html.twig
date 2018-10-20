@@ -1,0 +1,41 @@
+{% extends "HouseBundle::base_show.html.twig" %}
+{% block js %}
+{% endblock %}
+{% block body %}
+    {# {{dump(bindInfo)}} #}
+<form action="{{ action|U({'pid':app.request.get('pid',0)}) }}" method="post" class="bindmenuform form">
+    <table class=" popup-form-table" width="100%">
+        <tbody>
+            <tr>
+            {% if bindInfo is defined and bindInfo|default('') %}
+                <td>
+                    <div>
+                        {% for k,vo in bindInfo %}
+                        <div class="form-row">
+                            <div class="form-cell-label">
+                                <label class="w150 rtd txtright">{{ ('db.menus')|getOne('name',{'id':k}) }}</label>
+                            </div>
+                            <div class="form-cell">
+                                {% for id, name in vo %}
+                                    <label>
+                                        <input type="checkbox" name="bindmenu[]" value="{{ id }}" {{ id|isChecked(info.bindmenu|default('')) }} /><span>{{ name|default('') }}</span>
+                                    </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </td>
+            {% else %}
+                <td>未找到相关数据</td>
+            {% endif %}
+            </tr>
+        </tbody>
+    </table>
+    {% if bindInfo|default('') %}
+    <div class="popup-submit">
+        <a data-role="submit" data-close="1" class="btn">提交</a>
+    </div>
+    {% endif %}
+</form>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'CoreBundle::base_ajax.html.twig' %}
+
+{% block result %}
+{# 表单名称 #}
+{% set formflag = app.request.get("formflag")|default('') %}
+{# form的样式 #}
+{% set formcls = app.request.get("formcls")|default('') %}
+{# 是否显示label #}
+{% set formlabel = 'common-form-label' in formcls %}
+{# 表单验证提示的样式 #}
+{% set formvalidstyle = app.request.get("formvalidstyle")|default('multiple') %}
+{# 提交后的跳转 #}
+{% set formjumpurl = app.request.get("formjumpurl")|default('') %}
+
+{% if formflag %}
+    {# {{ dump(form) }} #}
+    {# 加上时间戳保证唯一性 #}
+    {% set formflag = formflag ~ 'now'|date('U') %}
+<div data-view-form="1" class="common-form {{formcls}}">
+    <form {{ formjumpurl ? ('data-jumpurl="' ~ formjumpurl ~ '"')|raw : ''}} data-{{formflag}}="1" action="{{ form.vars.action }}" method="{{ form.vars.method }}" class="" {{ form_enctype(form) }} {{ formvalidstyle == 'single' ? ('errorLabelContainer="[data-' ~ formflag ~ '] .error-wrap"')|raw : '' }}>
+        <ul>
+        {% for k, v in form.children %}
+            {# 表单类型 #}
+            {% set type = v.vars.block_prefixes[v.vars.block_prefixes|length == 3 ? 1 : 2] %}
+            {# text和原有的样式冲突转下 #}
+            <li class="item {{type == 'text' ? 'text1' : type}}">
+                {% if formlabel %}
+                <div class="label">{{- type != 'submit' ? form_label(v) : '' -}}</div>
+                {% endif %}
+                <div class="field">{{- form_widget(v) -}}</div>
+            </li>
+        {% endfor %}
+        {% if formvalidstyle == 'single' %}
+            {# 验证信息 #}
+            <li class="item valid-error">
+                {% if formlabel %}
+                <div class="label"></div>
+                {% endif %}
+                <div class="field">
+                    <div class="error-wrap"></div>
+                </div>
+            </li>
+        {% endif %}
+        </ul>
+    </form>
+</div>
+<script type="text/javascript">
+    seajs.use(['inter', 'validate'], function(inter) {
+        $('[data-{{formflag}}="1"]').validate();
+        // inter.submit()
+    })    
+</script>
+{% else %}
+    <font color="#ff0000">请指定表单名称！</font>
+{% endif %}
+{% endblock result %}
+

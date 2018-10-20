@@ -1,0 +1,31 @@
+views:
+    tableName: views
+    aliasName: p
+    storagetype: 1
+    pageIndex: 1
+    pageSize: 8
+    order: id
+    orderBy: desc
+    alias:
+        t1: name
+        t2: bundle
+        t3: controller
+        t4: title
+    query:
+        title:
+            neq: ttt
+        name:
+            lt: '5'
+    join:
+        users:
+            aliasName: ppp
+            joinType: join
+            alias:
+                t1: mid
+                t2: isfounder
+                t3: username
+                t4: password
+                t5: email
+            query:
+                id:
+                    neq: p.name

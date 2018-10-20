@@ -1,0 +1,82 @@
+{% extends 'HouseBundle:Msale:mpay.html.twig' %}
+{% set aid = app.request.get('aid') %}
+{% set models = app.request.get('models') %}
+{% set ctime = ('now')|date('U') %}    
+{% set refreshs = (app.user.id)|getRefreshs()|default(0) %}
+
+{% block content %}
+{% set  unit = ('db.mconfig')|getOne('value', { name: 'urefresh'})|default(0) %}
+{% set total = (aid|split(',')|length) * unit  %}
+            {# <div class="con-nav"  data-target=".list-con">
+                 <span >
+                    <a href="{{ (controller ~ '/refresh')|U({ aid: aid, models: models}) }}"  data-role="jump">智能刷新</a>
+                </span>
+                <span class="active">
+                    <a href="{{ (controller ~ '/handref')|U({ aid: aid, models: models }) }}"  data-role="jump" >手动刷新</a>
+                </span>
+            </div> #}
+            <div class="handref  handtip ">
+             
+                {% if refreshs == 0 %}
+                        {# paytype=1&consume=2&touid=5&total_fee=3&models=sale&aid=674 #}
+                        <form action="{{('mpayment/save')|U}}" method="get" target="_blank">
+                            <div style="" class="tal refcon">
+                            <div class="refinfo">信息刷新后：排名靠前，时间显示最新。能获得更多浏览机会！</div> 
+                            <div class="refinfo">您本次刷新需要消费<font color="red">{{ total }}</font>元，确定要刷新吗？</div> 
+                            <input type="hidden" name="total_fee" value="{{ total }}">
+                            <input type="hidden" name="models" value="{{ models }}">
+                            <input type="hidden" name="touid" value="{{ app.user.id }}">
+                            <input type="hidden" name="aid" value="{{ aid }}">
+                            <input type="hidden" name="consume" value="8">
+                            <input type="hidden" name="paytype" value="1">
+                            <div class="blank15"></div>
+                            <ul class="choice-item l">
+                                <li class="weichat on" data-paytype="1">
+                                    <span></span>
+                                </li>
+                                <li class="alipay" data-paytype="2">
+                                    <span></span>
+                                </li>
+                            </ul>
+                            
+                        <div class="blank20"></div>
+                        <div class="blank10"></div>
+                            <input type="submit" id="submit"  name="submit" class="mszd-btn mr10" value="充值并购买"> <input type="checkbox" name="balance" value="1">账户余额 <font color="#f00">{{ app.user.currency.rmb|default(0) }}</font> 元
+                        </div>
+                        </form>
+                        <script type="text/javascript">
+                            seajs.use([],function(){
+                                $('.choice-item').on('click','li',function(){
+                                $('.choice-item li').removeClass('on');
+                                $(this).addClass('on');
+                                $('input[name=paytype]').val($(this).attr('data-paytype'))
+                                 })
+                            })
+                        </script>
+                {% else %}   
+                <div class="tac">
+                <p>信息刷新后：排名靠前，时间显示最新。能获得更多浏览机会！</p>
+                <p>您还有<i>{{refreshs}}</i>次免费刷新，确定要刷新吗？</p> 
+                <div class="bottom-confirm" data-id="{{ aid }}">
+                    {% if models == 'sale' %}
+                    {% set col = 'msalemanage' %}
+                    {% else %}
+                    {% set col = 'mrentmanage' %}
+                    {% endif %}
+                     <form data-id="0" action="{{ ( col ~ '/refresh')|U({ _form_id: 385 })}}" method="POST" class="form" novalidate="novalidate">
+                        {# {% set form = (385)|getForm %} #}
+                        {{ form_widget(form.csrf_token) }}
+                        <input type="hidden" name="refreshdate" value="{{ ctime }}">
+                        <input type="hidden" name="id" value="{{ aid }}">
+                        {% if refreshs == 0 %}
+                        <input type="submit" id="submit" disabled="disabled"  name="submit" class="graybtn" data-role="submit" data-reload="1" data-close="1" value="马上刷新">
+                        {% else %}
+                        <button type="submit" id="submit"  name="submit" class="mszd-btn" data-role="submit" data-reload="1" data-close="1">马上刷新</button>
+                        {% endif %}
+                    </form>
+                </div>
+                </div>   
+                {% endif %}
+              </div>    
+      
+{% endblock %}    

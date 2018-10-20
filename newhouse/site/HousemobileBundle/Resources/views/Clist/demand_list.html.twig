@@ -1,0 +1,62 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+** ajax调用：需求列表
+** fabu_btn：是否显示发布按钮
+#}
+
+{% block result %}
+    {% set url_uid = app.request.get('uid') %}
+    {% if url_uid %}
+        {% set list = ident.lists %}
+    {% elseif ident.list is defined %}
+        {% set list = ident.list %}
+    {% endif %}
+    {% spaceless %}
+        {% if list.data is defined and list.pageCount|default('') != 0 %}
+            {% for item in list.data  %}
+                {% set item_category = item.category|default(297) %}
+                <li {% if loop.last %}data-page="{
+                            pageIndex: {{list.pageIndex}},
+                            pageCount: {{list.pageCount}}
+                                }" {% endif %}>
+                <a href="{{('demand/detail')|UU({id: item.id|default('')})}}" class="item-content p-default">
+                    <div class="item-inner">
+                        <div class="item-title-row">
+                            {{housemobile_global.list_title({title: item.name|default('')})}}
+                            <div class="item-after">
+                                {% if item_category == 297 %}
+                                    {{house_global.if_wy({value: item.zj|default(''), class: "l p-red"})}}
+                                {% else %}
+                                    {{house_global.if_czj({value: item.zj|default(''), class: 'l p-red'})}}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="item-subtitle item-subtitle-ex">
+                            {{house_global.if_mj({value: item.mj|default('')})}}
+                            <span class="pull-right">
+                                <span class="new">{{core_global.timeformat({time: item.update_time|default('')})}}</span>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+                {% if url_uid|default('')%}
+                    {% if item.category == 297 %}
+                        {% set item_formflag = 'sdemand' %}
+                    {% else %}
+                        {% set item_formflag = 'rdemand' %}
+                    {% endif %}
+                    <div class="item-content user-fb-btn">
+                        <div class="item-inner">
+                            <a href="{{ ('mdemandmanage/show')|UU({_id: item.id, formflag: item_formflag, models:'demand', category: item_category}) }}" class="button button-fill">修改</a>
+                            <a data-delete="{{('mdemandmanage/delete')|U({id: item.id|default('')})}}" href="javascript:;" class="button button-gray button-fill">删除</a>
+                        </div>
+                    </div>
+                    <div class="user-fb-line"></div>
+                {% endif %}
+            </li>
+            {% endfor %}
+        {% else %}
+        <li class="mobile-list-none">暂无{% if app.request.get('category', 297)|default('') == 297 %}求购{% else %}求租{% endif %}信息</li>
+        {% endif %}
+    {% endspaceless %}
+{% endblock result %}

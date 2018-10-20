@@ -1,0 +1,51 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+{# 说明 
+* detail：学区详情数据
+#}
+{% set detail = cident.xdetail.data[0]|default('') %}
+
+{% block title %}
+    【{{cur_area_data|default('')}}{{detail.name|default('')}}附近二手房/附近出租/小区详情/学校简介】
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}，小区详情，招生简章，{{detail.name|default('')}}附近二手房" />
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}二手房网为您提供最新、最全的{{detail.name|default('')}}附近二手房出售信息以及{{detail.name|default('')}}学校介绍、入学条件等信息。查找{{detail.name|default('')}}小区出售信息，就到{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}二手房网！" />
+{% endblock key_des %}
+
+{% block header_title %}
+    <h1 class="title ">学区详情</h1>
+{% endblock header_title %}
+
+{% block popup %}
+    {{ housemobile_global.popup({
+        name: 'popup-map',
+        title: '学校地图',
+        content: {
+            bParams: true,
+            ajax: {
+                url: ('sale/xdetail')|U,
+                data: {
+                    id: detail.id|default(''),
+                    tpl: 'Common:mapblock'
+                }
+            }
+        }
+    }) }}
+{% endblock popup %}
+
+
+{% block container %}
+<div data-block="{
+    bParams: true,
+    ajax:{
+        url: '{{ ('sale/xdetail')|U }}',
+        data: {
+            id: '{{ detail.id|default('') }}',
+            tpl: 'Sale:xdetailblock'
+        }
+    }
+}"></div>
+{% endblock container %}
+

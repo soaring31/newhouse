@@ -1,0 +1,89 @@
+{% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:demand_list.html.twig' : 'HousemobileBundle::list_layout.html.twig' %}
+{% set url_category = app.request.get("category", 297) %}
+
+{% block title %}
+    {% if url_category|default('') == 297 %}
+    {{cur_area_data|default('')}}二手房网_{{cur_area_data|default('')}}二手房信息|二手房出售
+    {% else %}
+    {{cur_area_data|default('')}}租房网_{{cur_area_data|default('')}}租房信息|房屋出租
+    {% endif %}
+{% endblock title %}
+
+{% block header_title %}
+    {% if url_category|default('') == 297 %}
+    {{core_mobile_global.title({title: '求购'})}}
+    {% else %}
+    {{core_mobile_global.title({title: '求租'})}}
+    {% endif %}
+{% endblock header_title %}
+
+{% block key_des %}
+    {% if url_category|default('') == 297 %}
+        <meta name="keywords" content="{{cur_area_data|default('')}}二手房,{{cur_area_data|default('')}}二手房出售,{{cur_area_data|default('')}}二手房买卖" />
+        <meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}二手房网为您提供快速全面的{{cur_area_data|default('')}}二手房信息及新发布{{cur_area_data|default('')}}二手房价格。大量优质二手房实时更新，为您创造舒适二手房购房体验。" />
+    {% else %}
+        <meta name="keywords" content="{{cur_area_data|default('')}}租房，{{cur_area_data|default('')}}租房网，{{cur_area_data|default('')}}出租房源租房，租房信息" />
+        <meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}租房网提供{{cur_area_data|default('')}}海量出租房源，实时更新，租房信息真实有效。{{cur_area_data|default('')}}租房子、找合租、个人房屋出租，就到{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}。" />
+    {% endif %}
+{% endblock key_des %}
+
+
+{# 头部右边追加 #}
+{% block header_right %}
+{% if url_category|default('') == 297 %}
+    {{ core_mobile_global.bar_nav_btn({
+        title: '搜索',
+        icon: 'font-f-8',
+        popup: {
+            title: '求购搜索',
+            popup: '.popup-search',
+        }
+    }) }}
+{% else %}
+    {{ core_mobile_global.bar_nav_btn({
+        title: '搜索',
+        icon: 'font-f-8',
+        popup: {
+            title: '求租搜索',
+            popup: '.popup-search',
+        }
+    }) }}
+{% endif %}
+{% endblock header_right %}
+
+{% block container %}
+    {% set list_header %}
+        <div class="filter" data-block="{
+            ajax: {
+                url: '{{ ('bundlebindforms/ajax')|U }}',
+                data: {
+                    tpl: 'Common:filter',
+                    tag: 'region'
+                }
+            }
+        }"></div>
+    {% endset %}
+
+    {# 列表链接 js调用列表需要 #}
+    {% set list_url = ('demand/list')|U({ajax: 1, category: url_category}) %}
+    {{ parent() }}
+{% endblock container %}
+
+
+{% block popup_nav %}
+    {% set current_nav = {
+        title: '需求信息',
+        data: [
+            {
+                name: '求购',
+                url: ('demand/list')|UU
+            },
+            {
+                name: '求租',
+                url: ('demand/list')|UU({category: 298})
+            }
+        ]
+    } %}
+    {{parent()}}
+{# {% include 'HousemobileBundle:Demand:navblock.html.twig' ignore missing %} #}
+{% endblock popup_nav %}

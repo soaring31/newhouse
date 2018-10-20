@@ -1,0 +1,43 @@
+$img-share-QQ16:(16px, 16px, -112px, -78px, img-share-QQ16);
+$img-share-QQwb16:(16px, 16px, -112px, -52px, img-share-QQwb16);
+$img-share-QQzone16:(16px, 16px, -112px, -26px, img-share-QQzone16);
+$img-share-arrow-up:(10px, 7px, 0, -112px, img-share-arrow-up);
+$img-share-coment-hover:(18px, 18px, -84px, -28px, img-share-coment-hover);
+$img-share-coment:(18px, 18px, 0, -28px, img-share-coment);
+$img-share-qq18-hover:(18px, 18px, -56px, 0, img-share-qq18-hover);
+$img-share-qq18:(18px, 18px, -56px, -28px, img-share-qq18);
+$img-share-qqwb18-hover:(18px, 18px, -28px, -56px, img-share-qqwb18-hover);
+$img-share-qqwb18:(18px, 18px, -56px, -56px, img-share-qqwb18);
+$img-share-qqzone18-hover:(18px, 18px, 0, 0, img-share-qqzone18-hover);
+$img-share-qqzone18:(18px, 18px, -84px, -56px, img-share-qqzone18);
+$img-share-share-btn-hover:(18px, 18px, 0, -84px, img-share-share-btn-hover);
+$img-share-share-btn:(18px, 18px, -28px, -84px, img-share-share-btn);
+$img-share-slide-btn-hover:(18px, 18px, -56px, -84px, img-share-slide-btn-hover);
+$img-share-slide-btn:(18px, 18px, -84px, -84px, img-share-slide-btn);
+$img-share-wb16:(16px, 16px, -112px, 0, img-share-wb16);
+$img-share-wb18-hover:(18px, 18px, -84px, 0, img-share-wb18-hover);
+$img-share-wb18:(18px, 18px, 0, -56px, img-share-wb18);
+$img-share-wx18-hover:(18px, 18px, -28px, -28px, img-share-wx18-hover);
+$img-share-wx18:(18px, 18px, -28px, 0, img-share-wx18);
+
+$img-share: ($img-share-QQ16,$img-share-QQwb16,$img-share-QQzone16,$img-share-arrow-up,$img-share-coment-hover,$img-share-coment,$img-share-qq18-hover,$img-share-qq18,$img-share-qqwb18-hover,$img-share-qqwb18,$img-share-qqzone18-hover,$img-share-qqzone18,$img-share-share-btn-hover,$img-share-share-btn,$img-share-slide-btn-hover,$img-share-slide-btn,$img-share-wb16,$img-share-wb18-hover,$img-share-wb18,$img-share-wx18-hover,$img-share-wx18);
+
+@mixin img-share($sprites) {
+  %icoshare {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/share.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+        @extend %icoshare;
+    }
+  }
+}

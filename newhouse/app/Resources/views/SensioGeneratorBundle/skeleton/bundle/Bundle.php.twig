@@ -1,0 +1,24 @@
+<?php
+/**
+* @copyright Copyright (c) 2008 – {{ ''|date('Y') }} www.08cms.com
+* @author 08cms项目开发团队
+* @package 08cms
+* create date {{ ''|date('Y-m-d') }}
+*/
+namespace {{ namespace }};
+
+{% block use_statements %}
+use Symfony\Component\HttpKernel\Bundle\Bundle;
+{% endblock use_statements %}
+
+{% block class_definition %}
+class {{ bundle }} extends Bundle
+{% endblock class_definition %}
+{
+{% block class_body %}
+{% endblock class_body %}
+    public function getCompany()
+    {
+        return '08cms';
+    }
+}

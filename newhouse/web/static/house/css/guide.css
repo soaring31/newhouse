@@ -1,0 +1,736 @@
+@charset "UTF-8";
+/*!
+ * @name <%= name %>
+ * @author <%= author %>
+ * @date <%= date %>
+ */
+/**
+ * @method 清除浮动 %clearfix 
+ * @description 清除浮动
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %clearfix;
+ * }
+ * ```
+ * 
+ * ```css
+ * 	div {
+	    *zoom: 1;
+	}
+	div:after {
+	    display: block;
+	    clear: both;
+
+	    height: 0;
+
+	    content: '\20';
+	}
+ * ```
+ */
+.guide .list-b, .guide .point {
+  *zoom: 1;
+}
+
+.guide .list-b:after, .guide .point:after {
+  display: block;
+  clear: both;
+  height: 0;
+  content: '\20';
+}
+
+/**
+ * @method 去掉虚线框 %outline 
+ * @description 去掉虚线框
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @ extend %outline;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		outline: thin dotted;
+		outline: 5px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
+ * ```
+ */
+/**
+ * @method 文字不换行后面加省略号 %text-overflow 
+ * @description 文字不换行后面加省略号
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %text-overflow;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+ * ```
+ */
+/**
+ * @method 透明层opacity 
+ * @description 透明层 内容也透明
+ * @param {number} $opacity - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include opacity(.5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+	  opacity: .5;
+	  filter: alpha(opacity=50);
+ * }
+ * ```
+ */
+/**
+ * @method 背景透明层transparent 
+ * @description 透明层只处理背景透明
+ * @param {string} $color - 背景透明层的颜色
+ * @param {number} $alpha - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include transparent(#000, .5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+ *    	background-color: transparent;
+		background-color: (0,0,0,.5);
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7fffffff, endColorstr=#7fffffff,);
+		zoom: 1;
+ * }
+ * ```
+ */
+/**
+ * @method triangle 
+ * @description 生成一个三角形图标
+ * @param {string} $size - 三角的大小
+ * @param {string} $color - 三角颜色
+ * @param {string} $direction - 三角的方向 up, down, left, right
+ * @example 调用
+ * 
+ * ```scss
+ * i {
+ *    @include triangle(5px, #bbb, up); 
+ * }
+ * ```
+ * 
+ * ```css
+ * i {
+ *    width: 0;
+      height: 0;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent;
+      border-bottom-color: #bbb;
+ * }
+ * ```
+ */
+/**
+* @method 水平线hr nav-divider 
+* @description 透明层 内容也透明
+* @param {string} $color=#e5e5e5 - 线的颜色
+* @param {string} $line-height-computed - 线的高度，空间
+* @example 调用
+* 
+* ```scss
+* div {
+*    @include nav-divider(#e5e5e5, 24px);
+* }
+* ```
+* 
+* ```css
+* div {
+	  height: 1px;
+	  margin: 11px 0;
+	  overflow: hidden;
+	  background-color: #e5e5e5;
+* }
+* ```
+*/
+.img-gd-1, .img-gd-2, .img-gd-3, .img-gd-4, .img-gd-5, .img-gd-6 {
+  display: inline-block;
+  *zoom: 1;
+  *display: inline;
+  vertical-align: middle;
+  line-height: 300px;
+  overflow: hidden;
+  background-image: url(../images/gd.png);
+}
+
+.img-gd-1 {
+  width: 70px;
+  height: 44px;
+  background-position: 0 0;
+}
+
+.img-gd-2 {
+  width: 18px;
+  height: 16px;
+  background-position: 0 -54px;
+}
+
+.img-gd-3 {
+  width: 11px;
+  height: 6px;
+  background-position: -28px -54px;
+}
+
+.img-gd-4 {
+  width: 4px;
+  height: 7px;
+  background-position: -80px 0;
+}
+
+.img-gd-5 {
+  width: 3px;
+  height: 2px;
+  background-position: -80px -17px;
+}
+
+.img-gd-6 {
+  width: 7px;
+  height: 4px;
+  background-position: -49px -54px;
+}
+
+@font-face {
+  font-family: "gd";
+  font-weight: normal;
+  font-style: normal;
+  src: url("../fonts/gd.eot");
+  src: url("../fonts/gd.eot?#iefix") format("embedded-opentype"), url("../fonts/gd.woff") format("woff");
+}
+
+[class^="font-gd-"],
+[class*=" font-gd-"] {
+  font-family: "gd"!important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: inherit;
+  float: none;
+  margin: 0;
+  vertical-align: -0.25em;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  text-decoration: none;
+  text-transform: none;
+}
+
+.font-gd-p:before {
+  content: "\EA01";
+}
+
+.font-gd-s:before {
+  content: "\EA02";
+}
+
+/*!
+ * @name guide
+ * @author ahuing
+ * @date 2016-1-15
+ * @dec top toolbar popular search terms containing the search and
+ */
+/*
+top-bar
+*/
+.top-bar {
+  background: #f3f3f3;
+  min-width: 1200px;
+  padding: 15px 0 10px 0;
+}
+
+.top-bar .search-bar {
+  float: left;
+}
+
+.top-bar .list {
+  margin-left: 68px;
+}
+
+.top-bar .list li {
+  float: left;
+  margin-right: 22px;
+  font-size: 14px;
+  margin-top: 9px;
+  margin-top: 12px;
+  display: inline;
+  overflow: hidden;
+}
+
+.top-bar .list li a {
+  height: 20px;
+  line-height: 20px;
+  text-decoration: none;
+  color: #686465;
+  overflow: hidden;
+}
+
+.top-bar .list li a:hover {
+  color: #f00;
+}
+
+.top-bar .list li a i {
+  font-size: 20px;
+  float: left;
+  margin-right: 4px;
+  margin-top: 2px;
+}
+
+body {
+  background: #f4f4f4;
+}
+
+.top-bar {
+  padding-top: 0;
+  background: #fff;
+}
+
+.current-location i {
+  color: #27b346;
+}
+
+input {
+  outline: none;
+}
+
+.container {
+  margin: 0 auto;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #27b346;
+}
+
+.s-head {
+  width: 100%;
+  min-width: 1200px;
+  height: 68px;
+  background: #fff;
+  line-height: 68px;
+}
+
+.s-head .list {
+  display: inline-block;
+  margin-left: 70px;
+  vertical-align: top;
+}
+
+.s-head .list li {
+  height: 58px;
+  margin-top: 0;
+}
+
+.s-head .list li a {
+  line-height: 58px;
+  word-spacing: 1px;
+  font-size: 14px;
+  color: #525252;
+  margin-right: 15px;
+}
+
+.s-head .list li a:hover {
+  color: #27b346;
+}
+
+.p-bar .current,
+.p-bar a:hover {
+  background: #27b346;
+  border-color: #27b346;
+}
+
+.search-bar {
+  width: 502px;
+  height: 44px;
+  border: 1px solid #27b346;
+  display: inline-block;
+  font-size: 0;
+  margin-top: 12px;
+  margin-left: 10px;
+}
+
+.search-bar .search-input {
+  padding: 0;
+  width: 432px;
+  height: 44px;
+  display: inline-block;
+  line-height: 46px;
+  font-size: 13px;
+  color: #a9a9a9;
+  text-indent: 10px;
+  border: none;
+  vertical-align: top;
+}
+
+.search-bar .search-btn {
+  margin-right: 0;
+  width: 70px;
+  height: 44px;
+  display: inline-block;
+  border: none;
+  background-color: #27b346;
+  vertical-align: top;
+}
+
+.path {
+  word-spacing: 0.5px;
+  line-height: 16px;
+  padding-left: 10px;
+  color: #a89999;
+  margin-top: 19px;
+}
+
+.path i {
+  height: 16px;
+  width: 18px;
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.path a {
+  color: #2c2c2c;
+  font-size: 13px;
+}
+
+.path a:hover {
+  color: #27b346;
+}
+
+.guide .main {
+  margin-top: 22px;
+  width: 100%;
+}
+
+.guide .test {
+  width: 100%;
+  position: relative;
+}
+
+.guide .lmenu {
+  float: left;
+  width: 300px;
+}
+
+.guide .lmenu-bg {
+  float: left !important;
+}
+
+.guide .m-head {
+  position: relative;
+  width: 246px;
+  height: 45px;
+  padding: 0 27px;
+  background: #27b346;
+}
+
+.guide .m-head li {
+  float: left;
+  height: 45px;
+  font-size: 14px;
+}
+
+.guide .m-head span {
+  position: absolute;
+  bottom: 0;
+  left: 67px;
+  height: 0;
+  width: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 6px;
+  border-bottom-color: #fff;
+}
+
+.guide .m-head a {
+  display: block;
+  height: 100%;
+  line-height: 45px;
+  padding: 0 15px;
+  color: #fff;
+}
+
+.guide .m-head .active {
+  font-size: 16px;
+}
+
+.guide .m-con {
+  padding-top: 5px;
+  padding-bottom: 40px;
+  width: 100%;
+  background: #fff;
+  cursor: pointer;
+}
+
+.guide .m-con h5 {
+  padding-left: 40px;
+  line-height: 1;
+  font-size: 17px;
+  color: #333;
+  margin-top: 25px;
+}
+
+.guide .m-con .first {
+  margin-top: 24px;
+}
+
+.guide .m-con .arrow-r {
+  height: 0;
+  width: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 4px;
+  border-left-color: #666;
+}
+
+.guide .m-con .open .arrow-r {
+  height: 0;
+  width: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 4px;
+  border-top-color: #666;
+}
+
+.guide .m-con i {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.guide .m-con .img-f-4 {
+  width: 4px;
+  height: 7px;
+}
+
+.guide .m-con .img-f-6 {
+  width: 7px;
+  height: 4px;
+}
+
+.guide .m-con ul {
+  display: none;
+  margin-left: 56px;
+}
+
+.guide .m-con li {
+  margin-top: 15px;
+  height: 14px;
+}
+
+.guide .m-con a {
+  font-size: 14px;
+  color: #666;
+}
+
+.guide .m-con a:hover {
+  color: #27b346;
+}
+
+.guide .m-con .active {
+  color: #27b346;
+}
+
+.guide .m-con span {
+  height: 2px;
+  width: 2px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 7px;
+}
+
+.guide .content {
+  width: 880px;
+  float: right;
+}
+
+.guide .banner {
+  width: 860px;
+  height: 280px;
+  border: 10px solid #fff;
+  overflow: hidden;
+  position: relative;
+}
+
+.guide .banner ul {
+  width: 9999px;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.guide .banner ul li {
+  width: 860px;
+  height: 280px;
+  float: left;
+}
+
+.guide .banner ol {
+  position: absolute;
+  height: 10px;
+  right: 0;
+  bottom: 10px;
+}
+
+.guide .banner ol i {
+  cursor: pointer;
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  background: #fff;
+  float: left;
+  margin-right: 10px;
+  text-indent: -999999px;
+}
+
+.guide .banner ol img {
+  width: 100%;
+  height: auto;
+}
+
+.guide .banner .active {
+  background: #ee4433;
+}
+
+.guide .list {
+  width: 100%;
+}
+
+.guide .list .no {
+  font-size: 16px;
+  text-align: center;
+  line-height: 2;
+}
+
+.guide .l-head {
+  height: 45px;
+  width: 100%;
+  background: #27b346;
+}
+
+.guide .l-head h2 {
+  font-size: 16px;
+  text-indent: 20px;
+  color: #fff;
+  line-height: 45px;
+}
+
+.guide .l-wrap {
+  width: 858px;
+  padding-left: 20px;
+  border: 1px solid #eee;
+  background: #fff;
+}
+
+.guide .list-b {
+  margin-top: 18px;
+  padding-bottom: 18px;
+  width: 100%;
+  border-bottom: 1px solid #f7f7f7;
+}
+
+.guide .list-b img {
+  float: left;
+}
+
+.guide .tbox {
+  margin-left: 148px;
+  padding-right: 15px;
+  word-break: break-all;
+}
+
+.guide .tbox h3 {
+  font-size: 16px;
+  line-height: 20px;
+  text-indent: 5px;
+  color: #333;
+}
+
+.guide .tbox p {
+  /*添加样式*/
+  color: #bbb;
+  margin-top: 3px;
+}
+
+.guide .ls-btn {
+  margin-top: 12px;
+  font-size: 0;
+}
+
+.guide .ls-btn a {
+  display: inline-block;
+  height: 22px;
+  padding: 0 8px;
+  background: #e7e7e7;
+  color: #666;
+  line-height: 22px;
+  border-radius: 2px;
+  margin-right: 5px;
+  font-size: 13px;
+}
+
+.guide .ls-btn a:hover {
+  background: #27b346;
+  color: #fff;
+}
+
+.guide .ls-btn .active {
+  background: #27b346;
+  color: #fff;
+}
+
+.guide .point {
+  height: 18px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding-right: 30px;
+}
+
+.guide .p-row {
+  cursor: pointer;
+  float: right;
+  margin-right: 28px;
+  height: 100%;
+  color: #ccc;
+  font-size: 13px;
+}
+
+.guide .p-row i {
+  color: #ccc;
+  display: inline-block;
+  font-size: 13px;
+  vertical-align: top;
+}
+
+/*修改样式*/
+.fs-style {
+  font-size: 15px;
+  text-decoration: none;
+  vertical-align: middle;
+}
+
+.link {
+  margin-top: 48px;
+}
+
+/*# sourceMappingURL=guide.css.map */

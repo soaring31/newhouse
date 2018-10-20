@@ -1,0 +1,21 @@
+cloud_homepage:
+    path:     /cloud/
+    defaults: { _controller: CloudBundle:Default:index }
+cloud_index:
+    path:     /cloud
+    defaults: { _controller: CloudBundle:Default:index }
+cloud_register:
+    path:     /cloud/register
+    defaults: { _controller: CloudBundle:Register:index }
+cloud_login:
+    path:     /cloud/login
+    defaults: { _controller: CloudBundle:Default:login }
+cloud_main:
+    path:     /cloud/main
+    defaults: { _controller: CloudBundle:Default:main }
+cloud_logout:
+    path:     /cloud/logout
+    defaults: { _controller: CloudBundle:Default:logout }
+cloud_captcha:
+    path:     /cloud/captcha
+    defaults: { _controller: CloudBundle:Default:captcha }

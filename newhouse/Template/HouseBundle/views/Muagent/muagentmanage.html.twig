@@ -1,0 +1,81 @@
+{% extends 'CoreBundle::base_show.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set aid = app.request.get('aid') %}    
+{% set rmb = app.user.currency.rmb|default('0') %}    
+{% set ctime = ('now')|date('U') %}  
+
+{% block mainMenu %}
+    {# {{ parent() }}  #}
+    {# {{ core_manage.btn({title: '升级经纪人'}) }} #}
+{% endblock %}
+
+{% block body %}
+    <div class="mainBody-topDiv">
+       <p class="mainBody-topDiv-fiP">
+           {% if app.user.userinfo.duedate < ctime  %}
+           支付成功后, 如果没显示升级, 请重新登陆
+           {% else %}
+            您现在是高级经纪人, {{ app.user.userinfo.duedate|date('Y-m-d') }}到期, 免费刷新 {{ app.user.userinfo.refreshs}}次, 免费置顶 {{ app.user.userinfo.tops}}次
+           {% endif %}
+       </p>
+    </div>
+    {{ core_global.payment({ consume: 3 }) }}
+<script>
+seajs.use('', function () {
+        var $rmb = {{ rmb }}
+        $('.mszd-btn').on('click',function(){
+            var $this = $(this);
+            if($('input[name=total_fee]').val() == 0){
+                $.jqModal.tip('请选择一个升级方案','error');
+                return false;
+            }
+            $.jqModal.confirm({
+                text: '已支付成功请按确定, 重新支付请按取消',
+                accept: function(){
+                    $this.closest('.jq-modal').jqModal('hide');
+                    window.location.reload();
+                }
+            });
+        })
+
+        $('input[type=radio]').on('click',function(){
+            var $el = $(this).data();
+            var $money = $el.money
+                $('input[name=total_fee]').val($money)
+                $('.quit-pay-money').html($money)
+                $('#quit-all-pay').html($money)
+                balance($rmb);        
+        })
+        
+         function balance(){
+             var $total = $('input[name=total_fee]').val(); 
+             if($('input[name=balance]').prop('checked')){
+                 if($rmb > $total){
+                     $('#quit-all-pay').html(0); // 支付金额      
+                }else{
+                     $('#quit-all-pay').html($total - $rmb); // 支付金额      
+                }
+             }else{
+                 $('.quit-pay-money').html($total);// 总计金额
+                 $('#quit-all-pay').html($total); // 支付金额      
+             }
+         } 
+         $('.choice-item').on('click','li',function(){
+                 if ($(this).hasClass('on')) {
+                    //$(this).siblings('li').removeClass('on');
+                      $(this).removeClass('on');
+                 }else{
+                     $(this).siblings('li').removeClass('on')
+                     $(this).addClass('on')
+                     $('input[name=paytype]').val($(this).attr('data-paytype'))
+                 }
+         })
+         $('input[name=balance]').on('click',function(){
+            balance()
+        })
+})  
+</script>
+{% endblock body %}
+
+
+

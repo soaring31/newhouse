@@ -1,0 +1,33 @@
+{% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:door_list.html.twig' : 'HousemobileBundle::list_layout.html.twig' %}
+
+{% block title %}
+    {{cur_area_data|default('')}}{{'now'|date('Y')}}年最新户型图
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data|default('')}}{{'now'|date('Y')}}户型,{{cur_area_data|default('')}}{{'now'|date('Y')}}户型图,{{cur_area_data|default('')}}{{'now'|date('Y')}}户型大全" />
+<meta name="description" content="{{cur_area_data|default('')}}{{'now'|date('Y')}}户型图,{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}为您提供最新、最全的{{'now'|date('Y')}}年户型图，包含一居室户型、二居室户型、三居室户型等所有大小户型图，查找更多、更新、更全户型图就上{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}。 "/>
+{% endblock key_des %}
+
+{% block header_title %}
+{{core_mobile_global.title({title: '户型'})}}
+{% endblock header_title %}
+
+{% block container %}
+    {# 检索 #}
+    {% set list_header %}
+    <div class="filter" data-block="{
+        ajax: {
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                tpl: 'Common:filter',
+                tag: 'door'
+            }
+        }
+    }"></div>
+    {% endset %}
+
+    {# 列表链接 js调用列表需要 #}
+    {% set list_url = ('door/list')|U({ajax: 1}) %}
+    {{ parent() }}
+{% endblock container %}

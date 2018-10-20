@@ -1,0 +1,53 @@
+{% extends 'ManageBundle::mainlayout.html.twig' %}
+{% import 'ManageBundle:Form:lists.html.twig' as lists %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block tableMain %}
+<section>
+    <span class="tableDesc">监听列表&gt;&gt;
+    <input type="button" id="btnfun_edit" data="{{ (action~'/show')|U }}" class="btn" value="新增监听" />
+    </span>
+    <table class="right-table">
+    	<tbody>
+    		<tr>
+    			<th class="w30"></th>
+                <th class="txtleft">监听名称</th>
+                <th class="w130 txtleft">英文名称 </th>
+                <th class="w130 txtleft">监听URL</th>
+                <th class="w130 txtleft">绑定服务</th>
+                <th class="w130 txtleft">操作类型</th>
+                <th class="w130 txtleft">映射类型</th>
+    			<th class="w200">操作</th>
+    		</tr>
+    		{% if info.data is defined %}
+    		{% for key,vo in info.data %}
+    		<tr>
+    		    <td></td>
+    			<td>{{ vo.name }}</td>
+    			<td>{{ vo.ename  }}</td>
+    			<td>{{ vo.url }}</td>
+    			<td>{{ vo.bindService }}</td>
+    			<td>操作后</td>
+    			<td>{{ vo.mapType }}</td>
+    			<td class="txtcenter">
+    				<input type="button" id="btnfun_edit_{{key}}" data="{{ (action~'/show')|U('_id='~key) }}" class="btn" value="修改" />&nbsp;&nbsp;
+    				<input type="button" id="btnfun_delete_{{key}}" data="{{ (action~'/delete')|U('id='~key) }}" class="btn" value="删除" />
+    			</td>
+    			<td></td>
+    		</tr>
+    		{% endfor %}
+    		{% endif %}
+    	</tbody>
+    </table>
+</section>
+{% endblock %}
+{% block submit %}{% endblock %}
+{% block pageIndex %}{{ info.pageIndex|default(1) }}{% endblock %}
+{% block pageCount %}{{ info.pageCount|default(1) }}{% endblock %}
+{% block promptUl %}
+<li>为优化性能，只从文件库中读取监听配置</li>
+{% endblock %}

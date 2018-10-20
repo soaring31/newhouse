@@ -1,0 +1,127 @@
+{% extends 'HouseBundle:Msale:msalecon.html.twig' %}
+
+{% block mainMenu %}
+     {{ forms.jump(
+        {
+            title: '<i class="font-ico-24 mr5"></i>委托出售',
+            url: 'msale/msalecon',    
+            class: 'on'
+        }
+        ) }}
+    {{ forms.jump(
+        {
+            title: '<i class=" mr5"></i>委托出租',
+            url: 'mrent/mrentcon',     
+        }
+        ) }}
+{% endblock mainMenu %}
+
+{% block mainleft %}
+ 
+{% endblock mainleft %}
+
+{% block tableMain %}
+
+    {# {{dump(ident.info.data)}} #}
+    {{ lists.filter([
+        {
+            method: 'selectFormField',
+            title: '审核',
+            form: 'checked',
+            field: 'checked',
+        },
+        {
+            method: 'search',
+            field: 'name',
+        }
+    ]) }}
+    <section class="list-con" data-param="{
+            defUrl    : '{{ (action)|U }}',
+            showUrl   : '{{ (action ~ '/show')|U}}',
+            submitUrl : '{{ (action ~ "/save")|U }}',
+            deleteUrl : '{{ (action ~ "/delete")|U }}',
+            fixed     : '.filter',
+            list      : '.list-con',
+            data      : {
+                models: '{{ models }}', 
+            }
+        }">
+        <div class="list">
+            <table class="right-table table-hover">
+                <tbody>
+                    <tr data-id>
+                        <th width="40" class="tac">{{forms.checkbox()}}</th>
+                        <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                        <th width="200">楼盘名称</th>
+                        <th>联系人</th>
+                        <th>联系电话</th>
+                        <th>户型</th>
+                        <th>面积</th>
+                        <th>价格</th>
+                        <th>委托时间</th>
+                        <th  width="100">操作</th>
+                    </tr>
+                    {% if ident.info.data is defined %}
+                    {% for k, vo in ident.info.data %}
+
+                    <tr {% if vo.entrust<1 %} data-id="{{vo.id}}" {% endif %}>
+
+                        <td class="tac">{{forms.checkbox()}}</td>
+                        <td>{{vo.id}}</td>
+                        <td>{{vo.name}}</td>
+                        <td>{{vo.xingming}}</td>
+                        <td>{{ vo.tel }}</td>
+                        <td>{{core_global.formData({value: vo.shi})}}/{{core_global.formData({value: vo.ting})}}/{{core_global.formData({value: vo.wei})}}</td>
+                        <td>{{ vo.mj }}㎡</td>
+                        <td>{{ vo.dj }}</td>
+                        <td>{{ vo.create_time|default('0')|date('Y-m-d') }}</td>
+                        <td>
+                            {% if vo.entrust < 1 %}
+                                {{ forms.submit({
+                                    class: 'btn btn-sm ',
+                                    title: '接受委托',
+                                    attr: vo.id,
+                                    data: '{uid: \'' ~ userid ~ '\', entrust:1 }'
+                                }) }}
+                            {% else %}
+                               {{ forms.show({
+                                     url: ("msalemanage/show")|U({aid: vo.id}),
+                                    title: '发布二手房',
+                                    class: 'btn'
+                                }) }}
+                            {% endif %}
+
+                         
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        {{lists.page(ident.info)}}
+    </section>
+
+
+    {{ lists.oprate([
+        {
+            method: 'delete',
+            title: '<i class="font-ico-del mr5"></i>批量删除',
+        },
+        {
+            method: 'dropdownFormField',
+            field: 'checked',
+            form: 'checked',
+            title: '审核',
+        },
+        {
+            method: 'dropdownCate',
+            title: '置顶',
+            field: 'top',
+            service: 'house.category',
+        },
+    ]) }}
+{% endblock %}

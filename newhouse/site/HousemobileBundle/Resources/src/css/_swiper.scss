@@ -1,0 +1,200 @@
+/*!
+ * @name swiper.css
+ * @author xying
+ * @date 2016-1-15
+ */
+
+/*************************************************
+					公用部分
+*************************************************/
+/*!
+ * @description 自定义宽度滑块
+ * @示例 
+ * ```twig
+ * <div class="swiper-container swiper-width-auto"><div>
+ * ```
+ */
+.swiper-container {
+    height: rem(365px);
+}
+.swiper-container2 {
+    height: rem(400px);
+}
+
+.swiper-width-auto {
+	.swiper-slide {
+		width: auto;
+	}
+}
+
+.swiper-container {
+	padding-bottom: 0;
+}
+
+.swiper-slide {
+	img {
+		max-height: 100%;
+		max-width: 100%;
+		margin: 0 auto;
+	}
+}
+
+/*************************************************
+					独有部分
+*************************************************/
+// 文字链接类型左右滑动样式
+
+.txt-swiper {
+	font-size: 14px;
+	height: 64px;
+	a {
+		color: #83868f;
+		display: block;
+		line-height: 34px;
+		padding: 15px 12px;
+	}
+}
+
+// 楼盘详情户型图、相册
+
+.img-swiper {
+	height: 165px;
+	.card {
+		height: 160px;
+		font-size: 12px;
+		width: 115px;
+		margin:0 0 0 14px;
+		text-align: center;
+		.card-content-inner {
+			padding: 0 4px 0 4px;
+			margin-top: 8px;
+		}
+		img {
+			height: 115px;
+			width: 115px;
+			display: block;
+		}
+	}
+}
+
+// 户型图详情
+.door-swiper {
+	height: 100%;
+	background: #000;
+	.swiper-wrapper {
+		height: 100%;
+	}
+	.swiper-slide {
+		overflow: hidden;
+		display: flex;
+		align-items: center;
+		vertical-align: middle;
+		& > div {
+			width: 100%;
+		}
+		img {
+			// width: 100%;
+			// height: auto;
+			vertical-align: middle;
+		}
+	}
+	.swiper-pagination-bullet {
+		background: #fff;
+	}
+}
+.door-nav {
+	background-color: #000;
+	.tab-item {
+		color: #fff; 
+	}
+}
+
+// 纵向菜单
+.swiper_v_nav {
+	height: 100%;
+	// background: #f3f4f6;
+	.swiper-slide {
+		height: 44px !important;
+		text-align: center;
+		line-height: 44px;
+		white-space:nowrap;
+		overflow: hidden;
+		border-bottom: 1px solid #e7e7e7;
+		border-right: 1px solid #e7e7e7;
+		a {
+			color: #3c3f46;
+			font-size: 12px;
+			display: block;
+		}
+		&.active {
+			background: #fff;
+			border-right-color: #fff;
+		} 
+	}
+}
+
+// 新房首页
+.top-roll {
+	height:44px;
+	overflow: hidden;
+	.swiper-slide {
+		background-color: #989898;
+		border: none;
+		a{
+			color: #fff;
+		}
+	}
+}
+
+// 列表滚动
+// .infinite-scroll {
+// 	overflow: hidden;
+// 	.fixed-list-container {
+// 		height: 100%;
+// 		overflow-y: auto;
+// 	}
+// }
+.lp-fixed-left {
+	top: 4.09444rem;
+}
+.lp-fixed-content {
+	top: 4.09444rem !important;
+}
+
+.lp-fixed-hd {
+	padding-left: 0;
+	padding-right: 0;
+	height: 1.65rem;
+	// background: #fff;
+}
+
+.xq-fixed-left {
+	top: 2.44444rem;
+}
+
+.xq-fixed-left,
+.lp-fixed-left {
+	position: absolute;
+	left: 0;
+	width: 55px;
+	height: 100%;
+}
+
+.lp-fixed-content,
+.xq-fixed-content {
+	left: 55px;
+	background: #fff;
+	.list-container {
+		min-height: auto;
+	}
+}
+
+// 户型
+.door-bar ~ .content {
+	bottom: 2.44444rem;
+}
+
+// 只有一张图的时候使用
+.swiper-one-img {
+    margin: 0;
+}

@@ -1,0 +1,55 @@
+{% extends 'HousemobileBundle:Bundlebindforms:register.html.twig' %}
+
+{% set url_tplurl = app.request.get('tplurl', '../index/index.html') %}
+
+{% block result %}
+<div class="content bg-white">
+    <div class="content-block"></div>
+    <div class="list-block list-block-login mobile-form">
+    	{% if Form.children|default('') %}
+        <form class="form" data-url="{{url_tplurl|default('')}}" action="{{ ('main/login')|U({loginflag:1}) }}" method="post" data-login-url="{{('main/mindex')|UU({}, true)}}">
+        <ul>
+        	{% for k,v in Form.children %}
+        		{% if k not in ['submit', 'codeText'] %}
+        		<li class="item-content" {% if v.vars.block_prefixes[1]|default('') == 'hidden' %}style="display: none;"{% endif %}>
+                    <div class="item-inner">
+                        <div class="item-title label">
+                            {{- form_label(v) -}}
+                        </div>
+                        <div class="item-input item-input-flex">
+                        	{{attribute(core_mobile_global, v.vars.block_prefixes[v.vars.block_prefixes|length - 2]|default('text') ~ '_form', [v.vars])}}
+                        </div>
+                        {{ core_mobile_forms.form_password_see(v) }}
+                    </div>
+	            </li>
+	    		{% endif %}
+    		{% endfor %}
+        </ul>
+        <div class="content-block">
+            <!-- 有效时加clss=item-button1 -->
+            <div class="row">
+                <div class="col-100">
+                    <a class="button  button-big button-fill button-success" data-role="submit" href="javascript:;">登 录</a>
+                </div>
+                <div class="col-50">
+                    &nbsp;
+                </div>
+                <div class="col-50 mt20 tar">
+                    <a href="{{ ('register/resetpwd')|UU }}" class="p-default">忘记密码？</a> 
+                </div>
+            </div>
+        </div>
+        </form>
+        {% endif %}
+    </div>
+    {{ block('result_nav') }}
+</div>
+<script type="text/javascript">
+seajs.use([''], function() {
+	$(document).on('click', '#submit', function(event) {
+	    $.toast("<span class='font-f-37'></span> 密码不能为空", 2000, 'toast-ex');    
+	    return false;
+	});
+})
+</script>
+{% endblock result %}

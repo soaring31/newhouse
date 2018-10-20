@@ -1,0 +1,1850 @@
+@charset "UTF-8";
+/*!
+* @name index
+* @author author
+* @date 
+*/
+/**
+ * @method 清除浮动 %clearfix 
+ * @description 清除浮动
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %clearfix;
+ * }
+ * ```
+ * 
+ * ```css
+ * 	div {
+	    *zoom: 1;
+	}
+	div:after {
+	    display: block;
+	    clear: both;
+
+	    height: 0;
+
+	    content: '\20';
+	}
+ * ```
+ */
+.house-news, .partner-inner, .aside-news-hd {
+    *zoom: 1;
+}
+
+.house-news:after, .partner-inner:after, .aside-news-hd:after {
+    display: block;
+    clear: both;
+    height: 0;
+    content: '\20';
+}
+
+/**
+ * @method 去掉虚线框 %outline 
+ * @description 去掉虚线框
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @ extend %outline;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		outline: thin dotted;
+		outline: 5px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
+ * ```
+ */
+/**
+ * @method 文字不换行后面加省略号 %text-overflow 
+ * @description 文字不换行后面加省略号
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %text-overflow;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+ * ```
+ */
+/**
+ * @method 内容换行 %word-wrap 
+ * @description 内容换行
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %word-wrap;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+	    word-wrap: break-word;
+	    word-break: break-all;
+	}
+ * ```
+ */
+/**
+ * @method 透明层opacity 
+ * @description 透明层 内容也透明
+ * @param {number} $opacity - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include opacity(.5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+	  opacity: .5;
+	  filter: alpha(opacity=50);
+ * }
+ * ```
+ */
+/**
+ * @method 背景透明层transparent 
+ * @description 透明层只处理背景透明
+ * @param {string} $color - 背景透明层的颜色
+ * @param {number} $alpha - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include transparent(#000, .5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+ *    	background-color: transparent;
+		background-color: (0,0,0,.5);
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7fffffff, endColorstr=#7fffffff,);
+		zoom: 1;
+ * }
+ * ```
+ */
+/**
+ * @method triangle 
+ * @description 生成一个三角形图标
+ * @param {string} $size - 三角的大小
+ * @param {string} $color - 三角颜色
+ * @param {string} $direction - 三角的方向 up, down, left, right
+ * @example 调用
+ * 
+ * ```scss
+ * i {
+ *    @include triangle(5px, #bbb, up); 
+ * }
+ * ```
+ * 
+ * ```css
+ * i {
+ *    width: 0;
+      height: 0;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent;
+      border-bottom-color: #bbb;
+ * }
+ * ```
+ */
+/**
+* @method 水平线hr nav-divider 
+* @description 透明层 内容也透明
+* @param {string} $color=#e5e5e5 - 线的颜色
+* @param {string} $line-height-computed - 线的高度，空间
+* @example 调用
+* 
+* ```scss
+* div {
+*    @include nav-divider(#e5e5e5, 24px);
+* }
+* ```
+* 
+* ```css
+* div {
+	  height: 1px;
+	  margin: 11px 0;
+	  overflow: hidden;
+	  background-color: #e5e5e5;
+* }
+* ```
+*/
+@font-face {
+    font-family: "ico";
+    font-weight: normal;
+    font-style: normal;
+    src: url("../fonts/ico.eot");
+    src: url("../fonts/ico.eot?#iefix") format("embedded-opentype"), url("../fonts/ico.woff") format("woff");
+}
+
+[class^="font-ico-"], .ys180 h3 .close:before, .ys180 dt:before, .ys180 dt.ico:before,
+[class*=" font-ico-"] {
+    font-family: "ico"!important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: inherit;
+    float: none;
+    margin: 0;
+    vertical-align: -0.25em;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    text-decoration: none;
+    text-transform: none;
+}
+
+.font-ico-22:before {
+    content: "\EA01";
+}
+
+.font-ico-28:before, .ys180 h3 .close:before {
+    content: "\EA02";
+}
+
+.font-ico-arwl:before {
+    content: "\EA03";
+}
+
+.font-ico-arwr:before {
+    content: "\EA04";
+}
+
+.font-ico-plus:before, .ys180 dt.ico:before {
+    content: "\EA05";
+}
+
+.font-ico-plus0:before, .ys180 dt:before {
+    content: "\EA06";
+}
+
+@font-face {
+    font-family: "service";
+    font-weight: normal;
+    font-style: normal;
+    src: url("../fonts/service.eot");
+    src: url("../fonts/service.eot?#iefix") format("embedded-opentype"), url("../fonts/service.woff") format("woff");
+}
+
+[class^="font-service-"],
+[class*=" font-service-"] {
+    font-family: "service"!important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: inherit;
+    float: none;
+    margin: 0;
+    vertical-align: -0.25em;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    text-decoration: none;
+    text-transform: none;
+}
+
+.font-service-1:before {
+    content: "\EA01";
+}
+
+.font-service-2:before {
+    content: "\EA02";
+}
+
+.font-service-3:before {
+    content: "\EA03";
+}
+
+.font-service-arrow:before {
+    content: "\EA04";
+}
+
+.font-service-ask:before {
+    content: "\EA05";
+}
+
+.font-service-balance:before {
+    content: "\EA06";
+}
+
+.font-service-find-psd:before {
+    content: "\EA07";
+}
+
+.font-service-go-top:before {
+    content: "\EA08";
+}
+
+.font-service-home:before {
+    content: "\EA09";
+}
+
+.font-service-house:before {
+    content: "\EA0A";
+}
+
+.font-service-login:before {
+    content: "\EA0B";
+}
+
+.font-service-order:before {
+    content: "\EA0C";
+}
+
+.font-service-real-name:before {
+    content: "\EA0D";
+}
+
+.font-service-register:before {
+    content: "\EA0E";
+}
+
+.font-service-search:before {
+    content: "\EA0F";
+}
+
+@font-face {
+    font-family: "index";
+    font-weight: normal;
+    font-style: normal;
+    src: url("../fonts/index.eot");
+    src: url("../fonts/index.eot?#iefix") format("embedded-opentype"), url("../fonts/index.woff") format("woff");
+}
+
+[class^="font-index-"],
+[class*=" font-index-"] {
+    font-family: "index"!important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: inherit;
+    float: none;
+    margin: 0;
+    vertical-align: -0.25em;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    text-decoration: none;
+    text-transform: none;
+}
+
+.font-index-1:before {
+    content: "\EA01";
+}
+
+.font-index-2:before {
+    content: "\EA02";
+}
+
+.font-index-3:before {
+    content: "\EA03";
+}
+
+.font-index-4:before {
+    content: "\EA04";
+}
+
+.font-index-5:before {
+    content: "\EA05";
+}
+
+.font-index-6:before {
+    content: "\EA06";
+}
+
+.ys180 {
+    font-family: simsun;
+    font-size: 12px;
+    position: absolute;
+    z-index: 999999;
+    top: 42px;
+    right: 0;
+    width: 220px;
+    background: #fff;
+}
+
+.ys180 h3 {
+    line-height: 30px;
+    height: 30px;
+    padding-left: 10px;
+    color: #fff;
+    border-bottom: 1px solid #d6d6d6;
+    background: #b00d0d;
+}
+
+.ys180 h3 .close {
+    float: right;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.ys180 dt,
+.ys180 dd i {
+    line-height: 25px;
+    height: 25px;
+    padding-left: 20px;
+    white-space: nowrap;
+}
+
+.ys180 dt {
+    font-size: 14px;
+    font-weight: bold;
+    padding-left: 0;
+    margin-bottom: 3px;
+    cursor: pointer;
+    border-bottom: 1px solid #b00d0d;
+    background-color: #f8f8f8;
+    background-position: 5px -12px;
+}
+
+.ys180 dt:before {
+    font-size: 12px;
+    vertical-align: top;
+}
+
+.ys180 dt.ico:before {
+    font-size: 12px;
+    vertical-align: top;
+}
+
+.ys180 dt em {
+    font-size: 12px;
+    font-weight: normal;
+    color: #2c2c2c;
+}
+
+.ys180 dd i {
+    display: block;
+    background-position: 9px -32px;
+}
+
+.ys180 dt,
+.ys180 dt a {
+    color: #b00d0d;
+}
+
+.bb9a {
+    border: 2px solid #b00d0d;
+}
+
+.showys {
+    line-height: 15px;
+    position: absolute;
+    z-index: 9999;
+    top: 74px;
+    right: 0;
+    width: 14px;
+    padding: 5px;
+    cursor: pointer;
+    text-align: center;
+    color: #fff;
+    background-color: #b00d0d;
+    background-position: -32px 9px;
+}
+
+.showys i {
+    font-family: simsun;
+    color: #ddd;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+}
+
+.dw {
+    font-size: 14px;
+    line-height: 30px;
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    overflow: hidden;
+    width: 1198px;
+    height: 30px;
+    margin: 0 0 0 -600px;
+    text-align: center;
+    border: 1px solid #f3c16b;
+    background: #ffd;
+}
+
+.dw .txt a {
+    padding: 0 10px;
+    color: #c00;
+}
+
+.dw .close {
+    font-size: 18px;
+    position: absolute;
+    top: 0;
+    right: 6px;
+    cursor: pointer;
+    color: #e49621;
+}
+
+.dw .close:hover {
+    text-decoration: none;
+}
+
+/* ==========
+vote
+========== */
+.vote-box {
+    position: fixed;
+    z-index: 999999;
+    bottom: 20px;
+    left: 20px;
+    width: 194px;
+    height: 165px;
+}
+
+.vote-img {
+    width: 100%;
+    height: 100%;
+    background: url("../images/hongbao.png") center center no-repeat;
+    background-size: 80% 80%;
+}
+
+.vote-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #fff;
+    line-height: 1.2;
+    cursor: pointer;
+    padding: 0 1px;
+    background-color: #ccc;
+}
+
+.vote-close:hover {
+    text-decoration: none;
+    color: #999;
+}
+
+.closebg {
+    position: fixed;
+    z-index: 1000000;
+    bottom: 50px;
+    left: 20px;
+    display: none;
+    width: 70px;
+    height: 65px;
+    background: url(../images/diaocha.png) no-repeat 0 0;
+}
+
+/*!
+* @name btgg.css
+* @author xying
+* @date 2016-8-5
+* @dec 背投广告
+*/
+[data-popads="1"] .popads-image {
+    position: relative;
+}
+
+[data-popads="1"] .popads-image .operat-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+[data-popads="1"] .popads-image-sm {
+    position: relative;
+}
+
+[data-popads="1"] .popads-image-sm .operat-btn {
+    background: rgba(255, 255, 255, 0.5);
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    text-align: center;
+    bottom: 0;
+    padding: 10px 0;
+}
+
+[data-popads="1"] .operat {
+    border: 1px solid #666;
+    border-radius: 5px;
+    color: #333;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 12px;
+    height: 20px;
+    line-height: 20px;
+    padding: 0 7px;
+    cursor: pointer;
+}
+
+[data-popads="1"] .operat i {
+    float: left;
+    font-size: 14px;
+    margin-top: 1px;
+    margin-right: 4px;
+}
+
+[data-popads="1"] .operat-white {
+    border-color: #fff;
+    color: #fff;
+}
+
+/* common */
+.num {
+    font: 24px georgia;
+    color: #e43;
+}
+
+.f-color {
+    color: #e43;
+}
+
+.line {
+    border-bottom: 1px solid #e6e6e6;
+}
+
+/* ==========
+tab common
+========== */
+.tab-header li {
+    float: left;
+    cursor: pointer;
+    text-align: center;
+    background: #fff;
+}
+
+.tab-header li.act {
+    color: #e43;
+}
+
+.tab-body .item {
+    width: 100%;
+    height: auto;
+}
+
+/* ==========
+list common
+========== */
+.list li {
+    float: left;
+}
+
+.list li a {
+    position: relative;
+    display: block;
+    overflow: hidden;
+}
+
+.list li a img {
+    display: block;
+    transition: transform .5s ease 0s;
+}
+
+.list li a p {
+    line-height: 35px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 35px;
+    text-indent: 10px;
+    color: #fff;
+}
+
+.list li p {
+    line-height: 21px;
+    overflow: hidden;
+    height: 21px;
+}
+
+.list li .price {
+    font-size: 24px;
+    margin-right: 4px;
+}
+
+.list li .ad {
+    margin-top: 12px;
+    margin-right: 5px;
+}
+
+.list li:hover a img {
+    transform: scale(1.1);
+}
+
+/* ==========
+slider
+========== */
+.slider-wrap {
+    min-width: 1200px;
+    position: relative;
+    background: #e0f2f4;
+}
+
+.slider-wrap .container {
+    position: relative;
+}
+
+.slider-wrap .slider-content {
+    overflow: hidden;
+    width: 100%;
+    height: 450px;
+}
+
+.slider-wrap .slider-content .slider {
+    width: 100%;
+    height: 450px;
+}
+
+.slider-wrap .slider-content a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.slider-wrap .prev-btn,
+.slider-wrap .next-btn {
+    font-size: 34px;
+    line-height: 81px;
+    position: absolute;
+    top: 50%;
+    width: 40px;
+    height: 81px;
+    margin-top: -40.5px;
+    cursor: pointer;
+    text-align: center;
+    opacity: 0;
+    color: #fff;
+    background-color: transparent;
+    background-color: rgba(0, 0, 0, 0.8);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#CC000000, endColorstr=#CC000000);
+    zoom: 1;
+}
+
+.slider-wrap .prev-btn i,
+.slider-wrap .next-btn i {
+    vertical-align: 0;
+}
+
+.slider-wrap .prev-btn {
+    left: 135px;
+}
+
+.slider-wrap .next-btn {
+    right: 135px;
+}
+
+.slider-wrap .small-btn {
+    position: absolute;
+    width: 300px;
+    z-index: 10;
+    bottom: 20px;
+    left: 50%;
+    text-align: center;
+    margin-left: -150px;
+}
+
+.slider-wrap .small-btn i {
+    display: inline-block;
+    overflow: hidden;
+    width: 30px;
+    height: 10px;
+    cursor: pointer;
+    vertical-align: middle;
+    text-indent: -9999px;
+    margin: 0 3px;
+    background: #fff;
+}
+
+.slider-wrap .small-btn i.act {
+    background: #e43;
+}
+
+/* ==========
+search
+========== */
+.search-form {
+    position: absolute;
+    top: 200px;
+    left: 50%;
+    width: 680px;
+    margin-left: -340px;
+    display: block;
+    border-radius: 5px;
+    background-color: transparent;
+    background-color: rgba(0, 0, 0, 0.3);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4D000000, endColorstr=#4D000000);
+    zoom: 1;
+}
+
+.search-form form {
+    padding: 20px;
+}
+
+.search-form .logo {
+    height: 28px;
+    margin-bottom: 15px;
+}
+
+.search-form .search-cate {
+    margin-bottom: 10px;
+}
+
+.search-form .search-cate a {
+    font-size: 16px;
+    margin-right: 12px;
+    position: relative;
+    float: left;
+    padding: 4px 12px;
+    cursor: pointer;
+    color: #fff;
+    border-radius: 3px;
+}
+
+.search-form .search-cate a i {
+    font-size: 18px;
+    position: absolute;
+    top: 22px;
+    left: 50%;
+    margin-left: -8px;
+    color: transparent;
+}
+
+.search-form .search-cate a:hover {
+    text-decoration: none;
+}
+
+.search-form .search-cate a.act {
+    background: #e43;
+}
+
+.search-form .search-cate a.act i {
+    color: #e43;
+}
+
+.search-form .quick {
+    font-size: 16px;
+    line-height: 32px;
+    margin-left: 20px;
+    color: #fff;
+}
+
+.search-form .quick:hover {
+    text-decoration: none;
+    color: #e43;
+}
+
+.search-form .quick i {
+    vertical-align: -2px;
+}
+
+.search-form .search-wrap {
+    width: 640px;
+}
+
+.search-form .search-wrap .search-input {
+    line-height: 32px;
+    width: 548px;
+    height: 32px;
+    padding: 6px 10px;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+}
+
+.search-form .search-wrap .search-btn {
+    font-size: 22px;
+    line-height: 46px;
+    width: 68px;
+    height: 46px;
+    color: #fff;
+    border: 0;
+    background: #e43;
+}
+
+/* ==========
+menu
+========== */
+.menu {
+    min-width: 1200px;
+    padding: 18px 0;
+    border-bottom: 1px solid #d5d5d5;
+    box-shadow: 0 1px 10px #d5d5d5;
+}
+
+.menu dl {
+    float: left;
+    width: 300px;
+}
+
+.menu dl dt {
+    float: left;
+    width: 100px;
+    margin-top: 9px;
+    text-align: right;
+}
+
+.menu dl dt a {
+    font-size: 28px;
+}
+
+.menu dl dt a:hover {
+    text-decoration: none;
+}
+
+.menu dl dd {
+    width: 149px;
+    margin-left: 100px;
+}
+
+.menu dl dd a {
+    font-size: 16px;
+    display: inline-block;
+    margin-top: 4px;
+    margin-left: 15px;
+    color: #666;
+}
+
+.menu dl dd a:hover {
+    color: #f00;
+}
+
+/* ==========
+资讯
+========== */
+.house-news .aside {
+    float: left;
+    width: 300px;
+}
+
+.house-news .aside1 {
+    float: right;
+    width: 300px;
+}
+
+.house-news .content {
+    float: left;
+    width: 600px;
+}
+
+.house-news .content-inner {
+    padding: 0 20px;
+}
+
+.house-news .content li {
+    float: left;
+    width: 270px;
+}
+
+.house-news .content li.top {
+    width: auto;
+    float: none;
+}
+
+.house-news .content li.news-panel-left {
+    margin-right: 20px;
+}
+
+.house-news .news-panel li {
+    line-height: 35px;
+    overflow: hidden;
+    height: 35px;
+}
+
+.house-news .news-panel li i {
+    display: inline-block;
+    overflow: hidden;
+    width: 4px;
+    height: 4px;
+    margin-right: 7px;
+    vertical-align: middle;
+    text-indent: -9999px;
+    background-color: #e8e5e5;
+    *display: none;
+}
+
+.house-news .news-panel li .cate {
+    font-size: 16px;
+    line-height: 30px;
+    float: left;
+    height: 30px;
+    margin-top: 2px;
+    margin-right: 7px;
+    padding: 0 10px;
+    text-align: center;
+    text-indent: 0;
+    color: #fff;
+    background: #e43;
+}
+
+.house-news .news-panel li.top a {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 30px;
+}
+
+.house-news .news-panel li.top a:hover {
+    text-decoration: none;
+}
+
+/* banner */
+.focus {
+    position: relative;
+    overflow: hidden;
+    zoom: 1;
+    width: 300px;
+    height: 220px;
+}
+
+.focus ul {
+    position: relative;
+    overflow: hidden;
+    width: 300px;
+    height: 220px;
+}
+
+.focus li {
+    position: relative;
+    float: left;
+    width: 300px;
+    height: 220px;
+    overflow: hidden;
+}
+
+.focus li a {
+    display: block;
+    cursor: pointer;
+}
+
+.focus li .tit {
+    font-size: 14px;
+    line-height: 18px;
+    position: absolute;
+    z-index: 1;
+    bottom: 22px;
+    left: 30px;
+    overflow: hidden;
+    width: 240px;
+    height: 18px;
+    text-align: center;
+}
+
+.focus li .tit a {
+    margin-top: 0;
+    color: #fff;
+}
+
+.focus li .tit a:hover {
+    text-decoration: none;
+}
+
+.focus li .bg {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 300px;
+    height: 50px;
+    opacity: .7;
+    background: #000;
+    filter: alpha(opacity=70);
+}
+
+.focus .foucsTit {
+    position: absolute;
+    bottom: 7px;
+    left: 0;
+    width: 300px;
+    text-align: center;
+}
+
+.focus .foucsTit i {
+    font-size: 0;
+    line-height: 7px;
+    display: inline-block;
+    overflow: hidden;
+    width: 8px;
+    height: 8px;
+    margin: 0 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    background: #fff;
+}
+
+.focus .foucsTit i.on {
+    background: red;
+}
+
+.focus:hover .focusBtnL,
+.focus:hover .focusBtnR {
+    display: block;
+}
+
+.focus .focusBtnL,
+.focus .focusBtnR {
+    line-height: 50px;
+    position: relative;
+    z-index: 1;
+    display: none;
+    width: 40px;
+    height: 50px;
+    margin-top: -50px;
+}
+
+.focus .focusBtnL img,
+.focus .focusBtnR img {
+    display: none;
+    cursor: pointer;
+}
+
+.focus .focusBtnL span,
+.focus .focusBtnR span {
+    font-size: 30px;
+    cursor: pointer;
+    color: #fff;
+}
+
+.focus .focusBtnL {
+    float: left;
+}
+
+.focus .focusBtnL img {
+    float: right;
+}
+
+.focus .focusBtnL span {
+    float: left;
+}
+
+.focus .focusBtnR {
+    float: right;
+}
+
+.focus .focusBtnR span {
+    float: right;
+}
+
+/* head-lines */
+.head-lines {
+    height: 84px;
+    background: #fafafa;
+}
+
+.head-lines .tit {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 32px;
+    position: relative;
+    float: left;
+    width: 64px;
+    height: 64px;
+    padding: 10px;
+    text-align: center;
+    color: #fff;
+    background: #e43;
+}
+
+.head-lines .tit .arrow {
+    line-height: 16px;
+    position: absolute;
+    top: 50%;
+    margin-top: -8px;
+    right: -9px;
+    width: 9px;
+    height: 17px;
+    vertical-align: middle;
+    text-indent: -9px;
+    color: #e43;
+}
+
+.head-lines .txt {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 50px;
+    display: block;
+    overflow: hidden;
+    height: 44px;
+    margin-bottom: 4px;
+    padding: 0 20px;
+    text-overflow: ellipsis;
+    color: #e43;
+}
+
+.head-lines .txt:hover {
+    text-decoration: none;
+}
+
+.head-lines p a {
+    line-height: 24px;
+    display: inline-block;
+    overflow: hidden;
+    height: 24px;
+    margin-left: 20px;
+    vertical-align: middle;
+}
+
+/* ==========
+recommend
+========== */
+.recommend .tab-header {
+    border: 1px solid #ddd;
+    border-bottom-color: #fff;
+}
+
+.recommend .tab-header li {
+    font-size: 18px;
+    line-height: 50px;
+    width: 299.5px;
+    height: 50px;
+    margin-left: -1px;
+    border-bottom: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    background: #fafafa;
+}
+
+.recommend .tab-header li.act {
+    line-height: 44px;
+    height: 48px;
+    border-top: 3px solid #e43;
+    border-bottom-color: #fff;
+    background: #fff;
+}
+
+.recommend .tab-body {
+    overflow: hidden;
+    height: 280px;
+}
+
+.recommend .item {
+    min-height: 280px;
+}
+
+.recommend .list {
+    margin-left: -25px;
+}
+
+.recommend .list li {
+    font-size: 12px;
+    width: 220px;
+    margin-left: 25px;
+    color: #666;
+}
+
+.recommend .list a {
+    width: 220px;
+    height: 192px;
+    margin-bottom: 3px;
+}
+
+.recommend .list a img {
+    width: 220px;
+    height: 192px;
+}
+
+.recommend .list a p {
+    background-color: transparent;
+    background-color: rgba(0, 0, 0, 0.5);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#80000000, endColorstr=#80000000);
+    zoom: 1;
+}
+
+.recommend .list a:hover p {
+    background-color: transparent;
+    background-color: rgba(238, 68, 51, 0.5);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#80EE4433, endColorstr=#80EE4433);
+    zoom: 1;
+}
+
+/* ==========
+floor
+========== */
+.thlp_count {
+    display: none;
+}
+
+.panel .panel-title {
+    line-height: 40px;
+    position: relative;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #000;
+}
+
+.panel .panel-title h2 {
+    font-size: 24px;
+    display: inline;
+    padding-left: 20px;
+    border-left: 4px solid #e43;
+}
+
+.panel .map {
+    line-height: 20px;
+    display: block;
+    margin-top: 12px;
+    margin-left: 15px;
+}
+
+.panel .map:hover {
+    text-decoration: none;
+}
+
+.panel .map i {
+    font-size: 28px;
+    float: left;
+    margin-right: 5px;
+    vertical-align: 3px;
+    color: #e43;
+}
+
+.panel .floor-tab-header {
+    position: absolute;
+    bottom: -1px;
+    left: 230px;
+}
+
+.panel .floor-tab-header a {
+    font-size: 16px;
+    display: inline-block;
+    width: 104px;
+    text-align: center;
+    border-bottom: 1px solid #000;
+}
+
+.panel .floor-tab-header a span {
+    display: block;
+    border-bottom: 3px solid #fff;
+}
+
+.panel .floor-tab-header a.act {
+    color: #e43;
+    border-color: #e43;
+}
+
+.panel .floor-tab-header a.act span {
+    border-color: #e43;
+}
+
+.panel .floor-tab-header a:hover {
+    text-decoration: none;
+}
+
+.panel .panel-body {
+    padding-top: 30px;
+}
+
+.panel .panel-body .aside-menu {
+    width: 200px;
+}
+
+.panel .panel-body .floor-tab-body {
+    overflow: hidden;
+    width: 700px;
+    height: 428px;
+}
+
+.panel .panel-body .floor-tab-body .item {
+    width: 100%;
+}
+
+.panel .panel-body .aside {
+    width: 300px;
+}
+
+/* filter */
+.aside-menu dl {
+    padding: 12px 0 12px 10px;
+    border-top: 1px solid #eee;
+    border-right: 1px solid #fff;
+}
+
+.aside-menu dl dt {
+    margin-bottom: 4px;
+}
+
+.aside-menu dl h4 {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.aside-menu dl h4 .arrow {
+    font-family: 'simsun';
+    font-size: 20px;
+    font-weight: normal;
+    line-height: 22px;
+}
+
+.aside-menu dl a {
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 2px;
+    vertical-align: middle;
+}
+
+.aside-menu .filter-wrap {
+    position: relative;
+}
+
+.aside-menu .filter-wrap dl {
+    position: relative;
+    z-index: 1001;
+}
+
+.aside-menu .filter-wrap .filter dd {
+    overflow: hidden;
+    height: 48px;
+}
+
+.aside-menu .filter-wrap .filter-more {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 200px;
+    display: none;
+    width: 360px;
+    min-height: 400px;
+    margin-left: -1px;
+    padding: 5px 20px;
+    border: 1px solid #eee;
+    background: #fff;
+}
+
+.aside-menu .filter-wrap .filter-more h4 {
+    color: #e43;
+}
+
+.aside-menu .filter-wrap .filter-more dl {
+    margin-top: 6px;
+    padding: 0;
+    border-top-color: #fff;
+}
+
+.aside-menu .filter-wrap.open .filter-more {
+    display: block;
+}
+
+.aside-menu .filter-wrap.open .arrow {
+    color: #e43;
+}
+
+/* 看房团报名 */
+.kanfang {
+    line-height: 35px;
+    width: 200px;
+    height: 85px;
+    color: #666;
+    background: url(../images/kanfang.jpg) no-repeat 0 0;
+}
+
+.kanfang h4 {
+    font-size: 16px;
+    color: #333;
+}
+
+.kf-list {
+    overflow: hidden;
+    height: 105px;
+}
+
+.kf-list li {
+    line-height: 35px;
+    overflow: hidden;
+    height: 35px;
+}
+
+.kf-list li a {
+    color: #e43;
+}
+
+.info {
+    height: 36px;
+    overflow: hidden;
+}
+
+/* body */
+.floor-tab-body .item {
+    display: none;
+}
+
+.floor-tab-body .list {
+    margin-top: -28px;
+}
+
+.floor-tab-body li {
+    width: 193px;
+    margin-top: 28px;
+    margin-left: 30px;
+}
+
+.floor-tab-body li a {
+    width: 193px;
+    height: 138px;
+    margin-bottom: 5px;
+}
+
+.floor-tab-body li a img {
+    width: 193px;
+    height: 138px;
+}
+
+.floor-tab-body li a p {
+    background-color: transparent;
+    background-color: rgba(0, 0, 0, 0.5);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#80000000, endColorstr=#80000000);
+    zoom: 1;
+}
+
+.floor-tab-body li a:hover {
+    text-decoration: underline;
+}
+
+.floor-tab-body li a:hover p {
+    background-color: transparent;
+    background-color: rgba(238, 68, 51, 0.7);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#B3EE4433, endColorstr=#B3EE4433);
+    zoom: 1;
+}
+
+.floor-tab-body li .price {
+    color: #f40;
+}
+
+/* partner */
+.partner {
+    overflow: hidden;
+    margin-right: 28px;
+    clear: both;
+}
+
+.partner-inner {
+    margin-right: -50px;
+    padding-top: 10px;
+}
+
+.partner a {
+    display: inherit;
+    float: left;
+    overflow: hidden;
+    width: 150px;
+    height: 70px;
+    margin-right: 23px;
+    padding: 2px;
+    border: 1px solid #ddd;
+}
+
+.partner a img {
+    display: block;
+    width: 150px;
+    height: 70px;
+    transition: transform .5s ease 0s;
+}
+
+.partner a:hover img {
+    transform: scale(1.1);
+}
+
+/* 看房资讯 */
+.aside h3 {
+    font-size: 18px;
+}
+
+.aside h3 .fr {
+    font-size: 12px;
+    margin-top: 7px;
+}
+
+.aside-news-hd .tit {
+    float: left;
+}
+
+.aside-news-hd .more {
+    float: right;
+}
+
+.aside-news li {
+    line-height: 32px;
+    overflow: hidden;
+    height: 32px;
+}
+
+.aside-news li.first a {
+    font-size: 18px;
+    font-weight: 700;
+    color: #e43;
+}
+
+.aside-news li.first a:hover {
+    text-decoration: none;
+}
+
+.aside-news i {
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    vertical-align: middle;
+    background-color: #e8e5e5;
+}
+
+.aside-news a {
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+/* 最新开盘 */
+.new-property .tab-header {
+    border-bottom: 1px solid #ddd;
+}
+
+.new-property .tab-header li {
+    line-height: 30px;
+    width: 100px;
+    height: 30px;
+    background: #f4f4f4;
+}
+
+.new-property .tab-header li.act {
+    color: #fff;
+    background: #e43;
+}
+
+.new-property .item {
+    display: none;
+}
+
+.new-property .item li {
+    line-height: 42px;
+    overflow: hidden;
+    height: 42px;
+    border-bottom: 1px dashed #ddd;
+}
+
+.new-property .item li:hover {
+    background: #f8f8f8;
+}
+
+.new-property .item li:last-child {
+    border-bottom-color: #fff;
+}
+
+.new-property .item a span {
+    font-size: 12px;
+    color: #888;
+}
+
+.new-property .item span {
+    color: #e43;
+}
+
+/* 广告转换 */
+.house-ad-slider {
+    position: relative;
+    width: 300px;
+    height: 176px;
+}
+
+.house-ad-slider .house-ad {
+    display: none;
+}
+
+.house-ad-slider .big-img {
+    width: 300px;
+    height: 160px;
+}
+
+.house-ad-slider .big-img .house-ad {
+    display: none;
+}
+
+.house-ad-slider .small-btn {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: 10px;
+}
+
+.house-ad-slider .small-btn i {
+    display: block;
+    float: left;
+    overflow: hidden;
+    width: 30px;
+    height: 10px;
+    margin-left: 10px;
+    text-indent: -9999px;
+    background: #e6e6e6;
+}
+
+.house-ad-slider .small-btn i.act {
+    background: #e43;
+}
+
+/* 发布消息 */
+@keyframes bounce-down {
+    25% {
+        transform: translateY(-2px);
+    }
+    50%,
+    100% {
+        transform: translateY(0);
+    }
+    75% {
+        transform: translateY(2px);
+    }
+}
+
+.release-news {
+    margin-left: -10px;
+}
+
+.release-news a {
+    line-height: 30px;
+    display: block;
+    float: left;
+    width: 145px;
+    height: 30px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    text-align: center;
+    color: #fff;
+    border-radius: 3px;
+    background: #e43;
+}
+
+.release-news a:nth-child(2n) {
+    background: #f60;
+}
+
+.release-news a:hover {
+    text-decoration: none;
+    opacity: .8;
+}
+
+.release-news a:hover i {
+    animation: bounce-down 1s linear 1;
+}
+
+.release-news a i {
+    font-size: 18px;
+    margin-right: 5px;
+    vertical-align: -3px;
+}
+
+/* 经纪人 */
+.broker li {
+    padding: 13px 10px;
+    border-top: 1px solid #ddd;
+}
+
+.broker li img {
+    float: left;
+    width: 56px;
+    height: 56px;
+    margin-top: 4px;
+    margin-right: 20px;
+    border-radius: 50%;
+}
+
+.broker li:hover {
+    background: #f8f8f8;
+}
+
+.more-broker {
+    font-size: 16px;
+    line-height: 50px;
+    display: block;
+    width: 300px;
+    height: 50px;
+    text-align: center;
+    color: #fff;
+    background: url(../images/more-broker.png) no-repeat 20px 0 #e43;
+}
+
+.more-broker:hover {
+    text-decoration: none;
+    color: #fff !important;
+    opacity: .8;
+}
+
+/* ==========
+daquan
+========== */
+.daquan .tab-header li {
+    font-size: 18px;
+    line-height: 50px;
+    position: relative;
+    z-index: 2;
+    width: 170px;
+    height: 50px;
+    margin-right: -1px;
+    border: 1px solid #ddd;
+}
+
+.daquan .tab-header li.act {
+    line-height: 46px;
+    height: 48px;
+    border-top: 3px solid #e43;
+    border-bottom-color: #fff;
+}
+
+.daquan .tab-body {
+    position: relative;
+    z-index: 1;
+    margin-top: -1px;
+    border: 1px solid #ddd;
+}
+
+.daquan .tab-body .item {
+    display: none;
+    min-height: 190px;
+    padding-top: 10px;
+}
+
+.daquan .tab-body .item li {
+    line-height: 34px;
+    float: left;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.daquan .tab-body a {
+    color: #666;
+}
+
+.daquan .tab-body a:hover {
+    color: #f00;
+}
+
+.daquan .tab-body p {
+    line-height: 40px;
+    margin-top: 13px;
+    padding-left: 15px;
+    color: #666;
+    border-top: 1px dashed #ddd;
+}
+
+.daquan .tab-body p a {
+    margin-right: 5px;
+}
+
+/* ==========
+f-link
+========== */
+.f-link-tit {
+    font-size: 24px;
+    text-align: left;
+}
+
+.f-link {
+    min-width: 1200px;
+    padding: 20px 0;
+    background: #ececec;
+}
+
+.f-link a {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+/*# sourceMappingURL=index.css.map */

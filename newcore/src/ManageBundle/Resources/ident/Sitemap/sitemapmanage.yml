@@ -1,0 +1,24 @@
+info:
+    tableName: sitemap
+    subTableName: ''
+    aliasName: p
+    listGrid:
+        - 'id:序号|txtcenter w50'
+        - 'cname[EDITSPAN]:任务名称|txtleft  w150'
+        - 'xml_url[EDITSPAN]:XML文件名称|txtleft  w150'
+        - 'tpl:XML文件模版|txtleft w180'
+        - 'status[GETSTATUS]:是否启用|txtleft  w80'
+        - 'id:操作|txtcenter w300:[EDIT]修改|btn,[DELETE]删除|btn,[EDIT]生成|btn|sitemapmanage/create,[JUMP]绑定模型|btn|sitemapbind,[EDIT]主动推送|btn|sitemapmanage/pushsitemap'
+    listDesc: SiteMap管理
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    order: ''
+    orderBy: asc
+    searchFun: EXISTS
+    dataModel: 0
+    alias: {  }
+    query: {  }
+    query1: {  }
+    autoQuery: '0'

@@ -1,0 +1,215 @@
+{# 区块 #}
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set block_models = app.request.get('block_models')|default('houses_arc') %}
+{% set aid = app.request.get('aid') %}
+{% set models = app.request.get('models') %}    
+
+{# 全部区块 #}
+{% set block_data = ('house.cate_pushs') | getTree({
+        type: block_models,
+        checked: 1,
+        pageSize: 20,
+        order: 'sort|asc',
+        aid: 0
+    }) 
+%}
+{# 推送标识 #}
+{% set cate_pushs = app.request.get('cate_pushs')|default(block_data.data|length ? block_data.data[0].menu.ename : '') %}
+{# 推送位表单ID #}
+{% set form = app.request.get('form')|default(block_data.data|length ? block_data.data[0].menu.form : '') %}  
+{# 推送位表单标识 #}
+{% set form_id = app.request.get('form_id') ? : ('db.model_form')|getOne('id', {name: form}) %}
+{# 当前区块 #}
+{% set block_active_data = ('house.cate_pushs')|getRow({ename: cate_pushs}) %}
+{# 当前分页 #}
+{% set pageIndex = app.request.get('pageIndex')|default(1) %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+{% block mainleft %}
+<section class="main-left" data-target=".main-through">
+    <div data-level="top" class="level1" data-trigger-next="1">
+        {% if block_data.data is defined %}
+        {%- for item in block_data.data -%}
+            {% set form_id1 = ('db.model_form')|getOne('id', {name: item.menu.form}) %}
+            {# {% set nodes = ('house.cate_pushs') | getAll({pid: item.id}).data %} #}
+        {#- 1级 -#}
+        {% set href %}
+            {% if item.nodes|length == 0 %}
+                href="{{ (item.menu.controller|default(controller) ~ '/' ~ item.menu.action|default(action))|U({cate_pushs: item.menu.ename, form: item.menu.form, form_id: form_id1}) }}"
+            {% endif %}
+        {% endset %}
+        <a data-role="jump" class="{% if loop.index == 1 %}on{% endif %} {% if item.nodes|length %}has-child{% endif %}" data-level="1" {{href}}>{{item.menu.name}}</a>
+
+        <div data-level="next" class="level2 {% if loop.index == 1 %}on{% endif %}">
+            {% for item2 in item.nodes %}
+            <a data-role="jump" data-level="1" href="{{ (item2.menu.controller|default(controller) ~ '/' ~ item2.menu.action|default(action))|U({cate_pushs: item2.menu.ename, form: item2.menu.form, form_id: form_id1}) }}" >{{item2.menu.name}}</a>
+            {% endfor %} <!-- /item2 -->
+        </div>
+        {% endfor -%}
+        {% endif -%}
+    </div>
+</section>
+{% endblock mainleft %}
+
+
+{% block mainMenu %}
+    {# {{ dump(action) }} #}
+{% if cate_pushs is defined and block_active_data|length > 0 -%}
+    {# 推荐位信息 #}
+    {% set models_data = ('db.models')|getAll({name: 'in|' ~ block_active_data.models}) %}
+    <div data-target=".main-bd">
+        {# {{dump(models)}} #}
+    {{ core_manage.jump({
+        url: (action)|U({cate_pushs: cate_pushs}), 
+        title: '<i class="font-ico-detail mr5"></i>推送管理',
+        class: 'on',
+    }) }}
+    {% if models_data.data is defined %}
+    {% if models_data.data|length == 1 %}
+    {# 单个分类 #}
+        {{ core_manage.jump({
+            title: '<i class="font-ico-sort mr5"></i>加载推送',
+            url: (action ~ '/loadarcs')|U({
+                models: models_data.data[0].name, 
+                cate_pushs: cate_pushs, 
+                form_id: form_id,
+                form: form
+            }|merge(block_active_data.urlparams|getQuery)),
+        }) }}
+    {% elseif  models_data.data|length > 1 %}
+    {# 多个分类 #}
+        <div class="dropdown" >
+            <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <i class="font-ico-sort mr5"></i>加载推送
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdown1">
+                {# <li role="separator" class="divider"></li> #}
+                {%- for item in models_data.data -%}
+                <li><a data-role="jump" href="{{ (action ~ '/loadarcs')|U({models: item.name, cate_pushs: cate_pushs, block_models: block_models}) }}">{{ item.title }}</a></li>
+                {% endfor -%}
+            </ul>
+        </div>
+    {% endif %}
+    {# 区块里的资讯不让手动添加，只让加载 #}
+    {% if action not in ['mhousesarc', 'mnexusarc'] %}
+    {% if (action ~ '/show')|P %}
+    {{ core_manage.show({
+        title: '<i class="font-ico-plus mr5"></i>手动添加',
+        url: (action ~ "/show")|U
+    }) }}
+    {% endif %}
+    {% endif %}
+    {% endif %}
+    </div>
+{%- endif %}
+{% endblock mainMenu %}
+
+{% set params -%}
+    {
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ "/show")|U({_form_id  : form_id}) }}',
+        submitUrl : '{{ (action ~ "/save")|U }}',
+        deleteUrl : '{{ (action ~ "/delete")|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data : {
+            block_models      : '{{ block_models }}',
+            cate_pushs: '{{ cate_pushs }}',
+            form      : '{{ form }}',
+            aid       : '{{ aid }}',
+            models    : '{{ models }}'
+        }
+    }
+{%- endset %}
+{% set order = app.request.get('order') %}
+{# {% set search_opt1 = search_opt|default({}) %} #}
+{% set aid_opt = aid ? {
+    aid: aid
+} : {} %}
+{% set block_arc_data = ('house.' ~ block_models)|getBlock({'ename': cate_pushs}, {pageSize: 12, pageIndex: pageIndex, timeflag: 1, _multi: 1, order: order}|merge(aid_opt)|merge(add_opt|default({}))|merge(search_opt|default({})), search_original_opt|default({}) ) %}
+
+{% block tableMain %}
+{% if ename is defined %}
+{% set filterOpt = [
+    {
+        method: 'search',
+        field: 'name',
+    }
+] %}
+{% endif %}
+{{ core_manage.filter(filterOpt|default('')) }}
+
+<div class="list-con"  data-param="{{ params }}">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th>名称</th>
+                    <th width="120">模型</th>
+                    <th width="100"data-role="sort" data-sort="fromid" class="sort">来源ID</th>
+                    <th width="50"data-role="sort" data-sort="sort" class="sort">排序</th>
+                    <th width="50">状态</th>
+                    <th width="100"data-role="sort" data-sort="create_time" class="sort">添加时间</th>
+                    <th width="120" class="tac">操作</th>
+                </tr>
+                {% if block_arc_data.data is defined and block_arc_data.pageCount|default('') != 0 %}
+                {% for k, vo in block_arc_data.data -%}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td class="tov">{% if vo.url is empty %}{{ vo.name|default('-') }}{% else %}<a target="_blank" href="{{ vo.url }}">{{ vo.name|default('-') }}{% endif %}</a></td>
+                    <td>{{ vo.models|default('手动添加') }}</td>
+                    <td>{{ vo.fromid|default('-') }}</td>
+                    <td><span data-role="itemEdit" data-name="sort" data-size="5" class="edit">{{ vo.sort|default('0') }}</span></td>
+                    <td>{{core_global.formField({
+                        value: vo.checked|default(''),
+                        form: 'checked',
+                        field: 'checked'
+                    })}} </td>
+                    <td>{{ vo.create_time|default(0)|date('Y-m-d') }}</td>
+                    <td class="tar pr10">
+                        {{ core_manage.show() }}
+                        {{ core_manage.delete() }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(block_arc_data)}}
+</div>
+    {% if app.user.usertplid is empty %}
+        {% set list_oprate_opt = [
+        {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'checked',
+        title: '审核',
+    }
+    ] %}
+{% else %}
+        {% set list_oprate_opt = [
+            {
+                method: 'delete',
+                title: '<i class="font-ico-del mr5"></i>批量删除',
+            },
+        ] %}
+    {% endif %}
+    {{ core_manage.oprate(list_oprate_opt) }}
+{% endblock %}
+
+
+{% block promptUl %}
+{% endblock %}
+

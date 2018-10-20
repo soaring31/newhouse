@@ -1,0 +1,24 @@
+info:
+    tableName: voteoptions
+    subTableName: ''
+    aliasName: vt
+    listGrid: {  }
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    groupBy: ''
+    order: ''
+    orderBy: desc
+    searchFun: EXISTS
+    dataModel: 0
+    autoQuery: '0'
+    alias: {  }
+    query:
+        vid:
+            eq: '[vid]'
+        name:
+            orX: 'name,like,%[name]%'
+    query1: {  }
+    attribute: '0'

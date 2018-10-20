@@ -1,0 +1,135 @@
+﻿/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+*/
+
+@import 'static/ats';
+// 工具类 每个文件都要导入
+@import 'lp-map'; //地图
+
+
+.title {
+	font-size: 26px;
+    height: 52px;
+    line-height: 52px;
+    i {
+    	background-color: #3cc;
+	    border-radius: 3px;
+	    color: #fff;
+	    display: block;
+	    font-size: 14px;
+	    float: left;
+	    line-height: 26px;
+	    margin: 15px 10px 0 0;
+	    padding: 0 15px;
+	    text-align: center;
+    }
+	h2 {
+		font-size: 26px;
+	    height: 52px;
+	    line-height: 52px;
+	    overflow: hidden;
+	}
+}
+.thumb {
+	width: 550px;
+}
+
+.info {
+	padding-top: 20px;
+	width: 580px;
+	li {
+		min-height: 50px;
+	    font-size: 16px;
+	    padding-bottom: 8px;
+	    vertical-align: top;
+	}
+	label {
+		color: #999;
+		width: 120px;
+	}
+}
+
+.panel-hd {
+	line-height: 28px;
+    overflow: hidden;
+    padding: 20px 0 10px;
+	h3 {
+		float: left;
+	    font-size: 22px;
+	    padding: 0 5px;
+    }
+}
+
+// 周边列表
+.around-list {
+	li {
+		float: left;
+	    padding: 12px 0 10px 18px;
+	    width: 149px;
+	}
+	a {
+		display: block;
+	}
+	img {
+		margin-bottom: 6px;
+	}
+	p {
+	    height: 24px;
+	    line-height: 24px;
+	    overflow: hidden;
+	    text-align: center;
+	    word-wrap: break-word;
+	}
+}
+// 列表2
+.around-list2 {
+	dt,
+	dd {
+		clear: both;
+	    height: 26px;
+	    line-height: 26px;
+	    vertical-align: top;
+	}
+	dt {
+		background: #eee;
+	}
+	.td1 {
+		text-align: left;
+	    text-indent: 5px;
+	    width: 295px;
+	}
+	.td2 {
+		width: 80px;
+	}
+	.td4 {
+		width: 60px;
+	}
+	em {
+		float: left;
+	    font-family: arial,"helvetica neue",helvetica,sans-serif;
+	    height: 26px;
+	    line-height: 26px;
+	    overflow: hidden;
+	    text-align: center;
+	    width: 70px;
+	}
+}
+.txt-list {
+	width: 590px;
+}
+// 地图
+.lp-coltit {
+    padding: 15px 0;
+    // .map-label1 {
+    //     display: inline-block;
+    //     float: left;
+    // }
+    h3 {
+        font-size: 24px;
+        line-height: 40px;
+        // float: left;
+        margin-top: 6px;
+    }
+}

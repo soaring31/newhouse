@@ -1,0 +1,340 @@
+@charset "UTF-8";
+/*!
+ * @name <%= name %>
+ * @author <%= author %>
+ * @date <%= date %>
+ */
+/**
+ * @method 清除浮动 %clearfix 
+ * @description 清除浮动
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %clearfix;
+ * }
+ * ```
+ * 
+ * ```css
+ * 	div {
+	    *zoom: 1;
+	}
+	div:after {
+	    display: block;
+	    clear: both;
+
+	    height: 0;
+
+	    content: '\20';
+	}
+ * ```
+ */
+.log, .log .auto, .log .one-login, .regter, .regter .checks, .regter .row {
+    *zoom: 1;
+}
+
+.log:after, .log .auto:after, .log .one-login:after, .regter:after, .regter .checks:after, .regter .row:after {
+    display: block;
+    clear: both;
+    height: 0;
+    content: '\20';
+}
+
+/**
+ * @method 去掉虚线框 %outline 
+ * @description 去掉虚线框
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @ extend %outline;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		outline: thin dotted;
+		outline: 5px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
+ * ```
+ */
+/**
+ * @method 文字不换行后面加省略号 %text-overflow 
+ * @description 文字不换行后面加省略号
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %text-overflow;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+ * ```
+ */
+/**
+ * @method 透明层opacity 
+ * @description 透明层 内容也透明
+ * @param {number} $opacity - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include opacity(.5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+	  opacity: .5;
+	  filter: alpha(opacity=50);
+ * }
+ * ```
+ */
+/**
+ * @method 背景透明层transparent 
+ * @description 透明层只处理背景透明
+ * @param {string} $color - 背景透明层的颜色
+ * @param {number} $alpha - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include transparent(#000, .5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+ *    	background-color: transparent;
+		background-color: (0,0,0,.5);
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7fffffff, endColorstr=#7fffffff,);
+		zoom: 1;
+ * }
+ * ```
+ */
+/**
+ * @method triangle 
+ * @description 生成一个三角形图标
+ * @param {string} $size - 三角的大小
+ * @param {string} $color - 三角颜色
+ * @param {string} $direction - 三角的方向 up, down, left, right
+ * @example 调用
+ * 
+ * ```scss
+ * i {
+ *    @include triangle(5px, #bbb, up); 
+ * }
+ * ```
+ * 
+ * ```css
+ * i {
+ *    width: 0;
+      height: 0;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent;
+      border-bottom-color: #bbb;
+ * }
+ * ```
+ */
+/**
+* @method 水平线hr nav-divider 
+* @description 透明层 内容也透明
+* @param {string} $color=#e5e5e5 - 线的颜色
+* @param {string} $line-height-computed - 线的高度，空间
+* @example 调用
+* 
+* ```scss
+* div {
+*    @include nav-divider(#e5e5e5, 24px);
+* }
+* ```
+* 
+* ```css
+* div {
+	  height: 1px;
+	  margin: 11px 0;
+	  overflow: hidden;
+	  background-color: #e5e5e5;
+* }
+* ```
+*/
+.common-form-lg input.btn, .common-form-lg button.btn, .common-form-lg input[type="number"], .common-form-lg input[type="text"], .common-form-lg input[type="password"], .common-form-lg input.text {
+    font-size: 14px;
+    line-height: 22px;
+    height: 22px;
+    text-indent: 15px;
+    border-radius: 0px;
+    border:none;
+    background-color: #fff !important;
+
+}
+.footer{
+    margin-top: 0;
+}
+.bg{
+    width: 100%;
+    height: 600px;
+    background: url(../images/base/loginbg.png) no-repeat;
+    background-size: cover;
+    background-position:center center;
+    position: relative;
+}
+.log{
+    position: absolute;
+    top: 75px;
+    right: 100px;
+    width: 400px;
+    height: 453px;
+    background: #FFFFFF;
+    box-shadow: 0 8px 39px 0 rgba(0,0,0,0.40);
+    border-radius: 4px;
+}
+.common-form .select-wrap{
+    display: none;
+}
+.login-box{
+    padding: 20px;
+}
+.login-head img{    
+    width: 134px;
+}
+.logo-cont{
+    width: 162px;
+    height: 25px;
+    margin: 0 auto;
+    line-height: 25px;
+    margin-top: 30px;
+    text-align: center;
+}
+.logo-cont p{
+    float: left;
+    font-size: 18px;
+    color: #333;
+}
+.logo-cont span{
+    float: left;
+    width: 25px;
+    height: 1px;
+    background: #333;
+    font-size: 30px;
+    margin-top: 12px;
+}
+.logo-cont .lf{
+    margin-right: 20px;
+}
+
+.logo-cont .rh{
+    margin-left: 20px;
+}
+.input-box{
+    margin-top: 40px;
+    margin-left: 20px;
+}
+.input-box .iconfont{
+    float: left;
+    width: 48px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    color: #bbb;
+    font-size: 20px;
+    border-right: 1px solid #eee;
+}
+.input-box .input{
+    width: 320px;
+    height: 50px;
+    border:1px solid #eee;
+    margin-bottom: 30px;
+    position: relative;
+}
+.input-box .input #userName{
+    width: 261px;
+}
+.input-box .input #vcode{
+    width: 150px;
+}
+.input-box .input .code-wrap-outer{
+    width: 270px;
+    float: left;
+    height: 50px;
+    overflow: hidden;
+}
+.input-box .input .code-wrap-outer .code-item{
+    float: left;
+}
+.input-box .input .code-wrap-outer  button{
+    float: left;
+}
+.input-box .input .code-wrap-outer  .code-item-img{
+    width: 110px;
+}
+.input-box .input .code-wrap-outer  .code-item-img .btn{
+    width: 100%;
+    text-align: center;
+    line-height: 50px;
+    height: 50px;
+    color: #ff9400;
+    background: #fff;
+    border:none;
+    border-left: 1px solid #eee;
+    border-radius: 0;
+    outline: 0;
+    font-size: 12px;
+}
+input[type=text], input[type=password], textarea{
+    height: 50px;
+    line-height: 50px;
+    border:none;
+    outline: none;
+    padding-left: 10px;
+}
+.font-icons-31{
+    display: none;
+}
+.input label{
+    margin-top: 10px;
+    font-size: 12px;
+    color: #ff8400;
+}
+.input-box .input-submit{
+    border:none;
+    width: 320px;
+    height: 85px;
+    background: linear-gradient(135deg,rgba(255,132,0,1),rgba(255,65,0,1));
+    border-radius: 2px;
+    background-image: url(../images/base/submit.svg);
+    background-repeat: no-repeat;
+}
+#submit{
+    width: 320px;
+    height: 50px;
+    background-image: linear-gradient(-135deg, #FF8400 0%, #FF4100 100%);
+    border-radius: 2px;
+    outline: none;
+    border:none;
+    font-size: 18px;
+    color: #fff;
+    
+}
+.account-tip {
+    margin-top: 40px;
+    color: #999;
+    font-size: 12px;
+    text-align: left;
+    margin-bottom: 10px;
+}
+.account-tip a {
+    color: #333;
+}
+
+
+
+/*# sourceMappingURL=login.css.map */

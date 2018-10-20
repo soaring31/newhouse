@@ -1,0 +1,84 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+** ajax调用：经纪公司
+#}
+{% block result %}
+{% set list = ident.list %}
+{% if app.request.get('json', 0) %}
+{
+    "pageCount": "{{list.pageCount|default(0)}}"
+}
+{% else %}
+    {% spaceless %}
+        {% if list.data is defined and list.pageCount|default(0) != 0 %}
+        	{# userinfo uid合集变量 #}
+            {% set userinfo_uids = '' %}
+            {# users data #}
+            {% set users_data = '' %}
+            {# users data all #}
+            {% set user_data = {} %}
+
+            {# 获取user id合集 #}
+            {% for item in list.data %}
+                {% if loop.index != 1 %}
+                    {% set dh = ',' %}
+                {% endif %}
+                {% set userinfo_uids = userinfo_uids ~ dh|default('') ~ item.uid %}
+            {% endfor %}
+
+            {% set users_data = ('db.users')|getAll({id: 'in|' ~ userinfo_uids, pageSize: list.pageSize}) %}
+
+            {% for item in users_data.data %}
+                {% set user_data = user_data|merge({
+                    ('user' ~ item.id): {
+                        tel: item.tel,
+                        username: item.username
+                    }
+                }) %}
+            {% endfor %}
+
+            {% for item in list.data %}
+	            {# 名称 公司名称 》公司简称 》昵称 》用户名 #}
+	            {% set item_name = item.company|default(item.cpltd|default(item.nicename|default(user_data['user' ~ item.uid].username|default('')))) %}
+                <li {% if loop.last %}data-page="{
+                    pageIndex: {{list.pageIndex}},
+                    pageCount: {{list.pageCount}},
+                    pageSize: {{list.pageSize}}
+                 }"{% endif %}>
+                	<a href="{{('member/d_ds')|UU({id: item.uid|default('')})}}" class="item-content p-default">
+                		<div class="item-media">
+                			{{- core_global.img({
+	                            src: item.image|default(''),
+	                            alt: item_name|default(''),
+	                            width: 160,
+	                            height: 90,
+	                            type: 2
+	                        }) -}}
+                		</div>
+                		<div class="item-inner">
+		                    {{housemobile_global.list_title({title: item_name|default('') })}}
+	                        <div class="item-subtitle item-subtitle-ex mt5">
+	                            <b>{{user_data['user' ~ item.uid].tel|default('')}}</b>
+	                        </div>
+	                        <div class="item-subtitle item-subtitle-ex">
+	                            <span>
+	                            	{{item.caddress|default('')}}
+	                            </span>
+	                        </div>
+	                        <div class="item-subtitle item-subtitle-ex mt5">
+	                            房源&nbsp;:&nbsp;售(
+	                            <span >{{item.csales|default('')}}</span>
+	                            )&nbsp;&nbsp;租(
+	                            <spa>{{item.crents|default('')}}</span>
+	                            )
+	                        </div>
+                		</div>
+                	</a>
+                </li>
+            {% endfor %}
+	    {% else %}
+            <li class="mobile-list-none">暂无经纪公司数据</li>
+        {% endif %}
+    {% endspaceless %}
+{% endif %}
+{% endblock result %}

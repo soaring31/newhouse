@@ -1,0 +1,31 @@
+{% if ident.info.data is defined %}
+<section class="main-left">
+    <div data-level="top" class="level1">
+        <a data-level="1" data-role="filter">全部类目</a>
+        {% for item in ident.info.data if item.nodes is defined and item.nodes %}
+        {% set cateCars2s = {} %}
+        {% for item1 in item.nodes %}
+        {% set cateCars2s = cateCars2s|merge(item1.nodes|keys) %}
+        {% endfor %}
+        {# 1级 #}
+        <a data-level="1" data-value="in|{{cateCars2s|join(',')}}" data-name="cate_cars" data-role="filter">{{item.menu.ename|slice(0, 1)|upper}} {{item.menu.name}}</a>
+        <div data-level="next" class="level2">
+            {# 2级 #}
+            {% if item.nodes is defined %}
+            {% for item1 in item.nodes %}
+            <a data-level="1" data-value="in|{{item1.nodes|keys|join(',')}}" data-name="cate_cars" data-role="filter">{{item1.menu.name}}</a>
+            <div data-level="next" class="level3">            
+                {% if item1.nodes is defined %}
+                {% for item2 in item1.nodes %}
+                {# 3级 #}
+                <a data-level="1" data-value="{{item2.menu.id}}" data-name="cate_cars" data-role="filter">{{item2.menu.name}}</a>
+                {% endfor %}
+                {% endif %}
+            </div>            
+            {% endfor %}
+            {% endif %}
+        </div>        
+        {% endfor %}
+    </div>
+</section>
+{% endif %}

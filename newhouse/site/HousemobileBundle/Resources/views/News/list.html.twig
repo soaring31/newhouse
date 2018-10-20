@@ -1,0 +1,57 @@
+{% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:newslist.html.twig' : 'HousemobileBundle::list_layout.html.twig' %}
+{# 说明 
+ * search_action: 搜索链接
+ * url_category: url中传的category值
+ * category: 当前分类数据
+#}
+
+
+{% set url_category = app.request.get("category", 1) %}
+
+{% set category = ('house.category')|getRow({id: url_category|default(''), checked: 1}) %}
+
+{% block title %}
+    {{category.name|default('资讯列表')}}
+{% endblock title %}
+
+{% block header_right %}
+{{ core_mobile_global.bar_nav_btn({
+    title: '搜索',
+    icon: 'font-f-8',
+    popup: {
+        title: '资讯搜索',
+        popup: '.popup-search',
+    }
+}) }}
+{% endblock header_right %}
+
+{% block key_des %}
+<meta name="keywords" Content="{{category.keywords|default('列表关键字')}}"/>
+<meta name="description" content="{{category.description|default('列表描述')}}"/>
+{% endblock key_des %}
+
+{% block header_title %}
+	{{core_mobile_global.title({title: category.name|default('资讯')})}}
+{% endblock header_title %}
+
+{% block container %}
+    {% set list_header %}
+    <div class="filter" data-block="{
+        ajax: {
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                tpl: 'Common:filter',
+                tag: 'news'
+            }
+        }
+    }"></div>
+    {% endset %}
+    {% set list_url = ('news/list')|U({ajax: 1}) %}
+{# {% include 'HousemobileBundle:News:filterblock.html.twig' ignore missing %} #}
+    {{ parent() }}
+{% endblock container %}
+
+{% block popup_search %}
+{% set search_action = ('news/list')|UU %}
+    {{ parent() }}
+{% endblock popup_search %}

@@ -1,0 +1,50 @@
+{% extends 'HouseBundle::base.html.twig' %}
+
+{% set nav_act = 9 %}
+
+{% block title %}手机客户端{% endblock title %}
+
+{% block css %}
+    {{core_global.linkcss('bundles/'~bundlepath~'/css/download-index.css')}}
+{% endblock css %}
+
+{% block body %}
+<div class="container">
+    <div class="bg">
+        <div class="banner fr">
+            <h2>房产客户端</h2>
+            <p>提供新房、二手房、租房等于房产相关的全面信息，帮您轻松找房子。</p>
+            <div class="download">
+                <div class="ad fl">
+                    <p>Android二维码下载 </p>
+                    <div class="img">
+                        <div id="ewm" data-qrcode="1" data-text="{{('download/index')|U({})}}" data-size="110" data-logo="{{core_global.img_url({src: core_global.mconfig({name: 'qrcodelogo', ename: 'mvariables_user'})})}}"></div>
+                        {# <div id="ewm" data-qrcode="1" data-text="{{('clist/download')|U({},true)}}" data-size="110" data-logo="{{core_global.img_url({src: core_global.mconfig({name: 'qrcodelogo', ename: 'mbasecfg'})})}}"></div> #}
+                        {# <img src="#"> #}
+                    </div>
+                    <a href="{{ core_global.mconfig({name: 'android_apk', ename: 'mbasecfg'}) }}" target="_blank">
+                    {# <a href="{{('clist/download')|U}}" target="_blank"> #}
+                        <img src="{{ asset('bundles/'~bundlepath~'/images/download/down-ad.gif')}}" alt="">
+                    </a>
+                </div>
+                <div class="ip fl">
+                    <p>iPhone二维码下载 </p>
+                    <div class="img">
+                        <div id="ewm" data-qrcode="1" data-text="{{('download/index')|U({})}}" data-size="110" data-logo="{{core_global.img_url({src: core_global.mconfig({name: 'qrcodelogo', ename: 'mvariables_user'})})}}"></div>
+                        {# <div id="ewm" data-qrcode="1" data-text="{{('clist/download')|U({},true)}}" data-size="110" data-logo="{{core_global.img_url({src: core_global.mconfig({name: 'qrcodelogo', ename: 'mbasecfg'})})}}"></div> #}
+                        {# <img src="#"> #}
+                    </div>
+                    <a href="{{ core_global.mconfig({name: 'ios_ipa', ename: 'mbasecfg'}) }}" target="_blank">
+                    {# <a href="{{('clist/download')|U}}" target="_blank"> #}
+                        <img src="{{ asset('bundles/'~bundlepath~'/images/download/down-ip.gif')}}" alt="">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}
+
+{% block footer%}
+    {% include 'HouseBundle:Common:webinfo.html.twig' %}
+{% endblock footer %}

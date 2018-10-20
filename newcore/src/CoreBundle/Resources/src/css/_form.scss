@@ -1,0 +1,281 @@
+﻿$p-w: 490px;
+// $fm-item-bg: #fff url(../images/input-bak.gif) repeat-x 0 0;
+$fm-item-bg: #fff;
+$bdrs: 3px;
+// input 和 select 的公用样式
+%input-style {
+    border: 1px solid $fm-bdc;
+    border-radius: $bdrs;
+    background: $fm-item-bg;
+    padding: 5px;
+    margin-right: 5px;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    &:focus {
+        border-color: #66afe9;
+        outline: 0;
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+    }
+}
+.form {
+    input[type='text'],
+    input[type='number'],
+    input[type='email'],
+    input[type='password'] {
+        @extend %input-style;
+        line-height: 18px;
+        height: 18px;
+        width: $p-w / 2;
+        vertical-align: middle;
+    }
+    select[disabled],
+    input[disabled] {
+        background-color: #f1f1f1;
+    }
+    input.error[type='text'],
+    input.error[type='number'],
+    input.error[type='email'],
+    input.error[type='password'] {
+        border-color: #f00;
+        box-shadow: none;
+    }
+    
+    .hide {
+        display: none;
+    }
+    select {
+        @extend %input-style;
+        text-align: center;
+        // height: $sel-h !important;
+        line-height: $sel-h !important;
+        display: inline-block;
+    }
+    textarea {
+        @extend %input-style;
+        // margin-top: 3px;
+        min-height: 5em;
+        width: $p-w;
+        line-height: 1.8;
+        display: block;
+    }
+    .tip {
+        padding-top: 5px;
+        // display: inline-block;
+        display: block;
+        color: #999;
+        margin-right: 5px;
+        // min-width: 250px;
+        // &:before {
+        //     font-size: 16px !important;
+        //     margin-left: 3px !important;
+        //     margin-right: 3px !important;
+        //     vertical-align: -3px !important;
+        //     @extend .font-ico-32:before;
+        //     @extend [class^="font-ico-"];
+        // }
+    }
+    // 表单验证
+    .required:before {
+        content: "* ";
+        color: #f00;
+        vertical-align: middle;
+    }
+    .error-wrap {
+        display: inline-block;
+    }
+    label {
+        &.error {
+            color: #f00;
+            &:before {
+                font-size: 16px !important;
+                margin-left: 3px !important;
+                margin-right: 3px !important;
+                vertical-align: -3px !important;
+                @extend .font-ico-33:before;
+                @extend [class^="font-ico-"];
+            }
+        }
+        &.success {
+            color: #57CB1D;
+            &:before {
+                font-size: 16px !important;
+                margin-left: 3px !important;
+                margin-right: 3px !important;
+                vertical-align: -3px !important;
+                @extend .font-ico-34:before;
+                @extend [class^="font-ico-"];
+            }
+        }
+    }
+
+    .form-errors {
+        border: none;
+    }
+
+    .form-row #ueditor_content {
+        display: block;
+        div {
+            display: block;
+        }
+    }
+    .hide {
+        display: none;
+    }
+    .form-cell {
+        .form-row {
+            display: inline-block;
+            >div {
+                display: inline;
+            }
+            .form-cell-label {
+                label {
+                    display: none;
+                }
+                label.dib {
+                    display: inline-block;
+                }
+            }
+        }
+    }
+    .select-wrap {
+        line-height: 1.8;
+        display: inline-block;
+        vertical-align: middle;
+        @extend %clearfix;
+        // overflow: hidden;
+        .select-item {
+            float: left;
+            margin-right: 5px;
+            min-width: 54px;
+            text-align: center;
+            input {
+                // display: none;
+                width: 0;
+                height: 0;
+                overflow: hidden;
+                position: absolute;
+                top: -100px;
+            }
+            label {
+                cursor: pointer;
+                position: relative;
+                overflow: hidden;
+                border-radius: $bdrs;
+                border: 1px solid $fm-bdc;
+                padding: 3px 8px;
+                display: block;
+                margin-bottom: 5px;
+                // transition: border .5s;
+            }
+            .arraw {
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                display: block;
+                width: 0;
+                height: 0;
+                border-bottom: 8px solid $fm-bdc;
+                border-left: 8px solid transparent;
+                transition: border .5s;
+            }
+            &-act {
+                label {
+                    border: 1px solid #f00;
+                }
+                .arraw {
+                    border-bottom: 8px solid #f00;
+                }
+            }
+            &:hover {
+                label {
+                    border: 1px solid orange;
+                }
+                .arraw {
+                    border-bottom: 8px solid orange;
+                }
+            }
+        }
+    } 
+    $input-w: 256px;
+    // 验证码
+    .code-wrap-outer {
+        display: inline-block;
+        vertical-align: middle;
+        width: $input-w;
+    }
+    .code-wrap {
+        display: table;
+        width: 100%;
+        .input {
+            margin-right: -50px;
+        }
+            
+        .code-item {
+            display: table-cell;
+           
+            width: 100%;
+            vertical-align: top;
+        }
+        input[type="text"],
+        .code-txt {
+            width: 100% !important;
+            // padding: 0;
+            text-indent: 10px;
+        }
+        .code-item-img {
+            // float: right;
+            padding-left: 15px;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .code-img {
+            width: 90px;
+            height: 32px;
+
+            vertical-align: middle;
+
+            border: 1px solid #e3e3e3;
+        }
+        .code-title {
+            padding-left: 5px;
+
+            text-decoration: none;
+
+            color: #999;
+        }
+        .code-btn {
+            font-size: 12px;
+
+            width: auto;
+            // padding: 0 10px;
+
+            vertical-align: middle;
+            &.disabled {
+                cursor: no-drop;
+            }
+        }
+    }
+}
+
+.input-lg {
+    @extend %input-style;
+    height: 46px;
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.3333333;
+    border-radius: 6px;
+}
+.input-sm {
+    @extend %input-style;
+    height: 18px;
+    font-size: 12px;
+    line-height: 19px;
+}
+.input-search {
+    padding-right: 30px;
+    & + .font-ico-search {
+        margin: 0 0 0 -28px;
+        cursor: pointer;
+        color: #aaa;
+    }
+}

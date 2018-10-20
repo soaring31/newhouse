@@ -1,0 +1,150 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set aid = app.request.get('aid')|default('') %}
+{% set type = app.request.get('type')|default(null) %}
+{% set name = app.request.get('name')|default('') %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {# {{ parent() }}  #}
+     {{ core_manage.jump({
+        url: (action)|U({ type: 1 }), 
+        title: '<i class="font-ico-detail mr5"></i>分站管理员',
+        class: 'on',
+    }) }}
+    {{ core_manage.jump({
+        title: '<i class="mr5"></i>加载会员',
+        url: 'mauthority/mmemload'|U({ type: 1 })
+    }) }}
+{% endblock %}
+{% block mainleft %}
+{% endblock mainleft %}
+
+{% block tableMain %}
+    {% if type is null %}
+        {{ core_manage.filter([
+             {
+                method: 'selectCate',
+                title: '地区',
+                field: 'aid',
+                data: ('db.auth_group_area')|getAll({pageSize: 20, checked: 1}).data|default('')
+            },
+             {
+                method: 'search',
+                field: 'name',
+                title: '请输入会员账号或id'
+            }
+        ]) }}
+     {% else %}
+      {{ core_manage.filter([
+            
+        ]) }}  
+    {% endif %}
+ {% set search_opt = {
+            username: 'orX|username,like,%' ~ name ~ '%|id,eq,' ~ name ~ ''
+        } %}
+
+{% set search_aid = aid ? { aid: aid } : {} %} 
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            aid: '{{ aid }}'
+        }
+    }">
+    {% set uids = ('db.auth_access_area')|getCol('uid',{ uid: 'neq|0' }|merge(search_aid)) %}
+    {% set utypes = ('db.userinfo')|getCol( 'uid', { usertype: 16, uid: 'in|' ~ uids|join(',') }) %}  
+    {% set uinfo = ('db.users')|getAll({ id: 'in|' ~ utypes|join(',') }|merge(search_opt) ) %}
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                    <th>会员账号</th>
+                    {% if type is null %}
+
+                    <th>分站</th>
+                    {% endif %}
+                    <th width="120" class="tac">操作</th>
+                </tr>
+                {% if uinfo.data is defined and uinfo.pageCount|default('') != 0 %}
+                {% for k, vo in uinfo.data %}
+                
+
+                    {# {{dump(vo)}} #}
+                <tr data-id="{{ ('db.auth_access_area')|getOne('id', { uid: vo.id}) }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td>{{ vo.id }}</td>
+                    <td>{# {{('db.users')|getOne('username',{id: vo.uid})}} #}{{ vo.username}}</td>
+                    {% if type is null %}
+                    <td>
+                        {% set aids = ('db.auth_access_area')|getOne('aid', { uid: vo.id}) %}
+                        {% set areaname = ('db.auth_group_area')|getOne('name', { id: aids})|default('主站') %}     
+                         {{ areaname }}      
+                        {# {% set auaccaid = ('db.auth_access_area')|getOne('aid',{ id: vo.id }) %}
+                        {% set augroup = ('db.auth_group_area')|getOne('rulesarea',{ id: auaccaid }) %}
+                        {% set areaname = augroup|getAreaName|default('主站') %} 
+                        
+                         #}
+                    </td>
+                    {% endif %}
+                    {% if type is null %}
+                    <td class="tar pr10">
+                         {{ core_manage.show({
+                         }) }}
+                        {{ core_manage.delete({
+                        title: '删除'
+                    }) }}
+                    </td>
+                    {% else %}
+                    <td class="tar pr10">
+                         {{ core_manage.show({
+                         }) }}
+                        {{ core_manage.delete({
+                        title: '删除'
+                    }) }}
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="5" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(uinfo)}}
+</section>
+
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownCate',
+        title: '区域',
+        field: 'aid',
+        service: 'db.auth_group_area',
+        where: {
+            ename: 'neq|_null',
+            checked: 1
+        }
+    }
+]) }}
+{% endblock %}
+
+{% block promptUl %}
+{% endblock %}
+
+
+
+

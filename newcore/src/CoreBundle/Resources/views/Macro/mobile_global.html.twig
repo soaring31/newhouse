@@ -1,0 +1,601 @@
+{#
+/**
+* @description 手机端(使用sui框架)
+*/
+#}
+{# 调用说明开始 #}
+{# {% import "CoreBundle:Macro:mobileglobal.html.twig" as cm_global %} #}
+{# 调用说明结束 #}
+{#
+/**
+* @method title(o)
+* @description 标题调用
+* @param {String} o.title 标题
+* @param {String} o.class 样式
+* @example 调用
+* ```twig
+* {{- core_mobile_global.title({title: item.name}) -}}
+* ```
+*/
+#}
+{%- macro title(o) -%}
+    {% spaceless %}
+        {{o.tpl|default('<h1 class="title %class%">%title%</h1>')|replace({
+            '%title%': o.title|default(''),
+            '%class%': o.class|default('')
+        })|raw}}
+    {% endspaceless %}
+{%- endmacro title -%}
+
+
+{%- macro title_list(o) -%}
+    {% spaceless %}
+        {{o.tpl|default('<h1 id="list_title" class="title %class%">%title%<span class="title-tip"></span></h1>')|replace({
+            '%title%': o.title|default(''),
+            '%class%': o.class|default('')
+        })|raw}}
+    {% endspaceless %}
+{%- endmacro title_list -%}
+{#
+/**
+* @method title_tab(o)
+* @description 标题调用
+* @param {String} o.data 数据
+* @param {String} o.class 样式
+* @example 调用
+* ```twig
+* {{- core_mobile_global.title_tab({data: [
+*   {title: '新房', url: ''},
+*   {title: '二手房', url: ''},
+*   {title: '租房', url: ''},
+* ], class: 'new-tab'}) -}}
+* ```
+*/
+#}
+{%- macro title_tab(o) -%}
+    {% spaceless %}
+    {% set _o = {
+            data: [],
+            class: '',
+            act_id: '',
+        }|merge(o|default({})) %}
+    {% if _o.data %}
+    <div class="title title-tab {{ _o.class }}">
+        {% for item in _o.data %}
+            {% set act_id = _o.act_id %}
+
+            {% if act_id is empty and loop.first %}
+                {% set act_id = item.id %}
+            {% endif %}
+            <a class="{{ act_id == item.id|default('') ? 'active' : '' }}" href="{{ item.url|default('') }}">{{ item.title|default('') }}</a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="title-tab">没有数据</div>
+    {% endif %}
+    {% endspaceless %}
+{%- endmacro title_tab -%}
+
+{#
+/**
+* @method go_back(o)
+* @description 手机端返回上一页，一般位于头部左侧
+* @param {String} o.href 链接，如果不填则直接返回上一页
+* @param {String} o.class 样式名
+* @param {String} o.value 内容
+* @example 调用
+* ```twig
+* {{- core_mobile_global.go_back({href: item.href|default('')}) -}}
+* ```
+*/
+#}
+{%- macro go_back(o) -%}
+    {% spaceless %}
+    {% set _opt = {
+        href: '',
+        value: '',
+        class: 'pull-left ' ~ (o.href|default('') ? '' : 'back'),
+        icon: 'font-f-10'
+    }|merge(o|default({})) %}
+
+    {{ _self.bar_nav_btn(_opt) }}
+    {% endspaceless %}
+{%- endmacro go_back -%}
+
+{#
+/**
+* @method header_right(o)
+* @description 手机端头部右侧内容
+* @param {String} o.href 链接
+* @param {String} o.class 样式名
+* @param {String} o.value 内容
+* @parem {String} o.attr 其他属性
+* @example 调用
+* ```twig
+* {{- core_mobile_global.header_right({href: item.href|default('')}) -}}
+* ```
+*/
+#}
+{%- macro header_right(o) -%}
+    {% spaceless %}
+        {{o.tpl|default('<a href="%href%" class="pull-right %class%" %attr%>%value%</a>')|replace({
+            '%href%': o.href|default(''),
+            '%class%': o.class|default(''),
+            '%value%': o.value|default(''),
+            '%attr%': o.attr|default('')
+        })|raw}}
+    {% endspaceless %}
+{%- endmacro header_right -%}
+{#
+/**
+* @method mobile_search(o)
+* @description 手机端通用搜索控件,此处只是一个弹层按钮，弹出`popup-search`弹层
+* @param {String} o.placeholder 文本框的`placeholder`
+* @param {String} o.title=搜索 弹层头部标题
+* @param {String} o.action 提交地址
+* @param {String} o.class 样式
+* @param {String} o.value 内容
+* @example 调用
+* ```twig
+* {{- core_mobile_global.mobile_search({title: '新房搜索'}) -}}
+* ```
+*/
+#}
+{%- macro mobile_search(o) -%}
+{% spaceless %}
+    {{o.tpl|default('<div class="open-popup search-wrap %class%" data-popup=".popup-search" data-title="%title%" data-action="%action%"><div class="search-input"><i class="icon font-f-8"></i>%value%</div></div>')|replace({
+        '%title%': o.title|default('搜素'),
+        '%class%': o.class|default(''),
+        '%action%': o.action|default(''),
+        '%value%': o.value|default('')
+    })|raw}}
+{% endspaceless %}
+{%- endmacro mobile_search -%}
+
+{#
+/**
+* @method bar_nav_btn(o)
+* @description 手机导航上的按钮
+* @param {String} o.class 样式名
+* @param {String} o.icon 图标样式名
+* @param {String} o.title 图标的文字
+* @param {String} o.href 图标的链接
+* @param {Object} o.popup 图标的对应的弹窗配置
+* @param {String} o.popup.title 弹窗的标题
+* @param {String} o.popup.action 弹窗的搜索的提交地址
+* @example 调用
+* ```twig
+* {{- core_mobile_global.bar_nav_btn({title: '搜索'}) -}}
+* ```
+*/
+#}
+{%- macro bar_nav_btn(o) -%}
+    {% import "CoreBundle:Macro:global.html.twig" as core_global %}
+    {% set _opt = {
+            class: '',
+            icon: 'font-f-8',
+            title: '',
+            href: '',
+            attr: '',
+            popup: {
+                title: '',
+                target: '',
+                popup: '',
+                action: ''
+            },
+        }|merge(o) %}
+
+    {% set icon %}
+        <span class="icon {{ _opt.icon }}"></span>
+    {% endset %}
+    {# button-horizontal 让按钮水平显示 #}
+    <a {{ core_global.h5_attr(_opt.attr) }} href="{{ _opt.href ? : 'javascript:;' }}" class="button button-link button-nav {{ 'pull' in _opt.class ? '' : 'pull-right' }} {{ (_opt.title and 'button-horizontal' not in _opt.class) ? 'button-ver' : '' }} {{ _opt.popup.popup ? 'open-popup' : '' }} {{ _opt.class }}" {{ core_global.h5_attr(_opt.popup, 'data') }}>{{ icon }}{{ _opt.title }}</a>
+    {# 分享按钮时调用分享js #}
+    {% if 'share-actions' in _opt.class %}
+    <script type="text/javascript">
+        seajs.use(['share'])
+    </script>
+    {% endif %}
+{%- endmacro bar_nav_btn -%}
+
+{#
+/**
+* @method header_search(o)
+* @description 标题栏上的搜索 其他参数参考 `mobile_search(o)`
+* @example 调用
+* ```twig
+* {{- core_mobile_global.header_search({title: '搜索'}) -}}
+* ```
+*/
+#}
+{%- macro header_search(o) -%}
+    {% set _opt = {
+            value: '搜索'
+        }|merge(o) %}
+    {{_self.mobile_search({
+        tpl: '<a href="javascript:;" class="icon icon-title  open-popup mr5 pull-right %class%" data-popup=".popup-search" data-title="%title%" data-action="%action%">%value%</a>'
+    }|merge(_opt))}}
+{%- endmacro header_search -%}
+
+{#
+/**
+* @method list_scroll(o)
+* @description 手机结构下拉刷新(调用此结构的下拉刷新，最近的`.content`上要加上`infinite-scroll`样式)
+* @param {String} o.class=media-list 样式名
+* @param {Boolean} o.footer=1 显示底部信息
+* @param {Boolean} o.up=0 上拉刷新
+* @example 调用
+* ```twig
+* {{- core_mobile_global.list_scroll()-}}
+* ```
+* ```js
+* seajs.use('loadmore', function (loadmore) {
+*   loadmore.init({
+*       url: BASE_URL + '/house/houses/list?ajax=1'
+*   })
+* })
+* ```
+*/
+#}
+{%- macro list_scroll(o) -%}
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+
+{% set opt = {
+    list_header: '',
+    list_footer: '',
+    footer: 1,
+    content_cls: '',
+    content_attr: '',
+    class: 'media-list',
+    autoLoad: 1,
+    bUrlHash: 1,
+    attr: {},
+    url: '',
+    up: 0
+}|merge(o) %}
+{% spaceless %}
+
+<div {{ core_global.h5_attr(opt.content_attr) }} class="content infinite-scroll {{ opt.content_cls }}" data-container="list">
+    {{ opt.list_header|raw }}
+    {% if opt.up %}
+    <div class="pull-to-refresh-layer">
+        <div class="preloader"></div>
+        <div class="pull-to-refresh-arrow"></div>
+    </div>
+    {% endif %}
+    <!-- list -->
+    <div {{ core_global.h5_attr(opt.attr) }} class="list-block {{opt.class}}">
+        <ul class="list-container clearfix"></ul>
+    </div>
+    <!-- 加载提示符 -->
+    <div class="infinite-scroll-preloader">
+        <div class="preloader"></div>
+    </div>
+    {% if opt.list_footer %}
+        {{ opt.list_footer|raw }}
+    {% elseif opt.footer %}
+        {{ render(controller('HouseBundle:Common:footer', {_isApp: app.request.get('_isApp', 0)})) }}
+    {% endif %}
+</div>
+<script type="text/javascript">
+{# 调用检索条件 #}
+seajs.use(['sm', 'loadmore'], function(sm, loadmore){
+    // 重新手动启用下滚动插件
+    $('.content').scroller();
+    loadmore.init({
+        autoLoad: {{ opt.autoLoad }},
+        bUrlHash: {{ opt.bUrlHash }},
+        ajaxOpt: {
+            url: '{{ opt.url }}'
+        }
+    });
+})
+</script>
+{% endspaceless %}
+{%- endmacro -%}
+
+{#
+/**
+* @method more_con(o)
+* @description 查看更多,此方式的查看更多是根据最大高度的原理来实现的，也就是id所在的标签上要有一个max-height属性，而样式addclass中要有一个max-height: none的属性，并且后者的权重要比前者的大
+* @parma {String} o.class 样式
+* @param {String} o.id 需要控制收缩的区块id
+* @param {String} o.addclass=more-con 展开时增加的样式
+* @param {String} o.down=收起<span class="icon font-f-35 ml"></span> 展开时显示的内容
+* @param {String} o.up=查看更多<span class="icon font-f-34 ml"></span> 收起时显示的内容
+* @example 调用
+* ```twig
+* {{- core_mobile_global.more_con({
+*     id: 'con'
+* })-}}
+* ```
+*/
+#}
+{%- macro more_con(o) -%}
+{% set opt = {
+    addclass: 'more-con',
+    down: '收起<span class="icon font-f-35 ml"></span>',
+    up: '查看更多<span class="icon font-f-34 ml"></span>'
+}|merge(o) %}
+{% spaceless %}
+    <div class="tac {{opt.class|default('')}}">
+        <a href="#{{opt.id|default('')}}" data-class="{{opt.addclass}}" data-down="{{opt.down}}" class="button2 more-btn external">
+            {{opt.up|raw}}
+        </a>
+    </div>
+{% endspaceless %}
+{%- endmacro -%}
+
+{#
+/**
+* @method menu(o)
+* @description 手机端菜单栏,横线滚动菜单
+* @param {Number} o.num=8 每屏最大显示数量，默认为8
+* @param {String} o.data 菜单数据
+* @param {String} o.class 样式名
+* @param {String} o.otherdata 其他配置
+* @param {String} o.page=swiper-menu 分页控制
+* @param {String} o.tpl 循环中的内容
+* @example 调用
+* ```twig
+* {% set ttt = {
+*     0 : {
+*         name: '帮助指南',
+*         icon: 'font-f-45',
+*         url: ('service/list')|U({category:8})
+*     }
+* } %}
+* {{- core_mobile_global.menu({data: ttt|default('')}) -}}
+* ```
+*/
+#}
+{%- macro menu(o) -%}
+{% set opt = {
+    page: 'swiper-menu',
+    num: 8,
+    tpl: '<a class="help external" href="%url%"><div class="icon %icon% %cnum%"></div><span>%name%</span></a>'
+}|merge(o) %}
+    {% spaceless %}
+    <div class="swiper-container s-nav {{opt.class|default('')}}" data-pagination=".{{opt.page}}" {{opt.otherdata|default('')|raw}}>
+        <div class="swiper-wrapper">
+            {% set num = 0 %}
+            {% for item in opt.data|default('') %}
+                {% if loop.index0 % opt.num == 0 %}
+                <div class="swiper-slide">
+                    {% for k, item2 in opt.data|default('') if num <= k and k < (num + opt.num) %}
+                    {{opt.tpl|replace({
+                        '%name%': item2.name|default(''),
+                        '%url%': item2.url|UU|default(''),
+                        '%icon%': item2.navicon|default(''),
+                        '%cnum%' : 'm-ico-color' ~ loop.index0
+                    })|raw}}
+                    {% endfor %}
+                    {% set num = num + opt.num %}
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="swiper-pagination {{opt.page}}"></div>
+    </div>
+    {% endspaceless %}
+{%- endmacro menu -%}
+
+{#
+/**
+* @method swiper(o)
+* @description 手机轮播图  注意： 自定义tpl的时候要把house-ad样式和%ad%替换值加上，不然广告小图标会丢失
+* @param {String} o.tag 标识名（只限定推送位标识）
+* @param {Number} o.num=8 推送位数据最大显示数量，默认为8
+* @param {String} o.value 轮播图中的数据
+* @param {String} o.class 样式名
+* @param {Number} o.autoplay=5000 自动播放时间
+* @param {String} o.otherdata 其他配置
+* @param {String} o.page=swiper-hdp 分页控制
+* @param {String} o.tpl 循环中的内容
+* @example 调用
+* ```twig
+* {{- core_mobile_global.swiper({value: jdt|default('')}) -}}
+* ```
+*/
+#}
+{%- macro swiper(o) -%}
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+{% set opt = {
+    num: 8,
+    autoplay: 5000,
+    page: 'swiper-hdp',
+    type: 2,
+    height: 200,
+    width: 300,
+    tpl: '<div class="swiper-slide house-ad">%ad%<a href="%url%"><img src="%image%" alt="%name%"></a></div>'
+}|merge(o) %}
+    {% if opt.tag|default('') %}
+        {% set swiper_value = (opt.tag|default(''))|getPush(opt.num) %}
+    {% else %}
+        {% if opt.value.data|default('') %}
+            {% set swiper_value = opt.value.data|default('') %}
+        {% else %}
+            {% set swiper_value = opt.value|default('') %}
+        {% endif %}
+    {% endif %}
+    {% spaceless %}
+    {% if swiper_value|default('') %}
+
+    {# 随机字串 #}
+    {% set _code = 'now'|date('U') %}
+    <div data-swiper-{{ _code }}="1" class="swiper-container {{opt.class|default('')}}" id="{{opt.id|default('')}}" data-autoplay="{{opt.autoplay}}" data-pagination=".{{opt.page}}" data-lazyloading="true" data-lazy-loading-in-prev-next='true' {{opt.otherdata|default('')|raw}}>
+        <div class="swiper-wrapper" style="height: 100%;">
+            {% for item in swiper_value %}
+                {% if item.ad|default('') %}
+                    {% set ad = '<div class="ad-txt"></div>' %}
+                {% else %}
+                    {% set ad = '' %}
+                {% endif %}
+                {{opt.tpl|replace({
+                    '%name%': item.name|default(''),
+                    '%url%': item.url|default('javascript:;'),
+                    '%image%': core_global.img_url({src: item.thumb|default(item.href|default('')), alt: item.name|default(item.desc|default('')), type: opt.type, height: opt.height, width: opt.width }),
+                    '%cate_album%': item.cate_album|default(''),
+                    '%ad%': ad|default('')
+                })|raw}}
+            {% endfor %}
+        </div>
+        {% if opt.page != 'no' %}
+            <div class="swiper-pagination {{opt.page}}"></div>
+        {% endif %}
+    </div>
+    <script type="text/javascript">
+        // 重新启用swiper
+        seajs.use(['sm'], function(sm) {
+            $('[data-swiper-{{ _code }}="1"]').swiper();
+        })
+    </script>
+    {% endif %}
+    {% endspaceless %}
+{%- endmacro swiper -%}
+
+{%- macro swiper2(o) -%}
+    {% import "CoreBundle:Macro:global.html.twig" as core_global %}
+    {% set opt = {
+        num: 8,
+        autoplay: 5000,
+        page: 'swiper-hdp',
+        type: 2,
+        height: 200,
+        width: 300,
+        tpl: '<div class="swiper-slide house-ad">%ad%<a href="%url%"><img src="%image%" alt="%name%"></a></div>'
+    }|merge(o) %}
+    {% if opt.tag|default('') %}
+        {% set swiper_value = (opt.tag|default(''))|getPush(opt.num) %}
+    {% else %}
+        {% if opt.value.data|default('') %}
+            {% set swiper_value = opt.value.data|default('') %}
+        {% else %}
+            {% set swiper_value = opt.value|default('') %}
+        {% endif %}
+    {% endif %}
+    {% spaceless %}
+        {% if swiper_value|default('') %}
+
+            {# 随机字串 #}
+            {% set _code = 'now'|date('U') %}
+            <div data-swiper-{{ _code }}="1" class="swiper-container {{opt.class|default('')}}" id="{{opt.id|default('')}}" data-autoplay="{{opt.autoplay}}" data-pagination=".{{opt.page}}" data-lazyloading="true" data-lazy-loading-in-prev-next='true' {{opt.otherdata|default('')|raw}}>
+                <div class="swiper-wrapper" style="height: 100%;">
+                    {% for item in swiper_value %}
+                        {% if item.ad|default('') %}
+                            {% set ad = '<div class="ad-txt"></div>' %}
+                        {% else %}
+                            {% set ad = '' %}
+                        {% endif %}
+                        {{opt.tpl|replace({
+                            '%name%': item.name|default(''),
+                            '%url%': ('houses/dphotos')|UU({id: item.aid|default('')})|default('javascript:;'),
+                            '%image%': core_global.img_url({src: item.thumb|default(item.href|default('')), alt: item.name|default(item.desc|default('')), type: opt.type }),
+                            '%cate_album%': item.cate_album|default(''),
+                            '%ad%': ad|default('')
+                        })|raw}}
+                    {% endfor %}
+                </div>
+                {% if opt.page != 'no' %}
+                    <div class="swiper-pagination {{opt.page}}"></div>
+                {% endif %}
+            </div>
+            <script type="text/javascript">
+                // 重新启用swiper
+                seajs.use(['sm'], function(sm) {
+                    $('[data-swiper-{{ _code }}="1"]').swiper();
+                })
+            </script>
+        {% endif %}
+    {% endspaceless %}
+{%- endmacro swiper2 -%}
+
+{#
+/**
+* @method swiper_one(o)
+* @description 详情页顶部图片（只有一张的情况下使用） 其余参数参考`img(o)`方法
+* @param {String} o.class 样式
+* @example 调用
+* ```twig
+* {{- core_mobile_global.swiper_one(item) -}}
+* ```
+*/
+#}
+{%- macro swiper_one(o) -%}
+    {% import "CoreBundle:Macro:global.html.twig" as core_global %}
+    <div class="card swiper-one-img {{o.class|default('')}}">
+        <div valign="bottom" class="card-header color-white no-border no-padding">
+            {{core_global.img({
+                src: o.thumb|default(''),
+                alt: o.name|default(''),
+                attr: o.attr|default('class="card-cover"'),
+                height: o.height|default('200'),
+                width: o.width|default('300'),
+                type: o.type|default('2')
+            })}}
+        </div>
+    </div>
+{%- endmacro swiper_one -%}
+
+{# 详情页导航 #}
+{% macro m_detail_nav(o) %}
+    {% set _opt = {
+        action: '',
+        data: [],
+    }|merge(o) %}
+
+    {% if _opt.data|length %}
+        <div class="bar bar-header-secondary lp-fixed-hd">
+            <div class="content native-scroll">
+                <div class="swiper-container swiper-width-auto horizontal-nav" data-pagination="" data-initial-slide="{{_opt.active}}" data-slides-per-view="auto">
+                    <div class="swiper-wrapper">
+                        {% for k,item in _opt.data %}
+                            <div class="swiper-slide">
+                                <a href="{{item.url|default('')}}" {% if _opt.active == k %}class="active"{% endif %}>
+                                    {{item.name|default('')}}
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <script type="text/javascript">
+                    // 重新调用导航滚动
+                    seajs.use(['sm'])
+                </script>
+            </div>
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{#
+/**
+* @method tel(o)
+* @description 按钮拨打电话
+* @param {String} o.value 电话号码，必须是以转字为中间或者英文状态下的逗号分隔分机号，如果是手机，则默认返回，分机号为0
+* @param {String} o.tpl 模板上带上 %tel% 替换值即可
+* @example 调用
+* ```twig
+* {{- core_mobile_global.tel(item) -}}
+* ```
+*/
+#}
+{%- macro tel(o) -%}
+{% spaceless %}
+    {% set opt = {
+        default: 'javascript:;'
+    }|merge(o) %}
+    {% if opt.value %}
+        {% if '转' in opt.value %}
+            {% set value = opt.value|split('转') %}
+            {{'tel:' ~ value[0]|trim ~ ',' ~ value[1]|trim }}
+        {% elseif ',' in opt.value %}
+            {% set value = opt.value|split(',') %}
+            {{'tel:' ~ value[0]|trim ~ ',' ~ value[1]|trim }}
+        {% else %}
+            {{'tel:' ~ opt.value}}
+        {% endif %}
+    {% else %}
+        {{opt.default}}
+    {% endif %}
+{% endspaceless %}
+{%- endmacro -%}

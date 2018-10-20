@@ -1,0 +1,65 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+
+{# 说明 
+* detail：小区详情数据
+#}
+{% set detail = cident.xq_detail.data[0]|default('') %}
+
+{% block title %}
+    【{{cur_area_data|default('')}}{{detail.name|default('')}}小区,二手房,租房】
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}小区,{{cur_area_data|default('')}}{{detail.name|default('')}}论坛,{{detail.name|default('')}}租房,{{detail.name|default('')}}二手房"/>
+<meta name="description" content="{{detail.name|default('')}}小区网是为{{cur_area_data|default('')}}{{detail.name|default('')}}小区居民服务的网站,主要提供{{detail.name|default('')}}论坛、{{detail.name|default('')}}二手房、{{detail.name|default('')}}租房、{{detail.name|default('')}}家居装修、{{detail.name|default('')}}二手交易、{{detail.name|default('')}}便民服务、{{detail.name|default('')}}周边商户、小区活动、小区相册等栏目."/>
+{% endblock key_des %}
+
+{% block header_title %}
+{{core_mobile_global.title({title: '小区详情'})}}
+{% endblock header_title %}
+
+{% block popup %}
+	{{ housemobile_global.popup({
+	    name: 'popup-map',
+	    title: '小区地图',
+	    content: {
+	        bParams: true,
+	        ajax: {
+	            url: ('sale/qdetail')|U,
+	            data: {
+	                id: detail.id|default(''),
+	                tpl: 'Common:mapblock'
+	            }
+	        }
+	    }
+	}) }}
+{% endblock popup %}
+
+{% block container %}
+	<div data-block="{
+	    bParams: true,
+	    ajax:{
+	        url: '{{ ('sale/qdetail')|U }}',
+	        data: {
+	            id: '{{ detail.id|default('') }}',
+	            tpl: 'Sale:qdetailblock'
+	        }
+	    }
+	}"></div>
+{% endblock container %}
+
+{% block nav %}
+	<div data-block="{
+	    bParams: true,
+	    ajax:{
+	        url: '{{ (action)|U }}',
+	        data: {
+	            id: '{{ detail.id|default('') }}',
+	            tpl: 'Common:navbottom',
+	            nav_opt_tag: 'xq_nav',
+	            action: '{{nav_houses_act|default(1)}}'
+	        }
+	    }
+	}"></div>
+{% endblock nav %}

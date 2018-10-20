@@ -1,0 +1,94 @@
+﻿/*!
+ * @name lp-compare.css
+ * @author xying
+ * @date 2016-8-10
+ * @dec lp compare
+ */
+
+
+ /*
+ 对比
+*/
+#comp_box {
+    background: #fff none repeat scroll 0 0;
+    border: 2px solid #e43;
+    font-size: 12px;
+    width: 170px;
+    display: none;
+}
+#comp_top .close, #comp_items .icon {
+    color: #fff;
+    cursor: pointer;
+    float: right;
+    line-height: 1;
+    margin-top: 9px;
+    overflow: hidden;
+    position: relative;
+}
+#comp_top {
+    background: #e43 none repeat scroll 0 0;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 30px;
+    padding: 0 5px;
+}
+#comp_items {
+    background: #fff none repeat scroll 0 0;
+    padding: 5px;
+}
+#comp_items .icon {
+    background-position: right -349px;
+    color: #e43;
+}
+#comp_items li {
+    border-bottom: 1px solid #e6e6e6;
+    border-top: 1px solid #fff;
+    height: 28px;
+    line-height: 28px;
+    overflow: hidden;
+}
+#comp_boot {
+    line-height: 22px;
+    overflow: hidden;
+    padding-bottom: 5px;
+}
+#comp_boot .prosubmit {
+    background: #e43 none repeat scroll 0 0;
+    border: medium none;
+    border-radius: 2px;
+    color: #fff;
+    cursor: pointer;
+    float: left;
+    height: 22px;
+    margin: 0 10px 0 15px;
+    padding: 0 8px;
+}
+#comp_boot .clear {
+    float: left;
+}
+#comp_boot .clear .ico08 {
+    color: #e43;
+    margin-right: 5px;
+}
+
+.btnshow {
+    font-size: 50px;
+    line-height: 52px;
+    text-align: center;
+    position: fixed;
+    bottom: 103px;
+    right: 30px;
+    width: 52px;
+    height: 52px;
+    display: none;
+    background: #b8babe;
+    cursor: pointer;
+    color: #fff;
+
+    &:hover {
+        background: #e43;
+        color: #fff;
+        text-decoration: none;
+    }
+}

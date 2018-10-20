@@ -1,0 +1,180 @@
+/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+* @dec 求租 求购
+*/
+
+@import 'static/ats';
+// 工具类 每个文件都要导入
+
+$map-color:#27b446 !default;
+$map-link-color:#666 !default;
+$map-hover-link-color:#ee4433 !default;
+
+$map-aside-w:270px !default;
+$map-container-p:30px !default;
+*{
+    margin: 0;
+    padding: 0;
+}
+.map-container{
+    margin: 0 auto;
+    min-width: $min-screen;
+    width: $screen;
+    .body{
+        width: $screen - $map-aside-w - $map-container-p;
+    }
+    .aside{
+        width: $map-aside-w;
+    }
+}
+
+
+/*
+common
+*/
+.panel{
+    border: 1px solid #e1e1e1;
+    border-top: 2px solid #999;
+    .panel-title{
+        border-bottom: 1px solid #e1e1e1;
+        font-size: 16px;
+        height: 40px;
+        line-height: 40px;
+        overflow: hidden;
+        padding-left: 20px;
+    }
+    .panel-body{
+        padding: 10px;
+    }
+}
+
+/*
+body
+*/
+.wrap-head{
+    margin-bottom: 15px;
+    ul{
+        li{
+            color: #666;
+            cursor: pointer;
+            font-size: 20px;
+            float: left;
+            height: 53px;
+            overflow: hidden;
+            text-align: center;
+            width: 20%;
+            div{
+                height: 48px;
+                line-height: 48px;
+                position: relative;
+                span{
+                    padding: 0 6px;
+                }
+                i{
+                    border-top:5px solid $map-color;
+                    border-left: 5px solid transparent;
+                    border-right: 5px solid transparent;
+                    display: none;
+                    height: 0;
+                    margin-left: -2px;
+                    width: 0;
+                    position: absolute;
+                    left: 50%;
+                    top: 48px;
+                }
+            }
+            &.cur{
+                div{
+                    background: $map-color;
+                    color: #fff;
+                    i{
+                        display: block;
+                    }
+                }
+            }
+            &:hover{
+                color: $map-hover-link-color;
+            }
+        }
+    }
+}
+.wrap-con{
+    overflow: hidden;
+    position: relative;
+}
+.cons{
+    position: absolute;
+    width: 100%;
+    .panel{
+        margin-bottom: 30px;
+        .panel-title{
+            color:$map-color;
+            font-weight: 700;
+            padding-left: 43px;
+            span{
+                font-weight: normal;
+                padding: 0 6px;
+            }
+        }
+        .panel-body{
+            padding: 0 30px 0 55px;
+            dl{
+                color: #666;
+                font-size: 14px;
+                margin-top: 26px;
+                margin-bottom: 10px;
+                padding-left: 100px;
+                position: relative;
+                min-height: 35px;
+                dt{
+                    border-right: 2px solid $map-color;
+                    height: 20px;
+                    line-height: 20px;
+                    width: 93px;
+                    position: absolute;
+                    left: 0;
+                    top: 2px;
+                }
+                a {
+                    color: $map-link-color;
+                    &:hover{
+                        color: $map-hover-link-color;
+                    }
+                }
+                dd{
+                    a{
+                        display: inline-block;
+                        line-height: 20px;
+                        margin-bottom: 15px;
+                        margin-left: 15px;
+                    }
+                }
+            }
+        }
+    }
+}
+/*
+aside
+*/
+/*
+top-recommend
+*/
+.top-recommend .panel-body{
+    padding: 20px 27px 0;
+    ul{
+        li{
+            font-size: 12px;
+            float: left;
+            margin-bottom: 20px;
+            width: 49%;
+            a{
+                color: #999;
+            }
+            &:nth-child(2n){
+                text-indent: 25px;
+            }
+        }
+    }
+}

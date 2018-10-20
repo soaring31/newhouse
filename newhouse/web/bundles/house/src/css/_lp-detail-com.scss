@@ -1,0 +1,116 @@
+﻿/*!
+ * @name lp-detail.css
+ * @author xying
+ * @date 2016-8-5
+ * @dec top toolbar popular search terms containing the search and  for lp
+ */
+
+ @import 'top-search'; // 搜索栏
+ @import 'detail-nav'; // 详情导航
+ /*
+bread
+*/
+.bread{
+    .time,
+    .pipe{
+        color: #999;
+    }
+    span,
+    a{
+        color: #333;
+    }
+    i,
+    a i{
+        color: #f00;
+    }
+    i{
+        vertical-align: middle;
+    }
+}
+
+/*
+title
+*/
+.lp-detail-tit{
+    height: 110px;
+    position: relative;
+    h1{
+        font-size: 28px;
+        font-weight: 100;
+        line-height: 2;
+        margin-bottom: 5px;
+    }
+    .tag{
+        span{
+            border: 1px solid #ccc;
+            border-color: #ccc;
+            color: #999;
+            margin-right: 5px;
+            padding: 3px 10px;
+        }
+        .sp-co-114 {
+            color: #fff;
+            border-color: #3393F5; 
+            background: #3393F5 !important;
+        }
+        .sp-co-115 {
+            color: #fff;
+            border-color: #0EBF8F; 
+            background: #0EBF8F !important;
+        }
+        .sp-co-116 {
+            color: #fff;
+            border-color: #fb841f; 
+            background: #fb841f !important;
+           
+        }
+        .sp-co-117 {
+            color: #fff;
+            border-color: #D00404; 
+            background: #D00404 !important;
+        }
+        .sp-co-118 {
+            color: #fff;
+            border-color: #a9a9aa; 
+            background: #a9a9aa !important;
+        }
+    }
+}
+.ewmurl{
+    position: absolute;
+    top: 0;
+    right: 0;
+    .elist{
+        float: right;
+        text-align: center;
+        li{
+            display: inline;
+            float: left;
+            margin-left: 15px;
+            .wxhouseimg{
+                width:76px;
+                height: 76px;
+                border:none;
+            }
+        }
+        img{
+            border: 1px solid #ddd;
+            height: 80px;
+            width: 80px;
+        }
+        span{
+            display: block;
+            font-size: 12px;
+            line-height: 21px;
+        }
+    }
+    .qqqun{
+        float: right;
+        margin-right: -10px;
+        margin-top: 20px;
+        width: 100px;
+        img{
+            margin-bottom: 5px;
+        }
+    }
+}

@@ -1,0 +1,53 @@
+{% extends 'HouseBundle:Register:index.html.twig' %}
+
+{% block regter_left %}
+<div class="register resetpwd">
+    <div class="register-head">
+        <a class="active" href="javascript:;" data-show="emailForm">邮箱找回</a>
+        {% if 'sms_api'|C and 'sms_api'|C !='apitester' %}
+        <a class="" href="javascript:;" data-show="telForm">手机找回</a>
+        {% endif %}
+    </div>
+    <!-- tag -->
+    <div class="tag">
+        <!-- 邮箱找回 -->
+        <div class="tag-son" id="emailForm">
+            {{ render(controller('HouseBundle:Bundlebindforms:ajaxform', {
+                    formflag: 'resetpwdemail',
+                    formcls: 'common-form-lg common-form-label',
+                    type: 'resetpwd'
+                }))
+            }}
+        </div>
+        {% if 'sms_api'|C!='' and 'sms_api'|C !='apitester'   %}
+            <!-- 手机找回 -->
+        <div class="tag-son" style="display: none;" id="telForm">
+            {{ render(controller('HouseBundle:Bundlebindforms:ajaxform', {
+                    formflag: 'resetpwdtel',
+                    formcls: 'common-form-lg common-form-label',
+                    type: 'resetpwd'
+                }))
+            }}
+        </div>
+        {% endif %}
+    </div>
+</div>
+<script type="text/javascript">
+    seajs.use([], function() {
+        var emailForm = $('#emailForm').html();
+        var telForm = $('#telForm').html();
+        $('.register-head').on('click', 'a', function() {
+            var $this = $(this);
+            $this.addClass('active').siblings().removeClass('active');
+            var showDiv = $('.tag').find('.tag-son').eq($(this).index());
+            var showDivData = $this.data('show');
+            if (showDivData == 'emailForm') {
+                showDiv.html(emailForm).show().siblings().hide().html('')
+            } else {
+                showDiv.html(telForm).show().siblings().hide().html('')
+            };
+            $('.btn[disabled="disabled"]').prop('disabled', '');
+        });
+    })
+</script>
+{% endblock regter_left %}

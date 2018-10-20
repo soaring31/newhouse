@@ -1,0 +1,10 @@
+{% spaceless %}
+{
+    pageCount: {{ident.fenxiao_houses.pageCount}},
+    pageIndex: {{ident.fenxiao_houses.pageIndex}},
+    pageSize: {{ident.fenxiao_houses.pageSize}},
+    data: [{% for item in ident.fenxiao_houses.data %}
+              {% if loop.index != 1 %},{% endif %}'{{item.name|default('')}}{{item.id|default('')}}'
+          {% endfor %}]
+}
+{% endspaceless %}

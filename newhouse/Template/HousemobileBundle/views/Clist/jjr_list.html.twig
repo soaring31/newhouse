@@ -1,0 +1,59 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+** ajax调用：经纪人
+#}
+{% block result %}
+    {% if ident.list is defined %}
+        {% set list = ident.list %}
+    {% endif %}
+    {% spaceless %}    	
+        {% if list.data is defined and list.pageCount|default('') != 0 %}
+            {% for item in list.data %}
+            	{% set item_user_info = ('db.userinfo')|getRow({uid: item.id|default('')}) %}
+                {% set item_name = item_user_info.nicename|default(item.username|default('')) %}
+                <li {% if loop.last %}data-page="{
+                            pageIndex: {{list.pageIndex}},
+                            pageCount: {{list.pageCount}},
+                            pageSize: {{list.pageSize}}
+                         }"{% endif %}>
+                    <a href="{{('member/j_d_ds')|UU({id: item.id|default('')})}}" class="item-content p-default">
+                        <div class="item-media">
+                            {{- core_global.img({
+                                src: item_user_info.image|default(''),
+                                alt: item_name|default(''),
+                                width: 100,
+                                height: 130,
+                                type: 2
+                            }) -}}
+                        </div>
+                        <div class="item-inner jjr">
+                            {{housemobile_global.list_title({title: item_name|default('')})}}
+                            <div class="item-subtitle item-subtitle-ex lh mt5">
+                                 <span class="button button-danger button-sm">售</span>&nbsp;
+                                 <span>{{item_user_info.sales|default('0')}}</span>套&nbsp;&nbsp;&nbsp;
+                                 <span class="button button-sm">租</span>&nbsp;
+                                 <span>{{item_user_info.rents|default('0')}}</span>套
+                            </div>
+                            <div class="item-subtitle item-subtitle-ex lh mt5">
+                                服务等级&nbsp;:&nbsp;{{ house_global.publisher({
+                                                        id: item.id|default(''),
+                                                        jjr_tpl: '<span>
+                                                            %fwdj%
+                                                        </span>'
+                                                    }) }}
+                            </div>
+                            <div class="item-subtitle item-subtitle-ex lh">
+                                联系电话&nbsp;:&nbsp; <b>{{item.tel|default('')}}</b>
+                            </div>
+                            <div class="item-subtitle item-subtitle-ex lh">
+                                服务区域&nbsp;:&nbsp;<span>{{core_global.region({id: item_user_info.region|default(''), tpl: '%value%'})}}</span>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            {% endfor %}
+        {% else %}
+            <li class="mobile-list-none">暂无经纪人数据</li>
+        {% endif %}
+    {% endspaceless %}
+{% endblock result %}

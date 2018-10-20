@@ -1,0 +1,172 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {# {{ parent() }} #}
+{% endblock %}
+
+{% block mainleft %}
+{% endblock mainleft %}
+
+{% block tableMain %}
+
+<section class="tab-one" style="display:block">
+{% set filterOpt = [
+    {
+        method: 'selectCate',
+        title: '区域',
+        field: 'region',
+        service: 'db.area',
+        where: {
+            pid: session_area|default(0)
+        }
+    },
+    {
+        method: 'search',
+        field: 'name',
+    }
+] %}
+
+{{ core_manage.filter(filterOpt) }}
+<section class="list-con"  data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ ("Mnews/mnewshousesinfo")|U({id:0}) }}',
+        submitUrl : '{{ (action ~ "/save")|U }}',
+        deleteUrl : '{{ (action ~ "/delete")|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+                    {# type: 'POST',
+                    showtype: '1' #}
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="50" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="50" class="sort" data-role="sort" data-sort="id">ID</th>
+                    <th>名称</th>
+                    <th>所属区域</th>
+                </tr>
+                {% if ident.info.data is defined and ident.info.data|length != 0 %}
+                {% for k, vo in ident.info.data %}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td>{{ vo.id }}</td>
+                    <td>
+                    	{{vo.name|default('')}}
+                    </td>
+                    <td>
+                    	{{ core_global.region({id: vo.region|default('')}) }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="4" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+<div class="tac">
+    {# {{ core_manage.oprate([
+        {
+            method: 'show',
+            title: '查看',
+            data: '',
+            class: 'fz12',
+            attr: 'data-url="(Mnews/mnewshousesinfo)|U"',
+        }
+    ]) }}  #}
+    <section class="oprate">
+        <a  data-showtype="1" data-url="{{('Mnews/mnewshousesinfo')|U({})}}" href="javascript:;" data-look="1" class="btn btn-sm fz12 look">查看</a>
+    </section>
+</div>
+</section>
+<section class="tab-two" style="display:none">
+    <section class="list-con tab-list" style="overflow:auto">
+        
+    </section>
+    <section class="oprate">
+        <a  data-save="0"  href="javascript:;"  class="btn btn-sm fz12 look">上一步</a>
+        <a  data-save="1"  href="javascript:;"  class="btn btn-sm fz12 look">保存</a>
+    </section>
+</section>
+{% block loupan_js %}
+<script>
+seajs.use('manage', function(manage) {
+
+    $(document).off('.look').on('click.look', '[data-look]', function(event) {
+
+        var $this = $(this);
+        var url = $this.data('url');
+        var ids = getIDS('.list');
+        if ($this.hasClass('inited')) {
+            return;
+        }
+        $this.addClass('inited');
+
+        $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'html',
+                data: {
+                    id: ids
+                },
+                beforeSend: function(){
+                    $('#loadingX').show();
+                }
+            })
+            .done(function(data) {
+                $('#loadingX').hide();
+                $('.tab-one').hide();
+                $('.tab-two').show();
+                $('.tab-list').html(data);
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                $this.removeClass('inited');
+            });
+
+    });
+
+    $(document).off('.saveoff').on('click.saveoff', '[data-save="0"]', function() {
+        $('.tab-two').hide();
+        $('.tab-one').show();
+    });
+    $(document).off('.saveon').on('click.saveon', '[data-save="1"]', function() {
+        var html = $('.tab-list').html();
+        var editor = $('.class_name').eq(-1).data('editor');
+
+        editor.execCommand('inserthtml', html);
+
+        $(this).closest('.jq-modal').data().jqModal.hide();
+        // $(this).closest('.m-body').siblings('[data-close="1"]').trigger('click');
+    });
+
+    function getIDS(obj) {
+        return $(obj).find('.chked').map(function(i, elem) {
+            return $(this).data('id') || undefined;
+        }).get().join(',');
+    };
+
+});
+</script>
+
+{% endblock loupan_js %}
+{% endblock %}
+
+{% block promptUl %}
+{% endblock %}
+
+
+

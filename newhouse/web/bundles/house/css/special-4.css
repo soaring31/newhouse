@@ -1,0 +1,458 @@
+@charset "UTF-8";
+/* ͨ�� */
+* {
+  padding: 0px;
+  margin: 0px;
+}
+
+body {
+  font-family: "΢���ź�";
+  font-size: 12px;
+  color: #666;
+}
+
+ul, li {
+  list-style: none;
+}
+
+img {
+  border: none;
+}
+
+i, em, s {
+  font-style: normal;
+  text-decoration: none;
+}
+
+a {
+  text-decoration: none;
+  color: #666;
+}
+
+a:hover {
+  color: #ff5200;
+  text-decoration: underline;
+}
+
+.hid {
+  display: none;
+}
+
+h1 {
+  font-size: 16px;
+}
+
+h2 {
+  font-size: 14px;
+}
+
+h3 {
+  font-size: 12px;
+}
+
+h4 {
+  font-size: 20px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  font-size: 12px;
+}
+
+.cl {
+  clear: both;
+  font-size: 1px;
+  line-height: 0px;
+  height: 0px;
+}
+
+.w {
+  margin: 0 auto;
+  width: 990px;
+}
+
+.w1210 .w {
+  width: 1210px;
+}
+
+.w1210 .mt120 {
+  margin-top: 120px;
+}
+
+.more {
+  float: right;
+  margin-right: 10px;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.more a {
+  color: #999;
+}
+
+.more a:hover {
+  color: #F00;
+  text-decoration: none;
+}
+
+.button {
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  color: #7c7c7c;
+  display: block;
+  font-family: "΢���ź�";
+  font-size: 16px;
+  height: 44px;
+  line-height: 44px;
+  text-align: center;
+  width: 320px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin-top: 16px;
+}
+
+.button:hover {
+  color: #333;
+}
+
+.orange {
+  background: 0;
+  border: 0 none;
+  background: #ff6600;
+  color: #fff;
+  border: 1px solid #ff7549;
+}
+
+.orange:hover {
+  background: #ff4a00;
+  color: #FFF;
+}
+
+body {
+  background: url(../images/zt-4/bg.jpg) repeat-x #43024c 0px 690px;
+}
+
+.banner {
+  height: 693px;
+  background: url(../images/zt-4/banner.jpg) center;
+  position: relative;
+}
+
+.title {
+  text-align: center;
+  margin: 80px auto 40px;
+}
+
+.title_list {
+  width: 220px;
+  height: 40px;
+  position: relative;
+}
+
+.title_list img {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.title_list p {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 220px;
+  height: 40px;
+  line-height: 40px;
+  color: #fff;
+  font-size: 20px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.daoyu {
+  height: 99px;
+  width: 1110px;
+  margin: 100px auto 0;
+  position: relative;
+  background: #751184;
+  color: #fff;
+  font-size: 16px;
+  line-height: 30px;
+  padding: 20px 30px;
+  border-radius: 50px;
+}
+
+.daoyu i {
+  position: absolute;
+  width: 398px;
+  height: 28px;
+  top: -28px;
+  left: 50%;
+  z-index: 10;
+  background: url(../images/zt-4/daoyu.png) no-repeat;
+  margin-left: -199px;
+}
+
+.tezheng li {
+  width: 900px;
+  margin: 0 auto 40px;
+  background: #5d026b;
+  padding: 22px 0px 22px;
+  position: relative;
+}
+
+.tezheng p {
+  color: #fff600;
+  font-size: 18px;
+  text-align: center;
+  margin: 27px 40px 27px;
+}
+
+.tezheng span {
+  display: block;
+  text-indent: 2em;
+  line-height: 30px;
+  color: #fff;
+  font-size: 16px;
+  margin: 0 40px;
+}
+
+.tezheng p.right {
+  float: right;
+  color: #f4b4fd;
+  font-size: 16px;
+  margin: 0 40px !important;
+}
+
+.tezheng i {
+  position: absolute;
+  top: -14px;
+}
+
+.mianji {
+  width: 1070px;
+  margin: 0 auto;
+  background: #570162;
+  color: #fff;
+  line-height: 30px;
+  padding: 20px 50px;
+  border-radius: 50px;
+  font-size: 16px;
+}
+
+.mianji p {
+  color: #fffc00;
+}
+
+.mianji span {
+  display: block;
+  color: #f2abfb;
+}
+
+.fenshui {
+  width: 1170px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.fenshui ul {
+  width: 1300px;
+}
+
+.fenshui li {
+  width: 248px;
+  height: 187px;
+  background: url(../images/zt-4/bg-fenshui.png) center;
+  float: left;
+  margin-right: 59px;
+}
+
+.fenshui li p {
+  text-align: center;
+  margin-bottom: 11px;
+  line-height: 40px;
+  font-size: 18px;
+  color: #333;
+}
+
+.fenshui span {
+  color: #fff;
+  font-size: 16px;
+  text-indent: 2em;
+  display: block;
+  padding: 0 25px;
+}
+
+.wuqu {
+  width: 1170px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.wuqu ul {
+  width: 1300px;
+}
+
+.wuqu li {
+  background: #f4ca08;
+  float: left;
+  margin: 0 21px 21px 0;
+  width: 570px;
+  height: 121px;
+}
+
+.wuqu img {
+  float: left;
+  margin: 26px 23px 16px 19px;
+}
+
+.wuqu p {
+  color: #5f2b01;
+  font-size: 14px;
+  text-indent: 2em;
+  line-height: 24px;
+  margin-top: 10px;
+}
+
+.jieshu {
+  width: 1060px;
+  margin: 69px auto 0;
+  font-size: 16px;
+  color: #fff;
+  line-height: 30px;
+  padding: 25px 55px;
+  background: #662070;
+  border-radius: 20px;
+  position: relative;
+  /* overflow: hidden; */
+}
+
+.jieshu p {
+  width: 438px;
+  height: 169px;
+  position: absolute;
+  top: -166px;
+  margin-left: -219px;
+  left: 50%;
+  background: url(../images/zt-4/jieshu.png) center;
+}
+
+.blackBg {
+  background: #000;
+  filter: alpha(opacity=78);
+  opacity: 0.78;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  display: none;
+}
+
+.tanPic {
+  width: 800px;
+  height: 500px;
+  top: 50%;
+  left: 50%;
+  margin-left: -400px;
+  margin-top: -250px;
+  z-index: 2000;
+  position: fixed;
+  text-align: center;
+  display: none;
+}
+
+.bigPic {
+  width: 800px;
+  top: 50%;
+  left: 50%;
+  margin-left: -400px;
+  margin-top: -250px;
+  z-index: 2000;
+  position: fixed;
+  text-align: center;
+}
+
+.bigPic img {
+  max-width: 800px;
+  *height: 500px;
+  max-height: 500px;
+}
+
+.bigPicClose {
+  position: absolute;
+  top: 0px;
+  left: 804px;
+  z-index: 2000;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  background: url(../images/zt-4/fy_close.png);
+}
+
+.hx {
+  display: block;
+  float: left;
+  width: 201px;
+  height: 300px;
+  background: #f96196;
+  padding: 6px;
+  text-align: center;
+  margin-right: 67px;
+  margin-top: 38px;
+  color: #fff;
+  line-height: 27px;
+  overflow-x: hidden;
+}
+
+.hx img {
+  width: 200px;
+  height: 200px;
+  margin-bottom: 7px;
+}
+
+.hx b {
+  display: block;
+  font-size: 20px;
+}
+
+.house {
+  width: 1120px;
+}
+
+.pk {
+  width: 481px;
+  background: #6b44fa;
+  position: relative;
+}
+
+.pk span {
+  display: block;
+  float: left;
+}
+
+.pk .house_l {
+  margin-right: 81px;
+}
+
+.pk i {
+  width: 97px;
+  height: 97px;
+  background: url(../images/zt-4/pk.png);
+  position: absolute;
+  top: 58px;
+  left: 197px;
+}
+
+.hx:hover {
+  color: #ff0;
+  text-decoration: none;
+}
+
+/*# sourceMappingURL=special-4.css.map */

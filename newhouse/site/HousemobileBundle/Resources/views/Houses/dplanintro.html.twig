@@ -1,0 +1,40 @@
+{# {% extends app.request.get('ajax', 0) ? 'HousemobileBundle:Clist:door_list.html.twig' : 'HousemobileBundle:Houses:dphotos.html.twig' %} #}
+
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default('Houses:detail') ~ '.html.twig' %}
+
+{% block h_title %}
+户型图
+{% endblock h_title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}户型,{{detail.name|default('')}}户型图,{{detail.name|default('')}}户型大全" />
+<meta name="description" content="{{detail.name|default('')}}户型图,{{cur_area_data|default('')}}{{detail.name|default('')}}小区网为您提供最新、最全的{{detail.name|default('')}}户型图，包含一居室户型、二居室户型、三居室户型等所有大小户型图，查找{{detail.name|default('')}}户型图就上{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}。 "/>
+{% endblock key_des %}
+
+{% block secondary %}
+    {% set nav_active = 5 %}
+    {{ parent() }}
+{% endblock secondary %}
+
+
+{% block container %}
+    {{core_mobile_global.list_scroll({
+        content_cls: 'lp-fixed-content',
+        url: ('houses/dplanintro')|U({
+            tpl: 'Clist:door_list',
+            id: detail.id|default(''),
+        }),
+        footer: 0
+    })}}
+    <div data-block="{
+        bParams: true,
+        ajax:{
+            url: '{{ ('houses/dplanintro')|U }}',
+            data: {
+                id: '{{ detail.id|default('') }}',
+                tpl: 'Clist:planintro'
+            }
+        }
+    }"></div>
+{% endblock container %}

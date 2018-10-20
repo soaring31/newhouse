@@ -1,0 +1,158 @@
+{% extends 'CoreBundle::base_ajax.html.twig' %}
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+{% import "HouseBundle:Macro:global.html.twig" as house_global %}
+{# house/list?search=1 #}
+{% set search = app.request.get('search') %}
+{% set aid = app.request.get('aid', '') %}
+{# 普通搜索 #}
+{% if search == 1 %}
+    {%- set result -%}
+    {
+        "query": "Unit",
+        "suggestions": [
+        {% if ident.list.data is defined %}
+        {% for item in ident.list.data %}
+        {% if loop.index > 1 %},{% endif %}{
+            {% set area =  item.region|getAreaName|default('')%}
+                
+            "value": "{{item.name}}",
+            "data": {
+                "name" : "<span class='fr'>二手：{{item.sales|default('0')}}条</span>[{{area}}]{{item.name}}",
+                "url": "{{ ('sale/list')|U({name: app.request.get('name')}) }}" ,
+                "id" : "{{item.id}}"
+            }
+        }
+        {% endfor %}
+        {% endif %}
+        ]
+    }
+    {%- endset -%}
+{# 地图搜小区 aid存在表示从小区中搜索房源 #}
+{% elseif search in [14, 15, 16] or aid %}
+    {% set params = app.request.query.all %}
+
+    {% set sales = ('house.sale') | getAll({
+            pageIndex: 1,
+            pageSize: 8,
+            _multi: 1,
+            checked: 1
+        }|merge(params)|merge({type: null})) %}
+
+    {# {% set sales = ('house.sale') | getAll({aid: params.aid|default('')}) %} #}
+    {%- set result -%}
+    {
+        "status": true,
+        "data": {
+            {# 搜索楼盘 #}
+            "page": {
+                "pageCount": "{{sales.pageCount}}",
+                "pageSize": "{{sales.pageSize}}",
+                "pageIndex": "{{sales.pageIndex}}"
+            },
+            "list": [
+                {% if sales.data is defined %}
+                {% for item in sales.data %}
+                    {% set arr_map = item.map|split(',') %}
+                    {% if loop.index > 1 %},{% endif %}
+                    {
+                        "name"    : "{{item.name}}",
+                        "aid"      : "{{item.aid}}",
+                        "id"      : "{{item.id}}",
+                        "thumb"   : "{{core_global.img_url({width: 120, height: 90, src: item.thumb, type: 2})}}",
+                        "address" : "{{item.address}}",
+                        "dj"      : "{{item.dj|default('')}}",
+                        "zj"      : "{{item.zj|default('')}}",
+                        "url"     : "{{('sale/detail')|U({id: item.id})}}",
+                        "zlhx": "{% spaceless %}{{- house_global.huxing({aid: item.id|default(''),zlhx: 0, tpl: "<span>%shi%</span>"}) -}}{% endspaceless %}",
+                        "tags": "{% spaceless %}{{- house_global.lptag({value: item, tpl: '<span>%value%</span>', con: 'cate_type'}) -}}{% endspaceless %}",
+                        "point": {
+                            "lng": {{arr_map[0]|default(0)}}, 
+                            "lat": {{arr_map[1]|default(0)}}
+                        }
+                    }
+                {% endfor %}
+                {% else %}
+                    {
+                        "name"    : "暂无数据"
+                    }
+                {% endif %}
+            ]
+            {% if aid == '' %}
+            {# 搜索小区 #}
+            {% set sess_area = app.session.get('area')|default(0) %}
+            {% set area_data = ('house.houses')|getAll({
+                    map: 'neq|_null',
+                    pageIndex: 1,
+                    pageSize: 8,
+                    checked: 1
+                } | merge(params)).data %}
+            ,
+            "mklist": [
+                {% for item in area_data %}
+                    {% set arr_map = item.map|split(',') %}
+                    {% if loop.index > 1 %},{% endif %}
+                    {
+                        "name": "{{item.name}}",
+                        "id": "{{item.id}}",
+                        "num": {{item.sales}},
+                        "dj": {{(item.dj * 0.0001)|round(1)}},
+                        {# "map": "{{item.map}}", #}
+                        "point": {
+                                "lng": {{arr_map[0]|default(0)}}, 
+                                "lat": {{arr_map[1]|default(0)}}
+                            },
+                        "polyline": "{{item.polyline}}"
+                    }
+                {% endfor %}
+            ]
+            {% endif %}
+        }
+    }
+    {%- endset -%}
+{# 地图搜索区域 #}
+{% elseif search in [12, 13] %}
+    {% set params = app.request.query.all %}
+    {% set sess_area = app.session.get('area')|default(0) %}
+    {% set area_data = ('db.area')|getAll({pid: sess_area, pageSize: 50}) %}
+
+    {% set n_area_data = [] %}
+    {% for item in area_data.data %}
+        {% set arr_map = item.map|split(',') %}
+        {% set num = ('house.sale') | getCount({
+                region: item.id,
+                map: 'neq|_null',
+                checked: 1
+            } | merge(params)) %}
+        {% set n_area_data = n_area_data|merge([{
+            name: item.name,
+            id: item.id,
+            num: num,
+            point: {
+                    lng: arr_map[0]|default(0), 
+                    lat: arr_map[1]|default(0)
+                },
+            polyline: item.polyline
+        }]) %}
+    {% endfor %}
+
+    {%- set result -%}
+    {
+        "status": true,
+        "data": {
+            {# 搜索楼盘 #}
+            "page": {
+                "pageCount": {{area_data.pageCount}},
+                "pageSize": {{area_data.pageSize}},
+                "pageIndex": {{area_data.pageIndex}}
+            },
+            "list": {{ n_area_data|json_encode|raw }},
+            "mklist": {{ n_area_data|json_encode|raw }}
+        }
+    }
+    {%- endset -%}
+{% endif %}
+
+{%- block result -%}
+    {% set def_info = '{"status": false, "info": "url参数错误！"}' %}
+    {{ result|default(def_info)|raw }}
+{%- endblock result -%}

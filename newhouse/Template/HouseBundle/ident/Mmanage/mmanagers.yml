@@ -1,0 +1,28 @@
+info:
+    tableName: users
+    subTableName: userinfo
+    aliasName: p
+    listGrid: {  }
+    listDesc: ''
+    subJoinField: uid
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 15
+    groupBy: ''
+    order: ''
+    orderBy: asc
+    searchFun: EXISTS
+    dataModel: 2
+    attribute: '0'
+    autoQuery: '0'
+    alias: {  }
+    query:
+        mid:
+            neq: '1'
+        username:
+            orX: 'username,like,%[name]%'
+    query1:
+        usertype:
+            eq: '12'
+        groupid:
+            eq: '[groupid]'

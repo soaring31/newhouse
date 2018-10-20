@@ -1,0 +1,69 @@
+{% extends "HouseBundle::base_show.html.twig" %}
+
+{% block js %}
+<script>
+
+</script>
+{% endblock %}
+{% block body %}
+<div data-part=".popup-table" data-target=".popup-table">
+    <table class="popup-table" style="width:100%;">
+        <tbody>
+            <tr>
+                <th width="5%" class="rtd">ID</th>
+                <th width="20%" class="rtd">菜单名称</th>
+                <th width="20%" class="rtd">所属动作</th>
+                <th width="20%" class="rtd">排序</th>
+                <th width="15%" class="rtd">图标</th>
+                <th width="20%">操作</th>
+            </tr>
+            {% if info.data is defined %}
+            {% for item in info.data %}
+            <tr data-id="{{item.id}}" data-url="{{ 'save'|U('id='~item.id~'&_form_id='~formId|default(0)) }}">
+                <td class="tac rtd">{{item.id}}</td>
+                <td class="tac rtd"><span class="edit" data-role="itemEdit" data-name="name">{{item.name}}</span></td>
+                <td class="tac rtd"><span class="edit" data-role="itemEdit" data-name="action">{{item.action}}</span></td>
+                <td class="tac rtd"><span class="edit" data-role="itemEdit" data-name="sort">{{item.sort}}</span></td>
+                <td class="tac rtd"><span class="edit" data-role="itemEdit" data-name="remark">{{ item.remark|default('-') }}</span></td>
+                <td class="tac">
+                    {{core_manage.delete('delete'|U('id='~item.id))}}
+                </td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+<div class="popup-submit">{{core_manage.menuShow('.popup-table', '#show', '添加菜单')}}</div>
+
+<script id="show" type="text/html">
+    <tr>
+        <td class="rtd"></td>
+        <td class="tac rtd"><span class="edit" ><input name='name' size="15" type='text' /></span></td>
+        <td class="tac rtd"><span class="edit" ><input name='action' size="15" type='text' /></span></td>
+        <td class="tac rtd"><span class="edit" ><input name='sort' size="15" type='text' /></span></td>
+        <td class="tac rtd"><span class="edit" ><input name='remark' size="15" type='text' /></span></td>
+        <td class="tac">
+            {{core_manage.btn({
+                type: 'menuSave',
+                url: 'save'|U('_form_id='~formId|default(0)~'&pid='~app.request.get('pid')),
+                tpl: '#save',
+                title: '保存'
+            })}}
+            {{core_manage.menuCancel()}}
+        </td>
+    </tr>
+</script>
+<script id="save" type="text/html">
+    <tr data-id="<%= _data.id %>" data-url="<%= data.modurl %>">
+        <td class="rtd"></td>
+        <td class="tac rtd"><span class="edit" data-role="itemEdit" data-name="name" ><%= _data.name %></span></td>
+        <td class="tac rtd"><span class="edit" data-role="itemEdit" data-name="action" ><%= _data.action %></span></td>
+        <td class="tac rtd"><span class="edit" data-role="itemEdit" data-name="sort" ><%= _data.sort || 0 %></span></td>
+        <td class="tac rtd"><span class="edit" data-role="itemEdit" data-name="remark" ><%= _data.remark || '-' %></span></td>
+        <td class="tac">
+            {{core_manage.delete('<%= data.delurl %>')}}
+        </td>
+    </tr>
+</script>
+{% endblock %}

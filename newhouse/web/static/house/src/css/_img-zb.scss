@@ -1,0 +1,28 @@
+
+$img-zb-zhibo-bg:(1600px,948px,0,0,img-zb-zhibo-bg);
+
+$img-zb-zhibo-btns:(59px,41px,-1010px,-958px,img-zb-zhibo-btns);
+
+$img-zb-zhibo-t-b:(1000px,200px,0,-958px,img-zb-zhibo-t-b);
+
+$img-zb: ($img-zb-zhibo-bg,$img-zb-zhibo-btns,$img-zb-zhibo-t-b,);
+
+@mixin img-zb($sprites) {
+  %icozb {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/zb.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+      @extend %icozb;
+    }
+  }
+}

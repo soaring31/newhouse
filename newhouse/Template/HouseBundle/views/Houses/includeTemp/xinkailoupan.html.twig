@@ -1,0 +1,31 @@
+{% set xklp = ('tuijian_list_xklp')|getPushMuti(10,{area:cityid,checked:1}) %}
+{% set xklpData = xklp['tuijian_list_xklp']|default('') %}
+{% if  xklpData and  xklpData|length > 0 %}
+    <div class="new-open-list">
+        <h2 class="xklp-title">新开楼盘</h2>
+        {#<div class="more"><a href="">更多&gt;&gt;</a></div>#}
+        <ul class="loupan-table">
+            <li class="list-nav">
+                <span class="list-1">楼盘名称</span>
+                <span class="list-2">城区</span>
+                <span class="list-3">价格</span>
+            </li>
+            {% for key,item in xklpData|default('') %}
+            {% set regionId = item.region|default('') %}
+            {% set cityarea_name = ('db.area')|getRow({id:regionId,checked:1})|default('') %}
+            <li key={{key}}>
+                <a href="{{item.url|default('')}}">
+                    <span class="list-1 hover-li">{{item.name|default('')}}</span>
+                    <span class="list-2">
+                    {% if cityarea_name|default('') and cityarea_name.name|default('') %}
+                    {{cityarea_name['name']|default('')}}
+                    {% else %}--
+                    {% endif %}
+                    </span>
+                    <span class="list-2 list-3" style="text-align:right;">{{house_global.if_dj({value: item.dj|default('')})}}</span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}

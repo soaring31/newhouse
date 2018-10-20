@@ -1,0 +1,72 @@
+parameters:
+    oauth.resource_owner.qq.class: OAuthBundle\OAuth\ResourceOwner\QQResourceOwner    
+    oauth.resource_owner.yahoo.class: OAuthBundle\OAuth\ResourceOwner\YahooResourceOwner
+    oauth.resource_owner.google.class: OAuthBundle\OAuth\ResourceOwner\GoogleResourceOwner
+    oauth.resource_owner.weixin.class: OAuthBundle\OAuth\ResourceOwner\WeixinResourceOwner
+    oauth.resource_owner.wechat.class: OAuthBundle\OAuth\ResourceOwner\WechatResourceOwner    
+    oauth.resource_owner.alipay.class: OAuthBundle\OAuth\ResourceOwner\AlipayResourceOwner
+    oauth.resource_owner.sina_weibo.class: OAuthBundle\OAuth\ResourceOwner\SinaWeiboResourceOwner
+    oauth.resource_owner.smsapis.class: OAuthBundle\OAuth\ResourceOwner\SmsApisResourceOwner
+    oauth.resource_owner.baidumap.class: OAuthBundle\OAuth\ResourceOwner\BaiduMapResourceOwner
+    oauth.resource_owner.weilogin.class: OAuthBundle\OAuth\ResourceOwner\WeiloginResourceOwner
+    oauth.resource_owner.wilddogio.class: OAuthBundle\OAuth\ResourceOwner\WilddogioResourceOwner
+services:
+    oauth.authentication.listener.oauth:
+        class: OAuthBundle\Security\Http\Firewall\OAuthListener
+        parent: 'security.authentication.listener.abstract'
+        public: false
+        abstract: true
+    oauth.authentication.provider.oauth:
+        class: OAuthBundle\Security\Core\Authentication\Provider\OAuthProvider
+        public: false
+    oauth.authentication.entry_point.oauth:
+        class: OAuthBundle\Security\Http\EntryPoint\OAuthEntryPoint
+        public: false
+        abstract: true
+        arguments: ['@http_kernel', '@security.http_utils']
+    oauth.user.provider:
+        class: OAuthBundle\Security\Core\User\OAuthUserProvider
+        public: false
+    oauth.user.provider.entity:
+        class: OAuthBundle\Security\Core\User\EntityUserProvider
+        arguments: ['@doctrine']
+        abstract: true
+        public: false
+#================ Session storage============#
+    oauth.storage.session:
+        class: OAuthBundle\OAuth\RequestDataStorage\SessionStorage
+        public: false
+        arguments: ['@session']      
+    oauth.security.oauth_utils:
+        class: OAuthBundle\Security\OAuthUtils
+        arguments: ['@security.http_utils', '@security.authorization_checker', '%oauth.connect%']
+        calls:
+            - [ setContainer, ["@service_container"] ]
+    oauth.abstract_resource_ownermap:
+        class: OAuthBundle\Security\Http\ResourceOwnerMap
+        arguments: ['@security.http_utils', '%oauth.resource_owners%', [ ]] 
+        calls:
+            - [ setContainer, ["@service_container"] ]
+        abstract: true
+    oauth.abstract_resource_owner.generic:
+        abstract: true
+        arguments: ['@oauth.http_client', '@security.http_utils', [ ], '']
+    oauth.abstract_resource_owner.oauth1:
+        class: OAuthBundle\OAuth\ResourceOwner\GenericOAuth1ResourceOwner
+        parent: 'oauth.abstract_resource_owner.generic'
+        abstract: true
+        arguments: ['@oauth.storage.session', '@service_container']
+    oauth.abstract_resource_owner.oauth2:
+        class: OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner
+        parent: 'oauth.abstract_resource_owner.generic'
+        abstract: true
+        arguments: ['@oauth.storage.session', '@service_container']
+#================ services no dir ============#
+    oauth.baidumap:
+        class: OAuthBundle\Services\Baidu\BaiduMap
+        public: true
+        arguments: ['@service_container']
+    oauth.baiduip:
+        class: OAuthBundle\Services\Baidu\BaiduIP
+        public: true
+        arguments: ['@service_container']

@@ -1,0 +1,228 @@
+{% set detail = cident.xdetail.data[0] %}
+
+{% extends detail ? 'HouseBundle:Sale:xlist.html.twig' : 'CoreBundle:Dispatch:errorcontent.html.twig' %}
+{# 说明
+ * detail: 学校详情
+ * zhoubian：周边数据
+ * sort_clicks_school_opt: 热门学校推荐附加条件
+#}
+
+{% block title %}【{{cur_area_data|default('')}}{{detail.name|default('')}}附近二手房/附近出租/小区详情/学校简介】{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}，小区详情，招生简章，{{detail.name|default('')}}附近二手房" />
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}二手房网为您提供最新、最全的{{detail.name|default('')}}附近二手房出售信息以及{{detail.name|default('')}}学校介绍、入学条件等信息。查找{{detail.name|default('')}}小区出售信息，就到{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}二手房网！" />
+{% endblock key_des %}
+
+{% set houses_id = ('house.houses_arc')|getCol('aid',{form: 'houses_around', fromid: detail.id|default(''), checked: 1})|default('')|join(',') %}
+
+{% set sort_clicks_school_opt = {
+    id: 'neq|' ~ detail.id|default('')
+} %}
+
+{% block current_container %}
+    <span>周边配套</span>
+    <span>&gt;</span>
+    <a href="{{('sale/xlist')|U}}">学校</a>
+    <span>&gt;</span>
+    <span>{{detail.name|default('')}}</span>
+{% endblock current_container %}
+
+{% block container %}
+    <div class="container">
+        <div class="xq-body fl">
+            <h2 id="gk">{{detail.name|default('')}}</h2>
+            <div class="xdec jqScrollspy" data-offset="43">
+                <ul class="clearfix">
+                    <li>
+                        <a href="#gk" class="act">学校概况</a>
+                    </li>
+                    <li>
+                        <a href="#js" class="">学校介绍</a>
+                    </li>
+                    {% if detail.map|default('') %}
+                    <li>
+                        <a href="#dt" class="">学校地图</a>
+                    </li>
+                    {% endif %}
+                    <li>
+                        <a href="#xq">对口小区</a>
+                    </li>
+                    <li>
+                        <a href="#esf">二手房</a>
+                    </li>
+                    <li>
+                        <a href="#czf">出租房</a>
+                    </li>
+                </ul>
+            </div>
+            <!--section1-->
+            <div class="xxsy clearfix">
+                <div class="fl">
+                    <a href="{{('sale/xdetail')|U({id: detail.id|default('')})}}">
+                        {{- core_global.img({
+                            src: detail.thumb|default(''),
+                            alt: detail.name|default(''),
+                            height: 350,
+                            width: 450
+                        }) -}}
+                    </a>
+                </div>
+                <div class="fr w412">
+                    <ul>
+                        <li class="es">
+                            <em>二手房</em>：<i>{{ house_global.around_count({ids: houses_id|default(''), field: 'sales'}) }}</i>套
+                            <em>出租房</em>：<i>{{ house_global.around_count({ids: houses_id|default(''), field: 'rents'}) }}</i>套
+                        </li>
+                        <li class="xz">
+                            <i>所属性质：</i>{{- core_global.formField({value: detail.leibie|default(''), form: 'around_school', field: 'leibie'}) -}}
+                        </li>
+                        <li>
+                            <i>学校分类：</i>{{- core_global.formField({value: detail.school_type|default(''), form: 'around_school', field: 'school_type'}) -}}
+                        </li>
+                        <li>
+                            <i>级别：</i>{{- core_global.formField({value: detail.jibie|default(''), form: 'around_school', field: 'jibie'}) -}}
+                        </li>
+                        <li>
+                            <i>地址：</i>{{core_global.address({data:detail|default(''), num: 100})}}
+                        </li>
+                        <li class="clearfix tl">
+                            <i class="font-lp-13 fl"></i>
+                            <div class="fl">
+                                <p class="tel">{{detail.tel|default('-')}}</p>
+                                <p class="lx">联系时请告知在“{{- core_global.mconfig({name: 'hostname', ename: 'mwebset'}) -}}”上看到的，谢谢</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!--section1-->
+            <!--学校介绍-->
+            <div class="blank15"></div>
+            <div class="xxjs" id="js">
+                <div class="lp-coltit">
+                    <h3>学校介绍</h3>
+                </div>
+                <div class="xxjsb">
+                    {{core_global.content({content: detail.abstract|default('')})}}
+                </div>
+            </div>
+            <!--/学校介绍-->
+            <!--地图-->
+            <div class="blank25"></div>
+            <div id="dt" class="xxmap">
+                {{
+                    house_global.map({
+                        detail: detail,
+                        data: detail,
+                        round: 0,
+                        panorama: 0
+                    })
+                }}
+            </div>
+            <!--/地图-->
+            <!--对口小区-->
+            <div class="blank25"></div>
+            {% set xiaoqu_num = 10 %}
+            {% set xiaoqu_data = ('house.houses')|getAll({id: 'in|' ~ houses_id, type: 1, pageSize: xiaoqu_num}) %}
+            {% set xiaoqu_attr_data = ('house.houses_attr')|getAll({name: 'xqhs', mid: 'in|' ~ houses_id, pageSize: xiaoqu_num}) %}
+
+            {% set xiaoqu_attr_xqhs = {} %}
+
+            {% for item in xiaoqu_attr_data.data %}
+                {% set xiaoqu_attr_xqhs = {
+                    ('xqhs' ~ item.mid): item.value
+                }|merge(xiaoqu_attr_xqhs) %}
+            {% endfor %}
+
+            <div id="xq" class="gongyong">
+                <div class="lp-coltit">
+                    <h3>对口小区</h3>
+                </div>
+                <dl class="clearfix">
+                    <dt>
+                        <span class="gy1">小区名称</span>
+                        <span class="gy2">小区户数</span>
+                        <span class="gy3">小区均价</span>
+                        <span class="gy4">出售房源</span>
+                        <span class="gy5">出租房源</span>
+                    </dt>
+                    {% if xiaoqu_data.data is defined and xiaoqu_data.pageCount|default(0) != 0 %}
+                        {% for item in xiaoqu_data.data %}
+                            <dd>
+                                <span class="gy1">
+                                    <a target="_blank" href="{{('sale/qdetail')|U({id: item.id|default('')})}}">{{item.name|default('')}}</a>
+                                </span>
+                                <span class="gy2">
+                                    {{xiaoqu_attr_xqhs['xqhs' ~ item.id]|default('')}}
+                                </span>
+                                <span class="gy3">
+                                    {{house_global.if_dj({value: item.dj|default(''), tpl: '<i>%value%</i>%danwei%'})}}
+                                </span>
+                                <span class="gy4">{{item.sales|default('')}}</span>
+                                <span class="gy5">{{item.rents|default('')}}</span>
+                            </dd>
+                        {% endfor %}
+                    {% else %}
+                        <dd class="noinfo" style="width: 100%; padding-left: 0">暂无对口小区</dd>
+                    {% endif %}
+                </dl>
+            </div>
+            <!--/对口小区-->
+            <!--二手房-->
+            <div class="blank25"></div>
+            <div class="gongyong" id="esf">
+                <div class="lp-coltit">
+                    <h3>二手房</h3>
+                </div>
+                <dl class="clearfix">
+                    <dt>
+                        <span class="gy1">房源名称</span>
+                        <span class="gy2">户型</span>
+                        <span class="gy3">面积</span>
+                        <span class="gy4">价格</span>
+                        <span class="gy5">日期</span>
+                    </dt>
+                    {{house_global.school_lp_recommend({
+                        models: 'sale',
+                        ids: houses_id
+                    })}}
+                </dl>
+            </div>
+            <!--/二手房-->
+            <!--出租房-->
+            <div class="blank25"></div>
+            <div class="gongyong" id="czf">
+                <div class="lp-coltit">
+                    <h3>出租房</h3>
+                </div>
+                <dl class="clearfix">
+                    <dt>
+                        <span class="gy1">房源名称</span>
+                        <span class="gy2">户型</span>
+                        <span class="gy3">面积</span>
+                        <span class="gy4">价格</span>
+                        <span class="gy5">日期</span>
+                    </dt>
+                    {{house_global.school_lp_recommend({
+                        models: 'rent',
+                        ids: houses_id
+                    })}}
+                </dl>
+            </div>
+            <!--/出租房-->
+        </div>
+        {% block aside_school %}{{parent()}}{% endblock aside_school %}
+    </div>
+    <div class="blank20"></div>
+{% endblock container %}
+
+{% block js %}
+<script type="text/javascript">
+    seajs.use(['fixed','jqscrollspy'], function (fixed, jqscrollspy) {
+        $(".xdec").scrollToFixed({
+            marginTop: $('.header ').outerHeight()
+        });
+    });
+</script>
+{% endblock js %}

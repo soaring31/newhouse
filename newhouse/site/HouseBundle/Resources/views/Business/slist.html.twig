@@ -1,0 +1,76 @@
+{% extends 'HouseBundle:Business:business_list_layout.html.twig' %}
+{# 说明
+ * tpl_list_title: 列表标题模板变量
+ * list_ident: 列表内容变量
+ * sort_clicks_houses: 热门商铺推荐
+#}
+
+{% block title %}【{{cur_area_data|default('')}}楼盘】_{{cur_area_data|default('')}}新楼盘_{{cur_area_data|default('')}}房价_{{cur_area_data|default('')}}新商铺{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" Content="{{'now'|date('Y')}}{{cur_area_data|default('')}}楼盘信息,{{'now'|date('Y')}}{{cur_area_data|default('')}}新楼盘信息,{{cur_area_data|default('')}}新商铺信息"/>
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}新房网为您提供最真实的{{cur_area_data|default('')}}新房出售信息及最新{{cur_area_data|default('')}}楼盘,新楼盘价格信息。大量优质最新楼盘信息实时更新,为您创造最佳新房购房体验。"/>
+{% endblock key_des %}
+
+{% set list_ident = ident.list|default('') %}
+
+{# 搜索 #}
+{% block top_search %}
+    {% set tpl_topsearch_action = 'business/slist' %}
+    {% set tpl_topsearch_placeholder = '请输入商铺名称/拼音' %}
+    {{ parent() }}
+{% endblock top_search %}
+
+{% set sort_clicks_houses = ('house.houses')|getAll({checked: 1, orderBy: 'desc', order: 'id', cate_type: 106, findType: 1}) %}
+
+{% set tpl_title = '商铺楼盘' %}
+
+{# 当前位置 #}
+{% block current_container %}
+    <span>商铺楼盘</span>
+{% endblock current_container %}
+
+{% block container %}
+    {# 检索数据源 #}
+    {% set cate_data = house_global.cate_data({ 
+                    tag: 'sp_lp',
+                }).__toString|json_decode %}
+    {{ parent() }}
+{% endblock container %}
+
+
+{# 排序 #}
+{% block list_sort %}
+    {% set sort_data = {
+        def: {
+            title: '默认'
+        },
+        dj: {
+            title: '价格'
+        },
+        mj: {
+            title: '面积'
+        },
+        kpdate: {
+            title: '开盘时间'
+        }
+    } %}
+    {{ parent() }}
+{% endblock list_sort %}
+
+{% block business_list %}
+<div class="xpan-list">
+    {{house_global.business_houses({
+        list: list_ident,
+    })}}
+</div>
+{% endblock business_list %}
+
+{% block business_aside %}
+{{house_global.houses_recommend({
+    list: sort_clicks_houses.data,
+    tag: 'clicks',
+    models: 'business',
+    class: 'side'
+})}}
+{% endblock business_aside %}

@@ -1,0 +1,22 @@
+info:
+    tableName: wxusers
+    subTableName: ''
+    aliasName: p
+    listGrid:
+        - 'id:序号|txtcenter w60'
+        - 'usemodel:链接|txtleft w120'
+        - 'infoid:信息ID|txtleft w120'
+        - 'appid:微信Appid|txtleft w120'
+        - 'id:操作|txtcenter w350:[EDIT]编辑|search-btn,[DELETE]删除|search-btn'
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    order: ''
+    orderBy: asc
+    searchFun: EXISTS
+    dataModel: 0
+    alias: {  }
+    query: {  }
+    query1: {  }

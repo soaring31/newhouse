@@ -1,0 +1,63 @@
+{{'
+
+{% extends \'AutoBundle::mainlayout.html.twig\' %}
+
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+{% block mainMenu %}
+    {# {{ parent() }} #}
+{% endblock %}
+
+{% block tableMain %}
+<section>
+    <section class="main-oprate">
+        <div class="mb10">
+            {{lists.mainMenu(action, \'价格\', 1)}}
+        </div>        
+    </section>
+    <div class="list-con">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr>
+                    <th width="5%" class="tac">{{forms.checkbox(\'.right-table\')}}</th>
+                    <th width="5%" data-sort="id" class="sort">ID</th>
+                    <th data-sort="name" class="sort">名称</th>
+                    <th width="20%">条件</th>
+                    <th width="10%">排序</th>
+                    <th width="10%" data-sort="clicks" class="sort">点击</th>
+                    <th width="10%" class="tac">操作</th>
+                </tr>
+                {% if ident.info.data is defined %}
+                {% for k, vo in ident.info.data %}
+                <tr data-id="{{ vo.id }}" data-url="{{\'catepricemanage/save\'|U(\'id=\' ~ vo.id)}}">
+                    <td class="tac">{{forms.checkbox(vo.id)}}</td>
+                    <td>{{ vo.id }}</td>
+                    <td><span data-role="itemEdit" data-name="name" class="edit">{{ vo.name|default(\'\') }}</span></td>
+                    <td><span data-role="itemEdit" data-name="wherestr" class="edit">{{ vo.wherestr|default(\'-\') }}</span></td>
+                    <td><span data-role="itemEdit" data-name="sort" class="edit">{{ vo.sort|default(\'0\') }}</span></td>
+                    <td>{{ vo.clicks|default(\'0\') }}</td>
+                    <td class="tar pr10">
+                        {{ forms.show((action~\'/show\')|U(\'id=\'~vo.id)) }}
+                        {{ forms.delete((action~\'/delete\')|U(\'id=\'~vo.id)) }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+        {{lists.page(ident.info)}}
+    </div>
+</section>
+{% endblock %}
+
+
+{% block promptUl %}
+提示说明
+{% endblock %}
+
+
+
+'}}

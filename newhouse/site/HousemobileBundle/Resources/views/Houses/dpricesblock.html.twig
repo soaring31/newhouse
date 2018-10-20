@@ -1,0 +1,50 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明 
+ * detail: 当前数据
+ * detail_prices: 当前数据价格
+#}
+{% set detail = detail|default(cident.detail.data[0]|default('')) %}
+{% set detail_prices = prices|default(('house.houses_price')|getAll({type: detail.type|default(''), aid: detail.id|default(''), checked: 1, orderBy: 'desc', order: 'jtime',  pageSize: 10})) %}
+{% block result %}
+{# 走势图 #}
+<div class="list-block panel-block">
+    {{housemobile_global.panel_title({title: '价格走势'})}}
+    <div class='house-price'>
+        <p>
+            价格：{{house_global.if_dj({value: detail.dj|default(''), class: 'p-red fz-jg'})}}
+        </p>
+        <p>
+            价格说明：<span class="p-red">{{detail.bdsm|default('')}}</span>
+        </p>
+    </div>
+    <div class="item-inner zst">
+        <canvas id="cms08"></canvas>
+    </div>
+</div>
+<div class="content-block-title">
+    本页面价格单位如无特殊标注都是：元/m&sup2;
+</div>
+
+{# 走势图数据 #}
+{% set xAxis = [] %}
+{% for item in detail_prices.data[ : 12] %}
+    {% set xAxis = [item.jtime|default('')|date('m/d')]|merge(xAxis) %}
+{% endfor %}
+
+{% set zstData = [] %}
+{% for item in detail_prices.data[ : 12] %}
+    {% set zstData = [item.dj|default('')]|merge(zstData) %}
+{% endfor %}
+
+<script type="text/javascript">
+    // [10000,14000,12000,13000,15000,16000,10700,11800,10900,10000,10010,12000]
+    seajs.use(['mobilezst'], function(mobilezst) {
+        mobilezst(null, {
+            // 横坐标定义 结构 xAxis = []
+            xAxis: {{ xAxis|json_encode|raw }},
+            // 纵坐标数据定义 结构 zstData = [[数据1], [数据2], [数据3]];
+            data: {{ zstData|json_encode|raw }}
+        });
+    });
+</script>
+{% endblock result %}

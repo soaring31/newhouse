@@ -1,0 +1,86 @@
+{% extends 'HouseBundle::base.html.twig' %}
+{# 说明
+ * 当前模板是使用通用搜索头部模板继承
+#}
+
+{% block body %}
+    {% block logo_header %}{% endblock logo_header %}
+    {# 头部搜索 #}
+    {% block top_search %}
+    <div class="header-search">
+        <div class="header-search-box">
+             <i class="header-search-logo"></i>
+             <!--<span></span>-->
+             <!--城市切换-->
+             <div class="city-change">
+                <div class="line"></div>
+                <div class="city-box">
+                    <p>{{cur_area_data|default('主')[:2]}}站</p>
+                    <a href="{{'areachange/index'|U}}">切换城市</a>
+                </div>
+             </div>
+             {#
+             <div class="tag">
+                 新房
+             </div>
+            #}
+             <!--搜索-->
+             {# <div class="search-right">
+                 {{ core_global.topSearch2({
+                     action: tpl_topsearch_action|default('houses/list'),
+                     autocomplete: tpl_topsearch_autocomplete|default(1),
+                     placeholder: tpl_topsearch_placeholder|default(''),
+                     other: {
+                         method: 'topSearchHot',
+                         opt: tpl_topsearch_hot|default(''),
+                         num: tpl_topsearch_hot_num|default(5)
+                     }
+                 }) }}
+             </div> #}
+             <div class="search-right">
+                    <input id="searchTxt" type="text" class="search-txt input_text" placeholder="请输入楼盘名、地址、关键词" value="">
+                    <input id="searchBtn" type="button" class="search-btn" value="开始找房">
+                    <!-- start 下拉框 -->
+                    <div id="autoSearchList" class="search-drp-box" style="display: none;">
+                    </div>
+                    <!-- end 下拉框 -->
+            </div>
+            <script type="text/javascript" src="{{asset('static/house/js/search.js')}}{{version}}"></script>
+        </div>
+        {# 当前位置 #}
+        {% block current %}
+            <div class="container-100">
+                <div class="current-location">
+                    {% block navi_go %}
+                        {% block current_default_block %}
+                            {{block('current_default')}}
+                        {% endblock current_default_block %}
+                        {% block current_container %}
+                        {% endblock current_container %}
+                    {% endblock navi_go %}
+                </div>
+            </div>
+        {% endblock current %}
+    </div>
+    {% endblock top_search %}
+
+    {# 搜索栏底下广告位 #}
+    {% block top_ad %}
+        <div class="container">
+            <div class="blank10"></div>
+            {# dbtsbs: 默认顶部广告推送标识 #}
+            {{- core_global.ads( {tag: 'dbtsbs', default_tag: 'dbtsbs'}|merge(top_ad|default({})) ) -}}
+        </div>
+    {% endblock top_ad %}
+
+    {# 内容 #}
+    {% block container %}{% endblock container %}
+{% endblock body %}
+
+
+{# 当前位置默认值 #}
+{% block current_default %}
+{#<i class="font-icons-20"></i>#}
+<a href="{{('index/index')|U}}">诸葛找房</a>
+<span>&gt;</span>
+{% endblock current_default %}

@@ -1,0 +1,33 @@
+$img-lo-1:(14px, 14px, -54px, -102px, img-lo-1);
+$img-lo-2:(30px, 30px, -41px, -62px, img-lo-2);
+$img-lo-3:(30px, 30px, -81px, -62px, img-lo-3);
+$img-lo-4:(31px, 30px, 0, -62px, img-lo-4);
+$img-lo-5:(14px, 14px, -30px, -102px, img-lo-5);
+$img-lo-6:(20px, 22px, 0, -102px, img-lo-6);
+$img-lo-7:(23px, 20px, -122px, -60px, img-lo-7);
+$img-lo-8:(23px, 20px, -122px, -30px, img-lo-8);
+$img-lo-9:(23px, 20px, -122px, 0, img-lo-9);
+$img-lo-10:(51px, 52px, -61px, 0, img-lo-10);
+$img-lo-11:(51px, 52px, 0, 0, img-lo-11);
+
+$img-lo: ($img-lo-1,$img-lo-2,$img-lo-3,$img-lo-4,$img-lo-5,$img-lo-6,$img-lo-7,$img-lo-8,$img-lo-9,$img-lo-10,$img-lo-11);
+
+@mixin img-lo($sprites) {
+  %icolo {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/lo.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+        @extend %icolo;
+    }
+  }
+}

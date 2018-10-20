@@ -1,0 +1,225 @@
+@charset "UTF-8";
+/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+*/
+/**
+ * @method 清除浮动 %clearfix 
+ * @description 清除浮动
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %clearfix;
+ * }
+ * ```
+ * 
+ * ```css
+ * 	div {
+	    *zoom: 1;
+	}
+	div:after {
+	    display: block;
+	    clear: both;
+
+	    height: 0;
+
+	    content: '\20';
+	}
+ * ```
+ */
+/**
+ * @method 去掉虚线框 %outline 
+ * @description 去掉虚线框
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @ extend %outline;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		outline: thin dotted;
+		outline: 5px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
+ * ```
+ */
+/**
+ * @method 文字不换行后面加省略号 %text-overflow 
+ * @description 文字不换行后面加省略号
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %text-overflow;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+ * ```
+ */
+/**
+ * @method 透明层opacity 
+ * @description 透明层 内容也透明
+ * @param {number} $opacity - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include opacity(.5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+	  opacity: .5;
+	  filter: alpha(opacity=50);
+ * }
+ * ```
+ */
+/**
+ * @method 背景透明层transparent 
+ * @description 透明层只处理背景透明
+ * @param {string} $color - 背景透明层的颜色
+ * @param {number} $alpha - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include transparent(#000, .5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+ *    	background-color: transparent;
+		background-color: (0,0,0,.5);
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7fffffff, endColorstr=#7fffffff,);
+		zoom: 1;
+ * }
+ * ```
+ */
+/**
+ * @method triangle 
+ * @description 生成一个三角形图标
+ * @param {string} $size - 三角的大小
+ * @param {string} $color - 三角颜色
+ * @param {string} $direction - 三角的方向 up, down, left, right
+ * @example 调用
+ * 
+ * ```scss
+ * i {
+ *    @include triangle(5px, #bbb, up); 
+ * }
+ * ```
+ * 
+ * ```css
+ * i {
+ *    width: 0;
+      height: 0;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent;
+      border-bottom-color: #bbb;
+ * }
+ * ```
+ */
+/**
+* @method 水平线hr nav-divider 
+* @description 透明层 内容也透明
+* @param {string} $color=#e5e5e5 - 线的颜色
+* @param {string} $line-height-computed - 线的高度，空间
+* @example 调用
+* 
+* ```scss
+* div {
+*    @include nav-divider(#e5e5e5, 24px);
+* }
+* ```
+* 
+* ```css
+* div {
+	  height: 1px;
+	  margin: 11px 0;
+	  overflow: hidden;
+	  background-color: #e5e5e5;
+* }
+* ```
+*/
+body {
+    background-color: #eee;
+}
+
+.bg {
+    background: url(../images/download/bg.gif) no-repeat 0 0;
+    width: 100%;
+    min-height: 580px;
+}
+
+.bg .banner {
+    margin-top: 70px;
+    margin-right: 130px;
+}
+
+.bg .banner h2 {
+    font-size: 24px;
+}
+
+.bg .banner p {
+    font-size: 14px;
+}
+
+.bg .banner .download {
+    margin-top: 30px;
+}
+
+.bg .banner .download .ad, .bg .banner .download .ip {
+    width: 190px;
+    margin: 0 auto;
+}
+
+.bg .banner .download .ad .img #ewm, .bg .banner .download .ip .img #ewm {
+    width: 110px;
+    height: 110px;
+    margin-left: 32px;
+}
+
+.bg .banner .download .ad p, .bg .banner .download .ip p {
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.bg .banner .download .ad a > img, .bg .banner .download .ip a > img {
+    padding-top: 20px;
+    width: 189px;
+    height: 40px;
+}
+
+.bg .banner .download .ad a > img:hover, .bg .banner .download .ip a > img:hover {
+    opacity: 0.8;
+    filter: alpha(opacity=0.8);
+}
+
+.bg .banner .download .ad {
+    margin-right: 30px;
+    padding-left: 10px;
+}
+
+body .container02 {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin-bottom: 50px;
+}
+
+/*# sourceMappingURL=download-index.css.map */

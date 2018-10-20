@@ -1,0 +1,109 @@
+{% set tpl_extends = 'HousemobileBundle::list_layout.html.twig' %}
+
+{% set tpl_extends_data = {
+	'ajax': 'HousemobileBundle:Clist:salelist.html.twig',
+    'search': 'HousemobileBundle:Sale:search.html.twig',
+} %}
+
+{% for k,v in tpl_extends_data %}
+    {% if app.request.get(k) %}
+		{% set tpl_extends = v %}
+    {% endif %}
+{% endfor %}
+
+
+{% extends tpl_extends|default('') %}
+
+{% block title %}
+    【{{cur_area_data|default('')}}二手房|{{cur_area_data|default('')}}二手房出售】_{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}买房交易平台
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data|default('')}}二手房,{{cur_area_data|default('')}}二手房出售,{{cur_area_data|default('')}}二手房买卖" />
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}二手房网为您提供快速全面的{{cur_area_data|default('')}}二手房信息及新发布{{cur_area_data|default('')}}二手房价格。大量优质二手房实时更新，为您创造舒适二手房购房体验。" />
+{% endblock key_des %}
+
+{% block header_title %}
+{{core_mobile_global.title({title: '二手房'})}}
+{% endblock header_title %}
+
+{# 头部右边追加 #}
+{% block header_right %}
+{{ core_mobile_global.bar_nav_btn({
+    title: '搜索',
+    icon: 'font-f-8',
+    popup: {
+        title: '二手房搜索',
+        popup: '.popup-search',
+    }
+}) }}
+{{ core_mobile_global.bar_nav_btn({
+    title: '发布',
+    icon: 'font-f-24',
+    popup: {
+        title: '发布二手房',
+        popup: '.popup-about',
+    }
+}) }}
+{% endblock header_right %}
+
+{% block container %}
+    {# 检索 #}
+    {% set list_header %}
+    <div class="filter" data-block="{
+        ajax: {
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                tpl: 'Common:filter',
+                tag: 'sale'
+            }
+        }
+    }"></div>
+    {% endset %}
+
+    {# 列表链接 js调用列表需要 #}
+    {% set list_url = ('sale/list')|U({ajax: 1}) %}
+    {{ parent() }}
+{% endblock container %}
+
+{% block popup_nav %}
+{# {% include 'HousemobileBundle:Sale:navblock.html.twig' ignore missing %} #}
+{% set current_nav = {
+    title: '二手房',
+    data: [
+        {
+            name: '二手房',
+            url: ('sale/list')|UU
+        },
+        {
+            name: '个人房源',
+            url: ('sale/list')|UU({usertype: 11})
+        },
+        {
+            name: '求购',
+            url: ('demand/list')|UU
+        },
+        {
+            name: '经纪人',
+            url: ('member/j_list')|UU
+        },
+        {
+            name: '经纪公司',
+            url: ('member/list')|UU
+        },
+        {
+            name: '小区',
+            url: ('sale/xqlist')|UU
+        },
+    ]
+} %}
+    {{ parent() }}
+{% endblock popup_nav %}
+{# 搜索 #}
+{% block popup_search %}
+    {% set search_action = ('sale/list')|UU %}
+    {{ parent() }}
+{% endblock popup_search %}
+{% block popup %}
+    {{ housemobile_global.popup_fabu() }}
+{% endblock popup %}

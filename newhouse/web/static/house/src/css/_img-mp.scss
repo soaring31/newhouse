@@ -1,0 +1,38 @@
+$img-mp-1:(14px, 14px, -100px, -94px, img-mp-1);
+$img-mp-2:(30px, 30px, 0, -94px, img-mp-2);
+$img-mp-3:(30px, 30px, -122px, -40px, img-mp-3);
+$img-mp-4:(31px, 30px, -122px, 0, img-mp-4);
+$img-mp-5:(14px, 14px, -124px, -94px, img-mp-5);
+$img-mp-6:(17px, 17px, -27px, -134px, img-mp-6);
+$img-mp-7:(17px, 17px, 0, -134px, img-mp-7);
+$img-mp-8:(23px, 20px, -163px, -90px, img-mp-8);
+$img-mp-9:(23px, 20px, -163px, -60px, img-mp-9);
+$img-mp-10:(51px, 52px, 0, 0, img-mp-10);
+$img-mp-11:(51px, 52px, -61px, 0, img-mp-11);
+$img-mp-12:(20px, 22px, -87px, -62px, img-mp-12);
+$img-mp-13:(23px, 20px, -163px, -30px, img-mp-13);
+$img-mp-ico-3:(50px, 16px, -40px, -94px, img-mp-ico-3);
+$img-mp-ico-rz:(40px, 20px, -163px, 0, img-mp-ico-rz);
+$img-mp-qq:(77px, 22px, 0, -62px, img-mp-qq);
+
+$img-mp: ($img-mp-1,$img-mp-2,$img-mp-3,$img-mp-4,$img-mp-5,$img-mp-6,$img-mp-7,$img-mp-8,$img-mp-9,$img-mp-10,$img-mp-11,$img-mp-12,$img-mp-13,$img-mp-ico-3,$img-mp-ico-rz,$img-mp-qq);
+
+@mixin img-mp($sprites) {
+  %icomp {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/mp.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+        @extend %icomp;
+    }
+  }
+}

@@ -1,0 +1,98 @@
+{% extends 'MemberBundle::base_manage_block.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+    {% set aid = app.request.get('aid') %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }} 
+  {{ core_manage.jump(
+        {
+            title: '在线支付',
+            url: ( 'muserpaylist/payonline')|U({ename:'payonline'})      
+        }
+        ) }}
+   {{ core_manage.jump(
+        {
+            title: '其他支付',
+            url: ( 'muserpaylist/paygiro')|U({ename:'paygiro'})      
+        }
+        ) }}     
+{% endblock %}
+
+
+
+{% block tableMain %}
+{{ core_manage.filter([
+   
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            models: '{{ models }}',
+            category: '{{ category }}'
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                
+                    <th>支付方式</th>
+                    <th width="100">支付数量</th>
+                    <th width="100">支付接口</th>
+                    <th width="100"data-role="sort" data-sort="create_time" class="sort">记录日期</th>
+                    <th width="100"data-role="sort" data-sort="create_time" class="sort">到帐日期</th>
+                    <th width="100"data-role="sort" data-sort="create_time" class="sort">充值日期</th>                   
+                    <th width="120" class="tac">详情</th>
+                </tr>
+                {% if ident.info.data is defined and ident.info.pageCount|default('') != 0 %}
+                {% for k, vo in ident.info.data %}
+                    {# {{dump(vo)}} #}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+              
+                    <td width="100"> {# {{ core_manage.formField({value: vo.pay, form: 'userpay_online', field:'pay'}) }} #}</td>
+                    <td width="100">{{vo.amount}}</td>
+                    <td width="100">支付接口</td>
+                    <td width="100">{{ vo.create_time|default('0')|date('Y-m-d') }}</td>
+                    <td width="100">{{ vo.create_time|default('0')|date('Y-m-d') }}</td>
+                    <td width="100">{{ vo.create_time|default('0')|date('Y-m-d') }}</td>                   
+                    <td width="120" class="tac">详情</td>
+                    
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    }
+]) }}
+{% endblock %}
+
+{# {% block promptUl %}
+提示说明
+{% endblock %} #}
+
+
+
+

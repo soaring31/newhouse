@@ -1,0 +1,13 @@
+{% extends "ManageBundle::poplayout.html.twig" %}
+{% block js %}
+<script>
+seajs.use("{{ bundlepath }}/js/controllers",function(c){
+	//js入口	    
+	c.init('createaction');
+});
+</script>
+{% endblock %}
+{% block body %}
+{% import "ManageBundle:Form:popedit.html.twig" as forms %}
+{{ forms.popEdit(form|default(''),'form') }}
+{% endblock %}

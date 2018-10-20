@@ -1,0 +1,219 @@
+{#  说明
+* url_id : 获取从列表获取过来的id
+* detail : 获取问答的详情
+* sort_category_ask: 同分类下问答
+* sort_clicks_ask: 点击率排行
+* pcate : 获取当前的父级
+* wdclgg : 侧边广告推送
+* detail_answer : 获取当前问题的所有回答
+* detail_answer_best:　获取最佳答案
+* detail_category_parents ： 获取当前问题的所有分类
+* nav_ask_act ： 导航条判断
+* user : 提问者
+* user_info: 提问者附加属性
+* user_name: 提问者名字
+#}
+
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% extends detail ? 'HouseBundle:Ask:index.html.twig' : 'CoreBundle:Dispatch:errorcontent.html.twig' %}
+
+{% block title %}{{detail.name|default('')}}-问答详情{% endblock title %}
+
+{% block key_des %}
+    {{core_global.key_des({keywords: detail.keywords, description: detail.abstract})}}
+{% endblock key_des%}
+
+{% set sort_clicks_ask = ('house.ask')|getAll({checked: 1, orderBy: 'desc', order: 'clicks', pageSize: 10}) %}
+
+{% set sort_category_ask = ('house.ask')|getAll({category: detail.category|default(''), checked: 1,findType:1,pageSize: 10, id: 'neq|' ~ detail.id|default(0)}) %}
+
+{% set detail_category_parents = ('house.category')|getParents(detail.category|default('')) %}
+
+{% set nav_ask_act = detail_category_parents.data[1].id|default('38') %}
+
+{% set user = ('db.users')|getRow({id: detail.uid|default(''), checked: 1}) %}
+
+{% set user_info = ('db.userinfo')|getRow({uid: detail.uid|default('')}) %}
+
+{% set user_name = user_info.nicename|default(user.username|default('')) %}
+
+{% set detail_answer_best = ('house.answer')|getRow({ask:detail.id|default(''),isanswer:1,checked:1}) %}
+
+{# 当前位置 #}
+{% block current_ask %}
+{% if detail_category_parents is defined and detail_category_parents.pageCount != 0 %}
+    {% for item in detail_category_parents.data %}
+        {% if not loop.first %}
+            <a href="{{('ask/list')|U({category: item.id|default('')})}}" target="_blank">
+                {{item.name|default('')}}
+            </a>
+            <span>&gt;</span>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+<span>{{detail.name|default('')}}</span>
+{% endblock current_ask %}
+
+{# 屏蔽推送位 #}
+{% block push_ask %}{% endblock push_ask %}
+
+{% block container_ask %}
+    <div class="container">
+        {# 主要内容 #}
+        <div class="ask-detail">
+            {# 问题描述 #}
+            <div class="ask-question">
+                <div class="ask-title">
+                    <h2> <i class="font-ask-11"></i>
+                        {{detail.name|default('')}}
+                    </h2>
+                    <div class="ask-title-r">
+                        {# 收藏按钮 #}
+                        {{core_global.collect_btn({
+                            aid: detail.id|default(''),
+                            models: detail.models|default('ask'),
+                            class: 'ask-btn'
+                        })}}
+                        <a href="#jbao" class="ask-btn form-bdrs btn-jqModal-ex">
+                            <i class="font-icons-27"></i>
+                            <span>举报</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="question p20 ml20 mr20">
+                    {{core_global.content({content: detail.content|default('')})}}
+                </div>
+                <p class="info">
+                    悬赏积分&nbsp;:&nbsp; <i></i>
+                    <span class="info-con">{{detail.currency|default('')}}</span>
+                    提问者&nbsp;:&nbsp;
+                    <span class="info-con">{{user_name|default('')}}</span>
+                    回答数&nbsp;:&nbsp;
+                    <span class="info-con"><i data-counts="{models: 'ask', field: 'asknum', id: '{{detail.id|default('')}}'}"></i></span>
+                    浏览数&nbsp;:&nbsp;
+                    <span class="info-con"><i data-counts="{models: 'ask', field: 'clicks', id: '{{detail.id|default('')}}'}"></i></span>
+                    时间&nbsp;:&nbsp;
+                    <span class="info-con">{{detail.create_time|default('')|date('Y-m-d')}}</span>
+                    <span class="bdsharebuttonbox share" share-text="{{detail.name|default('')}}">
+                        分享到&nbsp;:&nbsp;
+                        <a href="#" target="_blank" data-cmd="more"></a>
+                        <a href="#" class="font-ask-5" data-cmd="qzone" title="分享到QQ空间"></a>
+                        <a href="#" class="font-ask-6" data-cmd="baidu" title="分享到百度"></a>
+                        <a href="#" class="font-ask-7" data-cmd="weixin" title="分享到微信"></a>
+                        <a href="#" class="font-ask-8" data-cmd="tsina" title="分享到新浪微博"></a>
+                    </span>
+                </p>
+                <script type="text/javascript">
+                    seajs.use(['share'])    
+                </script>
+                <!-- 最佳答案 -->
+                {% if detail_answer_best.content is defined %}
+                <div class="great-answer">
+                    <h2>
+                        <i class="img-ask-7"></i>
+                        &nbsp;最佳答案
+                    </h2>
+                     <p>{{core_global.content({content: detail_answer_best.content|default('')})}}</p>
+                </div>
+                {% endif %}
+
+                <div class="answer">
+                    <i class="font-icons-222 fz20 mr5 ico"></i>您的回答被采纳后将获得相应积分奖励
+                    <input type="button" value="我来回答" class="answer-btn answer-submit fr"/>
+                </div>
+                <!-- 下拉回答表单 -->
+                {{ render(controller('HouseBundle:Bundlebindforms:askcomment', {
+                    formflag: 'view_answer',
+                    ask: detail.id|default('')
+                })) }}
+            </div>
+            {# 问题描述 #}
+            <!--举报-->
+            {{house_global.modal_layout({
+                id: "jbao",
+                title: "举报(" ~ detail.name|default('') ~ ")",
+                ajax: "ajax: {
+                    data : {
+                        formflag: 'view_ask_report',
+                        formcls: 'common-form-lg common-form-control',
+                        type: 'sale',
+                        models: 'ask',
+                        aid: " ~ detail.id|default(0) ~ "
+                    }
+                }"
+            })}}
+            <!-- 相关问题 -->
+            <div class="list ask-anothers">
+                <div class="ask-a-title">
+                    <h2>相关问题</h2>
+                </div>
+                {{house_global.ask_list({
+                    list: sort_category_ask
+                })}}
+            </div>
+            <!-- 相关问题 -->
+            <div class="blank20"></div>
+            <!-- 其他回答 -->
+            <div class="list anthor-list  comment">
+                <h2>
+                    <i class="font-ask-9"></i>
+                    &nbsp;其他回答
+                </h2>
+                <div id="pl-list" class="pl-list"></div>
+                <!--page-->
+                <div class="blank20"></div>
+                <div class="load-more" id="load-more">点击加载更多</div>
+                <!--page-->
+            </div>
+        </div>
+        {# 主要内容 #}
+        {# 侧栏 #}
+        <div class="Side">
+            <!-- 提问 -->
+            <div class="Side-box tiwen">
+                <h2>
+                    <i class="font-ask-1"></i>
+                    我要提问
+                </h2>
+                {{house_global.modal_layout({
+                    type: "load",
+                    ajax: "ajax: {
+                        data : {
+                            formflag: 'view_ask',
+                            formcls: 'common-form-control',
+                            formvalidstyle: 'single',
+                            type: 'ask',
+                            category: " ~ detail.category|default(38) ~ ",
+                        }
+                    }"
+                })}}
+            </div>
+            {{core_global.ads({tag: 'wdclgg'})}}
+            <!-- 精彩回答 -->
+            {% if sort_clicks_ask.data is defined and sort_clicks_ask.pageCount|default(0) != 0 %}
+                <div class="Side-box answer mt15">
+                    <h2 class="title">
+                        <i class="font-ask-4"></i>
+                        精彩回答
+                    </h2>
+                    <div class="answer-box">
+                        {% for item in sort_clicks_ask.data %}
+                            <div class="answer-item">
+                                <i class="font-ask-2"></i>
+                                {% set pcate = (item.category)|getCategoryById() %}
+                                {% if pcate is defined %}
+                                    &nbsp;[
+                                    <a title="{{item.name|default('')}}" href="{{('ask/list')|U({category:pcate.id|default('')})}}">{{pcate.name|default('')}}</a>
+                                    ]&nbsp;
+                                {% endif %}
+                                <a title="{{item.name|default('购房合同')}}" href="{{('ask/detail')|U({id:item.id|default('#')})}}">{{item.name|default('')}}</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        {# 侧栏 #}
+    </div>
+{% endblock container_ask %}

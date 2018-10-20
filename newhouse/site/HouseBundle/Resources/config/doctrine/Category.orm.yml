@@ -1,0 +1,189 @@
+HouseBundle\Entity\Category:
+    type: entity
+    table: category
+    indexes:
+        name:
+            columns:
+                - name
+        pid:
+            columns:
+                - pid
+        ename:
+            columns:
+                - ename
+        keywords:
+            columns:
+                - keywords
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            options:
+                comment: 标题
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 5
+        pid:
+            options:
+                comment: 父级id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        level:
+            options:
+                comment: 级别
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 3
+        ename:
+            options:
+                comment: 标识
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        models:
+            options:
+                comment: 模型
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        binary_tree:
+            options:
+                comment: '二叉树标识,1为启用'
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+        left_node:
+            options:
+                comment: 左节点
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        right_node:
+            options:
+                comment: 右节点
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        keywords:
+            options:
+                comment: 关键词
+                unsigned: false
+            nullable: false
+            type: string
+            length: 50
+        description:
+            options:
+                comment: 描述
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        sqlstr:
+            options:
+                comment: 查询字串
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        cate_action:
+            options:
+                comment: 动作
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        remark:
+            options:
+                comment: 备注
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        is_next:
+            options:
+                comment: 是否有下级菜单
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+        form_id:
+            options:
+                comment: 表单ID
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        checked:
+            options:
+                comment: 启用
+                unsigned: false
+                default: '1'
+            nullable: false
+            default: '1'
+            type: boolean
+            length: 1
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

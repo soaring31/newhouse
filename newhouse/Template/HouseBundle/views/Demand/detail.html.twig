@@ -1,0 +1,88 @@
+{# # 说明：
+ * detail: 详情数据
+#}
+{% set detail = ident.detail.data[0]|default('') %}
+
+{% extends detail ? 'HouseBundle:Demand:list.html.twig' : 'CoreBundle:Dispatch:errorcontent.html.twig' %}
+
+{% block title %}{{detail.name|default('')}}{% endblock title %}
+
+{% block key_des %}
+    <meta name="keywords" content="{{detail.keywords|default('')}}" />
+    <meta name="description" content="{{detail.description|default('')}}" />
+{% endblock key_des%}
+
+{% block current_container %}
+    {% set url_category = detail.type|default('') %}
+    <span>&gt;</span>
+    <span>{{- detail.name|default('') -}}</span>
+{% endblock current_container %}
+
+{% block container_demand %}
+    <div class="need-detail p10 bd-gray">
+        {# 收藏按钮 #}
+        {{core_global.collect_btn({
+            aid: detail.id|default(''),
+            models: detail.models|default('demand'),
+            class: 'fr btn btn-sm form-bdrs',
+            text: '收藏需求'
+        })}}
+        <h1 class="title">{{detail.name|default('')}}</h1>
+        <div class="blank0"></div>
+        <ul class="info">
+            <li> <b>发布时间：</b>
+                {{detail.create_time|default('')|date('Y-m-d')}}
+            </li>
+            <li> <b>更新时间：</b>
+                {{core_global.timeformat({time: detail.update_time|default('')})}}
+            </li>
+            <li>
+                <b>意向面积：</b>
+                <span class="fs20 c-e43 fw6">
+                    {{house_global.if_mj({value: detail.mj|default('')})}}
+                </span>
+            </li>
+             <li>
+                <b>意向户型：</b>
+                <span class="fs20 c-e43 fw6">
+                     {{- house_global.huxing({data: detail|default(''), tpl: '%shi%%ting%'}) -}}
+                </span>
+            </li>
+            <li>
+                <b>意向价格：</b>
+                {% if detail.category|default(297) != 297 %}
+                    {{house_global.if_czj({value: detail.zj|default(''), class: 'fs20 c-e43 fw6'})}}
+                {% else %}
+                    {{house_global.if_wy({value: detail.zj|default(''), class: 'fs20 c-e43 fw6'})}}
+                {% endif %}
+            </li>
+            <li>
+                <b>具体需求：</b>
+                <span style="width:620px" class="fl">
+                    {{core_global.content({content: detail.jtyq|default('')})}}
+                </span>
+            </li>
+        </ul>
+        <div class="tel clearfix"> <i class="font-lp-13 ico-tel"></i>
+            {% if app.user.userinfo.usertype|default('') != 15 %}
+                <p>
+                    <i class="fz16">没有浏览权限,请升级为经纪人!</i>
+                </p>
+            {% else %}
+                <p>
+                    <b>{{detail.tel|default('更新中...')}}</b> 联系人：{{detail.xingming|default('')}}
+                </p>
+                <p>
+                    联系时请告知是从{{- core_global.mconfig({name: 'hostname', ename: 'mwebset'}) -}}看到的,谢谢。
+                </p>
+            {% endif %}
+        </div>
+        <div class="blank10"></div>
+    </div>
+{% endblock container_demand %}
+
+{% block js %}
+<script type="text/javascript">
+    seajs.use(['collect'], function(collect) {})
+</script>
+{% endblock js %}

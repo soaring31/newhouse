@@ -1,0 +1,68 @@
+{% extends 'HouseBundle:Houses:lp_list_layout.html.twig' %}
+{# # 说明
+* tpl_models: 所属模型，判别属于哪个模块
+* sort_data_opt: 重新排序
+* 以下是筛选区域数据定义
+*      1、filter_rows： 横排显示筛选条件条数
+*      2、filter_opt：筛选条件数据
+#}
+{% block title %}特价房{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" Content="特价房"/>
+<meta name="description" content="特价房"/>
+{% endblock key_des %}
+
+{% block css %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/tejia.css')}}
+{% endblock css %}
+
+{% block current_houses %}
+<span>特价房</span>
+{% endblock current_houses %}
+
+{% block container %}
+    {# 检索数据源 #}
+    {% set cate_data = house_global.cate_data({ 
+                    tag: 'special',
+                }).__toString|json_decode %}
+    {{ parent() }}
+{% endblock container %}
+
+{# 列表头 #}
+{% block list_head %}
+    <a class="act default"  href="{{(controller ~ '/' ~ action)|U}}">
+        <i class="font-lp-54 ico"></i>所有特价房
+    </a>
+{% endblock list_head %}
+
+{# 排序 #}
+{% block list_sort %}
+    {% set sort_data = {
+        def: {
+            title: '默认'
+        },
+        zj: {
+            title: '价格'
+        },
+        clicks: {
+            title: '人气'
+        }
+    } %}
+    {{ parent() }}
+{% endblock list_sort %}
+
+{% block container_houses_list %}
+    <!--list-->
+    <div class="lp-list lp-tj">
+        <ul data-tag="tejiafang">
+            {{house_global.specail_list({
+                list: ident.list
+            })}}
+        </ul>
+    </div>
+    <div class="blank30"></div>
+        {{core_global.page(ident.list)}}
+    <div class="blank30"></div>
+    <!--/list-->
+{% endblock container_houses_list %}

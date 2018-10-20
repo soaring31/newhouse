@@ -1,0 +1,89 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{%- block result -%}
+{% set detail = ident.detail.data[0]|default(cident.detail.data[0]|default('')) %}
+{% set mapseat = detail.map|default('')|split(',') %}
+{% set mapseat = mapseat|default('') %}
+
+{% set nav = nav|default('') ? : [
+                {
+                    name : '银行',
+                    icon : 'font-f-102'
+                },
+                {
+                    name : '餐饮',
+                    icon : 'font-f-103'
+                },
+                {
+                    name : '购物',
+                    icon : 'font-f-104'
+                },
+                {
+                    name : '公交',
+                    icon : 'font-f-105'
+                },
+                {
+                    name : '公园',
+                    icon : 'font-f-106'
+                },
+                {
+                    name : '机场',
+                    icon : 'font-f-107'
+                },
+                {
+                    name : '医院',
+                    icon : 'font-f-108'
+                }
+            ]
+%}
+{% if detail %}
+<div id="map-container"
+    data-map="{
+        redraw: false,
+        point: {
+            lng: {{ mapseat[0] }},
+            lat: {{ mapseat[1] }}
+        },
+        minZoom: 14,
+        zoom: {{ mapseat[2]|default(20)  }}
+    }"
+    data-marker-lists="{
+            tpl:  '#tpl-14',
+            data:  [{
+                        disableMassClear: true,
+                        name: '{{detail.name|default('')}}',
+                        id: '{{detail.id|default('')}}',
+                        dj: '{{detail.dj|default('')}}',
+                        point: {
+                            lng: {{ mapseat[0] }},
+                            lat: {{ mapseat[1] }}
+                        }
+                    }]
+        }">
+</div>
+<nav data-map-nav="1" class="bar bar-tab nav-bottom">
+    {% for item in nav %}
+        <a data-icon="{{item.icon|default('font-f-2')}}" data-map-local-search="{name: '{{ item.name }}'}" class="tab-item external" href="javascript:;">
+            <span class="icon  {{item.icon|default('font-f-2')}}"></span>
+            <span class="tab-label">{{item.name|default('')}}</span>
+        </a>
+    {% endfor %}
+</nav>
+<div data-map-list="1" class="map-list"></div>
+<script id="tpl-14" type="text/html">
+    <div class="marker-item" data-title="<%= name %>" data-name="id" data-value="<%= id %>" data-map-item="<%= id %>" data-opt="{refresh: 0}" data-point="<%= point.lng %>,<%= point.lat %>">
+        <span class="name"><%= dj * 1 ? dj + '元/m&sup2;' : name %></span>
+        <span class="name-sub"><%= name %></span>
+        <span class="arrow"></span>
+    </div>
+</script>
+
+<script type="text/javascript">
+    seajs.use(['mapLibs'], function(mapLibs) {
+        mapLibs.mapSimple();
+    })
+</script>
+{% else %}
+    <div class="tac fz12">没有数据无法显示地图-_-！</div>
+{% endif %}
+
+{%- endblock result -%}

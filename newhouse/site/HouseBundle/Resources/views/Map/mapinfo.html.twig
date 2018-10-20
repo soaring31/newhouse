@@ -1,0 +1,25 @@
+{% extends 'CoreBundle::base_ajax.html.twig' %}
+
+{% block result %}
+{
+    "0" : {
+        "pageCount" : "{{ident.list.pageCount|default('')}}",
+        "pageSize" : "{{ident.list.pageSize|default('')}}",
+        "pageIndex" : "{{ident.list.pageIndex|default('')}}",
+        "len" : "{{ident.list.data|length|default('')}}"
+    }
+    {% if ident.list.data is defined %}
+        {%- for item in ident.list.data -%}
+        ,"{{ loop.index }}": {
+            "point": {"lng":"{{item.map|default('0,0,0')|split(',')[0]}}","lat":"{{item.map|default('0,0,0')|split(',')[1]}}"},
+            "info": {"title":"{{item.name|default('')}}","address":"{{item.address|default('')}}"},
+            "thumb":"{{item.thumb|default('')}}",
+            "id" : "{{item.id|default('')}}",
+            "name" : "{{item.name|default('')}}",
+            "dj" : "{{item.dj|default('')}}",
+            "address" : "{{item.address|default('')}}"
+        }
+        {%- endfor -%}
+    {% endif %}
+}
+{% endblock result %}

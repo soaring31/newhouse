@@ -1,0 +1,13 @@
+{% extends 'HouseBundle:Release:wthouse.html.twig' %}
+
+{% block title %} 委托出售 {% endblock title %}
+
+{% block form_release %}
+    {# 渲染表单 #}
+    {{ render(controller('HouseBundle:Bundlebindforms:ajaxform', {
+        models: app.request.get('models')|default(''),
+        formflag: 'wtbuy',
+        formcls: 'form-fy wt-form',
+        formlabel: true
+    })) }}
+{% endblock form_release %}

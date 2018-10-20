@@ -1,0 +1,111 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+** ajax调用：出租列表
+** top_show: 是否显示置顶字段
+** fabu_btn：是否显示发布按钮
+#}
+{# 优先使用传过来的list #}
+{% set url_list = app.request.get('list') %}
+{% if url_list|default('') %}
+    {% set list = url_list %}
+{% elseif app.request.get('uid') %}
+    {% set list = ident.lists %}
+{% elseif ident.list is defined %}
+    {% set list = ident.list %}
+{% else %}
+    {% set index_chuzufangyuan = ('index_chuzufangyuan')|getPush(6) %}
+    {% set list = { 
+        data     : index_chuzufangyuan,
+        pageIndex: 1, 
+        pageCount: 0, 
+        pageSize : 8 
+    } %}
+{% endif %}
+{% block result %}
+
+{% if list.data is defined and list.data|length %}
+    {% for item in list.data %}
+
+    {% set item_count = item.tujis|default('')|sourceImg|length %}
+        
+    {% set fromid = item.fromid|default('') ? {
+        fromid: item.fromid|default('')
+    } : {} %}
+
+    {% set item_url = {
+        url: item.url|default(''),
+        id: item.id|default(''),
+        models: item.models|default('rent')
+    }|merge(fromid) %}
+
+    <li {% if loop.last %}data-page="{
+                    pageIndex: {{list.pageIndex}},
+                    pageCount: {{list.pageCount}},
+                    pageSize: {{list.pageSize}}
+                 }"{% endif %}>
+        <a href="{{core_global.url(item_url)}}" class="item-content p-default">
+            <div class="item-media por">
+                {{- core_global.img({
+                    src: item.thumb|default(''),
+                    alt: item.name|default(''),
+                    type: 2,
+                    width:102 ,
+                    height: 80
+                }) -}}
+                {% if item.zjdate|default('') >= ('now')|date('U') and app.request.get('top_show', 1) == 1 %}
+                    <div class="item-zd">顶</div>
+                {% endif %}
+                {% if item_count|default('') > 0 %}
+                    <div class="item-l-b black">{{item_count}}图</div>
+                {% endif %}
+            </div>
+            <div class="item-inner">
+                <div class="item-title-row">
+                    {{housemobile_global.list_title({title: item.name|default('')})}}
+                    <div class="item-after ml5">
+                        {{house_global.if_czj({value: item.czj|default(''), class: 'p-red'})}}
+                    </div>
+                </div>
+                <div class="item-title-row">
+                    <div class="item-title item-title-p0">
+                        {{item.address|default('-')}}
+                    </div>
+                    {{- house_global.huxing({data: item|default(''), tpl: '<div class="item-after ml5">%shi%%ting%</div>'}) -}}
+                </div>
+                <div class="item-subtitle">
+                    {% if item.szlc|default('') and item.zlc|default('') %}
+                    <span class="mr10">
+                        {{item.szlc|default('-')}}/{{item.zlc|default('-')}}层
+                    </span>
+                    {% endif %}
+                    <span class="mr10">
+                        {{ core_global.formField({value: item.zlfs|default(''), form: 'rent', field:'zlfs'}) }}
+                    </span>
+                    <span>
+                        {{ core_global.formField({value: item.fkfs|default(''), form: 'rent', field:'fkfs'}) }}
+                    </span>
+                </div>
+                <div class="item-subtitle">
+                    {{core_global.region({id: item.region|default(''), tpl: '<span class="button button-sm btn-1">%value%</span>'})}}
+                    {{core_global.formData({value: item.czlx|default(''), tpl: '<span class="button button-sm btn-2">%value%</span>'})}}
+                    {{ core_global.formData({value: item.zxcd|default(''), tpl: '<span class="button button-sm btn-3">%value%</span>'}) }}
+                    {% if item.jian|default('0') == 1 %}
+                    <span class="button button-sm btn-4">店铺 </span>
+                    {% endif %} 
+                </div>
+            </div>
+        </a>
+        {% if app.request.get('uid', 0) %}
+            {# 我的发布列表使用 #}
+            <div class="item-content user-fb-btn">
+                <div class="item-inner">
+                   <a href="{{('mrentmanage/show')|UU({_id: item.id|default(''), models: 'rent', formflag: 'rent'})}}" class="button button-fill">修改</a>
+                    <a data-delete="{{('mrentmanage/delete')|U({id: item.id|default('')})}}" href="javascript:;" class="button button-gray button-fill">删除</a>
+                </div>
+            </div>
+            <div class="user-fb-line"></div>
+        {% endif %}
+    </li>
+    {% endfor %}
+{% endif %}
+{% endblock result %}

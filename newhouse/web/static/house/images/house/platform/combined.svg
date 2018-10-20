@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="20px" viewBox="0 0 18 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
+    <title>Combined Shape</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="开始使用/立即体验弹窗" transform="translate(-576.000000, -332.000000)" fill-rule="nonzero" fill="#999999">
+            <g id="开始使用" transform="translate(520.000000, 205.000000)">
+                <g id="用户" transform="translate(40.000000, 112.000000)">
+                    <path d="M32.1633793,28.3501818 C33.262,28.8156364 34,30.052 34,31.4269091 L34,34.6363636 C34,34.8370909 33.8609655,35 33.6896552,35 L16.3103448,35 C16.1390345,35 16,34.8370909 16,34.6363636 L16,31.4269091 C16,30.052 16.738,28.8156364 17.8366207,28.3501818 C19.2908966,27.7345455 21.7143793,27 25,27 C28.2856207,27 30.7091034,27.7345455 32.1633793,28.3501818 Z M25,25 C22.243,25 20,23.0208824 20,20.5882353 L20,19.4117647 C20,16.9791176 22.243,15 25,15 C27.757,15 30,16.9791176 30,19.4117647 L30,20.5882353 C30,23.0208824 27.757,25 25,25 Z" id="Combined-Shape"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

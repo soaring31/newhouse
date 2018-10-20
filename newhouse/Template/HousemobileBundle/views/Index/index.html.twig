@@ -1,0 +1,297 @@
+{# {% extends 'HousemobileBundle::base.html.twig' %} #}
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+
+{% set search_action = ('houses/list')|UU({}, true) %}
+
+{% block title %}{% endblock title %}
+	
+{% block default_title %}
+{{core_global.mconfig({name: 'cmstitle', ename: 'mwebset'})}}
+{% endblock default_title %}
+
+{% block header_wrap %}
+    <header class="bar bar-nav">
+        <a class="button button-link button-area pull-left external" href="{{ ('areachange/index')|UU }}">
+            <div data-block="{
+                ajax: {
+                    url: '{{ ('bundlebindforms/ajax')|U }}',
+                    data: {
+                        tpl: 'Index:headerblock',
+                    }
+                }
+            }" class="dn"></div>
+            <span class="icon font-f-7"></span>
+        </a>
+        {{
+            core_mobile_global.mobile_search({
+                tpl: '<h1 class="title open-popup" data-popup=".popup-search" data-title="搜索"><a href="javascript:;" class="button button-search"><span class="icon font-f-8"></span>楼盘名/地名/房产百科等</a></h1>'
+            })
+        }}
+
+        {{ core_mobile_global.bar_nav_btn({
+            title: '我的',
+            icon: 'font-f-5',
+            href: ('main/mindex')|UU
+        }) }}
+    </header>
+    {# {% include 'HousemobileBundle:Index:headerblock.html.twig' ignore missing %} #}
+{% endblock header_wrap %}
+
+{% block key_des %}
+<meta name="keywords" content="{{ core_global.mconfig({name: 'cmskeyword', ename: 'mwebset'}) }}" />
+<meta name="description" content="{{ core_global.mconfig({name: 'cmsdescription', ename: 'mwebset'}) }}" />
+{% endblock key_des %}
+
+{% block container %}
+
+<div class="content home">
+    <!-- 幻灯片 -->
+    <div style="height: 9rem;" data-block="{
+        ajax: {
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                tpl: 'Common:swiper',
+                tag: 'mobile_index_dbgg'
+            }
+        }
+    }"></div>
+    <!-- 广告位 -->
+    {# 导航 #}
+    <div style="height: 10rem;background-color: #003466;" data-block="{
+        ajax: {
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                tpl: 'Index:indexnav'
+            }
+        }
+    }"></div>
+    <!-- 资讯 -->
+    <div class="list-block panel-block media-list no-margin">
+        {{housemobile_global.panel_title({title: '今日头条'})}}
+        <ul>
+            <div data-block="{
+                ajax: {
+                    url: '{{ ('bundlebindforms/ajax')|U }}',
+                    data: {
+                        tpl: 'Index:pushtoutiao'
+                    }
+                }
+            }"></div>
+        </ul>
+    </div>
+    <!-- 广告 -->
+    <div data-block="{
+        ajax: {
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                tpl: 'Common:ads',
+                tag: 'xinfangguanggao'
+            }
+        }
+    }"></div>
+    <!-- 新盘推荐 -->
+    <div class="buttons-tab">
+        <a href="#indexHouse1" class="tab-link active button">新房</a>
+        <a href="#indexHouse2" class="tab-link button">新房团购</a>
+        <a href="#indexHouse3" class="tab-link button">打折优惠</a>
+    </div>
+    <div class="tabs list-block media-list no-margin">
+        <div class="tab active" id="indexHouse1">
+            <div data-block="{
+                    ajax: {
+                        url: '{{ ('bundlebindforms/ajax')|U }}',
+                        data: {
+                            tpl: 'Common:filter',
+                            tpl_tag: 'index',
+                            filter_action: 'houses/list',
+                            tag: 'index_houses_filter'
+                        }
+                    }
+                }">
+            </div>
+        </div>
+        <div class="tab" id="indexHouse2">
+            {# 新房团购 #}
+            {# 新房团购、打折优惠、出租推荐、出售推荐 #}
+            <ul>
+                <div data-block="{
+                    ajax: {
+                        url: '{{ ('bundlebindforms/ajax')|U }}',
+                        data: {
+                            tpl: 'Clist:groupbuy_list',
+                            push: 'index_xftg',
+                            pageSize: 6
+                        }
+                    }
+                }"></div>
+            </ul>
+        </div>
+        <div class="tab" id="indexHouse3" >
+            {# 打折优惠 #}
+            <ul>
+                <div data-block="{
+                    ajax: {
+                        url: '{{ ('bundlebindforms/ajax')|U }}',
+                        data: {
+                            tpl: 'Clist:houseslist'
+                        }
+                    }
+                }"></div>
+            </ul>
+        </div>
+        <ul>
+            <li>
+                <a href="{{('houses/list')|UU }}" class="item-link item-content">
+                    <div class="item-inner">
+                        <div class="item-title item-title-p0 t-c">
+                            查看更多楼盘
+                        </div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- 广告 -->
+    <div data-block="{
+        ajax: {
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                tpl: 'Common:ads',
+                tag: 'ershouguanggao'
+            }
+        }
+    }"></div>
+    <!-- 二手房 -->
+    <div class="buttons-tab">
+        <a href="#indexSale1" class="tab-link active button">二手</a>
+        <a href="#indexSlae2" class="tab-link button">推荐房源</a>
+    </div>
+    <div class="tabs list-block media-list no-margin">
+        <div class="tab active" id="indexSale1">
+            <div data-block="{
+                ajax: {
+                    url: '{{ ('bundlebindforms/ajax')|U }}',
+                    data: {
+                        tpl: 'Common:filter',
+                        tpl_tag: 'index',
+                        filter_action: 'sale/list',
+                        tag: 'index_sale_filter'
+                    }
+                }
+            }"></div>
+        </div>
+        <div class="tab" id="indexSlae2">
+            {# 二手房 #}
+            <ul>
+                <div data-block="{
+                    ajax: {
+                        url: '{{ ('bundlebindforms/ajax')|U }}',
+                        data: {
+                            tpl: 'Clist:salelist'
+                        }
+                    }
+                }"></div>
+            </ul>
+        </div>
+        <ul>
+            <li>
+                <a href="{{('sale/list')|UU }}" class="item-link item-content">
+                    <div class="item-inner">
+                        <div class="item-title item-title-p0 t-c">
+                            查看更多二手
+                        </div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- 广告 -->
+    <div data-block="{
+        ajax: {
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                tpl: 'Common:ads',
+                tag: 'chuzuguanggao'
+            }
+        }
+    }"></div>
+    <!-- 出租 -->
+    <div class="buttons-tab">
+        <a href="#indexRent1" class="tab-link active button">出租</a>
+        <a href="#indexRent2" class="tab-link button">推荐房源</a>
+    </div>
+    <div class="tabs list-block media-list no-margin">
+        <div class="tab active" id="indexRent1">
+            <div data-block="{
+                ajax: {
+                    url: '{{ ('bundlebindforms/ajax')|U }}',
+                    data: {
+                        tpl: 'Common:filter',
+                        tpl_tag: 'index',
+                        filter_action: 'rent/list',
+                        tag: 'index_rent_filter'
+                    }
+                }
+            }"></div>
+        </div>
+        <div class="tab" id="indexRent2">
+            {# 出租 #}
+            <ul>
+                <div data-block="{
+                    ajax: {
+                        url: '{{ ('bundlebindforms/ajax')|U }}',
+                        data: {
+                            tpl: 'Clist:rentlist'
+                        }
+                    }
+                }"></div>
+            </ul>
+        </div>
+        <ul>
+            <li>
+                <a href="{{('rent/list')|UU }}" class="item-link item-content">
+                    <div class="item-inner">
+                        <div class="item-title item-title-p0 t-c">
+                            查看更多出租
+                        </div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="list-block panel-block">
+        <div class="item-content item-link">
+            <div class="item-inner">
+                <div class="item-title item-title-p0">
+                    <i class="icon font-f-15 p-red mr5"></i><span class="p-gray">当前分站：</span>
+                    <div data-block="{
+                        ajax: {
+                            url: '{{ ('bundlebindforms/ajax')|U }}',
+                            data: {
+                                tpl: 'Index:headerblock',
+                            }
+                        }
+                    }" class="dn"></div>
+                </div>
+                <a href="{{('areachange/index')|UU }}" class="item-after">重新定位</a>
+            </div>
+        </div>
+    </div>
+    {{ render(controller('HouseBundle:Common:footer', {_isApp: url_isApp})) }}
+</div>
+
+<script type="text/javascript">
+    seajs.use(['template','utils','sm','ajax'], function( template, utils, sm, ajax){
+        var ajaxData = {}
+        if ({{url_isApp|default(0)}}) {
+            ajaxData = {
+                _isApp: {{url_isApp}}
+            }
+        };
+    })
+</script>
+{% endblock container %}
+
+{% block current_nav %}{% endblock current_nav %}

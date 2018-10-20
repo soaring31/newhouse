@@ -1,0 +1,16 @@
+
+{# 使用页面
+ * 1、新房详情页  Houses/ddongtai.html.twig
+ * 2、新房楼盘动态二级页面  Houses/ddongtai.html.twig
+ * 3、新房全网比价二级页面  Houses/dqwbj.html.twig
+#}
+<nav class="bar bar-tab lp-bar-detail">
+    <a class="tab-item external j_telCall" href="{{ core_mobile_global.tel({ value: phone|default('') }) }}">
+        <i class="iconfont icon-dianhua1"></i>
+        <span class="tab-label" style="margin-left: .25rem;vertical-align: unset;font-size: .75rem ">电话咨询</span>
+    </a>
+    {#<a class="tab-item external dtype" href="javascript:;" data-title="楼盘订阅" data-type="3">#}
+    {#<i class="ico font-f-23"></i>#}
+    {#<span class="tab-label">楼盘订阅</span>#}
+    {#</a>#}
+</nav>

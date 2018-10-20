@@ -1,0 +1,24 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 头部
+默认头部，
+传参数 htitle=标题   即可
+ #}
+{% block result %}
+{% set htitle = app.request.get('htitle') %}
+<header class="bar bar-nav {{tpl_class|default(app.request.get('tpl_class'))}}">
+    {% block header_content %}
+    {{tpl_back|default(core_mobile_global.go_back())|raw}}
+    {% if htitle|default('') %}
+    	{{core_mobile_global.title({title: htitle|default('')})}}
+    {% else %}
+	    {{tpl_title|default('')|raw}}
+    {% endif %}
+
+    {{tpl_search|default('')|raw}}
+    {{tpl_share|default('')|raw}}
+    {% endblock header_content %}
+</header>
+<div data-to-top="1" class="toTop">
+    <span class="icon icon-up"></span>
+</div>
+{% endblock result %}

@@ -1,0 +1,334 @@
+
+{% set tpl_extends = 'LhomeBundle::base.html.twig' %}
+
+{% set tpl_extends_data = {
+    'search': 'LhomeBundle:Sale:search.html.twig'
+} %}
+{% for k,v in tpl_extends_data %}
+    {% if app.request.get(k) or app.request.headers.get(k) %}
+        {% set tpl_extends = v %}
+    {% endif %}
+{% endfor %}
+{% extends tpl_extends|default('') %}
+
+{% block css %}
+{{core_global.linkcss('bundles/LhomeBundle/css/index.css')}}
+{% endblock css %}
+
+{% block title %}【{{cur_area_data|default('')}}二手房|{{cur_area_data|default('')}}二手房出售】_{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}买房交易平台{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data|default('')}}二手房,{{cur_area_data|default('')}}二手房出售,{{cur_area_data|default('')}}二手房买卖" />
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}二手房网为您提供快速全面的{{cur_area_data|default('')}}二手房信息及新发布{{cur_area_data|default('')}}二手房价格。大量优质二手房实时更新，为您创造舒适二手房购房体验。" />
+{% endblock key_des %}
+
+{% block body %}
+    {% set filter_opt = {
+        region: {
+            title: '区域',
+            src: 'db.area',
+            relate: 'cate_circle',
+            sql_opt: {
+                pid: app.session.get('area')|default(0)
+            }
+        },
+        zj: {
+            title: '售价',
+        },
+        mj: {
+            title: '面积',
+        },
+        shi: {
+            title: '室', 
+        },
+        esflx: {
+            title: '用途',
+        }
+    } %}
+
+    {% set filter_action = 'sale/list' %}
+    {% set navs = ('house.navs')|getAll({ cate_pushs: 'zdh', pid: 5,checked: 1  }).data %}   
+    <div class="header">
+        <div class="menu">
+            <div class="menuLeft">
+                <a href="{{'index/index'|U}}" class="logo"><img width="140" height="40" alt="{{ core_global.mconfig({name: 'hostname', ename: 'mwebset'}) }}" src="{{ core_global.img_url({src: core_global.mconfig({name: 'cmslogo', ename: 'mwebset'}), type: 0}) }}"/></a>
+                <ul class="typeList">
+                    <li  class="selected"> <a href="{{('sale/list')|U}}" >二手房</a></li>
+                    {% for item in navs %}
+                        <li>
+                            <a href="{{ item.url }}" target="{{ item.target|default('_self')}}">{{ item.name }}</a>
+                        </li>
+                    {% endfor %}
+                    <li>
+                        <a href="{{('sale/xlist')|U}}">学区房</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="search">
+            <div class="input" log-mod="search">
+            {{ core_global.topSearch({
+            action: tpl_topsearch_action|default('sale/list'),
+            autocomplete: tpl_topsearch_autocomplete|default(1),
+            placeholder: tpl_topsearch_placeholder|default(''),
+            other: {
+                method: 'topSearchHot',
+                opt: tpl_topsearch_hot|default(''),
+                num: tpl_topsearch_hot_num|default(5)
+                }
+             }) }}
+            </div>
+                <div class="fr tips">真实房源，品质保证！</div>
+        </div>
+
+    </div>
+    
+
+    <div class="m-filter">
+        {% include 'LhomeBundle:Common:filter.html.twig' ignore missing %}
+    </div>
+     {% set cate_data = house_global.cate_data({ 
+                    tag: 'sale',
+                    switch: {
+                        cate_circle: 1,
+                        cate_line: 1,
+                        hxs: 1
+                    },
+                    url_opt: { 
+                        usertype: app.request.get('usertype'), 
+                        cook_id: cook_id|default('')
+                    } 
+                }).__toString|json_decode %}
+{% set sort_data = {
+    def: {
+        title: '默认'
+    },
+    mj: {
+        title: '面积'
+    },
+    zj: {
+        title: '总价'
+    },
+    dj: {
+        title: '单价'
+    }
+} %}
+
+
+    
+    <div class="content">
+        <div class="leftContent">
+            <div class="orderFilter">
+                <div class="orderTag">
+                    {{ core_global.sort({
+                                action: action,
+                                data: sort_data|default('')
+                            }|merge(cate_data)) }}
+
+
+
+                  {#   <ul>
+                        <li class='selected'>
+                            <h3>
+                                <a href="{{('sale/list')|U}}">默认排序</span></a>
+                            </h3>
+                        </li>
+                        <li >
+                            <h3>
+                                <a href="{{('sale/list')|U({order: 'zj|desc'})}}">总价</a>
+                            </h3>
+                        </li>
+                        <li >
+                            <h3>
+                                <a href="{{('sale/list')|U({order: 'dj|desc'})}}">房屋单价</a>
+                            </h3>
+                        </li>
+                        <li >
+                            <h3>
+                                <a href="{{('sale/list')|U({order: 'mj|desc'})}}">面积</a>
+                            </h3>
+                        </li>
+                    </ul> #}
+                </div>
+            </div>
+            <div class="resultDes clear">
+                <h2 class="total fl">
+                    共找到
+                    <span>{{ident.list.pageCount|default('0')}}</span>
+                    套{{cur_area_data|default('')}}二手房
+                </h2>
+                <div class="button fr"></div>
+            </div>
+            <div id="newAddHouseContainer"></div>
+            <div class="listContentLine"></div>
+            <ul class="sellListContent" log-mod="list">
+                {% if ident.list.data is defined and ident.list.pageCount|default(0) != 0 %}
+                    {% for item in ident.list.data %}
+                        <li class="clear">
+                            <a class="img "href="{{('sale/detail')|U({id:item.id})}}" target="_blank">
+                                {{- core_global.img({
+                                    src: item.thumb|default(''),
+                                    alt: item.name|default(''),
+                                    type: 2,
+                                    height: 174,
+                                    width: 232
+                                }) -}}
+                            </a>
+                            <div class="info clear">
+                                <div class="title">
+                                    <a class=""  href="{{('sale/detail')|U({id:item.id})}}" target="_blank">
+                                        {{item.name|default('')|trans({})}}
+                                    </a>
+                                </div>
+                                <div class="address">
+                                    <div class="houseInfo">
+                                        <span class="houseIcon"></span>
+                                        <a  href="{{item.aid|default('') ? ('houses/detail')|U({id: item.aid|default('')}) : 'javascript:;' }}" target="_blank">
+                                            {{item.lpmc|default('')}}
+                                        </a>
+                                        {{- house_global.huxing({data: item, tpl: '&nbsp;|&nbsp;<span>%shi%%ting%%wei%</span>', default: ''}) -}}
+                                                            
+                                        {{- house_global.if_mj({value: item.mj|default(''), tpl: '&nbsp;|&nbsp;<span>'~('面积')~':%value%%danwei%</span>'}) -}}
+                                                            
+                                        {{- house_global.lptag({value: item, tpl: '&nbsp;|&nbsp;<span>%value%</span>', con: 'zxcd,cx'}) -}}
+
+                                        {{core_global.if({value: item.szlc|default(''), tpl: '&nbsp;|&nbsp;<span>%value%/' ~ item.zlc|default('') ~('层')~'</span>'})}}
+                                    </div>
+                                </div>
+                                <div class="flood">
+                                    <div class="positionInfo">
+                                        <span class="positionIcon"></span>
+                                        {{item.address|default('')}}
+                                    </div>
+                                </div>
+                                <div class="followInfo">
+                                    <span class="starIcon"></span>
+                                    {{core_global.count({models: 'collects', sql_opt: {checked: 1, models: 'sale', aid: item.id} })}}人关注 / {{item.update_time|default('')|date('Y-m-d')}}发布
+                                </div>
+                                <div class="tag">
+                                    <span class="subway">{{ core_global.formData({value: item.esflx|default('')}) }}</span>
+                                    <span class="taxfree">{{ core_global.formData({value: item.fl|default('')}) }}</span>
+                                </div>
+                                <div class="priceInfo">
+                                    <div class="totalPrice">
+                                        <span>{{house_global.if_wy({value: item.zj|default('')})}}</span>
+                                    </div>
+                                    <div class="unitPrice">
+                                        <span>
+                                            单价&nbsp;:&nbsp;{{house_global.if_dj({value: item.dj|default('')})}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            {# <div class="listButtonContainer">
+                                <div class="btn-follow followBtn" data-hid="101101983289">
+                                    <span class="follow-text">关注</span>
+                                </div>
+                                <div class="compareBtn LOGCLICK" data-hid="101101983289" log-mod="101101983289" data-log_evtid="10230">加入对比</div>
+                            </div> #}
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+            <div class="contentBottom clear" >
+                <div class="crumbs fl">
+                    <a href="/">{{cur_area_data|default('')}}</a>
+                    <span >&nbsp;&gt;&nbsp;</span>
+                    <h1>
+                        <a href="{{('sale/index')|U()}}">{{cur_area_data|default('')}}二手房</a>
+                    </h1>
+                </div>
+                <div class="page-box fr">
+                    {{core_global.page(ident.list)}}
+                </div>
+            </div>
+        </div>
+        <!-- 右侧sidebar -->
+        <div class="rightLayout">
+            <div class="rightContent">
+                <div class="map">
+                    <div class="pic"></div>
+                    <a href="{{('map/sale')|U()}}" target="_blank">
+                        <button id="btn-map">试试地图找房</button>
+                    </a>
+                </div>
+
+                <div class="wenda SCROLLVIEWLOG" id="pushWendaContainer" log-mod="recommand_wenda" style="display: block;">
+                    <div class="title">热门问答</div>
+                    {% set hot_aks = ('house.ask')|getAll({pageSize: 5, checked: 1,orderBy: 'desc', order: 'clicks'}) %}
+                    <ul>
+                        {% if hot_aks.data is defined and hot_aks.pageCount|default(0) != 0 %}
+                            {% for item in hot_aks.data %}
+                                <li>
+                                    <a class="info" href="{{('ask/detail')|U({id:item.id})}}"  target="_blank" data-bl="list" data-log_index="5">{{item.content|default('')}}</a>
+                                    <span class="answer_count">{{item.asknum|default('')}}个回答 /</span>
+                                    <span class="time">{{item.create_time|default('')|date('Y-m-d')}}</span>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+                {# <div class="download">
+                    <div class="title">下载APP</div>
+                    <div class="qr-code">
+                        {{- core_global.img({
+                            src: 'bundles/LhomeBundle/picture/fd355c2080ff4f2dbec90115302ddbf4.gif',
+                            width: 94,
+                            height: 94,
+                            type: 2
+                        }) -}}
+                        <div class="text">
+                            <p>扫描上方二维码</p>
+                            <p>随时查看新房源</p>
+                            <p class="get-more">
+                                <a href="{{('download/index')|U()}}">
+                                    了解更多
+                                    {{- core_global.img({
+                                        src: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAGFBMVEUAAACcn6Gfn5+an5+bnqCbnqGfn5+cn6EV6DbuAAAAB3RSTlMA0BAw8LAgvf5k9AAAAEdJREFUKM9jIBOkBqMJhBcqoAmUC6EKmJSjKWEWR1eiiK6ECZsSA3QlzuhKSihRghDA0EJ/BWIoCgzh4YMIZALRYBrMQAkAAF5bGMBkrwzqAAAAAElFTkSuQmCC",
+                                        width: 9,
+                                        height: 9,
+                                        type: 2
+                                    }) -}}
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div> #}
+            </div>
+        </div>
+        <div style="clear:both"></div>
+    </div>
+    {# 推荐二手房 #}
+    {% set list_aside = ('house.sale')|getAll({pageSize: 5,orderBy: 'desc',checked: 1}) %}
+    {% if list_aside.data is defined and list_aside.pageCount|default(0) != 0 %}
+        <div id="newHousePush" class="newHousePush">
+            <div class="newHousePushContainer">
+                <h3>推荐二手房</h3>
+                <ul>
+                    {% for item in list_aside.data %}
+                        <li>
+                            <a class="pic LOGCLICK" href="{{('sale/detail')|U({id:item.id})}}" target="_blank">
+                                <span class="bg"></span>
+                                {{- core_global.img({
+                                    src: item.thumb|default(''),
+                                    alt: item.name|default(''),
+                                    width: 218,
+                                    height: 150,
+                                    type: 2
+                                }) -}}
+                                <div class="description">{{item.lpmc|default('')}}</div>
+                            </a>
+                            <p class="area">
+                                {{- house_global.huxing({data: item, tpl: '<span>%shi%%ting%</span>', default: ''}) -}}
+                                &nbsp;-&nbsp;
+                                {{- house_global.if_mj({value: item.mj|default(''), tpl:'<span>%value%</span>%danwei%'}) -}}
+                            </p>
+                            <div class="price"> <i>{{house_global.if_wy({value: item.zj|default('')})}}</i>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+{% endblock body %}

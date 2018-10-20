@@ -1,0 +1,27 @@
+info:
+    tableName: wxusers
+    subTableName: ''
+    aliasName: p
+    listGrid:
+        - 'id:序号|txtcenter w60'
+        - 'type[WXUSERTYPE]:类型|txtleft w80'
+        - 'name:公众号名称|txtleft w120'
+        - 'appid:微信Appid|txtleft w150'
+        - 'wxaccount[WXQRCODE]:二维码|txtleft w60'
+        - 'token[WXTOKEN]:token|txtleft w120'
+        - 'id[WXCALLBAK]:callback|txtleft w200'
+        - 'id:操作|txtcenter:[EDIT]配置|btn,[LOCATION]管理|btn|weixin/main/index|_wxid,[JUMP]菜单|btn|weixinmanage/weixinmenu,[DELETE]删除|btn'
+    listDesc: 公众号
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    order: ''
+    orderBy: asc
+    searchFun: EXISTS
+    dataModel: 0
+    alias: {  }
+    query:
+        uid:
+            eq: '<id>'
+    query1: {  }

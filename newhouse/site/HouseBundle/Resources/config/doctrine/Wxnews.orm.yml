@@ -1,0 +1,161 @@
+HouseBundle\Entity\Wxnews:
+    type: entity
+    table: wxnews
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        title:
+            options:
+                comment: 标题
+                unsigned: false
+            nullable: false
+            type: string
+            length: 64
+        thumb_media_id:
+            options:
+                comment: 缩略图media_id
+                unsigned: false
+            nullable: false
+            type: string
+            length: 128
+        author:
+            options:
+                comment: 作者
+                unsigned: false
+            nullable: false
+            type: string
+            length: 64
+        digest:
+            options:
+                comment: 摘要
+                unsigned: false
+            nullable: false
+            type: string
+            length: 255
+        show_cover_pic:
+            options:
+                comment: 是否显示封面
+                unsigned: false
+                default: '1'
+            nullable: false
+            default: '1'
+            type: boolean
+            length: 1
+        content:
+            options:
+                comment: 内容
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        content_source_url:
+            options:
+                comment: 原文地址
+                unsigned: false
+            nullable: false
+            type: string
+            length: 200
+        media_id:
+            options:
+                comment: mediaid
+                unsigned: false
+            nullable: false
+            type: string
+            length: 200
+        token:
+            options:
+                comment: 微信token
+                unsigned: false
+            nullable: false
+            type: string
+            length: 200
+        is_sync:
+            options:
+                comment: 归零
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+        manyindex:
+            options:
+                comment: 多图文位置
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        url:
+            options:
+                comment: 图文页的链接
+                unsigned: false
+            nullable: false
+            type: string
+            length: 200
+        authtest:
+            options:
+                comment: 测试模型id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        checked:
+            options:
+                comment: 是否审核
+                unsigned: false
+            nullable: false
+            type: boolean
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

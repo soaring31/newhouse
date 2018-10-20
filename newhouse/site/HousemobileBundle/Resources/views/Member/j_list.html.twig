@@ -1,0 +1,39 @@
+{% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:jjr_list.html.twig' : 'HousemobileBundle::list_layout.html.twig' %}
+
+{% block title %}
+    经纪人列表
+{% endblock title %}
+
+{% block header_title %}
+{{core_mobile_global.title({title: '经纪人'})}}
+{% endblock header_title %}
+
+{% block header_right %}
+{{ core_mobile_global.bar_nav_btn({
+    title: '搜索',
+    icon: 'font-f-8',
+    popup: {
+        title: '经纪人搜索',
+        popup: '.popup-search',
+    }
+}) }}
+{% endblock header_right %}
+
+{% block container %}
+    {# 检索 #}
+    {% set list_header %}
+    <div class="filter" data-block="{
+        ajax: {
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                tpl: 'Common:filter',
+                tag: 'region'
+            }
+        }
+    }"></div>
+    {% endset %}
+
+    {# 列表链接 js调用列表需要 #}
+    {% set list_url = ('member/j_list')|U({ajax: 1}) %}
+    {{ parent() }}
+{% endblock container %}

@@ -1,0 +1,28 @@
+{% set _action = app.request.get('action') %}
+<section class="main-left" data-target=".main-through">
+    <div data-level="top" class="level1" data-trigger-next="{{ app.request.get('triggerNext')|default(0) }}">
+        {# {{ dump(ident.info) }} #}
+        {% if ident.info.data is defined %}
+        {% for item1 in ident.info.data %}
+        {# 1级 #}
+        <a data-level="1" data-sider-category="{{item1.menu.ename}}" class="on {% if item1.nodes %}has-child{% endif %}" href="{{ (item1.menu.cate_action?:_action)|U({(item1.menu.ename): item1.menu.id}) }}" data-role="jump">{{item1.menu.name}}</a>
+        {% if item1.nodes is defined %}
+        <div data-level="next" class="level2 {% if loop.index == 1 %}on{% endif %}">
+        {% for item2 in item1.nodes %}
+        {# 2级 #}
+        <a data-level="1" class="{% if item2.nodes %}has-child{% endif %}" href="{{ (item2.menu.cate_action?:_action)|U({(item2.menu.ename): item2.menu.id}) }}" data-role="jump">{{item2.menu.name}}</a>
+        <div data-level="next" class="level3">
+            {% if item2.nodes is defined %}
+            {% for item3 in item2.nodes %}
+            {# 3级 #}
+            <a data-level="1" href="{{ (item3.menu.cate_action?:_action)|U({(item3.menu.ename): item3.menu.id}) }}" data-role="jump">{{item3.menu.name}}</a>
+            {% endfor %}
+            {% endif %}
+        </div>
+        {% endfor %}
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+    </div>
+</section>

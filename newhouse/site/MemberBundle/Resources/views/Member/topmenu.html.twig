@@ -1,0 +1,41 @@
+<header class="header">
+    <a class="logo" href="{{('main')|U}}">logo</a>
+    <menu id="topmenu">
+        <section class="menu-1" data-target='#cleft-id' >
+            <a class="item" data-target="#rleft" data-role="route" data-route="#/topmenu/mindex" href="{{('main/mindex')|U}}">
+                <i class="font-ico-ind"></i>
+                管理首页
+            </a>
+            {# {{dump(menus)}} #}
+        {% if menus is defined %}
+            {% for item in menus %}
+        	<a class="item" data-role="route" data-route="#/topmenu/{{ item.menu.ename }}" href="{{('manage/leftmenu')|U('menuId=' ~ item.menu.id|default(0)|tripodEncode)}}">
+                <i class="font-ico-{{ item.menu.remark }}"></i>
+                {{ item.menu.name }}
+            </a>
+            {% endfor %}
+        {% endif %}
+        </section>
+        <section class="menu-2">
+            <a class="item" target="_blank" href="{{'manage/main/'|U}}">
+                <i class="ico font-ico-7"></i>
+                核心管理
+            </a>
+            <a class="item" target="_blank" href="{{'house/index/'|U}}">
+                <i class="ico font-ico-5"></i>
+                整站首页
+            </a>
+            <div class="drop item item1">
+                <i class="arrow font-ico-arrow-down"></i>
+                <i class="ico font-ico-man2"></i>
+                {{app.user.username|default('')}}<br/>
+                {{rolename|default('游客')}}
+                <div class="drop-list">
+                    <a href="###"><i class="font-ico-13"></i>我的积分</a>
+                    <a href="{{ ('manage/password'|U) }}" data-target="#rleft" data-role="route" data-route="#/topmenu/password"><i class="font-ico-edit"></i>修改密码</a>
+                    <a href="{{ path('auto_logout') }}"><i class="font-ico-exit"></i>退出管理</a>
+                </div>
+            </div>
+        </section>
+    </menu>
+</header>

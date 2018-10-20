@@ -1,0 +1,16 @@
+
+{% if menus is defined %}
+<div data-level="top" data-trigger-next="1" data-size="1" data-target='#rleft' class="level1">
+	{% for item in menus %}
+		{% if item.nodes is defined %}
+		<h4 data-level="1">{{item.menu.name}}</h4>
+		<div data-level="next" class="level2">
+		{% for vo in item.nodes %}
+		{% set url = (vo.menu.bundle~'/'~vo.menu.controller~'/'~vo.menu.action)|U({ models: vo.menu.models?: null }) %}
+			<a data-role="route" data-level="1" href="{{ url }}" data-route="#/leftmenu/{{ vo.menu.ename }}">{{vo.menu.name}}</a>
+		{% endfor %}
+		</div>
+		{% endif %}
+	{% endfor %}
+</div>
+{% endif %}

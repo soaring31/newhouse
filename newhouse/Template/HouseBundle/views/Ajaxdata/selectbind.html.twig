@@ -1,0 +1,19 @@
+{% extends 'CoreBundle::base_ajax.html.twig' %}
+{% set name = app.request.get("name")|default('') %}
+
+{% set data = ('house.category')|getAll({models:name,pid:0}) %}
+
+{% block result %}
+{% if data.data is defined %}
+[
+	{% for item in data.data %}
+		{% if loop.index != 1 %},{% endif %}
+	    {
+			"id" :"{{item.id|default('')}}",
+			"name": "{{item.name|default('')}}"
+		}
+	{% endfor %}
+]
+
+{% endif %}
+{% endblock %}

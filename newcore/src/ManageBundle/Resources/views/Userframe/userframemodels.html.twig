@@ -1,0 +1,46 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+
+{% block tableMain %}
+<a class="tableDesc">
+             模型列表<input type="button" id="btnfun_show" data="{{ (action~'/show')|U }}" class="search-btn" value="新增模型" />
+</a>
+<table class="right-table">
+	<tbody>
+		<tr>
+		    <th class="w30"></th>
+			<th class="w150 txtleft">模型名称</th>
+			<th class="w150 txtleft">表名</th>
+			<th class="w80 txtleft">审核方式</th>
+			<th class="txtleft">备注</th>
+			<th class="w150">操作</th>
+		</tr>
+		{% if info.data is defined %}
+		{% for key,vo in info.data %}
+		<tr>
+		    <td></td>
+			<td>{{ vo.name|default('') }}</td>
+			<td>user_{{ vo.id }}</td>
+			<td>
+			    {% if vo.autocheck == 0 %}手动审核
+			    {% elseif vo.autocheck ==1 %}自动审核
+			    {% else %} Email激活 {% endif %}
+			</td>
+			<td>{{ vo.content|default('') }}</td>
+			<td class="txtcenter">
+				<input type="button" id="btnfun_edit_{{action}}" data="{{ (action~'/show')|U('id='~vo.id) }}" class="search-btn" value="修改" />&nbsp;&nbsp;
+				<input type="button" id="btnfun_delete_{{action}}" data="{{ (action~'/delete')|U('id='~vo.id) }}" class="search-btn" value="删除" />
+			</td>
+		</tr>
+		{% endfor %}
+		{% endif %}
+	</tbody>
+</table>
+{% endblock %}
+{% block submit %}{% endblock %}
+{% if info is defined %}
+{% block pageIndex %}{{ info.pageIndex|default(1) }}{% endblock %}
+{% block pageCount %}{{ info.pageCount|default(1) }}{% endblock %}
+{% endif %}
+{% block promptUl %}
+	<li></li>
+{% endblock %}

@@ -1,0 +1,28 @@
+manage_index:
+    path: /
+    defaults:
+        _controller: 'ManageBundle:Index:index'
+manage_check:
+    path: /check
+    defaults:
+        _controller: 'ManageBundle:Index:check'
+manage_login:
+    path: /login
+    defaults:
+        _controller: 'ManageBundle:Index:login'
+manage_logincheck:
+    path: /logincheck
+    defaults:
+        _controller: 'ManageBundle:Index:logincheck'
+manage_captcha:
+    path: /captcha
+    defaults:
+        _controller: 'ManageBundle:Index:captcha'
+manage_logout:
+    path: /logout
+    defaults:
+        _controller: 'ManageBundle:Index:logout'
+manage_main:
+    path: /main
+    defaults:
+        _controller: 'ManageBundle:Main:index'

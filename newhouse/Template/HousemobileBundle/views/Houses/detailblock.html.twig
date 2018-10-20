@@ -1,0 +1,1048 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+ * detail: 当前数据
+ * block_lphdp: 当前数据幻灯片
+ * block_lpdt: 当前数据最新动态
+ * block_huxing: 当前数据户型
+ * block_xiangce: 当前数据相册
+ * block_tuangou: 当前数据团购
+ * detail_topic_arc: 当前数据看房团关联
+ * detail_topic: 当前数据看房团
+ * detail_prices: 当前数据价格
+ * sort_prices_houses: 相同价格推荐(新房) 单价+-1000元/平米
+ * sort_area_houses: 同区域新房推荐
+ * sort_clicks_houses: 点击率排行推荐(新房)
+#}
+
+{% set detail = detail|default(cident.detail.data[0]|default('')) %}
+
+{% set block_lphdp = ('house.inter_album')|getAll({cate_pushs: 'xiangce', pageSize: 10, checked: 1, findType: 1,aid:detail.id|default('')}) %}
+
+{% set block_lpdt = ('house.houses_arc')|getBlock({ename: 'lpdt'}, { pageSize: 3, checked: 1, aid: detail.id|default(''), findType: 1}) %}
+
+
+{% set block_xiangce = ('house.inter_album')|getAll({pageSize: 5, checked: 1, findType: 1,aid:detail.id|default('')}) %}
+
+{% set block_tuangou = ('house.groupbuy')|getAll({checked: 1, aid: detail.id|default(''), pageSize: 1, orderBy: 'desc', order: 'id'}) %}
+
+{% set detail_topic_arc = ('house.topic_arc')|getBlock({ename: 'loupan'}, {pageSize: 1, checked: 1, findType: 1, fromid: detail.id|default('')}) %}
+{% set detail_topic = ('house.topic')|getRow({id: detail_topic_arc.data[0].aid|default(''), checked: 1}) %}
+
+
+{% set sort_prices_houses = ('house.houses')|getAll({checked: 1, dj: 'between|' ~ (detail.dj|default('') - 1000) ~ '|' ~ (detail.dj|default('') + 1000) ~ '', pageSize: 10, type: detail.type|default('')}) %}
+
+{% set sort_area_houses = ('house.houses')|getAll({checked: 1, region: detail.region|default(''), pageSize: 10, type: detail.type|default('')}) %}
+
+{% set sort_clicks_houses = ('house.houses')|getAll({checked: 1, orderBy: 'clicks|desc', pageSize: 10, type: 0}) %}
+
+{% set catyarea_name = ('db.area')|getRow({id: detail.region,checked:1}) %}
+{% set catyarea2_name = ('house.cate_circle')|getRow({id: detail.cate_circle,checked:1}) %}
+
+{#最新活动  ,enddate:'gt|'~now~''#}
+{% set now = "now"|date("Y-m-d")%}
+{% set block_promotion = ('house.promotion')|getAll({checked: 1, aid: detail.id|default(''),enddate:'gte|'~now~'',pageSize:4, orderBy: 'desc', order: 'id'}) %}
+{% set block_promotion_first = block_promotion.data|first %}
+
+{#动态资讯#}
+{% set dtzx_data = ('house.houses_arc')|getBlock({ename: 'lpdt'}, { pageSize: 4, checked: 1, aid: detail.id|default(''), findType: 1}) %}
+
+{#楼盘动态数据#}
+{% set lpdt_data = ('house.loupandongtai')|getAll({aid:detail.id,pageSize:100,pageIndex:1,order:'create_time|desc'}) %}
+
+{#户型分析#}
+{% set block_huxing = ('house.door')|getAll({pageSize: 5, checked: 1, findType: 1,aid:detail.id|default('')}) %}
+
+{#全网点评#}
+{% set qwdp_data = ('house.inter_housescomment')|getAll({aid:detail.id,pageSize:20,pageIndex:1,order:'create_time|desc'}) %}
+
+{#置业顾问#}
+{% set zygw_data = ("house.inter_adviser")|getAll({aid:detail.id,pageSize:5}) %}
+
+{#走势图数据#}
+{% set detail_prices = ('house.houses_price')|getAll({type: detail.type|default(''), aid: detail.id|default(''), checked: 1, orderBy: 'desc', order: 'jtime',  pageSize: 10}) %}
+
+{#猜你喜欢 暂时不用 走传漾后台#}
+{#{% set cnxh_data = ('tuijian_list_cnxh')|getPush('5') %}#}
+
+{% block result %}
+    {#------------头部-------------#}
+    <div class="nav_list mui-flex">
+        <a class="cell" href="{{ ('houses/ddetail')|UU({id: detail.id|default('')}) }}">详情</a>
+        {#<a class="cell" href="{{ ('houses/dprices')|UU({id: detail.id|default('')}) }}">比价</a>#}
+        <a class="cell" href="{{ ('houses/ddongtai')|UU({id: detail.id|default('')}) }}">动态</a>
+        <a class="cell" href="{{ ('houses/dphotos')|U({id: detail.id|default('javascript:;')}) }}">相册</a>
+        <a class="cell" href="{{ ('houses/dcomment')|UU({id: detail.id|default('')}) }}">点评</a>
+        <a class="cell" href="{{ ('houses/dplanintro')|UU({id: detail.id|default('')}) }}">户型</a>
+    </div>
+
+    <div class="content" style="background: inherit;padding-bottom: 2.5rem ">
+        {% set all1=
+            house_global.countxc({
+            aid:detail.id|default(''),
+            tpl:'%name%(%number%),'})
+        %}
+        {% set all_ol=all1|split(',') %}
+        {% set img=(('house.inter_album')|getRow({checked:1,cate_album:1,aid:detail.id|default('')}))|default %}
+        <!-- 幻灯片 -->
+        {#{{ core_mobile_global.swiper2({value: block_lphdp.data|default(''), url:('houses/dphotos')|UU({id: detail.id|default('')}),id: 'detailSwiper', models: 'houses', aid: detail.id }) }}#}
+        {% set _code = 'now'|date('U') %}
+        {% set swiper_value= block_lphdp.data.data|default(block_lphdp.data) %}
+        <div data-swiper-{{ _code }}="1" class="swiper-container {{opt.class|default('')}}" id="detailSwiper"
+             data-autoplay="5000" data-pagination=".swiper-hdp"
+             data-lazyloading="true" data-lazy-loading-in-prev-next='true' {{opt.otherdata|default('')|raw}}>
+            <div class="swiper-wrapper" style="height: 100%;">
+                {% set i=0 %}
+                {% for item in 1..9 %}
+                    {% set img=(('house.inter_album')|getRow({checked:1,cate_album:item,aid:detail.id|default('')})).thumb|default %}
+                    {% set time=(('house.inter_album')|getRow({checked:1,cate_album:item,aid:detail.id|default('')})).update_time|default %}
+                    {% if img %}
+                        <div class="swiper-slide house-ad">
+                            {% if 'http' in img %}
+                                {% set img_url = img %}
+                            {% else %}
+                                {% set img_url = "/"~img %}
+                            {% endif %}
+                            <a href="{{ ('houses/dphotos')|U({id: detail.id|default('javascript:;')}) }}" class="banner_h5"
+                               style="background:url({{ img_url }}) center center no-repeat;background-size:cover;">
+                                <i class="num_">{{ all_ol[i] }}</i>
+                                <span>更新于{{ time|date('Y年m月d日') }}</span>
+                            </a>
+                        </div>
+                        {% set i=i+1 %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% if opt.page|default!= 'no' %}
+                <div class="swiper-pagination swiper-hdp"></div>
+            {% endif %}
+        </div>
+        <script type="text/javascript">
+            // 重新启用swiper
+            seajs.use(['sm'], function(sm) {
+                $('[data-swiper-{{ _code }}="1"]').swiper();
+            })
+        </script>
+
+
+        {#基础信息#}
+        <div class="loupanInformation section-padding">
+            <!-- 楼盘信息 -->
+            <div class="padding04">
+                <div class="pad_04">
+                    <h1>{{ detail.name }}</h1>
+                    {% if detail.alias_name|default %}
+                    <p class="alias">
+                        别名： {{ detail.alias_name|default('暂无') }}
+                    </p>
+                    {% endif %}
+                    <div class="state">
+                        {% if detail.cate_status %}
+                            <p class="frist-tag {{ 'on-sale-'~detail.cate_status|default('') }}" >{{ ('house.category')|getOne('name', {id: detail.cate_status|default('')}) }}</p>
+                        {% endif %}
+
+                        <p class="span_">{{house_global.lptag({value: detail, tpl: '<span>%value%</span>', con: 'cate_type,zxcd,tslp'})}}</p>
+                    </div>
+                    <p class="prices">
+                        <b>{{ detail.dj=='0' or  detail.dj=='0.0' or  detail.dj==''?'待定': detail.dj|default('待定') }}
+                            {{ detail.dj=='' or detail.dj==0 or detail.dj=='0.0'?"":'万' in detail.dj ? '万/套': '元/平' }}
+                        </b>
+                        <span class="sore">最终以开发商报价为准</span></p>
+                </div>
+                <ul class="colume-li">
+                    <li>
+                        <p class="p1">地址：</p>
+                        <p class="p2">
+                            {% if detail.region or detail.cate_circle %}
+                                {% if catyarea_name.name or catyarea_name2.name %}
+                                [
+                                {% endif %}
+                                {{ catyarea_name.name|default('')  }}
+                                {% if catyarea_name.name or catyarea_name2.name %}
+                                        -
+                                {% endif %}
+                                {{ catyarea2_name.name|default('')  }}
+                                {% if catyarea_name.name or catyarea_name2.name %}
+                                    ]
+                                {% endif %}
+                            {% endif %}
+                            {{ detail.address|default('') }}</p>
+                    </li>
+                    <li>
+                        <p class="p1">开盘：</p>
+                        <p class="p2">
+                            {% set kptime =  detail.kpdate.date|split(' ') %}
+                            {% if kptime[0] == "1970-01-01" %}待定{% else %}{{ kptime[0] }}{% endif %}
+                        </p>
+                    </li>
+                </ul>
+            </div>
+            <a class="go-btn sc-lpxq" href="{{ ('houses/ddetail')|UU({id: detail.id|default('')}) }}">更多楼盘信息</a>
+
+            <div class="tongzhi">
+                {#<a href="javascript:;" class="button1 button1-green external open-popup dtype" data-popup=".popup-yxiang"#}
+                   {#data-title="降价通知" data-type="3" data-yid="1"><span class="iconfont icon-qushi"></span>降价通知</a>#}
+                {#<a href="javascript:;" class="button1 external open-popup dtype" data-popup=".popup-yxiang"#}
+                   {#data-title="开盘通知" data-type="3" data-yid="3"><span class="iconfont icon-duanxin"></span>开盘通知</a>#}
+                <a href="javascript:;" class="button1 button1-green external dtype element_content"
+                   data-title="降价通知" data-type="3" data-yid="1"><span class="iconfont icon-qushi"></span>降价通知</a>
+                <a href="javascript:;" class="button1 external dtype element_content"
+                   data-title="开盘通知" data-type="3" data-yid="3"><span class="kp"></span>开盘通知</a>
+            </div>
+        </div>
+
+        {#电话号#}
+        <div class="newhouse-tel">
+            <p class="tel-num">
+                {% if detail.web_tel %}
+                    <b>
+                        {{ detail.web_tel|replace(',','')|slice(0,3)~' -'|default('') }}
+
+                        {{ detail.web_tel|replace(',','')|slice(3,3)~' -'|default('') }}
+
+                        {{ detail.web_tel|replace(',','')|slice(6)|default('') }}
+                    </b>
+                {% elseif detail.tel %}
+                    <b>
+                        {{ detail.tel|replace(',','')|slice(0,3)~' -'|default('') }}
+
+                        {{ detail.tel|replace(',','')|slice(3,3)~' -'|default('') }}
+
+                        {{ detail.tel|replace(',','')|slice(6)|default('') }}
+                    </b>
+                {% else %}
+                    <b></b>
+                {% endif %}
+            </p>
+            <div class="tel-info">最新开盘、户型及优惠信息，免费致售楼处</div>
+
+            {% set phone = detail.web_tel?detail.web_tel:detail.tel %}
+
+            <a href="tel:{{ phone }}" class="tel-btn tel-btn iconfont icon-dianhua1 j_telCall">
+                {#<span class="iconfont con-dianhua1"></span>#}
+            </a>
+
+        </div>
+
+        <a class="all_content" href="http://m.zhuge.com/Wap/Index/downloadAppPage?appPageForm=cms新房">
+            <div class="download_">
+                <i class="zhuge"></i>
+                <i class="zhuge_text">下载诸葛找房APP 新开楼盘早知道</i>
+                <i class="zhuger"></i>
+            </div>
+        </a>
+
+        {#最新活动#}
+        {% if block_promotion.data %}
+        {#最新活动#}
+        <div class="all_content">
+            <div class="build_top">
+                <i class="b_l">最新活动</i>
+                {#<a class="more_more">共11家平台销售</a>#}
+            </div>
+            <div class="network_block scroll" style="overflow:auto;padding:0;">
+                {% set len = block_promotion.data|length %}
+                <div class="new_most" style="width:calc(({{ len }}*16.5rem) + ({{ len+1 }}*0.75rem))">
+                    {% for item in block_promotion.data %}
+                        <div class="new_most_block">
+                            <a class="most_img" style="background:url('{{'/'~ item.thumb }}') center center no-repeat;background-size:cover;"><i class="most_tag">{{ item.name }}</i></a>
+                            <div class="most_right">
+                                <p class="line2 most_title">{{ item.description }}</p>
+                                <p class="most_text line">{{ item.subname }}</p>
+                                <p class="most_bottom">
+                                    <span class="most_span"><i class="most_num">{{ item.hdnum }}</i>人已报名</span>
+                                    <a class="element_content most_now dtype" data-type="1" data-title="活动报名" data-vid="{{ item.id }}">立即报名</a>
+                                </p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+
+        {#动态资讯#}
+        {% if dtzx_data and dtzx_data.data|length>0 %}
+        <div class="all_content">
+            <div class="build_top">
+                <i class="b_l">动态资讯</i>
+                <a class="more_more" href="{{ ('houses/dnews')|UU({id: detail.id|default('')}) }}">查看全部</a>
+            </div>
+            {% for key,item in dtzx_data.data %}
+                {% if key<2 %}
+                <a href="{{ item.url }}" style="width:100%;">
+                    <div class="network_block" {% if key==dtzx_data.data|length-1%}style="border: none"{% endif %}>
+                        <div class="evaluation_img">
+                            {{- core_global.img({
+                                src: item.thumb|default(''),
+                                alt: item.name|default(''),
+                                type: 2,
+                            }) -}}
+                        </div>
+                        <div class="evaluate_right">
+                            <p class="eva_title line">{{ item.name }}</p>
+                            <div class="eva_content line2">{{ item.content | raw }}</div>
+                        </div>
+                    </div>
+                </a>
+                {% endif %}
+
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {#楼盘动态#}
+        {% if lpdt_data and lpdt_data.data|length>0 %}
+            <div class="all_content" style="padding-bottom:0.4rem;">
+                <div class="build_top">
+                    <i class="b_l">楼盘动态</i>
+                    <a href="{{ ('houses/ddongtai')|UU({id: detail.id|default('')}) }}" class="more_more">查看全部</a>
+                </div>
+                <div class="details-min-box p-t-33 clearfix h-no m-0">
+                    {% for item in lpdt_data.data %}
+                        {% if loop.index<4 %}
+                        <div class="details-time-item-box">
+                        <span class="details-time-left-box">
+                           {{ item.update_time|date('m/d') }}
+                        </span>
+                            <span class="details-time-right-box">
+                             <p class="first-p line2">{{ item.name }}</p>
+                             <p class="first_content line2">&emsp;&emsp;{{ item.content }}</p>
+                        </span>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <a href="{{ ('houses/ddongtai')|UU({id: detail.id|default('')}) }}" class="build_more" style="color:#FF8400;background:#fff;font-size:0.6rem;">查看更多详情 ></a>
+            </div>
+        {% endif %}
+
+        {#楼盘户型#}
+        {% set all_door=('house.door')|getAll({checked:1,aid:detail.id|default(''),findType:1,groupBy:'shi',order:'shi',orderBy:'asc'}).data %}
+        {% if all_door %}
+        <div class="new-rec-house">
+            <div class="medi-head-box border-bottom-E7">
+                <i class="b_l">户型分析</i>
+                <a class="more_more" href="{{ ('houses/dplanintro')|UU({id: detail.id|default('')}) }}">
+                    查看全部户型
+                </a>
+            </div>
+            <div class="rec-house">
+                <div>
+                    <ul class="houseRecommend">
+                        {% for item in all_door %}
+                            <li>
+                                {% set status = core_global.formData({value: item.cate_status|default('') }) %}
+                                <p class="label {% if status=='在售' %}onsell{% elseif status=='待售' %}willsell{% else %}sellout{% endif %}">
+                                    {{ core_global.formData({value: item.cate_status|default('') }) }}
+                                </p>
+                                <a href="{{ ('door/detail')|U({id: item.id|default('')}) }}">
+                                    <div style="background:url({{ asset(item.thumb) }}) center center no-repeat;background-size: cover;">
+                                    </div>
+                                    <p>
+                                        {{ ('house.category')|getOne('name', {id:item.shi})~ ('house.category')|getOne('name', {id:item.ting}) }}
+                                        {{ item.mj }}㎡
+                                    </p>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {#楼栋信息#}
+        <div class="all_content" style="display: none">
+            <div class="build_top"><i class="b_l">楼栋信息</i></div>
+            <div class="build_body">
+                <a class="build_img"></a>
+                <a class="build_more">查看更多详情</a>
+            </div>
+        </div>
+
+        {#全网点评#}
+        {% if qwdp_data and qwdp_data.data|length>0 %}
+        <div class="all_content" style="padding-bottom:0.4rem;">
+            <div class="build_top">
+                <i class="b_l">全网点评</i>
+                <a class="more_more" href="{{ ('houses/dcomment')|UU({id: detail.id|default('')}) }}">查看全部</a>
+            </div>
+            {% for key,item in qwdp_data.data %}
+                <div class="network_block j_qwdpCon" {% if key>1 %}style="display: none" {% endif %}>
+                    <p class="network_top">用户*****<i class="network_time">{{ item.comment_source }} {{ item.create_time|date('Y-m-d') }}</i></p>
+                    <div class="network_body">
+                        {{ item.content }}
+                        {% if item.comment_source and item.source %}
+                            <a class="network_more viewSource" channel="{{ item.comment_source }}" data="{{ item.source }}">( 查看来源 )</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+            {% if qwdp_data.data|length>2 %}
+            <a class="build_more j_qwdp" style="background:#fff;color:#FF8400;font-size:0.6rem;" href="{{ ('houses/dcomment')|UU({id: detail.id|default('')}) }}">查看更多详情 > </a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {#楼盘测评#}
+       {# <div class="all_content">
+            <div class="build_top">
+                <i class="b_l">楼盘测评</i>
+                <a class="more_more">查看全部</a>
+            </div>
+            <div class="network_block">
+                <div class="evaluation_img"></div>
+                <div class="evaluate_right">
+                    <p class="eva_title line">长安畔永定源重视薄板中海寰宇项目长安畔永定源重视薄板中海寰宇项目</p>
+                    <p class="eva_content line2">中海寰宇天下地处石景山永定河绿色生态发展带，项目占地1.37平方公里，出行便利中海寰宇天下地处石景山永定河绿色生态发展带，项目占地1.37平方公里，出行便利</p>
+                </div>
+            </div>
+        </div>#}
+
+        {#新房顾问#}
+        {% if zygw_data and zygw_data.data|length>0 %}
+        <div class="all_content">
+            <div class="build_top">
+                <i class="b_l">新房顾问</i>
+                <a href="{{ ('houses/dxfgw')|U({id: detail.id|default('javascript:;')}) }}" class="more_more">查看全部{{ zygw_data.data|length }}名顾问</a>
+            </div>
+            {% for item in zygw_data.data %}
+                <div class="network_block" style="padding-right:0;">
+                    <div class="new_house_left" {% if item.thumb %}style="background:url({{ '/'~item.thumb }})"{% endif %}>{% if item.thumb is empty %}<i class="iconfont icon-xiaoqu"></i>{% endif %}</div>
+                    <div class="new_house_center">
+                        <p class="new_title">{{ item.name }}</p>
+                        <p class="new_type">{% if item.channel %}{{ item.channel }}-新房顾问{% else %}{{ '新房顾问' }}{% endif %}</p>
+                    </div>
+                    <a href="tel:{{ item.tel }}">
+                        <div class="new_house_right">
+                            <i class="iconfont icon-dianhua2 dianhua"></i>
+                            <i class="dianhua_text">电话</i>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {#map#}
+        {% set data = detail|default({}) %}
+        {% set lng = data.lng %}
+        {% set lat = data.lat %}
+        {% if lng and lat %}
+        <div class="newHouse-map">
+            <div class="medi-head-box border-bottom-E7">
+                <i class="b_l">位置及周边</i>
+                <a class="more_more tab-item external open-popup" data-popup=".popup-map" href="javascript:;">
+                    查看详细
+                </a>
+            </div>
+            <div id="MAP" class="tab-item external open-popup" data-popup=".popup-map" href="javascript:;"></div>
+            <div id="allmap1" style="display: none"></div>
+            <div class="address">
+                【 {{ catyarea_name.name|default('-') }} - {{ catyarea2_name.name|default('-') }} 】 {{ detail.address }}
+            </div>
+            <ul class="tab">
+                <li class="border-bottom" flag="1">
+                    <div class="icon">
+                        <img src="//zgsta.com/static/wap/images/page/newhouse/traffic2.png" alt="">
+                    </div>
+                    <div class="title1">交通<span class="num"></span></div>
+                </li>
+                <li flag="0">
+                    <div class="icon">
+                        <img src="//zgsta.com/static/wap/images/page/newhouse/sh1.png" alt="">
+                    </div>
+                    <div class="title1">生活<span class="num"></span></div>
+                </li>
+                <li flag="0">
+                    <div class="icon">
+                        <img src="//zgsta.com/static/wap/images/page/newhouse/yl1.png" alt="">
+                    </div>
+                    <div class="title1">医疗<span class="num"></span></div>
+                </li>
+                <li flag="0">
+                    <div class="icon">
+                        <img src="//zgsta.com/static/wap/images/page/newhouse/school1.png" alt="">
+                    </div>
+                    <div class="title1">学校<span class="num"></span></div>
+                </li>
+            </ul>
+            <div id="address_info">
+                <ul class="tab-con"></ul>
+                <ul class="tab-con" style="display: none"></ul>
+                <ul class="tab-con" style="display: none"></ul>
+                <ul class="tab-con" style="display: none"></ul>
+            </div>
+            {#<a class="tab-item external open-popup go-btn sc-zbxq-b" data-popup=".popup-map" href="javascript:;" style="background:#fff;color:#FF8400;font-size:0.6rem;">#}
+                {#查看更多详情 &gt;#}
+            {#</a>#}
+            <script>
+                function newHouse_map() {
+                    var map_data = '{{ lat~","~lng }}';
+                    map_data = map_data.split(',');
+                    var num = null, map2 = null, map = null, mPoint = null, local = null, local1 = null, local2 = null, local3 = null, local4 = null, data = null, ary_data = [], z, x, c, v;
+
+                    //计算 经纬度距离
+                    var EARTH_RADIUS = 6378137.0;    //单位M
+                    var PI = Math.PI;
+                    function getRad(d) {
+                        return d * PI / 180.0;
+                    }
+                    /**
+                     * caculate the great circle distance
+                     * @param {Object} lat1
+                     * @param {Object} lng1
+                     * @param {Object} lat2
+                     * @param {Object} lng2
+                     */
+                    function getGreatCircleDistance(lat1, lng1, lat2, lng2) {
+                        var radLat1 = getRad(lat1);
+                        var radLat2 = getRad(lat2);
+                        var a = radLat1 - radLat2;
+                        var b = getRad(lng1) - getRad(lng2);
+                        var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
+                        s = s * EARTH_RADIUS;
+                        s = Math.round(s * 10000) / 10000.0;
+                        s = Math.floor(s);
+                        return s;
+                    }
+                    //地图方法开始
+                    BD_map();
+                    click_tab();
+                    function BD_map() {
+                        var longitude = map_data[1],
+                            latitude = map_data[0];
+                        map2 = new BMap.Map("allmap1");           // 创建Map实例
+                        map = new BMap.Map("MAP");            // 创建Map实例
+                        mPoint = new BMap.Point(longitude, latitude);
+                        map.centerAndZoom(mPoint, 15);
+                        local = new BMap.LocalSearch(map, {
+                            renderOptions: {map: map, panel: "r-result"},
+                            pageCapacity: 5
+                        });
+                        var icon = new BMap.Icon("//zgsta.com/static/wap/images/base/pos.png", new BMap.Size(10, 10));
+                        var minMarker = new BMap.Marker(mPoint, {
+                            icon: icon
+                        });
+                        map.disableDragging();
+                        map.addOverlay(minMarker);
+                        map.panTo(mPoint);
+                        map2.enableScrollWheelZoom();
+                        map2.centerAndZoom(mPoint, 15);
+
+                        local1 = new BMap.LocalSearch(map2, {
+                            renderOptions: {map: map2, autoViewport: false},
+                            onSearchComplete: function (results) {
+                                tempData(0,results)
+                            }
+                        });
+                        local2 = new BMap.LocalSearch(map2, {
+                            renderOptions: {map: map2, autoViewport: false},
+                            onSearchComplete: function (results) {
+                                tempData(1,results)
+                            },
+                        });
+                        local3 = new BMap.LocalSearch(map2, {
+                            renderOptions: {map: map2, autoViewport: false},
+                            onSearchComplete: function (results) {
+                                tempData(2,results)
+                            }
+                        });
+                        local4 = new BMap.LocalSearch(map2, {
+                            renderOptions: {map: map2, autoViewport: false},
+                            onSearchComplete: function (results) {
+                                tempData(3,results)
+                            }
+                        });
+                        local1.searchNearby(['公交', "地铁"], mPoint, 1000);
+                        local2.searchNearby(['超市', "广场"], mPoint, 1000);
+                        local3.searchNearby(['医院', "药店"], mPoint, 1000);
+                        local4.searchNearby(['学校', ''], mPoint, 1000);
+                        function tempData(eq,results) {
+                            ary_data = [];
+                            z=null;
+                            z = results;
+                            $('.tab li').eq(eq).find('.num').hide().text('').text(z[0].XA + z[1].XA);
+                            if (z[0].Br.length == 0 || z[1].Br.length == 0) {
+                                $.each(z, function (index, item) {
+                                    for (var i in item.Br) {
+                                        if (i < 5) {
+                                            ary_data.push(item.Br[i]);
+                                        }
+                                    }
+                                });
+                            } else {
+                                $.each(z, function (index, item) {
+                                    for (var i in item.Br) {
+                                        if (i < 3) {
+                                            ary_data.push(item.Br[i]);
+                                        }
+                                    }
+                                });
+                            }
+                            if (ary_data.length > 5) {
+                                ary_data.pop();
+                            }
+                            var str = '';
+                            var alphabet=function (i) {
+                                var a='';
+                                switch (i){
+                                    case 1:
+                                        a='A';
+                                        break;
+                                    case 2:
+                                        a='B';
+                                        break;
+                                    case 3:
+                                        a='C';
+                                        break;
+                                    case 4:
+                                        a='D';
+                                        break;
+                                    case 5:
+                                        a='E';
+                                        break;
+                                }
+                                return a
+                            };
+                            if (ary_data.length > 0) {
+                                for (var a = 0, len = ary_data.length; a < len; a++) {
+                                    str = '<li>\
+                                <div><span>' + alphabet(a + 1) + ' </span>' + ary_data[a].title + '(' + ary_data[a].address + ')' + '</div>\
+                                <div>' + getGreatCircleDistance(map_data[0], map_data[1], ary_data[a].point.lat, ary_data[a].point.lng) + '米</div>\
+                              </li>';
+                                    $('.tab-con').eq(eq).append(str)
+                                }
+                            } else {
+                                str = '<li>附近未查找到</li>';
+                                $('.tab-con').eq(eq).append(str)
+                            }
+                        }
+                    }
+                    function click_tab() {
+                        $('.tab li').each(function (index, item) {
+                            var that = this;
+                            $(this).on('click', function () {
+                                if (index == 0) {
+                                    data_qh(index, that)
+                                } else if (index == 1) {
+                                    data_qh(index, that)
+                                } else if (index == 2) {
+                                    data_qh(index, that)
+                                } else if (index == 3) {
+                                    data_qh(index, that)
+                                }
+                            })
+                        })
+                    }
+                    function data_qh(index, t) {
+                        $('.tab-con').eq(index).show().siblings('.tab-con').hide();
+                        $(t).attr('flag', '1').addClass('border-bottom').siblings().attr('flag', 0).removeClass('border-bottom');
+                        flag();
+                    }
+                    function flag() {
+                        $('.tab li').each(function (index, item) {
+                            var img = $(this).find('img');
+                            var url = '';
+                            if ($(this).attr('flag') == 1) {
+                                url = img.attr('src').replace(1, 2);
+                                img.attr('src', url)
+                            } else {
+                                url = img.attr('src').replace(2, 1);
+                                img.attr('src', url)
+                            }
+                        })
+
+                    }
+                }
+                $(function () {
+                    newHouse_map()
+                })
+            </script>
+        </div>
+        {% endif %}
+
+        {#全网比价#}
+        <div class="all_content price_3" style="display:none;">
+            <div class="build_top">
+                <i class="b_l">全网比价</i>
+                <a href="{{ ('houses/dqwbj')|UU({id: detail.id|default('')}) }}" class="more_more">共<span></span>家平台销售</a>
+                {#<a class="more_more">查看更多</a>#}
+            </div>
+            <div class="price_block">
+            </div>
+            <div class="whole_price" style="border:none;padding-bottom:0.75rem;color:#878787;line-height:1rem;">
+                同一时期内，楼盘只有一个开发商统一的标准报价，但各网络平台更新速度不一致，导致价格有所差异。
+            </div>
+        </div>
+
+        {#均价走势#}
+        {#<div class="list-block panel-block">#}
+            {#{{ housemobile_global.panel_title({#}
+                {#title: '均价走势',#}
+                {#target: 'a',#}
+                {#url: ('houses/dprices')|UU({id: detail.id|default('')}),#}
+                {#class: 'item-link'#}
+            {#}) }}#}
+            {#<div class="item-inner zst">#}
+                {#<div id="cms08"></div>#}
+            {#</div>#}
+        {#</div>#}
+
+        {% block mzsm %}
+            <div class="mzsm" style="font-size:0.5rem;color:#999999;">
+                {#免责声明：{{ core_global.mconfig({name: 'housesmianze', ename: 'mvariables_user'}) }}#}
+                <p class="statement" style="font-size:0.5rem;color:#999999;">
+                    本页面所含信息、搜索结果系源互联网公开信息，未经人工筛选、校对、核实、信息真实性、完整性请浏览者慎重查阅原始信息来源或链接。请点击查看<a class="disclaimer" style="color:#FF8400;font-weight: 600" href="javascript:;">《法律与免责声明》</a>
+                </p>
+                <a class="open_app" href="http://m.zhuge.com/Wap/Index/downloadAppPage?appPageForm=cms新房">
+                    打开诸葛找房APP，查看更多内容
+                </a>
+            </div>
+        {% endblock mzsm %}
+
+        {#猜你喜欢---CY数据#}
+        <div class="all_content">
+            <div class="build_top">
+                <i class="b_l">猜你喜欢</i>
+            </div>
+            <p class="frist-tag onsell"></p>
+            <div class="network_block scroll" style="overflow:auto;">
+                <div class="guess_like" id="cyContent">
+                </div>
+            </div>
+        </div>
+
+
+        {#<!-- 户型图 -->#}
+       {# {% if block_huxing.data is defined and block_huxing.pageCount|default(0) != 0 %}
+            <div class="list-block panel-block">
+                {{ housemobile_global.panel_title({
+                    title: '户型图',
+                    target: 'a',
+                    url: ('houses/dplanintro')|UU({id: detail.id|default('')}),
+                    class: 'item-link'
+                }) }}
+                <div data-swiper-xc="1" class="swiper-container swiper-width-auto txt-swiper" data-pagination=""
+                     data-slides-per-view="auto">
+                    <div class="swiper-wrapper">
+                        {{- house_global.countshi({aid: detail.id|default(''), tpl: '<div class="swiper-slide"><a rel="nofollow" href="' ~ ('houses/dplanintro')|UU({id: detail.id|default('')}) ~ '#shi=%shi%">%name%(%number%)</a></div>'}) -}}
+                    </div>
+                </div>
+                <div data-swiper-xc="1" class="swiper-container slides-num img-swiper" data-pagination=""
+                     data-slides-per-view="auto">
+                    <div class="swiper-wrapper">
+                        {% for item in block_huxing.data %}
+                            <a href="{{ ('door/detail')|UU({id: item.id}) }}" class="card swiper-slide p-default">
+                                <div valign="bottom" class="card-header color-white no-border no-padding">
+                                    {{- core_global.img({
+                                        src: item.thumb|default(''),
+                                        alt: item.name|default(''),
+                                        type: 2,
+                                        width: 115,
+                                        height: 115
+                                    }) -}}
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-content-inner">
+                                        {{ item.name|default('') }}
+                                        {{- house_global.huxing({data: item|default(''), tpl: '%shi%%mj%m&sup2;'}) -}}
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}#}
+        {#<!-- 楼盘图库 -->#}
+       {# {% if block_xiangce.data is defined and block_xiangce.pageCount|default(0) != 0 %}
+            <div class="list-block panel-block">
+                {{ housemobile_global.panel_title({
+                    title: '图库',
+                    target: 'a',
+                    url: ('houses/dphotos')|UU({id: detail.id|default('')}),
+                    class: 'item-link'
+                }) }}
+                <div data-swiper-xc="1" class="swiper-container swiper-width-auto txt-swiper"
+                     data-slides-per-view="auto" data-pagination=".sss">
+                    <div class="swiper-wrapper">
+                        {{- house_global.countxc({aid: detail.id|default(''), tpl: '<div class="swiper-slide" style="display: inline-block; width:auto;"><a rel="nofollow" href="' ~ ('houses/dphotos')|UU({id: detail.id|default('')}) ~ '#cate=%cate%">%name%(%number%)</a></div>'}) -}}
+                    </div>
+                </div>
+                <div data-swiper-xc="1" class="swiper-container slides-num img-swiper" data-slides-per-view="auto"
+                     data-pagination=".aaa">
+                    <div class="swiper-wrapper">
+                        {% for item in block_xiangce.data %}
+                            <a href="{{ ('houses/dphotos')|UU({id: detail.id|default(0), big: item.id}) ~ '#slide' ~ item.id }}"
+                               class="p-default card swiper-slide">
+                                <div valign="bottom" class="card-header color-white no-border no-padding">
+                                    {{- core_global.img({
+                                        src: item.thumb|default(''),
+                                        alt: item.name|default(''),
+                                        type: 2,
+                                        width:115 ,
+                                        height: 115
+                                    }) -}}
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-content-inner">
+                                        {{ item.name|default('') }}
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <script type="text/javascript">
+                    // 重新启用swiper
+                    seajs.use(['sm'], function (sm) {
+                        $('[data-swiper-xc="1"]').swiper();
+                    })
+                </script>
+            </div>
+        {% endif %}#}
+
+        {#<!-- 地图 -->#}
+        {#<div class="list-block panel-block">
+            {{ housemobile_global.panel_title({
+                title: '地图',
+                target: 'a',
+                url: "javascript:;",
+                class: 'item-link'
+            }) }}
+            <div class="item-inner">
+                {{ housemobile_global.map({
+                    title: detail.name|default(''),
+                    map: detail.map|default(''),
+                    popup : '.popup-map'
+                }) }}
+            </div>
+        </div>#}
+        {#<!-- 价格走势 -->#}
+        {#<div class="list-block panel-block">
+            {{ housemobile_global.panel_title({
+                title: '价格走势',
+                target: 'a',
+                url: ('houses/dprices')|UU({id: detail.id|default('')}),
+                class: 'item-link'
+            }) }}
+            <div class="item-inner zst">
+                <div id="cms08"></div>
+            </div>
+        </div>#}
+        <!-- 楼盘点评 -->
+        {#<div class="list-block panel-block">
+            {{ housemobile_global.panel_title({
+                title: '楼盘点评',
+                target: 'a',
+                url: ('houses/dcomment')|UU({id: detail.id|default('')}),
+                class: 'item-link'
+            }) }}
+            <div style="margin-top: -1px;">
+                {{ render(controller('HouseBundle:Intercomment:list',{
+                    aid: detail.id|default(0),
+                    models: 'inter_housescomment',
+                    checkreply: 0,
+                    reply: 0,
+                    pageSize: 3
+                })) }}
+            </div>
+        </div>#}
+
+        {#<div class="buttons-tab" data-tag="clicks,sameprices,lparea">
+            <a href="#tab1" class="tab-link active button">热门楼盘</a>
+            <a href="#tab2" class="tab-link button">同价位楼盘</a>
+            <a href="#tab3" class="tab-link button">周边楼盘</a>
+        </div>#}
+        {# <div class="tabs list-block media-list panel-block list-block-m0">
+            <ul id="tab1" class="tab active">
+                {% if sort_clicks_houses.data is defined %}
+                    {% for item in sort_clicks_houses.data if item.id|default('') != detail.id|default('') %}
+                        <li class="item-content">
+                            <div class="item-inner">
+                        <span class="td1 item-title">
+                            <a class="p-default" title="{{ item.name|default('') }}"
+                               href="{{ ('houses/detail')|UU({id: item.id|default('')}) }}">{{ item.name|default('') }}</a>
+                        </span>
+                                <span class="td2 p-middle">
+                            {{ house_global.if_dj({value: item.dj|default(''),tpl: '<b class="c-f00 p-red">%value%</b>%danwei%'}) }}
+                        </span>
+                                {{ core_global.region({id: item.region|default(''), tpl: '<span class="td3 pull-right">%value%</span>'}) }}
+                            </div>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+            <ul id="tab2" class="tab">
+                {% if sort_prices_houses.data is defined %}
+                    {% for item in sort_prices_houses.data if item.id|default('') != detail.id|default('') %}
+                        <li class="item-content">
+                            <div class="item-inner">
+                        <span class="td1">
+                            <a class="p-default" title="{{ item.name|default('') }}"
+                               href="{{ ('houses/detail')|UU({id: item.id|default('')}) }}">{{ item.name|default('') }}</a>
+                        </span>
+                                <span class="td2 p-middle">
+                            {{ house_global.if_dj({value: item.dj|default(''),tpl: '<b class="c-f00 p-red">%value%</b>%danwei%'}) }}
+                        </span>
+                                {{ core_global.region({id:  item.region|default(''), tpl: '<span class="td3 pull-right">%value%</span>'}) }}
+                            </div>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+            <ul id="tab3" class="tab">
+                {% if sort_area_houses.data is defined %}
+                    {% for item in sort_area_houses.data if item.id|default('') != detail.id|default('') %}
+                        <li class="item-content">
+                            <div class="item-inner">
+                            <span class="td1">
+                                <a class="p-default" title="{{ item.name|default('') }}"
+                                   href="{{ ('houses/detail')|UU({id: item.id|default('')}) }}">{{ item.name|default('') }}</a>
+                            </span>
+                                <span class="td2 p-middle">
+                                {{ house_global.if_dj({value: item.dj|default(''),tpl: '<b class="c-f00 p-red">%value%</b>%danwei%'}) }}
+                            </span>
+                            </div>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </div>#}
+        {# 全网比价查看更多弹窗 #}
+        {% include 'HousemobileBundle:Clist:viewsource_popup.html.twig' %}
+        <script type="text/javascript">
+            seajs.use([],function () {
+                // 滑动页面显示头部
+                $('.content').scroll(function () {
+                    var top=$('.content').scrollTop();
+                    if(top==0){
+                        $('.nav_list').css({'top': '0','z-index': '-1'});
+                    }else {
+                        $('.nav_list').css({'top': '0','z-index': '9999999'});
+                    }
+                });
+
+                // 全网比价数据 开始
+                var url = '{{ apiUrl }}';
+                var $box = $('.price_block'); //承载数据box
+                var loupanId = '{{ detail.id|default('') }}'; //楼盘id
+                var num = '2'; //需要展示条数
+                var $boxParent = $(".price_3");
+                var $totalNum = $(".more_more span");
+                zgCommon.priceData($box,loupanId,num,$boxParent,$totalNum,url);
+                // 全网比价数据 结束
+            })
+        </script>
+
+
+        {{ render(controller('HouseBundle:Common:footer', {_isApp: url_isApp})) }}
+        {# 走势图数据 #}
+        {% set xAxis = [] %}
+        {% for item in detail_prices.data[ : 12] %}
+            {% set xAxis = [item.jtime|default('')|date('m/d')]|merge(xAxis) %}
+        {% endfor %}
+
+        {% set zstData = [] %}
+        {% for item in detail_prices.data[ : 12] %}
+            {% set zstData = [item.dj|default('')]|merge(zstData) %}
+        {% endfor %}
+        {% set sess_area = app.session.get('area')|default(0) %}
+        {# 当前城市的简称 #}
+    {% set city = ('db.auth_group_area')|getAll({
+        rulesarea:sess_area,
+        pageSize: 1,
+        order   : 'sort',
+        orderBy : 'asc'
+    }) %}
+    {% set citycode = city.data[0].city|default('') %}
+        <script type="text/javascript">
+            seajs.use(['mobilezst'], function (mobilezst) {
+                mobilezst('', {
+                    // 横坐标定义 结构 xAxis = []
+                    xAxis: {{ xAxis|json_encode|raw }},
+                    // 纵坐标数据定义 结构 zstData = [[数据1], [数据2], [数据3]];
+                    data: {{ zstData|json_encode|raw }}
+                });
+            });
+
+            seajs.use(['share', 'common'], function (share, common) {
+                // 调用统计
+                common.getcounts({
+                    url: '{{ ("igetcounts/index")|U }}'
+                });
+                //页面加载完毕 动态改变dom 回填 cy 数据 到 cyContent;
+                var HTML=document.getElementById('cyHTML');
+                var con=document.getElementById('cyContent');
+                con.innerHTML=HTML.innerHTML;
+                HTML.remove();
+
+            });
+
+            seajs.use([],function () {
+                zgCommon.agreement(".disclaimer",'declaration');  //免责声明
+
+            });
+
+            $(".feedback-main-mask").on('click', 'span', function () {
+                $("body").removeClass("fix");
+                $("#source").hide();
+            });
+
+        </script>
+        <script type="text/javascript">
+            seajs.use(['zgrequest'],function (zgrequest){
+                var spread = WebCookie.getCookie('spread');
+                var houseId = {{detail.id|default('')}};
+                var url = '';
+                var testStr1 = /\bsem/;
+                var testStr2 = /\bia/;
+                if(testStr1.test(spread)){
+                    url = '/sem';
+                }
+                if(testStr2.test(spread)){
+                    url = '/dsp';
+                }
+                var data = {
+                    spread : spread,
+                    houseIds : houseId,
+                }
+                if(spread){
+                    zgrequest.post(url,data,function(xhr){
+                        if(xhr && xhr.data && xhr.data[houseId]){
+                            var phoneNum = xhr.data[houseId];
+                            setSemTel(phoneNum)
+                        }
+                    },2,'get')
+                }
+                function setSemTel(val){
+                    var phoneBox = $('.j_phoneBox b');
+                    var phone = 'tel:' + val;
+                    $('.j_telCall').attr('href',phone)
+                    phoneBox.text(val);
+                    telCall(val);
+                }
+                //sem拨打电话埋点
+                function telCall(tel){
+                    $(document).on('click','.j_telCall',function(){
+                        var postData = {
+                            city:'{{citycode}}',
+                            aid:'{{detail.id|default('')}}',
+                            platformType:6,
+                            spread:spread,
+                            virtualPhone:tel,
+                        }
+                        if(spread){
+                            zgrequest.post('/phones/records',postData,function(xhr){},2)
+                        }
+                    })
+                }
+            })
+        </script>
+    </div>
+    {# 底部电话咨询 #}
+    {% include 'HousemobileBundle:Clist:phone_call.html.twig' %}
+    {% include 'HousemobileBundle:Houses:see_house.html.twig' %}
+{% endblock result %}

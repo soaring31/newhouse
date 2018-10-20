@@ -1,0 +1,18 @@
+{% extends 'HouseBundle:Muserhand:muserhandlist.html.twig' %}
+{% set models = 'demand' %}
+ {# 求租求购 1: 求购 2 :求租  #}
+{% block mainMenu %}
+    {{ core_manage.jump(
+        {
+          class: 'on',
+           title: '<i class="mr5"></i>关注求购',
+           url: (action)|U({models: models,category: 297})       
+        }
+        ) }}
+      {{ core_manage.jump(
+        {
+           title: '<i class="mr5"></i>关注求租',
+           url: (action)|U({models: models,category: 298})       
+        }
+        ) }} 
+{% endblock %}

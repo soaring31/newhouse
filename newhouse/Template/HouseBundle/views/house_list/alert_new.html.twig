@@ -1,0 +1,186 @@
+{{core_global.linkcss('static/house/css/common.css?time=201804201145')}}
+<div class="broker-mask-layer shadow">
+    {#最新活动弹窗#}
+    {#未登录#}
+    <div class="block_activies no_load">
+        <div class="top_activies">最新活动<i class="top_close">&#10006;</i></div>
+        <div class="activies_body">
+            <p class="a_name">活动名称</p>
+            <div class="a_input_block one_">
+                <i class="iconfont icon-dianhua2 hh"></i>
+                <input class="a_input phone_" placeholder="请输入联系人手机号">
+            </div>
+            <div class="a_input_block two_">
+                <i class="iconfont icon-duanxinyanzheng"></i>
+                <input class="a_input mess_input" placeholder="请输入短信验证码">
+                <input type="button" value="发送短信验证码" class="btn_mess">
+            </div>
+            <p class="a_re">新用户将自动注册，并视为同意<a class="re">《诸葛找房用户协议》</a></p>
+            <button class="submit_btn submit_now">立即报名</button>
+        </div>
+    </div>
+    {#已登录#}
+    <div class="block_activies on_load">
+        <div class="top_activies">最新活动<i class="top_close">&#10006;</i></div>
+        <div class="activies_body">
+            <p class="a_name">活动名称</p>
+            <p class="a_n_text">手机号</p>
+            <p class="a_phone">18623456789</p>
+            <button class="submit_btn">立即报名</button>
+        </div>
+    </div>
+
+    {#一键订阅弹窗#}
+    <div class="block_activies take_sub">
+        <div class="top_activies">一键订阅<i class="top_close">&#10006;</i></div>
+        <div class="activies_body">
+            <p class="a_name" style="font-size:12px;font-weight:normal;">我们将为您保密个人信息！<i style="color:#bbbbbb;">请填写您接受订阅的手机号：</i></p>
+            <div class="take_list">
+                <p><a class="take iconfont icon-tongzhi" data-yid="1"></a>变价通知</p>
+                <p><a class="take" data-yid="2"></a>优惠通知</p>
+                <p><a class="take" data-yid="3"></a>开盘通知</p>
+                <p><a class="take" data-yid="4"></a>最新动态</p>
+                <p><a class="take" data-yid="5"></a>看房团通知</p>
+            </div>
+            <div class="a_input_block one_">
+                <i class="iconfont icon-dianhua2 hh"></i>
+                <input class="a_input phone_" placeholder="请输入联系人手机号">
+            </div>
+            <div class="a_input_block two_">
+                <i class="iconfont icon-duanxinyanzheng"></i>
+                <input class="a_input mess_input" placeholder="请输入短信验证码">
+                <input type="button" value="发送短信验证码" class="btn_mess" readonly>
+            </div>
+            <p class="a_re">新用户将自动注册，并视为同意<a class="re dingyue" target="_blank">《诸葛找房用户协议》</a></p>
+            <button class="submit_btn take_now">立即订阅</button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    seajs.use([],function () {
+        //一键订阅
+        var yid,type;
+        $('.dyxx-alert').on("click", function () {
+            type=3;
+            var id=$(this).data('yid');
+            $('.take').each(function () {
+                var id_=$(this).data('yid');
+                if(id==id_){
+                    $('.take').removeClass('icon-tongzhi').removeClass('iconfont');
+                    $(this).addClass('iconfont').addClass('icon-tongzhi');
+                }
+            });
+            $('.shadow,.take_sub').show();
+        });
+        $(".dingyue").click(function () {
+            var host= window.location.host;
+            var url = " http://"+ host +"/houses/agreement ";
+            $(".dingyue").attr("href",url)
+        });
+
+        //活动报名
+        var promotion_id;
+        $('.enroll').click(function () {
+            type=1;
+            promotion_id=$(this).data('id');
+            $('.shadow,.no_load').show();
+        });
+        
+        $('.submit_now,.take_now').click(function () {
+            var phone = $(this).siblings('.one_').find('.phone_').val();
+            var mess = $(this).siblings('.two_').find('.mess_input').val();
+            var reg = /^1(3|4|5|6|7|8|9)\d{9}$/;
+            if (type == 3) {
+                var did = '{{ detail.id|default('') }}';
+                var area = '{{ app.session.get('area')|default(0) }}';
+                yid = $('.icon-tongzhi').data('yid');
+            }
+            if(!phone.match(reg)){
+                alert('请输入正确的手机号');return false;
+            }
+            if(!mess){
+                alert('请输入短信验证码');return false;
+            }
+            post_huodong(mess,phone,promotion_id,yid,did,area)
+        });
+
+        function post_huodong(mess,phone,promotion_id,yid,did,area){
+            if(!yid) {
+                var data = {type:type, tel: phone, code: mess, promotion_id: promotion_id,};
+            }else{
+                var data={type:type,tel:phone,code:mess,promotion_id:promotion_id,yid:yid,area:area,did:did};
+            }
+            $.ajax({
+                url:'{{ apiUrl }}'+'/api/v1/promotion/order',
+                type:'post',
+                data:data,
+                success:function (data) {
+                    if(data.error==0){
+                        if(type==3){
+                            alert('订阅成功');
+                        }else {
+                            alert('报名成功');
+                        }
+                        $('.shadow,.no_load').hide();
+                        $('.phone_,.mess_input').val('');
+                    }else{
+                        alert(data.message);return false;
+                    }
+                }
+            })
+
+        }
+
+
+        $('body').on('click','.btn_mess',function () {
+            var phone=$(this).parent('.a_input_block').prev('.a_input_block').children('.phone_').val();
+            var reg = /^1(3|4|5|6|7|8|9)\d{9}$/;
+            if(!phone.match(reg)){
+                alert('请输入正确的手机号');return false;
+            }
+            $.ajax({
+                url:'{{ apiUrl }}'+'/api/v1/promotion/order/sends/mobilecodes',
+                type:'post',
+                data:{tel:phone},
+                success:function (data) {
+                    if(data.error==0){
+                        settime();
+                    }else{
+                        alert(data.message);return false;
+                    }
+                }
+            })
+        });
+
+        //  短信验证码发送时间
+        var countdown = 59;
+        var this_input = $('.btn_mess');
+        function settime() {
+            if (countdown == '-1') {
+                this_input.removeAttr("disabled");
+                this_input.css({"color":"#FF8400"});
+                this_input.val("发送短信验证码");
+                countdown = 59;
+            } else {
+                this_input.attr("disabled", true);
+                this_input.css({"color":"gray"});
+                this_input.val("重新发送(" + countdown + ")");
+                countdown--;
+                setTimeout(function () {
+                    settime()
+                }, 1000);
+            }
+        }
+        
+        $('.top_close').click(function () {
+            $('.shadow,.no_load').hide();
+        });
+        
+        $('.take').click(function () {
+            $('.take').removeClass('icon-tongzhi').removeClass('iconfont');
+            $(this).addClass('iconfont').addClass('icon-tongzhi');
+        })
+    });
+</script>

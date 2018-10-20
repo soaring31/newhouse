@@ -1,0 +1,124 @@
+{% set filter_rows = filter_rows|default(3) %}
+{% set filter_action = filter_action|default(action) %}
+
+{% set filter_category = filter_category|default('category') %}
+
+{% set filter_opt = filter_opt|default([]) %}
+
+{% for k, v in filter_opt %}
+    {% set sql_opt = {pageSize: 50, ename: k, order: 'sort|asc'}|merge(v.sql_opt|default({})) %}
+    {% set src = v.src|default('house.category') %}
+
+    {% set data1 = [] %}
+
+    {% set data = (src)|getTree(sql_opt).data %}
+
+    {% set filter_opt = data %}
+{% endfor %}
+<div class="buttons-tab buttons-tab-ex" data-target="#list-filter-con">
+	{% for k,v in filter_opt %}
+	    {% if loop.index <= filter_rows %}
+	    	{% if v.nodes|default('') %}
+	    		{% set href = '#filter' %}
+	    		{% set class = 'tab-link1' %}
+	    		{% set attr = 'data-filter=filterLevel' ~ loop.index ~ ' data-default-txt=' ~ v.menu.name ~ '' %}
+    		{% else %}
+    			{% set href = 'javascript:;' %}
+    			{% set class = '' %}
+    			{% set attr = 'data-filterbtn=1 data-hash=#category=' ~ v.menu.id|default('') ~ '' %}
+	    	{% endif %}
+	        {# <a href="{{href|default('')}}" {{attr|default('')|raw}} class="{{class|default('')}} external button">
+	            {{v.menu.name|default('')}}
+	        </a> #}
+	        <a href="#filter" class="tab-link1 external button" data-filter="filterLevel{{loop.index}}" data-default-txt="{{v.menu.name|default('')}}">
+                {{v.menu.name|default('')}}
+            </a>
+	    {% endif %}
+	{% endfor %}
+	{% if filter_opt|length > filter_rows %}
+	    <a href="#filter" class="tab-link1 external button">
+	        <span class="icon font-f-7"></span>
+	        更多
+	    </a>
+	{% endif %}
+</div>
+<script id="list-filter-con" type="text/html">
+	<div class="tabs">
+        <div id="filter" class="tab">
+        	<div id="level-1" class="level-1 level level-1-ex">
+                <div class="list-block list-block-modal">
+                    <ul class="">
+                        {% for k,v in filter_opt %}
+                    		{% if v.nodes|default('') %}
+					    		{% set href = '#filterLevel' ~ loop.index %}
+					    		{% set class = 'item-link jump' %}
+					    		{% set attr = 'data-inits=filterLevel' ~ loop.index ~ '' %}
+				    		{% else %}
+				    			{% set href = 'javascript:;' %}
+				    			{% set class = null %}
+				    			{% set attr = 'data-filterbtn=1 data-hash=#category=' ~ v.menu.id|default('') ~ '' %}
+					    	{% endif %}
+                            <li>
+                                <a class="external item-content item-link jump" data-inits="filterLevel{{loop.index}}" href="#filterLevel{{loop.index}}" data-same="1">
+                                    <div class="item-inner ">
+                                        <div class="item-title">{{v.menu.name|default('')}}</div>
+                                        <div class="item-after">
+                                            不限
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="bar bar-big2">
+	                <a href="javascript:;" id="submit-ex" data-loading="提交..." class="button button-big button-single button-fill button-success">筛 选</a>
+	            </div>
+            </div>
+
+            {% for k,v in filter_opt %}
+                <div class="level-2 level-2-ex level" id="filterLevel{{loop.index}}">
+                    <div class="list-block list-block-modal">
+                        <ul class="">
+	                        <li>
+                                <label class="label-checkbox item-content">
+                                    <input type="radio" value="{{v.menu.id|default('')}}" name="{{filter_category}}">
+                                    <div class="item-inner">
+                                        <div class="item-title">
+                                            {{v.menu.name|default('')}}
+                                        </div>
+                                    </div>
+                                    <div class="item-media"> 
+                                        <i class="icon icon-form-checkbox"></i>
+                                    </div>
+                                </label>
+                            </li>
+                            {% for v1 in v.nodes %}
+                                <li>
+	                                <label class="label-checkbox item-content">
+                                        <input type="radio" value="{{v1.menu.id|default('')}}" name="{{filter_category}}">
+                                        <div class="item-inner">
+                                            <div class="item-title">
+                                                {{v1.menu.name|default('')}}
+                                            </div>
+                                        </div>
+                                        <div class="item-media"> 
+                                            <i class="icon icon-form-checkbox"></i>
+                                        </div>
+                                    </label>
+	                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+	                <div class="bar bar-big2">
+                        <a href="#level-1" class="button jump button-big button-fill external">返回</a>
+                        <a href="#level-1" class="button jump button-big button-fill button-success external yes remove">
+                            确定
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</script>

@@ -1,0 +1,100 @@
+{% extends 'HouseBundle:Mhouse:mhousesarc.html.twig' %}
+
+{% block mainleft %}
+
+        {# {{ dump(_form_id) }} #}
+<section class="main-left" data-target=".main-through">
+    {# {{ dump(block_data.data) }} #}
+    <div data-level="top" class="level1">
+        {% if block_data.data is defined %}
+        {%- for item in block_data.data -%}
+            {% set _form_id1 = ('db.model_form')|getOne('id', {name: item.menu.form}) %}
+            {# {% set nodes = ('house.cate_pushs') | getAll({pid: item.id}).data %} #}
+        {#- 1级 -#}
+        <a data-role="jump" class="{% if loop.index == 1 %}on{% endif %} {% if item.nodes|length %}has-child{% endif %}" data-level="1" href="{{ (item.menu.controller|default(controller) ~ '/' ~ item.menu.action|default(action))|U({cate_pushs: item.menu.ename, form: item.menu.form, _form_id: _form_id1}) }}">{{item.menu.name}}</a>
+
+        <div data-level="next" class="level2 {% if loop.index == 1 %}on{% endif %}">
+            {% for item2 in item.nodes %}
+            <a data-role="jump" data-level="1" href="{{ (item2.menu.controller|default(controller) ~ '/' ~ item2.menu.action|default(action))|U({cate_pushs: item2.menu.ename, form: item2.menu.form, _form_id: _form_id1}) }}" >{{item2.menu.name}}</a>
+            {% endfor %} <!-- /item2 -->
+        </div>
+        {% endfor -%}
+        {% endif -%}
+    </div>
+</section>
+{% endblock mainleft %}
+
+
+{% block tableMain %} 
+    {{ lists.filter([
+        {
+            method: 'selectFormField',
+            title: '审核',
+            form: 'checked',
+            field: 'checked',
+        },
+        {
+            method: 'search',
+            field: 'name',
+        }
+    ]) }}
+    <div class="list-con" data-param="{{ params }}">
+         <table class="right-table table-hover">
+                <tbody>
+                    <tr data-id>
+                        <th width="40" class="tac">{{forms.checkbox()}}</th>
+                        <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                        <th width="100">意向楼盘</th>
+                        <th width="100">姓名</th>
+                        <th width="100">电话</th>
+                        <th width="100">审核</th>
+                        <th width="100" data-role="sort" data-sort="create_time" class="sort">添加时间</th>
+                        <th width="120" class="tac">操作</th>
+                    </tr>
+                    {% if block_arc_data.data|length %}
+                    {% for k, vo in block_arc_data.data %} 
+                                         
+                    <tr data-id="{{ vo.id }}">
+                        <td class="tac">{{forms.checkbox()}}</td>
+                        <td>{{ vo.id }}</td>
+                        <td >意向楼盘</td>
+                        <td class="tov" title="{{ vo.name|default('') }}"><span data-role="itemEdit" data-name="name" class="edit">{{ vo.name }}</span></td>                      
+                         <td class="tov" title="{{ vo.tel|default('') }}"><span data-role="itemEdit" data-name="tel" class="edit">{{ vo.tel }}</span></td>
+                        <td>{{ lists.formField({value: vo.checked}) }}</td>
+                        <td>{{ vo.create_time|default('0')|date('Y-m-d') }}</td>
+                        <td class="tar pr10">
+                            {{ forms.show({url: (action ~ "/show")|U({id: vo.id}) }) }}
+                            {{ forms.delete() }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+            {{lists.page(block_arc_data)}}
+        </div>
+
+    {{ lists.oprate([
+        {
+            method: 'delete',
+            title: '<i class="font-ico-del mr5"></i>批量删除',
+        },
+        {
+            method: 'dropdownFormField',
+            field: 'checked',
+            form: 'checked',
+            title: '审核',
+        }
+    ]) }}
+{% endblock %}
+
+
+{% block promptUl %}
+
+{% endblock %}
+
+
+
+

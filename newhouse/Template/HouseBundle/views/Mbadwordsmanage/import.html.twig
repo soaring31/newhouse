@@ -1,0 +1,70 @@
+{% extends "HouseBundle::base_show.html.twig" %}
+{% block js %}
+
+{% endblock %}
+{% block body %}
+
+{{ core_manage.form(form|default(''),'form', 'house.news') }}
+
+<script>
+  seajs.use('', function(){
+    setTimeout(function(){
+      var uploader = $('[data-upload="upload"]').data('uploader');
+      uploader.on('uploadSuccess', function(file, res){
+        if(res.status){
+          $('.img-url').val(file.name);
+          $.jqModal.tip(res.info, 'success');
+        }
+      });  
+    },200);
+      
+  })
+</script>
+
+{# {% if form is defined %}
+{% for key, v in form.children %}
+  {% if key != 'csrf_token' and key != 'submit' %}
+      <form name="form2" method="post" enctype="multipart/form-data" action="{{ ( controller ~ '/leading')|U }}">
+
+      <input type="hidden" name="leadExcel" value="true">
+      <table class=" popup-form-table" style="width:100%;" text=""border="0">
+          <tbody>
+              <tr>
+                  <td>
+                      <div>
+                          <div class="form-row">
+                              <div class="form-cell-label">
+                                  <label class="w150 rtd txtright required" for="kwbad" aria-required="true">导入不良词</label>
+                              </div>
+                              <div class="form-cell por">
+                                  <input type="hidden" class="csrf" name="csrf_token" value="{{ csrf_token }}" />                            
+                                  <input style="opacity: 0;left: 5px; top: 10px;width: 80px;height: 32px;" type="file" name="upload_file0" multiple="multiple" id="inputfile" class="poa" accept=".txt" /> 
+                                  <input type="button" value="选择文件" style="border:1px solid #ddd;background-color:#3e85a9;border-radius:4px;display: inline-block;width: 80px;color:#fff;padding:6px;vertical-align: middle;">
+
+                                  <input type="text" style="line-height: 18px;width: 245px;height: 18px; padding: 5px;vertical-align: middle;border: 1px solid rgba(0, 0, 0, .2);" readonly="readonly" id="inputTxt">
+                                  
+                                  <div class="tip" style="    font-size: 12px;line-height: 20px;display: inline-block;clear: both;padding-top: 5px;padding-left: 10px;color: #999;">
+                                    1、 只能导入txt文件。
+                                    2、格式为: 不良词 = 替换词
+                                    3、一行一个不良词组
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+      <div  class="btn pull-right" data-role="1" value="提交!"  style="display: block;width: 49px;margin-left: 42%;margin-top: 17px;">提交</div>
+{% else %}
+    </form>
+{% endif %}
+{% endfor %}
+{% endif %} #}
+
+
+{% endblock %}
+
+
+
+   

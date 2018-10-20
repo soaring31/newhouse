@@ -1,0 +1,3 @@
+parameters:
+    sphinx.search.class: SphinxBundle\Search\Sphinxsearch
+    sphinx.doctrine.bridge.class: SphinxBundle\Doctrine\Bridge

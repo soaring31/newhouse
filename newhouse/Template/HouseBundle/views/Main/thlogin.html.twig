@@ -1,0 +1,70 @@
+{% extends 'HouseBundle:Main:login.html.twig' %}
+{% set _form_id = app.request.get('_form_id') %}
+{% block css %}
+{# <link rel="stylesheet" href="{{ asset('bundles/house/css/register.css') }}" /> #}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/register.css')}}
+{% endblock %}
+{% block body %}
+    {# 手机短信状态 #}
+<div class="container">
+<div class="regter">
+    {% block regter_left %}
+    <!-- 左侧注册 -->
+    <div class="register fn ma" style="float:none">
+        <div class="register-head">
+            <a class="active" href="{{('register/index')|U}}">绑定账号</a>
+            {# <a href="{{('/connect/weixin')|U}}">微信注册</a> #}
+        </div>
+        <!-- tag -->
+        <div class="tag">
+            <!-- 普通注册 -->
+            <div class="tag-son tag-email view-form view-form-lg">
+                {% if form.children is defined %}
+                <form class="form-control" action="{{ form.vars.action }}" method="post">
+                    <!-- 用户类型 -->
+                     <div class="checks">
+                        {% set mem_group = ('db.mem_types')|getAll({allow: 1}) %}
+                        {% if mem_group.data is defined %}
+                        {% for item in mem_group.data %}
+                        <label class="active">
+                            <input type="radio" name="usertype" value="{{ item.id }}"/>
+                            <div class="icon ">
+                                <i class="font-re-{{ loop.index }}"></i>
+                                {{ item.name }}
+                                <span></span>
+                            </div>
+                        </label>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                    {% for v in form.children if v.vars.id != 'usertype' %}
+                    {% if v.vars.id == 'submit' %}
+                    <div class="item ">
+                        <div class="input">
+                            {{ form_widget(v) }}
+                        </div>
+                    </div>
+                    {% else %}
+                    {% if v.vars.id != 'usertplid' %}
+                        <div class="item {{v.vars.id}}">
+                            <label class="lable">{{v.vars.label|trans({})|raw }}</label>
+                            <div class="input">
+                                {{ form_widget(v) }}
+                            </div>
+                        </div>
+                    {% else %}
+                         {{ form_widget(v) }}
+                    {% endif %}    
+                    {% endif %}
+                    {% endfor %}  
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endblock regter_left %}
+    
+</div>
+<!-- end -->
+</div>
+{% endblock %}

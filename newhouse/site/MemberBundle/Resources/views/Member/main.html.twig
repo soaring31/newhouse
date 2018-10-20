@@ -1,0 +1,29 @@
+{% extends "MemberBundle::layout.html.twig" %}
+{% block title %}后台管理{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{{ asset('bundles/'~bundlepath~'/css/manage.css', absolute=true) }}" />
+{% endblock %}
+{% block js %}
+<script>
+seajs.config({
+    preload: ['ueditor.conf', 'codemirror'], // 预加载项
+});
+seajs.use(["manage"], function(manage) {
+    //js入口      
+    manage.init('main');
+});
+
+</script>
+{% endblock %}
+{% block body %}
+{{ render(controller('MemberBundle:Main:topmenu', {'channel':0})) }}
+<aside class="aside">        
+    <section id="cleft-id" class="left-menu">
+
+        {{ render(controller('MemberBundle:Main:leftmenu', {'menuId':0})) }}
+    </section>
+</aside>
+<section id="rleft" class="main" data-size-from=".main-hd, .filter, .oprate, .prompt" data-size-target=".list-con"></section>
+
+
+{% endblock %}

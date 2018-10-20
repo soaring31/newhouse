@@ -1,0 +1,38 @@
+$img-xf-1:(300px, 63px, 0, -73px, img-xf-1);
+$img-xf-2:(300px, 63px, -310px, 0, img-xf-2);
+$img-xf-3:(300px, 63px, 0, 0, img-xf-3);
+$img-xf-4:(300px, 63px, 0, -219px, img-xf-4);
+$img-xf-5:(300px, 63px, 0, -146px, img-xf-5);
+$img-xf-6:(58px, 58px, -310px, -73px, img-xf-6);
+$img-xf-7:(58px, 58px, -378px, -73px, img-xf-7);
+$img-xf-8:(53px, 53px, -310px, -204px, img-xf-8);
+$img-xf-9:(53px, 53px, -373px, -204px, img-xf-9);
+$img-xf-10:(53px, 53px, -509px, -73px, img-xf-10);
+$img-xf-11:(53px, 53px, -446px, -73px, img-xf-11);
+$img-xf-12:(53px, 53px, -310px, -141px, img-xf-12);
+$img-xf-13:(53px, 53px, -499px, -141px, img-xf-13);
+$img-xf-14:(53px, 53px, -436px, -141px, img-xf-14);
+$img-xf-15:(53px, 53px, -373px, -141px, img-xf-15);
+$img-xf-16:(41px, 42px, -562px, -141px, img-xf-16);
+
+$img-xf: ($img-xf-1,$img-xf-2,$img-xf-3,$img-xf-4,$img-xf-5,$img-xf-6,$img-xf-7,$img-xf-8,$img-xf-9,$img-xf-10,$img-xf-11,$img-xf-12,$img-xf-13,$img-xf-14,$img-xf-15,$img-xf-16);
+
+@mixin img-xf($sprites) {
+  %icoxf {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/xf.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+        @extend %icoxf;
+    }
+  }
+}

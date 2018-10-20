@@ -1,0 +1,236 @@
+/*!
+ * @name <%= name %>
+ * @author <%= author %>
+ * @date <%= date %>
+ */
+// var
+$aside-w     : 120px;
+// $main-w      : 100% - $aside-w;
+$spacing     : 5px;
+
+$bgc : #2A3342 !default; // 背景
+$c   : #5AA6CB !default; // 字体颜色
+
+.fcr {
+    color: #f00;
+}
+
+$font-ico-va: -.15em;
+@import 'static/ats'; // 工具类, 每个文件都要导入
+@import
+    'vendor-prefixes', 
+    'tab-focus',
+    'table', 
+    'page', 
+    'buttons-fun', 
+    'buttons', 
+    'dropdowns', 
+    'popup', 
+    'dialog', 
+    'daterangepicker',
+    'font-ico';
+
+body {
+    overflow: hidden;
+}
+ 
+ 
+@keyframes shake {
+    0%,
+    100% {
+        transform: translate3d(0,0,0);
+    }
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translate3d(-10px,0,0);
+    }
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translate3d(10px,0,0);
+    }
+}
+
+
+[class^='font-ico-']:hover,
+[class*=' font-ico-']:hover {
+    animation-name: shake;
+}
+
+.form-inline {
+    .form-control {
+        width: auto;
+        display: inline-block;
+        vertical-align: middle;
+    }
+}
+.form-control {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    box-sizing: border-box;
+}
+.input-lg {
+    height: 46px;
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.3333333;
+    border-radius: 6px;
+}
+.input-sm {
+    height: 30px;
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+}
+
+.promptTitle {
+    background: $tb-bgc;
+    padding: 5px;
+}
+.clear-txt {
+    color: #999;
+    position: absolute;
+    margin: 2px 0 0 -20px;
+    cursor: pointer;
+    &:before {
+        font-size: 14px !important;
+        @extend .font-ico-close:before;
+        @extend [class^="font-ico-"];
+    }
+}
+.footer {
+    clear: both;
+    text-align: center;
+    background-color: #4594BB;
+    color: #ddd;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9;
+    padding: $spacing;
+}
+.list {
+    &.thumb {
+        $list-s: 100px;
+        overflow: hidden;
+        ul {
+            margin-right: -50px;
+            @extend %clearfix;
+        }
+        li {
+            float: left;
+            width: $list-s;
+            text-align: center;
+            height: $list-s + 20;
+            font-size: 12px;
+            margin: 0 20px 10px 0;
+            position: relative;
+            &.chked {
+                 .font-ico-1 {
+                    // display: block;
+                    color: #00A0EF;
+                 }
+            }
+        }
+        .font-ico-1 {
+            // display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            font-size: 26px;
+            color: #999;
+            line-height: 1;
+        }
+        .img {
+            vertical-align: middle;
+            height: $list-s;
+            width: $list-s;
+            display: table-cell;
+            background-color: #eee;
+        }
+        img {
+            max-width: $list-s;
+            max-height: $list-s;
+        }
+        .bar {
+            margin-top: -20px;
+            text-align: right;
+            line-height: 20px;
+            background-color: rgba(0,0,0,.5);
+            position: relative;
+            padding: 0 5px;
+            a {
+                font-size: 16px;
+                color: #eee;
+                &:hover {
+                    text-decoration: none;
+                }
+            }
+            .text {
+                font-family: arial;
+                font-size: 12px;
+                float: left;
+                color: #eee;
+            }
+        }
+    }
+}
+
+// 滚动条
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    border: 1px #d3d3d3 solid;
+    box-shadow: 0px 0px 3px #dfdfdf inset;
+    border-radius: 10px;
+    background: #eee;
+}
+
+::-webkit-scrollbar-thumb {
+    border: 1px #aaa solid;
+    border-radius: 10px;
+    background: #ccc;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #7d7d7d;
+}
+.pager {
+    min-height: 27px;
+}
+.label-date {
+    position: relative;
+    &:after {
+        @extend .font-ico-15:before;
+        @extend [class^="font-ico-"];
+        font-size: 20px;
+        margin-left: -25px;
+        position: relative;
+        top: 3px;
+        color: #888;
+    }
+}
+body{
+   
+}
+

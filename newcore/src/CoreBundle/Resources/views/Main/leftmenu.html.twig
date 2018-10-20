@@ -1,0 +1,39 @@
+{% extends 'CoreBundle::base_ajax.html.twig' %}
+{%- block result -%}
+{# {{dump(app.user)}} #}
+{% if menus is defined %}
+[
+    {% for item in menus if item.menu.checked|default('') == 1 %}
+    {% if loop.index > 1 %},{% endif %}{
+        "remark": "{{ item.menu.remark }}",
+        "name": "{{item.menu.name}}",
+        {% spaceless %}
+        {% set nodes = [] %}
+        {% for vo in item.nodes if vo.menu.checked|default('') == 1 %}
+            {% set opt = {} %}
+            {# 优先使用models #}
+            {% if vo.menu.category_models  %}
+                {% set opt = {category_models: vo.menu.category_models} %}
+            {% elseif vo.menu.category %}
+                {% set opt = {category: vo.menu.category} %}
+            {% endif %}
+
+            {% set url = (vo.menu.bundle~'/'~vo.menu.controller~'/'~vo.menu.action)|U(vo.menu.urlparams|default([])|merge(opt)) %}
+            {% if core_manage.is_mainset_in_subwebs(vo).__toString() %}
+            {# 在分站，不显示“主站设置” #}
+            {% else %}
+            {# 在主站，显示“主站设置” #}
+                {% set nodes = nodes|merge([{
+                    url: url,
+                    name: vo.menu.name,
+                    ename: vo.menu.ename,
+                }]) %}
+            {% endif %}
+        {% endfor %}
+        {% endspaceless -%}
+        "nodes": {{ nodes|json_encode|raw }}
+    }
+    {% endfor %}
+]
+{% endif %}
+{%- endblock result -%}

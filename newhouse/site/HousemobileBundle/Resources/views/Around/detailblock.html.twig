@@ -1,0 +1,149 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明 
+ * detail: 当前数据
+#}
+{% block result %}
+<div class="content">
+    {{- core_mobile_global.swiper_one(detail) -}}
+    {# 概况 #}
+    <div class="list-block panel-block list-block-m0">
+    	{{- housemobile_global.panel_title({title: detail.name|default('') ~ '概况'})-}}
+	    <div class="item-content1 p-gray">
+	        <div class="item-inner2">
+	            <div class="row">
+	                {% if detail.category|default('') == 55 %}
+	                <div class="col-50">
+	                    性质：{{- core_global.formfield({value: detail.leibie|default(''), form: 'around_school', field: 'leibie'}) -}}
+	                </div>
+	                <div class="col-50">
+	                    分类：{{- core_global.formfield({value: detail.school_type|default(''), form: 'around_school', field: 'school_type'}) -}}
+	                </div>
+	                <div class="col-50">
+	                    级别：{{- core_global.formfield({value: detail.jibie|default(''), form: 'around_school', field: 'jibie'}) -}}
+	                </div>
+		            {% endif %}
+	                <div class="col-100">
+	                    联系电话：{{detail.tel|default('')}}
+	                </div>
+	                <div class="col-100">
+	                    地址：{{detail.address|default('')}}
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	{# 介绍 #}
+	{{housemobile_global.content({
+		title: detail.name|default('') ~ '介绍',
+		content: detail.abstract|default(''),
+		default: '暂无介绍'
+	})}}
+	{# 地图 #}
+	<div class="list-block panel-block">
+		{{- housemobile_global.panel_title({title: detail.name|default('') ~ '地图'})-}}
+        <div class="item-inner">
+            {{housemobile_global.map({
+                title: detail.name|default(''),
+                map: detail.map|default(''),
+                popup : 'map-open'
+            })}}
+        </div>
+    </div>
+	{# 楼盘 #}
+	{% set around_id = ('house.houses_arc')|getCol('aid', {form: 'houses_around', fromid: detail.id|default(''), checked: 1}) %}
+
+	<div class="list-block panel-block">
+		{{- housemobile_global.panel_title({title: detail.name|default('') ~ '周边楼盘'})-}}
+        <div class="pt10 pb10">
+	        <div class="swiper-container slides-num img-swiper"  data-pagination="" data-slides-per-view="auto">
+		        <div class="swiper-wrapper">
+		            {% if around_id is defined %}
+		                {% for item in around_id %}
+	                	{% set house = ('house.houses')|getRow({id: item|default(''), checked: 1, type: 0}) %}
+	                	{% if house %}
+		                <div class="card swiper-slide">
+		                	<a href="{{('houses/detail')|UU({id: house.id|default('')})}}" class="p-default">
+			                    <div valign="bottom" class="card-header color-white no-border no-padding">
+			                        {{- core_global.img({
+			                        src: house.thumb|default(''),
+			                        alt: house.name|default(''),
+			                        type: 2,
+			                        width:115 ,
+			                        height: 115
+			                    }) -}}
+			                    </div>
+			                    <div class="card-content">
+			                        <div class="card-content-inner">
+			                             {{house.name|default('')}}
+			                        </div>
+			                    </div>
+		                    </a>
+		                </div>
+		                {% endif %}
+		                {% endfor %}
+		            {% endif %}
+		        </div>
+		    </div>
+	    </div>
+    </div>
+	{# 小区 #}
+	<div class="list-block panel-block">
+		{{- housemobile_global.panel_title({title: detail.name|default('') ~ '周边小区'})-}}
+        <div class="pt10 pb10">
+	        <div class="swiper-container slides-num img-swiper"  data-pagination="" data-slides-per-view="auto">
+		        <div class="swiper-wrapper">
+		            {% if around_id is defined %}
+		                {% for item in around_id %}
+	                	{% set house = ('house.houses')|getRow({id: item|default(''), checked: 1, type: 1}) %}
+	                	{% if house %}
+		                <div class="card swiper-slide">
+		                	<a href="{{('sale/qdetail')|UU({id: house.id|default('')})}}" class="p-default">
+			                    <div valign="bottom" class="card-header color-white no-border no-padding">
+		                        {{- core_global.img({
+			                        src: house.thumb|default(''),
+			                        alt: house.name|default(''),
+			                        type: 2,
+			                        width:115 ,
+			                        height: 115
+			                    }) -}}
+			                    </div>
+			                    <div class="card-content">
+			                        <div class="card-content-inner">
+			                             {{house.name|default('')}}
+			                             <p>
+			                             	售(<i class="c-e43">{{house.sales|default('')}}</i>)·租(<i class="c-e43">{{house.rents|default('')}}</i>)
+			                             </p>
+			                        </div>
+			                    </div>
+			                </a>
+		                </div>
+		                {% endif %}
+		                {% endfor %}
+		            {% endif %}
+		        </div>
+		    </div>
+	    </div>
+    </div>
+
+    {# 周边出售、出租 #}
+    <div class="buttons-tab mt10">
+        <a href="#aroundSale" class="tab-link active button">周边二手房</a>
+        <a href="#aroundRent" class="tab-link button">周边出租</a>
+    </div>
+    <div class="tabs list-block media-list list-block-m0">
+    	<ul class="tab active" id="aroundSale">
+    		{{ render(controller('HouseBundle:Clist:aroundrelate', {_isApp: url_isApp, models: 'sale', data: around_id})) }}
+    	</ul>
+    	<ul class="tab" id="aroundRent">
+    		{{ render(controller('HouseBundle:Clist:aroundrelate', {_isApp: url_isApp, models: 'rent', data: around_id})) }}
+    	</ul>
+    </div>
+    {{ render(controller('HouseBundle:Common:footer', {_isApp: url_isApp})) }}
+</div>
+
+<script type="text/javascript">
+	seajs.use(['sm'], function (sm){
+	    $('.img-swiper').swiper();
+	});
+</script>
+{% endblock result %}

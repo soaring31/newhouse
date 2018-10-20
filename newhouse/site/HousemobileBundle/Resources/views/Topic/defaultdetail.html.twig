@@ -1,0 +1,21 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 默认专题详情模板 #}
+
+{% block result %}
+<div class="content">
+    <div class="con">
+        <div class="content-padded" style="margin-top: 0;">
+            <div class="con-title">
+                <h3>{{detail.name|default('')}}</h3>
+            </div>
+            <div class="detail-con" id="con">
+                {{ core_global.content({ content: detail.content|default(''), default: '暂无详细介绍' }) }}
+            </div>
+            <div class="list-block panel-block">
+                {{- core_mobile_global.more_con({id: 'con'})-}}
+            </div>
+        </div>
+    </div>
+    {{ render(controller('HouseBundle:Common:footer', {_isApp: url_isApp})) }}
+</div>
+{% endblock result %}

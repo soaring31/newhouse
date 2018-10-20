@@ -1,0 +1,27 @@
+{% extends "ManageBundle::poplayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+
+</script>
+
+{% endblock %}
+{% block body %}
+
+    <form action="{{ 'savetag'|U({'id':app.request.get('_id',0)}) }}" method="POST" class="form">
+        {% if tags is defined %}
+		    {% for key,val in tags %}
+			    <label class="">
+					<input type="checkbox" class="" name="tags[]" value="{{ key }}" {% if key|in_array(mytags) %} checked="checked" {% endif %}>
+					<span class="">{{ val }}</span>
+				</label>
+			{% endfor %}
+		    <br/>
+		    <input type="checkbox" class="" name="addtag[checked]" value='checked'>
+		    新建标签: <input type="text" name='addtag[new]' placeholder="请输入标签...">
+		    <p style="margin-left:3px;color:red">注意：最多只能选择3个标签！</p>
+        {% endif %}
+        {# data-close="1" data-reload="1" #}
+		<div class="popup-submit"><button type="submit" id="submit" name="submit" class="btn  ajax-post reload" data-submit="post">提交</button></div>
+    </form>
+
+{% endblock %}

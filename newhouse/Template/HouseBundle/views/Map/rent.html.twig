@@ -1,0 +1,79 @@
+{% extends 'HouseBundle:Map:sale.html.twig' %}
+{# 请求地址 #}
+{% block sea_url %}
+    {{- 'rent/list' -}}
+{% endblock %}
+
+{# 小区列表模板 #}
+{% block sider_item %}
+        
+    <li data-map-item="<%= aid || id %>">
+        <a href="<%= url %>" target="_blank">
+        <div class="img">
+                <img width="120" height="90" src="<%= thumb %>">
+        </div>
+        <div class="item-text">
+            <h3>
+                <span class="text-2">
+                    <%= zj * 1 ? zj + '元/月' : '面议' %>
+                </span>
+                <%= name %>
+            </h3>
+            <div class="text-1">
+                <div class="text-1-ls">
+                    <%=# zlhx %>
+                </div>
+                <div class="text-1-ls">
+                    <%= address %>
+                </div>
+                <div class="text-1-ls text-1-ls-1">
+                    <%=# tags %>
+                </div>
+            </div>
+        </div>
+        </a>
+    </li>
+{% endblock sider_item %}
+
+{# 地图小区模板 #}
+{% block marker_item_14 %}
+	<div class="marker-item" data-title="<%= name %>" data-opt="{refresh: 0}" data-name="aid" data-value="<%= id %>" data-map-item="<%= id %>" data-polyline="<%= polyline %>">
+        <span class="name"><%= dj * 1 ? dj + '元/月' : '' %> <%= num %>套</span>
+        <span class="name-sub"><%= name %></span>
+        <span class="arrow"></span>
+    </div>
+{% endblock marker_item_14 %}
+
+{% block map_filter %}
+
+{% set cate_data = house_global.cate_data({ 
+                tag: 'rent',
+            }).__toString|json_decode %}
+
+{{ house_global.filter_item({
+                    action: block('sea_url'),
+                    rows: 4,
+                    reserve: 1
+                }|merge(cate_data)) }}
+{% endblock map_filter %}
+
+{% block map_sort %}
+    {# 排序配置 #}
+    {% set sort_data = {
+        def: {
+            title: '默认'
+        },
+        mj: {
+            title: '面积'
+        },
+        dj: {
+            title: '租金'
+        }
+    } %}
+
+    {{ core_global.sort({
+        action: action,
+        data: sort_data|default('')
+    }) }}
+
+{% endblock map_sort %}

@@ -1,0 +1,121 @@
+{# 点评通用列表 资讯点评，楼盘点评，网站提问，店铺 #}
+{% extends 'CoreBundle::base_ajax.html.twig' %}
+{% set toid       = app.request.get('toid')|default('') %}
+{% set arc_models = app.request.get("arc_models")|default('') %}
+{% set models     = app.request.get("models")|default('') %}
+{% set title      = app.request.get('title')|default('') %}
+{% set aid        = app.request.get('aid')|default('') %}
+{% set service    = app.request.get('service')|default('house') %}
+{% set order      = app.request.get('order')|default('id|desc') %}
+{% set pageIndex  = app.request.get('pageIndex')|default(1) %}
+{% set pageSize   = app.request.get('pageSize')|default(10) %}
+{# 是否需要回复 #}
+{% set reply = app.request.get('reply') %}
+{% set checkreply = app.request.get('checkreply') %}
+
+{%- block result -%}
+    {% set params = {
+        aid      : aid, 
+        checked  : 1, 
+        order    : order,
+        pageSize : pageSize,
+        pageIndex: pageIndex,
+        _multi   : 1,
+        findType : 1
+    } %}
+
+    {% if arc_models %}
+        {% set params = params|merge({models: arc_models}) %}
+    {% endif %}
+    {# 注意数字0和字串0 #}
+    {% set params = params|merge({toid: toid == '0' ? '' : toid}) %}
+
+    {% set commment = (service ~ '.' ~ models)|getAll(params) %}
+        {# {{ dump(service ~ '.' ~ models) }} #}
+        {# {{ dump(params) }} #}
+        {# {{ dump(commment) }} #}
+    {% if commment.data|length %}
+        {% for item in commment.data %}
+            {% set item_user = ('db.users')|getRow({id: item.uid|default('0'),checked: 1}) %}
+            {% set item_user_info = ('db.userinfo')|getRow({uid: item.uid|default('')}) %}
+            {% set item_user_name = item_user_info.nicename|default(item_user.username|default('')) %}
+            <div class="pl-box" data-cid="{{item.id|default('')}}" {% if loop.last and toid == '0' %}
+                data-page="{
+                    pageIndex: {{commment.pageIndex}},
+                    pageCount: {{commment.pageCount}},
+                    pageSize: {{commment.pageSize}}
+                }"{% endif %}>
+                <div class="plcon">
+                    <div class="plcon-hd">
+                        {% if toid == '0' %}<span class="plcon-hd-tip">{{loop.index + (ident.info.pageIndex - 1) * ident.info.pageSize}}楼</span>{% endif %}
+                        <span class="colorbl">{{item_user_name|default('游客')}}</span>
+                        <span>&nbsp;{{ item.create_time|default('')|date('Y-m-d H:i:s') }}</span>
+                        <span>&nbsp;{{ core_global.get_user_info(item.user_agent|default(''))}}</span>
+                    </div>
+
+                    {% if toid == '0' and models == 'inter_housescomment' %}
+                      <div class="plcon-hd">
+                          <div class="start" data-score="{{item.overall|default('')}}"></div>
+                          <span class="dp-opt">价格&nbsp;:&nbsp;{{item.price|default('')}}</span>
+                          <span class="dp-opt">地段&nbsp;:&nbsp;{{item.position|default('')}}</span>
+                          <span class="dp-opt">交通&nbsp;:&nbsp;{{item.traffic|default('')}}</span>
+                          <span class="dp-opt">配套&nbsp;:&nbsp;{{item.charms|default('')}}</span>
+                          <span class="dp-opt">环境&nbsp;:&nbsp;{{item.environment|default('')}}</span>
+                      </div>
+                    {% endif %}
+                    <div class="plcon-bd">
+                        {# 标题 #}
+                        {% if models == 'webtw' %}
+                            <p>标题&nbsp;:&nbsp;{{item.name|default('')}}</p>
+                        {% endif %}
+                        {{ item.content }}
+                            {# -------------------{{ dump(item) }} #}
+                        <div class="zc_btn">
+                            {% if models == 'webtw' %}
+                            <span>
+                                提问类型&nbsp;:&nbsp;{{ core_global.formField({value: item.twlx, form: 'webtw', field: 'twlx'}) }} 
+                            </span>
+                            {% endif %}
+                            <a class="zc vote" data-vote="{models: '{{models|default('')}}', id: {{item.id|default('')}}, field: 'vote'}"> <i class="icon font-cmt-6"></i>
+                                支持 (<em data-vote-num="{{item.vote|default(0)}}">{{item.vote|default(0)}}</em>)
+                            </a>
+                            {% if item.toid == 0 %}
+                                {% if reply %}
+                                    <a class="wyhf"> <i class="icon font-cmt-5"></i>
+                                        回复
+                                    </a>
+                                {% endif %}
+                                {% if checkreply %}
+                                    <a class="replys"> <i class="icon font-cmt-7"></i>
+                                        查看回复
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="pl-box" data-page="{}"><div class="tac">暂无{{title}}！</div></div>
+    {% endif %}
+    <script type="text/javascript">
+        seajs.use(['vote'], function(vote) {
+            // 顶
+            vote.init({
+                saveUrl: '{{("viewinter/vote")|U}}'
+            });
+        })  
+    </script>
+    {# 只要楼盘点评才有星星 #}
+    {% if models == 'inter_housescomment' %}
+        <script type="text/javascript">
+            seajs.use(['comment'], function(comment) {
+                // 初始化星级
+                comment.raty({
+                    readOnly: true
+                }, '[data-score]');  
+            })  
+        </script>
+    {% endif %}
+{%- endblock result -%} 

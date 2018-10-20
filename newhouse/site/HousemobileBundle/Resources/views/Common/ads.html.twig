@@ -1,0 +1,5 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{%- block result -%}
+    {% set tag = app.request.get('tag') %}
+    {{ housemobile_global.mobile_ads({tag: tag}) }}
+{%- endblock result -%}

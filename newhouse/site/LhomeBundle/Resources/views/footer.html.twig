@@ -1,0 +1,118 @@
+{{core_global.linkcss('bundles/LhomeBundle/css/footer.css')}}
+<!-- 尾部 -->
+<div class="footer">
+    <div class="wrapper">
+        <div class="f-title">
+            <div class="fl">
+                <ul>
+                    {% set webInfo = ('house.category')|getTree({models: 'service', pid: 'neq|0', pageSize: 5, order: 'sort', orderBy: 'asc',checked:1}) %}
+                    <li><a target="_blank" href="{{('map/list')|U}}">{{'网站地图' }}</a> |</li>
+                        {% if webInfo.data is defined %}
+                            {% for item in webInfo.data %}
+                                {% if item.menu.id == 12 %}
+                                    {% set item_url = ('service/ask')|U({category: item.menu.id}) %}
+                                {% else %}
+                                    {% set item_url = ('service/list')|U({category: item.menu.id}) %}
+                                {% endif %}
+                                {% if item.menu.id == 13 %}
+                                    {% for item2 in item.nodes %}
+                                        <li><a target="_blank" href="{{('service/list')|U({category: item2.menu.id})}}">{{item2.menu.name}}</a></li>
+                                    {% endfor %}
+                                {% else %}
+                                    <li><a target="_blank" href="{{item_url}}">{{item.menu.name}}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    <li><a target="_blank" href="{{('download/index')|U}}">{{'手机版' }}</a></li>
+                </ul>
+            </div>
+            <div class="fr">
+                官方客服：{{core_global.mconfig({name: 'user_user_tel', ename: 'mvariables_user'})}}
+            </div>
+        </div>
+        {# <div class="lianjia-link-box"> #}
+        <div class="lianjia-link-box daquan jqDuang" data-tag="xflpdq,esfxqdq,zfxqdq,xzldq,spdq" data-autoplay="0" data-obj=".link-list div" data-cell=".tab">   
+            {% set dqArr = ('xflpdq,esfxqdq,zfxqdq,xzldq,spdq')|getPushMuti(50) %}
+            {% set tpl_businessmodule = core_global.mconfigtostring({name: 'businessmodule', ename: 'mabled'}).__toString|default('') %}
+            <div class="fl">
+                <div class="tab">
+                    <span  class="tab-item">新房楼盘大全</span>
+                    <span class="tab-item">二手房小区大全</span>
+                    <span class="tab-item">租房小区大全</span>
+                    <span class="tab-item">写字楼大全</span>
+                    {% if tpl_businessmodule == 1 %}
+                        <span class="tab-item">商铺大全</span>
+                    {% endif %}
+                </div>
+                <div class="link-list">
+                    <div>
+                        <dd>
+                            {% if dqArr['xflpdq']|default({}) %}
+                                {% for item in dqArr['xflpdq']|default({}) %}
+                                    <a target="_blank" href="{{item.url}}">
+                                        {{item.name|default('')}}
+                                    </a>
+                                {% endfor %}
+                            {% endif %}
+                        </dd>
+                    </div>
+                    <div>
+                        <dd>
+                            {% if dqArr['esfxqdq']|default({}) %}
+                                {% for item in dqArr['esfxqdq']|default({}) %}
+                                    <a target="_blank" href="{{core_global.url(item|merge({controller: 'sale/qdetail', set_models: 1}))}}">
+                                        {{item.name|default('')}}
+                                    </a>
+                                {% endfor %}
+                            {% endif %}
+                        </dd>
+                    </div>
+                    <div>
+                        <dd>
+                            {% if dqArr['zfxqdq']|default({}) %}
+                                {% for item in dqArr['zfxqdq']|default({}) %}
+                                    <a target="_blank" href="{{core_global.url(item|merge({controller: 'sale/qdetail', set_models: 1}))}}">
+                                        {{item.name|default('')}}
+                                    </a>
+                                {% endfor %}
+                            {% endif %}
+                        </dd>
+                    </div>
+                    <div>
+                        <dd>
+                            {% if dqArr['xzldq']|default({}) %}
+                                {% for item in dqArr['xzldq']|default({}) %}
+                                    <a target="_blank" href="{{core_global.url(item|merge({controller: 'business/detail', set_models: 1}))}}">
+                                        {{item.name|default('')}}
+                                    </a>
+                                {% endfor %}
+                            {% endif %}
+                        </dd>
+                    </div>
+                    <div>
+                        <dd>
+                            {% if dqArr['spdq']|default({}) %}
+                                {% for item in dqArr['spdq']|default({}) %}
+                                    <a target="_blank" href="{{core_global.url(item|merge({controller: 'business/detail', set_models: 1}))}}">
+                                        {{item.name|default('')}}
+                                    </a>
+                                {% endfor %}
+                            {% endif %}
+                        </dd>
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="bottom">
+            <div class="copyright fl">
+                {{core_global.mconfig({name: 'copyright', ename: 'mwebset'})}}
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    seajs.use(['jqduang'], function (jqduang) {
+
+    })
+</script>

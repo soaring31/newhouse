@@ -1,0 +1,281 @@
+/*!
+ * @name <%= name %>
+ * @author <%= author %>
+ * @date <%= date %>
+ */
+
+// @import 'static/ats'; // 工具类, 每个文件都要导入
+// 导入全部font demo 图标
+ @import 'font-mindex'; //导入css 标识-文件名
+
+
+.mindex {
+	height: 100%;
+	overflow: auto;
+	padding:25px  15px;
+	background: #fff;
+
+.m-wrap {
+	width: 100%;
+}
+
+.ico {
+	font-size: 20px;
+	margin-right: 10px;
+}
+
+
+
+a:hover {
+	text-decoration: none;
+}
+
+.info-head {
+	width: 100%;
+	@extend %clearfix;
+}
+
+.last {
+	
+	margin-right: 0 !important;
+}
+
+.in-h-box {
+	float: left;
+	width: 25%;
+	margin-bottom: 20px;
+	@extend %clearfix;
+
+	span {
+			font-size: 14px;
+			color: #3d9fe4;
+			float: right;
+			margin-right: 18px;
+		}
+}
+
+.in-h-box-w {
+	margin:0 10px;
+	border: 1px solid #ccc;
+	padding-left: 6%;
+	border-radius: 5px 7px 7px 5px;
+}
+
+
+.in-h-box-title {
+	background: #fff;
+	line-height: 50px;
+	border-bottom: 1px solid #ccc;
+	border-radius: 0 5px 0 0;
+	@extend %clearfix;
+
+	h2 {
+		font-size: 16px;
+		color: #333;
+		float: left;
+		margin-left: 18px;
+		font-weight: 700;
+	}
+
+	
+}
+
+.in-h-box-text {
+	background: #fff;
+	padding-top: 5px;
+	border-radius: 0 0 5px 0;
+	@extend %clearfix;
+	p {
+		
+		margin-left: 18px;
+		font-size: 14px;
+		line-height: 48px;
+		color: #333;
+	}
+
+}
+
+
+.cl-1 {
+	background: #f1684d;
+}
+
+.cl-2 {
+	background: #f2a344;
+}
+
+.cl-3 {
+	background: #7abd6c;
+}
+
+.cl-4 {
+	background: #949494;
+}
+
+
+.info-middle {
+	
+	@extend %clearfix;
+}
+
+.info-same {
+	margin: 0 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+}
+
+.same-title {
+	line-height: 42px;
+	border-bottom: 1px solid #ccc;
+	@extend %clearfix;
+
+	h2 {
+		font-size: 16px;
+		color: #333;
+		float: left;
+		margin-left: 18px;
+		font-weight: 700;
+	}
+
+	a {
+		float: right;
+		margin-right: 18px;
+		font-size: 14px;
+		color: #adadad;
+		letter-spacing: -5px;
+	}
+}
+
+.in-m-box {
+	
+	
+}
+
+.same-box {
+	float: left;
+	width: 50%;
+	margin-bottom: 20px;
+}
+
+.in-m-box-info {
+	width: 100%;
+
+	p {
+		line-height: 42px;
+		@extend %clearfix;
+	}
+
+	span {
+		float: left;
+		width: 20%;
+		text-align: center;
+		font-size: 12px;
+		color: #8f8f8f;
+		
+
+	}
+	img {
+		width: 100%;
+		height: 210px;
+	}
+}
+
+.in-m-box-text {
+	width: 100%;
+	height: 252px;
+	overflow: auto;
+	p {
+		font-size: 14px;
+		color: #333;
+		text-indent: 20px;
+		height: 41px;
+		line-height: 42px;
+		border-bottom: 1px solid #f9f9f9;
+	}
+
+	.nobord {
+		border-bottom: none;
+	}
+} 
+
+
+.info-foot {
+	margin-bottom: 28px;
+	@extend %clearfix;
+}
+
+
+
+
+.in-f-box-info {
+
+	p {
+		font-size: 14px;
+		color: #333;
+		text-indent: 20px;
+		height: 41px;
+		line-height: 42px;
+		border-bottom: 1px solid #f9f9f9;
+	}
+}
+
+.in-f-box-record {
+	 li {
+	 	font-size: 14px;
+		text-indent: 20px;
+		height: 41px;
+		line-height: 42px;
+		border-bottom: 1px solid #f9f9f9;
+		@extend %clearfix;
+	 }
+
+	 .clear {
+	 	float: left;
+	 	width: 80%;
+	 	overflow: hidden;
+	 	height: 40px;
+	 }
+
+	 .tip {
+	 	
+	 	color: #65b3ea;
+	 }
+
+	 .state {
+	 	margin-left: -5px;
+	 	display: inline;
+	 	color: #333;
+	 }
+
+	 .su {
+	 	color: #4caf51;
+	 }
+	 p {
+	 	display: inline;
+	 	margin-left:5px;
+	 	color: #b4b4b4;
+	 }
+	 .time {
+	 	float: right;
+	 	color: #b4b4b4;
+	 	margin-right: 4%;
+	 	width: 16%;
+	 	height: 40px;
+	 	overflow: hidden;
+	 }
+}
+
+}
+//修改内容
+.in-m-box-text table th {
+	background: #ddd;
+	text-align: center;
+}
+.in-m-box-text table td{
+	text-align: center;
+}
+.in-m-box-text table td:nth-child(1){
+	font-weight: bold;
+	background:#f7f5f5;
+	width: 198px;
+}

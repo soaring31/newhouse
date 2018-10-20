@@ -1,0 +1,81 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+ * 团购列表  groupbuy/list
+ * tpl_now: 当前时间
+ * item_time: 结束时间
+ * btn_class: 报名按钮样式
+#}
+{% block result %}
+    {% set tpl_now = 'now'|date("U") %}
+    {% set push = app.request.get('push', '') %}
+
+    {% if ident.list is defined %}
+        {% set list = ident.list %}  
+    {% elseif push %}
+        {% set push_data = (push)|getPush(app.request.get('pageSize', 5)) %}
+        {% set list = { 
+            data     : push_data,
+            pageIndex: 1, 
+            pageCount: 0, 
+            pageSize : 8 
+        } %}  
+    {% endif %}
+    {% spaceless %}    
+   	{% if list.data is defined and list.data|length %}
+        {% for item in list.data %}
+
+        	{% if item.enddate.date|default('')|date('U') > tpl_now|default('') %}
+        		{% set btn_class = 'button-danger tg' %}
+
+        		{% set item_time = '<span class="time format-time pull-left" data-endtime="' ~ item.enddate.date|default('') ~ '" data-noend="永久有效！" data-end="活动结束" data-type="1" data-timetype="1"></span>' %}
+    		{% else %}
+    			{% set btn_class = 'button-gray' %}
+
+    			{% set item_time = '<span class="c-e43">活动结束</span>' %}
+        	{% endif %}
+            <li {% if loop.last %}data-page="{
+                            pageIndex: {{list.pageIndex}},
+                            pageCount: {{list.pageCount}},
+                            pageSize: {{list.pageSize}}
+                        }" {% endif %}>
+            	<a href="{{ core_global.url(item|merge({ models: 'groupbuy', set_models: 1 })) }}" class="item-content p-default">
+        		 	<div class="item-media">
+	                    {{- core_global.img({
+                            src: item.thumb|default(''),
+                            alt: item.name|default(''),
+                            type: 2,
+                            width:107,
+                            height: 80
+                        }) -}}
+                	</div>
+	                <div class="item-inner">
+	                    <div class="item-title-row">
+		                    {{housemobile_global.list_title({title: item.name|default('')})}}
+		                    <div class="item-after">
+		                    	{{house_global.if_dj({value: item.tgj|default(''),class: 'l p-red'})}}
+		                    </div>
+	                    </div>
+	                    <div class="item-subtitle item-subtitle-ex">
+	                    	{{item_time|raw}}
+	                    </div>
+	                    <div class="item-subtitle item-subtitle-ex">
+                        	{{item.hdadr|default('')}}
+	                    </div>
+	                    <div class="item-title-row">
+	                        <div class="item-title item-title-p0">
+	                        	已报名<span class="p-red">{{item.hdnum|default('')}}</span>人
+	                        </div>
+	                        <div class="button pull-right {{btn_class|default('')}}">立即参团</div>
+	                    </div>
+					</div>
+	            </a>
+            </li>
+        {% endfor %}
+	{% else %}
+        <li class="mobile-list-none">暂无团购信息</li>
+    {% endif %}
+	<script type="text/javascript">
+		seajs.use(['formattime'])
+	</script>
+    {% endspaceless %}
+{% endblock result %}

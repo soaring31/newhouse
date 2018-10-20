@@ -1,0 +1,265 @@
+{#楼盘地图交通#}
+{% set data = detail|default({}) %}
+{% set lng = data.lng %}
+{% set lat = data.lat %}
+{% if lng and lat %}
+    <div name="navItem">
+        <div class="item_title">
+            <b>楼盘地图交通</b>
+        </div>
+        <div class="map-box">
+            <div id="MAP" class="map-content"></div>
+            <div class="map-extension">
+                <div class="map-header">
+                    <p>周边配套</p>
+                    <span><b class="iconfont icon-daba"></b>公交</span>
+                    <span><b class="iconfont icon-zhuanche"></b>驾车</span>
+                </div>
+                <div class="map-rim">
+                    <ul class="map-nav">
+                        <li>
+                            <div class="pic iconfont icon-daba ff8400"></div>
+                            <div class="name ff8400" flag="1">交通</div>
+                        </li>
+                        <li>
+                            <div class="pic iconfont icon-shangye"></div>
+                            <div class="name" flag="0">商业</div>
+                        </li>
+                        <li>
+                            <div class="pic iconfont icon-jiaoyu"></div>
+                            <div class="name" flag="0">教育</div>
+                        </li>
+                        <li>
+                            <div class="pic iconfont icon-yiliao"></div>
+                            <div class="name" flag="0">医疗</div>
+                        </li>
+                    </ul>
+                    <!--地图检索数据展示容器-->
+                    <div class="map-info-list" >
+                        <ul ></ul>
+                    </div>
+                </div>
+                <div class="map-omnirange">
+                    <div class="map-title">
+                        <span class="title"></span>
+                        <span class="go-back" type="1"><< 返回</span>
+                    </div>
+                    <div class="map-nav-input">
+                        <div class="start1">
+                            <span>起点</span><input type="text" value="{{ data.address }}">
+                        </div>
+                        <div class="end">
+                            <span>终点</span><input type="text" value="">
+                        </div>
+                        <div class="query" type="0">获取路线</div>
+                    </div>
+                    <div class="map-nav-info">
+                        <div id="map-nav-info"></div>
+                    </div>
+                </div>
+            </div>
+            <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&amp;ak=5ulnp3fPzXQaP38hsxAVxc83cqd5i2jp"></script>
+            <script type="text/javascript">
+                seajs.use([], function() {
+                    let lng ='{{ lng }}';
+                    let lat ='{{ lat }}';
+                    let Bmap=function (lat,lng,MAP,tabEl) {
+                        // var map_data = val.split(',');
+                        /*这里参数可能反着呢 注意新房二手房返回参数 是反的*/
+                        var longitude = lng;
+                        var latitude = lat;
+                        var z;
+                        var map;
+                        var mPoint;
+                        var local1;
+                        var transit=null;
+                        var driving=null;
+                        var ary_data = [];
+
+                        //计算 经纬度距离方法开始
+                        var EARTH_RADIUS = 6378137.0;    //单位M
+                        var PI = Math.PI;
+                        function getRad(d) {
+                            return d * PI / 180.0;
+                        }
+                        function getGreatCircleDistance(lat1, lng1, lat2, lng2) {
+                            var radLat1 = getRad(lat1);
+                            var radLat2 = getRad(lat2);
+                            var a = radLat1 - radLat2;
+                            var b = getRad(lng1) - getRad(lng2);
+                            var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
+                            s = s * EARTH_RADIUS;
+                            s = Math.round(s * 10000) / 10000.0;
+                            s = Math.floor(s);
+                            return s;
+                        }
+                        //计算 经纬度距离方法结束
+                        //地图方法开始
+                        map = new BMap.Map(MAP);            // 创建Map实例
+                        mPoint = new BMap.Point(longitude, latitude);
+                        map.centerAndZoom(mPoint, 15);
+                        // map.enableScrollWheelZoom();//启动鼠标滚轮缩放地图
+                        map.enableKeyboard();//启动键盘操作地图
+                        // 添加带有定位的导航控件 解决鼠标滚动到 当前地图位置
+                        var navigationControl = new BMap.NavigationControl({
+                            // 靠左上角位置
+                            anchor: BMAP_ANCHOR_TOP_LEFT,
+                            // LARGE类型
+                            type: BMAP_NAVIGATION_CONTROL_LARGE,
+                        });
+                        map.addControl(navigationControl);
+
+                        local1 = new BMap.LocalSearch(map, {
+                            renderOptions: {map: map,  panel: "r-result",autoViewport: false},
+                            pageCapacity: 5,
+                            onSearchComplete: function (results) {
+                                tempData(results);
+                            }
+                        });
+
+                        var icon = new BMap.Icon("http://api0.map.bdimg.com/images/markers.png", new BMap.Size(23, 25), {
+                            offset: new BMap.Size(10, 25),
+                            imageOffset: new BMap.Size(0, 0 - 10 * 25)
+                        });
+                        var minMarker = new BMap.Marker(mPoint, {
+                            icon: icon
+                        });
+                        // map.disableDragging();
+                        map.addOverlay(minMarker);
+                        map.panTo(mPoint);
+                        local1.searchNearby(['公交', "地铁"], mPoint, 1000);
+                        //检索关键字
+                        tabEl.each(function (index, item) {
+                            var self = this;
+                            $(this).on('click', function () {
+                                if (index == 0) {
+                                    data_qh(self);
+                                    local1.searchNearby(['公交', "地铁"], mPoint, 1000);
+                                }else if (index == 1) {
+                                    data_qh(self);
+                                    local1.searchNearby(['银行', '餐饮','超市', "广场"], mPoint, 1000);
+                                } else if (index == 2) {
+                                    data_qh(self);
+                                    local1.searchNearby(['学校', '书店'], mPoint, 1000);
+                                } else if (index == 3) {
+                                    data_qh(self);
+                                    local1.searchNearby(['医院', "药店"], mPoint, 1000);
+                                }
+                            })
+                        });
+                        //地图检索内容拼接模板
+                        function tempData(results) {
+                            var $el=$('.map-info-list>ul');
+                            var str = '';
+                            $el.html('');
+                            ary_data = [];
+                            z = results;
+                            if (z[0].Br.length == 0 || z[1].Br.length == 0) {
+                                $.each(z, function (index, item) {
+                                    for (var i in item.Br) {
+                                        ary_data.push(item.Br[i]);
+                                    }
+                                });
+                            } else {
+                                $.each(z, function (index, item) {
+                                    for (var i in item.Br) {
+                                        ary_data.push(item.Br[i]);
+                                    }
+                                });
+                            }
+                            if (ary_data.length > 0) {
+                                for (var a = 0, len = ary_data.length; a < len; a++) {
+                                    str=' <li>\n' +
+                                        '    <div title="'+ary_data[a].title+'">\n' +
+                                        '        <b class="iconfont icon-weizhi"></b>' + ary_data[a].title +
+                                        '    </div>\n' +
+                                        '    <p>' + ary_data[a].address + '</p>\n' +
+                                        '    <span class="meter">'+ getGreatCircleDistance(lat, lng, ary_data[a].point.lat, ary_data[a].point.lng) + 'm</span>\n' +
+                                        '</li>';
+                                    $el.append(str)
+                                }
+                            } else {
+                                str = '<li>附近未查找到</li>';
+                                $el.append(str)
+                            }
+                        }
+                        //更改选中状态
+                        function data_qh(t) {
+                            $(t).find('.name').attr('flag', '1').addClass('ff8400');
+                            $(t).siblings().find('.name').attr('flag', 0).removeClass('ff8400');
+                        }
+
+                        //切换导航
+                        var $goBack=$('.go-back');
+                        var $title=$('.map-title .title');
+                        $('.map-header span').each(function (index, item) {
+                            let self = $(this);
+                            self.on('click',function () {
+                                if($('.map-omnirange').css('display')=='none'){
+                                    $('.map-rim').hide();
+                                    $('.map-omnirange').show();
+                                }
+                                //点击驾车公交直接切换窗口
+                                if($goBack.attr('type')==="2"){
+                                    $('.map-nav-input').show();
+                                    $('.map-nav-info').hide();
+                                    $goBack.attr('type',"1");
+                                }
+                                // 导航标题
+                                $title.text($(this).text());
+                                $(this).addClass('ff8400').siblings().removeClass('ff8400');
+                                //清除导航路线
+                                map.clearOverlays();
+                            })
+                        });
+                        //搜素路线
+                        $('.query').on('click',function () {
+                            //控制返回键 type 参数
+                            $goBack.attr('type','2');
+                            //展示检索路线窗口
+                            $('.map-nav-input').hide();
+                            $('.map-nav-info').show();
+                            //起点终点信息
+                            let start=$('.start1 input').val();
+                            let end=$('.end input').val();
+                            // 回调百度检索内容
+                            if($title.text()==="公交"){
+                                transit = new BMap.TransitRoute(map, {
+                                    renderOptions: {map: map, panel: "map-nav-info"}
+                                });
+                                transit.search(start, end);
+                            } else if($title.text()==="驾车"){
+                                driving = new BMap.DrivingRoute(map, {
+                                    renderOptions: {
+                                        map: map,
+                                        panel: "map-nav-info",
+                                        autoViewport: true
+                                    }
+                                });
+                                driving.search(start, end);
+                            }
+                        });
+                        //返回键 展示逻辑
+                        $goBack.on('click',function () {
+                            //清除导航路线
+                            map.clearOverlays();
+                            let type=$(this).attr('type');
+                            // type 为1 返回默认检索信息窗口   为2 返回导航起止窗口
+                            if(type==='1'){
+                                $('.map-rim').show();
+                                $('.map-omnirange').hide();
+                                $('.map-header span').removeClass('ff8400');
+                            }else {
+                                $('.map-nav-input').show();
+                                $('.map-nav-info').hide();
+                                $(this).attr('type','1');
+                            }
+                        });
+                    };
+                    Bmap(lat,lng, "MAP", $('.map-nav li'));
+
+                });
+            </script>
+        </div>
+    </div>
+{% endif %}

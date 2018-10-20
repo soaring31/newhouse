@@ -1,0 +1,135 @@
+{% set selected = [] %}
+{% set filter_rows = filter_rows|default(4) %}
+{% set filter_action = filter_action|default(action) %}
+{# 默认为搜索值 #}
+{% set filter_url_opt = [] %}
+{# 处理一系列的配置 #}
+{% for k, v in filter_opt %}
+    {# 默认参数 #}
+    {% set sql_opt = {pageSize: 15, ename: k, pid: 'neq|0', order: 'sort|asc'}|merge(v.sql_opt|default({})) %}
+    {% set src = v.src|default('house.category') %}
+        {# add==0 时 不参与联合搜索 #}
+    {% set add = v.add|default(1) %}
+    {# /默认参数 #}
+    {% set data1 = [] %}
+    {# 当前值 #}
+    {% set value = app.request.get(k) %}
+    {# 已选择项 #}
+    {% if value and add %}
+        {% set filter_url_opt = filter_url_opt|merge({(k): value}) %}
+    {% endif %}
+    {# 已选择 #}
+        {# data #}
+    {% if v.type|default('') == 'form' %}
+        {% set data = (src)|getFormField(k) %}
+    {% else %}
+        {% set data = (src)|getAll(sql_opt).data %}
+    {% endif %}
+        {# /data #}
+    {% for k1, v1 in data %}
+        {# 处理自动类系 #}
+        {% set v1_value = v1.sqlstr|default('')?:v1.id %}
+        {# 组装一组新数据 #}
+        {% set n_data = {value: v1_value, name: v1.name} %}
+        {# 当传过来的值与循环值相等保存数据 #}
+        {% if value == v1_value %}
+            {% set selected = selected|merge({(k): n_data}) %}
+        {% endif %}
+        {% set data1 = data1|merge([n_data]) %}
+    {% endfor %}
+    {# 保存到配置变量里 #}
+    {% set kv = filter_opt[(k)]|merge({data1: data1, value: value, data: data}) %}
+    {% set filter_opt = filter_opt|merge({(k): kv}) %}
+{% endfor %} {# /filter_opt #}
+{% if filter_hd|default('')|length > 0 %}
+<div class="head-search">
+   <div class="h-s-btns">
+    {% for k, vo in filter_hd|default('') %}
+       <a class="btns-{{loop.index}}" href="{{vo.url|default('')}}" target="_blank"><i class="fz16 {{vo.icons|default('')}}"></i>{{vo.title|default('')}}</a>
+    {% endfor %}
+   </div>
+   {% if filter_search|default('') %}
+   {{v_forms.search({placeholder: '请输入二手/小区', models: 'sale'})}}
+   {% endif %}
+</div>
+{% endif %}
+<div class="filter-wrap">
+    <!--body-->
+    <div class="filter-bd">
+        <!--筛选条件-->
+        <div class="filter-item">
+            {% for k, vo in filter_opt %}
+                {% if loop.index <= filter_rows %}
+                <div class="blank10"></div>
+                <dl class="clearfix">
+                    <dt>{{vo.title}}：</dt>
+                    <dd>
+                        {% set url_opt = filter_url_opt|merge({(k): null}) %}
+                        <a href="{{ (filter_action)|U(url_opt) }}" class="{% if vo.value is null %}act{% endif %}">不限</a>
+                        {% for vo1 in vo.data1 %}
+                        {% set url_opt = filter_url_opt|merge({(k): vo1.value}) %}
+                        <a href="{{ (filter_action)|U(url_opt) }}" class="{% if vo.value == vo1.value %}act{% endif %}" data-name="{{k}}">{{vo1.name}}</a>
+                        {% endfor %} {# /vo.data #}
+                        {% if vo.extend is defined %}
+                            {{ attribute(form, vo.extend, {0: k, 1: vo, action: filter_action}) }}
+                        {% endif %}
+                    </dd>
+                </dl>
+                {% endif %}
+            {% endfor %} {# /filter_opt #}
+            {# 更多 #}
+            {% if filter_opt|length > filter_rows %}
+            <div class="filter-more clearfix">
+                <ul>
+                    <li class="more-tit">
+                        更多：
+                    </li>
+            {% endif %}
+            {% for k, vo in filter_opt %}
+                {% if loop.index > filter_rows %}
+                    <li>
+                        <div class="more-hd hoverslider" data-obj=".more-bd" data-delay="0">
+                        {% if vo.value %}
+                            {{selected[(k)].name}} 
+                        {% else %}
+                            {{vo.title}} 
+                        {% endif %}<i class="font-icons-1"></i>
+                        </div>
+                        <div class="more-bd">
+                            {% set url_opt = filter_url_opt|merge({(k): null}) %}
+                            <a href="{{ (filter_action)|U(url_opt) }}" class="{% if vo.value is null %}act{% endif %}">不限</a>
+                            {% for vo1 in vo.data1 %}
+                            {% set url_opt = filter_url_opt|merge({(k): vo1.value}) %}
+                            <a href="{{ (filter_action)|U(url_opt) }}" class="{% if vo.value == vo1.value %}act{% endif %}" data-name="{{k}}">{{vo1.name}}</a>
+                            {% endfor %} {# /vo.data #}
+                        </div>
+                    </li>
+                {% endif %}
+            {% endfor %} {# /filter_opt #}
+            {% if filter_opt|length > filter_rows %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+        <!--/筛选条件-->
+        <!--cur-->
+        {% if selected|length %}
+        <div class="filter-cur clearfix">
+            <span class="tip">当前条件：</span>
+            {% for k, v in selected %}
+            {% set url_opt = filter_url_opt|merge({(k): null}) %}
+            <a href="{{ (filter_action)|U(url_opt) }}" data-name="{{k}}" title="{{ v.name }}">
+                {{ v.name }}
+                <i class="font-filter-7"></i>
+            </a>
+            {% endfor %}
+            <a href="{{ (filter_action)|U }}" title="取消所有" class="cancal-cur">
+                <i class="font-filter-8"></i>
+                取消所有
+            </a>
+        </div>
+        {% endif %}
+        <!--/cur-->
+    </div>
+    <!--/body-->
+</div>

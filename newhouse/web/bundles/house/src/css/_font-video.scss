@@ -1,0 +1,35 @@
+$font-video-fz: inherit !default;
+
+@font-face {
+	font-family: "video";
+    font-weight: normal;
+    font-style: normal;
+	src: url('../fonts/video.eot');
+	src: url('../fonts/video.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/video.woff') format('woff');//,
+		//url('../fonts/video.ttf') format('truetype'),
+		//url('../fonts/video.svg#video') format('svg');
+}
+$font-video-fz: inherit !default;
+$font-video-fl: none !default;
+$font-video-m: 0 !default;
+$font-video-va: -.25em !default;
+[class^="font-video-"],
+[class*=" font-video-"] {
+	font-family: "video";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-size: $font-video-fz;
+	float: $font-video-fl;
+	margin: $font-video-m;
+	vertical-align: $font-video-va;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; only necessary if not using the private unicode range (firstdata option) 
+	text-decoration: none;
+	text-transform: none;
+}
+.font-video-1:before {
+	content: "\EA01";
+}

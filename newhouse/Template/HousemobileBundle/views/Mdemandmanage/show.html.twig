@@ -1,0 +1,40 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+
+{% set url_category = app.request.get('category') %}
+
+{% if url_category == 297 %}
+    {% set tpl_title = '求购' %}
+{% else %}
+    {% set tpl_title = '求租' %}
+{% endif %}
+
+{% if app.request.get('_id') %}
+    {% set tpl_title_a = '修改' %}
+{% else %}
+    {% set tpl_title_a = '发布' %}
+{% endif %}
+
+{% block header_title %}
+    {{core_mobile_global.title({title: tpl_title ~ tpl_title_a})}}
+{% endblock header_title %}
+
+{% block title %}
+    {{tpl_title ~ tpl_title_a}}
+{% endblock title %}
+
+{% block container %}
+    <div data-block="{
+        bParams: true,
+        ajax:{
+            url: '{{ ('mdemandmanage/show')|U }}',
+            data: {
+                tpl: 'Release:detailblock',
+                models: '{{app.request.get("models")}}',
+                formflag: '{{app.request.get("formflag")}}',
+                categoty: '{{url_category}}',
+                _id: '{{app.request.get("_id")}}'
+            }
+        }
+    }"></div>
+{% endblock container %}    

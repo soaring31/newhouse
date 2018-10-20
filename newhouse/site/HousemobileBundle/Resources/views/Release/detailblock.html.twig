@@ -1,0 +1,63 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+
+{% set url_formName = app.request.get('formflag') %}
+
+{% set url_models = app.request.get('models') %}
+
+{% if app.request.get('_id') %}
+    {% set tpl_btn_name = '提交' %}
+{% else %}
+    {% set tpl_btn_name = '发布' %}
+{% endif %}
+
+{% block result %}
+<div class="content">
+<div class="list-block" style="padding-left: .55556rem">
+    温馨提示: 手机端发布只提供部分字段以方便快速发布，如需更进一步完善信息，请到PC端会员中心完善信息    
+</div>
+{{
+    core_mobile_forms.forms({
+        form: form,
+        models: url_models|default(''),
+        uid: app.user.id|default(''),
+        buttons: {
+            0: {
+                name: tpl_btn_name|default(''),
+                class: ' button-big button-fill button-success fix',
+                attr: 'data-role="submit"'
+            }
+        }
+    })
+}}
+</div>
+<script type="text/javascript">
+    seajs.use(['autocomplete'], function() {
+        $('input[name="lpmc"]').autocomplete({
+            datasource: 'remote',
+            data: '{{ ("majaxaction/xiaoqu")|U() }}?name=',
+            onSearchBefore: function() {
+                $('[name="aid"]').val('');
+            },
+            onInited: function() {
+                $(this)
+                    .css({width: '100%'})
+                    .closest('.item-inner').css({overflow: 'visible'});
+            },
+            onItemClick: function() {
+                $('[name="aid"]').val($(this).data('id') || '');
+            }
+        });
+        {% if app.request.get('models') == 'sale' %}
+            // 单价计算，仅在二手房的时候执行
+            $(document).off('.computer').on('blur.computer', 'input[name="zj"],input[name="mj"]', function () {
+                var zj = $('input[name="zj"]');
+                var mj = $('input[name="mj"]');
+                var dj = $('input[name="dj"]');
+                if (zj.val() > 0 && mj.val() > 0) {
+                    dj.val(Math.round(zj.val() / mj.val() * 10000));
+                };
+            })
+        {% endif %}
+    })    
+</script>
+{% endblock result %}

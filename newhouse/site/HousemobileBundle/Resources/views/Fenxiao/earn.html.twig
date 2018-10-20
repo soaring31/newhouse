@@ -1,0 +1,62 @@
+{# {% extends 'HousemobileBundle::base.html.twig' %} #}
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+{# 说明
+* urlId: url传回来的id
+* urlMyself: 我要购买
+* fx_yixiang: 意向楼盘
+* users_name：当前用户名称
+* users_tel： 当前用户电话
+#}
+
+{% block title %}
+    楼盘分销推荐
+{% endblock title %}
+
+{% block header_title %}
+    {{core_mobile_global.title({title: '楼盘分销推荐'})}}
+{% endblock header_title %}
+
+{% set url_id = app.request.get("id") %}
+
+{% set url_myself = app.request.get("myself") %}
+
+{% set user_data = app.user %}
+
+{% set block_yixiang = ('house.sell')|getRow({checked: 1, id: url_id|default('')}) %}
+
+{% if url_myself|default('') %}
+{% set user_name = app.user.userinfo.nicename|default(app.user.username|default('')) %}
+{% set user_tel = app.user.tel|default('') %}
+{% endif %}
+
+{% set user_usertype = app.user.userinfo.usertype|default('') %}
+
+{% block container %}
+	{% if url_myself|default('') is empty and user_data|default('') is empty %}
+	    <script type="text/javascript">
+	        seajs.use(['sm'], function (sm) {
+	            $.alert('推荐用户请登录!', function () {
+	                location.href = "{{('fenxiao/list')|UU }}"
+	            });
+	        })
+	    </script>
+	{% else %}
+	    <div class="content">
+			<div data-block="{
+			    bParams: true,
+			    ajax:{
+			        url: '{{ ('bundlebindforms/ajax')|U }}',
+			        data: {
+				        tpl: 'Common:forms',
+				        formflag: 'view_recommend',
+				        aid: {{url_id}},
+				        yongjin: {{block_yixiang.yongjin|default(0)}},
+				        myself: '{{url_myself}}'
+				    }
+			    }
+			}"></div>
+	        {{ render(controller('HouseBundle:Common:footer', {_isApp: url_isApp})) }}
+	    </div>
+	{% endif %}
+{% endblock container %}

@@ -1,0 +1,30 @@
+{% extends app.request.get('ajax') ?  'HousemobileBundle:Clist:' ~ app.request.get('_action') ~ '.html.twig' : 'HousemobileBundle::list_layout.html.twig' %}
+
+{% block title %}
+	收藏列表
+{% endblock title %}
+
+{% block header_title %}
+	{{core_mobile_global.title({title: '收藏'})}}
+	
+{% endblock header_title %}
+
+
+
+{% block container %}
+	{% set list_header %}
+	    <div data-block="{
+	        ajax: {
+	            url: '{{ ('bundlebindforms/ajax')|U }}',
+	            data: {
+	                tpl: 'Muserhand:muserhandblock',
+	                models: '{{app.request.get("models")}}'
+	            }
+	        }
+	    }"></div>
+    {% endset %}
+
+    {% set list_url = ('muserhand/muserhandlist')|U({ajax: 1}) %}
+    {{ parent() }}
+
+{% endblock container %}

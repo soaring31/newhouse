@@ -1,0 +1,203 @@
+<script id="formCache" type="text/html">
+<div class="<%= data[0].class %> view-form ">
+    <form action="<%= data[0].action %>" method="post" class="form-control form-<%= data[0].formName %>"
+        <% if(data[0].formValidate){ %>
+            errorLabelContainer=".form-<%= data[0].formName %> .error-wrap"
+        <%}%>
+     >
+       
+        <ul class="">
+            <% for(var i=1;i<data.length;i++){ %>
+                <% var attr = data[i].attr.split(',') %>
+                <% var current = {
+                    data: data[i],
+                    attr: attr,
+                    config:data[0]
+                } %>
+                <% if(data[i].id == 'user_agent'){ %>
+
+                    <% include('User_agent',current )  %>
+                <%} else if(data[i].id == 'submit'){  %>
+
+                <%} else if(data[i].type == 'captcha'){  %>
+                    <% include('CodeText',current )  %>
+                <%} else if(data[i].type=='telcode'){  %>
+                    <% include('Telcode',current )  %>
+                <%} else if(data[i].type == 'choice'){  %>
+                     <% include('Choice',current )  %>
+                <%} else if(data[i].type == 'checkbox'){  %>
+                     <% include('Checkbox',current )  %>
+                <%} else if(data[i].type == 'radio'){  %>
+                     <% include('Radio',current )  %>
+                <%} else if(data[i].type == 'textarea'){  %>
+                     <% include('Textarea',current )  %>
+                <% } else {  %>
+                    <% include('FormItem',current )  %>
+
+                <%} %>
+            <%} %>
+            <li class="item submit">
+                <button type="submit" id="submit"  name="submit" class="btn" data-role="submit"><i class="mr5 <%=data[0].iconClass %>"></i><%= data[0].submit_title %></button>
+            </li>
+            
+        </ul>
+
+       <%if(data[0].formValidate){  %>
+            <div class="error-wrap"></div>
+       <%} %>
+    </form>
+</div>
+</script>
+
+<script id="User_agent" type="text/html">
+   <li class="item hidden">
+        <input id="<%= data.id %>" type="<%= data.type %>"
+        <% for(var k=0;k<attr.length-1;k++){ %>
+            <% var attrItem = attr[k].split('=') %>
+            <%= attrItem[0] %> = "<%= attrItem[1] %>"
+        <%} %>
+         name="<%= data.name %>" value="<%= config.user_agent %>" <% if(data.required){ %> <% if(data.required){ %> required="<%= data.required %>" <%}%> <%}%>/>
+    </li> 
+</script>
+
+<script id="CodeText" type="text/html">
+   <li class="item captcha">  
+        <% include('showLabel') %>
+        <div class="code-wrap">
+            <div class="code-item code-item-input">
+            <input id="codeText" name="codeText" data-msg-required="验证码不能为空" <% if(data.required){ %> required="<%= data.required %>" <%}%>  data-tpl=""  width="100" type="text" height="28" 
+                <% for(var k=0;k<attr.length-1;k++){ %>
+                    <% var attrItem = attr[k].split('=') %>
+                    <%= attrItem[0] %> = "<%= attrItem[1] %>"
+                <%} %>
+            ></div>
+            <div class="code-item code-item-img">
+                <img id="codeImg" src="<%= data.src %>" data-src="<%= data.src %>" class="code-img" alt="验证码" title="点击更换验证码" align="absbottom">
+                <a href="javascript:;" class="code-title">换一张</a>
+            </div>
+        </div>
+    </li>
+</script>
+<script id="Telcode" type="text/html">
+<li class="item <%= data.type %>">
+    <% include('showLabel') %>
+    <div class="code-wrap">
+        <div class="code-item code-item-input">                
+            <input id="<%= data.id %>" name="<%= data.name %>" data-msg-required="短信验证不能为空" <% if(data.required){ %> required="<%= data.required %>" <%}%> type="text"
+                    <% for(var k=0;k<attr.length-1;k++){ %>
+                        <% var attrItem = attr[k].split('=') %>
+                        <%= attrItem[0] %> = "<%= attrItem[1] %>"
+                    <%} %>
+             >
+        </div>
+        <div class="code-item code-item-img">
+            <button type="button" class="btn code-btn" data-code="tel" data-src="<%= data.src %>"
+                <% for(var k=0;k<attr.length-1;k++){ %>
+                    <% var attrItem = attr[k].split('=') %>
+                    <%= attrItem[0] %> = "<%= attrItem[1] %>"
+                <%} %>
+            >
+                <i class="font-icons-31 mr5 fz14"></i><span class="code-btn-text">获取验证码</span>
+            </button>
+        </div>
+    </div>
+</li>
+</script>
+
+<script id="Checkbox" type="text/html">
+   <li class="item <%= data.type %>">
+        <% include('showLabel') %>
+        <ul class="select-wrap">
+        <% var choices = data.choices.split(',') %>
+            <% for(var k=0;k< choices.length-1;k++){ %>
+                <% var item = choices[k].split('=') %>
+                <li class="select-item">
+                    <label>
+                        <input id="<%= data.id %>" name="<%= data.name %>" type="<%= data.type %>" value="<%= item[0] %>"><%= item[1] %><i class="arraw"></i>
+                    </label>
+                </li> 
+            <%} %>
+        </ul>
+    </li>
+</script>
+
+
+<script id="Radio" type="text/html">
+<li class="item radio">
+    <% include('showLabel') %>
+    <ul class="select-wrap">
+    <% var choices = data.choices.split(',') %>
+            <% for(var k=0;k< choices.length-1;k++){ %>
+                <% var item = choices[k].split('=') %>
+                <li class="select-item">
+                    <label><input id="<%= data.id %>" name="<%= data.name %>" data-msg-required="举报类型不能为空" required="required"  value="<%= item[0] %>"  class="valid" type="radio"><%= item[1] %><i class="arraw"></i></label>
+                </li>
+            <%} %>
+    </ul>
+</li>
+</script>
+
+<script id="Choice" type="text/html">
+   <li class="item <%= data.type %>">
+        <% include('showLabel') %>
+        <select id="<%= data.id %>" name="<%= data.name %>" class="text valid" data-tpl="" aria-invalid="false">
+            <option value="">请选择</option>
+            <% var choices = data.choices.split(',') %>
+            <% for(var k=0;k< choices.length-1;k++){ %>
+                <% var item = choices[k].split('=') %>
+                <option value="<%= item[0] %>"><%= item[1] %></option>
+            <%} %>
+        </select>
+    </li>
+</script>
+
+<script id="Textarea" type="text/html">
+   <li class="item <%= data.type %>">
+        <% include('showLabel') %>
+        <textarea id="<%=data.id %>"
+            <% for(var k=0;k<attr.length-1;k++){ %>
+                <% var attrItem = attr[k].split('=') %>
+                <%= attrItem[0] %> = "<%= attrItem[1] %>"
+            <%} %>
+             name="<%=data.name %>" <% if(data.required){ %> required="<%= data.required %>" <%}%>/></textarea>
+    </li>
+</script>
+
+<script id="FormItem" type="text/html">
+   <% var arr = ['form', 'aid', 'cate_pushs', 'topic', 'models']  %>
+    <% for(var k=0;k<arr.length;k++){  %>
+        <% if(arr[k] == data.id){  %>
+            <% var diff = true%>
+        <%} else{  %>
+            <% var diff = false%>
+        <%} %>
+    <%} %>
+    
+    <% if(diff){  %>
+        <li class="item <%=data.type %>">
+            <% include('showLabel') %>
+            <input id="<%=data.id %>" type="<%=data.type %>" 
+            <% for(var k=0;k<attr.length-1;k++){ %>
+                <% var attrItem = attr[k].split('=') %>
+                <%= attrItem[0] %> = "<%= attrItem[1] %>"
+            <%} %>
+             name="<%= config[data.name] %>" value="<%= data.value %>" <% if(data.required){ %> required="<%= data.required %>" <%}%>/>
+        </li>
+    <%} else{  %>
+        <li class="item <%=data.type %>">
+            <% include('showLabel') %>
+            <input id="<%=data.id %>" type="<%=data.type %>" 
+            <% for(var k=0;k<attr.length-1;k++){ %>
+                <% var attrItem = attr[k].split('=') %>
+                <%= attrItem[0] %> = "<%= attrItem[1] %>"
+            <%} %>
+             name="<%=data.name %>" value="<%= data.value %>" <% if(data.required){ %> required="<%= data.required %>" <%}%>/>
+        </li>
+    <%} %>
+</script>
+
+<script id="showLabel" type="text/html">
+    <% if(config.showLabel){ %> 
+        <p style="text-indent:0"><%= data.label %></p>
+    <%}%> 
+</script>

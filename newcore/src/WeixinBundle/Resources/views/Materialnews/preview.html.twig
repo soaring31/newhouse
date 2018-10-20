@@ -1,0 +1,26 @@
+{% extends "ManageBundle::poplayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+
+
+</script>
+{% endblock %}
+{% block body%}
+<p>图文素材预览</p>
+<ul>
+
+	{% for item in data %}
+		<li>
+			<p><span>标题：</span>{{ item.title }}</p>
+			<p><span>图文消息的封面：</span><img src="{{ item.thumb_media_id }}" style="vertical-align:middle;"></img></p>
+			<p><span>是否显示封面：</span>{{ item.show_cover_pic }}</p>
+			<p><span>作者：</span>{{ item.author }}</p>
+			<p><span>图文消息的摘要：</span>{{ item.digest }}</p>
+			<p><span>图文消息的具体内容：</span>{{ item.content }}</p>
+			<p><span>图文消息的原文地址：</span>{{ item.content_source_url }}</p>
+			<p><span>图文页的URL：</span>{{ item.url }}</p>
+		</li></br><hr><br/>
+    {% endfor %}
+
+<ul>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+{# 说明 
+* detail: 分销详情数
+#}
+
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% block title %}
+    {{detail.name|default('')}}
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" Content="{{detail.keywords|default('')}}"/>
+<meta name="description" content="{{detail.abstract|default('')}}"/>
+{% endblock key_des %}
+
+{% block header_title %}
+    {{core_mobile_global.title({title: '分销详情'})}}
+{% endblock header_title %}
+
+{% block container %}
+    <div data-block="{
+        bParams: true,
+        ajax:{
+            url: '{{ ('fenxiao/detail')|U }}',
+            data: {
+                id: '{{ detail.id|default('') }}',
+                tpl: 'Fenxiao:detailblock'
+            }
+        }
+    }"></div>
+    {# 微信分享只能放当前页 #}
+    {{ housemobile_global.weixin_share({
+        text    : detail.name|default,
+        abstract: detail.abstract|default,
+        url     : ('fenxiao/detail')|U({id: detail.id|default}, true),
+        thumb   : detail.thumb|default,
+    }) }}
+{% endblock container %}

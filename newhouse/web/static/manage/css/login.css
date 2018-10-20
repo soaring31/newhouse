@@ -1,0 +1,190 @@
+@charset 'UTF-8';
+@CHARSET 'UTF-8';
+.loginlay {
+    width: 200px;
+    margin: 50px auto;
+}
+
+.loginlay table {
+    width: 100%;
+}
+
+.loginlay table td {
+    height: 25px;
+}
+
+.loginlay table td input {
+    height: 22px;
+
+    color: #666; 
+    border: 1px solid #ccc;
+}
+
+.loginlay table td input:hover {
+    border-color: red;
+}
+
+body {
+    line-height: 35px; 
+
+    width: 100%;
+
+    color: #333;
+    background: url(../images/back3.jpg) no-repeat;
+    background-position: 50% 50%;
+    -moz-background-size: 100%;
+         background-size: 100%;
+}
+
+#loginBody #loginBezel {
+    /* 登录主窗口半透明*/
+    font: bold 18px 宋体; 
+
+    width: 500px;
+    height: 300px;
+    margin: 0 auto;
+    margin-top: 130px;
+
+    border: 1px solid #000;
+    -moz-border-radius: 4px;
+         -webkit-border-radius: 4px;
+            border-radius: 4px;
+    /* for IE */
+    background: #fff;
+    background: rgba(255, 255, 255, .3);
+    /* Old Firefox */
+    -webkit-box-shadow: 30px 30px 50px;
+       -moz-box-shadow: 30px 30px 50px;
+            box-shadow: 30px 30px 50px;
+}
+
+#loginBody #loginChildTop {
+    font: bold 20px 宋体;
+    line-height: 60px;
+
+    width: 100%;
+    height: 20%;
+
+    cursor: pointer;
+
+    color: #fff;
+    -moz-border-radius: 4px;
+         -webkit-border-radius: 4px;
+            border-radius: 4px;
+    background: #333;
+    /* Old Firefox */
+}
+
+#loginBody #loginChildBottom {
+    width: 100%;
+    height: 240px;
+}
+
+#loginBody .rememberMe {
+    font-size: 12px;
+
+    vertical-align: middle;
+}
+
+#loginBody table {
+    margin-top: 10px;
+    padding: 10px auto;
+
+    text-align: center;
+
+    color: #000;
+}
+
+#loginBody .inputUP {
+    line-height: 35px;
+
+    width: 200px;
+    height: 35px;
+    padding: 0 5px;
+
+    border: 1px solid #999;
+    -moz-border-radius: 4px;
+         -webkit-border-radius: 4px;
+            border-radius: 4px;
+    /* Old Firefox */
+}
+
+.onFocus {
+    -webkit-box-shadow: 0 0 10px #2d46ae;
+       -moz-box-shadow: 0 0 10px #2d46ae;
+            box-shadow: 0 0 10px #2d46ae;
+    /* for IE */
+}
+
+#loginBody #codeText {
+    line-height: 35px;
+
+    width: 80px;
+    height: 35px;
+    padding: 0 5px;
+
+    border: 1px solid #999;
+    -moz-border-radius: 4px;
+         -webkit-border-radius: 4px;
+            border-radius: 4px;
+    /* Old Firefox */
+}
+
+#loginBody #loginBtn,
+#loginBody #loginBtn1 {
+    font-size: 15px;
+
+    width: 100px;
+    height: 35px;
+    /* Old Firefox */
+
+    cursor: pointer;
+
+    color: #fff;
+    border: 1px solid rgba(0, 0, 0, .4); 
+    -moz-border-radius: 4px;
+         -webkit-border-radius: 4px;
+            border-radius: 4px;
+    background: rgba(0, 0, 0, .4);
+    background-color: #2a2525;
+}
+
+#loginBody #checkSpan {
+    margin-top: 100px; 
+
+    border: 1px solid red;
+}
+
+#loginBody #codeImg {
+    width: 100px;
+    height: 35px;
+
+    cursor: pointer; 
+
+    border: 1px solid #999;
+    -webkit-border-radius: 4px;
+       -moz-border-radius: 4px;
+            border-radius: 4px;
+}
+
+#loginBody #pointerOpen {
+    /* Old Firefox */
+    display: none;
+
+    width: 30px;
+    height: 30px;
+    margin: 200px auto;
+
+    cursor: pointer; 
+
+    border: 1px #000 solid;
+    -moz-border-radius: 4px;
+         -webkit-border-radius: 15px;
+            border-radius: 15px;
+}
+
+.view-form .code-item {
+    width: auto;
+}
+
+/*# sourceMappingURL=..\..\..\..\src\ManageBundle\Resources\src\css\login.css.map */

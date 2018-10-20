@@ -1,0 +1,80 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+seajs.use(["{{bundlepath}}/js/webconfig.js", "{{bundlepath}}/css/cfplatform.css"],function(main){
+	main.init('cfplatform');
+});
+</script>
+{% endblock %}
+{% block tableMain %}
+<form class="form" action="{{ (action)|U }}" method="post">
+<table class="right-table" id="artlist">
+	<tr>
+		<th colspan="2" class="conlist">平台支付设置</th>
+	</tr>
+	<tr>
+		<td class="w200 fB pleft30">平台支付</td>
+		<td>
+			<input type="radio" name="platform_open" {{ 'platform_open'|C|isChecked(1) }} value="1" /><label>开启</label>
+			<input type="radio" name="platform_open" {{ 'platform_open'|C|isChecked(0) }} value="0" /><label>关闭</label>
+			<span class="tips1">开启后，若公众号没有开通此支付方式。用户将可以使用此方法进行支付。</span>
+		</td>
+	</tr>
+	<tr>
+		<td class="fB pleft30"><img src="{{ asset('bundles/'~bundlepath~'/images/pay_icon/alipay.png') }}" />支付宝支付</td>
+		<td>
+		    <div>
+    			<input type="radio" name="platform_alipay_open" {{ 'platform_alipay_open'|C|isChecked(1) }} value="1" /><label>开启</label>
+    			<input type="radio" name="platform_alipay_open" {{ 'platform_alipay_open'|C|isChecked(0) }} value="0" /><label>关闭</label>
+    			<span class="tips1"><a href="javascript:void(0);" data="alipay,支付宝" class="a_choose">配置信息</a></span>
+    	    </div>
+    	    <div class="hide" id="alipay_setting">
+				<div class="setting_rows">
+					<p>
+						<span>帐号：</span>
+						<input type="text" name="platform_alipay_name" value="{{ ('platform_alipay_name')|C }}" class="px w250" />
+					</p>
+					<p>
+						<span>PID：</span>
+						<input type="text" name="platform_alipay_pid" value="{{ ('platform_alipay_pid')|C }}" class="px w250" />
+					</p>
+					<p>
+						<span>KEY：</span>
+						<input type="text" name="platform_alipay_key" value="{{ ('platform_alipay_key')|C }}" class="px w250" />
+					</p>
+				</div>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td class="fB pleft30"><img src="{{ asset('bundles/'~bundlepath~'/images/pay_icon/weixin.png') }}" />微信支付</td>
+		<td>
+		    <div>
+    			<input type="radio" name="platform_weixin_open" {{ 'platform_weixin_open'|C|isChecked(1) }} value="1" /><label>开启</label>
+    			<input type="radio" name="platform_weixin_open" {{ 'platform_weixin_open'|C|isChecked(0) }} value="0" /><label>关闭</label>
+    			<span class="tips1"><a href="javascript:void(0);" data="weixin,微信" class="a_choose">配置信息</a></span>
+			</div>
+			<div class="hide" id="weixin_setting">
+				<div class="setting_rows">
+					<p>
+						<span>微支付商户号：</span>
+						<input type="text" name="platform_weixin_mchid" value="{{ ('platform_weixin_mchid')|C }}" class="px w250" />
+					</p>
+					<p>
+						<span>API密钥：</span>
+						<input type="text" name="platform_weixin_key" value="{{ ('platform_weixin_key')|C }}" class="px w250" />
+					</p>
+					<p style="color: red;">注：这里填写的信息与基本设置中应用ID和应用秘钥是来自同一微信公众号的！</p>
+				</div>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td><input class="submit-btn ajax-post confirm" target-form="form" value="保 存" type="submit"></td>
+	</tr>
+</table>
+</form>
+{% endblock %}
+{% block submit %}{% endblock %}
+{% block promptUl %}<li></li>{% endblock %}

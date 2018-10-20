@@ -1,0 +1,42 @@
+{% block css %}{% endblock %}
+<script type="text/javascript">
+seajs.use(["manage/js/main","core"],function(l,core){
+	l.init('ajaxSubmit');
+	//图片上传、图片预览、选择文件
+    core.generalEvent.initViewImg();
+    core.generalEvent.initUploadImg();
+});
+</script>
+{% block js %}{% endblock %}
+<div class="position">　当前位置：{{navurl.data.name|default('')}}</div>
+<div class="center">
+    <div class="topMenu">
+		<ul>
+			{% if navurl.childs is defined %}
+			<label id="topNav">		
+			{% for item in navurl.childs %}
+			{% set url = (item.menu.bundle~"/"~item.menu.controller~"/"~item.menu.action)|U(item.menu.urlparams) %}
+			<li id='mainmenu_{{item.menu.id|default(0)|tripodEncode}}' data-url='{{ url }}' {% if action==item.menu.action %}class="on"{% endif %}><a href="javascript:void(0);">{{ item.menu.name }}</a></li>
+			{% endfor %}
+			</label>
+			{% endif %}
+			{% block mainMenu %} {% endblock %}
+		</ul>
+	</div>
+	<div class="tableMain">
+	{% block tableMain %}{% endblock %}
+	</div>
+	<div class="submit">
+	{% block submit %}<input type="button" id="mainsubmit_{{controller}}_save" class="submit-btn" value="提交" />{% endblock %}
+	</div>
+	<div id="page"></div>
+	{% block page %}
+	<div id="pageIndex" class="hide">{% block pageIndex %}1{% endblock %}</div>
+	<div id="pageCount" class="hide">{% block pageCount %}1{% endblock %}</div>
+	<div id="pageSize" class="hide">{% block pageSize %}8{% endblock %}</div>
+	{% endblock %}
+	<div class="promptTitle">提示说明</div>
+	<ul class="promptUl">
+		{% block promptUl %}{% endblock %}
+	</ul>
+</div>

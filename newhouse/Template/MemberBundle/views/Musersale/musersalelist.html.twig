@@ -1,0 +1,153 @@
+
+{% extends 'MemberBundle::Mainlayout.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+{% set aid = app.request.get('aid') %}
+{% set ename = app.request.get('ename') %}
+{% set esflx = app.request.get('esflx') %}
+{% set _form_id = app.request.get('_form_id') %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }} 
+    
+    {{ forms.jump(
+        {
+            title: '<i class=" mr5"></i>发布二手房',
+            url: 'musersale/musersaleinfo'|U      
+        }
+        ) }}
+
+
+{% endblock %}
+
+{% block mainleft %}
+{#     {{ render(controller('HouseBundle:Mnews:category', {category: category, action: 'mnews/mnewsmanage'})) }} #}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ lists.filter([
+    {
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增二手房'
+    },
+    {
+        method: 'selectFormField',
+        title: '审核',
+        form: 'checked',
+        field: 'checked',
+    },
+     {
+        method: 'selectFormField',
+        title: '置顶',
+        form: 'sale',
+        field: 'top',
+    },
+    {
+        method: 'selectFormField',
+        title: '推荐',
+        form: 'sale',
+        field: 'jian',
+    },
+    {
+        method: 'selectFormField',
+        title: '上架',
+        form: 'usesale',
+        field: 'valid',
+    },
+    {
+        method: 'search',
+        field: 'name',
+    }
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            models: '{{ models }}',
+            category: '{{ category }}'
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover  ">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{forms.checkbox()}}</th>                  
+                    <th>房源标题/小区名称<br>其他信息</th>
+                    <th width="100">点击<br>预约</th>
+                    <th width="100">到期时间<br>物业类型</th>
+                    <th width="100" >置顶<br>推荐</th>
+                    <th width="100">刷新日期<br>装修程度</th>
+                    <th width="100" >价格<br>单价</th>
+                    {# <th width="100" >房源图片</th> #}
+                    <th width="100" >区块</th>
+                    <th width="100" >审核<br>上架</th>
+                    <th width="120" class="tac">操作</th>
+                </tr>
+              
+                {% if ident.info.data is defined %}
+                {% for k, vo in ident.info.data %}
+                <tr data-id="{{ vo.id }}">
+                <td width="40" class="tac">{{forms.checkbox()}}</td>                  
+                <td>[南城]<a href="">{{vo.name}}</a><br>{{vo.lpmc}}<br>{{ lists.formField({value: vo.shi, form: 'srv_common', field:'shi'}) }}/{{ lists.formField({value: vo.ting, form: 'srv_common', field:'ting'}) }}/{{ lists.formField({value: vo.wei, form: 'srv_common', field:'wei'}) }},{{ vo.mj }}㎡,{{core_global.formData({value: vo.cx})}}</td>
+                <td width="100">123123<br><a href="#" data-rolo="show">预约</a></td>
+                <td width="100">{{ vo.zjdate|default('0')|date('Y-m-d') }}<br>
+                {# {{core_global.formData({value: vo.esflx})}} #}
+                {{vo.esflx}}
+                </td>
+                <td width="100" >{{core_global.formData({value: vo.top})}}<br>{{ lists.formField({value: vo.jian, form: 'sale', field:'jian'}) }}</td>
+                <td width="100">刷新日期<br>{{core_global.formData({value: vo.zxcd})}}</td>
+                <td width="100" >{{vo.zj}}元<br>{{vo.dj}}/㎡</td>
+                {# <td width="100" >房源图片</td> #}
+                <td width="100" ><a title="{{ vo.name }}的区块" data-role="show" href="{{ ('msale/msalearc')|U({type: 'sale_arc', aid:  vo.id, models: models}) }}">[0]</a></td>
+                <td width="100" >{{ lists.formField({value: vo.checked}) }}<br>{{ lists.formField({value: vo.valid, form: 'usesale', field:'valid'}) }}</td>
+                <td width="120" class="tac">
+                    {{ forms.show() }}
+                    {{ forms.delete() }}
+                </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{lists.page(ident.info)}}
+</section>
+
+{{ lists.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'checked',
+        title: '审核',
+    },
+   {
+            method: 'dropdownFormField',
+            title: '上架',
+            field: 'valid',
+            form: 'userent',
+    }
+]) }}
+{% endblock %}
+
+{% block promptUl %}
+提示说明
+{% endblock %}
+
+
+
+

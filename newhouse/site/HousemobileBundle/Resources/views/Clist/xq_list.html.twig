@@ -1,0 +1,62 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+** ajax调用：小区列表
+#}
+
+{% if ident.list is defined %}
+    {% set list = ident.list %}
+{% endif %}
+{% block result %}
+    {% spaceless %}
+    {% if ident.list.data is defined and ident.list.pageCount|default('') != 0 %}
+        {% for item in ident.list.data %}
+            <li {% if loop.last %}data-page="{
+                    pageIndex: {{list.pageIndex}},
+                    pageCount: {{list.pageCount}},
+                    pageSize: {{list.pageSize}}
+                 }"{% endif %}>
+                <a href="{{('sale/qdetail')|UU({id: item.id|default('')})}}" class="item-content p-default">
+                    <div class="item-media">
+                        {{- core_global.img({
+                            src: item.thumb|default(''),
+                            alt: item.name|default(''),
+                            type: 2,
+                            width: 90,
+                            height: 75
+                        }) -}}
+                    </div>
+                    <div class="item-inner xq">
+                        <div class="item-title-row">
+                            {{housemobile_global.list_title({title: item.name|default('')})}}
+                        </div>
+                        <div class="item-subtitle item-subtitle-ex">
+                            {{item.address|default('')}}
+                        </div>
+                        <div class="item-subtitle item-subtitle-ex">
+                            <span>
+                                户型
+                                <span class="p-red">({{item.doornum|default('')}})</span>
+                            </span>
+                            <span>
+                                &nbsp;相册
+                                <span class="p-red">({{item.albumnum|default('')}})</span>                        
+                            </span>
+                                &nbsp;
+                              人气&nbsp;:&nbsp;
+                            <span>{# <span data-counts="{models: 'houses', field: 'clicks', id: '{{item.id|default('')}}'}"></span> #}{{item.clicks|default(0)}}</span>
+                        </div>
+                        <div class="item-subtitle item-subtitle-ex p pull-left">
+                             <span class="button button-danger button-sm">售</span>&nbsp;
+                             <span class="l p-red fam">{{item.sales|default('')}}</span>&nbsp;套&nbsp;&nbsp;&nbsp;
+                             <span class="button button-sm">租</span>&nbsp;
+                             <span class="l p-red fam">{{item.rents|default('')}}</span>&nbsp;套
+                        </div>
+                    </div>
+                </a>
+            </li>
+        {% endfor %}
+    {% else %}
+        <li class="mobile-list-none">暂无小区</li>
+    {% endif %}
+    {% endspaceless %}
+{% endblock result %}

@@ -1,0 +1,73 @@
+{#
+{% set cnxh = ('tuijian_list_cnxh')|getPushMuti(4,{area:cityid,checked:1}) %}
+{% set cnxhData = cnxh['tuijian_list_cnxh']|default('') %}
+{% if cnxhData|default('') and cnxhData|default('')|length > 0 %}
+    <div class="cnxh-wrap">
+        <!--title-->
+        <div class="cnxh-title">
+            <h3>猜你喜欢</h3>
+        </div>
+        <!--/title-->
+        <!--body-->
+        <ul class="cnxh-list" data-tag="tuijian_list_cnxh">
+            {% for item in cnxhData|default('') %}
+
+            {% set regionId = item.region|default('') %}
+            {% set cate_circle = tem.cate_circle|default('') %}
+            {% set cityarea_name = ('db.area')|getRow({id:regionId,checked:1})|default('') %}
+            {% set catyarea2_name = ('house.cate_circle')|getRow({id: cate_circle,checked:1})|default('') %}
+                <li>
+                    <a href="{{item.url|default('')}}" target="_blank" class="cnxh-img">
+                        {{- core_global.lazy_img({
+                            src: item.thumb|default(''),
+                            alt: item.name|default(''),
+                            type: 2,
+                            width:280 ,
+                            height: 190
+                        }) -}}
+                    </a>
+                    <p class="clearfix cnxh-house-title">
+                        <a href="{{item.url|default('')}}" title="{{item.name|default('')}}" target="_blank" class="ellipsis">{{item.name|default('')}}</a>
+                        <span class="cnxh-price fr ellipsis">
+                            {{house_global.if_dj({value: item.dj|default(''), tpl: '%value%%danwei%'})}}
+                        </span>
+                        <p class="cnxh-addrs ellipsis">
+                            {% if catyarea_name.name|default('') or catyarea2_name.name|default('') %}
+                            [ {{catyarea_name.name|default('')}}{{catyarea2_name.name|default('')}} ]
+                            {% endif %}
+                            {{item.address}}
+                        </p>
+                    </p>
+                </li>
+            {% endfor %}
+        </ul>
+        <!--/body-->
+    </div>
+{% endif %}
+#}
+
+
+
+<div class="cnxh-wrap">
+        <!--title-->
+        <div class="cnxh-title">
+            <h3>猜你喜欢</h3>
+        </div>
+        <!--/title-->
+        <!--body-->
+        <ul class="cnxh-list" data-tag="tuijian_list_cnxh">
+            <!-- AdSame ShowCode: PC / 新房列表页 / 猜你喜欢1 Begin -->
+            <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~'13102110' }}" charset="gbk" ></script>
+            <!-- AdSame ShowCode: PC / 新房列表页 / 猜你喜欢1 End -->
+            <!-- AdSame ShowCode: PC / 新房列表页 / 猜你喜欢2 Begin -->
+            <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~'13102111' }}" charset="gbk" ></script>
+            <!-- AdSame ShowCode: PC / 新房列表页 / 猜你喜欢2 End -->
+            <!-- AdSame ShowCode: PC / 新房列表页 / 猜你喜欢3 Begin -->
+            <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~'13102112' }}" charset="gbk" ></script>
+            <!-- AdSame ShowCode: PC / 新房列表页 / 猜你喜欢3 End -->
+            <!-- AdSame ShowCode: PC / 新房列表页 / 猜你喜欢4 Begin -->
+            <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~'13102113' }}" charset="gbk" ></script>
+            <!-- AdSame ShowCode: PC / 新房列表页 / 猜你喜欢4 End -->
+        </ul>
+        <!--/body-->
+</div>

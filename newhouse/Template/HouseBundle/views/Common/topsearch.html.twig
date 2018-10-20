@@ -1,0 +1,18 @@
+{# # 说明
+**　class 增加外层控制样式，以便修改不同的样式  #}
+{% set class = app.request.get('class')|default('') %}
+{% set placeholder = app.request.get('placeholder')|default('') %}
+{% set models = app.request.get('models')|default('') %}
+
+<div class="top-bar {{class}}">
+    <div class="container">
+        {{core_global.search({
+            placeholder: placeholder|default('请输入楼盘名称/地址/拼音')
+        })}}
+        <ul class="list clearfix fl">
+            <li>
+                {{core_global.topSearchHot}}
+            </li>
+        </ul>
+    </div>
+</div>

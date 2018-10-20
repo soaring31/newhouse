@@ -1,0 +1,122 @@
+﻿/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+*/
+
+@import 'static/ats';
+// 工具类 每个文件都要导入
+
+@import 'top-search';
+
+// 标题
+.con-head{
+    font-weight: bold;
+    font-size:18px;
+    margin:0px 0 20px 10px;
+    em{
+        color:#fe5200;
+        font-weight:normal;
+        font-size: 14px;
+        margin-left: 5px;
+    }
+}
+// 内容
+.t1{
+    background-color: #f4f4f4;
+    height:280px;
+    width:1200px;
+    overflow:hidden;
+    margin-bottom:40px;
+    a {
+        img {
+            display: block;
+        }
+    }
+    .time {
+        span {
+            background: #eee;
+            border-radius: 5px;
+            color: $major-color;
+            display: inline-block;
+            font-weight: 700;
+            margin: 0 3px;
+            padding: 0 7px;
+            vertical-align: middle;
+        }
+    }
+    .t1-text{
+        margin-left: 60px;
+        margin-top: 12px;
+        width: 470px;
+        h2 a{
+            color: #fc6700;
+            font-weight: bold;
+            font-size: 24px;
+            display: block;
+            padding-right: 15px;
+            @extend %text-overflow;
+        }
+        h3{
+            color:#ff6400;
+            margin:10px 0;
+            font-size:18px;
+        }
+        .ad{
+            color:#343436;
+            border-bottom: 1px dashed #ddd;
+            margin-bottom: 12px;
+            padding-bottom: 5px;
+            line-height:24px;
+        }
+        .ad-text {
+            max-height: 48px;
+            overflow: hidden;
+            span {
+                float: left;
+                display: block;
+            }
+        }
+        .ad-txt {
+            float: left;
+            width: 390px;
+        }
+        .text-box p{
+            margin-bottom:10px;
+            span{
+                color:red;
+                font-size:16px;
+            }
+        }
+    }
+
+    .btn-detail {
+        text-decoration: none;
+        display:inline-block;
+        background-color: #f68014;
+        background: linear-gradient(to bottom, #f68014 0%,#f55e0b 100%);
+        border-radius: 2px;
+        color:#fff;
+        border:1px solid #de2200;
+        width:132px;
+        height:46px;
+        font-size:20px;
+        line-height: 48px;
+        text-align: center;
+        margin:10px 8px 0 40px;
+    }
+
+}
+// 按钮
+.btn {
+    display:inline-block;
+    font-size:16px;
+    background-color: #1c78c1;
+    background: linear-gradient(to bottom, #31a2ee 0%,#1e79c2 100%);
+    border-radius: 2px;
+    padding:1px 20px;
+    border-color: #1c78c1;
+    text-decoration: none;
+    height: 24px;
+    line-height: 24px;
+}

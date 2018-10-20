@@ -1,0 +1,289 @@
+{% extends 'HouseBundle::base.html.twig' %}
+{% block title %}地图{% endblock title %}
+{% block key_des %}
+<meta name="keywords" Content="地图"/>
+<meta name="description" content="地图"/>
+{% endblock key_des %}
+{% block css %}
+    {{ core_global.linkcss('static/' ~ bundlepath ~ '/css/map.css') }}
+{% endblock css %}
+{% block js %}
+<script type="text/javascript">
+seajs.use(['mapComplex', 'jqhoverS']);
+</script>
+{% endblock js %}
+
+{% block js_common %}{% endblock js_common %}
+
+{% block header %}
+
+{% endblock header %}
+{% block body %}
+{% set map = core_global.mconfigtostring({name: "map", ename: 'mwebset'}).__toString %}
+{% set arr_map = (map == 0 ? '' : map)|split(',') %}
+{# 请求地址 #}
+{% block map_body %}
+{# 地图 #}
+<div id="container"
+    data-map="{
+        point: {
+            lng: {{arr_map[0]|default(116.413384)}},
+            lat: {{arr_map[1]|default(39.910925)}}
+        },
+        url: '{{('houses/list')|U}}',
+        zoom: {{arr_map[2]|default(12)}}
+    }"
+    data-marker-lists="[
+        {
+            title: '地图上显示区域, 此参数没有意义只做备注用',
+            listOpt: {
+                wrap: '.con-list .list',
+                tpl: '#tpl-list',
+                tplListTop: '#tpl-list-top'
+            },
+            tpl:  '#tpl-12',
+            urlOpt: {
+                search: 2,
+                map: 'neq|_null',
+                needarea: 1,
+                type: 'neq|1'
+            },
+            zoom: [12, 13]
+        },
+        {
+            title: '地图上显示楼盘',
+            listOpt: {
+                wrap: '.con-list .list',
+                tpl: '#tpl-list',
+                tplListTop: '#tpl-list-top'
+            },
+            tpl:  '#tpl-14',
+            urlOpt: {
+                search: 2,
+                map: 'neq|_null',
+                type: 'neq|1'
+            },
+            zoom: [14]
+        },
+        {
+            title: '地图上显示楼盘详细信息',
+            listOpt: {
+                wrap: '.con-list .list',
+                tpl: '#tpl-list',
+                tplListTop: '#tpl-list-top'
+            },
+            tpl:  '#tpl-15',
+            urlOpt: {
+                search: 2,
+                map: 'neq|_null',
+                type: 'neq|1'
+            },
+            zoom: [15]
+        }
+    ]"></div>
+
+{# template items #}
+{# 地图区域模板 #}
+<script id="tpl-12" type="text/html">
+    <div class="area-item" data-map-item="<%= id %>" data-point="<%= point.lng %>,<%= point.lat %>" data-name="region" data-value="<%= id %>" data-polyline="<%= polyline %>">
+        <div class="area-item-inner">
+            <span class="name"><%= name %></span>
+            <span class="name-sub"><%= num %>个楼盘</span>
+        </div>
+    </div>
+</script>
+{# 地图楼盘模板 #}
+<script id="tpl-14" type="text/html">
+    <div class="marker-item" data-map-item="<%= id %>" data-polyline="<%= polyline %>">
+        <a href="<%= url %>" target="_blank">
+            <span class="name"><%= dj * 1 ? dj + '元/m&sup2;' : name %></span>
+            <span class="name-sub"><%= name %></span>
+            <span class="arrow"></span>
+        </a>
+    </div>
+</script>
+<script id="tpl-15" type="text/html">
+    <div class="marker-item marker-item-15" data-map-item="<%= id %>" data-polyline="<%= polyline %>">
+        <a href="<%= url %>" target="_blank">
+            <span class="name"><%= name %></span>
+            <span class="name-sub"><%= dj * 1 ? dj + '元/m&sup2;' : name %></span>
+            <span class="arrow"></span>
+        </a>
+    </div>
+</script>
+{# 列表楼盘模板 #}
+<script id="tpl-list" type="text/html">
+    <li data-map-item="<%= id %>">
+        <a href="<%= url %>" target="_blank">
+        <div class="img">
+                <img width="120" height="90" src="<%= thumb %>">
+        </div>
+        <div class="item-text">
+            <h3>
+                <span class="text-2">
+                    <%= dj * 1 ? dj + '元/m&sup2;' : '待定' %>
+                </span>
+                <%= name %>
+            </h3>
+            <div class="text-1">
+                <div class="text-1-ls">
+                    <%=# zlhx %>
+                </div>
+                <div class="text-1-ls">
+                    <%= address %>
+                </div>
+                <div class="text-1-ls text-1-ls-1">
+                    <%=# tags %>
+                </div>
+            </div>
+        </div>
+        </a>
+    </li>
+</script>
+{# 列表头 #}
+<script type="text/html" id="tpl-list-top">
+    <div class="con-top ">
+        <h2><%= title ? title : '{{ sess_area|getAreaName|default('区域') }}' %></h2>
+        <p>当前共有<%= num %>个结果</p>
+    </div>
+</script>
+
+{% endblock map_body %}
+
+{# 侧栏 #}
+<div class="con-box">
+    <div class="con-box-inner">
+        <!-- 内左 图标 -->
+        <ul class="icon-nav">
+            <li class="active1">
+                <a href="#"> <i class="font-map-search"></i>搜索</a>
+            </li>
+            <!-- <li>
+                <a href="#"> <i class="font-map-school"></i>学区</a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="font-map-guangzhu"></i>关注</a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="font-map-history"></i>历史</a>
+            </li> -->
+            <li>
+                <div class="icon-sz">
+                    <a href="#" class="shou" data-toggle=".con-box-inner" data-toggle-con='<i class="font-map-shouzhan show-plz"></i>展开'>
+                        <i class="font-map-shouzhan"></i>收起</a>
+            </div>
+        </li>
+    </ul>
+    <!-- 内容 -->
+    <div class="icon-box">
+        <div class="icon-box-inner">
+            <div class="con-header">
+                <!-- 内右 文字 -->
+                <div data-list-top="1"></div>
+                <ul class="con-nav" data-con-nav="1">
+                    {% block map_sort %}
+                    {# 排序配置 #}
+                    {% set sort_data = {
+                        def: {
+                            title: '默认'
+                        },
+                        dj: {
+                            title: '价格'
+                        },
+                        mj: {
+                            title: '面积'
+                        },
+                        clicks: {
+                            title: '人气'
+                        }
+                    } %}
+
+                    {{ core_global.sort({
+                        action: action,
+                        data: sort_data|default('')
+                    }) }}
+
+                    {% endblock map_sort %}
+                </ul>
+            </div>
+            <div class="con-list">
+                <ul class="list"></ul>
+                <div data-page="1"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+{# 顶部 #}
+
+<div class="top">
+    <h2 class="logo fl">
+        地图 <i class="font-map-ADD"></i>
+    </h2>
+    {# set sea_opt = {
+        index: '新房',
+        sale: '二手房',
+        rent: '出租',
+    } #}
+    {% set sea_opt = {
+        index: '新房',
+    } %}
+    {# {{ dump(action) }} #}
+    <ul class="top-con">
+        <li class="top-list new-house">
+            <a href="#" class="searchfor hoverslider" data-obj=".searchfor-downlist" data-delay="0">
+                {{sea_opt[(action)]|default('')}} <i class="font-map-jian"></i>
+            </a>
+            <div class="list-con1 list-con2 searchfor-downlist">
+                <ul class="n-house">
+                    {% for k, v in sea_opt %}
+                    <li>
+                        <a href="{{('map/' ~ k)|U}}">{{v}}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </li>
+        <li>
+            <div class="search-bar ">
+                <input type="text" class="fl" data-map-search-input="1" name="name" placeholder="请输入关键字">
+                <button type="btn" data-map-search-btn="1" class="search-btn fl">
+                    <i class="font-map-search"></i>
+                </button>
+            </div>
+        </li>
+    </ul>
+    <div class="top-filter">
+    {% block map_filter %}
+
+        {% set cate_data = house_global.cate_data({ 
+                        tag: 'houses',
+                    }).__toString|json_decode %}
+
+        {{ house_global.filter_item({
+                            action: 'houses/list',
+                            rows: 3,
+                            reserve: 1
+                        }|merge(cate_data)) }}
+    {% endblock map_filter %}
+    </div>
+
+    <div class="top-widget">
+        <a href="{{('index/index')|U}}" class="list">
+            <i class="font-map-20"></i>
+            首页
+        </a>
+        <a href="{{( (action != 'index' ? action : 'houses') ~ '/list' )|U}}" class="list">
+            <i class="font-map-liebiao"></i>
+            列表
+        </a>
+    </div>
+</div>
+{% endblock body %}
+
+{% block footer %}
+
+{% endblock %}

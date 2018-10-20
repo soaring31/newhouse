@@ -1,0 +1,255 @@
+{# 新房 #}
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set aid = app.request.get('aid') %}
+{% set category = 'cate_type' %}
+{% set cate_type = app.request.get('cate_type') %}
+{% set category_data = ('house.category')|getRow({id: cate_type, findType: 1}) %}
+{% set form_id = category_data.form_id|default('') %}
+{% set usertype = app.user.usertype %}
+{% set usertplid = ('db.mem_types')|getOne('usertplid',{ id: usertype })|default('') %}
+{# 小区楼盘 #}
+{% set type = 0 %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+{% block mainMenu %}
+    {{ core_manage.jump(
+        {
+            title: '<i class="font-ico-24 mr5"></i>管理楼盘',
+            url: action|U,    
+            class: 'on'
+        }
+    ) }}
+    {% if usertplid is empty %}
+    {{ core_manage.jump(
+        {
+            title: '<i class="font-ico-10 mr5"></i>评论',
+            url: (controller ~ '/mcommentmanage')|U, 
+            attr: {
+                'data-route': 'mcommentmanage'
+            },
+            class: ''
+        }
+    ) }}
+{% endif %}    
+    {{ core_manage.jump(
+        {
+            title: '<i class="font-ico-14 mr5"></i>意向',
+            url: (controller ~ '/minterintentmanage')|U(),    
+            attr: {
+                'data-route': 'minterintentmanage'
+            },
+            class: ''
+        }
+    ) }}
+    {{ core_manage.jump(
+        {
+           title: '<i class="font-ico-24 mr5"></i>管理小区',
+           url: (controller ~ '/mcourtmanage')|U({type: 1}),
+            attr: {
+                'data-route': 'mcourtmanage'
+            },    
+        }
+        ) }} 
+{% endblock %}
+
+{% set params -%}
+    {
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U({_form_id: form_id}) }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            models: '{{ models }}',
+            cate_type: '{{ cate_type }}',
+
+        }
+    }
+{%- endset %}
+{% block tableMain %}
+{% set filter_opt = [
+    {
+        method: 'selectFormField',
+        title: '审核',
+        form: 'checked',
+        field: 'checked',
+    },
+    {
+        method: 'selectCate',
+        title: '状态',
+        chosen: {width: '100px',disable_search:true},
+        field: 'cate_status',
+        service: 'house.category',
+    },
+    {
+        method: 'selectCate',
+        title: '区域',
+        field: 'region',
+        service: 'db.area',
+        where: {
+            pid: session_area|default(0)
+        }
+    },
+    {
+        method: 'selectFormField',
+        title: '特色楼盘',
+        form: 'houses_common',
+        field: 'tslp',
+    },
+    {
+        method: 'selectCate',
+        title: '置顶',
+        field: 'top',
+        service: 'house.category',
+    },
+    {
+        method: 'search',
+        field: 'name',
+        title:'请搜索ID/楼盘名称'
+    }
+] %}
+{% if category_data.is_next|default(false) == false %}
+    {% set filter_opt = [{
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增楼盘'
+    }]|merge(filter_opt) %}
+{% endif %}
+{{ core_manage.filter(filter_opt) }}
+<section class="list-con" data-param="{{params}}">
+    {# {{dump(ident.info.data)}} #}
+    {# {{dump(ident.info)}} #}
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                    <th>名称</th>  
+                    <th width="100" class="tac">置顶</th>  
+                    <th width="100" class="tac">区域</th>  
+                    <th width="100" class="tac">区块</th>  
+                    <th width="100" class="tac">沙盘</th>
+                    <th width="100" class="tac">微信</th>  
+                    <th width="90" data-role="sort" data-sort="clicks" class="tac sort">点击</th>
+                    <th width="80" class="tac">审核</th>
+                    <th width="80" class="tac">价格</th>
+                    <th width="80" class="tac"  data-role="sort" data-sort="sort" class="tac sort">排序</th>
+                    <th width="120" class="tac">操作</th>
+                </tr>
+                
+                {% if ident.info.data is defined and ident.info.pageCount|default('') != 0 %}
+                    {# {{dump(ident.info)}} #}
+                {% for k, vo in ident.info.data %}
+              
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td>{{ vo.id }}</td>
+                    <td class="tov" title="{{ vo.name|default('') }}"><a target="_blank" href="{% if cate_type == 105 or cate_type == 106 %}
+                        {{ ('business/detail')|U({id: vo.id}) }}
+                    {% else %}
+                        {{ ('houses/detail')|U({id: vo.id}) }}
+                    {% endif %}">{% if vo.thumb %}<i class="font-ico-tp mr5 fcr"></i>{% endif %}{{ vo.name }}</a></td> 
+                    <td class="tac">{{core_global.formData({value: vo.top})}}</td>
+                    
+                    <td class="tac">{{  vo.region|getAreaName|default('') }}</td>  
+
+                    <td class="tac"><a title="{{ vo.name }}&#10;区块" data-role="show" href="{{ (controller ~ '/mhousesarc')|U({type: 'houses_arc', aid:  vo.id}) }}">[管理]</a></td> 
+
+                    <td class="tac"><a data-role="show" title="{{vo.name}}&#10;沙盘" href="{{(controller ~ '/mshapan')|U({type: 'houses_arc', aid:  vo.id}) }}" class="font-ico-21 fz18 " style="color: {{vo.dzsp|default('') ? '#f00' : '#888'}}"></a></td>
+                    {% set wx_data = ('db.wxusers')|getRow({aid: vo.id})|default([]) %}
+                    {% set paramst = {} %} 
+                     {% if wx_data.id is defined %}
+                       {#  编辑 #}
+                        {% set paramst = {_id: wx_data.id,aid:vo.id } %}
+                     {% else %}
+                        {# 添加 #}
+                        {% set paramst = {aid: vo.id, models: vo.models} %}
+                     {% endif %}  
+                    <td class="tac">
+                        <a data-role="show" title="{{ vo.name }}&#10;微信设置" href="{{'mwxmanage/show'|U(paramst)}}">设置</a>
+                        {% if wx_data.id is defined %}/<a data-role="show" title="{{ vo.name }}&#10;微信菜单" href="{{'mwxconfig/weixinmenu'|U({appid: wx_data.appid})}}" >菜单</a>
+                     {% endif %}
+                    </td> 
+                    <td class="tac">{{ vo.clicks|default('0') }}</td>
+
+                    <td class="tac">{{ core_global.formField({value: vo.checked}) }} </td>
+                    <td class="tac"><a data-role="show" title="{{vo.name}}&#10;价格" href="{{('mhousepricemanage/show')|U({aid: vo.id})}}" >[{{ core_global.count({service: 'house', models: 'houses_price', sql_opt: {aid: vo.id|default('')} }) }}]</a></td>
+                    <td class="tac">
+                        <span data-role="itemEdit" data-name="sort" class="edit" >{{ vo.sort|default('0') }}</span>
+                    </td>
+                    <td class="tar pr10">
+                        {{ core_manage.show() }}
+                        {{ core_manage.delete() }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="12" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    {{core_manage.page(ident.info)}}
+</section>
+{% set oprate_opt = [
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownCate',
+        title: '物业类型',
+        field: 'cate_type',
+        service: 'house.category',
+    },
+    {
+        method: 'dropdownCate',
+        title: '销售状态',
+        field: 'cate_status',
+        service: 'house.category',
+    },
+  
+    {
+        method: 'dropdownCate',
+        title: '区域',
+        field: 'region',
+        service: 'db.area',
+        where: {
+            pid: session_area|default(0)
+        }
+    }
+] %}
+{% if usertplid is empty %}
+   {% set oprate_opt = oprate_opt|merge([
+    {
+        method: 'dropdownFormField',
+        field : 'checked',
+        form  : 'checked',
+        title : '审核',
+    },
+      {
+        method: 'dropdownCate',
+        title: '置顶',
+        field: 'top',
+        service: 'house.category',
+    },
+    {
+        method: 'dropdownHouseType'        
+    } 
+]) %}
+{% endif %}
+    {{ core_manage.oprate(oprate_opt) }}
+{% endblock tableMain %}
+
+
+{% block promptUl %}
+{% endblock %}
+
+
+

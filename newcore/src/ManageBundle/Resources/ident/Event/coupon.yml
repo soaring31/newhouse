@@ -1,0 +1,26 @@
+info:
+    tableName: eventcoupon
+    subTableName: ''
+    aliasName: ec
+    listGrid:
+        - 'ids:|w10'
+        - 'id:ID|txtcenter w30'
+        - 'title[EDITSPAN]:名称|txtleft  w170'
+        - 'keyword[EDITSPAN]:关键字|txtleft  w80'
+        - 'gmid[GETSPIDERMODELNAME]:参与数|txtleft'
+        - 'gmid[GETSPIDERMODELNAME]:开始/结束时间|txtleft'
+        - 'status[GETSTATUS]:是否启用|txtleft  w50'
+        - 'id:操作|txtcenter w200:[EDIT]复制|btn|spidertask/copy,[EDIT]修改|btn,[DELETE]删除|btn'
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    order: ''
+    orderBy: asc
+    searchFun: EXISTS
+    dataModel: 0
+    autoQuery: '0'
+    alias: {  }
+    query: {  }
+    query1: {  }

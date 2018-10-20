@@ -1,0 +1,61 @@
+@import 'variables'; // 重置css
+dl, dd, dt, ul, li, p, div, section, body, span, header, nav, footer, i, em, cite, ol, h1, h2, h3, h4, h5, h6, form{
+  margin: 0;
+  padding: 0;
+}
+
+.c-e43 {
+  color: $major-color;
+}
+
+.por {
+	position: relative;
+}
+
+.t-c {
+	text-align: center;
+}
+
+.house-big-ad {
+	img {
+		height: 100%;
+	}
+}
+
+.house-ad {
+	position: relative;
+	img {
+		display: block;
+		// height: 100%;
+		// width: auto;
+		max-width: 100%;
+	}
+	.ad-txt {
+		background-image: url('../images/ad-img.png');
+		background-position: 0 0;
+		background-repeat: no-repeat;
+		color: #fff;
+		font-size: 12px;
+		height: 20px;
+		line-height: 20px;
+		overflow: hidden;
+		text-align: center;
+		width: 30px;
+		position: absolute;
+		bottom: 0;
+		left: 3px;
+		z-index: 3;
+	}
+}
+
+.clearfix {
+    *zoom: 1;
+    @at-root &:after {
+        display: block;
+        clear: both; 
+
+        height: 0;
+
+        content: '\20';
+    }
+}

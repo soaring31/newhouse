@@ -1,0 +1,53 @@
+services:
+    oauth.weixin:
+        class: OAuthBundle\Services\WeiXin\WeiXin
+        public: false
+        arguments: ['@service_container']
+    oauth.weixin_menu:
+        class: OAuthBundle\Services\WeiXin\WeiXinMenu
+        parent: 'oauth.weixin'
+        public: true
+    oauth.weixin_user:
+        class: OAuthBundle\Services\WeiXin\WeiXinUser
+        parent: 'oauth.weixin'
+        public: true
+    oauth.weixin_message:
+        class: OAuthBundle\Services\WeiXin\WeiXinMessage
+        parent: 'oauth.weixin'
+        public: true
+    oauth.weixin_scan:
+        class: OAuthBundle\Services\WeiXin\WeiXinScan
+        parent: 'oauth.weixin'
+        public: true
+    oauth.weixin_wifi:
+        class: OAuthBundle\Services\WeiXin\WeiXinWifi
+        parent: 'oauth.weixin'
+        public: true
+    oauth.weixin_staff:
+        class: OAuthBundle\Services\WeiXin\WeiXinStaff
+        parent: 'oauth.weixin'
+        public: true
+    oauth.weixin_massmessage:
+        class: OAuthBundle\Services\WeiXin\WeiXinMassMessage
+        parent: 'oauth.weixin'
+        public: true
+    oauth.weixin_material:
+        class: OAuthBundle\Services\WeiXin\WeiXinMaterial
+        parent: 'oauth.weixin'
+        public: true
+    oauth.weixin_pay:
+        class: OAuthBundle\Services\WxPay\WeiXinPay
+        parent: 'oauth.weixin'
+        public: true
+    oauth.weixin_jspay:
+        class: OAuthBundle\Services\WxPay\WeiXinJSPay
+        parent: 'oauth.weixin_pay'
+        public: true
+    oauth.weixin_paynotify:
+        class: OAuthBundle\Services\WxPay\WeiXinPayNotify
+        parent: 'oauth.weixin_pay'
+        public: true
+    oauth.weixin_account:
+        class: OAuthBundle\Services\WeiXin\WeiXinAccount
+        parent: 'oauth.weixin'
+        public: true

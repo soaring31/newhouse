@@ -1,0 +1,29 @@
+info:
+    tableName: wxkeyword
+    subTableName: ''
+    aliasName: p
+    listGrid:
+        - 'id:序号|txtcenter w30'
+        - 'tips[EDITSPAN]:规则名|txtcenter w100'
+        - 'keyword:关键字|txtcenter w250'
+        - 'replytype:回复类型|txtcenter w50'
+        - 'is_switch[GETSTATUS]:是否全匹配|txtcenter w50'
+        - 'sort[EDITSPAN]:优先度排序|txtcenter w50'
+        - 'id:操作|txtcenter w150:[EDIT]修改|btn,[DELETE]删除|btn,'
+    listDesc: 微信关键字
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    order: sort
+    orderBy: desc
+    searchFun: EXISTS
+    dataModel: 0
+    autoQuery: '0'
+    alias: {  }
+    query:
+        token:
+            eq: '{wxtoken}'
+        keyword:
+            like: '%[keyword]%'
+    query1: {  }

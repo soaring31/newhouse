@@ -1,0 +1,251 @@
+
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% extends detail ? 'HouseBundle:Photos:index.html.twig' : 'CoreBundle:Dispatch:errorcontent.html.twig' %}
+{# # 说明
+** detail.id: 获取URL中传回来的id值
+** detail: 获取当前图集
+** detail_images: 图集数据
+** prevGallery: 上一个图集id
+** prevRow: 上一个图集内容
+** nextGallery: 下一个图集id
+** nextRow: 下一个图集内容
+** nav_photos_act: 导航高亮
+** category: 分类数据
+#}
+{% block title %}{{detail.name|default('')}}{% endblock title %}
+
+{% block key_des %}
+    <meta name="keywords" content="{{detail.keywords|default('')}}" />
+    <meta name="description" content="{{detail.abstract|default('')}}" />
+{% endblock key_des%}
+
+{% set detail_images = detail.images|default('')|sourceImg %}
+
+{% set prevRow = ('house.photos')|getAll({id: 'lt|' ~ detail.id|default(''), checked: 1, pageSize: 1, orderBy: 'desc', order: 'id'}).data[0]|default('') %}
+
+{% set nextRow = ('house.photos')|getRow({id: 'gt|' ~ detail.id|default(''), checked: 1}) %}
+
+{% set nav_photos_act = detail.category|default('') %}
+
+{% block current_photos %}
+    {% set category = detail.category|default(23)|getCategoryById() %}
+    <a href="{{('photos/list')|U({category: category.id|default('')})}}">{{category.name|default('')}}</a>
+    <span>&gt;</span>
+    <span>{{detail.name|default('')}}</span>
+{% endblock current_photos %}
+
+{% block container %}
+    <div class="blank20"></div>
+    <div class="body">
+        <div class="main" {{comment_attr|default('')|raw}}>
+            <div class="title container">
+                <h1>{{detail.name|default('标题')}}</h1>
+                <!-- 判断样式 -->
+                <div id="toolBar" class="toolbar clearfix">
+                    <ul>
+                        <li class="comment" title="发表评论">
+                            <a href="{{('photos/photoComment')|U({id: detail.id|default('')})}}" id="ComentLink" class="g-btn-a" target="_blank" onclick="registerZone2({bossZone:'gqComment',url:''},1)">
+                                <i></i> <em class="coment-num" id="ComentNum"><i data-counts="{models: 'photos', field: 'comnum', id: '{{detail.id|default('')}}'}"></i></em>
+                                评论
+                            </a>
+                        </li>
+                            <li class="slide" title="幻灯播放" id="slide">
+                                <a href="javascript:;" class="g-btn-a">
+                                    <i></i>
+                                        幻灯播放
+                                </a>
+                            </li>
+                        <li class="share-list menu bdsharebuttonbox">
+                            <a href="javascript:void(0)" class="g-btn-a menu-hd bds_more" data-cmd="more">
+                                <i></i>
+                                我要分享
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!--弹出层-->
+            <div class="bodymodal"></div>
+            <!--播放到最后一张图的提示-->
+            <div class="endtop">
+                <div class="firsttop_left">广告图片
+                    <a class="closebtn fr font-icons-13" title="关闭" href="javascript:void(0)"></a>
+                </div>
+                <div class="firsttop_right">
+                    <div class="replay">
+                        <h2 id="H1">已到最后一张图片了。</h2>
+                        <p>
+                            <a class="replaybtn" href="javascript:;">重新播放</a>
+                        </p>
+                    </div>
+                    <div class="pictwo">
+                        <ul>
+                            {% if prevRow|default('') %}
+                                <li>
+                                    <a href="{{('photos/detail')|U({id:prevRow.id|default('')})}}" title="{{prevRow.name|default('')}}" target="_blank">
+                                        {{- core_global.img({
+                                            src: prevRow.thumb|default(''),
+                                            alt: prevRow.name|default(''),
+                                            type: 2,
+                                            width:120 ,
+                                            height: 88
+                                        }) -}}
+                                    </a>
+                                    <div class="imgdivtext">
+                                        <a href="{{('photos/detail')|U({id: prevRow.id|default('')})}}" title="{{prevRow.name|default('')}}" target="_blank">上一图集</a>
+                                    </div>
+                                </li>
+                            {% else %}
+                                <li>
+                                    {{- core_global.img({
+                                        src: '',
+                                        alt: '',
+                                        type: 2,
+                                        width: 120,
+                                        height: 80
+                                    }) -}}
+                                    <div class="imgdivtext">暂无上一图集</div>
+                                </li>
+                            {% endif %}
+                            {% if nextRow|default('') %}
+                                <li>
+                                    <a href="{{('photos/detail')|U({id: nextRow.id|default('')})}}" title="{{nextRow.name|default('')}}" target="_blank">
+                                        {{- core_global.img({
+                                            src: nextRow.thumb|default(''),
+                                            alt: nextRow.name|default(''),
+                                            type: 2,
+                                            width:120 ,
+                                            height: 88
+                                        }) -}}
+                                    </a>
+                                    <div class="imgdivtext">
+                                        <a href="{{('photos/detail')|U({id:nextRow.id|default('')})}}" title="{{nextRow.name|default('')}}" target="_blank">下一图集</a>
+                                    </div>
+                                </li>
+                            {% else %}
+                                <li>
+                                    {{- core_global.img({
+                                        src: '',
+                                        alt: '',
+                                        type: 2,
+                                        width: 120,
+                                        height: 80
+                                    }) -}}
+                                    <div class="imgdivtext">暂无下一图集</div>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="returnbtn">
+                        <a href="{{('photos/index')|U}}">返回图库首页</a>
+                    </div>
+                </div>
+            </div>
+            <!--/弹出层-->
+            <!--图片特效内容-->
+            <div class="piccontext">
+                <div class="source container">
+                    {# <div class="source_left">
+                        来源：08cms
+                        <span>{{}}</span>
+                    </div> #}
+                    <div class="source_right">
+                        {# <div class="support">
+                            支持
+                            {{- core_global.img({
+                                src: item.thumb|default(''),
+                                alt: item.name|default(''),
+                                type: 2,
+                                width: ,
+                                height:
+                            }) -}}
+                            键翻阅图片
+                        </div> #}
+                    </div>
+                </div>
+                <!--大图展示-->
+                <div class="picshow">
+                    <div class="picshowtop">
+                        <div style="height:100%;" id="pic1">
+                            <span class="pic1-middle"></span>
+                        </div>
+                        <a id="preArrow" href="javascript:void(0)" class="contextDiv" title="上一张">
+                            <span id="preArrow_A"></span>
+                        </a>
+                        <a id="nextArrow" href="javascript:void(0)" class="contextDiv" title="下一张">
+                            <span id="nextArrow_A"></span>
+                        </a>
+                    </div>
+                    <div class="picshowtxt container">
+                        <div class="picshowtxt_left">
+                            <span>1</span>
+                            /
+                            <i>{{detail_images|length|default('1')}}</i>
+                        </div>
+                        <div class="picshowtxt_right"></div>
+                    </div>
+                    <div class="picshowlist">
+                        <div class="picshowlist_mid">
+                            <div class="picmidleft" id="preArrow_B"></div>
+                            <div class="picmidmid">
+                                <ul id="lightgallery">
+                                    {% if detail_images|default('') %}
+                                    {% for item in detail_images %}
+                                    <li data-src="{{assetImg(item.source|default('bundles/house/images/nopic.gif'),{watermark: 'giffun'})}}" data-sub-html="<p>{{item.desc|default('')}}</p>">
+                                    <a href="javascript:void(0);" class="img-responsive">
+                                        {{- core_global.img({
+                                            src: item.source|default(''),
+                                            alt: loop.index,
+                                            type: 2,
+                                            width:106 ,
+                                            height:66
+                                        }) -}}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                    {% endif %}
+                                </ul>
+                            </div>
+                            <div class="picmidright" id="nextArrow_B"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!--/图片特效内容-->
+        </div>
+    </div>
+    <div class="blank20"></div>
+{% endblock container %}
+
+{% block js %}
+<script type="text/javascript">
+    seajs.use(['gallery', 'jqhoverS', 'lightgallery', 'lgthumb', 'share'], function(gallery, jqhoverS, lightgallery, lgthumb, share) {
+        $('.main').gallery({
+            ad: true,
+            maxSize: true
+        });
+
+        $("#slide").on("click", function() {
+            action("#lightgallery");
+        });
+        
+        function action($ele) {
+            //查找当前状态
+            var $cur = $(".selectpic");
+            //启动幻灯片
+            var $lg = $($ele);
+            $lg.lightGallery({
+                loop: false
+            });
+            $cur.click();
+            $lg.on('onCloseAfter.lg', function() {
+                //关闭移除
+                $lg.data('lightGallery').destroy(true);
+            });
+        }
+        //分享
+        share.init();
+    });
+</script>
+{% endblock js %}

@@ -1,0 +1,246 @@
+{% extends 'HouseBundle:Houses:lp_detail_layout.html.twig' %}
+{# # 说明:
+ * detail： 导航判断
+ * category_around: 周边分类
+ * block_zhoubian: 周边数据
+ * detail_prices: 历史价格
+ * nav_houses_act: 导航判断
+#}
+
+{% block title_houses %}基本信息,售楼处电话,物业费,物业电话,开发商{% endblock title_houses %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}售楼处地址,{{detail.name|default('')}}售楼电话,物业费电话,{{detail.name|default('')}}开发商" />
+<meta name="description" content="{{cur_area_data|default('')}}{{detail.name|default('')}}为您提供{{detail.name|default('')}}基本信息，包括售楼处地址，售楼电话，物业费，物业电话，开发商等{{detail.name|default('')}}楼盘相关信息，为您选房、买房提供参考!"/>
+{% endblock key_des %}
+
+{# 导航高亮 #}
+{% block top_search %}{% endblock top_search %}
+    {% set nav_houses_act = 2 %}
+
+
+
+{% block container_houses %}
+    {% set category_around = ('house.category')|getAll({checked: 1, models: 'around', pid: 'neq|0', pageSize: 20}) %}
+
+    {% set block_zhoubian = ('house.houses_arc')|getBlock({ename: 'zhoubian'}, {checked: 1, aid: detail.id|default(''), pageSize: 150}) %}
+
+    <div class="container">
+        {% block body_fl %}
+        <div class="d-body fl">
+            {% block d_body %}
+                <!--基本信息-->
+                <div class="jbxx">
+                    <div class="lp-coltit">
+                        <h3 class="tit1">
+                            基本信息
+                        </h3>
+                    </div>
+                    <div class="p10 lp-detail bd-gray">
+                        <div class="item">
+                            <dl class="clearfix">
+                                <dt>物业类型：</dt>
+                                <dd>
+                                    {{core_global.formData({value: detail.cate_type|default(''), tpl: '%value%&nbsp;&nbsp;'})}}
+                                </dd>
+                                <dt>区域所属：</dt>
+                                <dd>
+                                    {{core_global.region({id: detail.region|default(''), tpl: '%value%'})}}
+                                </dd>
+                            </dl>
+                            <dl class="clearfix">
+                                <dt>车位状况：</dt>
+                                <dd>{{detail.cksm|default('-')}}</dd>
+                                {#
+                                <dt>销售电话：</dt>
+                                <dd> 
+                                    {% if detail.tel|default('') %}
+                                        {{detail.tel|default('')}}
+                                    {% else %}
+                                        4008105188
+                                    {% endif %}
+                                    
+                                </dd>
+                                #}
+                                <dt>许可证号：</dt>
+                                <dd>{{detail.xkzh|default('-')}}</dd>
+                            </dl>
+                            <dl class="clearfix">
+                                <dt>开盘日期：</dt>
+                                <dd>{{core_global.time_date({time: detail.kpdate.date|default('')})}}</dd>
+                                <dt>交房日期：</dt>
+
+                                <dd>{{detail.jfrq|default('-')}}</dd>
+                            </dl>
+                            <dl class="clearfix">
+                                <dt>得房率：</dt>
+                                <dd>{{detail.dfl|default('-')}}</dd>
+                                <dt>建筑面积：</dt>
+                                <dd>{{house_global.if_mj({value: detail.jzmj|default(''), defalut: '-'})}}</dd>
+                            </dl>
+                            <dl class="clearfix">
+                                <dt>绿化率：</dt>
+                                <dd>{{detail.lhl|default('-')}}</dd>
+                                <dt>占地面积：</dt>
+                                <dd>{{house_global.if_mj({value: detail.zdmj|default(''), defalut: '-'})}}</dd>
+                            </dl>
+                            <dl class="clearfix">
+                                <dt>容积率：</dt>
+                                <dd>{{detail.rjl|default('-')}}</dd>
+                                <dt>装修状况：</dt>
+                                <dd>
+                                    {{- core_global.formData({value: detail.zxcd|default('')}) -}}
+                                </dd>
+                            </dl>
+                            <dl class="clearfix">
+                                <dt>开发商：</dt>
+                                <dd>{{detail.house_developer|default('-')}}</dd>
+                                <dt>特色楼盘：</dt>
+                                <dd>{{ core_global.formField({value: detail.tslp|default('-'), form: 'houses_common', field:'tslp', tpl: '<span>%title%</span>&nbsp;&nbsp;'}) }}</dd>
+                            </dl>
+                            <dl class="clearfix">
+                                <dt>楼　　层：</dt>
+                                <dd>{{ core_global.formField({value: detail.lcs|default(0), form: 'lcs', field:'lcs', tpl: '%title%&nbsp;'})|default('-') }}</dd>
+                            </dl>
+                            <dl class="nowrap clearfix">
+                                <dt>楼盘地址：</dt>
+                                <dd>
+                                    {{detail.address|default('-')}}
+                                </dd>
+                            </dl>
+                            <dl class="nowrap clearfix">
+                                <dt>售楼地址：</dt>
+                                <dd>{{detail.sldz|default('-')}}</dd>
+                            </dl>
+                            <dl class="nowrap clearfix">
+                                <dt>交通线路：</dt>
+                                <dd>{{detail.jtxl|default('-')}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                {#<!--历史价格-->#}
+                {#{{house_global.prices_info({#}
+                    {#aid: detail.id|default(0),#}
+                    {#table: 1#}
+                {#})}}#}
+                {#<!--/历史价格-->#}
+                <!--项目配套-->
+                <div class="xmpt">
+                    <div class="lp-coltit">
+                        <h3 class="tit1">
+                            项目配套
+                        </h3>
+                    </div>
+                    <div class="p10 bd-gray" data-tag="zhoubian">
+                        {% set detail_around_tpl = true %}
+                        {% if category_around.data is defined %}
+                            {% for item in category_around.data %}
+                               <p>
+                                {% for item2 in block_zhoubian.data if item2.category|default('') == item.id|default('') %}
+                                    {% set detail_around_tpl = false %}
+                                    {% if loop.index != 1 %}
+                                    、
+                                    {% else %}
+                                    <b>
+                                        {{item.name|default('')}}
+                                    </b>：
+                                    {% endif %}
+                                    <a title="{{item2.name|default('')}}" target="_blank" href="{% if item2.category == 55 %}{{core_global.url(item2|merge({controller: 'sale/xdetail', set_models: 1}))}}{% else %}{{core_global.url(item2|merge({models: 'around', set_models: 1}))}}{% endif %}">{{item2.name|default('')}}</a>
+                                {% endfor %}
+                                {% if detail_around_tpl and loop.last %}
+                                    暂无相关配套
+                                {% endif %}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
+
+                    </div>
+                </div>
+                <!--项目简介-->
+                <div class="xmjj">
+                    <div class="lp-coltit">
+                        <h3 class="tit1">
+                            项目简介
+                        </h3>
+                    </div>
+                    <div class="p10 bd-gray">
+                        {{core_global.content({content: detail.content|default('')})}}
+                    </div>
+                </div>
+            {% endblock d_body %}
+        </div>
+        {% endblock body_fl %}
+
+
+        {% block body_fr %}
+        <div class="d-aside fr">
+            {% block body_d %}
+                <!--周边楼盘-->
+                {% block build %}
+                    {% include 'HouseBundle:house_list:build.html.twig' %}
+                {% endblock %}
+                {#本月入住#}
+                {#
+                {% block this_month %}
+                    {% include 'HouseBundle:house_list:this_month.html.twig' %}
+                {% endblock %}
+                #}
+                {#{{house_global.houses_detail_recommend({#}
+                    {#title: '周边楼盘',#}
+                    {#list: sort_area_houses,#}
+                    {#compare: 1,#}
+                    {#tag: 'lparea'#}
+                {#})}}#}
+                <!--同价位楼盘-->
+                {{house_global.houses_detail_recommend({
+                    title: '同价位楼盘',
+                    list: sort_prices_houses,
+                    tag: 'lpprice'
+                })}}
+                <!--热门楼盘-->
+                {{house_global.houses_detail_recommend({
+                    title: '热门楼盘',
+                    list: sort_clicks_houses,
+                    tag: 'clicks'
+                })}}
+                <!--购房工具-->
+                <div class="gfgj">
+                    <div class="lp-coltit">
+                        <h3>
+                            <a href="#" target="_blank">购房工具</a>
+                        </h3>
+                    </div>
+                    <div class="home-tools bd-gray pb20">
+                        <a class="fdjs" href="{{('tools/index')|U({id: 2})}}" target="_blank">
+                            <i class="img-lp-1 ml5"></i>
+                            <p>贷款计算器</p>
+                        </a>
+                        <a class="mlpg" href="{{('tools/index')|U({id: 1})}}" target="_blank">
+                            <i class="img-lp-2"></i>
+                            <p>购房能力评估</p>
+                        </a>
+                        <a class="gjjdk" href="{{('tools/index')|U({id: 4})}}" target="_blank">
+                            <i class="img-lp-3"></i>
+                            <p>公积金贷款</p>
+                        </a>
+                        <a class="tqhd" href="{{('tools/index')|U({id: 6})}}" target="_blank">
+                            <i class="img-lp-4"></i>
+                            <p>提前还贷</p>
+                        </a>
+                        <a class="gfsf" href="{{('tools/index')|U({id: 7})}}" target="_blank">
+                            <i class="img-lp-5"></i>
+                            <p>税费计算器</p>
+                        </a>
+                        <a class="lpsc" target="_blank" href="{{('houses/list')|U}}">
+                            <i class="img-lp-6"></i>
+                            <p>楼盘速查</p>
+                        </a>
+                    </div>
+                </div>
+            {% endblock body_d %}
+        </div>
+        {% endblock body_fr %}
+    </div>
+    <div class="blank30"></div>
+{% endblock container_houses %}

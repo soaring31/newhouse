@@ -1,0 +1,111 @@
+{% extends 'HouseBundle:Mhouse:mhousesarc.html.twig' %}
+
+{% block tableMain %}
+    {{ core_manage.filter([
+
+    ]) }}
+    <div class="list-con" data-param="{{ params }}">
+        <div class="list">
+            <table class="right-table table-hover">
+                <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{ core_manage.checkbox() }}</th>
+                    <th width="40">ID</th>
+                    <th>竣工时间</th>
+                    <th>产权年限</th>
+                    <th>楼盘供水</th>
+                    <th>装修标准</th>
+                    <th>最早交房时间</th>
+                    <th>开发商报价</th>
+                    <th>开盘信息</th>
+                    <th>楼盘评分</th>
+                    <th width="120" class="tac">操作</th>
+                </tr>
+                {% if ident.info.data|length %}
+                    {% for k, vo in ident.info.data %}
+                        <tr data-id="{{ vo.id }}">
+                            <td class="tac">
+                                {{ core_manage.checkbox() }}
+                            </td>
+                            <td>
+                                {{ vo.id }}
+                            </td>
+                            <td>
+                                {% if vo.show_built_year %}
+                                    {{ vo.show_built_year|date('Y-m-d') }}
+                                {% else %}
+                                    暂无日期
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ vo.property_year|default('暂无年限') }}
+                            </td>
+                            <td>
+                                {{ vo.provide_water|default('暂无') }}
+                            </td>
+                            <td>
+
+                                {% if vo.decorate_standard %}
+                                    {{ vo.decorate_standard }}元/㎡
+                                {% else %}
+                                    暂无
+                                {% endif %}
+
+                            </td>
+                            <td>
+                                {% if vo.firstnew_delivertime %}
+                                    {{ vo.firstnew_delivertime|date('Y-m-d') }}
+                                {% else %}
+                                    暂无日期
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if vo.developer_offer %}
+                                    {{ vo.developer_offer }}
+                                {% else %}
+                                    暂无报价
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ vo.open_information|default('暂无') }}
+                            </td>
+                            <td>
+                                {{ vo.complex_score|default('暂无评分') }}
+                            </td>
+                            {#<td>#}
+
+                            {#{% if vo.day_date %}#}
+                            {#{{ vo.day_date|date('Y-m-d') }}#}
+                            {#{% else %}#}
+                            {#暂无日期#}
+                            {#{% endif %}#}
+
+                            {#</td>#}
+                            {#<td>#}
+                            {#{{ vo.content }}#}
+                            {#</td>#}
+                            <td class="tar pr10">
+                                {{ core_manage.show() }}
+                                {{ core_manage.delete() }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="9" class="tac">没有数据！</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+        {#{{ core_manage.page(block_arc_data) }}#}
+    </div>
+    {#{% if (action ~ '/show')|P %}#}
+    {#{{ core_manage.oprate([#}
+    {#{#}
+    {#method: 'delete',#}
+    {#title: '<i class="font-ico-del mr5"></i>批量删除',#}
+    {#}#}
+    {#]) }}#}
+    {#{% endif %}#}
+{% endblock tableMain %}

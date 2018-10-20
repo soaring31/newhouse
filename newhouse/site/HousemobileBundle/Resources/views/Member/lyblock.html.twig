@@ -1,0 +1,31 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{% block result %}
+{% set url_aid = app.request.get('aid', tpl_aid|default('')) %}
+<div class="comment panel-block">
+    {{housemobile_global.panel_title({title: '马上留言'})}}
+
+    {{ render(controller('HouseBundle:Bundlebindforms:lycomment', {
+          _isApp: url_isApp, 
+          formName: 'view_usermsg', 
+          aid: url_aid
+      })) }}
+
+    {{housemobile_global.panel_title({title: '相关点评'})}}
+    {{core_mobile_global.list_scroll({class: 'comment-list', footer: 0})}}
+</div>
+{% if tpl_js|default('') %}
+<script>
+seajs.use(['comment', 'vote'], function (comment, vote){
+    vote.init({
+         saveUrl: '{{("viewinter/vote")|U({})}}'
+    });
+    comment.init({
+        list: '.list-container',
+        url: '{{("intercomment/shoplist")|U({checked: "1", aid: url_aid})}}',
+        form: '.mobile-form',
+        removeItem: '.up'
+    });
+});    
+</script>
+{% endif %}
+{% endblock result %}

@@ -1,0 +1,118 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{# {% set topic = app.request.get('topic') %} #}
+{% set aid = app.request.get('aid') %} 
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% set ename = app.request.get('ename')|default('toutiao') %}
+{% set block_data = ('house.topic_block')|getRow({ename: ename}) %}
+{% block mainMenu %}
+{% endblock mainMenu %}
+
+{% block tableMain %}
+{# {{dump(block_data)}} #}
+{% if ename %}
+{% set filterOpt = [
+    {
+        method: 'show',
+        url:  (action ~ '/show')|U({_form_id: block_data|default('') ? block_data.form|default('') : null}),
+        title: '<i class="font-ico-plus mr5"></i>手动添加'
+    },
+    {
+        method: 'selectFormField',
+        title: '状态',
+        form: 'pushs_img_ad',
+        field: 'checked',
+    },
+    {
+        method: 'search',
+        field: 'name',
+    }
+] %}
+{% endif %}         
+{{ core_manage.filter(filterOpt|default('')) }}    
+<div class="list-con" data-height="300" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ "/show")|U }}',
+        submitUrl : '{{ (action ~ "/save")|U }}',
+        deleteUrl : '{{ (action ~ "/delete")|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data : {
+            ename: '{{ ename }}'
+        }
+    }">
+    {% set pageIndex = app.request.get('pageIndex')|default(1) %}
+    {% set pushs_data = (ename)|getPushs({from_data: 0, pageSize: 10, pageIndex: pageIndex}) %}
+        {# {{dump(pushs_data)}} #}
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th>名称</th>
+                    <th width="120">模型</th>
+                    <th width="100">来源ID</th>
+                    <th width="50">排序</th>
+                    <th width="50">状态</th>
+                    <th width="120" class="tac">操作</th>
+                </tr>
+                {% if pushs_data.data is defined and ident.info.pageCount|default('') != 0 %}
+                {% for k, vo in pushs_data.data -%}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td class="tov">{% if vo.url is empty %}{{ vo.name|default('-') }}{% else %}<a target="_blank" href="{{ vo.url }}">{{ vo.name|default('-') }}{% endif %}</a></td>
+                    <td>{{ vo.models|default('手动添加') }}</td>
+                    <td>{{ vo.fromid|default('-') }}</td>
+                    <td><span data-role="itemEdit" data-name="sort" data-size="5" class="edit">{{ vo.sort|default('0') }}</span></td>
+                    <td>{{vo.checked}}{{core_global.formField({
+                        value: vo.checked,
+                        form: 'pushs_img_ad',
+                        field: 'checked'
+                    })}} </td>
+                    <td class="tar pr10">
+                        {{ core_manage.show() }}
+                        {{ core_manage.delete() }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(pushs_data)}}
+</div>
+    
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'pushs_img_ad',
+        title: '设置状态',
+    },
+    {
+        method: 'btn_date',
+        field: 'start_time',
+        title: '开始时间',
+    },
+    {
+        method: 'btn_date',
+        field: 'end_time',
+        title: '到期时间',
+    }
+]) }}
+{% endblock %}
+
+
+{% block promptUl %}
+{% endblock %}
+

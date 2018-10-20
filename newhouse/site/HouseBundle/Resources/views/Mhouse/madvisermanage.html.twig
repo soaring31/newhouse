@@ -1,0 +1,103 @@
+{% extends 'HouseBundle:Mhouse:mhousesarc.html.twig' %}
+{% set url_name = app.request.get('name') %}
+
+{% if url_name|default('') %}
+    {% set search_opt = {
+        name: 'orX|name,like,%' ~ url_name ~ '%|tel,like,%' ~ url_name ~ '%|content,like,%' ~ url_name ~ '%'
+    } %}
+{% endif %}
+{% block tableMain %} 
+   {{ core_manage.filter([
+        {
+            method: 'selectFormField',
+            title: '审核',
+            form: 'checked',
+            field: 'checked',
+        },
+        {
+            method: 'search',
+            field: 'name',
+            title: '请输入姓名/电话/QQ'
+        }
+    ]) }}
+    <div class="list-con" data-param="{{ params }}">
+        <div class="list">
+          <table class="right-table table-hover">
+                <tbody>
+                    <tr data-id>
+                        <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                        <th width="40">ID</th>
+                        <th>姓名</th>
+                        <th width="200">联系电话</th>
+                        <th width="100">QQ</th>
+                        <th width="100">添加时间</th>
+                        <th width="100">审核</th>
+                        <th width="100" data-role="sort" class="sort">排序</th>
+                        <th width="120" class="tac">操作</th>
+                    </tr>
+                    {% if ident.info.data|length %}
+                        {% for k, vo in ident.info.data %}
+                            <tr data-id="{{ vo.id }}">
+                                <td class="tac">
+                                    {{core_manage.checkbox()}}
+                                </td>
+                                <td>
+                                    {{ vo.id }}
+                                </td>
+                                <td>
+                                    {{vo.name|default('')}}
+                                </td>
+                                <td>
+                                    {{ vo.tel }}
+                                </td>
+                                <td>
+                                    {{ vo.qq }}
+                                </td>
+                                <td>
+                                    {{ vo.create_time|default('0')|date('Y-m-d') }}
+                                </td>
+                                <td>
+                                    {{core_global.formField({
+                                        value: vo.checked|default(''),
+                                        form: 'checked',
+                                        field: 'checked'
+                                    })}}
+                                </td>
+                                <td>
+                                    <span data-role="itemEdit" data-name="sort" class='edit'>
+                                        {{vo.sort}}
+                                    </span>
+                                </td>
+                                <td class="tar pr10">
+                                    {{ core_manage.show() }}
+                                    {{ core_manage.delete() }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="9" class="tac">没有数据！</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        {{core_manage.page(block_arc_data)}}
+    </div>
+    {% if (action ~ '/show')|P %}  
+        {{ core_manage.oprate([
+            {
+                method: 'delete',
+                title: '<i class="font-ico-del mr5"></i>批量删除',
+            },
+            {
+                method: 'dropdownFormField',
+                field: 'checked',
+                form: 'checked',
+                title: '审核',
+            }
+        ]) }}
+    {% endif %}
+{% endblock tableMain %}
+
+{% block promptUl %}
+温馨提示：前台显示置业顾问最大数量为18条，如需显示更多，请手动更改模板上的设置
+{% endblock %}

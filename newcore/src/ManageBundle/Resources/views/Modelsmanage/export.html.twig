@@ -1,0 +1,10 @@
+<div style="margin:20px 0px;width:100%; text-align:center;">
+	{% if files is not defined %}
+	导出成功，
+	请<a href="{{ ('')|U('file='~file~'&stamp='~stamp)}}" target="_blank" style="color:green;">点击</a>下载
+	{% else %}
+	[{{count}}]项 导出成功，
+	请到 /app/cache/export/ 目录下查看
+	{{dump(files)}}
+	{% endif %}
+</div>

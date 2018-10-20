@@ -1,0 +1,40 @@
+{% extends 'HouseBundle:Member:detail.html.twig' %}
+{# 标题 #}
+{% set title_users_act = '公司动态' %}
+{# 高亮当前 #}
+{% set nav_users_act = 5 %}
+{# 搜索 #}
+{% block search_member %}
+    {% set searchUrl = 'member/d_news' %}
+    {{parent()}}
+{% endblock search_member %}
+
+{% block right %}
+    <div class="gs-dtai">
+        <div class="subT">
+            <p><i></i>公司动态</p>
+        </div>
+        {% block jjgs_container %}
+            <div class="dtai-list">
+                <ul>
+                    {% if ident.list.data is defined and ident.list.pageCount|default(0) != 0 %}
+                        {% for item in ident.list.data %}
+                            <li {% if loop.index % 5 == 0 %}class="line5"{% endif %}>
+                                <a href="{{('member/d_news_detail')|U({id: detail.id|default(''), newid: item.id|default('')})}}" target="_blank">
+                                    {{item.name|default('')}}
+                                </a>
+                                <span class='c-888 fr'>{{item.create_time|default('')|date('Y-m-d')}}</span>
+                            </li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="noinfo">暂无动态</li>
+                    {% endif %}
+                </ul>
+                <div class="blank20"></div>
+                <!--page-->
+                {{core_global.page(ident.list)}}
+                <!--page-->
+            </div>
+        {% endblock jjgs_container %}
+    </div>
+{% endblock right %}

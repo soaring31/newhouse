@@ -1,0 +1,24 @@
+info:
+    tableName: user_attr
+    subTableName: ''
+    aliasName: p
+    listGrid: {  }
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    groupBy: ''
+    order: id
+    orderBy: desc
+    searchFun: EXISTS
+    dataModel: 0
+    autoQuery: '0'
+    alias: {  }
+    query:
+        type:
+            eq: sms
+        name:
+            orX: 'name,like,%[name]%'
+    query1: {  }
+    attribute: '0'

@@ -1,0 +1,75 @@
+{% extends 'HousemobileBundle:Bundlebindforms:bundlebase.html.twig' %}
+
+{% block result %}
+<div class="content mobile-form bg-white">
+    {% if Form.children is defined and core_global.mconfigtostring({name: 'siteopenreg', ename: 'mvisit'}).__toString == 1 %}
+        <form class="form-control form" action="{{ form.vars.action|U({}, true) }}" method="post">
+            <div class="li-block list-block list-block-login">
+                <ul>
+                	{% for k,v in Form.children %}
+                		{% if k != 'submit' %}
+                		<li class="item-content" {% if v.vars.block_prefixes[1]|default('') == 'hidden' %}style="display: none;"{% endif %}>
+    	                    <div class="item-inner">
+    	                        <div class="item-title label">
+    	                            {{- form_label(v) -}}
+    	                        </div>
+    	                        <div class="item-input item-input-flex">
+    	                        	{{attribute(cmf, v.vars.block_prefixes[v.vars.block_prefixes|length - 2]|default('text') ~ '_form', [v.vars])}}
+    	                        </div>
+                                {{ core_mobile_forms.form_password_see(v) }}
+    	                    </div>
+    	                </li>
+    	                {% endif %}
+                	{% endfor %}
+                	<li class="item-content">
+                        <label class="label-checkbox item-content">
+                            <input type="checkbox" name="checkbox" required="required">
+                            <div class="item-media"><i style="width:0.86667rem; height:0.9rem;" class="icon icon-form-checkbox"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    <div class="item-title">我已看过并同意<a href="javascript:;" class="open-popup" data-popup=".popup-register">《本网站用户使用协议》</a></div>
+                                </div>
+                            </div>
+                        </label>                        
+                    </li>
+                </ul>
+            </div>
+            <div class="content-block">
+                <!-- 有效时加clss=item-button1 -->
+                <div class="row">
+                    <div class="col-100">
+                        <a class="button  button-big button-fill button-success" data-role="submit" href="javascript:;">免费注册</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+        {{ block('result_nav') }}
+    {% else %}
+        {{core_global.mconfig({name: 'regcloreason', ename: 'mvisit'})|default('系统维护中，关闭注册功能')}}
+    {% endif %}
+</div>
+{% endblock result %}
+
+{% block result_nav %}
+<nav class="bar-tab login-bar">
+    <div class="login-bar-title">快捷登录</div>
+    {% if core_global.mconfigtostring({name: 'qqlogin', ename: 'mloginset'}).__toString == 1 %}
+        <a href="{{('/connect/qq')|U({}, true)}}" class="tab-item tab-item-qq">
+            <span class="icon font-f-113"></span>
+            <span class="tab-label">QQ登录</span>
+        </a>
+    {% endif %}
+    {% if core_global.mconfigtostring({name: 'sinalogin', ename: 'mloginset'}).__toString == 1 %}
+        <a href="{{('/connect/weibo')|U({}, true)}}" class="tab-item tab-item-wb">
+            <span class="icon font-f-38"></span>
+            <span class="tab-label">微博登录</span>
+        </a>
+    {% endif %}
+    {% if core_global.mconfigtostring({name: 'wxlogin', ename: 'mloginset'}).__toString == 1 and core_global.operating_environment('weixin') %}
+        <a  href="{{('/connect/weixin')|U({}, true)}}" class="tab-item tab-item-wx">
+            <span class="icon font-f-112"></span>
+            <span class="tab-label">微信登录</span>
+        </a>
+    {% endif %}
+</nav>
+{% endblock result_nav %}

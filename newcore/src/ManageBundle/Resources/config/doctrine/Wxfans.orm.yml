@@ -1,0 +1,166 @@
+ManageBundle\Entity\Wxfans:
+    type: entity
+    table: wxfans
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        openid:
+            options:
+                comment: openid
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        nickname:
+            options:
+                comment: 用户的昵称
+                unsigned: false
+            nullable: false
+            type: string
+            length: 60
+        sex:
+            options:
+                comment: 性别
+                unsigned: false
+            nullable: false
+            type: string
+            length: 10
+        city:
+            options:
+                comment: 用户所在城市
+                unsigned: false
+            nullable: false
+            type: string
+            length: 30
+        country:
+            options:
+                comment: 用户所在国家
+                unsigned: false
+            nullable: false
+            type: string
+            length: 20
+        province:
+            options:
+                comment: 用户所在省份
+                unsigned: false
+            nullable: false
+            type: string
+            length: 24
+        headimgurl:
+            options:
+                comment: '最后一个数值代表正方形头像大小（有0、46、64、96、132数值可选，0代表640*640正方形头像）'
+                unsigned: false
+            nullable: false
+            type: string
+            length: 200
+        subscribe_time:
+            options:
+                comment: 用户关注时间戳
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 11
+        remark:
+            options:
+                comment: 公众号运营者对粉丝的备注
+                unsigned: false
+            nullable: false
+            type: string
+            length: 60
+        tagid_list:
+            options:
+                comment: 用户被打上的标签ID列表
+                unsigned: false
+            nullable: false
+            type: string
+            length: 128
+        token:
+            options:
+                comment: token
+                unsigned: false
+            nullable: false
+            type: string
+            length: 50
+        is_sync:
+            options:
+                comment: 是否更新
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+        tagname:
+            options:
+                comment: 标签名称
+                unsigned: false
+            nullable: false
+            type: string
+            length: 50
+        uid:
+            options:
+                comment: 会员主表id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        checked:
+            options:
+                comment: 是否审核
+                unsigned: false
+            nullable: false
+            type: boolean
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

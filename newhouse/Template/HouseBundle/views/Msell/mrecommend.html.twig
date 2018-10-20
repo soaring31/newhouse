@@ -1,0 +1,123 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set aid = app.request.get('aid') %}
+{% set xftype = app.request.get("xftype") %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {# {{ parent() }} #}
+{% endblock %}
+
+
+{% block tableMain %}
+
+{% set filter_opt = [{
+        method: 'selectFilter',
+        title: '推荐时间',
+        attr: {
+            'data-selectdate': {
+                unix: 1
+            }
+        },
+        data: [
+                {
+                    id: '1M',
+                    name: '一个月前'
+                },
+                {
+                    id: '3M',
+                    name: '三个月前'
+                }
+            ],
+        field: 'create_time'
+    }, {
+        method: 'selectFormField',
+        title: '客户状态',
+        form: 'recommend',
+        field: 'status',
+    }, {
+        method: 'search',
+        field: 'name',
+        title: '请搜索ID/名字/联系电话',
+    }] %}
+
+{% if aid|default('') %}
+	{% set filter_opt = [{
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增推荐'
+    }]|merge(filter_opt) %}
+{% endif %}
+
+{{ core_manage.filter(filter_opt) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            aid: '{{aid}}',
+            xftype: '{{xftype}}'
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                    <th>朋友姓名</th>
+                    {% if aid|default('') is empty %}
+	                    <th width="200">所属分销</th>
+                    {% endif %}
+                    <th width="120">推荐人</th>
+                    <th width="120">联系电话</th>
+                    <th width="100">客户状态</th>
+                    <th width="120">意向总价</th>
+                    <th width="120">推荐时间</th>
+                    <th class="tac" width="110">操作</th>
+                </tr>
+                {% if ident.info.data is defined and ident.info.pageCount|default('') != 0 %}
+                {% for k, vo in ident.info.data %}
+                    {# {{dump(vo)}} #}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td>{{ vo.id }}</td>
+                    <td class="tov" title="{{ vo.name|default('') }}">{{ vo.name }}</td> 
+                    {% if aid|default('') is empty %}
+                        {% set fx_name = ('house.sell')|getOne('name', {id: vo.aid|default('')})|default('-') %}
+	                    <td class="tov" title="{{fx_name}}">{{fx_name}}</td>
+                    {% endif %}
+                    <td>{{ ('db.users')|getOne('username', {id: vo.uid|default('')})|default('-') }}</td>
+                    <td>{{ vo.tel }}</td>
+                    <td><font color="{{ {5: 'red', 4: 'green'}[(vo.status)]|default('blue') }}">{{ core_global.formField({value: vo.status, form: 'recommend', field: 'status'}) }} </font></td>
+                    <td>{{core_global.formData({value: vo.dj})}}</td>
+                    <td>{{ vo.create_time|default('')|date('Y-m-d') }} </td>
+                    <td class="tar pr10">
+                        {% if vo.uid %}
+                            {{ core_manage.show() }}
+                        {% endif %}
+                        {{ core_manage.delete() }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    }
+]) }}
+{% endblock %}

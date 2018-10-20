@@ -1,0 +1,109 @@
+﻿/*!
+ * @name sale-filter-hd.css
+ * @author xying
+ * @date 2016-8-24
+ * @dec common filter header for sale rent
+ * 出租、二手筛选分类头部样式
+ */
+
+// 带有多个按钮的search 部分
+.head-search {
+    height: 56px;
+    padding: 0 10px;
+    border: 1px solid #ddd;
+    margin-bottom: -1px;
+    background: #f7f7f7;
+    @extend %clearfix;
+
+    .search-bar {
+        margin-top: 10px;
+        float: right;
+        .search-input {
+            width: 258px;
+            padding: 8px 10px;
+            border: 1px solid $major-color;
+        }
+
+        .search-btn {
+            width: 70px;
+            height: 38px;
+            line-height: 38px;
+            background:$major-color;
+        }
+    }
+}
+
+.h-s-btns {
+    float: left;
+    .btn1 {
+        float: left;
+        margin-top: 10px;
+        height: 36px;
+        padding: 0 16px;
+        border-radius: 3px;
+        margin-right: 10px;
+        font-size: 14px;
+        text-align: center;
+        line-height: 36px;
+        color: #fff;
+        text-decoration: none;
+        position: relative;
+        background: #5193d0;
+
+        .tri {
+             position: absolute;
+             bottom:-10px;
+             left:50%;
+             right:50%;
+             margin-left: -5px;
+             @include triangle(10px, #5193d0, down);
+        }
+
+        &-1, &.active {
+            background: #e43;
+            .tri {
+                border-top-color: #e43;
+            }
+        }
+        
+        &-2, &.active {
+            background: #5193d0;
+            .tri {
+                border-top-color: #5193d0;
+            }
+        }
+        
+
+        &-3 {
+            background: #4cb471;
+            .tri {
+                border-top-color: #4cb471;
+            }
+        }
+
+        &-4 {
+            background: #fe5200;
+            .tri {
+                border-top-color: #fe5200;
+            }
+        }
+
+        &-5 {
+            background: #2e9ee6;
+            .tri {
+                border-top-color: #2e9ee6;
+            }
+        }
+
+    }
+
+    a:hover {
+        color: #fff;
+        opacity: .8;
+    }
+    i{
+        margin-right: 3px;
+        vertical-align: -1px;
+    }
+
+}

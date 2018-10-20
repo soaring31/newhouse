@@ -1,0 +1,91 @@
+{% set mid = app.user.id %}
+{# 正常 #}
+{# {% macro memenu(o) %}
+<a data-role="route" data-level="1" href="{{(o.url)|U({}|merge(o.opt_cate)|merge(o.opt_catemode)|merge(o.opt_uid))}}"  data-route="{{ o.id|default(0) }}" >{{ o.name }}</a>
+{% endmacro memenu %} #}
+<div data-level="top" data-trigger-next="1" data-size="1" data-target="#rleft" class="level1">
+    
+{# {% set menustree = ('db.menus')|getTree({ genre: 'housemember', level: 'neq|1', order: 'sort|asc', checked: 1 }).data %} #}
+{% set menus_data = ('db.menus')|getAll({ genre: 'housemember', level: 'neq|1', order: 'sort|asc', checked: 1, pageSize: 300 }).data %}
+    
+{% macro menus_html(menus_data) %}
+    {% for item in menus_data if item.level == 2 %}
+        {% set has_children = 0 %}
+        {% set has_children1 = 0 %}
+        {% set children_html %}
+            {% for item1 in menus_data if item1.pid == item.id %}
+                {# 要找下级所有分类有没有权限 #}
+            {% set url = item1.url ? : item1.controller ~ '/' ~ item1.action %}
+            {% set url_opt = {} %}
+            {# 基本信息时需要ID #}
+            {% if item1.pid == 345 %}
+                {% set url_opt = url_opt|merge({_id: app.user.userinfo.id}) %}
+            {% endif %}
+            {# 分类 #}
+            {% if item1.category %}
+                {% set url_opt = url_opt|merge({category: item1.category}) %}
+            {% endif %}
+            {# 分类模型 #}
+            {% if item1.category_models %}
+                {% set url_opt = url_opt|merge({category_models: item1.category_models}) %}
+            {% endif %}
+            {% if item1.url %}
+                {% set has_children1 = item1.url|P %}
+            {% else %}
+            {% for item2 in menus_data if item2.pid == item1.id %}
+                {% set url2 = item2.url ? : item2.controller ~ '/' ~ item2.action %}
+                {% set has_children1 = url2|P %}
+            {% endfor %}
+            {% endif %}
+            {% if has_children1 %}
+                {% set has_children = 1 %}
+                <a data-role="route" data-level="1" href="{{ url|U(url_opt) }}"  data-route="{{ item1.ename ? : item1.action }}" >{{ item1.name }}</a>
+            {% endif %}
+            {% endfor %}
+        {% endset %} {# /children_html #}
+         {% if has_children == 1 %} 
+        <h4 data-level="1">
+            <span><i class="font-ico-{{ item.remark }}"></i>{{ item.name }}<span class="font-ico-down"></span></span>
+        </h4>
+        <div data-level="next" class="level2">
+            {{children_html}}
+        </div>
+        {% endif %} 
+    {% endfor %}
+{% endmacro menus_html %}
+
+    <h4 data-level="1" class="tit on">
+        <a data-role="route" class="mindex" data-route="mindex" href="{{('main/mindex')|U}}"><i class="font-ico-ind"></i>我的首页</a>
+    </h4>
+    {{ _self.menus_html(menus_data) }}
+{# {% if menustree is defined %}
+{% for item1 in menustree %}
+    <h4 data-level="1"><em><i class="font-ico-{{item1.menu.remark}}"></i> {{item1.menu.name}}<span class="font-ico-down"></span></em></h4>
+    <div data-level="next" class="level2">
+        {% for item2 in item1.nodes %}
+            {% set curl = false %}
+            {% set opt_uid = ( item2.menu.pid == 345 ) ? { _id: app.user.userinfo.id }:{} %}
+            {% set opt_cate = item2.menu.category ? { category:item2.menu.category }:{} %}
+            {% set opt_catemode = item2.menu.category_models ? { category_models:item2.menu.category_models }:{} %}
+            {% if item2.menu.url is not empty %}
+                {% set url = ( item2.menu.url ) %}
+                {% set curl = ( url )|P %}
+                {% set aurl = url %}
+                {% if curl %}
+                   {{- _self.memenu({name:item2.menu.name, id:item2.menu.id , url:url, opt_cate:opt_cate, opt_catemode:opt_catemode, opt_uid:opt_uid}) -}}
+                {% endif %} 
+            {% else %}
+                {% for item3 in item2.nodes if item3.menu.controller %}
+                    {% set url = ( item3.menu.controller ~ '/' ~ item3.menu.action ) %}
+                    {% set curl = ( url )|P %}
+                {% endfor %}
+                {% if curl %}
+                    {% set url = item2.menu.controller ~ '/' ~ item2.menu.action %}
+                    {{- _self.memenu({name:item2.menu.name, id:item2.menu.id , url:url, opt_cate:opt_cate, opt_catemode:opt_catemode, opt_uid:opt_uid}) -}}
+                {% endif %} 
+            {% endif %}
+        {% endfor %}
+    </div>  
+{% endfor %}
+{% endif %}
+</div> #}

@@ -1,0 +1,11 @@
+{% block css %}{% endblock %}
+<script type="text/javascript">
+seajs.use(["core"],function(core){
+	// l.init('ajaxSubmit');
+	//图片上传、图片预览、选择文件
+    core.generalEvent.initViewImg();
+    core.generalEvent.initUploadImg();
+});
+</script>
+{% block js %}{% endblock %}
+{% block body%}{% endblock %}

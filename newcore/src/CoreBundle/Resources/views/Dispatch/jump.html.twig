@@ -1,0 +1,126 @@
+<html>
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+<head>
+    <title>{{ tpl_title|default('提示信息') }}</title>
+    <meta charset="{{ _charset }}" />
+    <meta name="robots" content="noindex,nofollow" />
+    {# 启用极速模式 #}
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    {% if ''|isMobile %}
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        {# 禁止百度搜索抓取时转码 #}
+        <meta http-equiv="Cache-Control" content="no-transform" /> 
+        <meta http-equiv="Cache-Control" content="no-siteapp" />
+        <style type="text/css">
+        body .jump .container {
+            width: 100%;
+        }
+        body .jump .tip, 
+        body .jump .main, 
+        body .jump .main2, 
+        body .jump .main3, 
+        body .jump .main4 {
+            left: 5%;
+        }
+        </style>
+    {% endif %}
+    <script type="text/javascript">
+        var jsbase  = "{{ asset('bundles') }}";
+    </script>
+    <script type="text/javascript" src="{{ asset('bundles/core/js/seajs.js') }}"></script>
+    {{core_global.linkcss('bundles/core/css/jump.css')}}
+{# 
+ * 变量说明
+ * tpl_second 倒计时时间
+ * tpl_title  标题
+ * tpl_content  错误信息
+ * tpl_img 图标 可选值（2-8）具体图标可参考 bundles\core\images\ju.html
+ * tpl_footer 底部信息 默认显示
+ * tpl_btn 是否显示按钮
+ * tpl_btn_data 按钮数据
+#}
+
+<script type="text/javascript">
+seajs.use([''], function() {
+    var countDown = function(senconds, $el) {
+        var $btnTxt = $el;
+        if (senconds >= 1) {
+            $btnTxt.html(senconds-- + '秒');
+            setTimeout(function() {
+                countDown(senconds, $el);
+            }, 1000);
+        } else {
+            location.href = '{{ ('index/index')|U({}, true) }}'
+        }
+    }
+    {% if tpl_second|default('') %}
+        countDown({{tpl_second|default('')}}, $('#tpl_second'))
+    {% endif %}
+    function back () {
+        if (window.history.length > 0) {
+            window.history.go(-1);
+        } else {
+            location.href = "{{('index/index')|U({}, true)}}"
+        }
+    }
+    $(".first").click(function () {
+        back();
+    });
+})
+</script>
+</head>
+<body>
+{% set tpl_btn_data = tpl_btn_data|default({
+    0: {
+        name: '返回上一页',
+        url: url|default('javascript:;')
+    },
+    1: {
+        name: '返回首页',
+        url: ('index/index')|U
+    },
+    2: {
+        name: '关闭',
+        url: 'javascript:window.close();'
+    }
+}) %}
+<div class="jump">
+    <!-- 中心 -->
+    <div class="container">
+        <div class="tip img-ju-1">
+            {{ tpl_title|default('提示信息') }}
+        </div>
+        <!-- 内容 -->
+        <div class="main2">
+            <div class="title">
+                <h3>
+                    <i class="img-ju-{{tpl_img|default(2)}}"></i>
+                    <span>{{ tpl_content|default('')|raw }}</span>
+                </h3>
+                <p>
+                    {{tpl_abstract|default('')|raw}}
+                </p>
+                {% if tpl_second|default('') %}
+                <p><b id="tpl_second"></b>钟后 , 窗口将自动返回整站首页！</p>
+                {% endif %}
+            </div>
+            {% if tpl_btn|default(1) and tpl_btn_data|default('') %}
+                <div class="btns">
+                    {% for item in tpl_btn_data %}
+                        <a class="{{item.class|default('')}} {% if loop.first %}first{% endif %}" href="{{item.url|default('')}}" title="{{item.name|default('')}}">{{item.name|default('')}}</a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <!-- end  -->
+</div>
+{% if tpl_footer|default(0) %}
+{% include 'HouseBundle:Common:webinfo.html.twig' %}
+{% endif %}
+</body>
+</html>
+

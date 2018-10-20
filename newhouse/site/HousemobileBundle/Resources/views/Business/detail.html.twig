@@ -1,0 +1,92 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+
+{# 说明 
+* detail: 商业楼盘详情
+#}
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% set officetype = detail.officetype|default('') %}
+
+{% if officetype %}
+	{% set tpl_title = '写字楼' %}
+{% else %}
+	{% set tpl_title = '商铺' %}
+{% endif %}
+
+{% block header_title %}
+	<h1 class="title ">楼盘详情</h1>
+    {# {{core_mobile_global.title({title: detail.name|default('')})}} #}
+{% endblock header_title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}, {{cur_area_data|default('')}}{{detail.name|default('')}}，{{detail.name|default('')}}楼盘详情" />
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}({{'maindomain'|C}})提供{{cur_area_data|default('')}}{{detail.name|default('')}}售楼电话({{detail.tel|default('')}})、实时房价({{detail.dj|default('')}}元/平米)、户型图、地址{{detail.address|default('')}}、交通和周边配套、开盘动态、怎么样等楼盘信息。活跃、集聚众多人气的{{detail.name|default('')}}业主论坛，及时的{{detail.name|default('')}}楼盘信息尽在{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}!"/>
+{% endblock key_des %}
+
+{% block title %}
+    {{detail.name|default('')}}-
+    {% block b_title %}
+    楼盘详情
+    {% endblock b_title %}
+{% endblock title %}
+
+{% block container %}
+	<div data-block="{
+	    bParams: true,
+	    ajax:{
+	        url: '{{ ('business/detail')|U }}',
+	        data: {
+	            id: '{{ detail.id|default('') }}',
+	            tpl: 'Business:detailblock'
+	        }
+	    }
+	}"></div>
+{% endblock container %}
+
+{% block secondary %}
+	<div data-block="{
+        bParams: true,
+        ajax:{
+            url: '{{ ('business/detail')|U }}',
+            data: {
+                id: '{{ detail.id|default('') }}',
+                tpl: 'Business:navblock',
+                active: {{nav_active|default(0)}}
+            }
+        }
+    }"></div>
+{% endblock secondary %}
+
+{% block popup %}
+	{{ housemobile_global.popup({
+	    name: 'popup-yxiang',
+	    title: tpl_title ~ '订阅',
+	    content: {
+	        bParams: true,
+	        ajax:{
+	            url: ('business/detail')|U,
+	            data: {
+	                id: detail.id|default(''),
+	                formflag: 'view_sale_intent',
+	                tpl: 'Common:forms'
+	            }
+	        }
+	    }
+	}) }}
+
+	{{ housemobile_global.popup({
+	    name: 'popup-map',
+	    title: tpl_title ~ '楼盘地图',
+	    content: {
+	        bParams: true,
+	        ajax: {
+	            url: ('business/detail')|U,
+	            data: {
+	                id: detail.id|default(''),
+	                tpl: 'Common:mapblock'
+	            }
+	        }
+	    }
+	}) }}
+{% endblock popup %}

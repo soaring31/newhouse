@@ -1,0 +1,29 @@
+{% extends 'HousemobileBundle:Common:header.html.twig' %}
+
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+{% set _id = app.request.get('_id') %}
+
+{% if _id|default('') %}
+	{% set tpl_name = '修改' %}
+{% else %}
+	{% set tpl_name = '发布' %}
+{% endif %}
+
+{# 标题判断 #}
+{% if models == 'sale' %}
+    {% set fb_title = '二手房' ~ tpl_name|default('') %}
+{% elseif models == 'rent' %}
+    {% set fb_title = '出租'  ~ tpl_name|default('') %}
+{% elseif models == 'demand' %}
+    {% if category == 297 %}
+        {% set fb_title = '求购'  ~ tpl_name|default('') %}
+    {% else %}
+        {% set fb_title = '求租'  ~ tpl_name|default('') %}
+    {% endif %}
+{% endif %}
+
+{% block result %}
+{% set tpl_title = core_mobile_global.title({title: fb_title|default('')}) %}
+{{parent()}}
+{% endblock result %}

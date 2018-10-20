@@ -1,0 +1,251 @@
+{% extends 'HouseBundle:Topic:extend.html.twig' %}
+
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% set push_zxts_name = ('house.cate_pushs')|getAll({pid: 170, checked: 1, pageSize: 4}) %}
+
+{% block key_des %}
+<meta name="keywords" content="{{ detail.keywords|default('') }}" />
+<meta name="description" content="{{ detail.abstract|default('') }}" />
+{% endblock key_des%}
+
+{% block title %}{{detail.name|default('专题模板5')}}{% endblock title %}
+
+{% block css %}
+    {{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/special-5.css')}}
+{% endblock css %}
+
+{% block body %}
+
+<body class="w1210">
+<div class="banner">
+    <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-5/top_1.jpg'}) -}}" alt="买房潜规则">
+    <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-5/top_2.jpg'}) -}}" alt="买房潜规则"></div>
+<div class="navTitle">
+    {% if push_zxts_name.data is defined %}
+        {% for item in push_zxts_name.data %}
+            <a href= "#nav_{{loop.index}}" class="{% if loop.index == 1 %} first {% endif %}" >{{item.name|default('')}}</a>
+        {% endfor %}
+    {% endif %}
+</div>
+<div class="daoyu">
+    <h2>{{detail.name|default('')}}</h2>
+    <p>
+        {# {{core_global.substr(core_global.content({content: detail.content|default('')}),200,1)}} #}
+        {{detail.content|default('')|raw}}
+    </p>
+</div>
+    {% if push_zxts_name.data is defined %}
+        {% for item in push_zxts_name.data %}
+            {% set zxts = ('house.topic_arc')|getBlock({ename: item.ename|default('')},{checked: 1, pageSize: 4}) %}
+            <div class="look" id="nav_{{loop.index}}">
+                <div class="title">
+                    <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-5/greenLine.gif'}) -}}" alt="线">
+                    <h2>{{item.name|default('')}}</h2>
+                    <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-5/greenLine.gif'}) -}}" alt="线">
+                </div>
+                <ul>
+                    {% if zxts.data is defined %}
+                        {% for item2 in zxts.data %}
+                            <li>
+                                <div>
+                                    <a href= "{{item2.url|default('')}}" target="_blank">
+                                       {{core_global.lazy_img({
+                                            width: 250,
+                                            height: 426,
+                                            src: item2.thumb|default(''),
+                                            alt: item2.name|default(''),
+                                            type: 2
+                                       })}}
+                                    </a>
+                                </div>
+                                <p>
+                                  <a href= "{{item2.url|default('')}}" target="_blank">{{item2.name|default('')}}</a>
+                                </p>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+
+                    {# <li>
+                        <div>
+                            <a href= "#" target="_blank">
+                                <img src="{{ asset('bundles/'~bundlepath~'/images/zt-5/look_2.jpg', absolute=true) }}" alt="精装房"></a>
+                        </div>
+                        <p>
+                            <a href= "#" target="_blank">精装房的4种陷阱</a>
+                        </p>
+                    </li>
+                    <li>
+                        <div>
+                            <a href= "#" target="_blank">
+                                <img src="{{ asset('bundles/'~bundlepath~'/images/zt-5/look_3.jpg', absolute=true) }}" alt="生活圈"></a>
+                        </div>
+                        <p>
+                            <a href= "#" target="_blank">怎样选择便捷的生活圈？</a>
+                        </p>
+                    </li>
+                    <li>
+                        <div>
+                            <a href= "#" target="_blank">
+                                <img src="{{ asset('bundles/'~bundlepath~'/images/zt-5/look_4.jpg', absolute=true) }}" alt="沙盘"></a>
+                        </div>
+                        <p>
+                            <a href= "#" target="_blank">沙盘陷阱大起底</a>
+                        </p>
+                    </li> #}
+                </ul>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+
+{#    <div class="look" id="nav_2">
+        <div class="title">
+            <img src="{{ asset('bundles/'~bundlepath~'/images/zt-5/greenLine.gif', absolute=true) }}" alt="线">
+            <h2>选房技巧</h2>
+            <img src="{{ asset('bundles/'~bundlepath~'/images/zt-5/greenLine.gif', absolute=true) }}" alt="线"></div>
+        <ul>
+            <li>
+                <div>
+                    <a href= "#" target="_blank">
+                        <img src="{{ asset('bundles/'~bundlepath~'/images/zt-5/look_1.jpg', absolute=true) }}" alt="看房"></a>
+                </div>
+                <p>
+                    <a href= "#" target="_blank">哪种天气最适宜看房？</a>
+                </p>
+            </li>
+            <li>
+                <div>
+                    <a href= "#" target="_blank">
+                        <img src="{{ asset('bundles/'~bundlepath~'/images/zt-5/look_2.jpg', absolute=true) }}" alt="精装房"></a>
+                </div>
+                <p>
+                    <a href= "#" target="_blank">精装房的4种陷阱</a>
+                </p>
+            </li>
+            <li>
+                <div>
+                    <a href= "#" target="_blank">
+                        <img src="{{ asset('bundles/'~bundlepath~'/images/zt-5/look_3.jpg', absolute=true) }}" alt="生活圈"></a>
+                </div>
+                <p>
+                    <a href= "#" target="_blank">怎样选择便捷的生活圈？</a>
+                </p>
+            </li>
+            <li>
+                <div>
+                    <a href= "#" target="_blank">
+                        <img src="{{ asset('bundles/'~bundlepath~'/images/zt-5/look_4.jpg', absolute=true) }}" alt="沙盘"></a>
+                </div>
+                <p>
+                    <a href= "#" target="_blank">沙盘陷阱大起底</a>
+                </p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="look" id="nav_3">
+        <div class="title">
+            <img src="{{ asset('bundles/'~bundlepath~'/images/zt-5/greenLine.gif', absolute=true) }}" alt="线">
+            <h2>实地看房</h2>
+            <img src="{{ asset('bundles/'~bundlepath~'/images/zt-5/greenLine.gif', absolute=true) }}" alt="线"></div>
+        <ul>
+            <li>
+                <div>
+                    <a href= "#" target="_blank">
+                        <img src="{{ asset('bundles/'~bundlepath~'/images/zt-5/look_1.jpg', absolute=true) }}" alt="看房"></a>
+                </div>
+                <p>
+                    <a href= "#" target="_blank">哪种天气最适宜看房？</a>
+                </p>
+            </li>
+            <li>
+                <div>
+                    <a href= "#" target="_blank">
+                        <img src="{{ asset('bundles/'~bundlepath~'/images/zt-5/look_2.jpg', absolute=true) }}" alt="精装房"></a>
+                </div>
+                <p>
+                    <a href= "#" target="_blank">精装房的4种陷阱</a>
+                </p>
+            </li>
+            <li>
+                <div>
+                    <a href= "#" target="_blank">
+                        <img src="{{ asset('bundles/'~bundlepath~'/images/zt-5/look_3.jpg', absolute=true) }}" alt="生活圈"></a>
+                </div>
+                <p>
+                    <a href= "#" target="_blank">怎样选择便捷的生活圈？</a>
+                </p>
+            </li>
+            <li>
+                <div>
+                    <a href= "#" target="_blank">
+                        <img src="{{ asset('bundles/'~bundlepath~'/images/zt-5/look_4.jpg', absolute=true) }}" alt="沙盘"></a>
+                </div>
+                <p>
+                    <a href= "#" target="_blank">沙盘陷阱大起底</a>
+                </p>
+            </li>
+        </ul>
+    </div>
+    <div class="look" id="nav_4">
+        <div class="title">
+            <img src="{{ asset('bundles/'~bundlepath~'/images/zt-5/blueLine.gif', absolute=true) }}" alt="线">
+            <h2>买房流程</h2>
+            <img src="{{ asset('bundles/'~bundlepath~'/images/zt-5/blueLine.gif', absolute=true) }}" alt="线"></div>
+        <ul>
+            <li>
+                <div>
+                    <a href= "#" target="_blank">
+                        <img src="{{ asset('bundles/'~bundlepath~'/images/zt-5/look_5.jpg', absolute=true) }}" alt="买房风险"></a>
+                </div>
+                <p>
+                    <a href= "#" target="_blank">怎样规避买房风险？</a>
+                </p>
+            </li>
+            <li>
+                <div>
+                    <a href= "#" target="_blank">
+                        <img src="{{ asset('bundles/'~bundlepath~'/images/zt-5/look_6.jpg', absolute=true) }}" alt="房产证"></a>
+                </div>
+                <p>
+                    <a href= "#" target="_blank">房产证上怎么加名字？</a>
+                </p>
+            </li>
+            <li>
+                <div>
+                    <a href= "#" target="_blank">
+                        <img src="{{ asset('bundles/'~bundlepath~'/images/zt-5/look_7.jpg', absolute=true) }}" alt="税款"></a>
+                </div>
+                <p>
+                    <a href= "#" target="_blank">买房需要缴纳哪些税款？</a>
+                </p>
+            </li>
+            <li>
+                <div>
+                    <a href= "#" target="_blank">
+                        <img src="{{ asset('bundles/'~bundlepath~'/images/zt-5/look_8.jpg', absolute=true) }}" alt="公积金"></a>
+                </div>
+                <p>
+                    <a href= "#" target="_blank">公积金使用的6大误区</a>
+                </p>
+            </li>
+        </ul>
+    </div> #}
+
+</div>
+<div class="blank20"></div>
+</body>
+{% endblock body %}
+
+{% block js %}
+<script>
+    seajs.use(['lazyload'],function (lazyload){
+        $('.navTitle a').click(function() {
+            $('.navTitle a').removeClass('first');
+            $(this).addClass('first');
+
+        });
+    });
+</script>
+{% endblock js %}

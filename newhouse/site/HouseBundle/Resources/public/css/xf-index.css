@@ -1,0 +1,1157 @@
+@charset "UTF-8";
+/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+*/
+/**
+ * @method 清除浮动 %clearfix 
+ * @description 清除浮动
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %clearfix;
+ * }
+ * ```
+ * 
+ * ```css
+ * 	div {
+	    *zoom: 1;
+	}
+	div:after {
+	    display: block;
+	    clear: both;
+
+	    height: 0;
+
+	    content: '\20';
+	}
+ * ```
+ */
+/**
+ * @method 去掉虚线框 %outline 
+ * @description 去掉虚线框
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @ extend %outline;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		outline: thin dotted;
+		outline: 5px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
+ * ```
+ */
+/**
+ * @method 文字不换行后面加省略号 %text-overflow 
+ * @description 文字不换行后面加省略号
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %text-overflow;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+ * ```
+ */
+/**
+ * @method 内容换行 %word-wrap 
+ * @description 内容换行
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %word-wrap;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+	    word-wrap: break-word;
+	    white-space: pre-wrap;
+	    word-break: break-all;
+	}
+ * ```
+ */
+/**
+ * @method 透明层opacity 
+ * @description 透明层 内容也透明
+ * @param {number} $opacity - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include opacity(.5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+	  opacity: .5;
+	  filter: alpha(opacity=50);
+ * }
+ * ```
+ */
+/**
+ * @method 背景透明层transparent 
+ * @description 透明层只处理背景透明
+ * @param {string} $color - 背景透明层的颜色
+ * @param {number} $alpha - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include transparent(#000, .5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+ *    	background-color: transparent;
+		background-color: (0,0,0,.5);
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7fffffff, endColorstr=#7fffffff,);
+		zoom: 1;
+ * }
+ * ```
+ */
+/**
+ * @method triangle 
+ * @description 生成一个三角形图标
+ * @param {string} $size - 三角的大小
+ * @param {string} $color - 三角颜色
+ * @param {string} $direction - 三角的方向 up, down, left, right
+ * @example 调用
+ * 
+ * ```scss
+ * i {
+ *    @include triangle(5px, #bbb, up); 
+ * }
+ * ```
+ * 
+ * ```css
+ * i {
+ *    width: 0;
+      height: 0;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent;
+      border-bottom-color: #bbb;
+ * }
+ * ```
+ */
+/**
+* @method 水平线hr nav-divider 
+* @description 透明层 内容也透明
+* @param {string} $color=#e5e5e5 - 线的颜色
+* @param {string} $line-height-computed - 线的高度，空间
+* @example 调用
+* 
+* ```scss
+* div {
+*    @include nav-divider(#e5e5e5, 24px);
+* }
+* ```
+* 
+* ```css
+* div {
+	  height: 1px;
+	  margin: 11px 0;
+	  overflow: hidden;
+	  background-color: #e5e5e5;
+* }
+* ```
+*/
+@font-face {
+    font-family: "lp";
+    font-weight: normal;
+    font-style: normal;
+    src: url("../fonts/lp.eot");
+    src: url("../fonts/lp.eot?#iefix") format("embedded-opentype"), url("../fonts/lp.woff") format("woff");
+}
+
+[class^="font-lp-"],
+[class*=" font-lp-"] {
+    font-family: "lp";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: inherit;
+    float: none;
+    margin: 0;
+    vertical-align: -0.25em;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    text-decoration: none;
+    text-transform: none;
+}
+
+.font-lp-1:before {
+    content: "\EA01";
+}
+
+.font-lp-10:before {
+    content: "\EA02";
+}
+
+.font-lp-11:before {
+    content: "\EA03";
+}
+
+.font-lp-12:before {
+    content: "\EA04";
+}
+
+.font-lp-13:before {
+    content: "\EA05";
+}
+
+.font-lp-14:before {
+    content: "\EA06";
+}
+
+.font-lp-15:before {
+    content: "\EA07";
+}
+
+.font-lp-16:before {
+    content: "\EA08";
+}
+
+.font-lp-17:before {
+    content: "\EA09";
+}
+
+.font-lp-18:before {
+    content: "\EA0A";
+}
+
+.font-lp-19:before {
+    content: "\EA0B";
+}
+
+.font-lp-2:before {
+    content: "\EA0C";
+}
+
+.font-lp-20:before {
+    content: "\EA0D";
+}
+
+.font-lp-21:before {
+    content: "\EA0E";
+}
+
+.font-lp-22:before {
+    content: "\EA0F";
+}
+
+.font-lp-23:before {
+    content: "\EA10";
+}
+
+.font-lp-24:before {
+    content: "\EA11";
+}
+
+.font-lp-25:before {
+    content: "\EA12";
+}
+
+.font-lp-26:before {
+    content: "\EA13";
+}
+
+.font-lp-27:before {
+    content: "\EA14";
+}
+
+.font-lp-28:before {
+    content: "\EA15";
+}
+
+.font-lp-29:before {
+    content: "\EA16";
+}
+
+.font-lp-3:before {
+    content: "\EA17";
+}
+
+.font-lp-30:before {
+    content: "\EA18";
+}
+
+.font-lp-31:before {
+    content: "\EA19";
+}
+
+.font-lp-32:before {
+    content: "\EA1A";
+}
+
+.font-lp-33:before {
+    content: "\EA1B";
+}
+
+.font-lp-34:before {
+    content: "\EA1C";
+}
+
+.font-lp-35:before {
+    content: "\EA1D";
+}
+
+.font-lp-36:before {
+    content: "\EA1E";
+}
+
+.font-lp-37:before {
+    content: "\EA1F";
+}
+
+.font-lp-38:before {
+    content: "\EA20";
+}
+
+.font-lp-39:before {
+    content: "\EA21";
+}
+
+.font-lp-4:before {
+    content: "\EA22";
+}
+
+.font-lp-40:before {
+    content: "\EA23";
+}
+
+.font-lp-41:before {
+    content: "\EA24";
+}
+
+.font-lp-42:before {
+    content: "\EA25";
+}
+
+.font-lp-43:before {
+    content: "\EA26";
+}
+
+.font-lp-44:before {
+    content: "\EA27";
+}
+
+.font-lp-45:before {
+    content: "\EA28";
+}
+
+.font-lp-46:before {
+    content: "\EA29";
+}
+
+.font-lp-47:before {
+    content: "\EA2A";
+}
+
+.font-lp-48:before {
+    content: "\EA2B";
+}
+
+.font-lp-49:before {
+    content: "\EA2C";
+}
+
+.font-lp-5:before {
+    content: "\EA2D";
+}
+
+.font-lp-50:before {
+    content: "\EA2E";
+}
+
+.font-lp-51:before {
+    content: "\EA2F";
+}
+
+.font-lp-52:before {
+    content: "\EA30";
+}
+
+.font-lp-53:before {
+    content: "\EA31";
+}
+
+.font-lp-54:before {
+    content: "\EA32";
+}
+
+.font-lp-55:before {
+    content: "\EA33";
+}
+
+.font-lp-56:before {
+    content: "\EA34";
+}
+
+.font-lp-6:before {
+    content: "\EA35";
+}
+
+.font-lp-7:before {
+    content: "\EA36";
+}
+
+.font-lp-8:before {
+    content: "\EA37";
+}
+
+.font-lp-9:before {
+    content: "\EA38";
+}
+
+.img-xf-1, .img-xf-2, .img-xf-3, .img-xf-4, .img-xf-5, .img-xf-6, .img-xf-7, .img-xf-8, .img-xf-9, .img-xf-10, .img-xf-11, .img-xf-12, .img-xf-13, .img-xf-14, .img-xf-15, .img-xf-16 {
+    display: inline-block;
+    *zoom: 1;
+    *display: inline;
+    vertical-align: middle;
+    line-height: 300px;
+    overflow: hidden;
+    background-image: url(../images/xf.png);
+}
+
+.img-xf-1 {
+    width: 300px;
+    height: 63px;
+    background-position: 0 -73px;
+}
+
+.img-xf-2 {
+    width: 300px;
+    height: 63px;
+    background-position: -310px 0;
+}
+
+.img-xf-3 {
+    width: 300px;
+    height: 63px;
+    background-position: 0 0;
+}
+
+.img-xf-4 {
+    width: 300px;
+    height: 63px;
+    background-position: 0 -219px;
+}
+
+.img-xf-5 {
+    width: 300px;
+    height: 63px;
+    background-position: 0 -146px;
+}
+
+.img-xf-6 {
+    width: 58px;
+    height: 58px;
+    background-position: -310px -73px;
+}
+
+.img-xf-7 {
+    width: 58px;
+    height: 58px;
+    background-position: -378px -73px;
+}
+
+.img-xf-8 {
+    width: 53px;
+    height: 53px;
+    background-position: -310px -204px;
+}
+
+.img-xf-9 {
+    width: 53px;
+    height: 53px;
+    background-position: -373px -204px;
+}
+
+.img-xf-10 {
+    width: 53px;
+    height: 53px;
+    background-position: -509px -73px;
+}
+
+.img-xf-11 {
+    width: 53px;
+    height: 53px;
+    background-position: -446px -73px;
+}
+
+.img-xf-12 {
+    width: 53px;
+    height: 53px;
+    background-position: -310px -141px;
+}
+
+.img-xf-13 {
+    width: 53px;
+    height: 53px;
+    background-position: -499px -141px;
+}
+
+.img-xf-14 {
+    width: 53px;
+    height: 53px;
+    background-position: -436px -141px;
+}
+
+.img-xf-15 {
+    width: 53px;
+    height: 53px;
+    background-position: -373px -141px;
+}
+
+.img-xf-16 {
+    width: 41px;
+    height: 42px;
+    background-position: -562px -141px;
+}
+
+.searchbg {
+    background-color: #f4f4f4;
+    padding: 15px 0;
+    margin-top: 20px\9;
+}
+
+.search {
+    margin: 0 auto;
+    width: 1200px;
+}
+
+.searcht {
+    height: 38px;
+    padding: 13px 0;
+}
+
+.searchtl {
+    float: left;
+    margin-right: 41px;
+    width: 550px;
+}
+
+.searchtl input {
+    float: left;
+}
+
+.searchtl .sotxt {
+    border: 1px solid #d2d2d2;
+    color: #666;
+    height: 36px;
+    line-height: 36px;
+    padding-left: 10px;
+    width: 448px;
+}
+
+.searchtl .sobtn {
+    background-color: #df0303;
+    border: medium none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bolder;
+    height: 38px;
+    letter-spacing: 2px;
+    width: 90px;
+}
+
+.searchtr,
+.searchbc {
+    float: left;
+}
+
+.searchtr li {
+    float: left;
+    font-size: 14px;
+    line-height: 38px;
+    padding: 0 11px;
+}
+
+.searchtr li i {
+    color: #c00;
+}
+
+.searchb {
+    height: 40px;
+}
+
+.searchbl {
+    float: left;
+    height: 40px;
+    margin-right: 24px;
+    position: relative;
+    width: 742px;
+    z-index: 999;
+}
+
+.searchbl .more-tit {
+    display: none;
+}
+
+.searchbl li {
+    background-color: #fff;
+    float: left;
+    height: 38px;
+    margin-right: 6px;
+    position: relative;
+    width: 100px;
+}
+
+.searchbl li i {
+    bottom: 0;
+    left: 70px;
+    position: absolute;
+}
+
+.searchbl li.hover .more-bd {
+    display: block;
+}
+
+.searchbl .more-hd {
+    border: 1px solid #d2d2d2;
+    color: #666;
+    display: block;
+    font-size: 14px;
+    height: 38px;
+    line-height: 38px;
+    text-decoration: none;
+    text-indent: 10px;
+    vertical-align: top;
+}
+
+.searchbl .more-bd {
+    background-color: #fff;
+    left: 0;
+    position: absolute;
+    display: none;
+    height: auto;
+    overflow: hidden;
+    width: 100%;
+}
+
+.searchbl .more-bd ul {
+    width: 100%;
+}
+
+.searchbl .more-bd a {
+    border: 1px solid #e5e5e5;
+    color: #666;
+    height: 29px;
+    line-height: 29px;
+    margin-top: -1px;
+    vertical-align: top;
+    display: block;
+    font-size: 12px;
+    padding-left: 10px;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+.searchbl .more-bd a:hover {
+    background: #f4f4f4 none repeat scroll 0 0;
+    text-decoration: none;
+}
+
+.searchbc {
+    float: left;
+    height: 38px;
+    overflow: hidden;
+    width: 350px;
+}
+
+.searchbr {
+    float: right;
+}
+
+.searchbr a {
+    border: 1px solid #ddd;
+    display: inline-block;
+    height: 38px;
+    line-height: 38px;
+    margin-left: -1px;
+    text-align: center;
+    text-decoration: none;
+    width: 38px;
+}
+
+.searchbr i {
+    color: #999;
+    font-size: 24px;
+}
+
+.searchbr a:hover,
+.searchbr a.act {
+    background-color: #fff;
+}
+
+.searchbr a:hover i,
+.searchbr a.act i {
+    color: #e43;
+}
+
+.focus {
+    height: 476px;
+}
+
+.focusl {
+    float: left;
+    width: 888px;
+}
+
+.big {
+    float: left;
+    height: 476px;
+    overflow: hidden;
+    position: relative;
+    width: 665px;
+}
+
+.big li {
+    position: relative;
+}
+
+.big .text {
+    bottom: 0;
+    left: 0;
+    padding: 15px 25px;
+    position: absolute;
+    z-index: 9999;
+}
+
+.big .text i {
+    font-size: 18px;
+}
+
+.big .bg {
+    background: rgba(51, 51, 51, 0.6) none repeat scroll 0 0;
+    bottom: 0;
+    height: 100px;
+    left: 0;
+    line-height: 100px;
+    position: absolute;
+    width: 100%;
+    z-index: 100;
+}
+
+.big a {
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.big p {
+    color: #fff;
+    height: 24px;
+    line-height: 24px;
+    overflow: hidden;
+}
+
+.big .anniu {
+    background: rgba(0, 0, 0, 0.5) none repeat scroll 0 0;
+    color: #fff;
+    cursor: pointer;
+    font-family: sumsun;
+    font-size: 32px;
+    font-weight: bold;
+    height: 100px;
+    left: 0;
+    line-height: 100px;
+    margin-top: -50px;
+    overflow: hidden;
+    position: absolute;
+    text-align: center;
+    text-decoration: none;
+    top: 50%;
+    width: 40px;
+    z-index: 10;
+}
+
+.big .next {
+    left: auto;
+    right: 0;
+}
+
+.big .yuan {
+    bottom: 15px;
+    color: #fff;
+    position: absolute;
+    right: 10px;
+    z-index: 200;
+}
+
+.big .yuan i {
+    background-color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    float: left;
+    height: 16px;
+    line-height: 100;
+    margin-right: 10px;
+    overflow: hidden;
+    width: 16px;
+}
+
+.big .yuan i.act {
+    background-color: #c00;
+}
+
+.small {
+    float: right;
+    height: 158px;
+    margin-bottom: 1px;
+    overflow: hidden;
+    position: relative;
+    width: 220px;
+}
+
+.small img {
+    transition: -webkit-transform 0.3s ease 0s;
+}
+
+.small:hover img {
+    transform: scale(1.2);
+}
+
+.small .text {
+    bottom: 5px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    z-index: 9999;
+}
+
+.small .bg {
+    background: rgba(51, 51, 51, 0.6) none repeat scroll 0 0;
+    bottom: 0;
+    height: 55px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+}
+
+.small a {
+    color: #fff;
+    cursor: pointer;
+    display: block;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.small p {
+    padding: 0px 5px;
+    color: #fff;
+    height: 22px;
+    line-height: 22px;
+    overflow: hidden;
+}
+
+.focusr {
+    border: 1px solid #e5e5e5;
+    float: right;
+    height: 474px;
+    width: 298px;
+}
+
+.focusrt {
+    border-bottom: 1px solid #e5e5e5;
+    padding: 25px 12px 17px;
+}
+
+.focusrt li {
+    height: 27px;
+    line-height: 27px;
+    overflow: hidden;
+}
+
+.focusrt .title {
+    color: #c00;
+    font-size: 20px;
+    font-weight: bolder;
+    height: 27px;
+    margin-bottom: 8px;
+}
+
+.focusrt .title a {
+    color: #c00;
+}
+
+.focusrb .focusrbt {
+    color: #666;
+    padding-top: 27px;
+    text-align: center;
+}
+
+.gyt {
+    border-bottom: 1px solid #eee;
+    border-top: 1px solid #eee;
+    height: 63px;
+}
+
+.gytl {
+    float: left;
+    height: 63px;
+    width: 300px;
+}
+
+.gytl span {
+    float: left;
+    font-size: 24px;
+    line-height: 63px;
+    padding-right: 22px;
+}
+
+.gytl span.one {
+    color: #099;
+}
+
+.gytl h3 {
+    color: #fff;
+    float: left;
+    font-size: 26px;
+    line-height: 63px;
+}
+
+.gytc {
+    float: left;
+    margin-left: 13px;
+}
+
+.gytc li {
+    float: left;
+    font-size: 18px;
+    height: 63px;
+    line-height: 63px;
+    text-align: center;
+}
+
+.gytc li a {
+    display: block;
+    text-decoration: none;
+    width: 68px;
+}
+
+.gytc li a:hover {
+    background: transparent url("../images/xf/lphover.png") no-repeat scroll center bottom;
+    transition: none 0s ease 0s;
+}
+
+.gytr {
+    float: right;
+    font-size: 14px;
+    line-height: 63px;
+}
+
+.gytr a {
+    color: #999;
+}
+
+.gyb {
+    margin-right: -50px;
+}
+
+.gyb li {
+    float: left;
+    height: 257px;
+    margin-right: 24px;
+    margin-top: 25px;
+    width: 220px;
+}
+
+.gyb li a {
+    display: block;
+    overflow: hidden;
+}
+
+.gyb li img {
+    transition: transform 0.3s ease 0s;
+}
+
+.gyb li .bg47 {
+    background-color: #474747;
+    bottom: 125px;
+    height: 35px;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.gyb li:hover img {
+    transform: scale(1.1);
+}
+
+.gyb li:hover .bg47 {
+    background-color: #f60;
+}
+
+.bg47 a {
+    color: #fff;
+    cursor: pointer;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.bg47 p {
+    height: 35px;
+    line-height: 35px;
+    overflow: hidden;
+    padding: 0 10px;
+}
+
+.gyb li .intro {
+    border: 1px solid #eee;
+    font-size: 12px;
+    padding: 4px 5px;
+}
+
+.gyb li:hover .intro {
+    border: 1px solid #f60;
+}
+
+.intro p {
+    height: 28px;
+    line-height: 28px;
+    overflow: hidden;
+}
+
+.intro p .oh,
+.intro p .oh1 {
+    height: 28px;
+    overflow: hidden;
+}
+
+.intro p .oh1 {
+    width: 140px;
+}
+
+.intro p i {
+    color: #f40;
+    font-size: 14px;
+}
+
+.intro p em {
+    color: #e43;
+}
+
+.gyt .gytl .two {
+    color: #309b03;
+}
+
+.gyt .gytl .three {
+    color: #c00;
+}
+
+.gyt .gytl .four {
+    color: #c0f;
+}
+
+.gyt .gytl .five {
+    color: #0bf;
+}
+
+.gj {
+    height: 115px;
+}
+
+.gj dl dt {
+    padding-left: 24px;
+    padding-right: 23px;
+    position: relative;
+}
+
+.gj dl dd {
+    padding: 0 28px;
+}
+
+.gj dl a {
+    border: 1px solid #e6e6e6;
+    border-radius: 10px;
+    display: block;
+    height: 90px;
+    transition: all 0.3s ease 0s;
+    width: 90px;
+}
+
+.gj dt,
+.gj dd {
+    float: left;
+    font-size: 13px;
+    line-height: 2;
+    text-align: center;
+}
+
+.gj dt i {
+    bottom: 79px;
+    height: 38px;
+    left: 25px;
+    position: absolute;
+    width: 37px;
+}
+
+@keyframes move {
+    0% {
+        top: 0;
+        opacity: 1;
+        visibility: inherit;
+    }
+    25% {
+        top: -50px;
+        opacity: 0;
+        visibility: hidden;
+    }
+    75% {
+        top: 50px;
+        opacity: 0;
+        visibility: hidden;
+    }
+    100% {
+        top: 0;
+        opacity: 1;
+        visibility: inherit;
+    }
+}
+
+.gj dd a:hover {
+    border: 1px solid #4ec61b;
+    box-shadow: 0 0 3px #4ec61b inset;
+}
+
+.gj dt a {
+    background-color: #4ec61b;
+}
+
+.gj dt a em {
+    margin-top: 20px;
+}
+
+.gj dd a i {
+    margin-top: 20px;
+    margin-left: 3px;
+}
+
+#zst {
+    height: 230px;
+    width: 298px;
+}
+
+/*# sourceMappingURL=xf-index.css.map */

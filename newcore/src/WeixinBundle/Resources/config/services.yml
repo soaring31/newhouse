@@ -1,0 +1,9 @@
+services:
+    weixin.wechat:
+        class: 'WeixinBundle\WeChat\WeChat'
+        arguments: ['@service_container']
+    weixin.wxpayunifiedorder:
+        class: 'WeixinBundle\Services\Pay\WxPayUnifiedOrder'
+    weixin.nativepay:
+        class: 'WeixinBundle\Services\Pay\NativePay'
+        arguments: ['@service_container']

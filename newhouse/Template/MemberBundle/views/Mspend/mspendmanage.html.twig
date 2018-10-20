@@ -1,0 +1,86 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+    {% set aid = app.request.get('aid') %}
+{% block js %}
+<script type="text/javascript">
+
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {# {{ parent() }}  #}
+     
+    
+{% endblock %}
+
+{% block mainleft %}
+{% endblock mainleft %}
+{% block tableMain %}
+{{ core_manage.filter([
+    {
+        method: 'search',
+        field: 'name',
+        title: '请搜索名称',
+    }
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            models: '{{ models }}',
+            category: '{{ category }}'
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                    <th width="100">名称</th>
+                    <th width="100">消费金额</th>
+                    <th width="100">总金额</th>
+                    <th width="100">余额</th>
+                    {# <th width="100">操作服务</th> #}
+                    <th width="100">添加时间</th>
+                </tr>
+                {% if ident.info.data is defined and ident.info.pageCount|default(0) != 0 %}
+                {% for k, vo in ident.info.data %}
+                    {# {{dump(vo)}} #}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td>{{ vo.id }}</td>
+                    <td>{{ vo.name }}</td> 
+                    <td>{{ vo.amount }}</td> 
+                    <td>{{ vo.cmoney }}</td>
+                    <td>{{ vo.bmoney }}</td>
+                    {# <td>{{ vo.services }}</td> #}
+                    <td>{{ vo.create_time|default('0')|date('Y-m-d') }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+{{ core_manage.oprate([
+    
+    
+]) }}
+{% endblock %}
+
+{% block promptUl %}
+{% endblock %}
+
+
+
+

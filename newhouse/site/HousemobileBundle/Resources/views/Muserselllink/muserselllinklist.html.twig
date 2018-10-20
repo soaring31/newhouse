@@ -1,0 +1,29 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+
+{% block title %}
+    【{{cur_area_data|default('')}}邀请链接|{{cur_area_data|default('')}}邀请链接】_{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}邀请链接平台
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data|default('')}}邀请链接,{{cur_area_data|default('')}}邀请链接管理" />
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}二手房网为您提供快速全面的{{cur_area_data|default('')}}二手房信息及新发布{{cur_area_data|default('')}}二手房价格。大量优质二手房实时更新，为您创造舒适二手房购房体验。" />
+{% endblock key_des %}
+
+{% set zhu_nav = 2 %}
+
+{% block header_title %}
+{{core_mobile_global.title({title: '邀请链接'})}}
+{% endblock header_title %}
+
+{% block container %}
+    <div data-block="{
+        bParams: true,
+        ajax:{
+            url: '{{ ('muserselllink/muserselllinklist')|U }}',
+            data: {
+                tpl: 'Muserselllink:muserselllinklistblock'
+            }
+        }
+    }"></div>
+{% endblock container %}

@@ -1,0 +1,50 @@
+{% extends 'HouseBundle::base_show.html.twig' %}
+{% set aid = app.request.get('aid') %}
+{% set _id = app.request.get('_id') %}
+{% set type = app.request.get('type')|default(0) %}
+{% block js %}
+<script type="text/javascript">
+    seajs.use([], function() {
+        // 编辑时要关闭刷新
+        {% if _id %}
+        $('[price-form="1"]').find('[data-role="submit"]')
+            .attr({
+                'data-close': 1,
+                'data-reload': 1
+            });
+        {% endif %}
+    })  
+</script>
+{% endblock %}
+{% block mainMenu %}
+    {% if _id is null %}
+    {{ core_manage.jump(
+        {
+            title: '当前价格',
+            url: 'mhousepricemanage/show'|U,
+            class: ' on'
+        }
+        ) }}
+    {{ core_manage.jump(
+        {
+            title: '历史价格列表',
+            url: 'mhouse/mhousepricemanage'|U, 
+        }
+        ) }} 
+    {% endif %}
+{% endblock mainMenu %}
+
+{% block body %}
+<section price-form="1" class="table-inline" data-param='{
+        data      : {
+            aid: {{ aid }},
+            type: {{ type }}
+        }
+    }'>
+    {{ core_manage.form_cfg(form|default('')) }}
+</section>
+{% endblock body %}
+
+{% block promptUl %}
+    {% if _id is null %}当前编辑会新增一条历史价格{% endif %}
+{% endblock %}

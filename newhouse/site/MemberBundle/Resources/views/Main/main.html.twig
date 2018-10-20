@@ -1,0 +1,37 @@
+{% extends "CoreBundle::base.html.twig" %}
+{# {% import "MemberBundle:Macro:global.html.twig" as imgb %} #}
+{% block title %}后台管理{% endblock %}
+{% block css %}
+{{core_global.linkcss('bundles/core/css/member.css')}}
+{% endblock %}
+{% block js %}
+<script>
+var BUNDLE_NAME = '{{ bundlename }}';
+{# 内容区菜单的路由索引，会员中心单独定义 #}
+var MENU_ROUTE_INDEX = 1;
+seajs.config({
+    preload: ['ueditor.conf', 'codemirror'], // 预加载项
+});
+seajs.use(["manage"], function(manage) {
+    //js入口
+    manage.main({
+    	homePage: 'mindex'
+    });
+});
+</script>
+{% endblock %}
+{% block body %}
+{{ render(controller('HouseBundle:Main:topmenu', {'channel':0})) }}
+<aside id="leftmenu" data-aside="1" class="aside">
+    <section id="cleft-id" class="left-menu">
+        {{ render(controller('HouseBundle:Main:leftmenu', {'menuId':0})) }}
+    </section>
+</aside>
+{# {{dump()}} #}
+<section id="rleft" data-content="1" class="main" data-size-from=".main-hd, .filter, .oprate, [data-prompt-list]" data-size-target=".list-con"></section>
+
+{% endblock %}
+
+{% block footer %}
+	<div class="footer">{{core_global.mconfig({name: 'copyright', ename: 'mwebset'})}}</div>
+{% endblock footer %}

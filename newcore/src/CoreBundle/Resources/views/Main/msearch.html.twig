@@ -1,0 +1,147 @@
+{% extends "HouseBundle::base_show.html.twig" %}
+{% set info = ('db.auth_group'|getRow({'id':app.request.get('id', 0)})) %}
+{% block js %}
+<style type="text/css">
+    .msearch-content a {
+        /*text-decoration: underline;*/
+        color: #2a6384;
+    }
+    .msearch-content a:hover {
+        text-decoration: underline;
+    }
+    .msearch-content .kw {
+        color: #c00;
+    }
+</style>
+<script type="text/javascript">
+    seajs.use([], function() {
+        var $searchContent = $('[data-msearch-content="1"]');
+        $searchContent
+            .off('click')
+            .on('click', 'a', function() {
+                $(this).closest('.jq-modal').jqModal('hide');
+            })
+        // 搜索加缓存
+        $('[data-msearch="1"]')
+            .focus()
+            .on('input propertychange', function() {
+                var oInput = this;
+                $searchContent.find('.on').removeClass('on');
+                $searchContent.find('.subright-table').hide();
+                $searchContent.find('a, [data-tag]').each(function(i, el) {
+                    var val = $.trim(oInput.value);
+                    var $el = $(this);
+                    var isLink = $el.is('a');
+                    var text = $el.text();
+                    // 要搜索的内容
+                    var tag = isLink ? text : ($el.attr('title') + text);
+                    // 先全部把原来的font移除
+                    $el.html(text);
+                    // 搜索到内容
+                    if (val && tag.indexOf(val) > -1) {
+                        if (isLink) {
+                            $el.html(text.replace(val, '<i class="kw">'+ val +'</i>'));
+                        } else {
+                            $el.html(text.replace(text, '<i class="kw">'+ text +'</i>'));
+                        }
+                        $el.parents('.subright-table').show();
+                        $el.parents('[data-level]').addClass('on').prev('[data-level="1"]').addClass('on');
+                    } else if (!val) {
+                        // 如果搜索值为空
+                        $searchContent.find('[data-level]').addClass('on')
+                        $searchContent.find('.subright-table').show();
+                    }
+                })
+            })
+    })    
+</script>
+{% endblock %}
+
+{% block tableMain %}
+
+    {% set filter_opt = [
+        {
+            method: 'search',
+            search: 0,
+            size: 30,
+            field: 'name',
+            attr: 'data-msearch="1"',
+            title:'搜索名称/控制器/方法'
+        }
+    ] %}
+    {{ core_manage.filter(filter_opt) }}
+    {{ parent() }}
+{% endblock tableMain %}
+
+{% block body %}
+	{% set permissionsNode = ('db.menus')|getTree({genre: 'house', checked: 1, order: 'sort|asc'}).data %}
+
+<table data-level="top" data-msearch-content="1" data-type="singleToggle" class="right-table table-hover msearch-content">
+    <tbody>
+        {# tr不能删 #}
+        <tr></tr>
+    {#第一层#}
+    {% if permissionsNode is defined %}
+            
+    {% for item in permissionsNode if item.nodes %}
+        {# 一级 #}
+        <tr data-level="1" class="on" style="background: #ccc;">
+            <td width="40" class="tac {% if item.nodes %}plusico{% endif %}">&nbsp;</td>
+            <td class=""><strong><a href="#/{{ item.menu.ename }}">{{ item.menu.name }}</a></strong></td>
+        </tr>
+        <tr data-level="next" class="subtr on">
+            <td colspan="10">
+                <table class="subright-table">
+                    {% for item2 in item.nodes %}
+                    {# 二级 #}
+                    <tr data-level="1" class="on">
+                        <td width="40" class="pl20 tac {% if item2.nodes %}plusico{% endif %}">&nbsp;</td>
+                        <td class="">{{ item2.menu.name }}</td>
+                    </tr>
+                    {% if item2.nodes|length %}
+                    <tr data-level="next" class="subtr on">
+                        <td colspan="2">
+                        {% for item3 in item2.nodes %}
+                        {# 三级 #}
+                        {% if core_manage.is_mainset_in_subwebs(item3).__toString() %}
+                        {# 在分站，不显示“主站设置” #}
+                        {% else %}
+                        {# 在主站，显示“主站设置” #}
+                            {% if item3.nodes|length and (item3.menu.controller ~ '/' ~ item3.menu.action)|P %}
+                                <table class="subright-table">
+                                    {% for item4 in item3.nodes %}
+                                    {# 四级 #}
+                                    {% set nodes = {'menuid': item4.menu.id}|getRule %}
+                                    <tr >
+                                        <td width="40" class="pl20 tac"></td>
+                                        <td width="150" class=""><a href="#/{{ item.menu.ename }}/{{ item3.menu.ename }}">{{ item3.menu.name }}</a> / <a href="#/{{ item.menu.ename }}/{{ item3.menu.ename }}/{{ item4.menu.ename ? : item4.menu.action }}">{{ item4.menu.name }}</a></td>
+                                        <td class="ls-items-td">
+                                            {% if nodes.data is defined %}
+                                            <ul class="ls-items">
+                                                {% for node in nodes.data %}
+                                                <li class="ls-item">
+                                                <label><span title="{{ node.controller ~ '/' ~ node.action }}" data-tag="1" id="editspan_{{node.id}}_name" {# class="editspan"  #}data-url="{{ ('authoritynode/save')|U({'id':node.id}) }}">{{node.name}}</span></label>
+                                                </li>
+                                                {% endfor %}
+                                            </ul>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </table>
+                            {% endif %}
+                        {% endif %}
+                        {% endfor %}
+                        {# /三级 #}
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </table>
+            </td>
+        </tr>
+    {% endfor %}
+    {% endif %}
+    </tbody>
+</table>
+{% endblock %}

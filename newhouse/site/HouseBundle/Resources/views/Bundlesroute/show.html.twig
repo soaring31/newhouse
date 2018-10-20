@@ -1,0 +1,20 @@
+{% extends "HouseBundle::base_show.html.twig" %}
+
+{% block js %}
+<script type="text/javascript">
+    // 唯一标识自动完成
+    seajs.use([], function() {
+        $('[name="controllerName"], [name="actionName"]')
+            .off('input propertychange')
+            .on('input propertychange', function() {
+                var tag = $.trim($('[name="controllerName"]').val()).toLowerCase() + '_' + 
+                            $.trim($('[name="actionName"]').val());
+                $('[name="key"]').val(tag);
+            })
+        $('[name="key"]').prop('readonly', 'readonly');
+    })
+</script>
+{% endblock %}
+{% block body %}
+{{ core_manage.form(form|default(''),'form') }}
+{% endblock %}

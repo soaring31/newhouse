@@ -1,0 +1,63 @@
+$font-service-fz: inherit !default;
+
+@font-face {
+	font-family: "service";
+    font-weight: normal;
+    font-style: normal;
+	src: url('../fonts/service.eot');
+	src: url('../fonts/service.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/service.woff') format('woff');//,
+		//url('../fonts/service.ttf') format('truetype'),
+		//url('../fonts/service.svg#service') format('svg');
+}
+$font-service-fz: inherit !default;
+$font-service-fl: none !default;
+$font-service-m: 0 !default;
+$font-service-va: -.25em !default;
+[class^="font-service-"],
+[class*=" font-service-"] {
+	font-family: "service";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-size: $font-service-fz;
+	float: $font-service-fl;
+	margin: $font-service-m;
+	vertical-align: $font-service-va;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; only necessary if not using the private unicode range (firstdata option) 
+	text-decoration: none;
+	text-transform: none;
+}
+.font-service-1:before {
+	content: "\EA01";
+}.font-service-2:before {
+	content: "\EA02";
+}.font-service-3:before {
+	content: "\EA03";
+}.font-service-arrow:before {
+	content: "\EA04";
+}.font-service-ask:before {
+	content: "\EA05";
+}.font-service-balance:before {
+	content: "\EA06";
+}.font-service-find-psd:before {
+	content: "\EA07";
+}.font-service-go-top:before {
+	content: "\EA08";
+}.font-service-home:before {
+	content: "\EA09";
+}.font-service-house:before {
+	content: "\EA0A";
+}.font-service-login:before {
+	content: "\EA0B";
+}.font-service-order:before {
+	content: "\EA0C";
+}.font-service-real-name:before {
+	content: "\EA0D";
+}.font-service-register:before {
+	content: "\EA0E";
+}.font-service-search:before {
+	content: "\EA0F";
+}

@@ -1,0 +1,113 @@
+{% extends 'HousemobileBundle:Common:navblock.html.twig' %}
+{# 说明 
+* detail: 当前数据
+* detail_info: 当前数据附加属性
+#}
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% set detail_info = cident.detailinfo.data[0]|default('') %}
+
+{# 名称 公司名称 》公司简称 》昵称 》用户名 #}
+{% set detail_name = detail_info.company|default(detail_info.cpltd|default(detail_info.nicename|default(detail.username|default('')))) %}
+
+{% set push_pinpaikaifashang = ('pinpaikaifashang')|getPush(10) %}
+
+{% set sort_clicks_users = ('db.userinfo')|getAll({orderBy: 'desc', order: 'clicks', usertype: 18, pageSize: 10, _multi: 1, uid: 'neq|' ~ detail.id|default('')}) %}
+
+{% block result %}
+<div class="content">
+    {# 公司 #}
+    <div class="list-block media-list list-block-member list-block-m0">
+        <ul>
+          <li>
+            <div class="item-content">
+              <div class="item-media">
+                    {{- core_global.img({
+                        src: detail_info.image|default(''),
+                        alt: detail_name|default(''),
+                        type: 2,
+                        width:120 ,
+                        height: 60
+                    }) -}}  
+              </div>
+              <div class="item-inner">
+                <div class="item-title title-big item-title-ex">
+                    {{detail_name|default('')}}
+                </div>
+                <div class="item-subtitle item-subtitle-ex mt5">
+                    电话：{{detail.tel|default('')}}
+                </div>
+                 <div class="item-subtitle item-subtitle-ex mt5">
+                    地址：{{detail_info.companyadr|default('')}}
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+    </div>
+    {# 公司介绍 #}
+    {{housemobile_global.content({
+        title: '公司介绍',
+        content: detail_info.companyjs|default('')
+    })}}
+
+    {# <div class="list-block list-block-member panel-block">
+        {{- housemobile_global.panel_title({title:'旗下品牌楼盘'})-}}
+        <ul>
+            <li>
+                <a href="#" class="item-link item-content">
+                    <div class="item-inner">
+                        <div class="item-title item-title-ex">品牌1</div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="item-link item-content">
+                    <div class="item-inner">
+                        <div class="item-title item-title-ex">品牌1</div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="item-link item-content">
+                    <div class="item-inner">
+                        <div class="item-title item-title-ex">品牌1</div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div> #}
+    {# 热门开发商 #}
+    <div class="list-block list-block-member panel-block">
+        {{- housemobile_global.panel_title({title:'热门开发商'})-}}
+        <ul>
+            {% if sort_clicks_users.data is defined %}
+                {% for item in sort_clicks_users.data %}
+                    {{housemobile_global.list_line_one({
+                        name: core_global.attr({ name: "company", id: item.id|default('') }),
+                        url: ('member/k_detail')|UU({id: item.id|default('')}),
+                        class: 'p-default'
+                    })}}
+                {% endfor %}
+            {% endif %} 
+        </ul>
+    </div>
+    {# 品牌开发商 #}
+    <div class="list-block list-block-member panel-block">
+        {{- housemobile_global.panel_title({title:'品牌开发商'})-}}
+        <ul>
+            {% if push_pinpaikaifashang is defined %}
+                {% for item in push_pinpaikaifashang %}
+                    {% set item_userinfo = ('db.userinfo')|getRow({uid: item.fromid|default(0)}) %}
+                    {{housemobile_global.list_line_one({
+                        name: item_userinfo.attributes.company.value|default(item_userinfo.nicename|default(item.name|default(''))),
+                        url: core_global.url(item|merge({controller: 'member/k_detail', set_models: 1})),
+                        class: 'p-default'
+                    })}}
+                {% endfor %}
+            {% endif %} 
+        </ul>
+    </div>
+    {{ render(controller('HouseBundle:Common:footer', {_isApp: url_isApp})) }}
+</div>
+{% endblock result %}

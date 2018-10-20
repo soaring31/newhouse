@@ -1,0 +1,13 @@
+{% extends 'CoreBundle::base_ajax.html.twig' %}
+{% import "HousemobileBundle:Macro:global.html.twig" as housemobile_global %}
+{# 手机框架公用宏 #}
+{% import "CoreBundle:Macro:mobile_global.html.twig" as core_mobile_global %}
+{% set url_isApp = app.request.get('_isApp', 0) %}
+
+{# 前端域名统一配置#}
+{#  新房系统api域名测试#}
+{#{% set apiUrl = "http://cms.zhuge.com" %}#}
+{# 新房系统api域名线上#}
+{% set apiUrl = "http://newhouse.zhuge.com" %}
+{#  外部引用api域名#}
+{% set externalLinks = "http://api.zhugefang.com" %}

@@ -1,0 +1,108 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+** ajax调用：新房列表
+#}
+{% set push = app.request.get('push', '') %}
+{% set url_list = app.request.get('list') %}
+{# 直接传递数据 #}
+{% if url_list|default('') %}
+    {% set list = url_list %}
+{% elseif ident.list is defined %}
+    {# 当前模板list标识 #}
+    {% set list = ident.list %}
+{% elseif push %}
+    {# 推送位 #}
+    {% set push_data = (push)|getPush(5) %}
+    {% set list = { 
+        data     : push_data,
+        pageIndex: 1, 
+        pageCount: 0, 
+        pageSize : 8 
+    } %}
+{% else %}
+    {# 首页推送位 #}
+    {% set index_dazheyouhui = ('index_dazheyouhui')|getPush(6) %}
+    {% set list = { 
+        data     : index_dazheyouhui,
+        pageIndex: 1, 
+        pageCount: 0, 
+        pageSize : 8 
+    } %}
+{% endif %}
+
+{% block result %}
+{% spaceless %}
+
+{% set tpl_top = tpl_top|default(app.request.get('top', 1)) %}
+{% if list.data is defined and list.data|length %}
+    {% for item in list.data %}
+    {#  最后一个带上分页 #}
+    {% set fromid = item.fromid|default('') ? {
+        fromid: item.fromid|default('')
+    } : {} %}
+
+    {% set item_url = {
+        url: item.url|default(''),
+        id: item.id|default(''),
+        models: item.models|default('houses')
+    }|merge(fromid) %}
+    <li {% if loop.last %}data-page="{
+                        pageIndex: {{list.pageIndex}},
+                        pageCount: {{list.pageCount}},
+                        pageSize: {{list.pageSize}}
+                     }"{% endif %} >
+
+        <a href="{{core_global.url(item|merge({set_models:1}))}}" class="item-content p-default">
+            <div class="item-media por">
+                {{- core_global.img({
+                    src: item.thumb|default(''),
+                    alt: item.name|default(''),
+                    type: 2,
+                    width: 107,
+                    height: 80
+                }) -}}
+                {% if tpl_top|default('1') %}
+                    {% if item.top|default('') == 159 %}
+                        <div class="item-zd">顶</div>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="item-inner">
+                <div class="item-title-row">
+                    {{housemobile_global.list_title({title: item.name|default('')})}}
+                    <div class="item-after">
+                        {{house_global.if_dj({value: item.dj|default(''),class: 'l p-red'})}}                        
+                    </div>
+                </div>
+                {% if kft|default('1') %}
+                    {% if item.bdsm|default('') %}
+                    <div class="item-subtitle item-subtitle-ex">
+                        <span class="p-red">{{item.bdsm|default('-')}}</span>
+                    </div>
+                    {% endif %}
+                {% else %}
+                    <div class="item-subtitle item-subtitle-ex">
+                        主力户型：{{- house_global.huxing({aid: item.fromid|default(''),zlhx: 0, tpl: "
+                            <span class='mr10'>%shi%%ting%%mj%m&sup2;</span>
+                            "}) -}}
+                    </div>
+                {% endif %}
+                <div class="item-subtitle item-subtitle-ex">
+                    {{item.address|default('地址')}}
+                </div>
+                <div class="blank3"></div>
+                <div class="item-subtitle item-subtitle-ex">
+                    {{core_global.region({id: item.region|default(''), tpl: '<span class="button button-sm btn-1">%value%</span>'})}}
+                    {{core_global.formData({value: item.cate_type|default(''), tpl: '<span class="button button-sm btn-2">%value%</span>'})}}
+                    {{ core_global.formData({value: item.cate_status|default(''), tpl: '<span class="button button-sm btn-3">%value%</span>'}) }}
+                    {{ core_global.formData({value: item.zxcd|default(''), tpl: '<span class="button button-sm btn-4">%value%</span>'}) }}
+                </div>
+            </div>
+        </a>
+    </li>
+    {% endfor %}
+{% else %}
+    <li class="mobile-list-none">暂无楼盘信息</li>
+{% endif %}
+{% endspaceless %}
+{% endblock result %}

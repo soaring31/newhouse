@@ -1,0 +1,248 @@
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% extends detail ? 'HouseBundle::base_top_search.html.twig' : 'CoreBundle:Dispatch:errorcontent.html.twig' %}
+{# 说明：
+ * detail: 数据详情
+ * detail_houses_aid: 关联楼盘id
+ * top_ad: 广告
+#}
+{% set detail_houses_aid = ('house.houses_arc')|getCol('aid', {form: 'houses_around', fromid: detail.id|default(''), checked: 1}) %}
+
+{% set top_ad = {tag: 'aroundad'} %}
+
+{% block title %}{{detail.name|default('')}}{% endblock title %}
+
+{% block css %}
+    {{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/around.css')}}
+{% endblock css %}
+
+{# 屏蔽搜索 #}
+{% block top_search %}{% endblock top_search %}
+
+{# 当前位置 #}
+{% block current_container %}
+    <span>{{detail.name|default('')}}</span>
+{% endblock current_container %}
+
+{% block container %}
+    <div class="container">
+        <div class="title">
+            {{- core_global.formData({value: detail.category|default(''), tpl: '<i>%value%</i>'}) -}}
+            <h2>{{detail.name|default('')}}</h2>
+        </div>
+        <div class="blank5"></div>
+        <!--缩略图-->
+        <div class="thumb fl">
+            {{- core_global.img({
+                src: detail.thumb|default(''),
+                alt: detail.name|default(''),
+                type:3,
+                width: 550,
+                height: 366
+            }) -}}
+        </div>
+        <!--/缩略图-->
+        <!--基本信息-->
+        <div class="info fr">
+            <ul>
+                {% if detail.category|default('') == 55 %}
+                 <li>
+                    <label>学校分类：</label>
+                    <span>{{- core_global.formField({value: detail.leibie|default(''), form: 'around_school', field: 'school_type'}) -}}</span>
+                </li>
+                 <li>
+                    <label>级别：</label>
+                    <span>{{- core_global.formField({value: detail.jibie|default(''), form: 'around_school', field: 'jibie'}) -}}</span>
+                </li>
+                 <li>
+                    <label>类别：</label>
+                    <span>{{- core_global.formField({value: detail.leibie|default(''), form: 'around_school', field: 'leibie'}) -}}</span>
+                </li>
+                {% endif %}
+                 <li>
+                    <label>地址：</label>
+                    <span>
+                        {{core_global.address({data:detail|default('')})}}
+                    </span>
+                </li>
+                 <li>
+                    <label>电话：</label>
+                    <span>{{detail.tel|default('-')}}</span>
+                </li>
+             </ul>
+        </div>
+        <!--/基本信息-->
+        <div class="blank1"></div>
+        <!--简介-->
+        <div class="panel">
+            <div class="panel-hd clearfix">
+                <h3>
+                   简介
+                </h3>
+            </div>
+            <div class="bd-gray bdr5 p10">
+                {{core_global.content({content: detail.abstract|default('') })}}
+            </div>
+        </div>
+        <!--/简介-->
+        <!--地图-->
+        {{
+            house_global.map({
+                detail: detail,
+                data: detail,
+                round: 0,
+                panorama: 0
+            })
+        }}
+        <!--/地图-->
+        <!--周边楼盘-->
+        <div class="panel">
+            <!--title-->
+            <div class="panel-hd clearfix">
+                <h3>
+                  {{detail.name|default('')}}周边楼盘
+                </h3>
+            </div>
+            <!--/title-->
+            <!--body-->
+            <div class="bd-gray around-list bdr5">
+                <ul class="clearfix">
+                    {% if detail_houses_aid is defined and detail_houses_aid|default('') %}
+                        {% for item in detail_houses_aid %}
+                            {% set house = ('house.houses')|getRow({id: item|default(''), checked: 1, type: 0}) %}
+                            {% if house|default('') %}
+                            <li>
+                                <a href="{{('houses/detail')|U({id: house.id|default('')})}}" title="{{house.name|default('')}}" target="_blank">
+                                    {{- core_global.lazy_img({
+                                        src: house.thumb|default(''),
+                                        alt: house.name|default(''),
+                                        type: 1,
+                                        width:145 ,
+                                        height: 110
+                                    }) -}}
+                                    <p>
+                                        {{house.name|default('')}}
+                                    </p>
+                                </a>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <div class="noinfo">暂无周边楼盘</div>
+                    {% endif %}
+                </ul>
+            </div>
+            <!--/body-->
+        </div><!--/周边楼盘-->
+        <!--周边小区-->
+        <div class="panel">
+            <!--title-->
+            <div class="panel-hd clearfix">
+                <h3>
+                  {{detail.name|default('')}}周边小区
+                </h3>
+            </div>
+            <!--/title-->
+            <!--body-->
+            <div class="bd-gray around-list bdr5">
+                <ul class="clearfix">
+                    {% if detail_houses_aid is defined and detail_houses_aid|default('') %}
+                        {% set tpl_houses_court = true %}
+                        {% for item in detail_houses_aid %}
+                            {% set house = ('house.houses')|getRow({id: item|default(''), checked: 1, type: 1}) %}
+                            {% if house %}
+                                {% set tpl_houses_court = false %}
+                                <li>
+                                    <a href="{{('houses/detail')|U({id: house.id|default('')})}}" title="{{house.name|default('')}}" target="_blank">
+                                        {{- core_global.lazy_img({
+                                            src: house.thumb|default(''),
+                                            alt: house.name|default(''),
+                                            type: 2,
+                                            width:145 ,
+                                            height: 110
+                                        }) -}}
+                                        <p>
+                                            {{house.name|default('')}}
+                                        </p>
+                                        <p>
+                                            售(<i class="c-e43">{{house.sales|default('')}}</i>)·租(<i class="c-e43">{{house.rents|default('')}}</i>)
+                                        </p>
+                                    </a>
+                                </li>
+                            {% endif %}
+                            {% if loop.last and tpl_houses_court %}
+                                <div class="noinfo">暂无周边小区</div>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <div class="noinfo">暂无周边小区</div>
+                    {% endif %}
+                </ul>
+            </div>
+            <!--/body-->
+        </div><!--/周边小区-->
+        <!--周边二手-->
+        <div class="panel txt-list fl">
+            <!--title-->
+            <div class="panel-hd clearfix">
+                <h3>
+                  {{detail.name|default('')}}周边二手
+                </h3>
+            </div>
+            <!--/title-->
+            <!--body-->
+            <div class="bd-gray around-list2 bdr5">
+                <dl>
+                    <dt>
+                        <em class="td1">房源名称</em>
+                        <em class="td2">户型</em>
+                        <em class="td3">面积</em>
+                        <em class="td4">价格</em>
+                        <em class="td5">日期</em>
+                    </dt>
+                    {{house_global.around_recommend({
+                        models: 'sale',
+                        tips: '暂无周边二手',
+                        ids: detail_houses_aid
+                    })}}
+                </dl>
+            </div>
+            <!--/body-->
+        </div><!--/周边二手-->
+        <!--周边出租-->
+        <div class="panel txt-list fr">
+            <!--title-->
+            <div class="panel-hd clearfix">
+                <h3>
+                  {{detail.name|default('')}}周边出租
+                </h3>
+            </div>
+            <!--/title-->
+            <!--body-->
+            <div class="bd-gray around-list2 bdr5">
+                <dl>
+                    <dt>
+                        <em class="td1">房源名称</em>
+                        <em class="td2">户型</em>
+                        <em class="td3">面积</em>
+                        <em class="td4">价格</em>
+                        <em class="td5">日期</em>
+                    </dt>
+                    {{house_global.around_recommend({
+                        models: 'rent',
+                        tips: '暂无周边出租',
+                        ids: detail_houses_aid
+                    })}}
+                </dl>
+            </div>
+            <!--/body-->
+        </div><!--/周边出租-->
+        <div class="blank20"></div>
+    </div>
+{% endblock container %}
+
+{% block js %}
+    <script type="text/javascript">
+        seajs.use(['lazyload'], function (lazyload) {})
+    </script>
+{% endblock js %}

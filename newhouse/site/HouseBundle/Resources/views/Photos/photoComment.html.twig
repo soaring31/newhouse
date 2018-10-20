@@ -1,0 +1,16 @@
+{% extends 'HouseBundle:Photos:detail.html.twig' %}
+
+{% set comment_attr = 'style="background: #fff;"' %}
+
+{% block container %}
+	<div class="blank30"></div>
+	<div class="container clearfix">
+	    {{ render(controller('HouseBundle:Bundlebindforms:comment', {
+	        formflag: 'view_comment', 
+	        aid: detail.id|default(''),
+	        arc_models: detail.models|default('photos'),
+	        models: 'inter_comment'
+	    })) }}
+	</div>
+	<div class="blank30"></div>
+{% endblock container %}

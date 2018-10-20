@@ -1,0 +1,161 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明 
+ * detail: 当前数据
+ * sort_hdnum_houses_arc: 团购点击排行
+ * sort_clisks_houses: 点击排行新房
+ * tpl_now: 当前时间戳
+ * detail_time: 剩余时间
+#}
+{% set detail = detail|default(cident.detail.data[0]|default('')) %}
+
+{% set sort_hdnum_houses_arc = ('house.groupbuy')|getAll({checked: 1, order: 'hdnum', orderBy: 'desc', id: 'neq|' ~ detail.id|default(0)}) %}
+
+{% set sort_clisks_houses = ('house.houses')|getAll({checked: 1, pageSize: 10, order: 'clicks', orderBy: 'desc'}) %}
+
+{% set detail_houses = ('house.houses')|getRow({id: detail.aid|default(''), checked: 1, findType: 1}) %}
+
+{% set tpl_now = 'now'|date('U') %}
+
+{% if detail.enddate.date|default('')|date('U') > tpl_now|default('') %}
+{# 团购正在进行中 #}
+    {% set detail_baoming_data = "data-popup='.popup-apply'" %}
+    {% set detail_baoming_class = 'open-popup' %}
+    {% set detail_baoming_text = '立即报名' %}
+    {% set detail_time = '<span class="time format-time pull-left" data-endtime="' ~ detail.enddate.date|default('') ~ '" data-noend="永久有效！" data-end="活动结束" data-type="1" data-timetype="1"></span>' %}
+{% else %}
+{# 团购已结束 #}
+    {% set detail_baoming_text = '<span class="c-e43">活动已结束</span>' %}
+    {% set detail_time = '活动结束' %}
+{% endif %}
+
+{% block result %}
+<nav class="bar bar-tab lp-bar-detail">
+    <a class="tab-item tel" href="tel:{{detail.tel|default('')}}">
+        <i class="ico font-f-19"></i>
+        <span class="tab-label">打电话</span>
+    </a>
+    <a class="tab-item apply external {{detail_baoming_class|default('')}}" href="javascript:;" {{detail_baoming_data|default('')|raw}}>
+        <i class="ico font-f-23"></i>
+        <span class="tab-label">{{detail_baoming_text|default('')|raw}}</span>
+    </a>
+</nav>
+<div class="content">
+	{{- core_mobile_global.swiper_one(detail) -}}
+	<div class="list-block list-block-rent list-block-rent-mt0">
+        <ul>
+            <li class="item-content">
+                <div class="item-inner">
+                    <div class="m">
+                        <div class="t">
+                            {{detail.name|default('')}}
+                        </div>
+                        <div class="p">
+                            <dl class="group-detail-p clearfix">
+                                <dd>
+                                    团购价<br>
+                                    {{house_global.if_dj({value: detail.tgj|default('')})}}
+                                </dd>
+                                <dd>
+                                    市场价<br>
+                                    {{house_global.if_dj({value: detail.scj|default('')})}}
+                                </dd>
+                                <dd>
+                                    人气<br>
+                                    <span>
+                                        <span data-counts="{models: 'groupbuy', field: 'clicks', id: '{{detail.id|default('')}}'}"></span>
+                                    </span>
+                                </dd>
+                                <dd>
+                                    房源<br>
+                                    <span>
+                                        <span data-counts="{models: 'groupbuy', field: 'ksnum', id: '{{detail.id|default('')}}'}"></span>
+                                    </span>套
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="p p-gray">
+                        	{{detail_time|default('')|raw}}
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {% if detail_houses is defined %}
+                <li class="item-content item-link">
+                    <a class="item-inner p-default" href="{{('houses/detail')|UU({id: detail_houses.id|default('')})}}">
+                        <div class="item-title item-title-p0">
+                            所属楼盘：{{detail_houses.name|default('')}}
+                        </div>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+    
+    <div class="list-block groupbuy-apply-hd">
+        <ul>
+            <li class="item-link item-content">
+                <div class="item-inner external {{detail_baoming_class|default('')}}" {{detail_baoming_data|default('')|raw}}>
+                    {{detail_baoming_text|default('')|raw}}
+                    <span>已报名<span class="c-e43"><span data-counts="{models: 'groupbuy', field: 'hdnum', id: '{{detail.id|default('')}}'}"></span></span>人</span>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="list-block panel-block">
+        {{- housemobile_global.panel_title({title: '团购详情'})-}}
+        <div class="item-content1 p-gray">
+            <div class="item-inner2">
+                <div class="row">
+                    <div class="col-100">
+                        楼盘地址：{{detail.hdadr|default('待定')}}
+                    </div>
+                    <div class="col-100">
+                        联系电话：{{detail.tel|default('更新中')}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{- housemobile_global.content({title: '团购说明', content: detail.content|default(''), default: '暂无团购说明' })-}}
+    <div class="buttons-tab mt10">
+        <a href="#groupbuy-paihang" class="tab-link active button">热门团购</a>
+        <a href="#groupbuy-lp" class="tab-link button">热门楼盘</a>
+    </div>
+    <div class="tabs groupbuy-aside">
+        <div id="groupbuy-paihang" class="tab active list-block">
+            <ul>
+                {% if sort_hdnum_houses_arc.data is defined and sort_hdnum_houses_arc.pageCount|default(0) != 0 %}
+                    {% for item in sort_hdnum_houses_arc.data %}
+                        <li>
+                            <a href="{{('groupbuy/detail')|UU({id: item.id|default('')})}}" class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title">{{item.name|default('')}}</div>
+                                    <div class="item-after ml5">参团人数：<span data-counts="{models: 'groupbuy', field: 'hdnum', id: '{{item.id|default('')}}'}"></span>人</div>
+                                </div>
+                            </a>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <li class="mobile-list-none">暂无团购</li>
+                {% endif %}
+            </ul>
+        </div>
+        <div id="groupbuy-lp" class="tab list-block media-list">
+            <ul>
+            	{{ render(controller('HouseBundle:Clist:houseslist', {_isApp: url_isApp, houseslist: sort_clisks_houses})) }}
+            </ul>
+        </div>
+    </div>
+    <div style="height: 10px;"></div>
+    {{ render(controller('HouseBundle:Common:footer', {_isApp: url_isApp})) }}
+</div>
+<script type="text/javascript">
+    seajs.use(['formattime', 'common'], function (formattime, common){
+        // 调用统计
+        common.getcounts({
+            url: '{{("igetcounts/index")|U }}'
+        })
+    })
+</script>
+{% endblock result %}

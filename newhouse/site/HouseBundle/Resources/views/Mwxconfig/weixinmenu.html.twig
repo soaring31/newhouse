@@ -1,0 +1,118 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+{% set aid = app.request.get('aid') %}
+{% block js %}
+<script type="text/javascript">
+
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }}
+
+    {{ core_manage.jump({
+        url: ('mwxconfig/weixinmenu')|U({id: 1}),
+        title: '菜单',
+        class: 'btn btn-sm on',
+        target: '.main-bd',
+        attr: ''
+    }) }}
+
+{% endblock %}
+
+{% block mainleft %}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ core_manage.filter([
+
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U({appid: appid}) }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            models: '{{ models }}',
+            category: '{{ category }}'
+        }
+    }">
+    <div class="list">
+        <form action="{{ ('weixinmenu/save')|U }}" method="post" name="form">
+            <table class="right-table table-hover">
+                <tbody>
+                    <tr data-id>
+                        <th width="30" class="pl10">ID</th>
+                        <th>菜单名称</th>
+                        <th width="500">链接/KEY (支持变量:{aid},{mid},{cms_abs},{mobileurl})</th>
+                        <th width="200">类型</th>
+                    </tr>
+                {% for i in range(1, 3) %}
+                {% for j in range(0, 5) %}
+                {% set k=i~j %}
+                {% set row=data[k] %}
+                    <tr>
+                        <td class="pl10">{{k}}</td>
+                        <td class="txtleft" nowrap>
+                            {% if j==0 %}＋{% else %}｜　├-{% endif %}
+                                <input name="fmdata[{{k}}][title]" value="{{row.title}}" class="w150" type="text">
+                            </td>
+                        <td>
+                            <input name="fmdata[{{k}}][id]" value="{{row.id}}" type="hidden">
+                            <input name="fmdata[{{k}}][keyword]" value="{{row.keyword}}" size="60" type="text">
+                        </td>
+                        <td class="txtleft">
+                            <select style="height:auto" class="p5" name="fmdata[{{k}}][type]">
+                                <option value="">-类型-</option>
+                                {% for item in typecfgs %}
+                                    <option value="{{ item.value }}" {% if row.type==item.value %}selected{% endif %}>{{ item.title     }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                {% endfor %}
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <div class=" mt10 tac">
+           {#  <input class="btn ajax-post" target-form="form" data-url="{{ ("weixinmenu/create")|U }}" value="创建菜单" type="button">  #}
+            {{ core_manage.show({
+                url: ('weixinmenu/create')|U({ appid: appid }),
+                attr: {
+                    'data-ajax-title': '创建中...',
+                    'data-ajax': 1,
+                },
+                ico: 'font-ico-plus mr5',
+                class: 'btn',
+                title: '创建菜单',
+            }) }}
+            
+
+            {{ core_manage.submit({
+                 class: 'btn',
+                 title: '保存配置',
+            }) }}
+            {# <input class="btn ajax-post" target-form="form" value="保存配置" type="submit"> #}
+            {# <button type="submit" id="submit" name="submit" class="btn font-ico-22" data-role="submit" >保存配置</button> #}
+
+            </div>
+            <input name="appid" value="{{appid}}" type="hidden">
+        </form>
+    </div>
+    {# {{dump(('checked')|getFormField('checked'))}} #}
+</section>
+{% endblock %}
+
+{% block promptUl %}
+1. 一级菜单最多4个汉字, 二级菜单最多7个汉字<br>
+2. 如果一级菜单下有二级菜单, 则该一级菜单的[链接/KEY]必须为空, 支持变量:{aid},{mid},{cms_abs},{mobileurl}<br>
+3. 因创建菜单等操作每天有次数限制，请先修改保存配置，确认后进行创建菜单等操作。
+{% endblock %}
+
+
+

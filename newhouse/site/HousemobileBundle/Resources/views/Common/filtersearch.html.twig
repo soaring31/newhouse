@@ -1,0 +1,35 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+
+{% block result %}
+{% set models = app.request.get('models') %}
+<li>
+    <label class="label-checkbox item-content">
+        <input type="radio" value="" name="{{models|default('')}}">
+        <div class="item-inner">
+            <div class="item-title">
+                不限
+            </div>
+        </div>
+        <div class="item-media"> 
+            <i class="icon icon-form-checkbox"></i>
+        </div>
+    </label>
+</li>
+{% if ident.info.data is defined and ident.info.pageCount|default(0) != 0 %}
+	{% for item in ident.info.data %}
+	<li>
+        <label class="label-checkbox item-content">
+            <input type="radio" value="{{item.id|default('')}}" name="{{models|default('')}}">
+            <div class="item-inner">
+                <div class="item-title">
+                    {{item.name|default('')}}
+                </div>
+            </div>
+            <div class="item-media"> 
+                <i class="icon icon-form-checkbox"></i>
+            </div>
+        </label>
+    </li>
+	{% endfor %}
+{% endif %}
+{% endblock result %}

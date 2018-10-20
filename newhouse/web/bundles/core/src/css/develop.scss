@@ -1,0 +1,29 @@
+/*!
+ * @name <%= name %>
+ * @author <%= author %>
+ * @date <%= date %>
+ */
+@import 'static/ats'; // 工具类, 每个文件都要导入
+// var
+$aside-w        : 120px;
+// $main-w      : 100% - $aside-w;
+$spacing        : 5px;
+
+$bgc            : #2B2B2B; // 背景
+$c              : #FDA919; // 前景
+
+.fcr {
+    color : #f00;
+}
+
+$font-ico-va    : -2px;
+// btn
+$btn-info-bg    : #666;
+$btn-info-border: darken($btn-info-bg, 5%);
+// 按钮高亮
+$btn-primary-bg    : darken($btn-info-bg, 20%);
+$btn-primary-border: darken($btn-primary-bg, 5%);
+// 底部字体颜色
+$footer-color: #222935;
+
+@import 'manage-core'; // 引入manage-core为了保证相关样式更新时，当前文档可以实时更新

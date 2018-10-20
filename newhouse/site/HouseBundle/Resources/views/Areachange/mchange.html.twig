@@ -1,0 +1,53 @@
+{#
+/**
+ * area : 获取所有地区
+ */
+#}
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+{{ core_global.linkcss('bundles/core/css/city.css') }}
+{# 链接 #}
+{% set _action = _action|default('/main') %}
+
+<div class="city">
+    <div id="clist">
+        <dl>
+            <dt class="searchcity clearfix form view-form">
+                <span id="searchspan">搜索分站</span>
+                <input type="text" class="text" id="_cityinput"  value="" autocomplete="off">
+            </dt>
+        </dl>
+        <!-- area1 -->
+        <div data-city-area="1" class="city-area">
+        {% set _suffix = _action == '/' ? _action :  _action %}
+        {# 判断是否主控台 0 为否, 1 为是 #}
+
+        {# 主站链接 #}
+        {% if is_manage|default(0) %}
+        <a href="{{ core_global.get_http() ~ '://' ~  'maindomain'|C ~ core_global.get_port() ~ core_global.get_mode() ~ _action ~ '?_area=' ~ 0 }}" data-tag="{{item.ename|default('')}}" class="btn {% if app.session.get('area') == 0 %}btn-main{% endif %}">主站</a>
+        {% endif %}
+        {{core_global.switch_area({
+            act_class: 'btn-main',
+            is_manage: is_manage|default(0),
+            _action: _action,
+            _suffix: _suffix,
+            tpl: '<a href="%url%" data-tag="%ename%" class="btn %act_class%">%name%</a>'
+        })}}
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    // 简单的搜索
+    seajs.use([], function() {
+        $('#_cityinput').on('input propertychange', function() {
+            var val = $.trim($(this).val());
+            $('[data-city-area]').find('a').not('.btn-main')
+                .hide()
+                .each(function(index, el) {
+                    var $a = $(el);
+                    if ($a.text().indexOf(val) != -1 || $a.data('tag').indexOf(val) != -1) {
+                        $a.show();
+                    }
+                });
+        })
+    })    
+</script>

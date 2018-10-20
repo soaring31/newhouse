@@ -1,0 +1,194 @@
+{% extends 'CoreBundle::base_ajax.html.twig' %}
+
+{% block result %}
+{% set formflag = app.request.get("formflag")|default('') %}
+{% set title = app.request.get("title")|default('评论') %}
+{# 当前交互本身的模型 #}
+{% set models = app.request.get("models")|default('') %}
+{# 当前交互的服务 #}
+{% set service = app.request.get("service")|default('house') %}
+{# 与交互关联的文档ID #}
+{% set aid = app.request.get("aid")|default('') %}
+{# 调用统计时需要的文档服务 #}
+{% set arc_service = app.request.get("arc_service")|default('house') %}
+{# 调用统计时需要的文档模型 #}
+{% set arc_models = app.request.get("arc_models")|default('') %}
+
+{% set custom %}
+    {% if models == 'usermsg' %}
+    {# 经纪人 #}
+    <div data-other-fields="1" class="other-fields">
+        <div class="field">{{ form_widget(form.name) }}</div>
+        <div class="field">{{ form_widget(form.tel) }}</div>
+    </div>
+    {{ aid ? form_widget(form.aid, {value: aid}) : '' }}
+    {% elseif models == 'inter_housescomment' %}
+    {# 楼盘 #}
+    <div data-other-fields="1" class="pingfeng">
+        <div class="pf-left">
+            <div class="item">
+                <span class="item-name">价格&nbsp;:&nbsp;</span>
+                <div class="item-start" data-score="3"></div>
+                <span class="item-fen">3分</span>
+                <span class="item-info">项目性价比情况</span>
+                <input type="hidden" class="val" name="price" value="3"/>                
+            </div>
+            <div class="item">
+                <span class="item-name">地段&nbsp;:&nbsp;</span>
+                <div class="item-start" data-score="3"></div>
+                <span class="item-fen">3分</span>
+                <span class="item-info">项目所在地理位置情况</span>
+                <input type="hidden" class="val" name="position" value="3"/>                
+            </div>
+            <div class="item">
+                <span class="item-name">交通&nbsp;:&nbsp;</span>
+                <div class="item-start" data-score="3"></div>
+                <span class="item-fen">3分</span>
+                <span class="item-info">项目到交通实际距离远近</span>
+                <input type="hidden" class="val" name="traffic" value="3"/>                
+            </div>
+            <div class="item">
+                <span class="item-name">配套&nbsp;:&nbsp;</span>
+                <div class="item-start" data-score="3"></div>
+                <span class="item-fen">3分</span>
+                <span class="item-info">配套与项目的距离及规模大小</span>
+                <input type="hidden" class="val" name="charms" value="3"/>                
+            </div>
+            <div class="item">
+                <span class="item-name">环境&nbsp;:&nbsp;</span>
+                <div class="item-start" data-score="3"></div>
+                <span class="item-fen">3分</span>
+                <span class="item-info">项目内绿化及周边污染情况</span>
+                <input type="hidden" class="val" name="environment" value="3"/>                
+            </div>
+            <p class="item-name">点评&nbsp;:&nbsp;</p>
+        </div>
+        <div class="pf-right">
+            <p class="title">综合评分</p>
+            <p class="overall">
+                <span>3</span>
+                分
+            </p>
+            <p class="info">根据评分项目自动计算</p>
+            <input type="hidden" class="val" name="overall" value="3"/>
+        </div>
+    </div>
+    {{ aid ? form_widget(form.aid, {value: aid}) : '' }}
+    {% elseif models == 'webtw' %}
+    {# 网站提问 #}
+    <div data-other-fields="1" class="other-fields">
+        <div class="field">{{ form_widget(form.name) }}</div>
+        <div class="field">{{ form_widget(form.twlx) }}</div>
+    </div>
+    {% else %}
+    {# 其它 #}
+    {{ aid ? form_widget(form.aid, {value: aid}) : '' }}
+    {{ arc_models ? form_widget(form.models, {value: arc_models}) : '' }}
+    {% endif %}
+{% endset %} {# /custom #}
+
+{% if formflag %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/comment.css')}}
+<div id="comment" class="comment">
+    <div class="comment-inner">
+        <div class="tit">
+            <em><i class="font-cmt-1 mr5"></i>
+                我要{{title}}</em> 
+            <a class="num-info"> <i class="font-cmt-2 mr5"></i>
+                {% if models == 'webtw' %}
+                    {{core_global.count({models: 'webtw', sql_opt: {checked: 1, toid: ''} })}}
+                {% elseif models == 'usermsg' %}
+                    {{core_global.count({models: 'usermsg', sql_opt: {checked: 1, aid: aid, toid: ''} })}}
+                {% else %}
+                <span data-counts="{
+                    models: '{{arc_models}}', 
+                    service: '{{arc_service}}', 
+                    id: {{aid}}, 
+                    field: '{{field|default('comnum')}}' 
+                }"></span>
+                {% endif -%}
+                条{{title}}
+            </a>
+        </div>
+        <!--评论表单-->
+        <div data-view-form="1" class="comment-form form-origin common-form">
+            <form method="get" class="comment-form-self form-{{formflag}}" action="{{form.vars.action|default('')}}" errorLabelContainer=".form-origin .error-wrap">
+                {{ form_widget(form.toid) }}
+                {{ form_widget(form.checked) }}
+                {{ form_widget(form.user_agent, {value: app.request.headers.get('user-agent') }) }}
+                {{ form_widget(form.uid) }}
+                {# {{ form_widget(form.area) }} #}
+                {{ custom }}
+                <div class="textarea" >
+                    {{ form_widget(form.content) }}
+                </div>
+                <div class="comment-sub">
+                    <div class="btn-face">
+                        <span class="btn-c" data-id="f-list" data-assign="#content" data-path="{{ asset('bundles/'~ bundlepath ~'/images/face/', absolute=true) }}"><i class="font-cmt-3"></i>表情</span>
+                    </div>
+                    {{ form_widget(form.codeText) }}
+                    {{ form_widget(form.csrf_token) }}
+                    <div class="fr">
+                        <span class="error-wrap"></span>
+                        <button type="submit" disabled="disabled" data-role="submit" class="btn"><i class="font-cmt-4 mr5"></i><span>{{title}}</span></button>
+                    </div>
+                </div>
+            </form>
+            <div class="blank1"></div>
+        </div>
+        <!--评论列表-->
+        <div id="pl-list" class="pl-list"></div>
+        <div class="load-more" id="load-more">点击加载更多</div>
+        <!--//评论列表-->
+    </div>
+</div>
+{# 楼盘时点评里不需要楼盘模型 #}
+{% if models == 'inter_housescomment' %}
+    {% set arc_models = '' %}
+{% endif %}
+{% set comment_url = ('intercomment/list')|U({
+                            title: title,
+                            aid: aid, 
+                            arc_models: arc_models,
+                            models: models,
+                            service: service,
+                            reply: app.request.get('reply')|default(1),
+                            checkreply: app.request.get('checkreply')|default(1)
+                        }) %}
+
+<script type="text/javascript">
+    seajs.use(['comment'], function(comment) {
+        // 点评
+        comment.init({
+            list: '#pl-list',
+            url: '{{ comment_url }}',
+            loadMore: '.load-more',
+            cache: false
+        });
+        // 只有没登录的情况下才去判断
+        {% if app.user.id|default(0) == 0 %}
+            comment.checkComment();
+        {% endif %}
+        // 初始化星级
+        comment.raty();
+        // 启用按钮
+        $('.btn[disabled="disabled"]').prop('disabled', '');
+    })    
+</script>
+{# ajax请求的表单重新启用数量查询  需要在参数中传递ajax_count #}
+{% if app.request.get('ajax_count', 0) %}
+<script type="text/javascript">
+    seajs.use(['common'], function (common) {
+        // 调用统计
+        common.getcounts({
+            url: '{{("igetcounts/index")|U({} ,true)}}'
+        });
+    })
+</script>
+{% endif %}
+{% else %}
+    <font color="#ff0000">请指定表单名称！</font>
+{% endif %}
+{% endblock result %}
+
+

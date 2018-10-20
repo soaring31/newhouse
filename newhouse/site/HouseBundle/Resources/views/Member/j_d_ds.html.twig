@@ -1,0 +1,26 @@
+{% extends 'HouseBundle:Member:j_detail.html.twig' %}
+{# 标题 #}
+{% set title_users_act = '介绍' %}
+{# 高亮导航 #}
+{% set nav_users_act = 3 %}
+
+{% block right %}
+    <div class="jshao">
+        <div class="subT">
+            <p><i></i>个人介绍</p>
+        </div>
+        <div class="jshao-main">
+            <div class="jshao-box">
+                <p>姓名&nbsp;:&nbsp;<span>{{detail_name|default('')}}</span></p>
+                <p>从业年限&nbsp;:&nbsp;<span>{{detail_info.cynx|default('-')}}年</span></p>
+                <p>手机&nbsp;:&nbsp;<span>{{detail.tel|default('')}}</span></p>
+                <p>邮箱&nbsp;:&nbsp;<a href="mailto:{{detail.email|default('')}}" target="_blank">{{detail.email|default('')}}</a></p>
+            </div>
+            <div class="jshao-box">
+                <p>详细介绍：
+                    <span>{{detail_info.dpgg|default('暂无介绍')|raw}}</span>
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock right %}

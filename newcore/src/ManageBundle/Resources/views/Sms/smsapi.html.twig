@@ -1,0 +1,108 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+seajs.use(["core"],function(core){
+    //图片上传、图片预览、选择文件
+    //core.generalEvent.initViewImg();
+    //core.generalEvent.initUploadImg();
+
+});
+</script>
+{% endblock %}
+{% block tableMain %}
+
+<form class="form" action="{{ (action)|U }}" method="post" name="form">
+<table class="right-table" width="100%">
+	<tbody>
+
+	    <tr>
+			<th colspan="5" class="conlist">接口基本设置</th>
+		</tr>
+
+		<tr>
+			<td class="txtright fB" width="20%">启用选择：</td>
+			<td class="txtleft" colspan="4">
+				{% for key, name in sms_cfgs %}
+				{% set url = sms_urls[key] %}
+			    <label>
+					<input class="radio" name="sms_api" value="{{key}}" {{ sms_api|isChecked(key) }} type="radio" />
+					{% if(url) %}<a href='{{url}}' target='_blank'>{{name}}</a>{% else %}{{name}}{% endif %}
+				</label>
+				{% endfor %}
+			    <label>
+					<input class="radio" name="sms_api" value="" {{ sms_api|isChecked('') }} type="radio" />[关闭接口]
+				</label>
+				<span class="tips1"></span>
+			</td>
+		</tr>
+		<tr>
+			<td class="txtright fB" width="20%">帐号/序列号：</td>
+			<td class="txtleft" colspan="4">
+			    <label>
+					<input type="text" id="sms_appid" name="sms_appid" rev="帐号/序列号" rule="text" min="1" max="200" value="{{ ('sms_appid')|C|default('') }}">
+				</label>
+				<span class="tips1"></span>
+			</td>
+		</tr>
+		<tr>
+			<td class="txtright fB" width="20%">密码/密钥：</td>
+			<td class="txtleft" colspan="4">
+			    <label>
+					<input type="text" id="sms_appsecret" name="sms_appsecret" rev="" rule="text" min="1" max="200" value="{{ ('sms_appsecret')|C|default('') }}">
+				</label>
+				<span class="tips1"></span>
+			</td>
+		</tr>
+
+		<tr>
+			<td class="txtright fB" width="20%">管理员手机：</td>
+			<td class="txtleft" colspan="4">
+			    <label>
+					<input type="text" id="sms_admtel" name="sms_admtel" rev="" rule="text" min="1" max="200" value="{{ ('sms_admtel')|C|default('') }}">
+				</label>
+				<span class="tips1"></span>
+			</td>
+		</tr>
+		<tr>
+			<td class="txtright fB" width="20%">单号码发送限额：</td>
+			<td class="txtleft" colspan="4">
+			    <label>
+					<input type="text" id="sms_lmtday" name="sms_lmtday" rev="" rule="int" min="1" max="200" value="{{ ('sms_lmtday')|C|default('') }}">
+				</label>
+				<span class="tips1">单个号码,一天内(24小时)最多能发送短信的次数; 默认为10，请根据短信运营商设置。</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="txtright fB" width="20%">单IP发送时间间隔：</td>
+			<td class="txtleft" colspan="4">
+			    <label>
+					<input type="text" id="sms_lmtip" name="sms_lmtip" rev="" rule="text" min="1" max="200" value="{{ ('sms_lmtip')|C|default('') }}">
+				</label>
+				<span class="tips1">单位(秒)，单个IP两次发送信息的最短时间间隔，0为不限制，请根据短信运营商设置。</span>
+			</td>
+		</tr>
+
+	    <!--tr>
+			<th colspan="5" class="conlist">
+				开关设置
+			</th>
+		</tr>
+		<tr class="fB">
+			<td class="txtcenter">ID/选择</td>
+			<td class="txtleft">公众号名称</td>
+			<td class="txtleft">类型</td>
+			<td class="txtleft">微信号</td>
+			<td class="txtleft">应用ID</td>
+		</tr-->
+
+	</tbody>
+</table>
+<div class="submit">
+	<input class="submit-btn ajax-post confirm" target-form="form" value="保存" type="submit">
+	<input class="submit-btn confirm" target-form="form" value="清空" type="button" 
+	  onclick="javascript::$('.wx_accsite').value(0)">
+</div>
+</form>
+{% endblock %}
+{% block submit %}{% endblock %}
+{% block promptUl %}<li></li>{% endblock %}

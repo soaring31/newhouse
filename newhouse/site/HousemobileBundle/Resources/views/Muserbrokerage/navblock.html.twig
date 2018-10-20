@@ -1,0 +1,15 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+
+{% set user_data = app.user %}
+
+{% set user_info_yongjin = user_data.userinfo.yongjin|default('') %}
+	
+{% block result %}
+<nav class="bar tab-money">
+   <span class="rest-money">剩余可提取佣金额:{{core_global.if_dw({value: user_info_yongjin|default(0), danwei: '元', class: "p-red"})}}</span> 
+    <a class="item-content item-link open-popup extract" data-popup=".popup-news" href="javascript:;">
+        <i class="tabicon font-f-98 icon-cent"></i>
+       <span class="">提取</span>
+    </a>
+</nav>
+{% endblock result %}

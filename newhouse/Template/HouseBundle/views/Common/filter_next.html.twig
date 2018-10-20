@@ -1,0 +1,28 @@
+{% set models = app.request.get("models") %}
+{% extends 'CoreBundle::base_ajax.html.twig' %}
+{# 设置允许模型 #}
+{% set allow_models = ['cate_circle', 'cate_metro'] %}
+    
+{% block result %}
+{% spaceless %}
+{% if models in allow_models %}
+    {% set metro = ('house.' ~ models)|getAll({checked: 1, pageSize: 50}) %}
+    {% set data = [] %}
+    {% for item in metro.data %}
+        {% set data = data|merge([{
+            id: item.id,
+            name: item.name,
+            pid: item.pid,
+        }]) %}
+    {% endfor %}
+    {
+        "status": 1,
+        "data": {{ data|json_encode|raw }}
+    }
+{% else %}
+    {
+        status: 0
+    }
+{% endif %}
+{% endspaceless %}
+{% endblock %}

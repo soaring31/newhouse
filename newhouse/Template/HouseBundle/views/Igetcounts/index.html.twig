@@ -1,0 +1,19 @@
+{% extends 'CoreBundle::base_ajax.html.twig' %}
+{% set ids = app.request.get("id")|default(0) %}
+{% set models = app.request.get("models")|default('') %}
+{% set service = app.request.get("service")|default('house') %}
+{% set field = app.request.get("field")|default('')|split(',') %}
+{% set results = (service ~ '.' ~ models)|getAllNews({checked: 1, id: 'in|' ~ ids, pageSize: 100}) %}
+{% block result %}
+{
+    {%- for item in results.data -%}
+    {% if loop.index != 1 %},{% endif %}"{{ loop.index }}": {
+        "id": "{{item.id}}",
+        {%- for item1 in field -%}
+            "{{item1}}": "{{attribute(item, item1) is defined ? attribute(item, item1): ''}}",
+        {%- endfor -%}
+        "models": "{{ models }}"
+    }
+    {%- endfor -%}
+}
+{% endblock result %}

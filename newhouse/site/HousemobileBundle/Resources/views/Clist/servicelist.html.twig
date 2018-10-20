@@ -1,0 +1,32 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+** ajax调用：服务中心列表
+#}
+{% block result %}
+    {% if ident.list is defined %}
+        {% set list = ident.list %}
+    {% endif %}
+    {% spaceless %}
+    {% if list.data is defined and list.pageCount|default('') != 0 %}
+        {% for item in list.data %}
+            <li {% if loop.last %}data-page="{
+                            pageIndex: {{list.pageIndex}},
+                            pageCount: {{list.pageCount}}
+                        }" {% endif %}>
+                <a class="item-content p-default" href="{{('service/detail')|UU({id:item.id|default('')})}}">
+                    <div class="item-inner">
+                        <div class="item-title-row">
+                            {{housemobile_global.list_title({title: item.name|default('')})}}
+                        </div>
+                        <div class="item-subtitle item-subtitle-ex mt5">
+                            {{ core_global.content({content: item.abstract|default(), default: '暂无介绍'}) }}
+                        </div>
+                    </div>
+                </a>
+            </li>
+        {% endfor %}
+    {% else %}
+        <li class="mobile-list-none">暂无{{core_global.formData({value: app.request.get('category', 7)})}}数据</li>
+    {% endif %}
+    {% endspaceless %}
+{% endblock result %}

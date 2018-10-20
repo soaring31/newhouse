@@ -1,0 +1,31 @@
+{% extends 'HouseBundle:News:index.html.twig' %}
+{# #说明
+** urlCategory：获取url传回来的category参数值
+** category:根据category的值获取当前分类属性 #}
+
+{% block title %}{{category.name|default('资讯列表')}}{% endblock title %}
+
+{% block key_des %}
+    {{- core_global.key_des(category) -}}
+{% endblock key_des %}
+
+{% block news_push %}{% endblock news_push %}
+
+{% block container %}
+	<div class="xwzx">
+	    <div class="xwzxl">
+	        <h3>{{category.name|default('资讯列表')}}</h3>
+	    </div>
+	    {% block category %}{{parent()}}{% endblock category %}
+	</div>
+	{# {{ dump() }} #}
+	<!--加载列表-->
+	{{house_global.news_list({
+	    list: ident.list
+	})}}
+	<!--/加载列表-->
+	<div class="blank30"></div>
+	<!--page-->
+	{{core_global.page(ident.list)}}
+	<!--page-->
+{% endblock container %}

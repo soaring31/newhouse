@@ -1,0 +1,26 @@
+{% extends 'HouseBundle:Houses:ddetail.html.twig' %}
+
+{% block title_houses %}怎么样_{{detail.name|default('')}}评价{% endblock title_houses %}
+
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data|default('')}}{{detail.name|default('')}}怎么样，{{detail.name|default('')}}好不好，{{detail.name|default('')}}好吗" />
+<meta name="description" content="{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}提供{{detail.name|default('')}}房价、户型、质量、物业、附近交通、环境、配套等方面的点评，详细分析{{cur_area_data|default('')}}{{detail.name|default('')}}楼盘详情优缺点，为您买房置业提供参考信息。 "/>
+{% endblock key_des %}
+
+{# 导航高亮 #}
+{% block top_search %}{% endblock top_search %}
+{% block logo_header %}
+    {% set nav_houses_act = 9 %}
+    {{parent()}}
+{% endblock logo_header %}
+
+{% block d_body %}
+	<div class="blank15"></div>
+	{{ render(controller('HouseBundle:Bundlebindforms:comment', {
+		title: '点评',
+		formflag: 'view_houses_comment', 
+		aid: detail.id|default(''),
+		models: 'inter_housescomment',
+		arc_models: 'houses'
+	})) }}
+{% endblock d_body %}

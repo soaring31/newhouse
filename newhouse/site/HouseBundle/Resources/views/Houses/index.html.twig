@@ -1,0 +1,704 @@
+{% extends 'HouseBundle::base.html.twig' %}
+{# # 说明
+** sygdzx: 首页滚动资讯推送
+** sylphdp: 首页楼盘幻灯片推送
+** syhdpyc： 首页幻灯片右侧推送
+** syttzx： 首页头条资讯推送
+** sytjlp： 首页特价房推送
+** sytglp：首页团购推送
+** syrmlp：首页热门楼盘推送
+** sysplp：首页商铺楼盘推送
+** syxzllp： 首页写字楼楼盘推送
+** cateType : 快速检索中类型的标识
+** pricefilter: 价格筛选
+** tslpfilter： 特色楼盘筛选
+** lcfilter: 楼层筛选
+**  #}
+
+{# 导航高亮 #}
+{% set nav_act = 10 %}
+
+{% set sygdzx = ('sygdzx')|getPush(20) %}
+
+{% set sylphdp = ('sylphdp')|getPush(10) %}
+
+{% set syhdpyc = ('syhdpyc')|getPush(3) %}
+
+{% set syttzx = ('syttzx')|getPush(7) %}
+
+{% set cate_pushs_sytjlp = ('house.cate_pushs')|getRow({ename: 'sytjlp'}) %}
+{% set sytjlp = ('sytjlp')|getPush(5) %}
+
+
+{% set cate_pushs_sytglp = ('house.cate_pushs')|getRow({ename: 'sytglp'}) %}
+{% set sytglp = ('sytglp')|getPush(5) %}
+
+
+{% set cate_pushs_syrmlp = ('house.cate_pushs')|getRow({ename: 'syrmlp'}) %}
+{% set syrmlp = ('syrmlp')|getPush(5) %}
+
+
+{% set cate_pushs_sysplp = ('house.cate_pushs')|getRow({ename: 'sysplp'}) %}
+{% set sysplp = ('sysplp')|getPush(5) %}
+
+
+{% set cate_pushs_syxzllp = ('house.cate_pushs')|getRow({ename: 'syxzllp'}) %}
+{% set syxzllp = ('syxzllp')|getPush(5) %}
+
+
+{% set pricefilter = ('house.category')|getAll({checked: 1, pid: 'neq|0', ename: 'dj', pageSize: 20}) %}
+{% set tslpfilter = ('houses_common')|getFormField('tslp') %}
+{% set lcfilter = ('houses_common')|getFormField('lcs') %}
+
+{% block title %}新房首页{% endblock title %}
+
+{% block css %}
+{# <link rel="stylesheet" href="{{ asset('bundles/'~bundlepath~'/css/xf-index.css', absolute=true) }}" /> #}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/xf-index.css')}}
+{% endblock css %}
+{% set filter_rows = 0 %}
+{% set filter_action = ('houses/list') %}
+{# 检索配置 #}
+{% set filter_opt = {
+        region: {
+            title: '区域',
+            src: 'db.area',
+	        sql_opt: {
+	            pid: app.session.get('area')|default(0)
+	        }
+        },
+        dj: {
+            title: '价格',
+            extend: 'rangeSearch'
+        },
+        cate_type: {
+            title: '类型',
+        },
+        tslp: {
+            title: '特色',
+            type: 'form',
+            src: 'houses_common',
+        },
+        cate_status: {
+            title: '销售状态',
+        },
+        zxcd: {
+            title: '装修程度',
+        },
+        lcs: {
+            title: '楼层',
+            type: 'form',
+            src: 'lcs',
+        }
+    } %}
+
+{% block body %}
+	{# {{ dump(syhdpyc) }} #}
+<!--快速检索-->
+<div class="searchbg">
+	<div class="search">
+		<div class="searchb clearfix">
+			<div class="searchbl clearfix" id="search">
+		        {% include 'HouseBundle:Common:filter.html.twig' %}
+			</div>
+
+			<div class="searchbc clearfix">
+				<div class="blank5"></div>
+				<i class="font-lp-1 fl mr5 fz16 c-e43"></i>
+				<div data-effect="topLoop" class="jqDuang"  data-tag="sygdzx">
+					<ul class="clearfix">
+						{% if sygdzx is defined %}
+						    {% for item in sygdzx %}
+								<li>
+									<a title="{{item.name|default('')}}" target="_blank" href="{{item.url|default('#')}}">{{item.name|default('')}}</a>
+								</li>
+						    {% endfor %}
+						{% endif %}
+					</ul>
+				</div>
+			</div>
+			<div class="searchbr">
+				<a rel="nofollow" href="{{('houses/list')|U}}" title="查看所有楼盘" class="act">
+					<i class="font-lp-2"></i>
+				</a>
+				<a href="{{('map/houses')|U({})}}" title="地图找房">
+					<i class="font-lp-3"></i>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+<!--/快速检索-->
+<div class="blank20"></div>
+
+<div class="container">
+	<!--focus-->
+	<div class="focus">
+		<div class="focusl">
+			<div data-nextbtn=".next" data-prevbtn=".prev" data-cell=".yuan" data-effect="fold" data-obj="li" class="big jqDuang" data-tag="sylphdp" data-lazyload="src">
+
+					<div>
+						<ul>
+							{% if sylphdp is defined %}
+							    {% for item in sylphdp %}
+								<li {% if item.ad|default('') %}class="house-ad right-top"{% endif %}>
+				                    {% if item.ad|default('') %}
+				                        <div class="ad-txt"></div>
+				                    {% endif %}
+								<a target="_blank" href="{{item.url|default('')}}">
+									{{- core_global.data_src_img({
+										src: item.thumb|default(''),
+										alt: item.name|default(''),
+										height: 476,
+										width: 665
+									}) -}}
+								</a>
+								<div class="bg">
+									<div class="text">
+										<a target="_blank" href="{{item.url|default('')}}">
+											<p>
+												<i>{{item.name|default('')}}</i>
+												{{core_global.region({id: item.region|default('1')})}}
+											</p>
+											<p>
+												{{core_global.address({data: item|default('')})}}
+											</p>
+											<p>销售电话：{{item.tel|default('')}}</p>
+										</a>
+									</div>
+								</div>
+							</li>
+							    {% endfor %}
+							{% endif %}
+
+						</ul>
+					</div>
+					<span class="prev anniu" unselectable="on" onselectstart="return false;">&lt;</span>
+					<span class="next anniu" unselectable="on" onselectstart="return false;">&gt;</span>
+					<div class="yuan"></div>
+			</div>
+			<dl class="clearfix fr" style="width: 220px" data-tag="syhdpyc">
+				{% if syhdpyc is defined %}
+				    {% for item in syhdpyc %}
+					<dd class="small{% if item.ad|default('') %} house-ad right-top{% endif %}">
+	                    {% if item.ad|default('') %}
+	                        <div class="ad-txt"></div>
+	                    {% endif %}
+						<a target="_blank" href="{{item.url|default('')}}">
+							{{- core_global.lazy_img({
+								src: item.thumb|default(''),
+								alt: item.name|default(''),
+								height:158,
+								width: 220,
+								type:2
+							}) -}}
+							</a>
+						<div class="text">
+							<p>
+								{{core_global.address({data:item|default(''), area: item.region|default('1')})}}
+							</p>
+							<p>{{item.name|default('')}}</p>
+						</div>
+						<div class="bg"></div>
+					</dd>
+
+				    {% endfor %}
+				{% endif %}
+			</dl>
+		</div>
+		<div class="focusr">
+			<div class="focusrt" data-tag="syttzx">
+				<ul>
+					{% if syttzx is defined %}
+					    {% for item in syttzx %}
+							<li class="{% if loop.index == 1 %}title{% endif %}">
+								<a target="_blank" title="{{item.name|default('')}}" href="{{item.url|default('#')}}">{{item.name|default('')}}</a>
+							</li>
+					    {% endfor %}
+					{% endif %}
+				</ul>
+			</div>
+			<div class="focusrb">
+				<div id="zst"></div>
+			</div>
+		</div>
+	</div>
+	<!--/focus-->
+	<div class="blank30"></div>
+	<!--floor1-->
+	<div class="gy" data-tag="sytjlp">
+		<div class="gyt">
+			<div class="gytl img-xf-1">
+				<span class="one">1F</span>
+				<h3>{{cate_pushs_sytjlp.name}}</h3>
+			</div>
+			<div class="gytr">
+				<a href="{{('special/list')|U}}" target="_blank">查看更多&gt;&gt;</a>
+			</div>
+		</div>
+
+		<div class="gyb">
+			<ul class="clearfix">
+				{% if sytjlp is defined %}
+				    {% for item in sytjlp %}
+						<li {% if item.ad|default('') %}class="house-ad right-top"{% endif %}>
+		                    {% if item.ad|default('') %}
+		                        <div class="ad-txt"></div>
+		                    {% endif %}
+							<a target="_blank" href="{{core_global.url(item|merge({models: 'special', set_models: 1}))}}">
+								{{- core_global.lazy_img({
+								    src: item.thumb|default(''),
+								    alt: item.name|default(''),
+								    type: 2,
+								    width: 220,
+								    height: 157
+								}) -}}
+							</a>
+							<h3 class="bg47">
+								<a target="_blank" href="{{core_global.url(item|merge({models: 'special', set_models: 1}))}}">
+									<p>
+										<span class="r">{{core_global.region({id: item.region|default(''), tpl: '%name%'})}}</span>
+										<span class="fz14">{{item.name|default('')}}</span>
+									</p>
+								</a>
+							</h3>
+							<h4 class="intro clearfix">
+								<p>
+									<span class="fr">
+										{{house_global.if_wy({value: item.zj|default(''), tpl: '<i>%value%</i>%danwei%'})}}
+									</span>
+									<span class="oh">{{house_global.huxing({data: item|default(''), tpl: '%shi%%ting%%chu%%wei%'})}}</span>
+								</p>
+								<p>
+									{{core_global.formField({value: item.louxing|default(''), form: 'houses_bargain', field: 'louxing'})}}
+								</p>
+							</h4>
+						</li>
+				    {% endfor %}
+				{% endif %}
+			</ul>
+		</div>
+	</div>
+	<!--/floor1-->
+	<!--floor2-->
+	<div class="blank30"></div>
+	<div class="gy" data-tag="sytglp">
+		<div class="gyt">
+			<div class="gytl tg img-xf-2">
+				<span class="two">2F</span>
+				<h3>{{cate_pushs_sytglp.name}}</h3>
+			</div>
+
+			<div class="gytr">
+				<a href="{{('groupbuy/list')|U}}" target="_blank">查看更多&gt;&gt;</a>
+			</div>
+		</div>
+		<div class="gyb">
+			<ul class="clearfix">
+				{% if sytglp is defined %}
+				    {% for item in sytglp %}
+						<li {% if item.ad|default('') %}class="house-ad right-top"{% endif %}>
+		                    {% if item.ad|default('') %}
+		                        <div class="ad-txt"></div>
+		                    {% endif %}
+							<a target="_blank" href="{{core_global.url(item|merge({models: 'groupbuy', set_models: 1}))}}">
+								{{- core_global.lazy_img({
+								    src: item.thumb|default(''),
+								    alt: item.name|default(''),
+								    type: 2,
+								    width: 220,
+								    height: 157
+								}) -}}
+							</a>
+
+							<h3 class="bg47">
+								<a target="_blank" href="{{core_global.url(item|merge({models: 'groupbuy', set_models: 1}))}}">
+									<p>
+										<span class="r">{{core_global.region({id: item.region|default(''), tpl: '%name%'})}}</span>
+										<span class="fz14">{{item.name|default('')}}</span>
+									</p>
+								</a>
+							</h3>
+							<h4 class="intro clearfix">
+								<p>
+									<span class="fr">
+										<i><span data-counts="{models: 'houses_arc', field: 'hdnum', id: '{{item.id|default('')}}'}"></span></i>人报名
+									</span>
+									<span class="time fz14 c-e43 format-time" data-endtime="{{item.enddate.date|default('')}}" data-noend="永久有效！" data-end="活动结束" data-type="1" data-timetype="1"></span>
+								</p>
+								<p>地址：{{item.address|default('')}}</p>
+							</h4>
+						</li>
+				    {% endfor %}
+				{% endif %}
+			</ul>
+		</div>
+	</div>
+	<!--/floor2-->
+	<!--floor3-->
+	<div class="blank30"></div>
+	<div class="gy" data-tag="syrmlp">
+		<div class="gyt">
+			<div class="gytl rm img-xf-3">
+				<span class="three">3F</span>
+				<h3>{{cate_pushs_syrmlp.name}}</h3>
+			</div>
+
+			<div class="gytr">
+				<a href="{{(cate_pushs_syrmlp.models ~ '/list')|U}}" target="_blank">查看更多&gt;&gt;</a>
+			</div>
+		</div>
+		<div class="gyb">
+			<ul class="clearfix">
+				{% if syrmlp is defined %}
+				    {% for item in syrmlp %}
+						<li {% if item.ad|default('') %}class="house-ad right-top"{% endif %}>
+		                    {% if item.ad|default('') %}
+		                        <div class="ad-txt"></div>
+		                    {% endif %}
+							<a target="_blank" href="{{core_global.url(item|merge({models: 'houses'}))}}">
+								{{- core_global.lazy_img({
+								    src: item.thumb|default(''),
+								    alt: item.name|default(''),
+								    type: 2,
+								    width: 220,
+								    height: 157
+								}) -}}
+							</a>
+							<h3 class="bg47">
+								<a target="_blank" href="{{core_global.url(item|merge({models: 'houses'}))}}">
+									<p>
+										{{core_global.region({id: item.region|default('1'), tpl: '<span class="fr">%value%</span>'})}}
+										<span class="fz14">{{item.name|default('')}}</span>
+									</p>
+								</a>
+							</h3>
+							<h4 class="intro clearfix">
+								<p>
+									<span class="fr">
+										{{house_global.if_dj({value: item.dj|default(''), tpl: '<i>%value%</i>%danwei%'})}}
+									</span>
+									{{house_global.lptag({value: item, tpl: '<span class="oh">%value%</span>', con: 'zxcd'})}}
+								</p>
+								<p>地址：{{item.address|default('')}}</p>
+							</h4>
+						</li>
+				    {% endfor %}
+				{% endif %}
+			</ul>
+		</div>
+	</div>
+	<!--/floor3-->
+	<!--floor4-->
+	<div class="blank30"></div>
+	<div class="gy" data-tag="sysplp">
+		<div class="gyt">
+			<div class="gytl ts img-xf-4">
+				<span class="four">4F</span>
+				<h3>{{cate_pushs_sysplp.name}}</h3>
+			</div>
+			{# <div class="gytc">
+				<ul class="clearfix">
+					<li>
+						<a target="_blank" href="http://house.08cms.com/shangpu2/shangpuloupan/beijing/">海淀</a>
+					</li>
+					<li>
+						<a target="_blank" href="http://house.08cms.com/shangpu2/shangpuloupan/chaoyangqu/">朝阳</a>
+					</li>
+					<li>
+						<a target="_blank" href="http://house.08cms.com/shangpu2/shangpuloupan/dongchengqu/">东城</a>
+					</li>
+					<li>
+						<a target="_blank" href="http://house.08cms.com/shangpu2/shangpuloupan/xichengqu/">西城</a>
+					</li>
+					<li>
+						<a target="_blank" href="http://house.08cms.com/shangpu2/shangpuloupan/chongwenqu/">崇文</a>
+					</li>
+					<li>
+						<a target="_blank" href="http://house.08cms.com/shangpu2/shangpuloupan/xuanwuqu/">宣武</a>
+					</li>
+					<li>
+						<a target="_blank" href="http://house.08cms.com/shangpu2/shangpuloupan/fengtaiqu/">丰台</a>
+					</li>
+				</ul>
+			</div> #}
+
+			<div class="gytr">
+				<a href="{{('business/slist')|U}}" target="_blank">查看更多&gt;&gt;</a>
+			</div>
+		</div>
+		<div class="gyb">
+			<ul class="clearfix">
+				{% if sysplp is defined %}
+				    {% for item in sysplp %}
+						<li {% if item.ad|default('') %}class="house-ad right-top"{% endif %}>
+		                    {% if item.ad|default('') %}
+		                        <div class="ad-txt"></div>
+		                    {% endif %}
+							<a target="_blank" href="{{core_global.url(item|merge({models: 'business', set_models: 1}))}}">
+								{{- core_global.lazy_img({
+								    src: item.thumb|default(''),
+								    alt: item.name|default(''),
+								    type: 2,
+								    width: 220,
+								    height: 157
+								}) -}}
+
+							</a>
+
+							<h3 class="bg47">
+								<a target="_blank" href="{{core_global.url(item|merge({models: 'business', set_models: 1}))}}">
+									<p>
+										{{core_global.region({id: item.region|default('1'), tpl: '<span class="fr">%value%</span>'})}}
+										<span class="fz14">{{item.name|default('')}}</span>
+									</p>
+								</a>
+							</h3>
+							<h4 class="intro clearfix">
+								<p>
+									<span class="fr">
+										{{house_global.if_dj({value: item.dj|default(''), tpl: '<i>%value%</i>%danwei%'})}}
+									</span>
+									<span class="oh">电话：{{item.tel|default('')}}</span>
+								</p>
+								<p>地址：{{item.address|default('')}}</p>
+							</h4>
+						</li>
+				    {% endfor %}
+				{% endif %}
+			</ul>
+		</div>
+	</div>
+	<!--/floor4-->
+	<!--floor5-->
+	<div class="blank30"></div>
+	<div class="gy" data-tag="syxzllp">
+
+		<div class="gyt">
+			<div class="gytl sydc img-xf-5">
+				<span class="five">5F</span>
+				<h3>{{cate_pushs_syxzllp.name}}</h3>
+			</div>
+
+			<div class="gytr">
+				<a href="{{('business/list')|U}}" target="_blank">查看更多&gt;&gt;</a>
+			</div>
+
+		</div>
+
+		<div class="gyb">
+			<ul class="clearfix">
+				{% if syxzllp is defined %}
+				    {% for item in syxzllp %}
+						<li {% if item.ad|default('') %}class="house-ad right-top"{% endif %}>
+		                    {% if item.ad|default('') %}
+		                        <div class="ad-txt"></div>
+		                    {% endif %}
+							<a target="_blank" href="{{core_global.url(item|merge({models: 'business', set_models: 1}))}}">
+								{{- core_global.lazy_img({
+								    src: item.thumb|default(''),
+								    alt: item.name|default(''),
+								    type: 2,
+								    width: 220,
+								    height: 157
+								}) -}}
+							</a>
+							<h3 class="bg47">
+								<a target="_blank" href="{{core_global.url(item|merge({models: 'business', set_models: 1}))}}">
+									<p>
+										{{core_global.region({id: item.region|default('1'), tpl: '<span class="fr">%value%</span>'})}}
+										<span class="fz14">{{item.name|default('')}}</span>
+									</p>
+								</a>
+							</h3>
+							<h4 class="intro clearfix">
+								<p>
+									<span class="fr">
+										{{house_global.if_dj({value: item.dj|default(''), tpl: '<i>%value%</i>%danwei%'})}}
+									</span>
+									<span class="oh">电话：{{item.tel|default('')}}</span>
+								</p>
+								<p>地址：{{item.address|default('')}}</p>
+							</h4>
+						</li>
+				    {% endfor %}
+				{% endif %}
+			</ul>
+		</div>
+	</div>
+	<!--/floor5-->
+	<!--工具-->
+	<div class="blank30"></div>
+	<div class="gj">
+		<dl>
+			<dt>
+				<i class="img-xf-16"></i>
+				<a href="{{('tools/index')|U({})}}"><em class='img-xf-6'></em></a>
+				购房工具
+			</dt>
+			<dd>
+				<a target="_blank" href="{{('tools/index')|U({id: 1})}}">
+					<i class="img-xf-8"></i>
+				</a>
+				购房能力评估
+			</dd>
+			<dd>
+				<a class="gjjdk" target="_blank" href="{{('tools/index')|U({id: 4})}}">
+					<i class="img-xf-9"></i>
+				</a>
+				公积金贷款
+			</dd>
+			<dd>
+				<a class="debjjs" target="_blank" href="{{('tools/index')|U({id: 2})}}">
+					<i class="img-xf-10"></i>
+				</a>
+				等额本金计算
+			</dd>
+			<dd>
+				<a class="tqhk" target="_blank" href="{{('tools/index')|U({id: 6})}}">
+					<i class="img-xf-11"></i>
+				</a>
+				提前还款
+			</dd>
+			<dd>
+				<a class="debxjs" target="_blank" href="{{('tools/index')|U({id: 2})}}">
+					<i class="img-xf-12"></i>
+				</a>
+				等额本息计算
+			</dd>
+			<dd>
+				<a class="sfjsq" target="_blank" href="{{('tools/index')|U({id: 7})}}">
+					<i class="img-xf-13"></i>
+				</a>
+				税费计算器
+			</dd>
+			<dd>
+				<a class="jspc" target="_blank" href="{{('houses/list')|U({})}}">
+					<i class="img-xf-14"></i>
+				</a>
+				楼盘速查
+			</dd>
+		</dl>
+	</div>
+	<!--/工具-->
+
+</div>
+<div class="blank30"></div>
+{% endblock body %}
+
+{% set prices = ('house.prices')|getAll({checked: 1, area: sess_area|default(''), order: 'id', orderBy: 'desc', pageSize: 12}) %}
+
+{% block js %}
+    <script type="text/javascript">
+    {# 走势图 #}
+    {# 横坐标 #}
+    var zstMouth = [{% if prices.data is defined %}
+        {% for item in prices.data %}
+            {% if loop.index <= 6 %}
+            "{{item.months|default('')|date('m')}}月",
+            {% endif %}
+        {% endfor %}
+    {% endif %}];
+    {# 数据 #}
+    var dzstDta = [{% if prices.data is defined %}
+        {% for item in prices.data %}
+            {% if loop.index <= 6 %}
+            ["{{item.months|default('')|date('m')}}", {{item.price|default('')}}],
+            {% endif %}
+        {% endfor %}
+    {% endif %}];
+    var jsonData = {
+        "title": "{{cur_area_data|default('')}}价格走势图",
+        "series": [{
+            "name": "{{cur_area_data|default('')}}房价走势",
+            "datatype": "house",
+            "data": dzstDta.reverse()
+        }],
+        "color": ["#ee4433", "#F8CE5D", "#339966"],
+        "month_s": zstMouth.reverse()
+    };
+    seajs.use(['jqduang' , 'charts', 'lazyload', 'formattime', 'zst'], function (){
+		// $('#zst').highcharts({
+		// 	chart: {
+		// 		height: 230
+		// 	},
+  //           title: {
+  //               text: '新房价格走势图<span style="font-size:12px;color:#999">(单位：元/平米)</span>',
+  //               style:{fontFamily: 'microsoft yahei'},
+  //               align:'left',
+  //               margin:10,
+  //               x:40
+  //           },
+  //           xAxis: {
+  //               categories: ['16-08','16-07','16-05','16-04','16-03','16-01'],
+  //               tickPosition: 'inside',
+  //               reversed:true,
+  //               gridLineColor: '#eee',
+  //               gridLineWidth:1,
+  //               labels: {
+  //                   rotation: -20,
+  //                   align: 'right',
+  //                   style: {fontSize: '12px', fontFamily: 'arial'}
+  //               },
+  //               lineWidth:1
+  //           },
+  //           yAxis: {
+  //               title: {text: ''},
+  //               //min:0,
+  //               gridLineColor: '#eee',
+  //               lineWidth:1
+  //           },
+  //           colors:[ "#ee4433", "#F8CE5D", "#339966" ],
+  //           tooltip: {valueSuffix: '元/平米'},
+  //           legend: {enabled:false},
+  //           series: [{
+  //               name: '价格',
+  //               data: [23818,23818,23818,23818,23818,23818]
+  //           }],
+  //           credits: {enabled: false }
+  //       });
+
+    })
+    	// seajs.use(['jqduang','charts'],function(jqduang,charts) {
+    	// 	$('#zst').highcharts({
+    	// 		chart: {
+    	// 			height: 230
+    	// 		},
+	    //         title: {
+	    //             text: '新房价格走势图<span style="font-size:12px;color:#999">(单位：元/平米)</span>',
+	    //             style:{fontFamily: 'microsoft yahei'},
+	    //             align:'left',
+	    //             margin:10,
+	    //             x:40
+	    //         },
+	    //         xAxis: {
+	    //             categories: ['16-08','16-07','16-05','16-04','16-03','16-01'],
+	    //             tickPosition: 'inside',
+	    //             reversed:true,
+	    //             gridLineColor: '#eee',
+	    //             gridLineWidth:1,
+	    //             labels: {
+	    //                 rotation: -20,
+	    //                 align: 'right',
+	    //                 style: {fontSize: '12px', fontFamily: 'arial'}
+	    //             },
+	    //             lineWidth:1
+	    //         },
+	    //         yAxis: {
+	    //             title: {text: ''},
+	    //             //min:0,
+	    //             gridLineColor: '#eee',
+	    //             lineWidth:1
+	    //         },
+	    //         colors:[ "#ee4433", "#F8CE5D", "#339966" ],
+	    //         tooltip: {valueSuffix: '元/平米'},
+	    //         legend: {enabled:false},
+	    //         series: [{
+	    //             name: '价格',
+	    //             data: [23818,23818,23818,23818,23818,23818]
+	    //         }],
+	    //         credits: {enabled: false }
+	    //     });
+    	// })
+    </script>
+{% endblock js %}

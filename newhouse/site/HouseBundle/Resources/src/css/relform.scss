@@ -1,0 +1,321 @@
+﻿@import 'static/ats'; // 工具类, 每个文件都要导入
+@import 'font-ico';
+
+// 标题
+.fmtype {
+    overflow: hidden;
+
+    margin-top: 20px;
+    margin-bottom: 20px;
+    a {
+        font-size: 14px;
+        line-height: 30px;
+
+        position: relative;
+
+        float: left;
+
+        height: 30px;
+        margin-right: 15px;
+        padding: 0 15px;
+
+        color: #333;
+        border: 1px solid #ddd;
+        &:hover,
+        &.on {
+            line-height: 28px;
+
+            height: 28px;
+            padding: 0 14px;
+
+            text-decoration: none;
+
+            color: #f60;
+            border: 2px solid #f60;
+            i {
+                position: absolute;
+                right: 0;
+                bottom: 0;
+
+                display: block;
+
+                width: 15px;
+                height: 15px;
+
+                background: url('../images/tit_ico.png') no-repeat right bottom;
+            }
+        }
+    }
+}
+
+// 表单
+.form-fy{
+    border: 1px solid #ddd;
+    padding: 30px 0;
+    .item {
+        .label {
+            line-height: 46px;
+            height: 46px;
+            background-color: #eee;
+            font-size: 22px;
+            padding-left: 15px;
+            margin-bottom: 20px !important;
+            display: block;
+            text-align: left;
+            width: auto;
+            color: #444;
+        }
+        .field {
+            display: block;
+            width: auto;
+        }
+        &.submit {
+            text-align: center;
+            .btn {
+                display: inline-block;
+                height: 46px;
+                line-height: 44px;
+                font-weight: bold;
+                font-size: 16px;
+                width: auto;
+                padding: 0 40px;
+            }
+            .label {
+                display: none;
+            }
+        }
+    }
+    
+    // $row-w: 564px;
+    .form-row {
+        position: relative;
+        display: table;
+        // width: $row-w;
+        width: 100%;
+        margin-bottom: 24px;
+    }
+    .form-cell-label {
+        display: table-cell;
+        width: 150px;
+        text-align: right;
+        vertical-align: middle;
+    }
+    .form-cell {
+        display: table-cell;
+        // width: $row-w - 30 -150;
+        padding-left: 30px;
+        vertical-align: middle;
+        input[type="text"],
+        input[type="number"],
+        input[type="password"] {
+            display: inline-block;
+            width: 300px;
+        }
+        textarea {
+            width: 300px;
+        }
+        select {
+            display: inline-block;
+            margin-right: 5px;
+            width: auto;
+        }
+        .form-row {
+            display: inline-block;
+            width: auto;
+            margin-bottom: 0;
+        }
+        .form-cell-label {
+            display: none;
+        }
+        .form-cell {
+            display: inline;
+            padding-left: 0;
+            margin-right: 5px;
+            select {
+                width: auto;
+            }
+        }
+    }
+    .code-wrap-outer {
+        width: 302px;
+        .code-item-input {
+            input {
+                width: 100%;
+            }
+        }
+    }
+    .tip {
+        font-size: 12px;
+        padding-top: 5px;
+        color: #aaa;
+    }
+    label.error {
+        white-space: nowrap;
+    }
+}
+// 地图
+.wk-pop {
+    border: 2px solid #2a3342;
+    border-bottom: 3px solid #2a3342;
+    border-radius: 6px;
+    background: #fff;
+    box-shadow: 2px 2px 5px #2a3342;
+}
+.wk-pop-header {
+    padding: 5px;
+    border-bottom: 1px solid #2a3342;
+    background: #2a3342;
+    .wk-pop-close {
+        font-family: tahoma;
+        line-height: 20px;
+        position: relative;
+        display: inline-block;
+        float: right;
+        width: 15px;
+        padding: 0;
+        color: #fff;
+    }
+    .wk-pop-body {
+        position: relative;
+        overflow-y: auto;
+        height: 87%;
+    }
+    .wk-pop-title {
+        font-size: 12px;
+        color: #fff;
+    }
+}
+.wk-pop-body {
+    position: relative;
+    overflow-y: auto;
+    height: 87%;
+}
+// 经纪人
+.agn-con {
+    .sale-list-item {
+        border: 1px solid #ddd;
+        margin-top: -1px;
+        position: relative;
+        z-index: 1;
+        label {
+            @extend %clearfix;
+            display: block;
+            padding: 20px 0 16px 0;
+        }
+        p{
+            color:#666;
+        }
+        h3{
+            font-size: 16px;
+            line-height: 40px;
+            display: inline-block;
+            color: #333;
+            font-weight: 700;
+        }
+        &:first-child{
+               border-top: 1px solid #ddd;
+        }
+        &.active {
+            border-color: #f60;
+            z-index: 2;
+            &:after {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0;
+                border-color: transparent;
+                border-style: solid;
+                border-width: 0 24px 24px 24px;
+                border-left-color: #ff6600;
+            }
+        }
+    }
+
+    .sale-item-l {
+        
+        margin-left: 20px;
+        img {
+            float: left;
+            margin-top: 10px;
+           
+            padding: 2px;
+           
+        }
+    }
+
+    .sale-item-text {
+        
+        margin-left: 150px;
+
+        h3 {
+            display: inline-block;
+            line-height: 40px;
+            color: #333;
+            font-size: 16px;
+            
+        }
+        .name {
+            font-weight: 700;
+            font-size: 16px;
+        }
+        
+        .shou {
+            margin-left: 26px;
+            background: #f06d07;
+        }
+        .zu {
+            margin-left: 30px;
+            background: #2d99d6;
+        }
+        .shou, .zu {
+            font-size: 13px;
+            line-height: 20px;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            color: #fff;
+            border-radius: 2px;
+        }
+        span {
+            font-size: 14px;
+        }
+        .btn {
+            float: right;
+            margin: 30px;
+        }
+        p {
+            line-height: 28px;
+        }
+    }
+
+    .sale-item-r {
+        float: left;
+        padding-top: 73px;
+        margin: 0 20px;
+        
+    }
+    // 经纪人提交按钮
+    .btn-jjr-submit {
+        height: 46px;
+        line-height: 44px;
+        font-size: 16px;
+        display: block;
+        width: 200px;
+        text-align: center;
+        margin: 15px auto;
+        &:before {
+            margin-right: 10px;
+            vertical-align: -2px;
+        }
+    }
+    
+}
+
+// 重置模拟下拉框样式
+
+.chosen-container .chosen-results li.highlighted {
+  background-color: #f60;
+  border-radius: 2px;
+  background-image: linear-gradient(#f60 20%, #f60 90%);
+}

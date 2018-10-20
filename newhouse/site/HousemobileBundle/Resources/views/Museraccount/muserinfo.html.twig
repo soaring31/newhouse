@@ -1,0 +1,23 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+
+{% block header_title %}
+    {{core_mobile_global.title({title: '会员信息'})}}
+{% endblock header_title %}
+
+{% block title %}
+   会员信息 
+{% endblock title %}
+
+{% block container %}
+    <div data-block="{
+        bParams: true,
+        ajax:{
+            url: '{{ ('museraccount/muserinfo')|U }}',
+            data: {
+                tpl: 'Museraccount:muserinfoblock',
+                _id: '{{app.request.get("_id")}}'
+            }
+        }
+    }"></div>
+{% endblock container%}

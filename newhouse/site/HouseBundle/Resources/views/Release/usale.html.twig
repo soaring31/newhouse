@@ -1,0 +1,59 @@
+{% extends 'HouseBundle::base.html.twig' %}
+
+{% set id = app.request.get("id")|default('') %}
+{% set uid = app.user.id|default(0) %}
+
+{% block title %}发布二手{% endblock title %}
+
+{% block js %}
+    <script type="text/javascript">
+        seajs.use([ 'searchxq'], function ( searchxq) {
+
+            $(function(){
+                searchxq.search({
+                    url: '{{("majaxaction/xiaoqu")|U({type: 1})}}',
+                    autofill: ['address', 'aid']
+                });
+
+                // 自动计算单价
+                searchxq.division();
+
+                $('.tag-form form').on('auto', function(){
+                    searchxq.search({
+                        url: '{{("majaxaction/xiaoqu")|U}}'
+                    });
+                });
+
+            });
+        })
+    </script>
+    {# 自动完成列表模板 #}
+    <script id="searchlist" type="text/html">
+        <% for (var i = 0; i < name.length; i++) { %>
+        <li data-config="{id: <%= id[i] %>, address: '<%= address[i] %>'}">
+            <span class="name"><%= name[i] %> </span>
+            <span>地址 :</span>
+            <span class="address"> <%= address[i] %> </span>
+        </li>
+        <% } %>
+    </script>
+{% endblock js %}
+
+{% block body %}
+    <div class="container">
+        {{house_global.release_nav({
+            action: action
+        })}}
+        {% block form_release %}
+            {# 渲染表单 #}
+            {{ render(controller('HouseBundle:Bundlebindforms:ajaxform', {
+                models: app.request.get('models')|default(''),
+                esflx: app.request.get('esflx')|default(''),
+                formjumpurl: core_global.menu_url(330),
+                formflag: 'web_sale',
+                formcls: 'form-fy'
+            })) }}
+        {% endblock form_release %}
+    </div>
+    <div class="blank10"></div>
+{% endblock %}

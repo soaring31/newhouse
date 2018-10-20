@@ -1,0 +1,7 @@
+services:
+    twig_house_extension:
+        class: HouseBundle\Twig\Extension\HouseExtension
+        arguments: [ "@?service_container" ]
+        public: false
+        tags:
+            - { name: twig.extension }

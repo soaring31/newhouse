@@ -1,0 +1,19 @@
+{% extends 'HousemobileBundle:Bundlebindforms:bundlebase.html.twig' %}
+{# 佣金提取 #}
+{% set aid = app.request.get("aid")|default('') %}
+{% set popup = app.request.get("popup")|default('') %}
+{% set title = app.request.get("title")|default('') %}
+{% set submit = app.request.get("submit")|default('') %}
+{% set models = app.request.get("models", 'wages') %}
+{% block result %}
+{{- core_mobile_forms.popup_form({
+    popup: popup,
+    Form: Form,
+    formName: formName,
+    title: '佣金提取',
+    aid: aid,
+    submit: submit,
+    models: models
+}) -}}
+
+{% endblock result %}

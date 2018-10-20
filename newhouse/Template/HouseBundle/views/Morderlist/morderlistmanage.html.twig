@@ -1,0 +1,172 @@
+
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+    {% set aid = app.request.get('aid') %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }} 
+    {{ core_manage.jump(
+        {
+            title: '订单管理',
+            url:  ('morderlist/morderlistmanage')|U,  
+            class: 'on',
+            target: '.main-bd'
+        }
+        ) }}
+     {{ core_manage.jump(
+        {
+            title: '充值',
+            url:  ('msale/chongzhi')|U,  
+            target: '.main-bd',
+            attr: {
+                'data-route':'chongzhi' 
+            }
+        }
+        ) }}
+         {{ core_manage.jump(
+        {
+            title: '积分兑换',
+            url:  ('musercash/cashing')|U,  
+            target: '.main-bd',
+            attr: {
+                'data-route':'cashing'
+            }
+        }
+        ) }}
+{% endblock %}
+
+{% block mainleft %}
+    {# {{ render(controller('HouseBundle:Mnews:category', {category: category, action: 'mnews/mnewsmanage'})) }} #}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ core_manage.filter([
+   {
+        title: '结算时间',
+        attr: {
+            'data-selectdate': {
+                unix: 1
+            }
+        },
+        data: [
+            {
+                id: '1M',
+                name: '一个月前'
+            },
+            {
+                id: '3M',
+                name: '三个月前'
+            }
+        ],
+        field: 'create_time',
+        method: 'selectFilter'
+    },
+]) }}
+{# {% set filter_opt = [
+    {
+        method: 'search',
+        field: 'name',
+        title:'查询近30天的订单记录'
+    }
+] %} #}
+{# {{ core_manage.filter(filter_opt) }} #}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            models: '{{ models }}',
+            category: '{{ category }}'
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                    <th>订单号</th>
+                    <th width="100">支付工具</th>
+                    <th width="100">订单金额</th>
+                    <th width="100">订单日期</th>
+                    <th width="80">订单状态</th>
+                    <th width="80" class="tac">操作</th>
+                
+                </tr>
+                {% if ident.info.data is defined and ident.info.pageCount|default(0) != 0 %}
+                {% for k, vo in ident.info.data %}
+                    {# {{dump(vo)}} #}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td>{{ vo.id }}</td>
+                    <td>{{ vo.ordersn }}</td>
+                    <td>
+                        {% if vo.paytype == 1 %}
+                            微信支付
+                        {% elseif vo.paytype == 2 %}
+                        支付宝
+                        {% else %}
+                        其他支付   
+                        {% endif %}
+                    </td>
+                    <td>{{ vo.total_fee }}</td>
+                    <td>{{ vo.create_time|date('Y-m-d') }}</td>
+                   
+                    <td>
+                        {% if vo.checked == 0 %}
+                        {{ core_manage.btn({
+                            title: '待支付',
+                            class: 'btn-danger',
+                            role: 'disabled',
+                           }) }}
+                        {% else %}
+                        {{ core_manage.btn({
+                            title: '支付成功',
+                            class: 'btn-success',
+                            role: 'disabled'
+                           }) }}
+                        {% endif %}
+                    </td>
+                   
+                    <td class="tac">
+                    {% if vo.checked == 0 %}
+                        {{ core_manage.btn({
+                            title: '去支付',
+                            url:  ('morderlist/mrequest')|U({ id: vo.id, total_fee: vo.total_fee}),
+                            attr: {
+                                target: '_blank'
+                            } 
+                           }) }}
+                    {% else %}
+                        -
+                    {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                    <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+
+{% endblock %}
+
+{% block promptUl %}
+{% endblock %}
+
+
+
+

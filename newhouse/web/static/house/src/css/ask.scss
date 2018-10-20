@@ -1,0 +1,978 @@
+/*!
+ * @name <%= name %>
+ * @author <%= author %>
+ * @date <%= date %>
+ */
+
+@import 'static/ats'; // 工具类, 每个文件都要导入
+// 导入全部font demo 图标
+// 
+ @import 'font-ask'; //导入css 标识-文件名
+
+ @import 'ask-list'; // 列表
+
+ @import 'top-search'; // 搜索
+
+ @import 'img-ask'; //导入css 标识-文件名
+@include img-ask($img-ask); //调用全部样式， 标识-文件名($标识-文件名);
+
+
+$major-color : #33aa66;
+
+$text-color : #353535;
+
+a:hover {
+    text-decoration: none;
+    color: $major-color;
+}
+
+// 头部搜索----------
+.lp-top-bar {
+    
+    @extend %clearfix;
+
+    .search-bar {
+        float: left;
+    }
+
+    .search-input {
+        border-color: $major-color;
+    }
+
+    .search-btn {
+        background: $major-color;
+    }
+
+    .list {
+        margin-left: 68px;
+        width: auto;
+        line-height: 70px;
+    }
+}
+
+
+
+// ---------------首页推送的样式----------------
+.push {
+    width: 100%;
+    overflow: hidden;
+    @extend %clearfix;
+
+    .line {
+         border-bottom: 1px dashed #ddd;
+    }
+}
+
+.push-text {
+    float: left;
+    width: 495px;
+    color: #ddd;
+    
+
+    h2 {
+        font-size: 24px;
+        width: 100%;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    ul {
+        
+        overflow: hidden;
+        @extend %clearfix;
+    }
+
+    li {
+        font-size: 14px;
+        line-height: 36px;
+        float: left;
+        overflow: hidden;
+        width: 48%;
+        margin-right: 1%;
+        height: 36px;
+        color: #ddd;
+    }
+}
+
+.focus {
+    width: 680px;
+    height: 380px;
+    overflow: hidden;
+    zoom: 1;
+    position: relative;
+    float: right;
+}
+
+.focus ul {
+    width: 680px;
+    height: 380px;
+    overflow: hidden;
+    position: relative;
+}
+
+.focus li {
+    width: 680px;
+    height: 380px;
+    float: left;
+    position: relative;
+}
+
+.focus li a {
+    display: block;
+    cursor: pointer;
+}
+
+.focus .tit {
+    width: 680px;
+    position: absolute;
+    left: 0;
+    bottom: 38px;
+    text-align: center;
+    z-index: 1;
+    font-size: 18px;
+    line-height: 18px;
+}
+
+.focus .tit a {
+    color: #fff;
+}
+
+.focus .tit a:hover {
+    text-decoration: none;
+}
+
+.focus .bg {
+    width: 680px;
+    height: 70px;
+    position: absolute;
+    left: 0;
+    ;bottom: 0;
+    background: #000;
+    opacity: 0.7;
+    filter: alpha(opacity=70);
+}
+
+.focus .foucsTit {
+    width: 680px;
+    left: 0;
+    position: absolute;
+    bottom: 13px;
+    text-align: center;
+}
+
+.focus .foucsTit i {
+    display: inline-block;
+    margin: 0 5px;
+    line-height: 7px;
+    font-size: 0;
+     @extend .img-ask-05;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.focus .foucsTit i.on {
+     @extend .img-ask-06;
+}
+
+.focus .focusBtnL,
+.focus .focusBtnR {
+    width: 40px;
+    height: 56px;
+    padding: 7px;
+    margin-top: -70px;
+    position: relative;
+    z-index: 1;
+}
+
+.focus .focusBtnL {
+    float: left;
+}
+
+.focus .focusBtnR {
+    float: right;
+}
+
+.focus .focusBtnL img {
+    float: right;
+}
+
+.focus .focusBtnL img,
+.focus .focusBtnR img {
+    display: none;
+    cursor: pointer;
+}
+
+.focus .focusBtnL span,
+.focus .focusBtnR span {
+    display: inline;
+    overflow: hidden;
+    width: 23px;
+    height: 45px;
+    margin: 7px 5px 0;
+    cursor: pointer;
+}
+
+.focus .focusBtnL span {
+    float: left;
+}
+
+.focus .focusBtnR span {
+    float: right;
+}
+
+.focus .focusBtnLHover,
+.focus .focusBtnRHover {
+    width: 146px;
+    background: $major-color;
+    overflow: hidden;
+}
+
+.focus .focusBtnLHover img,
+.focus .focusBtnRHover img {
+    display: inline;
+}
+
+// --------------------------------
+
+.ask-head {
+    width: 100%;
+    height: 40px;
+    background:$major-color;
+    min-width: $screen;
+}
+
+.ask-nav {
+    width: 100%;
+    @extend %clearfix;
+    li {
+        font-size: 18px;
+        line-height: 40px;
+        height: 40px;
+        position: relative;
+        z-index: 2;
+        float: left;
+        border-right: 1px solid #09a800;
+        // padding: 0px 50px;
+
+        &:hover {
+            background: #36ca61;
+
+            .nav-ol {
+                top: 40px;
+            }
+        }
+    }
+
+    .act {
+        background: #36ca61;
+    }
+
+    a {
+        color: #fff;
+        display: block;
+        // width: 100%;
+        height: 100%;
+        text-align: center;
+        padding: 0px 50px;
+
+    }
+
+}
+
+.nav-ol {
+    width: 100%;
+    background: #fff;
+    position: absolute;
+    left: -1px;
+    top: -999px;
+    border: 1px solid #ddd; 
+    border-top: none;
+    padding: 10px 0;
+
+    li {
+        float: none;
+        padding:0;
+        text-align: center;
+        border-right: none;
+        height: 30px;
+        line-height: 30px;
+        &:hover {
+            background: #fff;
+            a {
+                color: $major-color;
+            }
+        }
+    }
+
+
+    a {
+        display: block;
+        width: 100%;
+        padding: 0;
+        height: 100%;
+        color: #353535;
+        font-size: 14px;
+    }
+}
+// 路径
+.current-location {
+    a:hover {
+        color: $major-color;
+    }
+    i {
+        color: $major-color;
+    }
+}
+
+// 主体
+.ask-main {
+    width: 100%;
+    @extend %clearfix;
+}
+
+// 左侧
+.ask-side {
+    float: left;
+    width: 260px;
+}
+
+.side-head {
+    width: 100%;
+    height: 40px;
+    font-size: 12px;
+    line-height: 40px;
+    font-weight: 700;
+    color: #fff;
+    text-indent: 15px;
+    background: $major-color;
+
+}
+
+.filter-item {
+    width: 244;
+    padding: 12px 8px;
+    margin-top: -10px;
+    
+    dt {
+        font-size: 16px;
+        color: $major-color;
+        line-height: 26px;
+    }
+
+    dd {
+        width: 100%;
+        padding: 10px 0;
+        border-bottom: 1px solid #ccc;
+        @extend %clearfix;
+        a {
+            display: inline-block;
+            margin-right: 5px;
+            border-radius: 3px;
+            padding: 0 5px;
+            margin-bottom: 5px;
+            &.act ,
+            &:hover{
+                background: $major-color;
+                color: #fff;
+            }
+        }
+    }
+
+} 
+
+.item-ul {
+
+    
+
+    li {
+        font-size: 14px;
+        float: left;
+        margin-right: 10px;
+        line-height: 26px;
+    }
+    a {
+        color: #666;
+
+        &:hover {
+            color: $major-color;
+        }
+    }
+
+}
+
+// 右侧
+.ask-content {
+    float: right;
+    width: 900px;
+    overflow: hidden;
+}
+
+.ask-search {
+    width: 100%;
+    height: 90px;
+    background: #f8f8f8;
+    line-height: 90px;
+    font-size: 0;
+
+    form {
+        
+        margin-left: 20px;
+    }
+
+    input {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .text {
+        height: 46px;
+        width: 610px;
+        border: 1px solid $major-color;
+        font-size: 14px;
+        color: #666;
+        text-indent: 5px;
+    }
+
+    .asking,.asked {
+        width: 120px;
+        height: 48px;
+        border: none;
+        font-size: 16px;
+        color: #fff;
+        text-align: center;
+        line-height: 48px;
+    }
+
+    .asking {
+        background: $major-color;
+        margin-left: -1px;
+    }
+
+    .asked {
+        margin-left: 10px;
+        background: #f36f20;
+    }
+}
+
+// 问答列表
+.ask-list {
+    width: 100%;
+    // margin-top: 30px;
+}
+
+.ask-l-head {
+    height: 40px;
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+    @extend %clearfix;
+
+     a {
+        display: block;
+        float: left;
+        height: 40px;
+        line-height: 40px;
+        padding:0 20px;
+        font-size: 16px;
+        color: $text-color;
+        font-weight: 700;
+     }
+     .act {
+        color: #fff;
+        background: #f36f20;
+     }
+
+     .more {
+        float: right;
+        color: #888;
+        font-size: 14px;
+        font-weight: 500;
+     }
+}
+
+// ------------------------item 可以公用 -------------------------
+// .ask-list-item {
+//  height: 52px;
+//  width: 100%;
+//  line-height: 52px;
+//  border-bottom: 1px dashed #ccc;
+//  overflow: hidden;
+//  @extend %clearfix;
+
+//  .icon {
+//      font-size: 11px;
+//      color: #fff;
+//      border-radius: 2px;
+//      margin-right: 10px;
+//  }
+
+//  .icon1 {
+//      background: #ff7400;
+//      border: 1px solid #c85b00;
+//  }
+
+//  .icon2 {
+//      background: #f71900;
+//      border: 1px solid #bc1300;
+//  }
+
+//  .icon3 {
+//      background: #b3df27;
+//      border: 1px solid #7ca800;
+//  }
+
+//  .icon4 {
+//      background: #3ac1eb;
+//      border: 1px solid #089dcb;
+//  }
+// }
+
+// .item-left {
+//  float: left;
+//  font-size: 15px;
+//  color: $text-color;
+
+//  i {
+//      font-size: 10px;
+//      color: #aaa;
+//  }
+// }
+
+// .item-text {
+//  width: 400px;
+//  overflow: hidden;
+//  margin-right: 30px;
+// }
+
+// .item-right {
+//  float: right;
+//  font-size: 14px;
+//  color: #888;
+//  margin-right: 20px;
+//  .num {
+//      color: #f00;
+//  }
+// }
+
+// item end
+
+
+//---------- 公用的右侧 -------------------------
+.Side {
+    float: right;
+    width: 270px;
+    
+}
+
+.Side-box {
+    width: 228px;
+    padding:0 20px;
+    border: 1px solid #ccc;
+    margin-bottom: 30px;
+
+    i {
+        color: #f00;
+        font-size: 23px;
+        vertical-align: middle;
+    }
+
+    .title {
+        line-height: 40px;
+        border-bottom: 1px solid #ccc;
+        font-size: 18px;
+        color: #333;
+        font-weight: 700;
+    }
+}
+
+// 提问
+
+.tiwen {
+    width: 248px;
+    padding: 10px;
+    margin-bottom: 15px;
+    h2 {
+        font-size: 18px;
+        color: #333;
+        line-height: 40px;
+        font-weight: 700;
+        // text-indent: 20px;
+    }
+
+}
+
+// 积分
+.jifen-box {
+    padding: 14px 0;
+
+}
+
+.jifen-item {
+    line-height: 44px;
+    font-size: 14px;
+    color: $text-color;
+    @extend %clearfix;
+
+    span {
+        display: inline-block;
+    }
+
+    i {
+        float: right;
+        color: #ff658a;
+    }
+
+    .jf {
+        font-size: 13px;
+        width: 16px;
+        height: 14px;
+        margin-right: 5px;
+        text-align: center;
+        line-height: 14px;
+        color: #fff;
+    }
+
+    .jf-1 {
+        background: #f63900;
+    }
+
+    .jf-2 {
+        background: #e8b300;
+    }
+
+    .jf-3 {
+        background: #45b845;
+    }
+}
+
+// 精彩回答
+.answer-item {
+    line-height: 44px;
+    font-size: 14px;
+    color: $text-color;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    i {
+        font-size: 10px;
+        color: #aaa;
+    }
+}
+
+// -----------------  回答问题页面 --------------------------------------
+.ask-detail {
+    width: 900px;
+    float: left;
+    // overflow: hidden;
+}
+
+.ask-question {
+    width: 100%;
+    padding-bottom: 20px;
+
+    i {
+        
+        font-size: 25px;
+        // vertical-align: middle;
+    }
+
+    h2 {
+        line-height: 36px;
+        font-size: 18px;
+        font-weight: 700;
+        color: #333;
+         text-indent: 5px;
+    }
+
+    p {
+        padding:0 40px;
+        font-size: 14px;
+        line-height: 24px;
+    }
+
+    .question {
+        color: $text-color;
+    }
+
+    .info {
+        line-height: 44px;
+        font-size: 14px;
+        color: #999;
+        @extend %clearfix;
+        .info-con {
+            color: #ff7f08;
+            margin-right: 5px;
+        }
+    }
+
+    .share {
+        float: right;
+
+        a {
+            font-size: 30px;
+            color: #999;
+            background-image: none;
+            padding-left: 0;
+            float: none;
+        }
+
+        
+
+    }
+
+    .answer {
+        margin: 0 40px;
+        height: 46px;
+        line-height: 46px;
+        font-size: 14px;
+        color: $text-color;
+        @extend %clearfix;
+        .ico {
+            color: #f97822
+        }
+    }
+
+    .answer-btn {
+        padding:0 14px;
+        height: 28px;
+        line-height: 28px;
+        // float: right;
+        margin-top: 9px;
+        margin-left: 10px !important;
+        border: none;
+        border-radius: 3px;
+        background: #f97822 !important;
+        font-size: 14px;
+        color: #fff;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .ask-title {
+        @extend %clearfix;
+        h2 {
+            float: left;
+            width: 700px;
+        }
+        i {
+            color: #ff7f08;
+        }
+    }
+
+    .ask-title-r {
+        margin-left: 700px;
+        line-height: 36px;
+
+        .ask-btn {
+            display: inline-block;
+            height: 30px;
+            line-height: 30px;
+            padding: 0 12px;
+            background: $major-color;
+            color: #fff;
+            vertical-align: middle;
+            margin-right: 5px;
+            border-radius: 5px;
+
+            &:hover {
+                opacity: .8;
+            }
+
+            i {
+                font-size: 14px;
+                color: #fff;
+                margin-right: 5px;
+            }
+        }
+    }
+}
+// 相关问题
+.list {
+    width: 100%;
+    // overflow: hidden;
+
+
+    h2 {
+        font-size: 16px;
+        font-weight: 700;
+        color: #333;
+        line-height: 44px;
+        text-indent: 10px;
+    }
+}
+
+.ask-a-title {
+    border-bottom: 1px solid #ccc;
+    @extend %clearfix;
+
+    h2 {
+        float: left;
+    }
+    .more {
+        float: right;
+        line-height: 44px;
+    }
+}
+
+// 下拉回答表单
+.answer-form {
+    display: none;
+    width: 820px;
+    margin: 0 auto;
+
+    // textarea {   
+    //  width: 818px;
+    //  height: 170px;
+    //  padding: 0 9px;
+    //  border: 1px solid #ccc;
+    //  font-size: 14px;
+    //  color: #999;
+    //  line-height: 20px;
+    //  outline: none;
+    //  resize: none;
+    // }
+
+    .verify {
+        height: 30px;
+        margin:20px 0;
+        padding: 0;
+        @extend %clearfix;
+
+        * {
+            display: inline-block;
+        }
+
+        a {
+            font-size: 13px;
+        }
+
+        img {
+            display: none;
+        }
+
+        i {
+            font-size: 18px;
+            color: #2190eb;
+            vertical-align: middle;
+            margin-top: -3px;
+        }
+    }
+
+    .text {
+        width: 60px;
+        height: 28px;
+        border: 1px solid #ccc;
+    }
+
+    .btn {
+        margin-top: 0;
+
+        i {
+            color: #fff;
+        }
+    }
+    .answer-btn {
+        padding:0 14px;
+        height: 28px;
+        line-height: 28px;
+        // float: right;
+        margin-left: 10px !important;
+        border: none;
+        border-radius: 3px;
+        background: #f97822 !important;
+        font-size: 14px;
+        color: #fff;
+        text-align: center;
+        vertical-align: middle;
+    }
+}
+// 最佳答案
+.great-answer {
+    // display: none;
+    padding:0 40px;
+    margin-bottom: 25px;
+
+    h2 {
+        line-height: 40px;
+        font-size: 14px;
+        color: #545454;
+        font-weight: 600;
+    }
+
+    p {
+        padding:0;
+    }
+}
+
+// 其他回答
+.anthor-list {
+
+    h2 {
+        border-bottom: 1px solid #ccc;
+    }
+    i {
+        font-size: 26px;
+        color: #ddd;
+        
+    }
+}
+
+
+
+.anthor-item {
+    padding: 20px 10px;
+    border-bottom: 1px dashed #ccc;
+
+    .time {
+        color: #999;
+        line-height: 1;
+        @extend %clearfix;
+
+        a {
+            float: right;
+            color: #999;
+            margin-right: 15px;
+        }
+
+        i {
+            font-size: 16px;
+            vertical-align: bottom;
+        }
+    }
+    .cancel {
+        display: none;
+    }
+}
+
+.man {
+    line-height: 50px;
+    font-size: 13px;
+    color: #999;
+    @extend %clearfix;
+    img {
+        float: left;
+        margin-right: 16px;
+        border-radius: 50%;
+    }
+    span {
+        color: $text-color;
+    }
+}
+
+.item-answer {
+    color: $text-color;
+}
+
+// -----------提示--------------
+.tip-no {
+    font-size: 18px;
+    text-align: center;
+    line-height: 3;
+}
+
+
+
+
+
+
+

@@ -1,0 +1,14 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+
+{% set user_id = app.user.id %}
+{% set models = app.request.get('models') %}
+
+{% set handlist = ('house.collects')|getAll({models:models ,uid: user_id|default('')}) %}
+
+{% block result %}
+<div class="buttons-tab">
+	<a href="{{('muserhand/muserhandlist')|UU({models: 'houses' ,uid: user_id|default(''), _action: 'handlist'})}}" class="{% if models == 'houses' %}active{% endif %}   tab-link def-link button external">楼盘</a>
+	<a href="{{('muserhand/muserhandlist')|UU({models: 'sale' ,uid: user_id|default(''), _action: 'salehandlist'})}}" class="{% if models == 'sale' %}active{% endif %} tab-link def-link button external">二手房</a>
+	<a href="{{('muserhand/muserhandlist')|UU({models: 'rent' ,uid: user_id|default(''), _action: 'renthandlist'})}}" class=" {% if models == 'rent' %}active{% endif %} tab-link def-link button external">租房</a>
+</div> 
+{% endblock result %}

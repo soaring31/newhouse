@@ -1,0 +1,7 @@
+/*!
+ * @name {{ name }}
+ * @author {{ author }}
+ * @date {{ now()|date('Y-m-d H:i:s') }}
+ */
+@import 'manage-core'; // 这里只做一个过度，当前文件里只添加后台独有的样式
+

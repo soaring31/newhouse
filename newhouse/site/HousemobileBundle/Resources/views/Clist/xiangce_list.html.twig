@@ -1,0 +1,29 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+** ajax调用：楼盘相册列表
+#}
+{% block result %}
+{% spaceless %}
+{% set list = ident.list %}
+{% if list.data is defined and list.pageCount|default('') != 0 %}
+    {% for item in list.data %}
+        <li {% if loop.last %}data-page="{
+                pageIndex: {{list.pageIndex}},
+                pageCount: {{list.pageCount}},
+                pageSize: {{list.pageSize}}
+             }"{% endif %} class="xiangce-item">
+            <a href="{{(action)|U({id: app.request.get('id', 0), big: item.id}) ~ '#slide' ~ item.id}}" class="card">
+                <div valign="bottom" class="card-header color-white no-border no-padding">
+                    <img class="img-responsive lazy"  src="{{- core_global.img_url({type: 2, height: 134, width: 184, src: item.thumb|default(''), alt: item.name|default('')}) -}}" height="134" width="184">
+                </div>
+                <div class="card-content">
+                    {{item.name|default('')}}
+                </div>
+            </a>
+        </li>
+    {% endfor %}
+{% else %}
+    <li class="mobile-list-none">暂无相关相册</li>
+{% endif %}
+{% endspaceless %}
+{% endblock result %}

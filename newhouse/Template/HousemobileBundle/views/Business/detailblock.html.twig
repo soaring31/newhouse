@@ -1,0 +1,224 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明 
+* detail: 商业楼盘详情
+* block_lphdp: 楼盘幻灯片
+* block_lpdt: 楼盘动态
+* block_xiangce: 相册
+* detail_prices: 价格
+#}
+
+{% set detail = detail|default(cident.detail.data[0]|default('')) %}
+
+{% set block_lphdp = ('house.inter_album')|getAll({cate_pushs: 'lphdp', pageSize: 10, checked: 1, findType: 1,aid:detail.id|default('')}) %}
+
+{% set block_lpdt = ('house.houses_arc')|getBlock({ename: 'lpdt'}, { pageSize: 3, checked: 1, aid: detail.id|default(''), findType: 1}) %}
+
+{% set block_xiangce = ('house.inter_album')|getAll({cate_pushs: 'xiangce', pageSize: 5, checked: 1, findType: 1,aid:detail.id|default('')}) %}
+
+{% set detail_prices = ('house.houses_price')|getAll({type: detail.type|default(''), aid: detail.id|default(''), checked: 1, orderBy: 'desc', order: 'jtime',  pageSize: 10}) %}
+
+{% block result %}
+<div class="content">
+    <!-- 幻灯片 -->
+    {{core_mobile_global.swiper({value: block_lphdp.data|default(''), id: 'detailSwiper'})}}
+
+    <!-- 标题 -->
+    <div class="list-block list-block-rent list-block-rent-mt0">
+        <ul>
+            <li class="item-content">
+                <div class="item-inner">
+                    <div class="m">
+                        <div class="t">
+                            {{detail.name|default('')}}
+                        </div>
+                        <div class="p">
+                            {{house_global.if_dj({value: detail.dj|default(''), class: 'l p-red'})}}
+                            <span class="c-e43 ml10">{{detail.bdsm|default('')}}</span>
+                        </div>
+                        <div class="item-subtitle p">
+                            {{- house_global.lptag({value: detail|default(''), tpl: '<span class="button button-sm">%value%</span>', con: 'officetype,officelevel,shoptype,shopindustry,zxcd', default: ' '}) -}}
+                        </div>
+                        <div class="p p-gray">
+                            <span class="pull-right">
+                                浏览：<span data-counts="{models: 'houses', field: 'clicks', id: '{{detail.id|default('')}}'}"></span>人
+                            </span>
+                            开盘时间：{{core_global.time_date({time: detail.kpdate.date|default('')})}}
+                        </div>
+                    </div>
+                    <div class="s">
+                        {# 收藏按钮 #}
+                        {{core_global.collect_btn({
+                            aid: detail.id|default(''),
+                            models: detail.models|default('houses'),
+                            class: 'button-ver external',
+                            icons: 'icon font-f-30 icon-cent'
+                        })}}
+                    </div>
+                </div>
+            </li>
+            <li class="item-content buttons-row buttons-row1">
+                <a href="javascript:;" class="button1 button1-green external open-popup" data-popup=".popup-yxiang" data-title="降价通知"> <span class="icon font-f-31" ></span>降价通知</a>
+                <a href="javascript:;" class="button1 external open-popup" data-popup=".popup-yxiang" data-title="开盘通知"><span class="icon font-f-32"></span>开盘通知</a>
+            </li>
+        </ul>
+    </div>
+    <div class="list-block panel-block">
+        {{housemobile_global.panel_title({
+            title: '楼盘详情',
+            target: 'a',
+            url: ('business/ddetail')|UU({id: detail.id|default('')}),
+            class: 'item-link'
+        })}}
+        <div class="item-content1 p-gray">
+            <div class="item-inner2">
+                <div class="row">
+                    <div class="col-50">
+                        楼盘均价：{{house_global.if_dj({value: detail.dj|default(''),class: 'l p-red'})}}
+                    </div>
+                    <div class="col-50">
+                        建筑面积：{{house_global.if_mj({value: detail.built_area|default('')})}}
+                    </div>
+                    <div class="col-50">
+                        开盘时间：{{core_global.time_date({time: detail.kpdate.date|default('')})}}
+                    </div>
+                    <div class="col-50">
+                        交房时间：{{detail.jfrq|default('-')}}
+                    </div>
+                    <div class="col-100">
+                        开发商：{{detail.house_developer|default('')}}
+                    </div>
+                    <div class="col-100">
+                        楼盘地址：{{detail.address|default('')}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 最新动态 -->
+    <div class="panel-block list-block media-list">
+        {{housemobile_global.panel_title({
+            title: '最新动态',
+            target: 'a',
+            url: ('business/dnews')|UU({id: detail.id|default('')}),
+            class: 'item-link'
+        })}}
+        <ul>
+            {% if block_lpdt.data is defined %}
+                {% for item in block_lpdt.data %}
+                <li class="item-content">
+                   <a href="{{core_global.url(item|merge({models: 'news',set_models:1}))}}" class="item-inner p-gray">
+                       <div class="item-title">{{ core_global.formData({value: item.category|default(''), tpl: '[ %value% ]' }) }}{{item.name|default('')}}</div>
+                       <div class="item-subtitle p">
+                            浏览：{{item.clicks|default('')}}
+                            <span class="pull-right">
+                                {{item.create_time|default('')|date('Y-m-d')}}
+                            </span>
+                       </div>
+                    </a>
+                </li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+
+    <!-- 楼盘图库 -->
+    <div class="panel-block list-block ">
+        {{housemobile_global.panel_title({
+            title: '图库',
+            target: 'a',
+            url: ('business/dphotos')|UU({id: detail.id|default('')}),
+            class: 'item-link'
+        })}}
+        <div data-swiper-xc="1" class="swiper-container swiper-width-auto txt-swiper"  data-pagination="" data-slides-per-view="auto">
+            <div class="swiper-wrapper">
+                {{- house_global.countxc({aid: detail.id|default(''), tpl: '<div class="swiper-slide" style="display: inline-block; width:auto;"><a rel="nofollow" href="' ~ ('business/dphotos')|UU({id: detail.id|default('')}) ~ '#cate=%cate%">%name%(%number%)</a></div>'}) -}}
+            </div>
+        </div>
+        <div data-swiper-xc="1" class="swiper-container slides-num img-swiper"  data-pagination="" data-slides-per-view="auto">
+            <div class="swiper-wrapper">
+                {% if block_xiangce.data is defined %}
+                    {% for item in block_xiangce.data %}
+                    <div class="card swiper-slide">
+                        <div valign="bottom" class="card-header color-white no-border no-padding">
+                            {{- core_global.img({
+                                src: item.thumb|default(''),
+                                alt: item.name|default(''),
+                                width: 200,
+                                height: 150
+                            }) -}}
+                        </div>
+                        <div class="card-content">
+                            <div class="card-content-inner">
+                                 {{item.name|default('')}}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        // 重新启用swiper
+        seajs.use(['sm'], function(sm) {
+            $('[data-swiper-xc="1"]').swiper();
+        })
+    </script>
+    <!-- 价格走势 -->
+    <div class="panel-block list-block ">
+        {{housemobile_global.panel_title({
+            title: '价格',
+            target: 'a',
+            url: ('business/dprices')|UU({id: detail.id|default('')}),
+            class: 'item-link'
+        })}}
+        <div class="item-inner zst">
+            <canvas id="cms08"></canvas>
+        </div>
+    </div>
+    <!-- 地图 -->
+    <div class="list-block panel-block">
+        {{housemobile_global.panel_title({
+            title: '地图',
+            target: 'a',
+            url: "javascript:;",
+            class: 'item-link'
+        })}}
+        <div class="item-inner">
+            {{housemobile_global.map({
+                title: detail.name|default(''),
+                map: detail.map|default(''),
+                popup : '.popup-map'
+                
+            })}}
+        </div>
+    </div>
+
+    {{ render(controller('HouseBundle:Common:footer', {_isApp: url_isApp})) }}
+</div>
+{# 走势图数据 #}
+{% set xAxis = [] %}
+{% for item in detail_prices.data[ : 12] %}
+    {% set xAxis = [item.jtime|default('')|date('m/d')]|merge(xAxis) %}
+{% endfor %}
+
+{% set zstData = [] %}
+{% for item in detail_prices.data[ : 12] %}
+    {% set zstData = [item.dj|default('')]|merge(zstData) %}
+{% endfor %}
+
+<script type="text/javascript">
+    seajs.use(['mobilezst', 'common'], function (mobilezst, common) {
+        mobilezst(null, {
+            // 横坐标定义 结构 xAxis = []
+            xAxis: {{ xAxis|json_encode|raw }},
+            // 纵坐标数据定义 结构 zstData = [[数据1], [数据2], [数据3]];
+            data: {{ zstData|json_encode|raw }}
+        });
+        // 调用统计
+        common.getcounts({
+            url: '{{("igetcounts/index")|U }}'
+        })
+    });
+</script>
+{% endblock result %}

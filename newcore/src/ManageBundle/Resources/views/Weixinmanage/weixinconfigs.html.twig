@@ -1,0 +1,89 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+seajs.use(["core"],function(core){
+    //图片上传、图片预览、选择文件
+    //core.generalEvent.initViewImg();
+    //core.generalEvent.initUploadImg();
+
+});
+</script>
+{% endblock %}
+{% block tableMain %}
+
+<form class="form" action="{{ (action)|U }}" method="post" name="form">
+<table class="right-table" width="100%">
+	<tbody>
+
+	    <tr>
+			<th colspan="5" class="conlist">微信开关</th>
+		</tr>
+
+		{% for key, name in swcfgs %}
+		{% set ukey='' %}
+		<tr>
+			<td class="txtright fB">启用{{name}}扫码登录：</td>
+			<td class="txtleft" colspan="4">
+			    <label>
+					<input class="radio" name="wx_{{key}}" value="1" {{ ('wx_'~key)|C|default(0)|isChecked(1) }} type="radio" />是
+				</label>
+				<label>
+					<input class="radio" name="wx_{{key}}" value="0" {{ ('wx_'~key)|C|default(0)|isChecked(0) }} type="radio" />否
+				</label>
+				<span class="tips1">需要认证服务号，且启用微信接口，并把公众号配置完整。</span>
+			</td>
+		</tr>
+		{% endfor %}
+
+		<tr>
+			<td class="txtright fB" width="20%">启用微信调试：</td>
+			<td class="txtleft" colspan="4">
+			    <label>
+					<input class="radio" name="wx_debug" value="1" {{ ('wx_debug')|C|default(0)|isChecked(1) }} type="radio" />是
+				</label>
+				<label>
+					<input class="radio" name="wx_debug" value="0" {{ ('wx_debug')|C|default(0)|isChecked(0) }} type="radio" />否
+				</label>
+				<span class="tips1">正式使用请关闭，关闭可提高效率和安全性。</span>
+			</td>
+		</tr>
+
+	    <tr>
+			<th colspan="5" class="conlist">
+				选取总站微信帐号
+				&nbsp; 公众号名称搜索:
+				<input type="text" id="search_name" value="{{ app.request.get('name','') }}" data-source="{{ app.request.get('name','') }}" />
+			</th>
+		</tr>
+		<tr class="fB">
+			<td class="txtcenter">ID/选择</td>
+			<td class="txtleft">公众号名称</td>
+			<td class="txtleft">类型</td>
+			<td class="txtleft">微信号</td>
+			<td class="txtleft">应用ID</td>
+		</tr>
+		{% for user in ulists %}
+		<tr>
+			<td class="txtcenter">
+				{{user.id}}
+				<input name="wx_accsite" {{ ('wx_accsite')|C|default(0)|isChecked(user.id) }} class="wx_accsite" type="radio" value="{{user.id}}">
+			</td>
+			<td class="txtleft">{{user.name}}</td>
+			<td class="txtleft">{{user.type}}</td>
+			<td class="txtleft">
+				<a href="http://open.weixin.qq.com/qr/code/?username={{user.wxaccount}}" target="_blank">{{user.wxaccount}}</a>
+			</td>
+			<td class="txtleft">{{user.appid}}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+<div class="submit">
+	<input class="submit-btn ajax-post confirm" target-form="form" value="保存" type="submit">
+	<input class="submit-btn confirm" target-form="form" value="清空" type="button" 
+	  onclick="javascript::$('.wx_accsite').value(0)">
+</div>
+</form>
+{% endblock %}
+{% block submit %}{% endblock %}
+{% block promptUl %}<li></li>{% endblock %}

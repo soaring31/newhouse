@@ -1,0 +1,35 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+ * ajax调用：邀请下线明细列表
+#}
+
+{% block result %}
+{% if ident.info is defined %}
+    {% set list = ident.info %}
+{% endif %}
+    {% spaceless %}
+        {% if list.data is defined and list.pageCount|default(0) != 0 %}
+            {% for k,vo in list.data %}
+                <li {% if loop.last %}data-page="{
+                    pageIndex: {{list.pageIndex}},
+                    pageCount: {{list.pageCount}},
+                    pageSize: {{list.pageSize}}
+                 }"{% endif %}>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">
+                                经纪人：{{ ('db.userinfo')|getOne('nicename', {uid: vo.id})|default(vo.username|default('')) }}    
+                            </div> 
+                            <div class="item-subtitle item-subtitle-ex">
+                                联系电话：{{ vo.tel|default('') }}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        {% else %}
+            <li class="mobile-list-none">暂无更多数据</li>
+        {% endif %}
+    {% endspaceless %}
+
+{% endblock result %}

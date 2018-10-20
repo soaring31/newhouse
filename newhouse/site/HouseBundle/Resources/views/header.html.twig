@@ -1,0 +1,60 @@
+
+{# # 说明
+** navModels: 获取传过来的models参数，用来高亮当前页面位置 #}
+{% set navModels = app.request.get("models")|default('') %}
+<!--header-->
+<div class="header scrollToFixed clearfix" data-spacer-class="header-spacer">
+    <div class="header-bg"></div>
+    <div class="container">
+        <div class="logo fl">
+            <span class="logocen">
+                <a href="{{'index/index'|U}}"><img width="140" height="40" alt="{{ core_global.mconfig({name: 'hostname', ename: 'mwebset'}) }}" src="{{ core_global.img_url({src: core_global.mconfig({name: 'cmslogo', ename: 'mwebset'}), type: 0}) }}"/></a>
+            </span>
+        </div>
+
+        {% if ismulticity == true %}
+        <div class="area fl">
+            <div data-hover="hoverslider" data-obj=".more-area">
+                <div class="cur-area">{{cur_area_data|default('主站')}}</div>
+                <i class="font-icons-1"></i>
+            </div>
+            {% set autharea = ('db.auth_group_area')|getCol( 'id', { checked: 1})|length %}
+            <div class="more-area">
+                {{core_global.switch_area({
+                    tpl: '<a href="%url%" title="%name%" target="_self">%name%</a>',
+                    sql_opt:{
+                        rulesarea:'gte|0',
+                        pageSize: 11
+                    },
+                    listWrap: '.more-area'
+                })}}
+                <a href="{{'areachange/index'|U}}" title="更多">更多</a>
+            </div>
+        </div>
+        {% endif %}
+        {% block top_nav %}
+        <ul class="nav fl" data-tag='zdh'>
+            {% if majorNav.data is defined %}
+                {% for item in majorNav.data %}
+                    <li>
+                        <a target="{{item.menu.target|default('_self')}}" href="{{item.menu.url|default('')|U(item.menu.urlparams|getQuery)}}"  class='hoverslider{% if nav_act|default('a') == item.menu.active|default('') %} act{% endif %}' data-obj=".nav-more" data-direction="bottom" data-offsetx="50%">
+                            {{item.menu.name|default('')}}
+                        </a>
+                        {% if item.nodes|length >= 1 and item.nodes|default('') %}
+                        <div class="nav-more">
+                            {% for second in item.nodes %}
+                                <a target="{{second.menu.target|default('_self')}}" href="{{second.menu.url|default('')|U(second.menu.urlparams|getQuery)}}">{{second.menu.name|default('')}}</a>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+        {% endblock top_nav %}
+        {# login-bar #}
+        {% include 'HouseBundle:Common:login.html.twig' %}
+        {# /login-bar #}
+    </div>
+</div>
+<!--/header-->

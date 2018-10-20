@@ -1,0 +1,42 @@
+$font-lp1-fz: inherit !default;
+
+@font-face {
+	font-family: "lp1";
+    font-weight: normal;
+    font-style: normal;
+	src: url('../fonts/lp1.eot');
+	src: url('../fonts/lp1.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/lp1.woff') format('woff');//,
+		//url('../fonts/lp1.ttf') format('truetype'),
+		//url('../fonts/lp1.svg#lp1') format('svg');
+}
+$font-lp1-fz: inherit !default;
+$font-lp1-fl: none !default;
+$font-lp1-m: 0 !default;
+$font-lp1-va: -.25em !default;
+[class^="font-lp1-"],
+[class*=" font-lp1-"] {
+	font-family: "lp1";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-size: $font-lp1-fz;
+	float: $font-lp1-fl;
+	margin: $font-lp1-m;
+	vertical-align: $font-lp1-va;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; only necessary if not using the private unicode range (firstdata option) 
+	text-decoration: none;
+	text-transform: none;
+}
+
+
+.font-lp1-1:before {
+	content: "\EA01";
+}
+
+.font-lp1-2:before {
+	content: "\EA02";
+}
+

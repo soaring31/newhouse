@@ -1,0 +1,50 @@
+{% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:guidelist.html.twig' : 'HousemobileBundle::list_layout.html.twig' %}
+{# 说明 
+ * url_category: url中传递的category
+ * category: 当前分类数据
+#}
+{% set url_category = app.request.get('category', 36) %}
+
+{% set category =  ('house.category')|getRow({models: 'news', checked: 1, id: url_category|default('')})%}
+
+{% block title %}
+    {{category.name|default('置业指南')}}
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{category.keywords|default('置业指南')}}" />
+<meta name="description" content="{{category.description|default('置业指南')}}" />
+{% endblock key_des %}
+
+{% block header_title %}
+    {{core_mobile_global.title({title: category.name|default('置业指南')})}}
+{% endblock header_title %}
+
+{% block container %}
+    {# 检索 #}
+    {% set list_header %}
+    <div style="height: 9rem;" data-block="{
+        ajax: {
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                tpl: 'Common:swiper',
+                tag: 'zyznsyts'
+            }
+        }
+    }"></div>
+    <div class="filter" data-block="{
+        ajax: {
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                tpl: 'Common:filter',
+                tag: 'guide'
+            }
+        }
+    }"></div>
+    {% endset %}
+
+    {# 列表链接 js调用列表需要 #}
+    {% set list_url = ('guide/list')|U({ajax: 1}) %}
+    {{ parent() }}
+{% endblock container %}
+

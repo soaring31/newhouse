@@ -1,0 +1,143 @@
+﻿/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+*/
+@import 'static/ats'; // 工具类 每个文件都要导入
+
+@import 'lp-detail'; // 楼盘详情样式
+
+// 头部
+.lptit
+{
+    position: relative;
+
+    padding: 12px 200px 12px 0;
+}
+.lptit .title
+{
+    font: 27px Microsoft yahei;
+
+    margin-bottom: 5px;
+}
+.lptit .logo
+{
+    float: left;
+
+    margin-right: 10px;
+    padding: 2px;
+
+    border: 1px solid #ddd;
+    background: #fff none repeat scroll 0 0;
+}
+.lptit span
+{
+    margin-right: 5px;
+    padding: 2px 10px;
+
+    color: #666;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+}
+.lptit .ewmurl
+{
+    position: absolute;
+    top: 10px;
+    right: 0;
+}
+.lptit .ewmurl .e
+{
+    float: right;
+}
+.lptit .qqqun
+{
+    float: right;
+
+    width: 100px;
+    margin-top: 20px;
+}
+.lptit .qqqun img
+{
+    margin-bottom: 5px;
+}
+
+// 最新动态
+.d-zxdt {
+	width: 480px;
+}
+.jbxx {
+	width: 700px;
+}
+.bus-detail {
+	dl{
+		margin-bottom: 2px;
+	}
+	dt {
+		background: #fafafa;
+		text-align: right;
+		width: 100px;
+	}
+	dd {
+		width: 235px;
+	}
+	.nowrap dd {
+		width: 570px;
+	}
+}
+.jbxx1{
+	dl{
+		margin-bottom: 2px;
+	}
+	dt {
+		background: #fafafa;
+		text-align: right;
+		width: 15%;
+	}
+	dd {
+		text-indent: 14px;
+		width: 35%;
+	}
+	.nowrap dd {
+		width: 83%;
+	}
+}
+
+// 分栏设置
+.d-body {
+	width: 900px;
+}
+.d-aside {
+	width: 280px;
+}
+
+// 周边楼盘
+.lp-tlist3 {
+    padding: 10px;
+}
+.lp-tlist3 li {
+    vertical-align: top;
+    *zoom: 1;
+}
+.lp-tlist3 i {
+    font-size: 14px;
+    line-height: 28px;
+    float: left;
+    overflow: hidden;
+    height: 28px;
+}
+.lp-tlist3 .td1 {
+    width: 50%;
+}
+.lp-tlist3 .td2 {
+    width: 29%;
+    white-space:nowrap;
+}
+.lp-tlist3 .td3 {
+    width: 20%;
+    text-align: right;
+}
+/*修改样式*/
+.lp-detail {
+    line-height: 30px;
+    /* height: 234px; */
+    }

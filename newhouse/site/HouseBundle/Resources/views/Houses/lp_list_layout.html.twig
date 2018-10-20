@@ -1,0 +1,105 @@
+{# 楼盘、户型、特价房 #}
+{% extends 'HouseBundle:Houses:houses_layout.html.twig' %}
+
+{# 说明
+** sort_data: 默认重新排序定义
+** sort_data_opt: 自定义重新排序
+** filter_hd: 筛选头部 #}
+
+{# 筛选头部 #}
+{% set head_data = {
+    quyu: {
+        title: '区域找房',
+        icons: 'font-filter-9',
+        url: ('houses/list')|U
+    },
+    door: {
+        title: '户型找房',
+        icons: 'font-filter-2',
+        url: ('door/list')|U
+    },
+    price: {
+        title: '房价找房',
+        icons: 'font-filter-3',
+        url: ('houses/cfj')|U
+    },
+    special: {
+        title: '特价房',
+        icons: 'font-filter-4',
+        url: ('special/list')|U
+    },
+    map: {
+        title: '地图找房',
+        icons: 'font-filter-11',
+        target: '_blank',
+        url: ('map/index')|U
+    },
+} %}
+{# 当前位置 #}
+{% block current_container %}
+    <a href="{{('houses/list')|U}}">新房</a>
+    <span>&gt;</span>
+    {% block current_houses %}{% endblock current_houses %}
+{% endblock current_container %}
+
+{# 内容 #}
+{% block container %}
+
+    <div class="container">
+        {# 筛选 #}
+        {% block filters %}
+            {# 筛选条件 #}
+            {{house_global.filter_cfg({
+                show_selected: show_selected|default(0),
+                head_data: head_data,
+                action: action
+            }|merge(cate_data))}}
+        {% endblock filters %}
+        <div class="blank20"></div>
+        <div class="clearfix">
+            {% block lp_body %}
+                <div class="lp-body fl">
+                    {% block container_houses_list_tit %}
+                        <!--title-->
+                        <div class="body-tit clearfix">
+                            <h2 class="fl">
+                            {% block list_head %}
+                                {% set tpl_models = 'houses' %}
+                                {# 红包 #}
+                                {% set tpl_rednum = app.request.get("rednum") %}
+                                <a class="{{ tpl_rednum ? '' : 'act' }} default"  href="{{(controller ~ '/' ~ action)|U}}" data-clear="all" data-name="rednum" data-value >
+                                    <i class="font-lp-54 ico"></i>所有楼盘
+                                </a>
+                                <a class="{{ tpl_rednum ? 'act' : '' }} default" href="{{('houses/list')|U({rednum: 'neq|0'})}}" data-single="rednum" data-name="rednum" data-value="neq|0">
+                                    <i class="font-lp-53 ico"></i>红包楼盘
+                                </a>
+                            {% endblock list_head %}
+                            </h2>
+
+                            <div class="sort fr">
+                                {% block list_sort %}
+                                    {{ core_global.sort({
+                                    action: action,
+                                    data: sort_data|default('')
+                                }|merge(cate_data)) }}
+                                {% endblock list_sort %}
+                            </div>
+                        </div>
+                    {% endblock container_houses_list_tit %}
+                    {% block container_houses_list %}
+                        列表
+                    {% endblock container_houses_list %}
+                </div>
+            {% endblock lp_body %}
+            
+            {% block lp_aside %}
+                {% set push_xptj = ('xptj')|getPush(8) %}
+                {{house_global.houses_recommend({
+                    list: push_xptj,
+                    tag: 'xptj',
+                    class: 'lp-aside fr'
+                })}}
+            {% endblock lp_aside %}
+        </div>
+    </div>
+{% endblock container %}

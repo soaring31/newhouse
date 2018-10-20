@@ -1,0 +1,148 @@
+parameters:
+    cloud.google_drive.timeout: 100
+
+services:
+    cloud.manager.database:
+        class: CloudBundle\Manager\DatabaseManager
+        arguments:
+          - '@logger'
+
+    cloud.manager.client:
+        class: CloudBundle\Manager\ClientManager
+        arguments:
+          - '@logger'
+
+    cloud.local_filesystem:
+        class: Symfony\Component\Filesystem\Filesystem
+    cloud.client.local:
+        class: CloudBundle\Client\LocalClient
+        arguments:
+            - '%cloud.cloud_storages%'
+        tags:
+            -  { name: cloud.client }
+    cloud.client.gaufrette:
+        class: CloudBundle\Client\GaufretteClient
+        arguments:
+            - '%cloud.restore_folder%'
+            - '@cloud.local_filesystem'
+        tags:
+            -  { name: cloud.client }
+
+    cloud.client.flysystem:
+        class: CloudBundle\Client\FlysystemClient
+        tags:
+            -  { name: cloud.client }
+
+    cloud.database.mongodb:
+        class: CloudBundle\Database\MongoDB
+        arguments:
+            - '%cloud.databases%'
+            - '%cloud.output_folder%'
+        calls:
+            - [ setTimeout, [ '%cloud.timeout%' ] ]
+        tags:
+            -  { name: cloud.database }
+
+    cloud.database.mysql:
+        class: CloudBundle\Database\MySQL
+        arguments:
+            - '%cloud.databases%'
+            - '%cloud.output_folder%'
+            - '%cloud.restore_folder%'
+        calls:
+            - [ setTimeout, [ '%cloud.timeout%' ] ]
+        tags:
+            -  { name: cloud.database }
+
+    cloud.database.postgresql:
+        class: CloudBundle\Database\PostgreSQL
+        arguments:
+            - '%cloud.databases%'
+            - '%cloud.output_folder%'
+        calls:
+            - [ setTimeout, [ '%cloud.timeout%' ] ]
+        tags:
+            -  { name: cloud.database }
+
+    cloud.processor.tar:
+        class: CloudBundle\Processor\TarProcessor
+        tags:
+            -  { name: cloud.processor }
+
+    cloud.processor.zip:
+        class: CloudBundle\Processor\ZipProcessor
+        tags:
+            -  { name: cloud.processor }
+
+    cloud.processor.7z:
+        class: CloudBundle\Processor\SevenZipProcessor
+        tags:
+            -  { name: cloud.processor }
+
+    cloud.splitter.zip:
+        class: CloudBundle\Splitter\ZipSplitSplitter
+        arguments: [~]
+
+    cloud.manager.backup:
+        class: CloudBundle\Manager\BackupManager
+        arguments:
+            - '@logger'
+            - '@cloud.manager.database'
+            - '@cloud.manager.client'
+            - '@cloud.manager.processor'
+            - '@event_dispatcher'
+
+    cloud.manager.restore:
+        class: CloudBundle\Manager\RestoreManager
+        arguments:
+            - '@cloud.manager.database'
+            - '@cloud.manager.client'
+            - '@cloud.manager.processor'
+            - '@event_dispatcher'
+            - '%cloud.restore_folder%'
+            - '@cloud.filesystem'
+            - '%cloud.restore%'
+
+    cloud.manager.processor:
+        class: CloudBundle\Manager\ProcessorManager
+        arguments:
+            - '%cloud.root_folder%'
+            - '%cloud.output_folder%'
+            - '%cloud.output_file_prefix%'
+            - '%cloud.processor%'
+            - '%cloud.folders%'
+            - '%cloud.restore_folder%'
+
+    cloud.filesystem:
+        class: Symfony\Component\Filesystem\Filesystem
+
+    cloud.listener.log_restore_completed:
+        class: CloudBundle\Listener\LogRestoreCompletedListener
+        arguments:
+            - '@logger'
+        tags:
+            - { name: kernel.event_listener, event: cloud.restore_completed, method: whenRestoreIsCompleted }
+
+    cloud.listener.log_restore_failed:
+        class: CloudBundle\Listener\LogRestoreFailedListener
+        arguments:
+            - '@logger'
+        tags:
+            - { name: kernel.event_listener, event: cloud.restore_failed, method: whenRestoreIsFailed }
+
+    cloud.listener.clean_restore_workspace:
+        class: CloudBundle\Listener\CleanRestoreWorkspaceListener
+        arguments:
+            - '%cloud.restore_folder%'
+            - '@cloud.filesystem'
+        tags:
+            - { name: kernel.event_listener, event: cloud.restore_completed, method: whenRestoreIsCompleted }
+            - { name: kernel.event_listener, event: cloud.restore_failed, method: whenRestoreIsFailed }
+
+    cloud.command.restore:
+        class: CloudBundle\Command\RestoreCommand
+        arguments:
+            - '%cloud.restore%'
+            - '@cloud.manager.restore'
+        tags:
+            - { name: console.command }

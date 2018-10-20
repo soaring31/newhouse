@@ -1,0 +1,183 @@
+{% extends 'HouseBundle:Msale:msalecon.html.twig' %}
+{% set models = app.request.get('models') %}
+{% block mainMenu %}
+     {{ core_manage.jump({
+        class: 'on',
+        title: '<i class="mr5"></i>委托出售',
+        url: 'mentrust/mentrustlist'|U({ models: 'sale'})
+    }) }}
+    {{ core_manage.jump({
+        title: '<i class="mr5"></i>委托出租',
+        url: 'mentrust/mentrustlist'|U({ models: 'rent'})
+    }) }}
+{% endblock %}
+{% block tableMain %}
+    {% set filter_opt = [
+         {
+            method: 'show',
+            title: '<i class="font-ico-plus mr5"></i>新增委托'
+        },
+        {
+            method: 'selectFormField',
+            title: '委托状态',
+            form: 'entrust',
+            field: 'entrust',
+        },
+        {
+            method: 'search',
+            field: 'name',
+            title: '请搜索名称/联系人/电话',
+        }
+    ] %}
+    {# {{dump(ident.info.data)}} #}
+    {% if app.user.usertype != 15  %}
+    {% set utel = ('db.users')|getOne('tel', { id: app.user.id })|default('') %}   
+    {% if utel is empty %}
+        <div class="mainBody-topDiv ml10 mt8" data-target="[data-content='1']">
+        <p class="mainBody-topDiv-fiP">
+            请认证手机号码, 再发布房源, <a href="{{- core_global.menu_url(496) -}}">点击认证手机</a>
+        </p>
+        </div>
+    <div class="blank10"></div>
+    {% else %}
+        {{ core_manage.filter(filter_opt) }}
+
+    {% endif %}
+
+    {% else %}
+     {{ core_manage.filter([
+       
+    ]) }}
+    {% endif %}
+{% set models = app.request.get('models')|default('sale') %}
+{% set uid = app.user.id %}
+    <section class="list-con" data-param="{
+            defUrl    : '{{ (action)|U }}',
+            showUrl   : '{{ ('msalecon/show')|U}}',
+            submitUrl : '{{ ("msalecon/save")|U }}',
+            deleteUrl : '{{ ("msalecon/delete")|U }}',
+            fixed     : '.filter',
+            list      : '.list-con',
+            data      : {
+                models: '{{ models }}',
+            }
+        }">
+        <div class="list">
+            <table class="right-table table-hover">
+                <tbody>
+                    <tr >
+                        <th class="pl10">房源名称</th>
+                        <th width="100">联系人</th>
+                        <th width="100">联系电话</th>
+                        <th width="100">户型</th>
+                        <th width="80" data-role="sort" data-sort="mj" class="sort">面积</th>
+                        <th width="80" data-role="sort" data-sort="dj" class="sort">价格</th>
+                        {% if app.user.usertype != 15 %}
+                        <th width="70">委托人</th>
+                        <th width="80">委托状态</th>
+                        {% endif %}
+                        <th width="100" data-role="sort" data-sort="create_time" class="sort">委托时间</th>
+                        <th width="100" class="tac">操作</th>
+                    </tr>
+
+                    {% if app.user.usertype != 15 %}
+                    {% set ident = ident.info %}
+                    {# {% set handlist = ('house.collects')|getAll({models: models,uid: uid,pageIndex: app.request.get('pageIndex',1)}) %} #}
+                    {% else %}
+                        {% set eid = ('house.entrust_arc')|getCol('aid',{ mid: app.user.id})|join(',') %}
+                        {% set arr = (eid)|join(',') %}  
+                        {% set ident = ('house.entrust')|getAll({ id: 'in|' ~ eid, models: models, findType: 1 }) %} 
+                    {% endif %}
+                    {% if ident.data is defined and ident.pageCount|default('') != 0 %}
+                    {% for k, vo in ident.data %}
+                    
+                    <tr data-id="{{ vo.id }}">
+                        <td class="pl10">{{vo.name}}</td>
+                        <td>{{vo.xingming}}</td>
+                        <td>{{ vo.fdtel }}</td>
+                        <td>{{core_global.formData({value: vo.shi})}}
+                            /{{core_global.formData({value: vo.ting})}}
+                            /{{core_global.formData({value: vo.wei})}}</td>
+                        <td>{{ vo.mj }}㎡</td>
+                        <td>{{ vo.dj }}</td>   
+                        {% if app.user.usertype != 15 %}
+                        <td><a href="{{('msale/mentrustarc')|U({ aid: vo.id, models: vo.models})}}" data-role="show" title="委托经纪人">[{{core_global.count({models: 'entrust_arc', sql_opt: {aid: vo.id}})}}]</a></td>
+                        <td>
+                            {{ core_global.formField({
+                                field: 'entrust',
+                                value: vo.entrust,
+                                form: [
+                                    {
+                                        id: 1,
+                                        name: '已委托',
+                                    },
+                                    {
+                                        id: 0,
+                                        name: '待委托',
+                                    }
+                                ]
+                            }) }}
+                        </td>
+                        {% endif %}
+                        <td>{{ vo.create_time|default('0')|date('Y-m-d') }}</td>
+                        {% if app.user.usertype != 15 %}
+                        <td class="tac">
+                            {% if vo.entrust == 1  %}
+                             已委托  
+                            {% else %}
+                            {{ core_manage.delete() }}
+                            {% endif %}   
+                        </td>
+
+                        {% else %}
+
+                        <td>
+                            {% if vo.entrust < 1 %}
+
+                                {{ core_manage.submit({
+                                    url: ('msalecon/save')|U({ _form_id: 249}),
+                                    class: 'btn btn-sm btn-primary',
+                                    title: '接受委托',
+                                    attr: vo.id,
+                                    data: '{ wid: \'' ~ uid ~ '\', entrust: 1 }'
+                                }) }}
+
+                            {% else %}
+
+                            {% set data = ('house.sale')|getOne('id', {eid:vo.id}) %}
+                            {% if data %}
+                                {% if vo.models == 'sale' %}
+                                <a href="#/default/330"  class="btn btn-sm btn">查看信息</a>
+                                {% else %}
+                                <a href="#/default/338"  class="btn btn-sm btn">查看信息</a>
+                                {% endif %}
+                            {% else %}
+                                {% if models == 'sale' %}
+                                 {{ core_manage.show({
+                                    url: ("msalemanage/show")|U({initid: vo.id, eid:vo.id, uid: app.user.id}),
+                                    title: '发布二手房',
+                                    class: 'btn'
+                                }) }}
+                                {% else %}
+                                    {{ core_manage.show({
+                                    url: ("mrentmanage/show")|U({initid: vo.id,eid:vo.id}),
+                                    title: '发布二手房',
+                                    class: 'btn'
+                                }) }}
+                                {% endif %}
+                            {% endif %}
+                            {% endif %}
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr><td colspan="100" class="tac">没有数据！</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        {{core_manage.page(ident)}}
+    </section>
+  
+{% endblock %}

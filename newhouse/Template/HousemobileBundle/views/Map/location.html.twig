@@ -1,0 +1,49 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':list_layout') ~ '.html.twig' %}
+
+
+{% block title %}{% endblock title %}
+
+{% block header_title %}
+{{core_mobile_global.title({title: '附近找房'})}}
+{% endblock header_title %}
+
+{% block container %}
+    {% set list_header %}
+<div class="filter" data-block="{
+    ajax: {
+        url: '{{ ('bundlebindforms/ajax')|U }}',
+        data: {
+            tpl: 'Common:filter',
+            tag: 'map_location'
+        }
+    }
+}"></div>
+    {% endset %}
+    {# list_url不设置，保持页面加载后不加载列表 #}
+{{ parent() }}
+{# {% include 'HousemobileBundle:Map:filterblock.html.twig' ignore missing with {models: 'location'} %} #}
+{% endblock container %}
+
+{% block js %}
+<script type="text/javascript">
+seajs.use(['loadmore', 'mapLibs'], function (loadmore, mapLibs) {
+    mapLibs.location(function(lng, lat){
+        // 初始化时没有url，不执行，拿到当前坐标后，先修改默认配置，再刷新
+        loadmore.setDefOption({
+            ajaxOpt: {
+                url: '{{ ('map/location')|U}}',
+                data: {
+                    tpl: 'Clist:locallist',
+                    lng: lng,
+                    lat: lat
+                }
+            }
+        })
+        loadmore.refresh();
+    })
+})
+</script>
+{% endblock js %}
+
+

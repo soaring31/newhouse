@@ -1,0 +1,81 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% block js %}
+
+{% endblock %}
+
+{% block mainMenu %}
+    {# {{ parent() }}  #}
+{% endblock %}
+
+{% block tableMain %}
+{{ core_manage.filter([
+    {
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增语言'
+    },
+    {
+        method: 'search',
+        field: 'name',
+        title: '请输入名称'
+    }
+]) }}
+<section class="list-con" data-height="580" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+        }
+    }">
+
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                    <th class="pl20">语言名称</th>
+                    {# <th width="150" class="tac">主题类型</th> #}
+                    <th width="150" class="tac">主题</th>
+                    <th width="150" class="tac">会员中心主题</th>
+                    <th width="150" class="tac">操作库</th>
+                    <th width="80" class="tac">标识</th>
+                    <th width="120" class="tac">操作</th>
+                </tr>
+                {% if ident.info.data is defined and ident.info.pageCount|default(0) != 0 %}
+                {% for key,vo in ident.info.data %}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td>{{ vo.id }}</td>
+                    <td class="pl20">{{ vo.name }}</td>
+                    {# <td class="tac">{{ core_global.formField({value: vo.themetype, form: 'language', field: 'themetype'}) }}</td> #}
+                    <td class="tac">{{ vo.tplid }}</td>
+                    <td class="tac">{{ vo.membertpl }}</td>
+                    <td class="tac">{{ vo.userdb }}</td>
+                    <td class="tac">{{ vo.ename }}</td>
+                    <td class="tac">
+                        {{ core_manage.show() }}
+                        {% if vo.issystem|default('') != 1 %}
+                            {{ core_manage.delete() }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    }
+]) }}
+{% endblock tableMain %}
+{% block promptUl %}{% endblock %}

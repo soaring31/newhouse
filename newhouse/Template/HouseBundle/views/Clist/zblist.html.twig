@@ -1,0 +1,24 @@
+{% extends 'CoreBundle::base_ajax.html.twig' %}
+{# ajax 
+ * 文字直播
+ * 使用模板: topic/live/detail
+#}
+{% block result %}
+{% if ident.info.data is defined %}
+    {% for item in ident.info.data %}
+        <dl data-cid="{{item.id}}" {% if loop.last  %}data-page-index="{{ident.info.pageIndex}}" data-page-count="{{ident.info.pageCount}}" data-page-size="{{ident.info.pageSize}}"{% endif %}>
+            <dd>
+                <span>
+                    [ <em class="u-s">{{item.username|default('')}}</em>
+                    ]
+                </span>
+                <p></p>
+                <p>
+                   <span> {{item.content|default('')|raw}} </span>
+                </p>
+                <p></p> <em class="u-s">({{item.create_time|default('')|date('Y-m-d')}})</em>
+            </dd>
+        </dl>
+    {% endfor %}
+{% endif %}
+{% endblock result %}

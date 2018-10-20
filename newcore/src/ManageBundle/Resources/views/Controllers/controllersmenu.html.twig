@@ -1,0 +1,99 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+seajs.use("{{ bundlepath }}/js/models",function(m){
+	//js入口
+	m.init('main');
+});
+</script>
+{% endblock %}
+
+{% block tableMain %}
+<span class="tableDesc">菜单列表
+    <input type="button" id="btnfun_show" data-url="{{ (action~'/show')|U }}" class="search-btn" value="新增主菜单" />
+    <input type="button" id="btnfun_all" data-url="{{ (action~'/structure')|U }}" class="search-btn" value="重置菜单结构" />
+    <input type="button" id="btnfun_all1" data-url="{{ (action~'/cache')|U }}" class="search-btn" value="重置菜单缓存" />
+</span>
+<table class="right-table">
+	<tbody>
+		<tr>
+			<th class="w100"></th>
+			<th class="w35"></th>
+			<th class="txtleft">菜单名称</th>
+			<th class="w300 txtleft">菜单链接</th>
+			<th class="w50 txtleft">排序</th>
+			<th class="w300">操作</th>
+		</tr>
+		{% if info is defined %}
+		{% for item in info %}
+		{% set url = (item.menu.bundle~"/"~item.menu.controller~"/"~item.menu.action)|U %}
+		<tr onmouseover="this.style.backgroundColor='#625B39'"; onmouseout="this.style.backgroundColor=''">
+			<td class="txtcenter">[{{item.menu.id}}]</td>
+			<td><a id="showtr_{{item.menu.id}}" href='javascript:void(0);' {% if item.nodes is empty %}style="display:none;"{% endif %}>+</a></td>
+			<td data-url="{{ (action~'/save')|U('id='~item.menu.id) }}"><span id='{{action}}_{{item.menu.id}}_name' class='editspan'>{{item.menu.name}}</span></td>
+			<td id="{{action}}_{{item.menu.id}}_url">{{ url }}</td>
+			<td data-url="{{ (action~'/save')|U('id='~item.menu.id) }}"><span id='{{action}}_{{item.menu.id}}_sort' class='editspan'>{{item.menu.sort}}</span></td>
+			<td class="txtleft">
+				<input type="button" id="btnfun_show" data-url="{{ (action~'/show')|U('id='~item.menu.id) }}" class="search-btn" value="修改" />
+				<input type="button" id="btnfun_delete" data-url="{{ (action~'/delete')|U('id='~item.menu.id) }}" class="search-btn" value="删除" />
+				<input type="button" id="btnfun_show" data-url="{{ (action~'/show')|U('pid='~item.menu.id) }}" class="search-btn" value="添加子菜单" />
+			</td>
+		</tr>
+		{% if item.nodes is defined %}
+		<tr class="subtr" style="display:none;" id='subtr_{{item.menu.id}}'>
+			<td colspan="6" style='border:0px;'>
+				<table class="subright-table" style="width: 100%;">
+					{% for item1 in item.nodes %}
+					{% set url = (item1.menu.bundle~"/"~item1.menu.controller~"/"~item1.menu.action)|U %}
+					<tr onmouseover="this.style.backgroundColor='#625B39'"; onmouseout="this.style.backgroundColor=''">
+						<td class="w70 pright50 txtright">{{item1.menu.id}}</td>
+						<td class="w35"><a id="showtr_{{item1.menu.id}}" href='javascript:void(0);' {% if item1.nodes is empty %}style="display:none;"{% endif %}>+</a></td>
+						<td data-url="{{ (action~'/save')|U('id='~item1.menu.id) }}"><span id='{{action}}_{{item1.menu.id}}_name' class='editspan'>{{item1.menu.name}}</span></td>
+						<td class="w300" id="{{action}}_{{item1.menu.id}}_url">{{url}}</td>
+						<td class="w50" data-url="{{ (action~'/save')|U('id='~item1.menu.id) }}"><span id='{{action}}_{{item1.menu.id}}_sort' class='editspan'>{{item1.menu.sort}}</span></td>
+						<td class="w300">
+							<input type="button" id="btnfun_show_1" data-url="{{ (action~'/show')|U('id='~item1.menu.id) }}" class="search-btn" value="修改" />
+							<input type="button" id="btnfun_delete_1" data-url="{{ (action~'/delete')|U('id='~item1.menu.id) }}" class="search-btn" value="删除" />
+							<input type="button" id="btnfun_show_2" data-url="{{ (action~'/show')|U('pid='~item1.menu.id) }}" class="search-btn" value="添加子菜单" />
+							<input type="button" id="btnfun_details" data-url="{{ (action~'/bindmenu')|U('pid='~item1.menu.id) }}" class="detail-btn" value="添加关联" />
+						</td>
+					</tr>
+					<tr class="subtr" style="display:none;" id='subtr_{{item1.menu.id}}'>
+						<td colspan="6"style='border:0px;'>
+							<table class="subright-table">
+								{% if item1.nodes is defined %}
+								{% for item2 in item1.nodes %}
+								{% set url = (item2.menu.bundle~"/"~item2.menu.controller~"/"~item2.menu.action)|U %}
+									<tr onmouseover="this.style.backgroundColor='#625B39'"; onmouseout="this.style.backgroundColor=''">
+										<td class="w70 pright50 txtright">{{item2.menu.id}}</td>
+										<td class="w35"></td>
+										<td data-url="{{ (action~'/save')|U('id='~item2.menu.id) }}"><span id='{{action}}_{{item2.menu.id}}_name' class='editspan'>{{item2.menu.name}}</span></td>
+										<td class="w300" id="{{action}}_{{item2.menu.id}}_url">{{ url }}</td>
+										<td class="w50" data-url="{{ (action~'/save')|U('id='~item2.menu.id) }}"><span id='{{action}}_{{item2.menu.id}}_sort' class='editspan'>{{item2.menu.sort}}</span></td>
+										<td class="w300">
+											<input type="button" id="btnfun_show_3" data-url="{{ (action~'/show')|U('id='~item2.menu.id) }}" class="search-btn" value="修改" />
+											<input type="button" id="btnfun_delete_2" data-url="{{ (action~'/delete')|U('id='~item2.menu.id) }}" class="search-btn" value="删除" />
+											<input type="button" id="btnfun_details" data-url="{{ (action~'/details')|U('pid='~item2.menu.id) }}" class="detail-btn" value="添加子菜单" />
+											<input type="button" id="btnfun_details_1" data-url="{{ (action~'/bindmenu')|U('pid='~item2.menu.id) }}" class="detail-btn" value="添加关联" />
+										</td>
+									</tr>
+								{% endfor %}
+								{% endif %}
+							</table>
+						</td>
+					</tr>
+					{% endfor %}
+				</table>
+			</td>
+		</tr>
+		{% endif %}
+		{% endfor %}
+		{% endif %}
+	</tbody>
+</table>
+{% endblock %}
+
+{% block submit %}{% endblock %}
+{% block promptUl %}
+	<li></li>
+{% endblock %}

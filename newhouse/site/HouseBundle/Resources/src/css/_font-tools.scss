@@ -1,0 +1,47 @@
+$font-tools-fz: inherit !default;
+
+@font-face {
+	font-family: "tools";
+    font-weight: normal;
+    font-style: normal;
+	src: url('../fonts/tools.eot');
+	src: url('../fonts/tools.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/tools.woff') format('woff');//,
+		//url('../fonts/tools.ttf') format('truetype'),
+		//url('../fonts/tools.svg#tools') format('svg');
+}
+$font-tools-fz: inherit !default;
+$font-tools-fl: none !default;
+$font-tools-m: 0 !default;
+$font-tools-va: -.25em !default;
+[class^="font-tools-"],
+[class*=" font-tools-"] {
+	font-family: "tools";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-size: $font-tools-fz;
+	float: $font-tools-fl;
+	margin: $font-tools-m;
+	vertical-align: $font-tools-va;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; only necessary if not using the private unicode range (firstdata option) 
+	text-decoration: none;
+	text-transform: none;
+}
+.font-tools-1:before {
+	content: "\EA01";
+}.font-tools-2:before {
+	content: "\EA02";
+}.font-tools-3:before {
+	content: "\EA03";
+}.font-tools-4:before {
+	content: "\EA04";
+}.font-tools-5:before {
+	content: "\EA05";
+}.font-tools-6:before {
+	content: "\EA06";
+}.font-tools-7:before {
+	content: "\EA07";
+}

@@ -1,0 +1,18 @@
+{% extends 'ManageBundle::mainlayout.html.twig' %}
+{% import 'ManageBundle:Form:lists.html.twig' as lists %}
+{% block js %}
+<script type="text/javascript">
+
+</script>
+{% endblock %}
+
+{% block tableMain %}
+{% import "ManageBundle:Form:popedit.html.twig" as forms %}
+{{ forms.popEdit(form|default(''),'form') }}
+{% endblock %}
+
+
+{% block submit %}{% endblock %}
+{% block promptUl %}
+提示说明
+{% endblock %}

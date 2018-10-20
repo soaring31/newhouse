@@ -1,0 +1,30 @@
+{#看房团推荐#}
+{{core_global.linkcss('static/house/css/newhouse-details/public.css?time=201804201145')}}
+{{core_global.linkcss('static/house/css/newhouse-details/newhouse-common.css?time=201804201145')}}
+{{core_global.linkcss('static/house/css/newhouse-details/newhouseDetail.css?time=201804201145')}}
+<style>
+    .vhg-recommend-txt.t{height:auto!important;}
+    .right-list,.vhg-recommend{width:auto;}
+</style>
+
+{% set recommend=('house.topic')|getAll({pageSize:2,checked:1,order: 'update_time', orderBy: 'desc'}) %}
+{% if recommend.data %}
+    {% set tpl_now = 'now'|date('U') %}
+    <div class="vhg-recommend">
+    <p class="vhg-recommend-title col-333 fb fz22">看房团推荐</p>
+    <a href="{{ '/topic/group' }}" class="vhg-recommend-more fz12 col-333">更多&gt;&gt;</a>
+    {% for item in recommend.data %}
+        {% if item.show_time.date|date('U') > tpl_now|default('') %}
+            <div class="vhg-recommend-txt por t">
+            <p class="col-333 fz14">{{ item.name|default('') }}</p>
+            <p class="col-ff8400 fz14 mt10" style="width: 57%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">优惠：{{ item.discount|default('暂无') }}</p>
+            <div class="vhg-registration-free free_click" data-id="{{ item.id }}" data-ad="">
+                免费报名
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+</div>
+{% endif %}
+
+{% include 'HouseBundle:house_list:alert_tour.html.twig' %}

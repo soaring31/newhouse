@@ -1,0 +1,32 @@
+$img-photoIndex-icon-coment-hover:(18px, 16px, -68px, 0, img-photoIndex-icon-coment-hover);
+$img-photoIndex-icon-coment:(18px, 16px, -68px, -26px, img-photoIndex-icon-coment);
+$img-photoIndex-icon-share-hover:(18px, 16px, 0, -52px, img-photoIndex-icon-share-hover);
+$img-photoIndex-icon-share:(18px, 16px, -28px, -52px, img-photoIndex-icon-share);
+$img-photoIndex-icon1:(24px, 42px, 0, 0, img-photoIndex-icon1);
+$img-photoIndex-icon2:(24px, 42px, -34px, 0, img-photoIndex-icon2);
+$img-photoIndex-icon3:(7px, 5px, -96px, -26px, img-photoIndex-icon3);
+$img-photoIndex-icon4:(7px, 5px, -96px, -41px, img-photoIndex-icon4);
+$img-photoIndex-icon5:(16px, 16px, -56px, -52px, img-photoIndex-icon5);
+$img-photoIndex-icon6:(16px, 16px, -96px, 0, img-photoIndex-icon6);
+
+$img-photoIndex: ($img-photoIndex-icon-coment-hover,$img-photoIndex-icon-coment,$img-photoIndex-icon-share-hover,$img-photoIndex-icon-share,$img-photoIndex-icon1,$img-photoIndex-icon2,$img-photoIndex-icon3,$img-photoIndex-icon4,$img-photoIndex-icon5,$img-photoIndex-icon6);
+
+@mixin img-photoIndex($sprites) {
+  %icophotoIndex {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/photoIndex.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+        @extend %icophotoIndex;
+    }
+  }
+}

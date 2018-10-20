@@ -1,0 +1,24 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 使用页面 
+ * 1、商业地产图库  business/dphotos
+ * 2、新房图库  houses/dphotos
+ * 3、小区图库  sale/qdphotos 
+#}
+{% block result %}
+<div class="{{class|default(app.request.get('class', 'lp'))}}-fixed-left">
+    <div class="content">
+        {% set xiangce_album = {
+            a: {
+                name: '全部', 
+                cate_album: null, 
+                alltype: 'all'
+            }
+        }|merge(('house.inter_album')|getAll({checked: 1, aid: id|default(app.request.get('id')), findType: 1, groupBy: 'cate_album', pageSize: 20, order: 'cate_album', orderBy: 'asc'}).data) %}
+        {{housemobile_global.swiper_v_nav({
+            data: xiangce_album,
+            cate: 'cate_album',
+            tpl: '<a href="%url%">%title%</a>'
+        })}}
+    </div>
+</div>
+{% endblock result %}

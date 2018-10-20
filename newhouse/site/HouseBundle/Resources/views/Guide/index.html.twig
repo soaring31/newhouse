@@ -1,0 +1,166 @@
+{% extends 'HouseBundle::base_top_search.html.twig' %}
+{# 说明
+ * zyznsyts  首页轮播图推送
+#}
+{% set url_category = app.request.get('category', 36) %}
+
+{% set category = (url_category)|getCategoryById() %}
+
+{% set category_guide = ('house.category')|getTree({checked: 1, pid: 36}) %}
+
+{% set tpl_topsearch_action = 'guide/list' %}
+{% set tpl_topsearch_placeholder = '请输入关键词' %}
+{% set tpl_topsearch_hot = 'guidekeyword' %}
+
+{% block title %}
+    {{category.name|default('')}}
+{% endblock %}
+
+{% block key_des %}
+{{core_global.key_des(category)}}
+{% endblock key_des %}
+
+{% block css %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/guide.css')}}
+{% endblock css %}
+
+{% block current_container %}
+    {% if url_category != 36 %}
+        <a href="{{('guide/index')|U}}" target="_blank">置业指南</a>
+        <span>&gt;</span>
+    {% endif %}
+    {% block current_guide %}
+    <a href="{{('guide/list')|U({category: category.id|default('')})}}" target="_blank">{{category.name|default('')}}</a>
+    {% endblock current_guide %}
+{% endblock current_container %}
+
+{% block container %}
+    <div class="container guide">
+        <!-- 左边菜单 -->
+        <div class="lmenu">
+            <ul class="m-head">
+                <li >
+                    <a href="javascript:;" class="active">置业指南</a>
+                </li>
+                <span></span>
+            </ul>
+            <div class="m-con">
+                {% if category_guide.data is defined %}
+                {% for item1 in category_guide.data %}
+                <h5 class="first"> <i class="arrow-r"></i>
+                    <a href="{{('guide/list')|U({(item1.menu.ename): item1.menu.id|default('')})}}" target="_self"{% if category.id|default(37) == item1.menu.id|default('') %}class="active"{% endif %}>{{item1.menu.name}}</a>
+                </h5>
+                {% if item1.nodes is defined %}
+
+                <ul>
+                    {% for item2 in item1.nodes %}
+                    <li>
+                        <span class="img-gd-5"></span>
+                        <a href="{{('guide/list')|U({(item1.menu.ename): item1.menu.id|default('')})}}"{% if category|default(36) == item1.menu.id|default('') %}class="active"{% endif %} >{{item1.menu.name}}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+              {% endfor %}
+              {% endif %}
+            </div>
+        </div>
+        <!-- 右边内容 -->
+        <div class="content">
+            {% block swiper %}
+                <!-- 轮播图 -->
+                {% set zyznsyts = ('zyznsyts')|getPush(14) %}
+                <div class="banner jqDuang" data-obj="ul li" data-cell="ol" data-actclass="active" data-effect="leftLoop" data-autoplay="1"  data-lazyload="src">
+                    {# 推送用到的 #}
+                    <div data-tag='zyznsyts'>
+                        <ul>
+                            {% if zyznsyts is defined and zyznsyts|default('') %}
+                                {% for item in zyznsyts %}
+                                    <li>
+                                        <a href="{{item.url|default('')}}" target="_blank">
+                                            {{- core_global.data_src_img({
+                                                src: item.thumb|default(''),
+                                                alt: item.name|default(''),
+                                                type: 0,
+                                                width:860 ,
+                                                height: 280
+                                            }) -}}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            {% else %}
+                                <li>
+                                    {{- core_global.data_src_img({
+                                        src: '',
+                                        alt: '置业指南',
+                                        type: 0,
+                                        width:860 ,
+                                        height: 280
+                                    }) -}}
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <ol></ol>
+                </div>
+                <!-- 内容列表 -->
+                <div class="blank20"></div>
+            {% endblock swiper %}
+            <div class="list">
+                <div class="l-head">
+                    <h2>
+                        {{category.name|default('')}}
+                    </h2>
+                </div>
+                <div class="l-wrap">
+                    {{house_global.guide_list({
+                        list: cident.list
+                    })}}
+                    <div class="blank20"></div>
+                    <!--page-->
+                    {{core_global.page(cident.list|default(''))}}
+                    <!--page-->
+                    <div class="blank20"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="blank30"></div>
+{% endblock container %}
+
+{% block js %}
+<script type="text/javascript">
+
+seajs.use(['jqduang', 'fixed', 'lazyload', 'vote'], function(jqduang, fixed, lazyload, vote) {
+
+    vote.init({
+        saveUrl: '{{("viewinter/vote")|U()}}'
+    });
+
+    {% block lmenu_js %}
+        $('.first').click(function() {
+            var $this = $(this);
+            var $ul = $this.next('ul');
+            var $i = $this.find('i');
+            if ($ul.find('li').length == 1) {
+                $this.addClass('open').siblings().removeClass('open');
+                $ul.show(500).siblings('ul').hide(500);
+            };
+        });
+        // 左侧菜单的滚动固定
+        var $content = $('.content');
+        var contentH = $content.height();
+        var contentT = $content.offset().top;
+        var lmenuH = $('.lmenu').height();
+        if (contentH > lmenuH) {
+            $('.lmenu').scrollToFixed({
+                marginTop: 50, // 固定top高度
+                limit: contentH + contentT - lmenuH, // 定义最高top值
+                spacerClass: 'lmenu-bg', // 定义遮罩层样式
+                zIndex: 999, // zindex的值
+            });
+        };
+    {% endblock lmenu_js %}
+});
+</script>
+{% endblock js %}

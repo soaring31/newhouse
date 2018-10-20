@@ -1,0 +1,191 @@
+{% extends 'HouseBundle::mainlayout.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+{% set cate_type = app.request.get('cate_type') %}
+{% set aid = app.request.get('aid') %}
+{% set _form_id = app.request.get('_form_id') %}
+
+{# 小区楼盘 #}
+{% set type = 0 %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+{% block mainMenu %}
+    {{ parent() }} 
+
+{% endblock %}
+
+
+{% block tableMain %}
+{{ lists.filter([
+    {
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增楼盘',
+    },
+    {
+        method: 'selectFormField',
+        title: '审核',
+        form: 'checked',
+        field: 'checked',
+    },
+    {
+        method: 'selectCate',
+        title: '状态',
+        field: 'cate_status',
+        service: 'house.category',
+    },
+    {
+        method: 'selectCate',
+        title: '区域',
+        field: 'region',
+        service: 'db.area',
+        where: {
+
+        }
+    },
+    {
+        method: 'selectFormField',
+        title: '特色楼盘',
+        form: 'houses_common',
+        field: 'tslp',
+    },
+    {
+        method: 'selectCate',
+        title: '置顶',
+        field: 'top',
+        service: 'house.category',
+    },
+    {
+        method: 'search',
+        field: 'name',
+    }
+]) }}
+<section class="list-con" data-param="{
+    defUrl    : '{{ (action)|U }}',
+    showUrl   : '{{ (action ~ '/show')|U({_form_id: _form_id}) }}',
+    submitUrl : '{{ (action ~ '/save')|U }}',
+    deleteUrl : '{{ (action ~ '/delete')|U }}',
+    fixed     : '.filter',
+    list      : '.list-con',
+    data      : {
+        models: '{{ models }}',
+        cate_type: '{{ cate_type }}',
+    }
+}">
+
+    {# {{dump(ident.info.data)}} #}
+    {# {{dump(ident.info)}} #}
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{forms.checkbox()}}</th>
+                    <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                    <th width="200">名称</th>  
+                    <th width="60" class="tac">置顶</th>  
+                    <th width="60" class="tac">区域</th>  
+                    <th width="60" class="tac">区块</th>  
+                    <th width="60" class="tac">沙盘</th>  
+                    <th width="60" data-role="sort" data-sort="clicks" class="tac sort">点击</th>
+                    <th width="60" class="tac">审核</th>
+                    <th width="60" class="tac">价格</th>
+                    <th width="120" class="tac">操作</th>
+                </tr>
+                {% if ident.info.data is defined %}
+                {% for k, vo in ident.info.data %}
+              
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{forms.checkbox()}}</td>
+                    <td>{{ vo.id }}</td>
+                    <td class="tov" title="{{ vo.name|default('') }}"><a target="_blank" href="{{ ('houses/detail')|U({id: vo.id}) }}">{{ vo.name }}</a></td> 
+                    <td class="tac">{{core_global.formData({value: vo.top})}}</td>
+                    
+                    <td class="tac">
+                        {{(vo.region)|getAreaName|default('')}}
+                    </td>  
+
+                   <td class="tac"><a title="{{ vo.name }}的区块" data-role="show" href="{{ ('mhouse/mhousesarc')|U({type: 'houses_arc', aid:  vo.id}) }}">[0]</a></td> 
+                   {#  href="{{ ('msale/msalearc')|U({type: 'sale_arc', aid:  vo.id, models: models}) }}" #}
+                    
+                    <td class="tac"><a data-role="show" title="{{vo.name}}的沙盘" href="{{(controller ~ '/minterintentmanage')|U({aid: vo.id})}}" class="font-ico-21 fz16 fcr"></a></td> 
+
+                    <td class="tac">{{ vo.clicks|default('0') }}</td>
+
+                    <td class="tac">{{ lists.formField({value: vo.checked}) }} </td>
+
+                    <td class="tac"><a data-role="show" title="{{vo.name}}的价格" href="{{('mhousepricemanage/show')|U({_copy: 1, aid: vo.id})}}" >[0]</a></td> 
+
+                    <td class="tar pr10">
+                        {{ forms.show() }}
+                        {{ forms.delete() }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    {{lists.page(ident.info)}}
+</section>
+   {{ lists.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownCate',
+        title: '物业类型',
+        field: 'cate_type',
+        service: 'house.category',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'checked',
+        title: '审核',
+    },
+    {
+        method: 'dropdownCate',
+        title: '状态',
+        field: 'cate_status',
+        service: 'house.category',
+    },
+    {
+        method: 'dropdownCate',
+        title: '区域',
+        field: 'region',
+        service: 'db.area',
+        where: {
+
+        }
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'tslp',
+        form: 'houses_common',
+        multiple: 1,
+        title: '特色楼盘',
+    },
+    {
+            method: 'dropdownCate',
+            title: '置顶',
+            field: 'top',
+            service: 'house.category',
+    },
+    {
+        method: 'dropdownHouseType'        
+    } 
+]) }}
+{% endblock tableMain %}
+
+
+{% block promptUl %}
+{% endblock %}
+
+
+

@@ -1,0 +1,41 @@
+{% extends 'HouseBundle:Houses:ddetail.html.twig' %}
+{# # 说明:
+** block_lpdt_zixun: 资讯
+#}
+{% block title_houses %}楼盘动态{% endblock title_houses %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}楼盘动态{{detail.name|default('')}}最新楼盘新闻{{detail.name|default('')}}最新消息" />
+<meta name="description" content="{{detail.name|default('')}}楼盘动态{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}为您提供{{detail.name|default('')}}实时楼盘动态，包括实时楼盘新闻，实时开盘时间信息、户型房源价格信息，为您选房、看房提供参考！"/>
+{% endblock key_des %}
+
+{# 高亮导航 #}
+{% block nav_houses %}
+{% set nav_houses_act = 3 %}
+{{parent()}}
+{% endblock nav_houses %}
+
+{% block d_body %}
+    {% set block_lpdt_zixun = ('house.houses_arc')|getBlock({form: 'houses_news'}, {pageSize: 10,pageIndex: pageindex, checked: 1, aid: detail.id|default(''), findType: 1, _multi: 1}) %}
+    <!--楼盘动态-->
+    <div class="d-news">
+        <div class="lp-coltit">
+            <h3 class="tit1">
+                楼盘动态
+            </h3>
+        </div>
+        <div class="p15 bd-gray">
+            <!--加载列表-->
+            {{house_global.news_list({
+                list: block_lpdt_zixun,
+                tips: detail.name ~ '的楼盘动态'
+            })}}
+            <!--/加载列表-->
+            <div class="blank20"></div>
+            <!--page-->
+            {{core_global.page(block_lpdt_zixun)}}
+            <!--page-->
+            <div class="blank10"></div>
+        </div>
+    </div>
+{% endblock d_body %}

@@ -1,0 +1,237 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+ * detail: 当前数据
+#}
+{% set detail = detail|default(cident.detail.data[0]|default('')) %}
+
+{% block result %}
+    <div class="content">
+        {# 基本信息 #}
+        <div class="list-block panel-block">
+            {{- housemobile_global.panel_title({title:'基本信息'})-}}
+            <div class="item-content1 p-gray attr-con" id='jbxx'>
+                <div class="item-inner2">
+                    <div class="row">
+                        <div class="col-100">
+                            楼盘均价：{{house_global.if_dj({value: detail.dj|default('')})}}
+                        </div>
+                        <div class="col-100">
+                            区域：{{core_global.region({id: detail.region|default(''), tpl: '%value%'})}}
+                        </div>
+                        <div class="col-100">
+                            开盘日期：{{core_global.time_date({time: detail.kpdate.date|default('')})}}
+                        </div>
+                        <div class="col-100">
+                            交房日期：{{detail.jfrq|default('-')}}
+                        </div>
+                        <div class="col-100">
+                            开盘说明：{{detail.kpsm|default('-')}}
+                        </div>
+                        <div class="col-100">
+                            装修程度：{{- house_global.lptag({value: detail, tpl: '%value%', con: 'zxcd'}) -}}
+                        </div>
+                        <div class="col-100">
+                            房屋类型: {{ core_global.formData({value: detail.cate_type|default('')}) }}
+                        </div>
+                        <div class="col-100">
+                            地铁：{{ house_global.lptag({value: detail|default(''), con: 'cate_line,cate_metro', tpl: '%value%&nbsp;&nbsp;'}) }}
+                        </div>
+                        <div class="col-100">
+                            特色楼盘：{{- house_global.lptag({value: detail, tpl: '%value%&nbsp;', con: 'tslp'}) -}}
+                        </div>
+                        <div class="col-100">
+                            项目地址：{{detail.address|default('-')}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{- core_mobile_global.more_con({id: 'jbxx'})-}}
+        </div>
+        {# 物业信息 #}
+        <div class="list-block panel-block">
+            {{- housemobile_global.panel_title({title:'物业信息'})-}}
+            <div class="item-content1 p-gray attr-con" id='wyxx'>
+                <div class="item-inner2">
+                    <div class="row">
+                        <div class="col-100">
+                            销售电话：{{detail.tel|default('-')}}
+                        </div>
+                        <div class="col-100">
+                            许可证号：{{detail.xkzh|default('-')}}
+                        </div>
+                        <div class="col-100">
+                            物业费：{{detail.wyf|default('-')}}
+                        </div>
+                        <div class="col-100">
+                            楼盘开发商：{{detail.house_developer|default('-')}}
+                        </div>
+                        <div class="col-100">
+                            物业公司：{{detail.wygs|default('-')}}
+                        </div>
+                        <div class="col-100">
+                            售楼地址：{{detail.sldz|default('-')}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{- core_mobile_global.more_con({id: 'wyxx'})-}}
+        </div>
+        {# 楼盘设备 #}
+        <div class="list-block panel-block">
+            {% if detail.officetype|default('') %}
+                {{- housemobile_global.panel_title({title:'楼盘设备'})-}}      
+            {% else %}
+                {{- housemobile_global.panel_title({title:'商铺详情'})-}}      
+            {% endif %}
+            <div class="item-content1 p-gray attr-con" id='lpsb'>
+                <div class="item-inner2">
+                    <div class="row">
+                        {% if detail.officetype|default('') %}
+                        {# 写字楼信息 #}
+                            <div class="col-100">
+                                办公面积：{{house_global.if_mj({value: detail.officearea|default('')})}}
+                            </div>
+                            <div class="col-100">
+                                商业面积：{{house_global.if_mj({value: detail.businessarea|default('')})}}
+                            </div>
+                            <div class="col-100">
+                                开间面积：{{house_global.if_mj({value: detail.bayarea|default('')})}}
+                            </div>
+                            <div class="col-100">
+                                标准层层高：{{core_global.if_dw({value:detail.layerheight|default(''), danwei: 'm',default_tips: '-'})}}
+                            </div>
+                            <div class="col-100">
+                                标准层面积：{{house_global.if_mj({value: detail.layerarea|default('')})}}
+                            </div>
+                            <div class="col-100">
+                                大堂层高：{{core_global.if_dw({value:detail.lobbyheight|default(''), danwei: 'm',default_tips: '-'})}}
+                            </div>
+                            <div class="col-100">
+                                大堂面积：{{house_global.if_mj({value: detail.lobbyarea|default('')})}}
+                            </div>
+                        {% else %}
+                        {# 商铺详情 #}
+                            <div class="col-100">
+                                商铺总面积：{{house_global.if_mj({value: detail.shopsarea|default('')})}}
+                            </div>
+                            <div class="col-100">
+                                总楼层：{{core_global.if_dw({value:detail.totalfloor|default(''), danwei: '层',default_tips: '-'})}}
+                            </div>
+                            <div class="col-100">
+                                面宽：{{core_global.if_dw({value:detail.wide|default(''), danwei: 'm',default_tips: '-'})}}                        
+                            </div>
+                            <div class="col-100">
+                                进深：{{core_global.if_dw({value:detail.depth|default(''), danwei: 'm',default_tips: '-'})}}                           
+                            </div>
+                            <div class="col-100">
+                                统一管理：{{ core_global.formField({value: detail.administered|default(''), form: 'houses_shops_attr', field:'administered'}) }}
+                            </div>
+                            <div class="col-100">
+                                外立面：{{detail.facades|default('-')}}
+                            </div>
+                            <div class="col-100">
+                                单层层高：{{core_global.if_dw({value: detail.floorheight|default(''), danwei: 'm'})}}
+                            </div>
+                        {% endif %}
+
+                        <div class="col-100">
+                            电梯数：{{detail.liftnum|default('-')}}
+                        </div>
+                        <div class="col-100">
+                            电梯分区：{{detail.liftdivision|default('')}}
+                        </div>
+                        <div class="col-100">
+                            空调开放时间：{{detail.airopentime|default('-')}}
+                        </div>
+                        <div class="col-100">
+                            网络通讯：{{ core_global.formField({value: detail.Networktx|default(''), form: 'houses_attr_common', field:'Networktx'}) }}
+                        </div>
+                        <div class="col-100">
+                            卫生间：{{detail.toilets|default('-')}}
+                        </div>
+                        <div class="col-100">
+                            供水方式：{{ core_global.formField({value: detail.wateringmodes|default(''), form: 'houses_attr_common', field:'wateringmodes'}) }}
+                        </div>
+                        <div class="col-100">
+                            供电系统：{{ core_global.formField({value: detail.powersystem|default(''), form: 'houses_attr_common', field:'powersystem'}) }}
+                        </div>
+                        <div class="col-100">
+                            排风系统：{{ core_global.formField({value: detail.exhaustsystem|default(''), form: 'houses_attr_common', field:'exhaustsystem'}) }}
+                        </div>
+                        <div class="col-100">
+                            排污系统：{{ core_global.formField({value: detail.sewagesystems|default(''), form: 'houses_attr_common', field:'sewagesystems'}) }}
+                        </div>
+                        <div class="col-100">
+                            供电系统：{{ core_global.formField({value: detail.powersystem|default(''), form: 'houses_attr_common', field:'powersystem'}) }}
+                        </div>
+                        {% if detail.officetype|default('') %}
+                                {# 写字楼 #}
+                            <div class="col-100">
+                                安防系统：{{detail.securitysy|default('')}}
+                            </div>
+                            <div class="col-100">
+                                楼内配套：{{ core_global.formField({value: detail.buildingfacilities|default(''), form: 'houses_attr_common', field:'buildingfacilities', tpl: '%title%&nbsp;'}) }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {{- core_mobile_global.more_con({id: 'lpsb'})-}}
+        </div>
+        {# 其他方面 #}
+        <div class="list-block panel-block">
+            {{- housemobile_global.panel_title({title:'其他方面'})-}}
+            <div class="item-content1 p-gray attr-con" id='qtfm'>
+                <div class="item-inner2">
+                    <div class="row">
+                        {% if detail.officetype|default('') %}
+                            <div class="col-100">
+                                写字楼类型：{{- house_global.lptag({value: detail|default(''), con: 'officetype'}) -}}
+                            </div>
+                            <div class="col-100">
+                                写字楼级别：{{- house_global.lptag({value: detail|default(''), con: 'officelevel'}) -}}
+                            </div>
+                        {% else %}
+                            <div class="col-100">
+                                商铺类型：{{- house_global.lptag({value: detail|default(''), con: 'shoptype'}) -}}
+                            </div>
+                            <div class="col-100">
+                                商铺行业：{{- house_global.lptag({value: detail|default(''), con: 'shopindustry'}) -}}
+                            </div>
+                        {% endif %}
+                        <div class="col-100">
+                            车位数：{{detail.carnum|default('-')}}
+                        </div>
+                        <div class="col-100">
+                            占地面积：{{house_global.if_mj({value: detail.area_covered|default('')})}}
+                        </div>
+                        <div class="col-100">
+                            建筑面积：{{house_global.if_mj({value: detail.built_area|default('')})}}
+                        </div>
+                        <div class="col-100">
+                            绿化率：{{detail.lhl|default('-')}}
+                        </div>
+                        <div class="col-100">
+                            容积率：{{detail.rjl|default('-')}}
+                        </div>
+                        <div class="col-100">
+                            得房率：{{detail.dfl|default('-')}}
+                        </div>
+                        <div class="col-100">
+                            产权年限：{{core_global.if_dw({value:detail.cqnx|default(''), danwei: '年',default_tips: '-'})}}                       
+                        </div>
+                        <div class="col-100">
+                            工程进度：{{detail.pjt_progress|default('-')}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{- core_mobile_global.more_con({id: 'qtfm'})-}}
+        </div>
+
+        {# 项目说明 #}
+        {{housemobile_global.content({title: '项目简介', content: detail.content|default('')})}}
+        
+        {{ render(controller('HouseBundle:Common:footer', {_isApp: url_isApp})) }}
+    </div>
+{% endblock result %}

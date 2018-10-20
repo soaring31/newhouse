@@ -1,0 +1,29 @@
+{% extends 'HouseBundle:Service:index.html.twig' %}
+{% block title %}我要提问{% endblock title %}
+
+{% set nav_service_act = app.request.get('category', 12) %}
+
+{% block service_bread %}
+	{{house_global.service_shortcut_recommend()}}
+{% endblock service_bread %}
+
+{% block service_left %}
+	<script type="text/javascript">
+	    seajs.use(['jqhoverS'], function(jqhoverS) {
+	       
+	    })
+	</script>
+
+	<div class="body fl">
+	    {# 载入表单 #}
+	    {{ render(controller('HouseBundle:Bundlebindforms:comment', {
+	        title: '提问',
+	        formflag: 'view_webtw',
+	        models: 'webtw'
+	    })) }}
+	</div>
+{% endblock service_left %}
+
+{% block js %}
+{% endblock js %}
+

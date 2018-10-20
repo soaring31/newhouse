@@ -1,0 +1,374 @@
+{# 调用说明开始 #}
+{# {{ 'qq'|trans({}, 'HomeBundle') }} #}
+{# {% import "ManageBundle:Form:lists.html.twig" as lists %} #}
+{# {{ lists.list(info) }} #}
+{# 调用说明结束 #}
+{% use "CoreBundle:Form:div_layout.html.twig" %}
+{#翻而参数区域#}
+{% macro page(info) %}
+{% spaceless %}
+<div id="pageIndex" class="hide">{{ info.pageIndex|default(1) }}</div>
+<div id="pageCount" class="hide">{{ info.pageCount|default(1) }}</div>
+<div id="pageSize" class="hide">{{ info.pageSize|default(8) }}</div>
+{% endspaceless %}
+{% endmacro %}
+
+{#导航菜单区域#}
+{% macro nav(info) %}
+<span class="tableDesc">
+        角色列表>><input type="button" id="btnfun_show" data="{{ (action~'/show')|U }}" class="search-btn" value="{{'新增角色'|trans({}) }}" />
+</span>
+{% endmacro %}
+
+{#列表区域#}
+{% macro list(info) %}
+{% if info is defined and info is not empty %}
+<section class="mt10">
+    <table class="right-table">
+        <!-- 表头 -->
+        <thead>
+            <tr>
+    		    {% if info.listGrid is defined  %}
+    		    {% for item in info.listGrid %}
+    		    {% set attr={'class':item.title.params[1]|default('')} %}
+    		    <th {{ block('widget_attributes') }}>
+        		    {% if item.title.func is defined and item.title.func %}
+        		    {{ attribute(_self, item.title.func, {'param':item.title.params}) }}
+        		    {% else %}
+                    {{ item.title.params[0]|default('') }}
+                    {% endif %}
+                </th>
+    		    {% endfor %}
+    		    {% endif %}
+    		</tr>
+        </thead>
+        <!-- 数据列表  -->
+    	<tbody>
+             {% if info.data is defined and info.listGrid is defined %}            
+            {% for key, data in info.data %}
+            <tr onmouseover="this.style.backgroundColor='rgba(89, 79, 61, 0.5)'"; onmouseout="this.style.backgroundColor=''">
+                {% for item in info.listGrid %}
+                {% set attr={'class':item.title.params[1]|default('')} %}
+    		    <td {{ block('widget_attributes') }}>
+    		    {# 有href属性的为按钮类 #}
+    		    {% if item.href is defined and item.href %}
+    		        {% for vo in item.href %}
+    		        {{ attribute(_self, vo.func, {'data':data, 'info':vo|default(''), 'action':item.action, 'fields':item.fields}) }}
+    		        {% endfor %}
+    		    {% else %}
+    		        {% for field in item.fields %}
+    		        {% if field.func is defined and field.func %}
+    		            {{ attribute(_self, field.func, {'field':field.field, 'data':data, 'action':item.action})}}
+    		        {% else %}
+    		            {{ data[field.field]|default('') }}
+    		        {% endif %}
+    		        {% endfor %}
+    		    {% endif %}
+    		    </td>
+    		    {% endfor %}
+            </tr>
+            {% endfor %}
+            {% endif %}
+    	</tbody>
+    </table>
+</section>
+{% endif %}
+{% endmacro %}
+
+{# 创建按钮组 #}
+{% macro group(buttons) %}
+{% spaceless %}
+    {% import "::macros.html.twig" as macros %}
+
+    {% set content = '' %}
+
+    {% for button in buttons %}
+        {% set content = content ~ button %}
+    {% endfor %}
+
+    {{ macros.el('div', content, { 'class' : 'btn-group' }) }}
+{% endspaceless %}
+{% endmacro %}
+
+{# 编辑 #}
+{% macro EDIT(data, info, action, fields) %}
+    {% set param = {} %}
+    {% if fields|is_array %}
+        {% for item in fields %}
+        {% set param = param|merge({ (item.field=='id'?'_id':item.field): data[item.field] }) %}
+        {% endfor %}
+    {% elseif fields %}
+        {% set param = { (fields=='id'?'_id':fields): data[fields] } %}
+    {% endif %}
+    {% set id = 'btnfun_edit_'~data.id|default(0) %}
+    {% set value=info.params[0]|trans({}) %}
+    {% set url = info.params[2]|default('')?info.params[2]:action~'/show' %}
+    {% set url1 = info.params[2]|default('')?info.params[2]:action~'/save' %}
+    {% set attr={'class':info.params[1]|default(''), 'title': data.title|default('') ~ '编辑'} %}
+    {% set attr = attr|merge({ 'data-url': url|U(param) }) %}
+
+    {% if isGranted(url) and isGranted(url1) %}
+    {% spaceless %}
+        {{ block('widget_simple_button') }}
+    {% endspaceless %}
+    {% endif %}
+{% endmacro %}
+
+{# 复制 #}
+{% macro COPY(data, info, action, fields) %}
+    {% set param = {_copy: 1} %}
+    {% if fields|is_array %}
+        {% for item in fields %}
+        {% set param = param|merge({ (item.field=='id'?'_id':item.field): data[item.field] }) %}
+        {% endfor %}
+    {% elseif fields %}
+        {% set param = { (fields=='id'?'_id':fields): data[fields] } %}
+    {% endif %}
+    {% set id = 'btnfun_edit_'~data.id|default(0) %}
+    {% set value=info.params[0]|trans({}) %}
+    {% set url = info.params[2]|default('')?info.params[2]:action~'/show' %}
+    {% set url1 = info.params[2]|default('')?info.params[2]:action~'/save' %}
+    {% set attr={'class':info.params[1]|default('')} %}
+    {% set attr = attr|merge({ 'data-url': url|U(param) }) %}
+
+    {% if isGranted(url) and isGranted(url1) %}
+    {% spaceless %}
+        {{ block('widget_simple_button') }}
+    {% endspaceless %}
+    {% endif %}
+{% endmacro %}
+
+{# 删除 #}
+{% macro DELETE(data, info, action, fields) %}
+    {% set param = {} %}
+    {% for item in fields %}
+    {% set param = param|merge({ (item.field): data[item.field] }) %}
+    {% endfor %}
+    {% set id='btnfun_delete_'~data.id|default(0) %}
+    {% set value=info.params[0]|trans({}) %}
+    {% set url = info.params[2]|default('')?info.params[2]:action~'/delete' %}
+    {% set attr={'class':info.params[1]|default('')} %}
+    {% set attr = attr|merge({ 'data-url': url|U(param) }) %}
+    {% if isGranted(url) %}
+    {% spaceless %}
+        {{ block('widget_simple_button') }}
+    {% endspaceless %}
+    {% endif %}
+{% endmacro %}
+
+{# 跳转 #}
+{% macro JUMP(data, info, action, fields) %}
+    {% set param = {} %}
+    {% for item in fields %}
+    {% set param = param|merge({ (item.field=='id'?'_id':item.field): data[item.field] }) %}
+    {% endfor %}
+    {% set id='btnfun_jump_'~data.id|default(0) %}
+    {% set value=info.params[0]|trans({}) %}
+    {% set url = info.params[2]|default('')?info.params[2]:action %}
+    {% set attr={'class':info.params[1]|default('')} %}
+    {% set attr = attr|merge({ 'data-url': url|U(param) }) %}
+    {% if isGranted(url) %}
+    {% spaceless %}
+        {{ block('widget_simple_button') }}
+    {% endspaceless %}
+    {% endif %}
+{% endmacro %}
+
+{# 整页跳转 #}
+{% macro LOCATION(data, info, action, fields) %}
+    {% set param = {} %}
+    {% for item in fields %}
+    {% set param = param|merge({ (info.params[3]|default(item.field=='id'?'_id':item.field)): data[item.field]|encode }) %}
+    {% endfor %}
+    {% set id='newwin_'~data.id|default(0) %}
+    {% set value=info.params[0]|trans({}) %}
+    {% set url = info.params[2]|default('')?info.params[2]:action %}
+    {% set attr={'class':info.params[1]|default('')} %}
+    {% set attr = attr|merge({ "onClick": "location.href='"~(url)|U(param)~"'" }) %}
+    {% if isGranted(url) %}
+    {% spaceless %}
+        {{ block('widget_simple_button') }}
+    {% endspaceless %}
+    {% endif %}
+{% endmacro %}
+
+{# 状态 #}
+{% macro GETSTATUS(field, data, action) %}
+    {% set field = data[field] %}
+    {% spaceless %}
+        {{ field?'是':'否' }}
+    {% endspaceless %}
+{% endmacro %}
+
+{# 监听操作 #}
+{% macro EVENTOP(field, data, action) %}
+    {% set field = data[field] %}
+    {% set OP = {'insert':'添加', 'update':'更新', 'select':'查询', 'delete':'删除'} %}
+    {% spaceless %}
+    {% if OP[field] is defined %}
+        {{ OP[field] }}
+    {% endif %}
+    {% endspaceless %}
+{% endmacro %}
+
+{# 监听类型 #}
+{% macro EVENTYPE(field, data, action) %}
+    {% set field = data[field] %}
+    {% set OP = {1:'操作前', 2:'操作后'} %}
+    {% spaceless %}
+    {% if OP[field] is defined %}
+        {{ OP[field] }}
+    {% endif %}
+    {% endspaceless %}
+{% endmacro %}
+
+{# 时间 #}
+{% macro SHOWTIME(field, data, action) %}
+    {% set field = data[field] %}
+    {% spaceless %} 
+        {{ field?field|date("Y-m-d H:i:s"):'-' }}
+    {% endspaceless %}
+{% endmacro %}
+
+{# 角色名 #}
+{% macro GETRULENAME(field, data, action) %}
+    {% set fields = data[field]|default('')|split(',') %}
+    {% set vals = {} %}
+    {% for v in fields %}
+        {% set vals = vals|merge({(v):'db.auth_rule'|getOne('controller',{'id':v})}) %}
+    {% endfor %}
+    {% spaceless %}        
+        {{ vals|join(' / ') }}
+    {% endspaceless %}
+{% endmacro %}
+
+{#模型服务名#}
+{% macro GETMODELSBYSERVICE(field, data, action) %}
+    {% set fields = data[field]|default('')|split(',') %}
+    {% set vals = {} %}
+    {% for v in fields %}
+        {% set vals = vals|merge({(v):'db.models'|getOne('serviceName',{'id':v})}) %}
+    {% endfor %}
+    {% spaceless %}        
+        {{ vals|join(' / ') }}
+    {% endspaceless %}
+{% endmacro %}
+
+{#模型名#}
+{% macro GETMODELBYTITLE(field, data, action) %}
+    {% set fields = data[field]|split(',') %}
+    {% set vals = {} %}
+    {% for v in fields %}
+        {% set vals = vals|merge({(v):'db.models'|getOne('title',{'id':v})}) %}
+    {% endfor %}
+    {% spaceless %}        
+        {{ vals|join(' / ') }}
+    {% endspaceless %}
+{% endmacro %}
+
+{#模型名#}
+{% macro GETMODELBYSERVICE(field, data, action) %}
+    {% set fields = data[field]|split(',') %}
+    {% set vals = {} %}
+    {% for v in fields %}
+        {% set vals = vals|merge({(v):'db.models'|getOne('title',{'service_name':v})}) %}
+    {% endfor %}
+    {% spaceless %}
+        {{ vals|join(' / ') }}
+    {% endspaceless %}
+{% endmacro %}
+
+{#选择#}
+{% macro CHECKBOXS(field, data, action) %}
+    {% set name = 'checks[]' %}
+    {% set value = data[field]|default('') %}
+    {% spaceless %}
+        {{ block('checkbox_widget') }}
+    {% endspaceless %}
+{% endmacro %}
+
+{#全选#}
+{% macro ALLCHECKBOX(param) %}
+    {% set id = 'allchecks' %}
+    {% spaceless %}
+        {{ block('checkbox_widget') }}
+    {% endspaceless %}
+{% endmacro %}
+
+{# #}
+{% macro EDITSPAN(field, data, action) %}
+    {% set url = action~'/save' %}
+    {% set param = {'id':data['id']|default(0)} %}
+    {% set attr={'class':'editspan'} %}
+    {% set attr = attr|merge({ 'data-url': url|U(param) }) %}
+    <span {% if isGranted(url) %}id="editspan_{{ data.id|default(0) }}_{{ field }}" {{ block('widget_attributes') }} {% endif %}>{{ data[field]|default('&nbsp;-&nbsp;')|raw }}</span>
+{% endmacro %}
+
+{#IMPFIELD#}
+{% macro IMPFIELD(field, data, action) %}
+<input type="button" id="btnfun_jump_{{field['id']}}" class="search-btn" data-url="{{('dataimport/dataimportfields')|U('id='~field['id'])}}" value="字段设置" />
+{% endmacro %}
+
+{#IMPDELL#}
+{% macro IMPDELL(field, data, action) %}
+<a class="search-btn" href="{{('dataimport/dataimportdeel')|U('id='~field['id']~'&_form_id='~field['inform'])}}" target="1">执行导入</a>
+<a class="search-btn" href="{{('dataimport/dataimportclear')|U('id='~field['id']~'&_form_id='~field['inform'])}}" target="1">清除记录</a>
+{% endmacro %}
+
+{# 通用类型 #}
+{% macro LISTENTYPE(field, data, action) %} 
+    {% set fcfgs = 'event_listen'|getFormField(field) %}
+    {{fcfgs[data[field]]['title']|default('-')}}
+{% endmacro %}
+
+{# 微信类型 #}
+{% macro WXUSERTYPE(field, data, action) %} 
+    {% set fcfgs = 'wxusers'|getFormField('type') %}
+    {{fcfgs[data[field]]['title']|default('-')}}
+{% endmacro %}
+
+{# 微信:二维码链接 #}
+{% macro WXQRCODE(field, data, action) %} 
+    <a href="http://open.weixin.qq.com/qr/code/?username={{data[field]}}" target="_blank">查看</a>
+{% endmacro %}
+
+{# 微信:token input #}
+{% macro WXTOKEN(field, data, action) %} 
+    {% set param = {'id':data['id']|default(0)} %}
+    {% set attr={'class':'copyspan1'} %}
+    <span id="copyspan_{{data.id|default(0)}}" {{block('widget_attributes')}} title="双击后使用[Ctrl+C]复制">复制</span>
+    <input id="copyinput_{{data.id|default(0)}}" {{block('widget_attributes')}} value="{{data[field]}}" readonly style="display:none" />
+    {# ['~field~'] #}
+{% endmacro %}
+
+{# 微信:callback input #}
+{% macro WXCALLBAK(field, data, action) %} 
+    {% set param = {'id':data['id']|default(0)} %}
+    {% set attr={'class':'copyspan2'} %}
+    <span id="copyspan_{{data.id|default(0)}}" {{block('widget_attributes')}} title="双击后使用[Ctrl+C]复制">复制</span>
+    <input id="copyinput_{{data.id|default(0)}}" {{block('widget_attributes')}} value="[root]?wxid={{data[field]|encode}}" readonly style="display:none" />
+{% endmacro %}
+
+{#获取用户名称#}
+{% macro GETUSERNAME(field, data, action) %}
+{{ 'db.users'|getOne('username',{'id':data[field]}) }}
+{% endmacro %}
+
+{#获取组名称#}
+{% macro GETGROUPNAME(field, data, action) %}
+{{ 'db.auth_group'|getOne('name',{'id':data[field]}) }}
+{% endmacro %}
+
+{%- block input_attributes -%}
+    class='ttt'
+{%- endblock input_attributes -%}
+
+{#头像URL#}
+{% macro HEADIMGURL(field, data, action) %}
+<img src="{{data[field]}}" class='pic' />
+{% endmacro %}
+
+{#链接URL#}
+{% macro HREFURL(field, data, action) %}
+<a href="{{data[field]}}" target="_blank" style="color:#13C310">>>点击查看<<</a>
+{% endmacro %}

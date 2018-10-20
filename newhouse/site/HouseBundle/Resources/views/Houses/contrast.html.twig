@@ -1,0 +1,583 @@
+{% extends 'HouseBundle::base_top_search.html.twig' %}
+{# # 说明
+ * url_chid: URL中传回来的chid的值
+ * nav_act: 导航高亮
+ * nav_houses_act: 新房导航高亮
+ * nav_sale_act: 二手导航高亮
+ * nav_rent_act: 出租导航高亮
+#}
+{% set url_chid = app.request.get('chid') %}
+
+{% block title %}房源对比{% endblock title %}
+{# 对比的总配置 #}
+{% set contrast_opt = {
+    4: {
+        formid: 'houses',
+        models: 'houses',
+        placeholder: '楼盘名称/拼音/地址',
+        searchUrl: 'houses/list'|U({chid: 4}),
+        urlPre: 'houses/detail'|U ~ '?id=',
+        title: '楼盘对比'
+    },
+    3: {
+        formid: 'sale',
+        models: 'sale',
+        placeholder: '二手房名称/拼音/地址',
+        searchUrl: 'sale/list'|U({chid: 3}),
+        urlPre: 'sale/detail'|U ~ '?id=',
+        title: '二手房对比'
+    },
+    2: {
+        formid: 'rent',
+        models: 'rent',
+        placeholder: '出租名称/拼音/地址',
+        searchUrl: 'rent/list'|U({chid: 2}),
+        urlPre: 'rent/detail'|U ~ '?id=',
+        title: '出租对比'
+    }
+} %}
+{# 当前对比的配置 #}
+{% set contrast_opt_act = contrast_opt[url_chid] %}
+
+{% block css %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/info.css')}}
+{% endblock css %}
+
+{# 广告 #}
+{% block top_ad %}{% endblock top_ad %}
+
+{# 当前位置 #}
+{% block current %}{% endblock current %}
+
+{% block container %}
+<!--头部-->
+<div class="blank30"></div>
+<div class="container">
+    <div class="nav-db">
+        <ul class="clearfix">
+            {% for k, v in contrast_opt %}
+
+            <li id="nav-{{k}}" class="{% if k == url_chid %}act{% endif %}">
+                <a href="{{('houses/contrast')|U({chid: k})}}" title="{{v.title}}">{{v.title}}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+<div class="blank20"></div>
+<!--/头部-->
+<!--新房-->
+<div>
+    <div class="list-head-inner">
+        <div class="container">
+            <div class="list-db list-head clearfix" id="list-head">
+                <ul class="col0">
+                    <li class="td0">
+                        <div>{{contrast_opt_act.title}}</div>
+                    </li>
+                </ul>
+                {% for i in 1..5 %}
+                <ul class="col{{i}}">
+                    <li class="td{{i}}">
+                        <div>
+                            <form action="{{contrast_opt_act.searchUrl}}">
+                                {{core_global.search_input({
+                                    autocomplete: 1,
+                                    attr: 'data-col="' ~ i ~ '"',
+                                    class: 'txt clear-txt',
+                                    placeholder: contrast_opt_act.placeholder,
+                                })}}
+                                <a class="reset"></a>
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div id="list-body" class="list-db list-body clearfix">
+            {% for i in 0..5 %}
+            <ul class="col{{i}} {% if i > 0 %}cols{% endif %}">
+
+            </ul>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!--/新房-->
+<div class="blank30"></div>
+
+
+{% endblock container %}
+
+{% block js %}
+<script type="text/javascript">
+seajs.use(['fixed', 'comparison'],function (fixed, comparison){
+    {% set cate_data = ('house.category')|getAll({ename: 'in|cate_type,cate_status,zxcd,cx,fl,esflx,shi,ting,wei,chu,yangtai,zlfs,czlx,fwpt', pageSize: 100, findType:1, checked: 1}).data %}
+    {% set cate_obj = {} %}
+    {% for item in cate_data %}
+        {% set cate_obj = cate_obj|merge({("k"~item.id): item.name, "k0":"-","k":"-"}) %}
+    {% endfor %}
+    /*var zxcd = {
+        1: '普通装修',
+        2: '豪华装修'
+    }*/
+    var tslp = [
+         ' ',
+         '打折优惠',
+         '小户型投资',
+         '教育地产',
+         '旅游地产',
+         '宜居生态',
+         '低密居所',
+         '公园地产',
+         '合作楼盘',
+         '综合体'
+    ];
+
+    var zlfs = [' ','整租','合租'];
+
+    var fwpt = [
+        ' ',
+        '厨房',
+        '床',
+        '家具',
+        '有线电视',
+        '热水器',
+        '宽带网',
+        '电话',
+        '饮水机',
+        '电视机',
+        '空调',
+        '洗衣机',
+        '冰箱',
+        '煤气',
+        '暖气',
+        '车库',
+        '天然气'
+    ];
+
+
+    // 分类数据
+    var cateData = {{cate_obj|json_encode|raw}};
+    // 显示的数据
+    var datas = {
+        4: [
+                {
+                    field: 'active',
+                    title: '基本信息',
+                    formatter: function() {
+                        return '&nbsp;';
+                    }
+                },
+                {
+                    field: 'name',
+                    title: '标题',
+                    formatter: function() {
+                        return '<a href="{{contrast_opt_act.urlPre}}' + this.id +'">' + this.name + '</a>';
+                    }
+                },
+                {
+                    field: 'dj',
+                    title: '价格',
+                    formatter: function(i) {
+                        return '<font color="red">' + this.dj + '</font>元/m&sup2;';
+                    }
+                },
+                {
+                    field: 'thumb',
+                    title: '图片',
+                    formatter: function(i) {
+                        return comparison.getImg(this.thumb, i);
+                    }
+                },
+                {
+                    field: 'lphf',
+                    title: '楼盘横幅',
+                    formatter: function(i) {
+                        return '<a href="{{contrast_opt_act.urlPre}}' + this.id +'">' + comparison.getImg(this.lphf, i) + '</a>';
+                    }
+                },
+                {
+                    field: 'address',
+                    title: '地址'
+                },
+                {
+                    field: 'tel',
+                    title: '电话'
+                },
+                {
+                    field: 'kpdate',
+                    title: '开盘日期',
+                     formatter: function() {
+                        return this.kpdate.date;
+                    }
+                },
+                {
+                    field: 'bdsm',
+                    title: '变动说明',
+                    formatter: function() {
+                        return '<font color="red">' + this.bdsm + '</font>';
+                    }
+                },
+                {
+                    field: 'active',
+                    title: '其它',
+                    formatter: function() {
+                        return '&nbsp;';
+                    }
+                },
+                {
+                    field: 'zxcd',
+                    title: '装修状况',
+                    formatter: function() {
+                        return cateData['k' + this.zxcd];
+                    }
+                },
+                {
+                    field: 'cate_type',
+                    title: '物业类型',
+                    formatter: function() {
+                        return cateData['k' + this.cate_type];
+                    }
+                },
+                {
+                    field: 'cate_status',
+                    title: '销售状态',
+                    formatter: function() {
+                        return cateData['k' + this.cate_status];
+                    }
+                },
+                 {
+                    field: 'tslp',
+                    title: '特色楼盘',
+                    formatter: function() {
+                        return $.map(this.tslp.split(','), function(n) {
+                             return '<span>'+ tslp[n] +'</span>';
+                        }).join();
+                    }
+                },
+                {
+                    field: 'wygs',
+                    title: '物业公司'
+                },
+                {
+                    field: 'content',
+                    title: '简介'
+                },
+
+
+                // 多选
+                /*{
+                    field: 'tslp',
+                    title: '特色楼盘',
+                    formatter: function() {
+                        var tslp = this.tslp; // 1,2,3,4
+                        return $.map(tslp.split(','), function(i, v) {
+                             return '<span>'+ cateData['k' + v] +'</span>';
+                        }).get().join();
+                    }
+                },
+                {
+                    field: 'zxcd',
+                    title: '装修程度',
+                    formatter: function() {
+                        return zxcd[this.zxcd];
+                    }
+                }*/
+            ],
+
+         3: [
+                {
+                    field: 'active',
+                    title: '基本信息',
+                    formatter: function() {
+                        return '&nbsp;';
+                    }
+                },
+                {
+                    field: 'name',
+                    title: '标题',
+                    formatter: function() {
+                        return '<a href="{{contrast_opt_act.urlPre}}' + this.id +'">' + this.name + '</a>';
+                    }
+                },
+                {
+                    field: 'zj',
+                    title: '总价',
+                    formatter: function(i) {
+                        return '<font color="red">' + this.zj + '</font>万';
+                    }
+                },
+                 {
+                    field: 'mj',
+                    title: '面积',
+                    formatter: function(i) {
+                        return  this.mj + 'm&sup2;';
+                    }
+                },
+                {
+                    field: 'thumb',
+                    title: '图片',
+                    formatter: function(i) {
+                        return comparison.getImg(this.thumb, i);
+                    }
+                },
+                {
+                    field: 'lpmc',
+                    title: '小区'
+                },
+                {
+                    field: 'address',
+                    title: '地址'
+                },
+                {
+                    field: 'tel',
+                    title: '电话'
+                },
+                {
+                    field: 'active',
+                    title: '其它',
+                    formatter: function() {
+                        return '&nbsp;';
+                    }
+                },
+                {
+                    field: 'cx',
+                    title: '朝向',
+                    formatter: function() {
+                        return cateData['k'+this.cx];
+                    }
+                },
+                {
+                    field: 'fwpt',
+                    title: '房屋配套',
+                    formatter: function() {
+                        if(this.fwpt.length > 0){
+                            return $.map(this.fwpt.split(','), function(n) {
+                                 return '<span>'+ fwpt[n] +'</span>';
+                            }).join();
+                        }
+                    }
+                },
+                {
+                    field: 'fls',
+                    title: '房龄',
+                    formatter: function() {
+                        return cateData['k'+this.fl];
+                    }
+                },
+                {
+                    field: 'lc',
+                    title: '楼层',
+                    formatter: function() {
+                        return this.szlc +'/'+ this.zlc +'层';
+                    }
+                },
+                 {
+                    field: 'shi',
+                    title: '室',
+                    formatter: function() {
+                        return cateData['k'+this.shi];
+                    }
+                },
+                 {
+                    field: 'ting',
+                    title: '厅',
+                    formatter: function() {
+                        return cateData['k'+this.ting];
+                    }
+                },
+                 {
+                    field: 'wei',
+                    title: '卫',
+                    formatter: function() {
+                        return cateData['k'+this.wei];
+                    }
+                },
+                 {
+                    field: 'chu',
+                    title: '厨',
+                    formatter: function() {
+                        return cateData['k'+this.chu];
+                    }
+                },
+                 {
+                    field: 'yangtai',
+                    title: '阳台',
+                    formatter: function() {
+                        return cateData['k'+this.yangtai];
+                    }
+                },
+                {
+                    field: 'esflx',
+                    title: '房屋类型',
+                    formatter: function() {
+                        return cateData['k'+this.esflx];
+                    }
+                },
+                {
+                    field: 'content',
+                    title: '简介'
+                }
+            ],
+
+        2: [
+                {
+                    field: 'active',
+                    title: '基本信息',
+                    formatter: function() {
+                        return '&nbsp;';
+                    }
+                },
+                {
+                    field: 'name',
+                    title: '标题',
+                    formatter: function() {
+                        return '<a href="{{contrast_opt_act.urlPre}}' + this.id +'">' + this.name + '</a>';
+                    }
+                },
+                {
+                    field: 'czj',
+                    title: '租价',
+                    formatter: function(i) {
+                        return '<font color="red">' + this.czj + '</font>元/月';
+                    }
+                },
+                {
+                    field: 'zlfs',
+                    title: '租赁方式',
+                    formatter: function() {
+                        return zlfs[this.zlfs];
+                    }
+                },
+                 {
+                    field: 'mj',
+                    title: '面积',
+                    formatter: function(i) {
+                        return  this.mj + 'm&sup2;';
+                    }
+                },
+                {
+                    field: 'thumb',
+                    title: '图片',
+                    formatter: function(i) {
+                        return comparison.getImg(this.thumb, i);
+                    }
+                },
+                {
+                    field: 'lpmc',
+                    title: '小区'
+                },
+                {
+                    field: 'address',
+                    title: '地址'
+                },
+                {
+                    field: 'tel',
+                    title: '电话'
+                },
+                {
+                    field: 'active',
+                    title: '其它',
+                    formatter: function() {
+                        return '&nbsp;';
+                    }
+                },
+                {
+                    field: 'cx',
+                    title: '朝向',
+                    formatter: function() {
+                        return cateData['k'+this.cx];
+                    }
+                },
+                {
+                    field: 'fls',
+                    title: '房龄',
+                    formatter: function() {
+                        return cateData['k'+this.fl];
+                    }
+                },
+                {
+                    field: 'fwpt',
+                    title: '房屋配套',
+                    formatter: function() {
+                        if(this.fwpt.length >0){
+                            return $.map(this.fwpt.split(','), function(n) {
+                                 return '<span>'+ fwpt[n] +'</span>';
+                            }).join();
+                        }
+                    }
+                },
+                {
+                    field: 'lc',
+                    title: '楼层',
+                    formatter: function() {
+                        return this.szlc +'/'+ this.zlc +'层';
+                    }
+                },
+                 {
+                    field: 'shi',
+                    title: '室',
+                    formatter: function() {
+                        return cateData['k'+this.shi];
+                    }
+                },
+                 {
+                    field: 'ting',
+                    title: '厅',
+                    formatter: function() {
+                        return cateData['k'+this.ting];
+                    }
+                },
+                 {
+                    field: 'wei',
+                    title: '卫',
+                    formatter: function() {
+                        return cateData['k'+this.wei];
+                    }
+                },
+                 {
+                    field: 'chu',
+                    title: '厨',
+                    formatter: function() {
+                        return cateData['k'+this.chu];
+                    }
+                },
+                 {
+                    field: 'yangtai',
+                    title: '阳台',
+                    formatter: function() {
+                        return cateData['k'+this.yangtai];
+                    }
+                },
+                {
+                    field: 'czlx',
+                    title: '房屋类型',
+                    formatter: function() {
+                        return cateData['k'+this.czlx];
+                    }
+                },
+                {
+                    field: 'content',
+                    title: '简介'
+                }
+            ]
+    }
+    // 对比初始化
+    comparison.init({
+            url: '{{("bundlebindforms/comparison")|U({formid: contrast_opt_act.formid, models: contrast_opt_act.models})}}',
+            data: datas[{{url_chid}}] || []
+        })
+
+    // 表头浮动
+    $('.list-head-inner').scrollToFixed({
+        marginTop: $('.header').height(),
+        zIndex: 10
+    })
+
+});
+</script>
+{% endblock js %}

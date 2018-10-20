@@ -1,0 +1,65 @@
+{# 相册 #}
+{% extends 'HouseBundle:Mhouse:mhousesarc.html.twig' %}
+{% set search_keyword = app.request.get('name') %}
+{% set search_opt = search_keyword ? {name: 'orX|name,like,%' ~ search_keyword ~ '%|id,like,%' ~ search_keyword ~ '%'} : {} %} 
+
+    {% block tableMain %}
+    {# {{dump(block_active_data)}} #}
+    {# {% if ename is defined %} #}
+    {% set filterOpt = [
+        {
+            method: 'search',
+            field: 'name',
+            title: '请搜索ID/名称'
+        }
+    ] %}
+    {# {% endif %} #}
+    {{ core_manage.filter(filterOpt|default('')) }}
+
+    <div class="list-con" data-param="{{ params }}">
+        <div class="list list-thumb">
+        <ul>
+            {% if ident.info.data|length %}
+                {% for k, vo in ident.info.data %} 
+                    <li data-id="{{ vo.id }}">
+                        <div data-role="checkbox" class="img">
+                            <img src="{{assetImg(vo.thumb, {type: 1, width: 135, height: 135})}}">
+                            <i class="font-ico-1"></i>
+                        </div>
+                        <div class="bar">
+                            <span class="text">{{ vo.id|default('') }}</span>
+                            <a title="编辑" data-role="show" href="{{ (action ~ "/show")|U({id: vo.id}) }}" class="font-ico-2 is-edit"></a>
+                            <a title="删除" data-role="delete" href="#" class="font-ico-3"></a>                    
+                        </div>
+                        <div class="t list-thumb-name" title="{{vo.name|default('')}}">
+                            [{{ core_global.formField({value: vo.checked}) }}] {{ vo.name|default('') }}
+                        </div>                     
+                    </li>
+                {% endfor %}
+            {% else %}
+                <li class="tac">没有数据！</li>
+            {% endif %}
+        </ul>
+    </div>
+        {{core_manage.page(ident.info)}}
+    </div>
+        
+    {{ core_manage.oprate([
+        {
+            method: 'delete',
+            title: ' <i class="font-ico-del mr5"></i>批量删除',
+        },
+        {
+            method: 'dropdownFormField',
+            field: 'checked',
+            form: 'checked',
+            title: '审核',
+        },
+        {
+            method: 'dropdownFormField',
+            field: 'cate_album',
+            form: 'houses_album',
+            title: '类型',
+        }
+    ]) }}
+    {% endblock %}

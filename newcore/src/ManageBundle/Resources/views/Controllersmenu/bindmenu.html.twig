@@ -1,0 +1,34 @@
+{% extends "ManageBundle::poplayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+seajs.use("{{bundlepath}}/js/backendmenu",function(l){
+	//js入口	    
+	l.init('main');
+});
+</script>
+{% endblock %}
+{% block body %}
+<form action="{{ action|U({'pid':app.request.get('pid',0)}) }}" method="post" class="bindmenuform">
+    {% if bindInfo is defined %}
+    {% for k,vo in bindInfo %}
+    <div style="background: rgba(0, 0, 0, 0.2);padding:0px 10px;">{{ ('db.menus')|getOne('name',{'id':k}) }}</div>
+    <ul>
+        {% for id, name in vo %}
+        <li style='float: left; display: inline-block; padding: 0px 10px;'>
+            <input type="checkbox" name="bindmenu[]" value="{{ id }}" {{ id|isChecked(info.bindmenu|default('')) }} /><span>{{ name|default('') }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+    <br />
+    {% endfor %}
+    {% if bindInfo is empty %}
+                      未找到相关数据
+    {% else %}
+    <hr>
+    <div class="popup-submit">
+        <button type="submit" class="search-btn btn ajax-post close" target-form="bindmenuform">提交</button>
+    </div>
+    {% endif %}
+    {% endif %}
+</form>
+{% endblock %}

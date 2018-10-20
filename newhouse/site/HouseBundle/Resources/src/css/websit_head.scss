@@ -1,0 +1,112 @@
+.website_tophead li,.website_tophead a,.website_otlinfo a,.website-search input.bnt{background: url(../images/webheadpic.gif) no-repeat;}
+.website_tophead{ height: 38px; line-height: 38px; background: #021220; color: #FFF; position: relative; z-index: 8888; font-size: 12px;}
+.website_tophead li{ float: left; border-right:1px solid #4F4F4F; position: relative; background-position:right 31px;}
+.website_tophead li.wzdh{ border-left:1px solid #4F4F4F; }
+.website_tophead li.noimgbg{ background-image:none; }
+.website_tophead li.fs{border-left:1px solid #4F4F4F;}
+.website_tophead li.substation{ border: 0; background-color:#FF6600; }
+.subschange{background: #CC0000; padding: 0 5px; height: 18px; line-height: 18px; float: left; margin:10px 15px 0 0; _display: inline; }
+.website_tophead a.col{ display: block; color: #FFF; background-position:15px -96px;  padding:0 15px 0 35px;}
+.website_tophead a:hover{ text-decoration: none;}
+.website_tophead a.sub{ background-image:none; padding: 0 5px 0 15px; float: left; }
+.website_tophead a.mb{ background-position:19px -31px; }
+.website_tophead a.lgbnt{ width: 50px; background-color: #383838; border: 1px solid #4F4F4F; height: 20px; line-height: 20px; margin:8px 5px; background-position:7px -167px; padding: 0 6px 0 35px; cursor: pointer; }
+.website_tophead a.regacbnt{background-position:7px -234px;}
+.website_tophead a.othrlogin{ width:58px; background-position:15px -301px;}
+.website_tophead a.indback{background-position:13px -367px; background-color: #021220;}
+.website_tophead a em{ display: block;}
+.website_tophead a em.load{ background: url(../images/lineload.gif) center center no-repeat;}
+.website_tophead a em.wdload{ width: 54px;}
+.website_tophead li.act{ background-position:right 5px; background-color:#FFF; }
+.website_tophead li.act a.col{ color: #2C2C2C;}
+.website_tophead li.act a.indback{color: #FFF; background-color:#383838; }
+.website_tophead li.act a i{ color: #FFF;}
+.website_tophead li.act a.mb{ background-position:19px -64px;}
+.website_tophead li.act a.wbnv{ background-position:15px -129px;}
+.website_tophead li.act a.lgbnt{ width: 62px; height: 38px; line-height:38px; border: 0; background-color: #FFF; background-position:10px -191px; margin: 0;}
+.website_tophead li.act a.regacbnt{background-position:10px -263px;}
+.website_tophead li.act a.othrlogin{background-position:15px -335px;}
+.website_pos{width: 428px; position: absolute; top: 38px; left: -1px;  color: #2C2C2C; border: 1px solid #021220; border-top:0; display: none; background-color:#FFF; }
+.website_mobapps{ width: 325px; left: 50%; margin-left:-162px;}
+.website_logininfo{ width: 300px; left: 50%; margin-left:-176px; padding:10px 15px; line-height: 24px; color: #555; }
+.website_logininfo a{ background-image:none; color: #0196DD; }
+.website_logininfo span{ color: #CC0000;}
+.website_logininfo span.colbl{ color: #0196DD; cursor: pointer;}
+.website_tophead li.act .website_pos{ display: block;}
+.subwebletter{ padding: 10px 10px 15px 10px;}
+.subwebletter i{ background: #FFF; border: 1px solid #DDE4E8; width: 24px; height: 24px; line-height: 24px; text-align: center; cursor: pointer; margin: 5px 0 0 5px; display: inline-block;}
+.subwebletter i:hover,.subwebletter i.act{ background: #0196DD; border: 1px solid #0196DD; color: #FFF;}
+.subwebline{ border-top:1px solid #DDD; margin-top:15px; height: 10px; clear:both; overflow: hidden;  }
+.nolettertip {width: 100%; height: 22px; line-height: 22px; text-align: center; position: absolute; top: -12px; left: 0; _left: -15px;border: 1px solid #E8CA54; border-width: 1px 0; background: #FDFCF2; color: #666; display: none;}
+.website_info{ padding-bottom:15px; line-height:22px;  background:#F4F8FA; }
+.website_navinfo{ width: 520px;}
+.website_navinfo dl{ padding: 8px 0; border-top: 1px dotted #DDD; line-height: 24px; }
+.website_navinfo dl.fs{ border: 0;}
+.website_navinfo dt{width:40px;  float: left;color: #666; font-weight: bold;}
+.website_navinfo dd{ margin-left:40px;}
+.website_info a,.website_navinfo a{ display: inline-block; padding:0 5px; background-image:none; }
+.website_info a:hover{ background:#000; color: #FFF;}
+.website_info a.act{ background: #FF6600; color: #FFF;}
+.website_mobapps a{ width:132px;height: 185px; background-image:none; float: left; border-left:1px solid #EEE; padding: 10px 15px 0; _display: inline; }
+.website_mobapps a:hover{background: #F9FBFF;}
+.website_mobapps a.fs{ border: 0;}
+.website_mobapps span{ display: block; height: 22px; line-height: 22px; color: #777; text-align: center;}
+.website_mobapps img{ width: 120px; height: 120px; padding: 5px; border: 1px solid #EEE; display: block; background: #FFF;}
+.website_otlinfo{ width: 108px; right: 0;}
+.website_otlinfo i,.website_otlinfo a{ display: block; border-top: 1px solid #EEE; color: #666;}
+.website_otlinfo a{ padding-left:30px; background-position: 16px -395px; }
+.website_otlinfo a.fs{ border: 0;}
+.website_otlinfo i{  padding-left:40px; background: url(../images/sharepic.gif) 15px -61px no-repeat; cursor: pointer; }
+.website_otlinfo i.wb{ background-position:15px 9px; border: 0; }
+.website_otlinfo i:hover,.website_otlinfo a:hover{ background-color:#F9FBFF; }
+/***公用导航***/
+.website-navbg{ height: 70px; line-height: 70px; background:#0196DD; position: relative; z-index: 1000;  }
+.website-logo{ width: 210px;  padding-top:10px;}
+.website-logo a{ width: 180px; height: 50px; display: block; }
+.website-nav a,.website-nav em{ padding: 0 28px; font-size: 16px; color: #FFF; float: left; display: block;}
+.website-nav a.act,.website-nav a.act:hover{ background: #FFF; color: #2C2C2C;}
+.website-nav a:hover,.website-nav em.act{ background: #3C5D85; text-decoration: none; color: #FFF;}
+.website-nav a.pp{ padding: 0 10px 0 0}
+.website-nav em.act a.act{ background: #3C5D85; color: #FFF;}
+.website-toolmore .xgtool{ width: 298px; position: absolute; top: 70px; right: 0; background: #3C5D85; line-height: 30px; display: none;}
+.website-nav em.act .xgtool{ display: block;}
+.website-nav em.act dt a.act{ color:#FCF9D9;}
+.website-toolmore dt,.website-toolmore dl{ clear: both;}
+.website-toolmore a{ float: none; display:inline-block; padding: 0 15px; font-size: 14px; }
+.website-toolmore dl{ padding:0 15px 15px;}
+.website-toolmore dd{ background: #000; padding: 5px;}
+.website-so{ width: 240px; margin-top:20px; }
+.website-so input{ float: left; width: 180px; height: 28px; line-height: 28px;line-height: 26px\9; overflow: hidden; padding-left:5px;  background: #FFF; border: 1px solid #000; font-size: 12px; color: #A9A9A9;}
+.website-so input.sosobtn{width: 48px; border: 0; height: 30px; line-height: 30px; background:#000; cursor: pointer; color: #FFF; padding: 0;}
+/***面包屑***/
+.website-break{ height: 45px; line-height: 45px; border-bottom:1px solid #EEE;  }
+.website-break i{font-family: "sinsum";color: #666; padding: 0 5px;}
+.website-search input{ width:198px; padding-left:10px;  height: 30px; line-height: 30px; border: 1px solid #DDD; border-width:1px 0 1px 1px; float: left; margin-top:6px; }
+.website-search input.bnt{ width: 40px; height:32px; border: 0; background-color:#1575A3;  text-indent: -100px; overflow: hidden; padding: 0; background-position:11px -466px; cursor: pointer;}
+
+.website-carhead{ background: #0196DD; color: #FFF;}
+.website-carinfo{ height:50px; padding-top:20px;}
+.website-carinfo a{ color: #FFF;}
+.website-carnav{ height: 50px; line-height: 50px; background: #015B86; border:1px solid #015279; border-bottom:0; }
+.website-carnav a{ float: left; color: #FFF; padding: 0 32px; font-size: 16px; text-align: center;}
+.website-carnav a:hover{background:#0670A3; color: #FFF; text-decoration: none;}
+.website-carnav a.addbg{ background: #0076AE; }
+.website-carnav a.act,.website-carnav a.act:hover{ background: #FFF; color: #076694;}
+.website-carnav-fix{width:998px;position:fixed; top:0; z-index:1000;}
+
+/***驾校、租车***/
+.website-com-navbg{ background: #0196DD;}
+.website-com-logo{ width: 120px; height: 90px; margin-right:15px;  background: #FFF;}
+.website-com-addr{ width: 800px; color: #FFF;}
+.website-com-addr a{ color: #FFFCC2;}
+.website-com-addr em{ font-size: 28px; display: block; margin-top:15px;  }
+.website-com-addr p{ height: 20px; line-height: 20px; overflow: hidden;}
+.website-com-nav{ height: 50px; line-height: 50px; background:#00A2EF;}
+.website-com-nav li{ float: left; padding: 0 25px; margin-left:15px; _display: inline; }
+.website-com-nav li.act{ background: #FFF;}
+.website-com-nav a{ color: #FFF;}
+.website-com-nav li.act a{ color: #096996;}
+.website-com-bg{ background:  #096996;}
+.website-jxnav li{ padding: 0 15px; margin-left: 7px; }
+.website-com-tel{ position: absolute; bottom: 20px; right: 0; width: 200px; height: 30px; line-height: 30px; margin-left:20px; font-size: 20px; font-weight: bold; font-family: Arial; color: #FF6600; padding-left:35px; border-bottom:2px solid #FD9526; background: #FFF;  }
+.website-com-tel i{  width: 27px; height: 27px; background: url(../images/tel.png) no-repeat; position: absolute; top: 5px; left: 0px; }

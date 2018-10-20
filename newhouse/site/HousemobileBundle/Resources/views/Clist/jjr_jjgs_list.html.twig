@@ -1,0 +1,13 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+** ajax调用：经纪人
+#}
+{% block result %}
+{% if app.request.get('json', 0) %}
+{
+    "pageCount": "{{ident.list.pageCount|default(0)}}"
+}
+{% else %}
+    {% include 'HousemobileBundle:Clist:jjr_list.html.twig' ignore missing %}
+{% endif %}
+{% endblock result %}

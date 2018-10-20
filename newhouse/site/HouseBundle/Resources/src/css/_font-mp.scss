@@ -1,0 +1,49 @@
+$font-mp-fz: inherit !default;
+
+@font-face {
+	font-family: "mp";
+    font-weight: normal;
+    font-style: normal;
+	src: url('../fonts/mp.eot');
+	src: url('../fonts/mp.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/mp.woff') format('woff');//,
+		//url('../fonts/mp.ttf') format('truetype'),
+		//url('../fonts/mp.svg#mp') format('svg');
+}
+$font-mp-fz: inherit !default;
+$font-mp-fl: none !default;
+$font-mp-m: 0 !default;
+$font-mp-va: -.25em !default;
+[class^="font-mp-"],
+[class*=" font-mp-"] {
+	font-family: "mp";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-size: $font-mp-fz;
+	float: $font-mp-fl;
+	margin: $font-mp-m;
+	vertical-align: $font-mp-va;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; only necessary if not using the private unicode range (firstdata option) 
+	text-decoration: none;
+	text-transform: none;
+}
+.font-mp-2:before {
+	content: "\EA01";
+}.font-mp-home:before {
+	content: "\EA02";
+}.font-mp-menu:before {
+	content: "\EA03";
+}.font-mp-phone:before {
+	content: "\EA04";
+}.font-mp-sc:before {
+	content: "\EA05";
+}.font-mp-search:before {
+	content: "\EA06";
+}.font-mp-tel:before {
+	content: "\EA07";
+}.font-mp-xin:before {
+	content: "\EA08";
+}

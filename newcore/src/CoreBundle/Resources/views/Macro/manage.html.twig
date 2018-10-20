@@ -1,0 +1,1561 @@
+{# 调用说明开始 #}
+{# {{ 'qq'|trans({}, 'HomeBundle') }} #}
+{# {% import "CoreBundle:Macro:manage.html.twig" as core_manage %} #}
+{# {{ core_manage.popEdit(dbForm,'formclass') }} #}
+{# 调用说明结束 #}
+{# @description 管理后台宏的使用文档 #}
+{#
+/**
+ * @method btn(object)
+ * @description 按钮、链接类
+ * @param {String} o.url=# 操作的链接
+ * @param {String} o.type 角色，对应[manage.js](./manage.html)里的`role`
+ * @param {String} o.title=确定 标题
+ * @param {String} o.class 按钮的css类
+ * @param {String} o.ico 按钮的图标样式
+ * @param {String} o.target 删除的对象, `data-role="delete"`-为要删除的对象的外层，`data-role="jump,route"`-要操作的外层具体看[manage.js](./manage.html)
+ * @param {String} o.attr 自定义属性，再多的参数也未必满足使用者的需求，attr可以自定义属性
+ * @example 调用
+ * ```twig
+ * {{ core_manage.btn({
+ *      type: 'jump',
+ *      url: '('mnews/mnewsmanage')|U({category: 1})',
+ *      title: '国内楼市',
+ *      class: 'btn',
+ *      target: '.main-through',
+ *      attr: ' data-a="1"'
+ * }) }}
+ * ```
+ */
+ #}
+{% macro btn(o) -%}
+    {% set _opt = {
+        url: '#',
+        attr: {},
+        class: '',
+        title: '确定',
+        role: '',
+        tpl: '',
+        target: '',
+        ico: ''
+    }|merge(o|default({})) %}
+
+    {%- set ico -%}
+        {%- if _opt.ico -%}
+        <i class="{{ _opt.ico }}"></i>
+        {%- endif -%}
+    {%- endset -%}
+    {# 移除没有的属性设置 #}
+    {% set _opt = _opt|merge({ico: ''}) %}
+    {# {{ dump(_opt) }} #}
+    <a {{_self.attr(_opt)}} class="btn btn-sm {{_opt.class}}">{{ ico|raw }}{{ _opt.title|raw }}</a>
+{%- endmacro %}
+
+{%- macro attr(_attr) -%}
+    {% import "CoreBundle:Macro:global.html.twig" as core_global %}
+    {%- for k, v in _attr -%}
+        {# 下面几个加前缀‘data-’ #}
+        {%- if k in ['role', 'target', 'tpl', 'data', 'params'] -%}
+            {%- if v %} data-{{k}}="{{core_global.arrToStr(v)}}"{%- endif -%}
+        {%- elseif k == 'url' %} href="{{v|raw}}"
+        {%- elseif k == 'attr' -%}
+            {# 是数组是才遍历 #}
+            {%- if v|is_array -%}
+            {%- for kk, vv in v %} {{kk}}="{{core_global.arrToStr(vv)}}"{%- endfor -%}
+            {%- else %} {{v|raw}}
+            {%- endif -%}
+        {%- elseif k not in ['title', 'class'] %}
+            {%- if v %} {{k}}="{{core_global.arrToStr(v)}}"{%- endif -%}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro -%}
+{#
+/**
+ * @method btn_date(object)
+ * @description 日期按钮，继承btn
+ * @param {String} o.url=# 操作的链接
+ * @param {String} o.title=标题
+ * @param {String} o.class 按钮的css类
+ * @param {String} o.attr 自定义属性，再多的参数也未必满足使用者的需求，attr可以自定义属性
+ * @example 调用
+ * ```twig
+ * {{ core_manage.btn_date({
+        field: 'end_time',
+        title: '到期时间',
+ * }) }}
+ * ```
+ */
+ #}
+{% macro btn_date(o) %}
+    {% set _opt = o|merge({
+        field: '',
+        title: '<i class="font-ico-16 mr5"></i>' ~ o.title|default('日期')|raw,
+        'data-drops': 'up',
+        'data-locale': {
+            format: 'YYYY-MM-DD HH:mm'
+        },
+        'data-name': o.field,
+        'data-date': o.field,
+    }) %}
+    {{ _self.btn(_opt) }}
+    <script type="text/javascript">
+        seajs.use(['manage', 'daterangepicker'], function(manage) {
+            var $dataDate = $('.btn[data-date="{{_opt['data-name']|default('')}}"]');
+            var dateValue = $dataDate.val();
+            var dateOpt = {
+                    // startDate: new Date(),
+                    drops: 'up',
+                    autoApply: true,
+                    locale: {
+                        format: 'YYYY-MM-DD' + ($dataDate.data('time-picker') ? ' hh:mm:ss' : '')
+                    }
+                };
+            $dataDate.daterangepicker(dateOpt, function(start, end, label) {
+                // 选择日期后的回调
+                var $inputAct = this.element;
+                $inputAct.data('value', start.format('YYYY-MM-DD'));
+                var eldata = $inputAct.data();
+                eldata.$el = $inputAct;
+                eldata.role = 'submit';
+                manage.submit(eldata);
+            })
+            .on('cancel.daterangepicker', function(ev, picker) {
+                //do something, like clearing an input
+                this.value = '';
+            })
+            .on('show.daterangepicker', function(ev, picker) {
+              picker.container
+                .on('click.today', 'button.todayBtn', function() {
+                    picker.container.off('.today');
+                    picker.hide();
+                    picker.setStartDate(moment().format());
+                    picker.setEndDate(moment().format());
+                    picker.updateElement();
+                })
+                .find('.ranges').show()
+            })
+            .click(function(event) {
+                return false;
+            });
+
+            // 还原表单值
+            $dataDate.val(dateValue);
+        })
+    </script>
+{% endmacro %}
+{#
+/**
+ * @method show(object)
+ * @description 添加编辑按钮，继承btn
+ * @param {String} o.url=# 操作的链接
+ * @param {String} o.title=修改 标题
+ * @param {String} o.class 按钮的css类
+ * @param {Object} o.attr 自定义属性，再多的参数也未必满足使用者的需求，attr可以自定义属性
+ * @example 调用
+ * ```twig
+ * {{ core_manage.show({
+ *      url: '('mnewsmanage/show')|U({aid: 1})',
+ *      title: '修改',
+ *      class: 'btn',
+ *      attr: {
+            'data-a': 1
+         }
+ * }) }}
+ * ```
+ */
+ #}
+{% macro show(o) %}
+    {% set _opt = {
+        role: 'show',
+        title: (o.title|default('修改'))|raw,
+    }|merge(o|default({})) %}
+    {{ _self.btn(_opt) }}
+{% endmacro %}
+
+{#
+/**
+ * @method delete(object)
+ * @description 删除按钮，继承btn
+ * @param {String} o.title=删除 标题
+ * @param {Object} o.class 按钮的css类
+ * @example 调用
+ * ```twig
+ * {{ core_manage.delete({
+ *      url: '('mnewsmanage/delete')|U({aid: 1})',
+ *      title: '删除',
+ *      class: 'btn',
+ *      attr: : {
+            'data-a': 1
+        }
+ * }) }}
+ * ```
+ */
+ #}
+{% macro delete(o) %}
+    {% set _opt = {
+        role: 'delete',
+        class: 'btn-danger ' ~ o.class|default(''),
+        title: o.title|default('删除')
+    }|merge(o|default({})) %}
+    {% if not _opt.issystem|default(0) %}
+    {{ _self.btn(_opt) }}
+    {% endif %}
+{% endmacro %}
+
+{#
+/**
+ * @method jump(object)
+ * @description 跳转按钮，继承btn
+ * @param {String} o.url=# 操作的链接
+ * @param {String} o.title=提交 标题
+ * @param {String} o.class 按钮的css类
+ * @param {String} o.target 删除的对象, `data-role="delete"`-为要删除的对象的外层，`data-role="jump,route"`-要操作的外层具体看[manage.js](./manage.html)
+ * @param {String} o.attr 自定义属性，再多的参数也未必满足使用者的需求，attr可以自定义属性
+ * @example 调用
+ * ```twig
+ * {{ core_manage.jump({
+ *      url: '('mnews/mnewsmanage')|U({category: 1})',
+ *      title: '提交',
+ *      class: 'btn on',
+ *      attr: ' data-a="1"'
+ * }) }}
+ * ```
+ */
+ #}
+{% macro jump(o)-%}
+    {% set _opt = {
+        role: 'jump',
+        title: o.title|default('提交')|raw,
+    }|merge(o|default({})) %}
+
+    {% if _opt.url|default('')|P %}
+    {{ _self.btn(_opt) }}
+    {% endif %}
+{% endmacro %}
+
+{#
+/**
+ * @method submit(object)
+ * @description 提交、设置按钮，继承btn
+ * @param {String} o.url=# 操作的链接
+ * @param {String} o.title=提交 标题
+ * @param {String} o.class 按钮的css类
+ * @param {object} o.params 要提交的额外数据
+ * @param {String} o.attr 自定义属性，再多的参数也未必满足使用者的需求，attr可以自定义属性
+ * @example 调用
+ * ```twig
+ * {{ core_manage.submit({
+ *      url: '('mnews/mnewsmanage')|U({category: 1})',
+ *      title: '提交',
+ *      class: 'btn on',
+ *      title: '确定加载',
+ *      attr: {
+            'data-add': 'fromid'
+ *      }
+ * }) }}
+ * ```
+ */
+ #}
+{% macro submit(o) %}
+    {% set _opt = {
+        role: 'submit',
+        title: o.title|default('提交')|raw,
+        ico: 'font-ico-22 mr5',
+    }|merge(o|default({})) %}
+    {{ _self.btn(_opt) }}
+{% endmacro %}
+{#
+/**
+ * @method checkbox(title)
+ * @description 筛选框
+ * @param {string} title=null 标题
+ * @example 调用
+ * ```twig
+ * {{ core_manage.checkbox() }}
+ * ```
+ */
+ #}
+{%- macro checkbox(title) -%}
+    <i data-role="checkbox">{{title|default('')|raw}}</i>
+{%- endmacro -%}
+{#
+/**
+ * @method checkboxImg(title)
+ * @description 选择图标，用于图片选中效果
+ * @example 调用
+ * ```twig
+ * {{ core_manage.checkboxImg() }}
+ * ```
+ */
+ #}
+{%- macro checkboxImg(title) -%}
+    <i data-role="checkbox" class="font-ico-1"></i>
+{%- endmacro -%}
+{#
+/**
+ * @method plus(next)
+ * @description 展开图标
+ * @param {String} next 为真时显示`+`号
+ * @example 调用
+ * ```twig
+ * {{ core_manage.plus() }}
+ * ```
+ */
+ #}
+{%- macro plus(next) -%}
+    <a data-plus="1" class="{% if next %}plus{% endif %}"></a>
+{%- endmacro -%}
+{#
+/**
+ * @method search(o)
+ * @description 检索类-搜索框
+ * @param {string} o.field=name 要搜索的字段
+ * @param {string} o.title=请输入关键字 搜索框的`placeholder`
+ * @param {Boolean} o.search=1 1表示启用`data-role="search"`属性设置
+ * @example 调用
+ * ```twig
+ * {{ core_manage.search({
+ *      field: 'name',
+ *      size: 0,
+ *      title: '请输入关键字',
+        search: 1
+ * }) }}
+ * ```
+ */
+ #}
+{%- macro search(o) -%}
+    {% set _o = {
+        size: '',
+        field: 'name',
+        title: '请输入关键字',
+        class: '',
+        search: 1,
+        attr: '',
+    }|merge(o|default({})) %}
+    {% import "CoreBundle:Macro:global.html.twig" as core_global %}
+    <input {{core_global.h5_attr(_o.attr)}} type="text" {{ _o.search ? 'data-role="search"'|raw : '' }} tabindex="1" size="{{_o.size}}" class="form-control input-search input-sm {{ _o.class ?? ''}}" name="{{_o.field}}" placeholder="{{_o.title}}" value=""/><i class="font-ico-search"></i>
+{%- endmacro -%}
+
+{#
+/**
+ * @method selectCate(o)
+ * @description 检索类-从分类表调用列表选项
+ * @param {String} o.field 分类在文档里的字段名
+ * @param {String} o.service 分类服务
+ * @param {String} o.title 标题
+ * @param {String} o.chosen 下拉框搜索
+ * @param {String|Number} o.value=id select的value取id的值
+ * @param {object} o.data 自定义选项
+ * @param {String} o.where 其它条件
+ * @example 调用
+ * ```twig
+ * {{
+ *    core_manage.selectCate({
+        title: '物业类型',
+        field: 'cate_type',
+        service: 'house.category',
+ *    })
+ * }}
+ * ```
+ * @example 调用1
+ * ```twig
+ * {{
+ *    core_manage.selectCate({
+        title: '小区楼盘',
+        field: 'type',
+        data: {
+            0: {
+                name: '小区',
+                id: 1
+            },
+            1: {
+                name: '楼盘',
+                id: 0
+            }
+        }
+ *    })
+ * }}
+ * ```
+ */
+ #}
+{% macro selectCate(o) %}
+    {% set opt = {
+        value: 'id',
+        selected: 0,
+        chosen: {}
+    }|merge(o) %}
+
+    {% if opt.data is defined %}
+        {% set data = opt.data %}
+        {% set title = opt.title|default('请选择')%}
+    {% else %}
+        {% set category = app.request.get('category') %}
+        {% set title = opt.title|default('请选择') ? : ('db.models')|getOne('title', {name: opt.field}) %}
+        {% set where = opt.where|default({})|merge({ename: opt.field, checked: 1}) %}
+        {% if opt.field == 'category' %}
+        {% set parents = ('house.category')|getParents(category) %}
+            {# 可能会没数据 #}
+            {% if parents.data is defined %}
+                {% set where = where|merge({pid: parents.data[0].id}) %}
+            {% endif %}
+        {% endif %}
+        {% set info = opt.service|default('house.category')|getAll({pageSize: 30}|merge(where)) %}
+        {% set data = info.data %}
+    {% endif %}
+        {% if data|length < 15 %}
+            {% set chosen = opt.chosen|merge({
+                disable_search: true
+            }) %}
+        {% else %}
+            {% set chosen = opt.chosen %}
+        {% endif %}
+        {% set chosen = opt|merge({chosen: chosen}) %}
+    <select data-chosen="{{ o.field }}" data-role="select"  class="form-control input-sm" name="{{ o.field }}">
+        <option value="">{{title}}</option>
+        {% for item in data %}
+        <option {% if loop.index == opt.selected %}selected="selected"{% endif %}  value="{{ attribute(item, opt.value) }}">{{ item.name }}</option>
+        {% endfor %}
+    </select>
+    {{_self.chosen(chosen)}}
+{% endmacro %}
+
+{% macro chosen(o) %}
+<script>
+    seajs.use('chosen', function(chosen){
+        var opt = $.extend(true, {}, {
+            no_results_text: "没有数据",
+            search_contains: true,
+            placeholder_text_multiple: '请选择',
+            placeholder_text_single: '请选择'
+        }, {{o.chosen|json_encode|raw}});
+        
+        $('[data-chosen="{{ o.field }}"]')
+            .chosen(opt)
+            .off('.chosen')
+            .on('change.chosen', function() {
+                $(this).next()[$.trim(this.value) ? 'addClass' : 'removeClass']('chosen-container-selected');
+            });
+    });
+</script>
+{% endmacro %}
+
+{#
+/**
+ * @method selectField(o)
+ * @description  检索类-模型字段搜索下拉框
+ * @param {String} o.field 要搜索的字段名
+ * @param {String} o.service 字段的服务名
+ * @param {String} o.title=选择 下拉框标题标题
+ * @example 调用
+ * ```twig
+ * {{ core_manage.selectField({
+ *      field: 'name',
+ *      service: 'house.ask',
+ *      title: '选择'
+ * }) }}
+ * ```
+ */
+#}
+{% macro selectField(o) %}
+    <select data-role="select" class="form-control input-sm" name="{{o.field}}">
+        <option value="">{{ o.title|default('选择') }}</option>
+        {% for item in (o.service)|getField(o.field) %}
+        <option value="{{ item.value }}">{{ item.title }}</option>
+        {% endfor %}
+    </select>
+{% endmacro %}
+
+{#
+/**
+ * @method selectFormField(o)
+ * @description  检索类-表单字段搜索下拉框
+ * @param {String} o.field 要搜索的字段名
+ * @param {String} o.form 表单名称
+ * @param {String} o.title=选择 下拉框标题标题
+ * @example 调用
+ * ```twig
+ * {{ core_manage.selectFormField({
+ *      field: 'name',
+ *      form: 'ask',
+ *      title: '选择'
+ * }) }}
+ * ```
+ */
+#}
+{% macro selectFormField(o) %}
+     {% set opt = {
+        chosen: {}
+    }|merge(o) %}
+    {% set data = opt.form|getFormField(opt.field) %}
+    {% if data|length < 15 %}
+        {% set chosen = opt.chosen|merge({
+            disable_search: true
+        }) %}
+    {% else %}
+        {% set chosen = opt.chosen %}
+    {% endif %}
+    {% set chosen = opt|merge({chosen: chosen}) %}
+    <select data-chosen="{{opt.field}}" data-role="select" class="form-control input-sm" name="{{opt.field}}">
+        <option value="">{{ opt.title|default('选择') }}</option>
+        {% for item in data %}
+        <option value="{{ item.id }}">{{ item.name }}</option>
+        {% endfor %}
+    </select>
+    {{_self.chosen(chosen)}}
+{% endmacro %}
+
+
+{#
+/**
+ * @method selectFilter(o)
+ * @description  检索类-搜索下拉框
+ * @param {object} o 对象
+ * @param {string} o.field `select`的`name`
+ * @param {string} o.title `select`标题
+ * @param {string} o.class 累加的`class`
+ * @param {object} o.attr `select`属性
+ * @param {Array} o.data 下拉列表的数据`[{id: 1, name: 'aaaa', id: 2: name: 'bbbb'}]`
+ * @param {object} o.chosen 对象 [chose插件](https://harvesthq.github.io/chosen/options.html)的配置
+ * @example
+ * 调用
+ * ```twig
+ * {{
+ *      core_manage.selectFilter({
+ *          title: '分类',
+ *          field: 'category',
+ *          data: [
+ *            {id: 1,name: '选项1'},
+ *            {id: 2,name: '选项2'},
+ *          ]
+ *          
+ *      })
+ * }}
+ * ```
+ * @example
+ * 输出
+ * ```html
+ * <select data-role="select" class="form-control input-sm category" name="category">
+ *  <option value="">分类</option>
+ *  <option value="1">选项1</option>
+ *  <option value="2">选项2</option>
+ * </select>
+ * ```
+ */
+#}
+{% macro selectFilter(o) %}
+    {% set opt = {
+        chosen:{}
+    }|merge(o) %}
+    {# {% set attr_data = 'data-data="' ~ _self.arrToStr(opt.data|default('')) ~ '"' %} #}
+    {% if opt.data|length < 15 %}
+        {% set chosen = opt.chosen|merge({
+            disable_search: true
+        }) %}
+    {% else %}
+        {% set chosen = opt.chosen %}
+    {% endif %}
+    {% set chosen = opt|merge({chosen: chosen}) %}
+    <select data-chosen="{{ opt.field|default('') }}" data-role="select" {{_self.attr(opt.attr|default(''))}} class="form-control input-sm {{ opt.class|default('') }}" name="{{ opt.field|default('') }}">
+        <option value="" selected>{{ opt.title|default('') }}</option>
+        {% for item in opt.data|default('') %}
+        <option value="{{ item.id }}">{{ item.name }}</option>
+        {% endfor %}
+    </select>
+    {{_self.chosen(chosen)}}
+{% endmacro %}
+
+{# {% macro disableSearch(opt,data) %}
+{% if data|length < 15 %}
+    {% set chosen = opt.chosen|merge({
+        disable_search: true
+    }) %}
+{% else %}
+    {% set chosen = opt.chosen %}
+{% endif %}
+{% set chosen = opt|merge({chosen: chosen}) %}
+{% endmacro %} #}
+{#
+/**
+ * @method dropdownField(o)
+ * @description 设置类-从模型调用列表选项
+ * @param {String} o.field 字段名
+ * @param {String} o.service 服务
+ * @param {String} o.title 标题
+ * @example 调用
+ * ```twig
+ * {{
+ *    core_manage.dropdownField({
+ *       field: 'status',
+ *       title: '设置特色楼盘',
+ *       service: 'db.users'
+ *    })
+ * }}
+ * ```
+ */
+ #}
+{% macro dropdownField(o) %}
+    <div class="dropdown dropup">
+        <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="dropdown{{ o.field }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            {{ o.title }}
+            <span class="caret"></span>
+        </button>
+
+        <ul class="dropdown-menu" aria-labelledby="dropdown{{ o.field }}">
+            {% for item in o.service|getField(o.field) %}
+            <li>
+                <a data-role="submit" data-name="{{ o.field }}" data-value="{{ item.value }}" href="#">{{ item.title }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endmacro %}
+{#
+/**
+ * @method dropdownFormField(o)
+ * @description 设置类-从表单调用列表选项
+ * @param {String} o.field 字段名
+ * @param {String} o.form 表单名称
+ * @param {String} o.title 标题
+ * @param {String|Object} o.params 附加参数
+ * @param {boolean} o.multiple 多选
+ * @example 调用
+ * ```twig
+ * {{
+ *    core_manage.dropdownFormField({
+ *       field: 'name',
+ *       title: '设置特色楼盘',
+ *       form: 'houses_common'
+ *       params: {
+            a: 11,
+            b: 22
+ *       }
+ *    })
+ * }}
+ * a.php?a=11&_form_id=22
+ * ```
+ */
+ #}
+{% macro dropdownFormField(o) %}
+    {% import "CoreBundle:Macro:global.html.twig" as core_global %}
+    <div class="dropdown dropup">
+        <button class="btn btn-sm dropdown-toggle" type="button" id="dropdown{{ o.field }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            {{ o.title }}
+            <span class="caret"></span>
+        </button>
+        {% set m_data = o.form|getFormField(o.field) %}
+        {% set attr_params -%}
+            {% if o.params|default('') %}
+            data-params="{{core_global.arrToStr(o.params)}}"
+            {% endif %}
+        {%- endset %}
+        {% if o.multiple is defined %}
+        {# 多选 #}
+        <ul class="dropdown-menu" aria-labelledby="dropdown{{ o.field }}">
+            {% for item in m_data -%}
+            <li>
+                <a data-value="{{ item.id }}" href="#"><i class="font-ico-22 fr"></i>{{ item.name }} </a>
+            </li>
+            {% endfor %}
+            <li role="separator" class="divider"></li>
+            <li><a data-role="submit" {{attr_params}} data-name="{{ o.field }}" href="#" class="btn btn-xs">确定</a></li>
+        </ul>
+        {% else %}
+        <ul class="dropdown-menu" aria-labelledby="dropdown{{ o.field }}">
+            {% for item in m_data -%}
+            <li>
+                <a data-role="submit" {{attr_params}} data-name="{{ o.field }}" data-value="{{ item.id }}" href="#">{{ item.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{#
+/**
+ * @method dropdownCate(o)
+ * @description 设置类 从分类表调用列表选项
+ * @param {String} o.field 分类在文档里的字段名，也就是要提交的字段名
+ * @param {String} o.service 分类服务
+ * @param {String} o.title 标题
+ * @param {object} o.data 自定义选项
+ * @param {String|Object} o.params ajax附加参数
+ * @param {String} o.where 其它条件
+ * @param {String} o.value=id 从数据调用哪个字段作为列表值
+ * @param {String} o.name=name 从数据调用哪个字段作为列表标题
+ * @example 调用
+ * ```twig
+ * {{
+ *    core_manage.dropdownCate({
+        title: '物业类型',
+        field: 'cate_type',
+        service: 'house.category',
+        data: [
+            {id: 1, name: '选项1'},
+            {id: 2, name: '选项2'},
+            {id: 3, name: '选项3'},
+        ],
+        where: {
+            checked: 0
+        }
+ *    })
+ * }}
+ * ```
+ */
+ #}
+
+{% macro dropdownCate(o) %}
+    {% set o = {
+        url: '',
+        data: [],
+        params: {},
+        d_data: {}
+    }|merge(o) %}
+    {# 自定义数据时不去查 #}
+    {% set title = o.title|default('') ? : ('db.models')|getOne('title', {name: o.field}) %}
+    {% set where = {ename: o.field, checked: 1}|merge(o.where|default({})) %}
+    {# 分类 排除掉pid #}
+    {% if o.service|default('') == 'house.category' and o.field != 'pid' %}
+        {# 是栏目时才多级 #}
+        {% if o.field == 'category' %}
+            {% set category = app.request.get('category') %}
+            {% set parents = ('house.category')|getParents(category) %}
+            {% if parents.data is defined %}
+                {% set where = where|merge({id: parents.data[0].id}) %}
+            {% endif %}
+        {% endif %}
+        {# {{ dump({pageSize: where.pageSize|default(30), query: {}|merge(where)}) }} #}
+        {% set data = o.service|default('house.category')|getNodeSearch({pageSize: where.pageSize|default(30), query: {}|merge(where)}).data %}
+
+        <div class="dropdown dropup">
+            <button class="btn btn-sm dropdown-toggle" type="button" id="dropdown{{ o.field }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                {{ title }}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdown{{ o.field }}">
+                {# 是栏目时才取第一个 #}
+                {% if o.field == 'category' %}
+                    {% set ls_data = (data|first).nodes|default([]) %}
+                {% else %}
+                    {% set ls_data = data %}
+                {% endif %}
+
+                {% if ls_data is defined %}
+                {% for item in ls_data -%}
+                {# <li role="separator" class="divider"></li> #}
+                <li>
+                    <a data-role="submit" data-name="{{ o.field }}" {% if o.url %}data-url="{{o.url}}"{% endif %} data-value="{{ item.menu.id }}" href="#">{{ item.menu.name }}</a>
+                </li>
+                    {% if item.nodes %}
+                        {% for item1 in item.nodes %}
+                <li>
+                    <a class="ml10" data-role="submit" data-name="{{ o.field }}" {% if o.url %}data-url="{{o.url}}"{% endif %} data-value="{{ item1.menu.id }}" href="#">{{ item1.menu.name }}</a>
+                </li>
+                        {% if item1.nodes %}
+                            {% for item2 in item1.nodes %}
+                <li>
+                    <a class="ml20" data-role="submit" data-name="{{ o.field }}" {% if o.url %}data-url="{{o.url}}"{% endif %} data-value="{{ item2.menu.id }}" href="#">{{ item2.menu.name }}</a>
+                </li>
+                            {% endfor %}
+                        {% endif %} {# /item1.nodes #}
+                        {% endfor %}
+                    {% endif %} {# /item.nodes #}
+                {% endfor %}
+                {% endif %} {# /0.nodes #}
+            </ul>
+        </div>
+    {# 普通选项 #}
+    {% else %}
+        {% if o.data %}
+            {% set data = o.data %}
+            {% set title = o.title|default('')%}
+        {% else %}
+            {% set data = o.service|default('house.category')|getAll({pageSize: 30}|merge(where)).data %}
+        {% endif %}
+
+        <div class="dropdown dropup">
+            <button class="btn btn-sm dropdown-toggle" type="button" id="dropdown{{ o.field }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                {{ title }}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdown{{ o.field }}">
+                {% if data is defined %}
+                {% for item in data -%}
+                {# <li role="separator" class="divider"></li> #}
+                <li>
+                    {{_self.btn({
+                        role: 'submit',
+                        title: attribute(item, o.name|default('name')),
+                        attr: {
+                            'data-name': o.field,
+                            'data-value': attribute(item, o.value|default('id')),
+                            'data-url': o.url
+                        },
+                        params: o.params,
+                        class: 'btn-link'
+                    })}}
+                    {# <a data-role="submit" data-name="{{ o.field }}" {% if o.url %}data-url="{{o.url}}"{% endif %} data-value="{{ attribute(item, o.value|default('id')) }}" href="#">{{ attribute(item, o.name|default('name')) }}</a> #}
+                </li>
+                {% endfor %}
+                {% endif %} {# /0.nodes #}
+            </ul>
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{#
+/**
+ * @method dropdownHouseType(o)
+ * @description 小区楼盘 其余参数参考 `dropdownCate(o)` 方法
+ * @param o.title 标题
+ * @example 调用
+ * ```twig
+ * {{
+ *      core_manage.dropdownHouseType({
+            title: '小区'
+ *      })
+ * }}
+ */
+#}
+{% macro dropdownHouseType(o) %}
+    {{ _self.dropdownCate({
+        field: 'type',
+        title: o.title|default('小区楼盘'),
+        data: {
+            0: {
+                id: 0,
+                name: '楼盘'
+            },
+            1: {
+                id: 1,
+                name: '小区'
+            },
+        }
+    }) }}
+{% endmacro %}
+
+{#
+/**
+ * @method dropdownCatePush(o)
+ * @description 获取推送位列表
+ * @param {String} o.title=推送到手机 标题
+ * @param {String} o.service=house.cate_pushs 服务
+ * @param {Object} o.data={ models: 'news' } 保存的除了当前字段以外的其它数据
+ * @param {Object} o.where={ } 推送列表的查询条件
+ * @param {String} o.url=mpushslist/save 服务
+ *
+ * @example 调用
+ * ```twig
+ * {{
+ *      core_manage.dropdownCatePush({
+             data: {
+                models: 'news',
+                end_time: 0
+            },
+            where: {
+                pid: 236
+            }
+ *      })
+ * }}
+ * ```
+ * 生成
+ * ```html
+ <div class="dropdown dropup">
+     <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="dropdownpush" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+         推送到手机
+         <span class="caret"></span>
+     </button>
+     <ul class="dropdown-menu" aria-labelledby="dropdownpush">
+         <li>
+             <a data-role="submit" data-add="fromid" data-url="/newcore/web/app_dev.php/ilv/mpushslist/save" data-data="{cate_pushs: 'yeshi', models: 'news', end_time: '0'}" href="#">野食</a>
+         </li>
+         <li>
+             <a data-role="submit" data-add="fromid" data-url="/newcore/web/app_dev.php/ilv/mpushslist/save" data-data="{cate_pushs: 'lvdouyan', models: 'news', end_time: '0'}" href="#">绿豆眼</a>
+         </li>
+     </ul>
+ </div>
+ * ```
+ */
+#}
+{% macro dropdownCatePush(o) %}
+    {% set opt = {
+        url: 'mpushslist/save'|U,
+        service: 'house.cate_pushs',
+        data: {
+            models: 'news'
+        },
+        where: {},
+        title: '推送到手机'
+    }|merge(o) %}
+    {% set cate_pushs_data = ('house.cate_pushs')|getAll(opt.where).data %}
+    {% set data_str %}
+        {%- for k, v in opt.data -%}
+            , {{k}}: '{{v}}'
+        {%- endfor -%}
+    {% endset %}
+    <div class="dropdown dropup">
+        <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="dropdownpush" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            {{ opt.title }}
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownpush">
+            {% if cate_pushs_data is defined %}
+            {% for item in cate_pushs_data -%}
+            <li>
+                <a data-role="submit" data-add="fromid" {% if opt.url %}data-url="{{opt.url}}"{% endif %} data-data="{cate_pushs: '{{item.ename}}'{{data_str}}}" href="#">{{ item.name }}</a>
+            </li>
+            {% endfor %}
+            {% endif %} {# /0.nodes #}
+        </ul>
+    </div>
+{% endmacro %}
+{#
+/**
+ * @method page(info)
+ * @description 生成分页
+ * @param {String} info.pageCount 总记录数
+ * @param {String} info.pageIndex 当前分页
+ * @param {String} info.pageSize 每页显示的数量
+ * @example 调用
+ * ```twig
+    {{core_manage.page(ident.info)}}
+ * ```
+ */
+ #}
+{% macro page(info) %}
+{% if info is defined %}
+    <div class="pager">
+        {% if info.pageCount is defined %}<span class="page-count">共 {{info.pageCount}} 条结果</span>{% endif %}
+        <div data-page="1" data-page-count="{{info.pageCount|default(1)}}" data-page-index="{{info.pageIndex|default(0)}}" data-page-size="{{info.pageSize|default(8)}}"></div>
+    </div>
+{% endif %}
+{% endmacro %}
+{#
+/**
+ * @name mainMenu 区域的主导航
+ * @param {String} title 标题
+ * @param {String} hasdel 是否启用批量删除
+ * @example 调用
+ * ```twig
+    {{core_manage.mainMenu(action, '价格', 1)}}
+ * ```
+ */
+ #}
+ {% macro mainMenu(action, title, delTarget, cls) %}
+    {% if title %}
+    {{_self.show({
+        title: '<i class="font-ico-plus mr5"></i>新增' ~ title,
+        class: cls
+    })}}
+    {% endif %}
+
+    {% if delTarget %}
+    {{_self.delete('<i class="font-ico-del mr5"></i>批量删除', cls)}}
+    {% endif %}
+{% endmacro %}
+{#
+/**
+ * @method oprate(o)
+ * @description 操作区配置
+ * @param {string} o.method 宏名
+ * @param {String} o 其它的为宏配置
+ * @example 调用
+ * ```twig
+ * {{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'checked',
+        title: '审核',
+    },
+    {
+        method: 'dropdownCate',
+        field: 'category',
+        service: 'house.category',
+        where: {
+            models: 'topic',
+            ename: 'category'
+        }
+    }
+    ]) }}
+ * ```
+ * @示例1 调用
+ * ```twig
+ * {{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    }
+    ]) }}
+ * ```
+ * @示例2 调用
+ * ```twig
+ * {{
+ *      core_manage.delete({
+ *          title: ' <i class="font-ico-del mr5"></i>批量删除'
+ *      })
+ * }}
+ * ```
+ * @示例1与示例2是同等效果
+ */
+ #}
+{% macro oprate(o) %}
+    {% if o|length %}
+        <section class="oprate">
+        {% for v in o %}
+            {% set method = v.method %}
+            {# 去掉method属性，保持html上的属性清洁 #}
+            {% set v = v|merge({method: ''}) %}
+            {{ attribute(_self, method, [v]) }}
+        {% endfor %}
+        </section>
+    {% endif %}
+{% endmacro %}
+{#
+/**
+ * @method filter(o, filter_opt)
+ * @description 搜索区配置
+ * @param {Array|String} o 可以是数组也可以是字符串
+ * @param {String} o.method 宏名
+ * @param {String} o 其它的为宏配置
+ * @param {Object} filter_opt filter本身的设置
+ * @param {String} filter_opt.class filter的class
+ * @param {String|Object} filter_opt.attr filter的属性
+ * @example 调用
+ * ```twig
+ * {{ core_manage.filter([
+    {
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增专题'
+    },
+    {
+        method: 'selectFormField',
+        title: '审核',
+        form: 'checked',
+        field: 'checked',
+    },
+    {
+        method: 'search',
+        field: 'name',
+    }
+]) }}
+
+ * ```
+ * ```twig
+ *  {% set aaa %}
+         <div>
+            <span></span>
+         </div>
+    {% endset %}
+
+ * {{ core_manage.filter(aaa, {
+ *          class: 'filter-2', 
+ *          attr: 'data-aaa="1"'
+ *        }) }}
+ * {{ core_manage.filter(aaa, {
+ *          class: 'filter-2', 
+ *          attr: {
+ *               'data-aaa': 1, 
+ *               'data-bbb': 1
+ *             }
+ *          }) }}
+ * ```
+ * @示例1 调用
+ * ```twig
+ * {{ core_manage.filter([
+    {
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增专题'
+    }
+]) }}
+ * ```
+ * @示例2 调用
+ * ```twig
+ * {{
+ *      core_manage.show({
+ *          title: '<i class="font-ico-plus mr5"></i>新增专题'
+ *      })
+ * }}
+ * ```
+ * @示例1与示例2是同等效果
+ */
+ #}
+{% macro filter(o, filter_opt) %}
+    {% set _filter_opt = {
+        class: '',
+        attr: ''
+    }|merge(filter_opt|default({})) %}
+
+    {% import "CoreBundle:Macro:global.html.twig" as core_global %}
+    <section {{core_global.h5_attr(_filter_opt.attr)}} class="filter {{ _filter_opt.class }}">
+    {% if o is iterable %}
+        <div class="mb10 form-inline">
+        {% for v in o %}
+            {% if v.method|default('') %}
+                {% set method = v.method %}
+                {# 去掉method属性，保持html上的属性清洁 #}
+                {% set v = v|merge({method: ''}) %}
+               {{ attribute(_self, method, [v]) }}
+            {% endif %}
+        {% endfor %}
+        </div>
+    {% else %}
+        {{ o ?? '' }}
+    {% endif %}
+    </section>
+{% endmacro %}
+
+{#
+/**
+ * @method field
+ * @description 模型字段
+ * @param {String} value - 字段值
+ * @param {String} field - 字段标识
+ * @param {String} service - 服务
+ * @example 调用
+ * ```twig
+    {{core_manage.field(1, 'checked', 'sale')}}
+ * ```
+ */
+ #}
+ {% macro field(value, field, service) %}
+    {%- for item in service|getField(field) if item.value == value -%}
+        {{- item.title -}}
+    {%- endfor -%}
+ {% endmacro %}
+
+{% macro fields(values, field, service) %}
+    {%- for item in service|getField(field) if item.value == values -%}
+        {{- item.title -}}
+    {%- endfor -%}
+{% endmacro %}
+
+{#
+/**
+ * @method input
+ * @description input文本框基模板
+ * @param {String} name - name值
+ * @param {String} value - value值
+ * @param {String} type=text - type值，默认text
+ * @param {Number} size=20 - 文本框size值，默认20
+ * @example 调用
+ * ```twig
+    {{core_manage.field(1, 'checked', 'sale')}}
+ * ```
+ */
+ #}
+{% macro input(name, value, type, size) %}
+    <input type="{{ type|default('text') }}" name="{{ name }}" value="{{ value|e }}" size="{{ size|default(20) }}" />
+{% endmacro %}
+
+{#
+/**
+ * @method form
+ * @description 后台表单渲染
+ * @param {String} form - 表单数据
+ * @param {String} formclass=form 表单样式，默然 form
+ * @example 调用
+ * ```twig
+    {{core_manage.form(form)}}
+ * ```
+ */
+ #}
+{% macro form(form, formclass) %}
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+{# 需要隐藏的字段可以传过来 #}
+{% set arr_hides = app.request.get('_hides')|default('')|split(',') %}
+
+{% if form is defined and form is not empty and form|is_array is empty %}
+    {% set id = app.request.get('_id')|default(0) %}
+    <form data-id="{{id}}" action="{{ form.vars.action }}" method="{{ form.vars.method }}" class="{{ formclass|default('form') }}" {{ form_enctype(form) }}>
+        {% if form.vars.errors|length>0 %}
+            <div class="alert alert-error">
+                {% for error in form.vars.errors %}
+                    {% if loop.index>1 %}<br>{% endif %}
+                    {{ error.messageTemplate|trans(error.messageParameters, 'validators') }}
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% for key,v in form.children %}
+            {% if key != 'submit' %}
+                {% if key == 'csrf_token' %}
+                    {{ form_widget(v) }}
+                {% elseif v.children and v.children.year is not defined and v.children.month is not defined %}
+                    <table class=" popup-form-table"  style="width:100%;" {{v.vars.name}} {{v.vars.block_prefixes[1]|default('') }}>
+                        <tbody>
+                            <tr>
+                                 <th width="25%" class=" tal">{# {{v.vars.label|trans({}) }} #} {{- form_label(v) -}}</th>
+                            </tr>
+                            <tr >
+                                <td class="tal">{{ form_widget(v) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                {% elseif key not in arr_hides %}
+                    <table class=" popup-form-table" style="width:100%;" {{v.vars.name}} {{v.vars.block_prefixes[1]|default('') }}>
+                        <tbody>
+                            <tr >
+                                <td >
+                                    <div>
+                                        <div class="form-row">
+                                            <div class="form-cell-label">{# {{v.vars.label|trans({}) }} #} {{- form_label(v) -}}</div>
+                                            {# <div class="form-errors"></div> #}
+                                            <div class="form-cell">{{ form_widget(v) }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        <div class="popup-submit">{{ form.submit is defined?form_widget(form.submit):'' }}</div>
+        {# {{ form_rest(form) }} #}
+    </form>
+    {{core_global.validate()}}
+{% endif %}
+{% endmacro %}
+
+{#
+/**
+ * @method form_cfg
+ * @description 表单渲染
+ * @param {String} form - 表单数据
+ * @param {String} opt - 额外参数
+ * @param {String} extra - 额外内容，当前内容置于form内最前面
+ * @example 调用
+ * ```twig
+    {% set extra %}
+    这里是表单头部
+    {% endset %}
+ *  {{core_manage.form_cfg(form, {}, extra)}}
+ * ```
+ * 生成内容
+ * ```html
+ * <form action="">
+ * 这里是表单头部
+ * ... // 原有的内容
+ * </form>
+ * ```
+ */
+ #}
+{% macro form_cfg(form, opt, extra) %}
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+{% if form is defined and form is not empty %}
+    {% set id = app.request.get('id')|default(0) %}
+    {% set option = app.request.get('option')|default({}) %}
+    <form data-id="{{id}}" action="{{ form.vars.action }}" method="{{ form.vars.method }}" class="{{ option.formclass|default('form') }}" {{ form_enctype(form) }}>
+        {{ extra }}
+        {% if form.vars.errors|length>0 %}
+            <div class="alert alert-error">
+            {% for error in form.vars.errors %}
+                {% if loop.index>1 %}<br>{% endif %}
+                {{ error.messageTemplate|trans(error.messageParameters, 'validators') }}
+            {% endfor %}
+            </div>
+        {% endif %}
+        {% for key,v in form.children %}
+            {% if key != 'csrf_token' and key != 'submit' %}
+                {% if v.children and v.children.year is not defined and v.children.month is not defined %}
+                    <table class="popup-form-table" style="width:100%;" {{v.vars.block_prefixes[1]|default('') }}>
+                        <tbody>
+                            <tr>
+                               <th width="25%" >{{ form_label(v) }}</th>
+                            </tr>
+
+                            <tr >
+                                <td>
+
+                                   {% if option and key == option.name %}
+                                    {{ form_widget(option.name, {value: option.value}) }}
+
+                                    {% else %}
+                                    {{ form_widget(v) }}
+                                    {% endif %}
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                {% else %}
+                    <table class=" popup-form-table" style="width:100%;" {{v.vars.block_prefixes[1]|default('') }}>
+                        <tbody>
+                            <tr >
+                                <td >
+                                    <div>
+
+                                        <div class="form-row">
+                                            <div class="form-cell-label">{{ form_label(v) }}</div>
+                                            <div class="form-errors"></div>
+                                            <div class="form-cell">
+                                                {% if option and key == option.name %}
+                                                {{ form_widget(option.name, {value: option.value}) }}
+                                                {% elseif key in ['mailer_from'] %}
+                                                    {# 说明：这里是传进来的数据 #}
+                                                    {{ form_widget(v, {value: opt[key]}) }}
+                                                {% else %}
+                                                {{ form_widget(v) }}
+                                                {% endif %}
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+
+        <div class="popup-submit">{{ core_manage.submit is defined?form_widget(form.submit):'' }}</div>
+        <div class="tac p10">{{ form_rest(form) }}</div>
+    </form>
+    {{core_global.validate()}}
+{% endif %}
+{% endmacro %}
+
+{#
+/**
+ * @method form_level
+ * @description 表单渲染
+ * @param {String} form - 表单数据
+ * @param {String} formclass - 表单样式
+ * @param {String} service - 服务名
+ * @example 调用
+ * ```twig
+    {{core_manage.form_level(form)}}
+ * ```
+ */
+ #}
+{% macro form_level(form, formclass, service) %}
+
+{% if form is defined and form is not empty and service %}
+
+    {% set id = app.request.get('id')|default(null) %}
+
+    {% set pid = app.request.get('pid') %}
+    {# 复制时'_copy=1' #}
+    {% set _copy = app.request.get('_copy') %}
+
+    {% set level = 1 %}
+
+    {% if pid %}
+        {% set level = service|getOne('level', {id: pid })|default(1) + 1 %}
+    {% elseif id %}
+        {% set level = service|getOne('level', {id: id })|default(1) %}
+    {% endif %}
+
+    <form data-id="{{ id }}" action="{{ form.vars.action|U({id: _copy == 1 ? null : id}) }}" method="{{ form.vars.method }}" class="{{ formclass|default('form') }}" {{ form_enctype(form) }}>
+
+        {% if form.vars.errors|length>0 %}
+            <div class="alert alert-error">
+                {% for error in form.vars.errors %}
+                    {% if loop.index>1 %}<br>{% endif %}
+                    {{ error.messageTemplate|trans(error.messageParameters, 'validators') }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <table class="popup-table" style="width:100%;">
+            <tbody>
+                {% for key,v in form.children %}
+                {% set flevel = v.vars.attr['data-level'] is not defined ? [] : v.vars.attr['data-level']|split('|') %}
+                    {# {{dump(flevel)}} #}
+                {# level没有指定时，为全部级别都用，若有指定在指定中显示 #}
+                {% if key != 'csrf_token' and key != 'submit' and (flevel|length == 0 or level in flevel) %}
+                    {# 当是level时并且是添加时 #}
+                    {% if key == 'level' and id is null %}
+                    <tr {{v.vars.block_prefixes[1]|default('') }}>
+                        <th width="25%" class="rtd tar">{{v.vars.label|trans({}) }}</th>
+                        <td class="tal">{{ form_widget(v, {value: level}) }}</td>
+                    </tr>
+                    {% else %}
+                    <tr {{v.vars.block_prefixes[1]|default('') }}>
+                        <th width="25%" class="rtd tar">{{v.vars.label|trans({}) }}</th>
+                        <td class="tal">{{ form_widget(v) }}</td>
+                    </tr>
+                    {% endif %}
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="popup-submit">{{ form.submit is defined?form_widget(form.submit):'' }}</div>
+        {{ form_widget(form.csrf_token) }}
+        {# {{ form_rest(form) }} #}
+    </form>
+{% endif %}
+
+{% endmacro %}
+
+{#
+/**
+ * @method main_left(info)
+ * @description 后台内容区左侧菜单
+ * @param {Boolean} info.triggerNext 是否触发下一级
+ * @example 调用
+ * ```twig
+    {{core_manage.main_left({
+        triggerNext: 0
+    })}}
+ * ```
+ */
+ #}
+{% macro main_left(option) %}
+    {# 当前分站id #}
+    {% set sess_area = app.session.get('area')|default(1) %}
+    {# 当前城市的简称 #}
+    {% set city = ('db.auth_group_area')|getAll({
+        rulesarea:sess_area,
+        pageSize: 1,
+        order   : 'sort',
+        orderBy : 'asc'
+    }) %}
+    {#{% set cityad = city.data[0].city %}#}
+    {#{% set cityid = city.data[0].id %}#}
+    {% set opt = {
+        action: null,
+        triggerNext: 0
+        }|merge(option|default({})) %}
+    {# 调用数据 #}
+    {% set category = app.request.get('category')|default('') %}
+    {% set category_ename = app.request.get('category_models')|default('') %}
+    {# 栏目 #}
+    {% if category_ename and category_ename != 'category'%}
+        {% set catagorys = ('house.category')|getTree({ename: category_ename, findType: 1, checked: 1}).data %}
+    {% elseif category %}
+        {% set catagorys = ('house.category')|getNodeById(category, {_multinode: 1, findType: 1, checked: 1}).nodes %}
+    {% endif %}
+    {# {{ dump(catagorys) }} #}
+    {% if catagorys|default([])|length %}
+    <section class="main-left" data-target=".main-through">
+        <div data-level="top" class="level1" data-trigger-next="{{ opt.triggerNext }}">
+            {% for item1 in catagorys %}
+            {# 1级 #}
+            <a data-level="1" data-sider-category="{{item1.menu.ename}}" class="{% if item1.nodes %}has-child{% endif %}"  href="{{ (item1.menu.cate_action|default('')?:opt.action)|U({(item1.menu.ename): item1.menu.id,area:sess_area}) }}" data-route="{{item1.menu.id}}" data-role="jump">{{item1.menu.name}}</a>
+            {% if item1.nodes is defined %}
+            <div data-level="next" class="level2 {% if loop.index == 1 %}on{% endif %}">
+            {% for item2 in item1.nodes %}
+            {# 2级 #}
+            <a data-level="1" class="{% if item2.nodes %}has-child{% endif %}"  href="{{ (item2.menu.cate_action|default('')?:opt.action)|U({(item2.menu.ename): item2.menu.id}) }}" data-route="{{item2.menu.id}}" data-role="jump">{{item2.menu.name}}</a>
+            <div data-level="next" class="level3">
+                {% if item2.nodes is defined %}
+                {% for item3 in item2.nodes %}
+                {# 3级 #}
+                <a data-level="1" href="{{ (item3.menu.cate_action|default('')?:opt.action)|U({(item3.menu.ename): item3.menu.id}) }}" data-route="{{item3.menu.id}}" data-role="jump">{{item3.menu.name}}</a>
+                {% endfor %}
+                {% endif %}
+            </div>
+            {% endfor %}
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+{% endmacro %}
+
+{#
+/**
+ * @method valid_date
+ * @description 有效时间
+ * @param {String} d 时间
+ * @param {String} format 转换格式
+ * @example 调用
+ * ```twig
+    {{core_manage.valid_date(item.end_time, 'Y-m-d')}}
+ * ```
+ */
+ #}
+{% macro valid_date(d, format) %}
+    {% set _date = d|default(0)|date(format) %}
+    {% if _date >= 'now'|date(format) %}
+        {{ _date }}
+    {% else %}
+        {% if _date == '1970-01-01' %}
+            <font color="#008000">下架</font>
+        {% else %}
+            <font color="#f00">{{ _date }}</font>
+        {% endif %}
+    {% endif %}
+{% endmacro %}
+
+{#
+/**
+ * @method table_attr
+ * @description 字段属性
+ * @param {String} o 字段attr属性
+ * @param {Boolean} is_th 是否显示样式等其他属性
+ * @example 调用
+ * ```twig
+    {{core_manage.table_attr(item.end_time, 'Y-m-d')}}
+ * ```
+ */
+ #}
+{%- macro table_attr(o, is_th) -%}
+    {% set _opt = {}|merge(o) %}
+        {% if _opt|length %}
+        {% for k, v in _opt %}
+            {% if k == 'sort' and is_th %} data-role="sort" class="sort" data-sort="{{v}}"{% else %} {{k}}="{{v}}"{% endif %}
+        {% endfor %}
+        {% endif %}
+{%- endmacro -%}
+{#
+/**
+ * @method table
+ * @description 列表
+ * @param {Array} opt 表单
+ * @example 调用
+ * ```twig
+    {{core_manage.table(opt)}}
+ * ```
+ */
+ #}
+{% macro table(opt) %}
+    {% set _opt = {
+        sortName: 'id',
+        sortOrder: 'desc'
+    }|merge(opt) %}
+    <table class="right-table table-hover">
+        <tbody>
+            <tr data-id>
+                {% for item in _opt.columns %}
+                <th {{ _self.table_attr(item.attr|default({}), 1) }}>{{ item.title }}</th>
+                {% endfor %}
+            </tr>
+            {% if _opt.data is defined and _opt.pageCount|default('') != 0 %}
+            {% for k, vo in _opt.data %}
+            <tr data-id="{{ vo.id }}">
+                {% for item in _opt.columns %}
+                <td {{ _self.table_attr(item.attr|default({})) }}>{{ item.content|default('') ? : vo[item.field] }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr><td colspan="{{ _opt.columns|length }}" class="tac">没有数据！</td></tr>
+            {% endif %}
+        </tbody>
+    </table>
+{% endmacro %}
+
+{% macro is_mainset_in_subwebs(opt) %}
+    {%- spaceless %}
+        
+    {% if app.user.mid|default(0) == 1 and opt.menu.ename == 'zhuzhanshezhi' and app.session.get('area', 0) > 0 %}
+    {# 在分站，不显示“主站设置” #}
+    1
+    {% else %}
+    {# 在主站，显示“主站设置” #}
+    0
+    {% endif %}
+    {% endspaceless -%}
+{% endmacro is_mainset_in_subwebs %}

@@ -1,0 +1,30 @@
+info:
+    tableName: models
+    aliasName: p
+    listGrid:
+        - 'id:序号|txtcenter w60'
+        - 'title[EDITSPAN]:备注|txtleft'
+        - 'name:名称|txtleft w200'
+        - 'service_name:服务名称|txtleft w300'
+        - 'autoup[GETSTATUS]:自动重置|txtleft w60'
+        - 'id:操作|txtcenter w400:[EDIT]编辑|btn,[DELETE]删除|btn,[JUMP]字段|btn|models/modelsfield,[EDIT]重置缓存|btn|modelsmanage/cache,[EDIT]关联设置|btn|modelsmanage/modelsrelation,[JUMP]回收站|btn|models/trash'
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    order: name
+    orderBy: asc
+    dataModel: 0
+    alias: {  }
+    query:
+        status:
+            gt: '0'
+        name:
+            orX: 'name,like,%[name]%|title,like,%[name]%'
+    subTableName: ''
+    listDesc: ''
+    subJoinField: ''
+    query1: {  }
+    searchFun: EXISTS
+    autoQuery: '0'
+    groupBy: ''
+    attribute: '0'

@@ -1,0 +1,33 @@
+{% extends 'HousemobileBundle::base.html.twig' %}
+
+{% block title %}
+{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}找回密码
+{% endblock title %}
+
+{% block moblie_header %}
+{{core_mobile_global.go_back({href: ('main/mindex')|UU })}}
+{{core_mobile_global.title({title: '找回密码'})}}
+{% endblock moblie_header %}
+
+{% block container %}
+	<div class="content bg-white">
+	    <div class="buttons-tab">
+	        <a href="#tab1" class="tab-link active button">手机找回</a>
+	        <a href="#tab2" class="tab-link button">邮箱找回</a>
+	    </div>
+	    <div class="tabs">
+	        <div id="tab1" class="tab active">
+	            {{ render(controller('HouseBundle:Bundlebindforms:resetpwd',{
+	                _isApp: url_isApp, 
+	                formName: 'resetpwdtel'
+	            })) }}
+	        </div>
+	        <div id="tab2" class="tab">
+	            {{ render(controller('HouseBundle:Bundlebindforms:resetpwd',{
+	                _isApp: url_isApp, 
+	                formName: 'resetpwdemail'
+	            })) }}
+	        </div>
+	    </div>
+	</div>
+{% endblock container %}

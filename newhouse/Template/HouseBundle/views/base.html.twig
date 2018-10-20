@@ -1,0 +1,158 @@
+{% extends 'CoreBundle::base.html.twig' %}
+{% import "HouseBundle:Macro:global.html.twig" as house_global %}
+{% set version = '?vt=0.0.1' %}
+{# JS #}
+{% block js_base %}
+<script type="text/javascript" src="{{ asset('static/' ~ bundlepath ~ '/js/seajs.cfg.js', absolute=true) }}{{version}}"></script>
+<script type="text/javascript">
+var web = "frontEnd"; //前台
+seajs.use([
+    'jqhoverS',
+    'fixed',
+    'common'
+], function(jqHoverS, fixed, common) {
+    $(function() {
+        // console.log('执行。。。');
+        // 调用统计
+        common.getcounts({
+            url: '{{("igetcounts/index")|U({} ,true)}}'
+        });
+        // 广告统计
+        common.adcount({
+            saveUrl : '{{("viewinter/vote")|U}}'
+        });
+        // 表单处理
+        common.form({
+            ajax: {
+                // 获取表单的默认地址
+                url: '{{('bundlebindforms/ajaxform')|U}}',
+            }
+        })
+    })
+});
+</script>
+<!-- 百度统计数据 -->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?8d409b931bc5e2ac53a0cea966f06d99";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119236000-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-119236000-1');
+</script>
+
+
+<!-- 神策埋点 -->
+<script>
+(function(para) {
+  var p = para.sdk_url, n = para.name, w = window, d = document, s = 'script',x = null,y = null;
+  w['sensorsDataAnalytic201505'] = n;
+  w[n] = w[n] || function(a) {return function() {(w[n]._q = w[n]._q || []).push([a, arguments]);}};
+  var ifs = ['track','quick','register','registerPage','registerOnce','clearAllRegister','trackSignup', 'trackAbtest', 'setProfile','setOnceProfile','appendProfile', 'incrementProfile', 'deleteProfile', 'unsetProfile', 'identify','login','logout','trackLink','clearAllRegister','getAppStatus'];
+  for (var i = 0; i < ifs.length; i++) {
+    w[n][ifs[i]] = w[n].call(null, ifs[i]);
+  }
+  if (!w[n]._t) {
+    x = d.createElement(s), y = d.getElementsByTagName(s)[0];
+    x.async = 1;
+    x.src = p;
+    y.parentNode.insertBefore(x, y);
+    w[n].para = para;
+  }
+})({
+  sdk_url: 'http://zgsta.com/static/web/js/third-party/sensorsdata.min.js',
+  name: 'SensorsData',
+  web_url: 'http://sc.zhugefang.com:8007/?project=zhugefang',
+  server_url: 'http://sc.zhugefang.com:8006/sa?token=******&project=zhugefang',
+  heatmap: {
+	    isTrackLink: true,
+	    loadTimeout:  3000,
+	    collect_url: function(){
+	        return true;
+	    },
+	    collect_element: function(element_target){
+	        // 如果这个元素有属性sensors-disable=true时候，不采集
+	        if(element_target.getAttribute('sensors-disable') === 'true'){
+	            return false;
+	        }else{
+	            return true;
+	        }
+	    },
+	    //考虑到用户隐私，这里可以设置input里的内容是否采集
+	    //如果返回真，表示采集input内容，返回假表示不采集input内容,默认不采集
+	    collect_input:function(element_target){
+	        return true;
+	    }
+	}
+});
+SensorsData.quick('autoTrack');
+</script>
+
+<!-- 启用网页URL自动推送百度搜索引擎收录。 -->
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+{% endblock js_base %}
+
+{% block js %} {% endblock js %}
+{# css #}
+{% block css_base -%}
+    {{ parent() }}
+{{core_global.linkcss('static/' ~ bundlepath ~ '/css/global.css')}}
+{{core_global.linkcss('static/' ~ bundlepath ~ '/iconfont/iconfont.css')}}
+{% endblock css_base %}
+{% block css %} {% endblock css %}
+{# 当前分站id #}
+{% set sess_area = app.session.get('area')|default(1) %}
+{# 当前城市的简称 #}
+{% set city = ('db.auth_group_area')|getAll({
+    rulesarea:sess_area,
+    pageSize: 1,
+    order   : 'sort',
+    orderBy : 'asc'
+}) %}
+{% set cityad = city.data[0].city|default('bj') %}
+{% set cityid = city.data[0].id|default('1') %}
+{% set City_id = ('db.auth_group_area')|getOne('id',{rulesarea:sess_area}) %}
+{% set cYCity_id = 100+City_id %}
+
+
+
+{% set majorNav = ('house.navs')|getTree({cate_pushs: 'zdh', checked: 1, pageSize: 100, order: "sort", orderBy: 'asc'}) %}
+{% set default_themes = 'default_themes'|C %}
+{% block header %}
+    {% include default_themes ~ '::header.html.twig' %}
+{% endblock header %}
+{% block footer %}
+    {% include default_themes ~ '::footer.html.twig' %}
+{% endblock footer %}
+
+{# 前端域名统一配置#}
+{#  新房系统api域名测试#}
+{#{% set apiUrl = "http://cms.zhuge.com" %}#}
+{# 新房系统api域名线上#}
+{% set apiUrl = "http://newhouse.zhuge.com" %}
+{#  外部引用api域名#}
+{% set externalLinks = "http://api.zhugefang.com" %}

@@ -1,0 +1,14 @@
+{% extends 'HouseBundle:Release:usale.html.twig' %}
+
+{% block title %}发布出租{% endblock title %}
+
+{% block form_release %}
+    {# 渲染表单 #}
+    {{ render(controller('HouseBundle:Bundlebindforms:ajaxform', {
+        models: app.request.get('models')|default(''),
+        czlx: app.request.get('czlx')|default(''),
+        formjumpurl: path('house_main') ~ '#/default/338',
+        formflag: 'web_rent',
+        formcls: 'form-fy'
+    })) }}
+{% endblock form_release %}

@@ -1,0 +1,23 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 使用页面
+ * 1、新房户型  houses/dphotos
+ * 2、小区户型  sale/qdphotos 
+#}
+{% block result %}
+<div class="{{class|default(app.request.get('class', 'lp'))}}-fixed-left">
+    <div class="content">
+        {% set huxing_nav = {
+            a: {
+                name: '全部', 
+                shi: null, 
+                alltype: 'all'
+            }
+        }|merge(('house.door')|getAll({checked: 1, aid: id|default(app.request.get('id')), findType: 1, groupBy: 'shi', order: 'shi', orderBy: 'asc'}).data) %}
+        {{housemobile_global.swiper_v_nav({
+            data: huxing_nav,
+            cate: 'shi',
+            tpl: '<a href="%url%">%title%</a>'
+        })}}
+    </div>
+</div>
+{% endblock result %}

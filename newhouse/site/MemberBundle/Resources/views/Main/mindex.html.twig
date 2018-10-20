@@ -1,0 +1,232 @@
+{% extends "MemberBundle::base_show.html.twig" %}
+{% set now_time = ('now')|date('U') %}
+{% block body %}
+<div class="member-mindex">
+    <div data-target="[data-content='1']" >
+    <div class="unametop" >
+        <div class="mleft fl">
+            <div class="txleft l">
+                {{ core_global.img({
+                    height: 140,
+                    width: 110,
+                    src: app.user.image,
+                    alt: app.user.nicename
+                }) }}
+                <a href="{{- core_global.menu_url(352) -}}">    
+                    <div class="bgblock">
+                        <i class="font-ico-edit mr5"></i><span>修改</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="mright fl">
+            <div class="uname-info">
+                <a href="{{- core_global.menu_url(352) -}}" class="uname" >
+                    {{ app.user.nicename }}
+                </a>
+                {# <a href="" class="">消息<span class="umsg ">(2)</span></a> #}
+            </div>
+            <p class="jfje">
+                您当前积分:<span class="highlight">{{ app.user.currency.jifen|default('0')}}</span>分<em>{% if ('msale/chongzhi')|P %}|</em>当前金额:<span ><span class="highlight">{{ app.user.currency.rmb|default('0')}}</span></span>元 <a href="{{- core_global.menu_url(659) -}}" class="btn btn-xs btn-warning">立刻充值</a>{% endif %}
+            </p>
+            <p>
+                您当前是{{app.user.rolename|default('')}}
+                
+                {% set workid = ('db.workflow')|getOne('uid',{ uid: app.user.id}) %}
+                {% if workid == app.user.id and app.user.usertype == 11 %}
+                    <a class="fcr" href="{{('muserupgrade/muserupgradelist')|U}}" data-route="muserupgradelist" data-role="jump" >完善资料</a> 后, 通过审核, 自动成为普通经纪人
+                {% endif %}
+            </p>
+            <div class="messagess">
+                <i class="font-ico-10 mr5"></i><a href="{{- core_global.menu_url(398) -}}">店铺留言<span class="red">({{core_global.count({models: 'usermsg', sql_opt: {aid: app.user.id|default(''),uid: 'neq|' ~ app.user.id |default('')}})}})</span></a>
+    
+                <div class="duanx"><i class="font-ico-55 mr5"></i><a href="{{- core_global.menu_url(420) -}}">短信<span class="red">({{core_global.count({models: 'usersms', sql_opt: {id: app.user.id|default('')}})}})</span></a></div >
+            </div>
+            {# {{ ('db.mem_group')|getOne('name', { id: app.user.groupid })}} #}
+    
+        </div>
+    </div>
+    <div class="daily">
+        <div class="dtit"><i class="font-ico-54"></i>日常管理</div>
+        <div class="dinfo">
+            {% if app.user.usertype == 11 or app.user.usertype == 15 %}
+            <dl>
+                <dt>房源管理</dt>
+                <dd> 
+                    <span>出售房源：</span>
+                    <span>已发布<em >{{core_global.count({models: 'sale', sql_opt: {uid: app.user.id|default('')}})}}</em>套 </span>
+                    <span>上架 <em >{{app.user.userinfo.sales|default('')}}</em>套</span>
+                    <span>下架 <em >{{core_global.count({models: 'sale', sql_opt: {valid: 'lt|' ~ now_time|default(''), uid: app.user.id|default('')}})}}</em>套</span>                
+                    <span class="fbtit">
+                    <a href="{{- core_global.menu_url(330) -}}" >发布二手房>></a>
+                    </span> 
+                </dd>
+                <dd> 
+                    <span>出租房源：</span>
+                    <span>已发布<em >{{core_global.count({models: 'rent', sql_opt: {uid: app.user.id|default('')}})}}</em>套 </span>
+                    <span>上架 <em >{{app.user.userinfo.rents|default('')}}</em> 套</span>
+                    <span>下架 <em >{{core_global.count({models: 'rent', sql_opt: {valid: 'lt|' ~ now_time|default(''), uid: app.user.id|default('')}})}}</em> 套</span>               
+                    <span class="fbtit">
+                    <a href="{{- core_global.menu_url(338) -}}">发布出租房>></a>
+                    </span> 
+                </dd>
+    
+                <dt class="mt10">需求管理</dt>
+                <dd> 
+                    <span>求购信息：</span>
+                    <span>已发布<em >{{core_global.count({models: 'demand', sql_opt: {type: 1, uid: app.user.id|default('')}})}}</em>套 </span>
+                    <span>已审 <em >{{core_global.count({models: 'demand', sql_opt: {checked: 1, type: 1, uid: app.user.id|default('')}})}}</em> 套</span>
+                    <span>未审 <em >{{core_global.count({models: 'demand', sql_opt: {checked: 0, type: 1, uid: app.user.id|default('')}})}}</em> 套</span>             
+                    <span class="fbtit">
+                    <a href="{{- core_global.menu_url(349) -}}">发布求购>>>></a>
+                    </span> 
+                </dd>
+                <dd> 
+                    <span>求租信息：</span>
+                    <span>已发布<em >{{core_global.count({models: 'demand', sql_opt: {type: 2, uid: app.user.id|default('')}})}}</em>套 </span>
+                    <span>已审 <em >{{core_global.count({models: 'demand', sql_opt: {checked: 1, type: 2, uid: app.user.id|default('')}})}}</em> 套</span>
+                    <span>未审 <em >{{core_global.count({models: 'demand', sql_opt: {checked: 0, type: 2, uid: app.user.id|default('')}})}}</em> 套</span>             
+                    <span class="fbtit">
+                    <a href="{{- core_global.menu_url(349) -}}">发布求租>>>></a>
+                    </span> 
+                </dd>
+                
+    
+                <dt>房源委托</dt>
+                <dd> 
+                    <span>委托出售</span>
+                    <span>已发布<em >{{core_global.count({models: 'entrust', sql_opt: {type: 2, wid: app.user.id|default('')}})}}</em>套 </span>
+                    <span>已审 <em >{{core_global.count({models: 'entrust', sql_opt: {checked: 1, type: 2, wid: app.user.id|default('')}})}}</em> 套</span>
+                    <span>未审 <em >{{core_global.count({models: 'entrust', sql_opt: {checked: 0, type: 2, wid: app.user.id|default('')}})}}</em> 套</span>                
+                    <span class="fbtit">
+                    <a href="{{- core_global.menu_url(350) -}}" >委托出售>></a>
+                    </span> 
+                </dd>
+                <dd> 
+                    <span>委托出租</span>
+                    <span>已发布<em >{{core_global.count({models: 'entrust', sql_opt: {type: 2, wid: app.user.id|default('')}})}}</em>套 </span>
+                    <span>已审 <em >{{core_global.count({models: 'entrust', sql_opt: {checked: 1, type: 2, wid: app.user.id|default('')}})}}</em> 套</span>
+                    <span>未审 <em >{{core_global.count({models: 'entrust', sql_opt: {checked: 0, type: 2, wid: app.user.id|default('')}})}}</em> 套</span>                
+                    <span class="fbtit">
+                    <a href="{{- core_global.menu_url(350) -}}">委托出租>></a>
+                    </span> 
+                </dd>
+    
+                <dt>分销管理</dt>
+                <dd> 
+                    <span>我的分销</span>
+                    <span>已推荐<em >{{core_global.count({models: 'recommend', sql_opt: {type: 2, uid: app.user.id|default('')}})}}</em>人 </span>          
+                    <span class="fbtit">
+                    <a href="{{- core_global.menu_url(483) -}}">分销列表>></a>
+                    </span> 
+                </dd>
+                <dd> 
+                    <span>我的佣金</span>
+                    <span>已提取<em >{{core_global.count({models: 'wages', sql_opt: {type: 2, uid: app.user.id|default('')}})}}</em>次 </span>          
+                    <span class="fbtit">
+                    <a href="{{- core_global.menu_url(520) -}}" >佣金提取>></a>
+                    </span> 
+                </dd>
+                <dd> 
+                    <span>推广链接</span>
+                                
+                    <span class="fbtit">
+                    <a href="{{- core_global.menu_url(518) -}}  " >推广链接>></a>
+                    </span> 
+                </dd>
+    
+                <dt>我的收藏</dt>
+                <dd> 
+                    <span>出售房源<em > {{core_global.count({models: 'collects', sql_opt: {type: 2, uid: app.user.id|default('')}})}} </em>条 </span>
+                    <span>出租房源<em > {{core_global.count({models: 'collects', sql_opt: {type: 2, uid: app.user.id|default('')}})}} </em>条 </span>
+                    <span class="fbtit">
+                    <a href="{{- core_global.menu_url(407) -}}">房源收藏>></a>
+                    </span> 
+                </dd>
+                <dd> 
+                    <span>关注求购<em > {{core_global.count({models: 'collects', sql_opt: {type: 2, uid: app.user.id|default('')}})}} </em>条 </span>
+                    <span>关注求租<em > {{core_global.count({models: 'answer', sql_opt: { uid: app.user.id, create_time: 'gte|' ~ 'now'|date('Y-m-d')|date('U') }})}} </em>条 </span>
+                    <span class="fbtit">
+                    <a href="{{- core_global.menu_url(408) -}}">需求收藏>></a>
+                    </span> 
+                </dd>
+                <dd> 
+                    <span>收藏楼盘<em > {{core_global.count({models: 'collects', sql_opt: {type: 2, uid: app.user.id|default('')}})}} </em>条 </span>
+                    <span>收藏小区<em > {{core_global.count({models: 'collects', sql_opt: {type: 2, uid: app.user.id|default('')}})}} </em>条 </span>
+                    <span class="fbtit">
+                    <a href="{{- core_global.menu_url(414) -}}">楼盘收藏>></a>
+                    </span> 
+                </dd>
+                <dd> 
+                    <span>问答收藏<em > {{core_global.count({models: 'collects', sql_opt: {type: 2, uid: app.user.id|default('')}})}} </em>条 </span>                
+                    <span class="fbtit">
+                    <a href="{{- core_global.menu_url(429) -}}">问答收藏>></a>
+                    </span> 
+                </dd>
+                <dd> 
+                    <span>店铺收藏<em > {{core_global.count({models: 'collects', sql_opt: {type: 2, uid: app.user.id|default('')}})}} </em>条 </span>                
+                    <span class="fbtit">
+                    <a href="{{- core_global.menu_url(601) -}}">店铺收藏>></a>
+                    </span> 
+                </dd>   
+            </dl>
+            {% elseif app.user.usertype == 18 %}
+                {% set uhouse = ('house.houses')|getCol('id', { uid: app.user.id }) %}
+                <dl>
+                <dt>楼盘管理</dt>
+                <dd> 
+                    <span>楼盘意向<em > {{core_global.count({models: 'inter_housesintention', sql_opt: { aid: 'in|' ~ uhouse, create_time: 'gte|' ~ 'now'|date('Y-m-d')|date('U') }})}} </em>条 </span>
+                    <span>楼盘点评<em > {{core_global.count({models: 'inter_housescomment', sql_opt: { aid: 'in|' ~ uhouse, create_time: 'gte|' ~ 'now'|date('Y-m-d')|date('U') }})}} </em>条 </span>
+                    <span class="fbtit">
+                    <a href="{{- core_global.menu_url(390) -}}">管理楼盘>></a>
+                    </span> 
+                </dd>
+            </dl>   
+            {% elseif app.user.usertype == 17 %}
+            <dl>
+                <dt>房源管理</dt>
+                <dd> 
+                    <span>经纪人二手房源<em > {{core_global.count({models: 'sale', sql_opt: { cid: app.user.id, create_time: 'gte|' ~ 'now'|date('Y-m-d')|date('U') }})}} </em>条 </span>
+                    <span>经纪人出租房源<em > {{core_global.count({models: 'rent', sql_opt: { cid: app.user.id, create_time: 'gte|' ~ 'now'|date('Y-m-d')|date('U') }})}} </em>条 </span>
+                    <span class="fbtit">
+                    <a href="{{- core_global.menu_url(55) -}}">管理二手房>></a>
+                    </span> 
+                </dd>
+            </dl>
+            <dl>
+                <dt>店铺动态</dt>
+                <dd> 
+                    <span>动态管理<em > {{core_global.count({models: 'news', sql_opt: { uid: app.user.id, create_time: 'gte|' ~ 'now'|date('Y-m-d')|date('U'), category: 76 }})}} </em>条 </span>
+                    <span class="fbtit">
+                    <a href="{{- core_global.menu_url(402) -}}">管理店铺动态>></a>
+                    </span> 
+                </dd>
+            </dl>
+                
+            {% endif %}
+            <dl>
+                <dt>问答管理</dt>
+                <dd> 
+                    <span>我的提问<em > {{core_global.count({models: 'ask', sql_opt: { uid: app.user.id, create_time: 'gte|' ~ 'now'|date('Y-m-d')|date('U') }})}} </em>条 </span>
+                    <span>我的回答<em > {{core_global.count({models: 'answer', sql_opt: { uid: app.user.id, create_time: 'gte|' ~ 'now'|date('Y-m-d')|date('U') }})}} </em>条 </span>
+                    <span class="fbtit">
+                    <a href="{{- core_global.menu_url(365) -}}">问答管理>></a>
+                    </span> 
+                </dd>
+            </dl>   
+        </div>
+    
+    </div>
+    </div>
+</div>
+<script type="text/javascript">
+$(function(){
+    $('.txleft').hover(function() {
+        $('.bgblock').slideDown();
+    }, function() {
+        $('.bgblock').slideUp();
+    });
+})
+
+</script>
+{% endblock body %}

@@ -1,0 +1,533 @@
+﻿/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+*/
+
+@import 'static/ats';
+// 工具类 每个文件都要导入
+
+@import 'sale';
+// 二手公用模块
+
+@import 'detail-nav'; // 详情公用导航
+
+@import 'lp-tk'; // 图库样式
+
+@import 'img-lp';
+//导入css 标识-文件名
+@include img-lp($img-lp);
+//调用全部样式， 标识-文件名($标识-文件名); 
+
+@import 'lp-hxt'; // 户型图
+
+@import 'img-sale-detail';
+//导入css 标识-文件名
+@include img-sale-detail($img-sale-detail);
+//调用全部样式， 标识-文件名($标识-文件名); 
+
+@import 'lp-map'; // 楼盘地图
+
+$xq-d-body-w: 930px !default;
+/* tit */
+// 列表 list
+// 外围包裹
+.main {
+	float: left;
+	width: 930px;
+}
+.vil-head {
+	
+	border-bottom: 2px solid $major-color;
+	@extend %clearfix;
+
+	h2 {
+		float: left;
+		padding: 0 20px;
+		height: 44px;
+		line-height: 46px;
+		color: #fff;
+		background: $major-color;
+
+	}
+
+	.sort {
+		margin-top: 8px;
+	}
+}
+
+.vil-box {
+	@extend %clearfix;
+	padding: 26px 0 30px 0;
+	border-bottom: 1px solid #ccc;
+}
+
+.vil-box:hover {
+	background: #fafafa;
+}
+
+.v-b-l {
+	float: left;
+
+	img {
+		float: left;
+		width: 160px;
+		height: 110px;
+		margin-top: 4px;
+	}
+
+	.text {
+		margin-left: 190px;
+		font-size: 14px;
+		color: #333;
+		h3 {
+			line-height: 32px;
+			
+			font-weight: 700;
+			
+		}
+		p {
+			line-height: 28px;
+		}
+		.num {
+			color: #f50;
+		}
+		i{
+			vertical-align: -2px;
+		}
+	}
+}
+
+.v-b-r {
+	float: right;
+	@extend %clearfix;
+}
+
+.v-b-r-l {
+	float: left;
+	line-height: 34px;
+	font-size: 14px;
+	color: #333;
+
+	span {
+		font-size: 16px;
+		font-family: georgia;
+	}
+
+	i {
+		display: inline-block;
+		width: 18px;
+		height: 18px;
+		line-height: 18px;
+		text-align: center;
+		border-radius: 2px;
+		font-size: 13px;
+		color: #fff;
+	}
+	.shou {
+		background: #f06d07;
+	}
+
+	.zu {
+		background: #2d99d6;
+	}
+}
+
+.margin {
+	margin: 0 28px 0 46px;
+}
+
+// 详情 detail
+#zst {
+	height: 200px;
+}
+.lptit-wrap {
+	border-radius: 5px;
+}
+.lptit h1 {
+	font: 27px/40px Microsoft yahei;
+	height: 40px;
+}
+.lptit .logo {
+	background: #fff none repeat scroll 0 0;
+	border: 1px solid #ddd;
+	float: left;
+	margin-right: 10px;
+	padding: 2px;
+}
+.lptit i {
+	color: #e43;
+}
+
+.xqcollect:hover {
+	text-decoration: none;
+	color: $major-color;
+}
+
+/* nav */
+.lp-gz {
+	height: 40px;
+	line-height: 40px;
+	a {
+		color: #fff;
+		margin-right: 10px;
+		text-decoration: none;
+	}
+	i {
+		margin-right: 3px;
+		vertical-align: -3px;
+	}
+}
+
+/* 图集 */
+.focus {
+	padding-bottom: 30px;
+	width: $screen;
+}
+.picshowtxt-h3 {
+	border-bottom: 2px solid #e6e6e6;
+	color: #fff;
+	display: block;
+	font-size: 26px;
+	line-height: 2;
+	margin-bottom: 10px;
+	margin-left: 0;
+	padding-top: 20px;
+	text-align: center;
+	width: $screen;
+}
+
+/* 详情 */
+.bdrs {
+	border-radius: 5px;
+}
+// top
+.xq-thumb {
+	background: rgba(0, 0, 0, 0) url("../images/sale/bg_1.gif") no-repeat scroll 0 0;
+	height: 217px;
+	padding: 6px 0 0 8px;
+	width: 303px;
+}
+.xq-zs {
+	.item1 {
+		background: rgba(0, 0, 0, 0) url("../images/sale/Broker_Area_25.gif") no-repeat scroll 0 3px;
+		padding: 0 0 0 20px;
+	}
+	.item2 {
+		background: rgba(0, 0, 0, 0) url("../images/sale/zgdj.gif") no-repeat scroll 0 3px;
+		padding: 0 0 0 20px;
+	}
+	.item3 {
+		background: rgba(0, 0, 0, 0) url("../images/sale/zddj.gif") no-repeat scroll 0 3px;
+		padding: 0 0 0 20px;
+	}
+}
+// 左侧
+.xq-d-body {
+	width: $xq-d-body-w;
+}
+// 标题
+.lp-coltit {
+	line-height: 28px;
+	overflow: hidden;
+	padding: 20px 0 10px;
+}
+.lp-coltit h3 {
+	float: left;
+	font-size: 22px;
+	padding: 0 5px;
+}
+.lp-coltit .more {
+	color: #999;
+	float: right;
+	font-size: 14px;
+}
+.lp-coltit .more a {
+	color: #999;
+	margin: 0 5px;
+}
+.lp-coltit span {
+	cursor: pointer;
+}
+.lp-coltit span.act {
+	color: #327acf;
+	padding-left: 10px;
+}
+.lp-coltit .tip {
+	color: #797979;
+	float: right;
+}
+.lp-coltit .tip span {
+	float: left;
+	margin-right: 5px;
+}
+.lp-coltit .tip i {
+	background: #3393f5 none repeat scroll 0 0;
+	border-radius: 50%;
+	float: left;
+	height: 12px;
+	margin: 5px 5px 0 0;
+	overflow: hidden;
+	vertical-align: top;
+	width: 12px;
+}
+.lp-coltit .tip .ico2 {
+	background: #fb841f none repeat scroll 0 0;
+}
+.lp-coltit .tip .ico3 {
+	background: #a9a9aa none repeat scroll 0 0;
+}
+.lp-coltit .btn1 {
+	background: #f97822 none repeat scroll 0 0;
+	border-radius: 2px;
+	color: #fff;
+	padding: 0 15px;
+}
+.lp-coltit .btn1:hover {
+	opacity: 0.9;
+	text-decoration: none;
+}
+// 详细信息
+.xqxq{
+	padding: 0 30px;
+}
+.lp-jbcs{
+	width: 870px;
+	position: relative;
+}
+.jgqk{
+	background: #fff;
+	width: 190px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	div{
+		height: 70px;
+		margin-bottom: 10px;
+	}
+	p{
+		padding-top: 12px;
+	}
+	i{
+		margin-right: 10px;
+		float: left;
+	}
+}
+.lp-jbcs li {
+	border-top: 1px solid #fff;
+	float: left;
+	font-size: 14px;
+	line-height: 2;
+	width: 50%;
+}
+.lp-jbcs li.wb {
+	width: 100%;
+}
+.lp-jbcs span {
+	background: #fafafa none repeat scroll 0 0;
+	color: #666;
+	display: inline-block;
+	margin-right: 10px;
+	padding: 4px 10px 4px 0;
+	text-align: right;
+	width: 90px;
+}
+.lp-jbcs i {
+	color: #f60;
+	// font-family: Arial;
+	font-size: 20px;
+}
+// 房源出售
+
+.esfylist {
+	-moz-border-bottom-colors: none;
+	-moz-border-left-colors: none;
+	-moz-border-right-colors: none;
+	-moz-border-top-colors: none;
+	border-color: #ddd #fff #fff;
+	border-image: none;
+	border-style: solid;
+	border-width: 1px;
+	margin-top: -1px;
+	overflow: hidden;
+	padding: 10px 0;
+	position: relative;
+	z-index: 1;
+}
+.esffirst {
+	border-top: 0 none;
+}
+.esfylist:hover{
+	background: #eef6fd;
+}
+.esfylist .chk {
+	float: left;
+	width: 35px;
+}
+.esfylist .chk label {
+	background: #eef6fd none repeat scroll 0 0;
+	display: block;
+	height: 74px;
+	line-height: 18px;
+	margin-left: 5px;
+	padding: 23px 2px 0;
+	text-align: center;
+	width: 20px;
+}
+.esfylist .chk input {
+	height: 13px;
+	margin-bottom: 5px;
+	width: 13px;
+}
+.esfylist .pic {
+	float: left;
+	width: 135px;
+}
+.esfylist .pic img {
+	border: 1px solid #ccc;
+	padding: 2px;
+}
+.esfylist .info {
+	float: left;
+	width: 350px;
+}
+.esfylist .info em,
+.esfylist .info strong {
+	display: block;
+	height: 24px;
+	line-height: 24px;
+	overflow: hidden;
+}
+.esfylist .info strong {
+	font-size: 14px;
+}
+.esfylist .info strong a {
+	float: left;
+}
+.esfylist .info span a {
+	color: #0053df;
+}
+.esfylist .info img {
+	vertical-align: middle;
+}
+.esfylist .info .icons {
+	margin-top: 3px;
+	position: absolute;
+	width: 80px;
+}
+.esfylist .info .icon,
+.esfylist .info .icon2 {
+	background: #c00 none repeat scroll 0 0;
+	float: left;
+	font-size: 12px;
+	height: 16px;
+	margin-left: 5px;
+	width: 32px;
+}
+.esfylist .info .icon i,
+.esfylist .info .icon2 i {
+	background: #c00 none repeat scroll 0 0;
+	color: #fff;
+	display: block;
+	height: 14px;
+	line-height: 14px;
+	margin: 1px -1px;
+	overflow: hidden;
+	position: relative;
+	text-align: center;
+	width: 34px;
+}
+.esfylist .info .icon2,
+.esfylist .info .icon2 i {
+	background: #95b722 none repeat scroll 0 0;
+}
+.esfylist span {
+	color: #666;
+}
+.esfylist .info2 {
+	float: left;
+	line-height: 90px;
+	text-align: center;
+	width: 78px;
+}
+.esfylist .info3 {
+	display: inline;
+	float: right;
+	margin-right: 10px;
+	padding-top: 22px;
+	text-align: center;
+	width: 120px;
+}
+.esfylist .info3 i,
+.esfylist .info3 em {
+	display: block;
+	height: 24px;
+	line-height: 24px;
+	overflow: hidden;
+	width: 120px;
+}
+.esfylist .info3 em {
+	color: #c00;
+}
+.esfylist .info3 em {
+	font-family: arial;
+	font-size: 18px;
+	font-weight: bold;
+}
+.esfylist .fy {
+	padding-left: 10px;
+}
+.noinfo {
+	color: #ccc;
+	font: 20px/200px "Microsoft YaHei";
+	height: 200px;
+	text-align: center;
+}
+.noinfo span,
+.noinfo a {
+	color: #c00;
+}
+
+.xiaoqu-share {
+	float: none !important;
+	padding-left: 20px !important;
+	color: #999 !important;
+	font-family: '微软雅黑' !important;
+	font-size: 14px !important;
+	background-position: 3px 3px !important;
+}
+
+.door-sale .tag{
+    border-radius: 3px;
+    color: #fff;
+    display: inline-block;
+    font-size: 12px;
+    padding: 1px 6px;
+    position: absolute;
+    left: 0;
+    top: 20px;
+    &.on-sale{
+        background: #f60;
+    }
+    &.dis-sale{
+        background: #aaa;
+    }
+    &.on-sale-114 {
+        background-color: #06a897;
+    }
+    &.on-sale-115 {
+        background-color: #1cbaff;
+    }
+    &.on-sale-116 {
+        background-color: #f60;
+    }
+    &.on-sale-117 {
+        background-color: #ce9b86;
+    }
+    &.on-sale-118 {
+        background-color: #afafaf;
+    }
+    &.on-sale-159 {
+        background-color: #e43;
+    }
+}

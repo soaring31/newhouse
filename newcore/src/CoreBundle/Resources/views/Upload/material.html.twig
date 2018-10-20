@@ -1,0 +1,209 @@
+{% extends "CoreBundle::base.html.twig" %}
+{% block css %}
+    <link type="text/css" rel="stylesheet" href="{{ asset('bundles/core/css/style.css') }}"/>
+    <link type="text/css" rel="stylesheet" href="{{ asset('bundles/core/css/cymain.css') }}"/>
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{{ asset(corepath ~ '/js/vendor/sea.map.js') }}"></script>
+    <script type="text/javascript">
+        seajs.use(["main", "jplayer", "miniplayer.css", "miniPlayer"], function (m) {
+            m.init("ajaxSubmit");
+
+            topJQuery = typeof parent.document == "undefined" ? $ : top.$;
+            var data = topJQuery('.jq-modal-act').data('returnValue'); // 获取对话框传递过来的数据
+            $('#picsize').html(data);
+            $(".selurl").off().on("click", function () {
+                topJQuery('.jq-modal-act').data('returnValue', $(this).attr("data")).jqModal('hide');
+            });
+
+            $(".audio").mb_miniPlayer({
+                width: 200,
+                inLine: false,
+                onEnd: playNext
+            });
+
+            function playNext(player) {
+                var players = $(".audio");
+                document.playerIDX = player.idx + 1 <= players.length - 1 ? player.idx + 1 : 0;
+                players.eq(document.playerIDX).mb_miniPlayer_play();
+            }
+
+            $("#selfolder").off().on("change", function () {
+                var url = "{{ action|U('type='~type~'&color='~color) }}&folder=" + $(this).val();
+                url = url.replace(/&amp;/g, '&');
+                window.location.href = url;
+            });
+
+            $("#selcolor").off().on("change", function () {
+                var url = "{{ action|U('type='~type~'&folder='~folder) }}";
+
+                if ($(this).val() != 'all') url += "&color=" + $(this).val();
+                url = url.replace(/&amp;/g, '&');
+                window.location.href = url;
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+    <div class="tab">
+        <ul>
+
+            <li class="{{ type=='icon'?'current':'' }} tabli" id="tab0">
+                <a href="{{ action|U('type=icon') }}">图标</a>
+            </li>
+            <li class="{{ type=='focus'?'current':'' }} tabli" id="tab0">
+                <a href="{{ action|U('type=focus') }}">幻灯片</a>
+            </li>
+            <li class="{{ type=='background'?'current':'' }} tabli" id="tab0">
+                <a href="{{ action|U('type=background') }}">背景图</a>
+            </li>
+            {# <li class="{{ type=='music'?'current':'' }} tabli" id="tab0">
+                <a href="{{ action|U('type=music') }}">音乐</a>
+            </li> #}
+            <li class="{{ type=='my'?'current':'' }} tabli" id="tab0">
+                <a href="{{ action|U('type=my') }}">我的素材</a>
+            </li>
+            <li class="{{ type=='house_inter_album'?'current':'' }} tabli" id="tab0">
+                <a href="{{ action|U({'type': 'house_inter_album', 'house_id': houseId}) }}">楼盘相册</a>
+            </li>
+
+        </ul>
+    </div>
+    <!--tab end-->
+    <div style="margin: 10px 20px;">
+        <div>
+            {% if type == 'house_inter_album' %}
+                <form>
+                    <table class="ListProduct" width="100%">
+                        <thead>
+                        <tr>
+                            <th>文件</th>
+                            <th>时间</th>
+                            <th>选择</th>
+                        </tr>
+                        </thead>
+                        <volist name="list" id="item">
+                            {% if list.data is defined %}
+                                {% for item in list.data %}
+                                    <tr>
+                                        <td><a href="javascript:void(0);" class="selurl" data="{{ item.thumb }}"><img
+                                                        src="{{ asset(item.thumb) }}" width="120"/></a></td>
+                                        <td>{{ item.createTime|date('Y-m-d H:i') }}</td>
+                                        <td>
+                                            <a href="javascript:void(0);" class="selurl" data="{{ item.thumb }}">选中</a>
+                                            <a href="{{ ('deletematerial')|U('id='~item.id) }}"
+                                               class="ajax-get reload confirm">删除</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </volist>
+                    </table>
+                </form>
+                <div class="footactions" style="padding-left: 10px">
+                    <div class="pages">{{ show|raw }}</div>
+                </div>
+            {% elseif type!='my' %}
+                <div style="margin-bottom: 10px;">
+                    请选择类别：
+                    <select id="selfolder">
+                        {% for f in folders %}
+                            <option value="{{ f.folder }}" {{ f.folder|isSelected(folder) }}>{{ f.name }}</option>
+                        {% endfor %}
+                    </select>
+                    {% if type=='icon' %}
+                        {% if folder is empty or folder|in_array(folderArr) %}
+                            &nbsp; &nbsp; &nbsp;
+                            <select id="selcolor" style="width: 76px">
+                                <option value="all">全部颜色</option>
+                                <option value="red" {{ color|isSelected('red') }}>红</option>
+                                <option value="orange" {{ color|isSelected('orange') }}>橙</option>
+                                <option value="yellow" {{ color|isSelected('yellow') }}>黄</option>
+                                <option value="green" {{ color|isSelected('green') }}>绿</option>
+                                <option value="blue" {{ color|isSelected('blue') }}>蓝</option>
+                                <option value="gray" {{ color|isSelected('gray') }}>灰</option>
+                                <option value="purple" {{ color|isSelected('purple') }}>紫</option>
+                                <option value="brown" {{ color|isSelected('brown') }}>棕</option>
+                                <option value="white" {{ color|isSelected('white') }}>白</option>
+                            </select>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                {% if type=='music' %}
+                    <table class="ListProduct" border="0" cellSpacing="0" cellPadding="0" width="100%">
+                        <thead>
+                        <tr>
+                            <th>播放</th>
+                            <th>选择
+                                <span class="tooltips">
+                            <img src="{{ asset('bundles/core/images/price_help.png') }}" align="absmiddle"/>
+                            <span style='width:80px;text-align:left;'>点击歌名即可</span>
+                        </span>
+                            </th>
+                        </tr>
+                        </thead>
+                        {% for item in files %}
+                            <tr>
+                                <td><a style="width: 220px; float: left" class="audio {skin:'blue'}"
+                                       href="{{ asset('attachment/'~type~'/'~folder~'/'~item.file) }}">{{ item.name }}</a>
+                                </td>
+                                <td>&nbsp;&nbsp;<a href="###" class="selurl"
+                                                   data="{{ 'attachment/'~type~'/'~folder~'/'~item.file }}"
+                                                   data1="{{ asset('attachment/'~type~'/'~folder~'/'~item.file) }}">{{ item.name }}</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    <ul>
+                        {% for item in files %}
+                            <li style="float:left;width:{{ height }}px;margin:1px;background:#ddd;">
+                                <a href="###" class="selurl" data="{{ 'attachment/'~type~'/'~folder~'/'~item }}"
+                                   data="{{ asset('attachment/'~type~'/'~folder~'/'~item) }}">
+                                    <img class="attimg" style="width:{{ height }}px;height:{{ height }}px;"
+                                         src="{{ asset('attachment/'~type~'/'~folder~'/'~item) }}"/></a>
+                            </li>
+                        {% endfor %}
+                        <div class="clr" style="height: 10px;"></div>
+                    </ul>
+                    <div class="pages">{{ show|raw }}</div>
+                {% endif %}
+            {% else %}
+                <form>
+                    <table class="ListProduct" width="100%">
+                        <thead>
+                        <tr>
+                            <th>文件</th>
+                            <th>时间</th>
+                            <th>选择</th>
+                        </tr>
+                        </thead>
+                        <volist name="list" id="item">
+                            {% if list.data is defined %}
+                                {% for item in list.data %}
+                                    <tr>
+                                        <td><a href="javascript:void(0);" class="selurl" data="{{ item.url }}"><img
+                                                        src="{{ asset(item.url) }}" width="120"/></a></td>
+                                        <td>{{ item.createTime|date('Y-m-d H:i') }}</td>
+                                        <td>
+                                            <a href="javascript:void(0);" class="selurl" data="{{ item.url }}">选中</a>
+                                            <a href="{{ ('deletematerial')|U('id='~item.id) }}"
+                                               class="ajax-get reload confirm">删除</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </volist>
+                    </table>
+                </form>
+                <div class="footactions" style="padding-left: 10px">
+                    <div class="pages">{{ show|raw }}</div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div style="clear: both; height: 30px;"></div>
+{% endblock %}
+{% block footer %}
+{% endblock footer %}

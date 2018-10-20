@@ -1,0 +1,53 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+ * ajax调用：我的佣金列表
+#}
+{% if ident.info is defined %}
+    {% set list = ident.info %}
+    {% set tpl_now = 'now'|date('U') %}
+{% endif %}
+{% block result %}
+    {% spaceless %}  
+        {% if list.data is defined and list.pageCount|default(0) != 0 %}
+            {% for item in list.data %}
+                <li  {% if loop.last %}data-page="{
+                    pageIndex: {{list.pageIndex}},
+                    pageCount: {{list.pageCount}},
+                    pageSize: {{list.pageSize}}
+                 }"{% endif %}>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title p-gray">
+                                    被推荐人姓名：{{item.name|default('')}}
+                                </div>
+                                <div class="item-after">
+                                    佣金:{{core_global.if_dw({value: item.yongjin, danwei: '元', class: "p-red"})}}
+                                </div>
+                            </div>
+                            <div class="item-subtitle item-subtitle-ex">
+                                {% set vo_houses = ('house.sell')|getOne('aid', {id: item.aid|default('')}) %}
+                                楼盘名称：
+                                {{ ('house.houses')|getOne('name', {id: vo_houses}) }}
+                            </div>
+                            <div class="item-subtitle item-subtitle-ex">
+                                结算时间：{{item.create_time|default('')|date('Y-m-d')}}
+                            </div>
+                            <div class="item-subtitle item-subtitle-ex">
+                                联系电话：{{item.tel|default('')}}
+                            </div>
+                            <div class="row mt5">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        {% else %}
+            <li class="mobile-list-none">暂无更多数据</li>
+        {% endif %}
+    {% endspaceless %}
+    <script type="text/javascript">
+        seajs.use(['formattime'])
+    </script>
+
+{% endblock result %}

@@ -1,0 +1,338 @@
+{% extends 'HouseBundle::base_top_search.html.twig' %}
+{# # 说明
+ * url_category: URL传送的分类
+ * category: 当前分类数据
+ * xxl:影像力推送
+ * push_cate_xxl：影像力推送标题
+ * sylptk: 楼盘图库推送
+ * push_cate_sylptk:楼盘图库推送标题
+ * syestk:二手图库推送
+ * push_cate_syestk:二手图库推送标题
+ * sycztk:出租图库推送
+ * push_cate_sycztk: 出租图库推送标题
+ * sysytk:商业图库推送
+ * push_cate_sysytk:商业图库推送标题
+ * nav_photos_act: url中category参数
+ * cate_pushs_data: 推送标题数据
+ * cate_pushs_title: 推送标题组装数据
+#}
+
+{% set url_category = app.request.get('category', 23) %}
+
+{% set category = (url_category)|getCategoryById() %}
+
+{% set category_photos = ('house.category')|getAll({models:"photos"}) %}
+
+{# 搜索 #}
+{% set tpl_topsearch_action = 'photos/list' %}
+
+{% set tpl_topsearch_placeholder = '请输入关键字' %}
+
+{% set tpl_topsearch_hot = 'photokeyword' %}
+
+{# 广告 #}
+{% set top_ad = {tag: 'phototopad'} %}
+
+{% block title %}{{category.name|default('')}}{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" Content="{{category.keywords|default('')}}"/>
+<meta name="description" content="{{category.description|default('')}}"/>
+{% endblock key_des %}
+
+{% block css %}
+	{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/photo.css')}}
+{% endblock css %}
+
+{# 当前位置 #}
+{% block current %}
+	<div class="blank20"></div>
+	<div class="container">
+		{{core_global.detail_nav({
+	        class: 'photo-nav fr',
+	        nav_detail_act: nav_photos_act|default(23),
+	        controller: 'photos',
+	        data: category_photos.data
+	    })}}
+		<div class="current-location">
+			{{block('current_default')}}
+			{% block current_photos %}
+				<span>
+					{{category.name|default('')}}
+				</span>
+			{% endblock current_photos %}
+		</div>
+	</div>
+{% endblock current %}
+
+{% block container %}
+	{% set cate_pushs_data = ('house.cate_pushs')|getAll({ename: 'in|sylptk,syestk,sycztk,sysytk,xxl'}) %}
+
+	{% set cate_pushs_title = {} %}
+
+	{% for item in cate_pushs_data.data %}
+		{% set cate_pushs_title = {
+			(item.ename): item.name
+		}|merge(cate_pushs_title) %}
+	{% endfor %}
+
+	<div class="blank30"></div>
+	<div class="container">
+		{% set syhdp = ('syhdp')|getPush(10) %}
+		{# 幻灯片 #}
+		<div id="focus" class="focus jqDuang" data-duang="1" data-obj=".focus-view li" data-prevbtn=".prev" data-nextbtn=".next" data-effect="left" data-cell=".mask ul" data-showtit="1" data-autoplay="0" data-lazyload="src">
+			<div id="focusView" class="focus-view" data-tag="syhdp">
+				<ul>
+
+					{% if syhdp is defined and syhdp|default('') %}
+					    {% for item in syhdp %}
+								<li data-url="{{item.url|default('#')}}" data-title="{{item.name|default('')}}" {% if item.ad|default('') %}class="house-ad right-top"{% endif %}>
+		                        {% if item.ad|default('') %}
+		                            <div class="ad-txt"></div>
+		                        {% endif %}
+								<a href="{{item.url|default('#')}}" target="_blank">
+			                        {{- core_global.data_src_img({
+			                            src: item.thumb|default(''),
+			                            alt: item.name|default(''),
+			                            type: 1,
+			                            width: 1200,
+			                            height: 550
+			                        }) -}}
+			                    </a>
+			                    <h3>
+			                    	<a href="{{item.url|default('#')}}" target="_blank">{{item.name|default('')}}</a>
+			                    </h3>
+							</li>
+					    {% endfor %}
+					{% else %}
+						<li>
+							{{- core_global.data_src_img({
+	                            src: '',
+	                            alt: '图库',
+	                            type: 1,
+	                            width: 1200,
+	                            height: 550
+	                        }) -}}
+						</li>
+					{% endif %}
+				</ul>
+			</div>
+			<!-- 小图 -->
+			<div id="focusSlider" class="focus-slider jqDuang" data-obj=".mask li"  data-visible="7" data-steps="7" data-autoplay="0" data-effect="left">
+				<div>
+					<span id="prev" class="prev"></span>
+				</div>
+				<div class="mask">
+					<ul>
+						{% if syhdp is defined %}
+						    {% for item in syhdp %}
+								<li class="{% if loop.index == 1 %}act{% endif %}">
+									<a href="{{item.url|default('#')}}" target="_blank">
+										{{- core_global.img({
+										    src: item.thumb|default(''),
+										    alt: item.name|default(''),
+										    type: 2,
+										    width: 75,
+										    height: 50
+										}) -}}
+									</a>
+								</li>
+						    {% endfor %}
+						{% endif %}
+					</ul>
+				</div>
+				<div>
+					<span id="next" class="next"></span>
+				</div>
+			</div>
+			<!-- /小图 -->
+			<!--大箭头-->
+			<div class="focus-l-btn"><i class=""></i></div>
+			<div class="focus-r-btn"><i class=""></i></div>
+			<!--/大箭头-->
+		</div>
+		{# 幻灯片 #}
+		<div class="blank30"></div>
+		<!--影像力-->
+		{% set xxl = ('xxl')|getPush(16) %}
+		<div id="pnav01" class="image-force yxl jqDuang" data-obj="li" data-autoplay="0"  data-effect="left" data-duang="1" data-visible="4" data-steps="4" data-lazyload="src">
+			<div class="xxl-hd">
+				<h2>
+					{{cate_pushs_title['xxl']|default('')}}
+				</h2>
+				<b class="border"></b>
+				<a href="javascript:;" title="换一换" class="change-btn">
+					<i></i>
+					换一换
+				</a>
+				<div class="aeaeae">
+				</div>
+			</div>
+			<div class="body" data-tag="xxl">
+				<ul class="pic-list clearfix" id="picLBxxl">
+					{% if xxl is defined %}
+					    {% for item in xxl %}
+					    	<li class="pic-dl {% if item.ad|default('') %}house-ad right-top{% endif %}">
+		                        {% if item.ad|default('') %}
+		                            <div class="ad-txt"></div>
+		                        {% endif %}
+								<div class="item">
+									<a href="{{item.url|default('#')}}" class="pic-img">
+										{{- core_global.data_src_img({
+										    src: item.thumb|default(''),
+										    alt: item.name|default(''),
+										    type: 1,
+										    width: 290,
+										    height: 200
+										}) -}}
+									</a>
+								</div>
+							</li>
+					    {% endfor %}
+					{% endif %}
+				</ul>
+			</div>
+		</div>
+		<!--/影像力-->
+		<div class="blank30"></div>
+		<!--left-->
+		<div class="chief">
+			{% if ident.list.data is defined and ident.list.pageCount|default(0) != 0 %}
+			<div id="news">
+			    {% for item in ident.list.data %}
+			    	<div class="item">
+						<div class="content">
+							<a href="{{('photos/detail')|U({id:item.id|default('')})}}" class="link-to">{{item.name|default('')}}</a>
+						    <ul class="clearfix">
+						    	{% for img in item.images|sourceImg %}
+						    		{% if loop.index < 5 %}
+								    	<li class="pic">
+								    		<a href="{{('photos/detail')|U({id:item.id|default('')})}}" target="_blank">
+								    			{{- core_global.lazy_img({
+								    			    src: img.source|default(''),
+								    			    alt: item.name|default(''),
+								    			    type: 2,
+								    			    width:160,
+								    			    height: 200
+								    			}) -}}
+								    		</a>
+								    	</li>
+							    	{% endif %}
+						    	{% endfor %}
+						    </ul>
+						</div>
+						<div class="item-ft clearfix">
+							<div class="info">
+								<span class="from">
+									关键词
+								</span>
+								<span class="keywords">
+									{{core_global.keywords({
+										keywords: item.keywords|default(''),
+										models: 'photos',
+										tpl: '<a href="%url%">%keywords%</a>'
+									})}}
+								</span>
+							</div>
+							<div class="btns">
+								<a href="{{('photos/detail')|U({id:item.id|default('')})}}" target="_blank" title="评论数" class="discuz-btn"><i></i><i data-counts="{models: 'photos', field: 'comnum', id: '{{item.id|default('')}}'}"></i></a>
+								<div class="share-btn bdsharebuttonbox" share-text="{{item.name|default('')}}"
+									 share-desc="{{item.name|default('')}}"
+									 share-pic="{{core_global.img_url({src: item.thumb|default(''), type: 0, absolute: 1 })}}"
+									 share-url="{{('photos/detail')|U({id:item.id|default('')}, 1)}}">
+									<a class="bds_more" data-cmd="more">
+			                        </a>
+								</div>
+							</div>
+						</div>
+					</div>
+			    {% endfor %}
+			</div>
+			<a href="{{('photos/list')|U({category: 23, type: 1})}}" title="点击查看全部" class="more">点击查看全部</a>
+			{% endif %}
+		</div>
+		<!--left-->
+		<!--right-->
+		{% set photoAttr = ('sylptk,syestk,sycztk,sysytk')|getPushMuti(3) %}
+		<div class="extra">
+	        <div class="emodule jqDuang"  data-cell=".header-tab span" data-obj=".content" data-autoplay="0" data-actclass="cur" data-lazyload="src">
+	            <div class="header-tab clearfix">
+	            	<span>
+		            	<a href="{{('photos/list')|U({category: 24})}}" target="_blank">
+		            		{{cate_pushs_title['sylptk']|default('')}}
+		            	</a>
+		            	<a href="{{('photos/list')|U({category: 25})}}" target="_blank">
+		            		{{cate_pushs_title['syestk']|default('')}}
+		            	</a>
+	            	</span>
+	            </div>
+	            {{house_global.photos_recommend({
+	            	list: photoAttr['sylptk']|default({}),
+	            	tag: 'sylptk'
+		        })}}
+	            {{house_global.photos_recommend({
+	            	list: photoAttr['syestk']|default({}),
+	            	tag: 'syestk',
+	            	class: 'dis-default'
+		        })}}
+	        </div>
+	        <div class="emodule jqDuang"  data-cell=".header-tab span" data-obj=".content" data-autoplay="0" data-actclass="cur" data-lazyload="src">
+	            <div class="header-tab clearfix">
+	            	<span>
+	            		<a href="{{('photos/list')|U({category: 26})}}" target="_blank">
+		            		{{cate_pushs_title['sycztk']|default('')}}
+		            	</a>
+		            	<a href="{{('photos/list')|U({category: 27})}}" target="_blank">
+		            		{{cate_pushs_title['sysytk']|default('')}}
+		            	</a>
+	            	</span>
+	            </div>
+	            {{house_global.photos_recommend({
+	            	list: photoAttr['sycztk']|default({}),
+	            	tag: 'sycztk'
+		        })}}
+	            {{house_global.photos_recommend({
+	            	list: photoAttr['sysytk']|default({}),
+	            	tag: 'sysytk',
+	            	class: 'dis-default'
+		        })}}
+	        </div>
+		</div>
+		<!--/right-->
+		<div class="blank20"></div>
+	</div>
+{% endblock container %}
+
+{% block js %}
+	<script type="text/javascript">
+		/* #
+		* jqduang 幻灯片
+		* jqhoverS 分享下拉
+		* lazyload 图片懒加载
+		* share 分享
+		*/
+		seajs.use(['jqduang', 'jqhoverS', 'lazyload', 'share'], function(jqduang, jqhoverS, lazyload, share) {
+		//影像力
+			var changeDuang = $("[data-duang=1]").eq("1");
+			$(".change-btn").click(function() {
+				changeDuang.jqDuang("next");
+			});
+			//新闻导航显示
+			$('#xwNav dt').bind("mouseover", function() {
+				$('#xwNavBox').show();
+
+				if (-[1, ]) {
+					$(this).find('.news-list').show();
+				} else {
+					$(this).addClass('on').find('.news-list').show();
+				}
+			});
+			$('#xwNav dt').bind("mouseout", function() {
+				$('#xwNavBox').hide();
+				$(this).removeClass('on').find('.news-list').hide()
+			});
+			//分享
+			share.init();
+		})
+	</script>
+{% endblock js %}

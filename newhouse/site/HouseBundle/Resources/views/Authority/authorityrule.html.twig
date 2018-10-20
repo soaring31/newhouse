@@ -1,0 +1,142 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% block js %}
+<script type="text/javascript">
+
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {# {{ parent() }} #}
+{% endblock %}
+
+{% block mainleft %}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ core_manage.filter([
+    {
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增角色'
+    },
+    {
+        method: 'selectFormField',
+        title: '类型',
+        form: 'authorityruleshow',
+        field: 'type',
+     },
+     {
+        method: 'selectFormField',
+        title: '是否启用',
+        form: 'authorityruleshow',
+        field: 'status',
+     },
+    {
+        method: 'search',
+        field: 'name',
+        title: '请搜索名称',
+    }
+]) }}
+<section class="list-con" data-param="{
+    defUrl    : '{{ (action)|U }}',
+    showUrl   : '{{ (action ~ '/show')|U }}',
+    submitUrl : '{{ (action ~ '/save')|U }}',
+    deleteUrl : '{{ (action ~ '/delete')|U }}',
+    fixed     : '.filter',
+    list      : '.list-con',
+    data      : {
+    }
+}">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="40" class="tac">ID</th>
+                    <th>名称</th>
+                    <th width="200" class="tal">说明</th>
+                    <th width="450" class="tal">继承角色</th>
+                    <th width="80" class="tac">类型</th>
+                    <th width="60" class="tac">是否启用</th>
+                    <th width="230" class="tac">操作</th>
+                </tr>
+                {% if ident.info.data is defined and ident.info.pageCount|default(0) != 0 %}
+                {% for k, vo in ident.info.data %}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td class="tac">{{ vo.id|default('') }}</td>
+                    <td>{{ vo.name|default('') }}</td>
+                    <td>{{ vo.title }}</td>
+                    <td>
+                        {# inherit => '1,2,3,4' #}
+
+                        {% set auth_group_names = ('db.auth_group')|getAll({id: 'in|' ~ vo.inherit}) %}
+                        {% for item in auth_group_names.data %}
+                            {% if loop.index != 1 %}、{% endif %}
+                            {{ item.name }}
+                        {% endfor %}
+                    </td>
+                    <td class="tac">{{ core_global.formField({ value: vo.type, field: 'type' ,form: 'authorityruleshow', }) }}</td>
+                    <td class="tac">{{ vo.status ? '是' : '否' }}</td>
+                    <td class="tac">
+                        {{ core_manage.show({
+                            title:"编辑",
+                            attr: {
+                                    'title': vo.name ~ '编辑'
+                                    }
+                        }) }}
+                        {{ core_manage.show({
+                            title:"节点权限",
+                            url: ('authoritygroup/show')|U({id: vo.id}),
+                            attr: {
+                                'title': vo.name ~ '节点权限'
+                                }
+                        }) }}
+                        {# {{ core_manage.show({
+                            title:"预览权限",
+                            url: ('authoritygroup/show')|U({id: vo.id}),
+                            attr: {
+                                'title': vo.name ~ '节点权限'
+                                }
+                        }) }} #}
+                       {#  <a href="{{('mmanage/authorityaccess')|U({id: vo.id})}}" class="btn btn-sm" data-role="show">成员管理</a> #}
+                       
+                        {% if vo.issystem == 0 %}
+                        {{ core_manage.delete() }}
+                         {{core_manage.show({
+                            title: '复制',
+                            url: (action~'/show')|U({_copy: 1, id: vo.id})
+                        })}}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="7" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'status',
+        form: 'authorityruleshow',
+        title: '开启',
+    }
+]) }}
+{% endblock %}
+{% block promptUl %}
+1. 白名单类型角色, 选中哪个节点, 用户将拥有哪个权限<br>
+2. 黑名单类型角色, 选中哪个节点, 用户将没有哪个权限<br>
+3. 黑名单类型和白名单类型相互继承, 如有相同节点, 则以黑名单为准.    
+{% endblock %}
+
+
+
+

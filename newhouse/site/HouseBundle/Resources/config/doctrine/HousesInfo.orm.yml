@@ -1,0 +1,365 @@
+HouseBundle\Entity\HousesInfo:
+    type: entity
+    table: houses_info
+    indexes:
+        show_built_year:
+            columns:
+                - show_built_year
+        complex_building_type:
+            columns:
+                - complex_building_type
+        aid:
+            columns:
+                - aid
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        show_built_year:
+            options:
+                comment: 竣工时间
+                unsigned: false
+            nullable: false
+            type: date
+            length: 10
+        take_land_time:
+            options:
+                comment: 拿地时间
+                unsigned: false
+            nullable: false
+            type: date
+            length: 10
+        property_year:
+            options:
+                comment: 70年、50年、40年、永久
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        complex_building_type:
+            options:
+                comment: '"板楼": "1", "塔楼": "2", "板塔结合": "3", "独栋别墅": "4", "双拼": "5", "联排": "6", "叠拼": "7", "低层": "8", "多层": "9'
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        architectural:
+            options:
+                comment: '4独栋别墅,5双拼,6联排,7叠排,8底层,9多层,10小高层,11高层,12超高层,13花园洋房,'
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        decorate_standard:
+            options:
+                comment: 元/㎡
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        entrance_mode:
+            options:
+                comment: '1:门禁、2:门禁（失效）、3:登记、4:随意出入'
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        door_num:
+            options:
+                comment: 几个入口
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        door_toward:
+            options:
+                comment: 小区主入口-朝向
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        door_depth:
+            options:
+                comment: 小区主入口-进深
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        parking_rate:
+            options:
+                comment: 车位配比
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        parking_count:
+            options:
+                comment: 车位数
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        mancar_shunt:
+            options:
+                comment: '1:是2：否'
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        parking_attr:
+            options:
+                comment: '人防车位 、产权车位'
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        upper_parking_rentprice:
+            options:
+                comment: 地上车位_租价
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        upper_parking_saleprice:
+            options:
+                comment: 地上车位_售价
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        under_parking_rentprice:
+            options:
+                comment: 地下车位_租价
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        under_parking_saleprice:
+            options:
+                comment: 地下车位_售价
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        provide_water:
+            options:
+                comment: '商用水、 民用水'
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        provide_heating:
+            options:
+                comment: 集中供暖、自采暖
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        provide_electric:
+            options:
+                comment: 商用电、民用电
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        provide_gas:
+            options:
+                comment: 天然气、管道燃气、无
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        provide_network:
+            options:
+                comment: '1:wifi   2:广播，宽带入户、预留电话、有线电视'
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        provide_elevator:
+            options:
+                comment: 无、有、部分有电梯
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        security:
+            options:
+                comment: 封闭式管理，24小时保安巡逻、闭路电视监控系统、各单元门设门禁装置、红外报警探头
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        hygiene:
+            options:
+                comment: 有专人打扫、无专人打扫
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        cleaner_personnel_total:
+            options:
+                comment: 保洁人员数量
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        green_personnel_total:
+            options:
+                comment: 绿化人员数量
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        security_personnel_total:
+            options:
+                comment: 安保人员数量
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        property_personnel_total:
+            options:
+                comment: 物业人员数量
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        repair_personnel_total:
+            options:
+                comment: 维修人员数量
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        repair_response_speed:
+            options:
+                comment: 非常及时、较及时、一般、比较拖延、拒绝
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        complex_tidy:
+            options:
+                comment: 非常整洁、较整洁、一般、比较乱、非常脏乱
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        complex_facilities:
+            options:
+                comment: 楼盘内部设施
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        open_information:
+            options:
+                comment: 开盘信息
+                unsigned: false
+            nullable: false
+            type: string
+            length: 250
+        firstnew_delivertime:
+            options:
+                comment: 最早交房时间
+                unsigned: false
+            nullable: false
+            type: date
+            length: 10
+        developer_offer:
+            options:
+                comment: 开发商报价
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        evaluating:
+            options:
+                comment: 楼盘评测
+                unsigned: false
+            nullable: false
+            type: string
+            length: 200
+        complex_score:
+            options:
+                comment: 楼盘评分
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        aid:
+            options:
+                comment: 楼盘id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        complex_id:
+            options:
+                comment: data数据楼盘id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        checked:
+            options:
+                comment: 是否审核
+                unsigned: false
+            nullable: false
+            type: boolean
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

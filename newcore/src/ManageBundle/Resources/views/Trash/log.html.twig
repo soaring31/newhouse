@@ -1,0 +1,28 @@
+{% extends "ManageBundle::poplayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+
+</script>
+{% endblock %}
+{% block body %}
+{% import "ManageBundle:Form:popedit.html.twig" as forms %}
+{{ forms.popEdit(form|default(''),'form') }}
+<table>
+	<tr>
+		<td style="margin-left:20px;margin-right:40px;float:left;">操作人</td>
+		<td style="margin-left:20px;margin-right:40px;float:left;">操作</td>
+		<td style="margin-left:20px;margin-right:40px;float:left;">操作ip</td>
+		<td style="margin-left:20px;margin-right:40px;float:left;">操作时间</td>
+	</tr>
+	{% if info.data is defined %}
+	{% for key,value in info.data %}
+	<tr>
+		<td style="margin-left:20px;margin-right:40px;float:left;">{{ value.operation }}</td>
+		<td style="margin-left:20px;margin-right:40px;float:left;">{{ value.name }}</td>
+		<td style="margin-left:20px;margin-right:40px;float:left;">{{ value.title }}</td>
+		<td style="margin-left:20px;margin-right:40px;float:left;">{{ value.updateTime|date('Y-m-d H:i:s') }}</td>
+	</tr>
+	{% endfor %}
+	{% endif %}
+</table>
+{% endblock %}

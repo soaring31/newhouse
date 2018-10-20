@@ -1,0 +1,110 @@
+{% extends 'HousemobileBundle:Map:index.html.twig' %}
+
+{% block header_title %}
+    {% set title_tab_act_id = 3 %}
+    {{ parent() }}
+{% endblock header_title %}
+
+{% block header_right %}
+{{ core_mobile_global.bar_nav_btn({
+    title: '列表',
+    href: ('rent/list')|UU,
+    icon: 'font-f-125',
+}) }}
+{{ core_mobile_global.bar_nav_btn({
+    title: '搜索',
+    icon: 'font-f-8',
+    popup: {
+        placeholder: '小区名称/拼音/地址',
+        title: '租房搜索',
+        popup: '.popup-search',
+    }
+}) }}
+{% endblock header_right %}
+
+{% block container %}
+    <div class="content">
+        <div class="map-btn">
+            <div class="filter" data-block="{
+                ajax: {
+                    url: '{{ ('bundlebindforms/ajax')|U }}',
+                    data: {
+                        tpl: 'Common:filter',
+                        tag: 'rent',
+                        switch_circle: 1,
+                        switch_line: 1,
+                        switch_hxs: 1
+                    }
+                }
+            }"></div>
+        </div>
+        
+        <div id="map-container" data-map="{
+                point: {
+                    lng: {{arr_map[0]|default(113.760128)}},
+                    lat: {{arr_map[1]|default(23.023205)}}
+                },
+                url: '{{('rent/list')|U}}',
+                zoom: {{arr_map[2]|default(13)}}
+            }"
+            data-marker-lists="[
+                {
+                    title: '地图上显示区域, 此参数没有意义只做备注用',
+                    tpl:  '#tpl-12',
+                    urlOpt: {
+                        search: 2,
+                        map: 'neq|_null',
+                        type: 1
+                    },
+                    zoom: [12, 13]
+                },
+                {
+                    title: '地图上显示楼盘',
+                    tpl:  '#tpl-14',
+                    urlOpt: {
+                        search: 2,
+                        map: 'neq|_null',
+                        type: 1
+                    },
+                    zoom: [14, 15, 16]
+                }
+            ]"></div>
+
+        {# template items #}
+        {# 地图楼盘模板 #}
+        {# 点 #}
+        <script id="tpl-12" type="text/html">
+            <div class="marker-item-dot" data-title="<%= name %>" data-name="aid" data-value="<%= id %>" data-map-item="<%= id %>" data-point="<%= point.lng %>,<%= point.lat %>" >
+                <span class="marker-item-dot-inner"></span>
+            </div>
+        </script>
+        {# 详细信息 refresh==0 只处理地图不请求数据 #}
+        <script id="tpl-14" type="text/html">
+            <div class="marker-item" data-title="<%= name %>" data-name="aid" data-value="<%= id %>" data-map-item="<%= id %>" data-opt="{refresh: 0}" data-point="<%= point.lng %>,<%= point.lat %>">
+                <span class="name"><%= dj * 1 ? dj + '元/月' : '' %> <%= num %>套</span>
+                <span class="name-sub"><%= name %></span>
+                <span class="arrow"></span>
+            </div>
+        </script>
+    </div>
+{% endblock container %}
+
+
+{# 地图弹窗 #}
+{% block popup %}
+    {# 弹窗内容 #}
+    {% set popup_content %}
+    {{core_mobile_global.list_scroll({
+        url: ('rent/list')|U({ajax: 1}),
+        bUrlHash: 0,
+        autoLoad: 0,
+        footer: 0
+    })}}
+    {% endset %}
+    {# 弹窗本身 #}
+    {{ housemobile_global.popup({
+        name: 'popup-map-complex-info',
+        title: '租房地图',
+        content: popup_content
+    }) }}
+{% endblock popup %}

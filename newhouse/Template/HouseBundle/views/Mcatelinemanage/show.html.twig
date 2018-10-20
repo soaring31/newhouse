@@ -1,0 +1,36 @@
+{% extends "HouseBundle::base_show.html.twig" %}
+{% block js %}
+{% endblock %}
+{% block body %}
+{{ core_manage.form(form|default(''),'form', 'house.news') }}
+{% set url_id = app.request.get('_id') %}
+{% set cate_metro = ('house.cate_metro')|getAll({checked: 1, pid: 'find|' ~ url_id}) %}
+{% if url_id|default('') and cate_metro.data|default('') %}
+	<table class="popup-form-table" width="100%">
+		<tr>
+             <th class=" tal" width="25%">                
+             	<label class="w150 rtd txtright">{{ ('house.cate_line')|getOne('name', {id: url_id|default('')}) }}</label>
+             </th>
+        </tr>
+		{% for item in cate_metro.data %}
+		<tr>
+			<td>
+				<div>
+				    <div class="form-row">
+                        <div class="form-cell-label">
+                            <label class="w150 rtd txtright">
+                            	{{'站点' ~ loop.index}}
+                            </label>
+                        </div>
+                        <div class="form-cell">
+                            <label>{{item.name|default('')}}</label>
+                        </div>
+                    </div>
+				</div>
+			</td>
+		</tr>
+        {% endfor %}
+	</table>
+	
+{% endif %}
+{% endblock %}

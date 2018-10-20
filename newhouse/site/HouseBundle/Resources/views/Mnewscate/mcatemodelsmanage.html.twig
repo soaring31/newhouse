@@ -1,0 +1,86 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %} {# {{ parent() }} #} {% endblock %}
+
+{% block tableMain %}
+    {{ core_manage.filter([
+        {
+            method: 'show',
+            title: '<i class="font-ico-plus mr5"></i>新增方案'
+        }
+    ]) }}
+
+<section class="list-con" data-param="{
+    defUrl    : '{{ (action)|U }}',
+    showUrl   : '{{ (action ~ "/show")|U }}',
+    submitUrl : '{{ (action ~ "/save")|U }}',
+    deleteUrl : '{{ (action ~ "/delete")|U }}',
+    fixed     : '.filter',
+    list      : '.list-con',
+    data      : {}
+}">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="50" class="tac" data-role="sort" data-sort="id" class="sort">ID</th>
+                    <th>名称</th>
+                    <th width="180">备注</th>
+                    <th width="100">标识</th>
+                    {# <th width="100">表单</th> #}
+                    <th width="80" data-role="sort" data-sort="sort" class="sort">排序</th>
+                    <th width="180" class="tac">操作</th>
+                </tr>
+                {% if ident.info.data is defined %}
+                {# 一级 #}
+                {% for key,item in ident.info.data %}
+                <tr data-id="{{item.id}}">
+                    <td width="40" class="tac">{{core_manage.checkbox()}}</td>
+                    <td width="50" class="tac">{{item.id}}</td>
+                    <td><span data-role="itemEdit" data-name="name" class="edit">{{item.name}}</span></td>
+                    <td width="300"><span data-role="itemEdit" data-name="remark" data-size="5" class='edit'>{{item.remark|default('-')}}</span></td>
+                    <td width="110">{{item.ename|default('-')}}</td>
+                    {# 查询表单的名称 #}
+                    {# {% set form = ('db.model_form')|getOne('name', {id: item.form_id}) %} #}
+                    {# <td width="100">{{ form|default('-') }}</td> #}
+                    <td width="100"><span data-role="itemEdit" data-name="sort" data-size="5" class='edit'>{{item.sort|default(0)}}</span></td>
+                    <td width="210">
+                        {# {% set catemodels_data = ('db.category_models')|getAll().data %} #}
+
+                        {{core_manage.show()}}
+                        {{core_manage.show({
+                            url: 'mnewscate/mnewscatelist'|U({ename: item.ename}),
+                            attr: {
+                                title: item.name ~'分类管理'
+                            },
+                            title: '分类管理'
+                        })}}
+                        {{core_manage.delete()}}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+     {{core_manage.page(ident.info)}}
+</section>
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+]) }}
+
+{% endblock %}
+
+
+{% block promptUl %}
+{% endblock %}

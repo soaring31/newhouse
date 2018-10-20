@@ -1,0 +1,16 @@
+{% extends "CoreBundle::layout.html.twig" %}
+{% block title %}后台管理{% endblock %}
+{% block css %}{% endblock %}
+{% block js %}
+<script type="text/javascript" cocos='aaa'>
+var g_resources = [];
+
+
+seajs.use("manage/js/gamescene",function(gamescene){
+	gamescene.init('main');
+});
+</script>
+{% endblock %}
+{% block body %}
+<canvas id="gameCanvas" width="800" height="450"></canvas>
+{% endblock %}

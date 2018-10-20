@@ -1,0 +1,27 @@
+citynum: 100
+type: house
+
+------ LICENSE FILE DATA -------
+U740U937vnXb7a5hYQymvoi7uzxxBtRX
+0UYaPSmx3a08GPXmgs6p0gvl2+ivWGSK
+qKHE/CyaAYojgzXpfD4TjrV78jXwLnjt
+2HttX7bkou9+ysRB1RWMUufe9gNbDc94
+wtPUGfguNLDYHF8hbJ3AucesJG7B7hSq
+0mv+AiwOf45oPwMVxSn3LMVgNzpslpOx
+415gf0d5clEz5wIDWPkorSZ4EvXIV/ab
+rXdbt0+B+X1eoksi8yY93/c7R0RIpQnX
+GsGg2qofqCHtaqpOOtHFhMh0/YPHK9Eu
+hpUcQov58obzWjtUvXBh0HbHhAHtwUpn
+JT1ZFl2JHEbB4v6t6LJX0ewOOpxWWqHR
+ZjyuhEB0QsFhBHnwYDJPyPwsnR58Qz8g
+RuD3CYPxYgJjbFonJjIV5zRhrOa8VK7c
+VrAP69ZoWXGKE1URF0kaYDgqWXfcNZZB
+j0D88hgGfQcwxu6N/eNhPnxf4sdF9KqJ
+5CIYNPFkvH63bzVzxGsCR0OJrv2TwIMW
+o/NbXJ5qKMj+VaeXRGGIdIv7uY4KHypU
+mydUcQpd7v86ZpfKUfo2mm8FBBlhMOCW
+0zjk8ODofUTyv+ItrTz4dsFdgj79tCBj
+/BUpDdEZhLg96TeQdX0aBJ0bGdpPtkZI
+P9gtGK7MlRKL32OZx53/KIpfNWnM9PFQ
+u48kxcIZeuuatze=
+--------------------------------

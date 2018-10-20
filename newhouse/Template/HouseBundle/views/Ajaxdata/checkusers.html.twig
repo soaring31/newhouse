@@ -1,0 +1,14 @@
+{% extends 'CoreBundle::base_ajax.html.twig' %}
+
+{% set name = app.request.get("username")|default('') %}
+
+{% set data = ("db.users")|getOne('username',{username:name}) %}
+
+{% block result %}
+{% if data|length > 1 %}
+用户已经存在
+
+{% else %}
+true
+{% endif %}
+{% endblock %}

@@ -1,0 +1,29 @@
+$img-ask-7:(36px, 40px, 0, 0, img-ask-7);
+$img-ask-01:(23px, 45px, 0, -50px, img-ask-01);
+$img-ask-02:(23px, 45px, -46px, 0, img-ask-02);
+$img-ask-03:(23px, 45px, -79px, 0, img-ask-03);
+$img-ask-04:(23px, 45px, -112px, 0, img-ask-04);
+$img-ask-05:(7px, 7px, -112px, -55px, img-ask-05);
+$img-ask-06:(7px, 7px, -112px, -72px, img-ask-06);
+
+$img-ask: ($img-ask-7,$img-ask-01,$img-ask-02,$img-ask-03,$img-ask-04,$img-ask-05,$img-ask-06);
+
+@mixin img-ask($sprites) {
+  %icoask {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/ask.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+        @extend %icoask;
+    }
+  }
+}

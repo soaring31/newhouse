@@ -1,0 +1,30 @@
+$img-photolist-big-btn-cur:(86px, 29px, 0, 0, img-photolist-big-btn-cur);
+$img-photolist-big-btn:(86px, 29px, 0, -39px, img-photolist-big-btn);
+$img-photolist-chakzt-hover:(22px, 13px, 0, -78px, img-photolist-chakzt-hover);
+$img-photolist-chakzt:(22px, 13px, -32px, -78px, img-photolist-chakzt);
+$img-photolist-pl-hover:(18px, 15px, 0, -101px, img-photolist-pl-hover);
+$img-photolist-pl:(18px, 15px, -28px, -101px, img-photolist-pl);
+$img-photolist-small-btn-cur:(86px, 29px, -96px, 0, img-photolist-small-btn-cur);
+$img-photolist-small-btn:(86px, 29px, -96px, -39px, img-photolist-small-btn);
+
+$img-photolist: ($img-photolist-big-btn-cur,$img-photolist-big-btn,$img-photolist-chakzt-hover,$img-photolist-chakzt,$img-photolist-pl-hover,$img-photolist-pl,$img-photolist-small-btn-cur,$img-photolist-small-btn);
+
+@mixin img-photolist($sprites) {
+  %icophotolist {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/photolist.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+        @extend %icophotolist;
+    }
+  }
+}

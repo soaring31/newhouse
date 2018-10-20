@@ -1,0 +1,102 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+
+{% block js %}
+    <script type="text/javascript">
+
+    </script>
+{% endblock %}
+
+{% block mainMenu %}
+    {# {{ parent() }} #}
+{% endblock %}
+
+{% block mainleft %}
+{% endblock mainleft %}
+
+{% block tableMain %}
+    {{ core_manage.filter([
+        {
+            method: 'show',
+            title: '<i class="font-ico-plus mr5"></i>新增站点SEO'
+        }
+    ]) }}
+    <section class="list-con" data-param="{
+    defUrl    : '{{ (action)|U }}',
+    showUrl   : '{{ (action ~ '/show')|U() }}',
+    submitUrl : '{{ (action ~ '/save')|U }}',
+    deleteUrl : '{{ (action ~ '/delete')|U }}',
+    fixed     : '.filter',
+    list      : '.list-con',
+    data      : {
+    }
+}">
+        <div class="list">
+            <table class="right-table table-hover">
+                <tbody>
+                <tr data-id>
+                    <th width="60" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="200" class="tal">标题</th>
+                    <th class="200" class="tal">关键字</th>
+                    <th width="tal" >描述</th>
+                    <th width="80" class="tac">所属页面</th>
+                    <th width="80" class="tac">是否启用</th>
+                    <th width="150" class="tac">操作</th>
+                </tr>
+                {% if ident.info.data is defined %}
+                    {% for key,vo in ident.info.data %}
+                        <tr data-id="{{ vo.id }}">
+                            <td class="tac">{{core_manage.checkbox()}}</td>
+                            <td style="text-overflow:ellipsis;overflow:hidden;white-space:nowrap;">{{ vo.title|default('') }}</td>
+                            <td class="word-wrap" style="text-overflow:ellipsis;overflow:hidden;white-space:nowrap;">
+                                {{ vo.keywords|default('') }}</td>
+                            <td style="text-overflow:ellipsis;overflow:hidden;white-space:nowrap;">{{ vo.description }}</td>
+                            <td class="tac">
+                                {% if vo.page_type == 1 %}
+                                    楼盘列表页
+                                {% elseif vo.page_type == 2 %}
+                                    楼盘详情页
+                                {% elseif vo.page_type == 3 %}
+                                    房价走势
+                                {% else %}
+                                    暂无
+                                {% endif %}
+                            </td>
+                            <td class="tac">{{ core_global.formField({
+                                    value: vo.status|default(''),
+                                    form: 'authorityfirewallshow',
+                                    field: 'status',
+                                }) }}
+                            </td>
+                            <td class="tac">
+                                {{ core_manage.show() }}
+                                {{ core_manage.delete() }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr><td colspan="6" class="tac">没有数据！</td></tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+        {{core_manage.page(ident.info)}}
+    </section>
+    {{ core_manage.oprate([
+        {
+            method: 'delete',
+            title: ' <i class="font-ico-del mr5"></i>批量删除',
+        },
+        {
+            method: 'dropdownFormField',
+            field: 'status',
+            form: 'authorityfirewallshow',
+            title: '开启',
+        }
+    ]) }}
+
+{% endblock %}
+{% block promptUl %}
+    <p>1.楼盘列表页规则：#城市#</p>
+    <p>2.规则就是正则,当链接地址在规则表达式里面就不需要登录，反之就要登录</p>
+    <p>3.IP集是控制某段ip能访问</p>
+{% endblock %}

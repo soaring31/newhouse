@@ -1,0 +1,63 @@
+{% extends "ManageBundle::poplayout.html.twig" %}
+{% set info = ('db.auth_group'|getRow({'id':app.request.get('_id',0)})) %}
+{% block js %}
+<script type="text/javascript">
+seajs.use(["{{ bundlepath }}/js/authority"],function(authority){
+	authority.init("group","{{ info.name|default('') }}");
+});
+</script>
+{% endblock %}
+
+{% block body %}
+<form action="{{ form.vars.action }}" method="{{ form.vars.method }}" class="form" {{ form_enctype(form) }}>
+<table class="popup-table" style="width:100%;">
+	<tbody>
+	{#第一层#}
+	{% if permissionsNode is defined %}
+	{% for permissions in permissionsNode %}
+		<tr class="maintr">
+			<th class="w150 rtd txtright"><a href="javascript:void(0);" id="showbtn_{{permissions.menu.id}}">+</a>&nbsp;{{permissions.menu.name}}[{{permissions.menu.bundle}}]</th>
+			<td class="txtleft"><input type="checkbox" id="selectbtn_all" />全选</td>
+		</tr>
+		{#第二层#}
+		{% if permissions.nodes is defined %}
+		{% for nodeheard in permissions.nodes %}
+		<tr class="subtr hide">
+			<td class="w150 rtd txtright"><input type="checkbox" id="selectbtn_sub" />&nbsp;{{nodeheard.menu.name}}</td>
+			<td class="txtleft">
+				{#第三层#}
+				{% if nodeheard.nodes is defined %}
+				<table class="popup-table-1">
+					{% for nodeitem in nodeheard.nodes %}
+					{% set nodes = {'menuid':nodeitem.menu.id}|getRule %}
+					<tr>
+						<td class="w100 txtright">{{nodeitem.menu.name}}</td>
+						<td>
+							{#第四层#}
+							{% if nodes.data is defined %}
+							<ul>
+        						{% for node in nodes.data %}
+        						<li>
+        						<input type="checkbox" name="rules[]" {{ node.id|isChecked( info.rules|default('') ) }} value="{{ node.id }}" />
+        						<span id="editspan_{{node.id}}_name" class="editspan" data-url="{{ ('authoritynode/save')|U({'id':node.id}) }}">{{node.name}}|{{node.id}}</span>
+        						</li>
+        						{% endfor %}
+							<ul>
+							{% endif %}
+						</td>
+					</tr>
+					{% endfor %}
+				</table>
+				{% endif %}	
+			</td>
+		</tr>
+		{% endfor %}
+		{% endif %}
+	{% endfor %}
+	{% endif %}
+	</tbody>
+</table>
+{{ form.csrf_token is defined?form_widget(form.csrf_token):'' }}
+<div class="popup-submit">{{ form.submit is defined?form_widget(form.submit):'' }}</div>
+</form>
+{% endblock %}

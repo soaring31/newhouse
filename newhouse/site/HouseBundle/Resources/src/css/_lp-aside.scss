@@ -1,0 +1,72 @@
+﻿/*!
+ * @name lp-aside.css
+ * @author xying
+ * @date 2016-8-5
+ * @dec common aside for lp
+ */
+$lp-aside-w:240px !default;
+$lp-price-color:#f50 !default;
+.lp-aside{
+	width: $lp-aside-w;
+}
+/*
+aside
+*/
+.lp-aside{
+	
+	h2{
+		font-size: 16px;
+		font-weight: 700;
+		height: 44px;
+		line-height: 44px;
+		text-indent: 15px;
+	}
+}
+
+.lp-tj-item{
+	color: #666;
+	line-height: 27px;
+	height: 250px;
+	overflow: hidden;
+	padding: 15px;
+	width: $lp-aside-w - 30;
+	.pic{
+		display: block;
+		height: 156px;
+		width: $lp-aside-w - 30;
+		img{
+			height: 156px;
+			width: $lp-aside-w - 30;
+		}
+	}
+	a{
+		color: #666;
+		&:hover{
+			color: $major-color;
+			text-decoration: none;
+		}
+	}
+	.tit{
+		height: 27px;
+		line-height: 27px;
+		margin-top: 8px;
+		overflow: hidden;
+	}
+	.tag{
+		margin-top: 5px;
+		a{
+			border: 1px solid #ddd;
+			margin-right: 8px;
+			padding: 0 8px 2px;
+		}
+	}
+	.price{
+		span{
+			color: $lp-price-color;
+			margin-right: 2px;
+		}
+	}
+	&:hover{
+		background: #f1f1f1;
+	}
+}

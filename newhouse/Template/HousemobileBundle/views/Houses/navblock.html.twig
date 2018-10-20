@@ -1,0 +1,81 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+
+{#
+{% set nav_data = [
+    {
+        name: '楼盘',
+        url: ('houses/detail')|UU({id: id|default(app.request.get('id'))})
+    },
+    {
+        name: '详情',
+        url: ('houses/ddetail')|UU({id: id|default(app.request.get('id'))})
+    },
+    {
+        name: '动态',
+        url: ('houses/dnews')|UU({id: id|default(app.request.get('id'))})
+    },
+    {
+        name: '价格',
+        url: ('houses/dprices')|UU({id: id|default(app.request.get('id'))})
+    },
+    {
+        name: '图库',
+        url: ('houses/dphotos')|UU({id: id|default(app.request.get('id'))})
+    },
+    {
+        name: '户型',
+        url: ('houses/dplanintro')|UU({id: id|default(app.request.get('id'))})
+    },
+    {
+        name: '点评',
+        url: ('houses/dcomment')|UU({id: id|default(app.request.get('id'))})
+    },
+    {
+        name: '问答',
+        url: ('houses/dask')|UU({id: id|default(app.request.get('id'))})
+    },
+    {
+        name: '特价房',
+        url: ('houses/dspehouse')|UU({id: id|default(app.request.get('id'))})
+    }
+] %}
+#}
+
+{% set nav_data = [
+    {
+        name: '楼盘',
+        url: ('houses/detail')|UU({id: id|default(app.request.get('id'))})
+    },
+    {
+        name: '详情',
+        url: ('houses/ddetail')|UU({id: id|default(app.request.get('id'))})
+    },
+    {
+        name: '资讯',
+        url: ('houses/dnews')|UU({id: id|default(app.request.get('id'))})
+    },
+    {
+        name: '价格',
+        url: ('houses/dprices')|UU({id: id|default(app.request.get('id'))})
+    },
+    {
+        name: '图库',
+        url: ('houses/dphotos')|UU({id: id|default(app.request.get('id'))})
+    },
+    {
+        name: '户型',
+        url: ('houses/dplanintro')|UU({id: id|default(app.request.get('id'))})
+    }
+] %}
+
+
+
+
+{% block result %}
+    {{ core_mobile_global.m_detail_nav({data: nav_data, active: app.request.get('active')|default(0)}) }}
+    <script type="text/javascript">
+        seajs.use(['sm'], function (sm) {
+            $('[data-initial-slide]').swiper();
+        })
+    </script>
+{% endblock result %}

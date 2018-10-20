@@ -1,0 +1,30 @@
+{% extends 'HouseBundle:Houses:lp_list_layout.html.twig' %}
+
+{% block title %}开发商列表{% endblock title %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ asset('bundles/'~bundlepath~'/css/kfs.css', absolute=true) }}" />
+{% endblock css %}
+
+{% block current_houses %}
+    <span>开发商</span>
+{% endblock current_houses %}
+
+{% block container %}
+    <div class="container">
+        <!--list-->
+        <div class="kfs-list clearfix">
+            <ul>
+                {{house_global.member_k_list({
+                    list: ident.list
+                })}}
+            </ul>
+        </div>
+        <!--/list-->
+        <!--page-->
+        <div class="blank20"></div>
+        {{core_global.page(ident.list)}}
+         <div class="blank20"></div>
+        <!--page-->
+    </div>
+{% endblock container %}

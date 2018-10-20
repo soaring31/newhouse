@@ -1,0 +1,92 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+seajs.use("{{ bundlepath }}/js/models",function(m){
+	//js入口	    
+	m.init('main');
+});
+</script>
+{% endblock %}
+
+{% block tableMain %}
+<span class="tableDesc">
+        菜单列表<input type="button" id="btnfun_show" data="{{ (action~'/show')|U }}" class="search-btn" value="新增主菜单" />
+</span>
+<table class="right-table">
+	<tbody>
+		<tr>
+			<th class="w100"></th>
+			<th class="w35"></th>
+			<th class="txtleft">菜单名称</th>
+			<th class="w300 txtleft">菜单链接</th>
+			<th class="w50 txtleft">排序</th>
+			<th class="w250">操作</th>
+		</tr>
+		{% if info is defined %}
+		{% for key,item in info %}
+		<tr onmouseover="this.style.backgroundColor='#625B39'"; onmouseout="this.style.backgroundColor=''">
+			<td class="txtcenter">[{{item.id}}]</td>
+			<td><a id="showtr_{{item.id}}" href='javascript:void(0);' {% if item.next is empty %}style="display:none;"{% endif %}>+</a></td>
+			<td><span id='{{action}}_{{item.id}}_name' class='editspan'>{{item.name}}</span></td>
+			<td id="{{action}}_{{item.id}}_url">{{item.url}}</td>
+			<td><span id='{{action}}_{{item.id}}_sort' class='editspan'>{{item.sort}}</span></td>
+			<td class="txtleft">
+				<input type="button" id="btnfun_show" data="{{ (action~'/show')|U('id='~item.id) }}" class="search-btn" value="修改" />
+				<input type="button" id="btnfun_delete" data="{{ (action~'/delete')|U('id='~item.id) }}" class="search-btn" value="删除" />
+				<input type="button" id="btnfun_show" data="{{ (action~'/show')|U('pid='~item.id) }}" class="search-btn" value="添加子菜单" />
+			</td>
+		</tr>
+		{% if item.next is defined %}
+		<tr class="subtr" style="display:none;" id='subtr_{{item.id}}'>
+			<td colspan="6" style='border:0px;'>
+				<table class="subright-table">
+					{% for key1,item1 in item.next %}
+					<tr onmouseover="this.style.backgroundColor='#625B39'"; onmouseout="this.style.backgroundColor=''">
+						<td class="w70 pright50 txtright">{{item1.id}}</td>
+						<td class="w35"><a id="showtr_{{item1.id}}" href='javascript:void(0);' {% if item1.next is empty %}style="display:none;"{% endif %}>+</a></td>
+						<td><span id='{{action}}_{{item1.id}}_name' class='editspan'>{{item1.name}}</span></td>
+						<td class="w300" id="{{action}}_{{item1.id}}_url">{{item1.url}}</td>
+						<td class="w50"><span id='{{action}}_{{item1.id}}_sort' class='editspan'>{{item1.sort}}</span></td>
+						<td class="w250">
+							<input type="button" id="btnfun_show" data="{{ (action~'/show')|U('id='~item1.id) }}" class="search-btn" value="修改" />
+							<input type="button" id="btnfun_delete" data="{{ (action~'/delete')|U('id='~item1.id) }}" class="search-btn" value="删除" />
+							<input type="button" id="btnfun_show" data="{{ (action~'/show')|U('pid='~item1.id) }}" class="search-btn" value="添加子菜单" />
+						</td>
+					</tr>
+					<tr class="subtr" style="display:none;" id='subtr_{{item1.id}}'>
+						<td colspan="6"style='border:0px;'>
+							<table class="subright-table">
+								{% if item1.next is defined %}
+								{% for key2,item2 in item1.next %}
+									<tr onmouseover="this.style.backgroundColor='#625B39'"; onmouseout="this.style.backgroundColor=''">
+										<td class="w70 pright50 txtright">{{item2.id}}</td>
+										<td class="w35"></td>
+										<td><span id='{{action}}_{{item2.id}}_name' class='editspan'>{{item2.name}}</span></td>
+										<td class="w300" id="{{action}}_{{item2.id}}_url">{{item2.url}}</td>
+										<td class="w50"><span id='{{action}}_{{item2.id}}_sort' class='editspan'>{{item2.sort}}</span></td>
+										<td class="w250">
+											<input type="button" id="btnfun_show" data="{{ (action~'/show')|U('id='~item2.id) }}" class="search-btn" value="修改" />
+											<input type="button" id="btnfun_delete" data="{{ (action~'/delete')|U('id='~item2.id) }}" class="search-btn" value="删除" />
+											<input type="button" id="btnfun_details" data="{{ (action~'/details')|U('pid='~item2.id) }}" class="detail-btn" value="添加子菜单" />
+										</td>
+									</tr>
+								{% endfor %}
+								{% endif %}
+							</table>
+						</td>
+					</tr>
+					{% endfor %}
+				</table>
+			</td>
+		</tr>
+		{% endif %}
+		{% endfor %}
+		{% endif %}
+	</tbody>
+</table>
+{% endblock %}
+
+{% block submit %}{% endblock %}
+{% block promptUl %}
+	<li></li>
+{% endblock %}

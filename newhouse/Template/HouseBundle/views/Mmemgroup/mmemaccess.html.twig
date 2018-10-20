@@ -1,0 +1,195 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set groupid = app.request.get('groupid') %}
+{% set memtype = app.request.get('memtype') %}
+{% set _form_id = app.request.get('_form_id')|default('') %}
+{% set typemode = ( 'db.mem_types')|getCol( 'id', {  mode: 'neq|4'})|join(',') %}
+
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {# {{ parent() }}  #}
+   
+{% endblock %}
+
+{% block mainleft %}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{% set filter_opt = [
+     {
+        method: 'search',
+        field: 'name',
+        title: '请搜索ID/用户名/电话/邮箱',
+    }
+]%}
+{% set aid_opt = (memtype == 16)?[{
+        method: 'selectCate',
+        title: '地区',
+        field: 'aid',
+        data: ('db.auth_group_area')|getAll({pageSize: 20, checked: 1 }).data|default('')
+    }] : [] %}
+{% set filter_opt = [{
+    method: 'show',
+    title: '<i class="font-ico-plus mr5"></i>新增成员'
+    }]|merge(aid_opt)|merge(filter_opt) 
+%}
+{{ core_manage.filter(filter_opt) }}
+
+
+{# {{ core_manage.filter([
+    {
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增成员'
+    },
+     {
+        method: 'selectCate',
+        title: '地区',
+        field: 'aid',
+        data: ('db.auth_group_area')|getAll({pageSize: 20, checked: 1}).data|default('')
+    },
+    {
+        method: 'search',
+        field: 'name',
+        title: '请搜索ID/用户名/电话/邮箱',
+    }
+]) }}
+{{ core_manage.filter(filter_opt) }} #}
+
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U({ _form_id: _form_id}) }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+          groupid: '{{ groupid }}',
+          memtype: '{{ memtype }}'
+            
+        }
+    }">
+
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th>会员账号</th>
+                    <th>备注</th>
+                    {% if groupid == 19 %}
+                    <th>到期时间</th>
+                    {% endif %}
+                    {% if memtype == 16 %}
+                    <th width="80">分站</th>
+                    {% endif %}
+                    <th class="tac" width="200">操作</th>
+                </tr>
+                {% if ident.info.data is defined and ident.info.pageCount|default('') != 0 %}
+                {% for k, vo in ident.info.data %}
+                    {# {{dump(vo)}} #}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td>{{ vo.username }}</td>
+                    <td></td>
+                    {% if groupid == 19 %}
+                    <td> {{ vo.duedate|default('0')|date('Y-m-d') }} </td>
+                    {% endif %}
+                    {% set areaid = ('db.auth_access_area')|getOne('aid',{ uid: vo.id }) %}
+                    {% set sid = ('db.auth_access_area')|getOne('id',{ uid: vo.id }) %}
+                    {% set areaname = ('db.auth_group_area')|getOne('name',{ id: areaid }) %}
+                
+                    {% if memtype == 16 %}
+                    
+                    <td width="80">{# {{ areaname|default('主站') }} #} {{ areaname }}</td>
+                    {% endif %}
+                    <td class="tac">
+
+
+                        {% if memtype == 16 %}
+                       {{ core_manage.show({
+                            url  : ('mmemaccess/show')|U({  _form_id: 398,  }),
+                            title: '设置会员组',
+                            data :{ 
+                                    username: vo.username,
+                                    groupid: groupid ,
+                                    aid: areaid,
+                                    memtype: memtype
+                                  }
+                        }) }}
+                        {% else %}
+                         {{ core_manage.show({
+                            url: ('msetmemgroup/show')|U({ uid: vo.id}),
+                            title: '设置会员组',
+                            data : {
+                                memtype: memtype, 
+                                _form_id: 266, 
+                                groupid: groupid 
+                        }
+                            
+                        }) }} 
+                       
+                        {% endif %}
+
+                        {#  {{ core_manage.show({
+                            url: ('mauthorityaccessarea/show')|U({ uid: vo.id,_form_id: 384 }|merge(opt_id)),
+                            title: '设置分站'
+                        }) }} #}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+{% set list_oprate_opt = [
+       {
+        method: 'dropdownCate',
+        title: '会员组',
+        field: 'group_id',
+        service: 'db.mem_group',
+        where: {
+            ename: 'neq|_null',
+            aid  : 'in|' ~ typemode,
+            order: 'aid|asc'
+        }
+    } 
+] %}
+{% if memtype == 16 %}
+    {% set list_oprate_opt = list_oprate_opt|merge( [
+         {
+            method: 'dropdownCate',
+            title: '分站',
+            field: 'aid',
+            service: 'db.auth_group_area',
+            where: {
+                ename: 'neq|_null',
+                checked: 1
+            },
+            params: {
+                group_id: groupid
+            }
+        }  
+    ]) %} 
+{% endif %}
+{{ core_manage.oprate(list_oprate_opt) }} 
+
+
+{% endblock %}
+{% block promptUl %}
+{# 提示说明 #}
+{# 1. 组内更换会员组, 可直接更换<br> #}
+1. 更换会员类别, 直接去对应类别设置即可, 如: 普通会员更换为管理组系中的权限组, 直接去权限组中添加对应账号即可, 添加成功后, 此会员将不在属于普通会员<br>
+2. 分站管理员, 请一定保持每个会员都绑定分站, 不要出现分站为空的情况
+{% endblock %}
+
+
+
+

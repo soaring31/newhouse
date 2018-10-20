@@ -1,0 +1,45 @@
+{% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:salelist.html.twig' : 'HousemobileBundle:Member:d_ds.html.twig' %}
+{# 说明 
+* 经纪公司出售
+* detail: 当前数据
+* detail_info: 当前数据拓展
+* detail_name: 当前数据名称
+#}
+
+{% block title %}
+    {{detail_name|default('')}}
+{% endblock title %}
+
+{% block header_title %}
+    {{core_mobile_global.title({title: '出售'})}}
+{% endblock header_title %}
+    
+{% block header_wrap %}
+    {% set header_class = '' %}
+    {{parent()}}
+{% endblock header_wrap %}
+
+{% set nav_users_act = 2 %}
+
+{% block container %}
+    {# 检索 #}
+    {% set list_header %}
+    <div class="filter" data-block="{
+        ajax: {
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                tpl: 'Common:filter',
+                tag: 'member_jjgs_sale'
+            }
+        }
+    }"></div>
+    {% endset %}
+
+    {# 列表链接 js调用列表需要 #}
+    {% set list_url = ('member/detail')|U({ajax: 1, id: detail.id|default(0)}) %}
+
+    {{core_mobile_global.list_scroll({
+        list_header: list_header|default(''),
+        url: list_url|default('')
+    })}}
+{% endblock container %}

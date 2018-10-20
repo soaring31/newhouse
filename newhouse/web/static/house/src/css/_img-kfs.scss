@@ -1,0 +1,24 @@
+$img-kfs-1:(50px, 144px, 0, 0, img-kfs-1);
+$img-kfs-2:(50px, 144px, -60px, 0, img-kfs-2);
+
+$img-kfs: ($img-kfs-1,$img-kfs-2);
+
+@mixin img-kfs($sprites) {
+  %icokfs {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/kfs.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+        @extend %icokfs;
+    }
+  }
+}

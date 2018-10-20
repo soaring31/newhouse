@@ -1,0 +1,28 @@
+{% extends "HouseBundle::base_show.html.twig" %}
+{% block js %}
+{% endblock %}
+{% block body %}
+<form action="{{ action|U({'pid':app.request.get('pid',0)}) }}" method="post" class="bindmenuform">
+    {% if bindInfo is defined %}
+    {% for k,vo in bindInfo %}
+    <div style="background: rgba(0, 0, 0, 0.2);padding:0px 10px;">{{ ('db.menus')|getOne('name',{'id':k}) }}</div>
+    <ul>
+        {% for id, name in vo %}
+        <li style='float: left; display: inline-block; padding: 0px 10px;'>
+            <input type="checkbox" name="bindmenu[]" value="{{ id }}" {{ id|isChecked(info.bindmenu|default('')) }} /><span>{{ name|default('') }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+    <br />
+    {% endfor %}
+    {% if bindInfo is empty %}
+                      未找到相关数据
+    {% else %}
+    <hr>
+    <div class="popup-submit">
+        <a data-role="submit" data-close="1" class="btn">提交</a>
+    </div>
+    {% endif %}
+    {% endif %}
+</form>
+{% endblock %}

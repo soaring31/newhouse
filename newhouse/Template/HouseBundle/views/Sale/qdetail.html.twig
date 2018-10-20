@@ -1,0 +1,358 @@
+{% set detail = cident.xq_detail.data[0]|default('') %}
+
+{% extends detail or door_detail|default('') ? 'HouseBundle:Sale:sale_layout.html.twig' : 'CoreBundle:Dispatch:errorcontent.html.twig' %}
+{# 说明
+** detail: 小区详情
+** houses_rent: 出租列表
+** houses_sale：出售列表
+** sort_area_houses: 周边小区
+** user_id: 当前登录用户id
+#}
+
+{% set houses_rent = ident.houses_rent|default(ident.list|default({})) %}
+
+{% set houses_sale = ident.houses_sale|default(ident.list|default({})) %}
+
+{% set sort_area_houses = ('house.houses')|getAll({checked: 1, region: detail.region|default(''), type: detail.type|default(''), id: 'neq|' ~ detail.id|default(0)}) %}
+
+{% set user_id = app.user.id|default(0) %}
+
+{% block title %}【{{cur_area_data|default('')}}{{detail.name|default('')}}小区,二手房,租房】{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}小区,{{cur_area_data|default('')}}{{detail.name|default('')}}论坛,{{detail.name|default('')}}租房,{{detail.name|default('')}}二手房"/>
+<meta name="description" content="{{detail.name|default('')}}小区网是为{{cur_area_data|default('')}}{{detail.name|default('')}}小区居民服务的网站,主要提供{{detail.name|default('')}}论坛、{{detail.name|default('')}}二手房、{{detail.name|default('')}}租房、{{detail.name|default('')}}家居装修、{{detail.name|default('')}}二手交易、{{detail.name|default('')}}便民服务、{{detail.name|default('')}}周边商户、小区活动、小区相册等栏目."/>
+{% endblock key_des %}
+
+{% block css %}
+    {{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/xiaoqu.css')}}
+    {{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/lp-detail.css')}}
+{% endblock css %}
+
+{% block current_container %}
+    <a href="{{('sale/xqlist')|U}}">小区列表</a>
+    <span>{{core_global.region({id: detail.region|default(''), tpl: '<span>&gt;</span>&nbsp;<a href="' ~ ("sale/xqlist")|U({region: detail.region|default('')}) ~ '" target="_blank">%value%</a>'})}}</span>
+    <span>&gt;</span>
+    <span>{{detail.name|default('')}}</span>
+{% endblock current_container %}
+
+{# 楼盘横幅  替换顶部广告 #}
+{% if detail.lphf|default('') %}
+    {% set top_ad = {
+        data : {
+            0: {
+                name: '' ~ detail.name|default('') ~ '',
+                thumb: '' ~ detail.lphf|default('') ~ '',
+                ad: true
+            }
+        },
+        tag: 'lphf',
+        height: 'auto'
+    } %}
+{% endif %}
+
+{% block container %}
+    {# 头部 导航 #}
+    <div class="container">
+        <!--tit-->
+        <div class="bd-gray lptit-wrap clearfix mb10">
+            <div class="lptit p15">
+                {{- core_global.img({
+                    src: detail.loupanlogo|default(''),
+                    alt: detail.name|default(''),
+                    type: 2,
+                    width: 80,
+                    height: 60,
+                    attr:'class="logo"'
+                }) -}}
+                <div class="lpother">
+                    <h1>{{detail.name|default('')}}</h1>
+                    更新时间：{{detail.update_time|default('')|date('Y-m-d')}}&nbsp;&nbsp;
+                    <i>
+                        <span data-counts="{models: 'houses', field: 'clicks', id: {{detail.id|default(0)}} }"></span>
+                    </i>次浏览
+                    {# 收藏按钮 #}
+                    {{core_global.collect_btn({
+                        aid: detail.id|default(''),
+                        models: detail.models|default('houses'),
+                        class: 'c-999 ml20 mr10 xqcollect',
+                        text: '收藏',
+                        icons: 'font-icons-19 c-999 fs-style'
+                    })}}
+                    <span class="bdsharebuttonbox "
+                        share-text="{{detail.name|default('')}}"
+                        share-desc="{{detail.name|default('')}}"
+                        share-pic="{{core_global.img_url({src: detail.thumb|default(''), type: 0, absolute:1 })}}"
+                        share-url="{{('sale/qdetail')|U({id: detail.id|default('')}, true)}}"
+                    >
+                        <a class="bds_more xiaoqu-share logo-align" data-cmd="more">
+                            分享
+                        </a>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!--/tit-->
+        <!--nav-->
+        {{core_global.detail_nav({
+            class: 'lp-nav',
+            nav_detail_act: nav_houses_act|default(1),
+            data: [
+                {
+                    name: '小区总览',
+                    url: ('sale/qdetail')|U({id: detail.id|default('')})
+                },
+                {
+                    name: '出售房源',
+                    url: ('sale/qdmai')|U({id: detail.id|default('')})
+                },
+                {
+                    name: '出租房源',
+                    url: ('sale/qdzhu')|U({id: detail.id|default('')})
+                },
+                {
+                    name: '小区图库',
+                    url: ('sale/qdphotos')|U({id: detail.id|default('')})
+                },
+                {
+                    name: '户型图',
+                    url: ('sale/qdplanintro')|U({id: detail.id|default('')})
+                },
+                {
+                    name: '点评',
+                    url: ('sale/qdcomment')|U({id: detail.id|default('')})
+                }
+            ]
+        })}}
+        <!--/nav-->
+    </div>
+    {% block container_houses %}
+        {% block hx_nav %}{% endblock hx_nav %}
+        <div class="container">
+            {% block header_xiaoqu %}
+                <div class="blank15"></div>
+                <!--图片-->
+                <div class="xq-thumb fl">
+                    {{- core_global.img({
+                        src: detail.thumb|default(''),
+                        alt: detail.name|default(''),
+                        type: 2,
+                        width: 290,
+                        height: 205,
+                        watermark: 'giffun'
+                    }) -}}
+                </div>
+                <!--/图片-->
+                <!--走势图-->
+                <div class="fr lp-jbcs">
+                    <ul class="pr15 pl15">
+                        <li>
+                            <span>物业类型：</span>{{- core_global.formData({value: detail.cate_type|default('-'), tpl: '%value%&nbsp;&nbsp;'}) -}}
+                        </li>
+                        <li>
+                            <span>区域所属：</span>{{core_global.region({id: detail.region|default(''), tpl: '%value%'})}}
+                        </li>
+                        <li>
+                            <span>竣工日期：</span>{{detail.jgdate|default('')}}
+                        </li>
+                        <li>
+                            <span>建筑面积：</span>
+                            {{house_global.if_mj({value: detail.jzmj|default(''), tpl: '%value%%danwei%'})}}
+                        </li>
+                        <li>
+                            <span>绿 化 率：</span>{{detail.lhl|default('-')}}
+                        </li>
+                        <li>
+                            <span>占地面积：</span>
+                            {{house_global.if_mj({value: detail.zdmj|default(''), tpl: '%value%%danwei%'})}}
+                        </li>
+                        <li>
+                            <span>容 积 率：</span>{{detail.rjl|default('-')}}
+                        </li>
+                        <li>
+                            <span>物 业 费：</span>{{detail.wyf|default('-')}}
+                        </li>
+                        <li class="wb">
+                            <span>物业公司：</span>{{detail.wygs|default('-')}}
+                        </li>
+                        <li class="wb">
+                            <span>小区地址：</span>{{detail.address|default('-')}}
+                        </li>
+                        <li class="wb">
+                            <span class="l">交通线路：</span> <em>{{detail.jtxl|default('-')}}</em>
+                        </li>
+                    </ul>
+                    <div class="jgqk">
+                        <div>
+                            <i class="img-sale-detail-9"></i>
+                            <p>
+                                最高价
+                                <br> {{house_global.if_dj({value: detail.jgjj|default(''), tpl: '<em class="c-e43">%value%</em>%danwei%', default_tips: '-'})}}
+                            </p>
+                        </div>
+                        <div>
+                            <i class="img-sale-detail-10"></i>
+                            <p>
+                                均价
+                                <br>{{house_global.if_dj({value: detail.dj|default(''), tpl: '<em class="c-e43">%value%</em>%danwei%', default_tips: '-'})}}
+                            </p>
+                        </div>
+                        <div>
+                            <i class="img-sale-detail-11"></i>
+                            <p>
+                                最低价
+                                <br>{{house_global.if_dj({value: detail.jdjj|default(''), tpl: '<em class="c-e43">%value%</em>%danwei%', default_tips: '-'})}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!--/走势图-->
+                <div class="blank10"></div>
+            {% endblock header_xiaoqu %}
+
+            {% block body_xiaoqu %}
+                <div class="xq-d-body fl">
+                    <!--详细信息-->
+                    <div class="lp-coltit">
+                        <h3 class="tit1 fl">小区详情</h3>
+                    </div>
+                    <div class="blank1"></div>
+                    <div class=" bdrs xqxq">
+                        <div class="blank15"></div>
+                        <div class="content">
+                            {{core_global.content({content: detail.xqjs|default(''), default: '暂无说明'})}}
+                        </div>
+                        {{house_global.prices_info({
+                            aid: detail.id,
+                            chart: 1,
+                            name: detail.name
+                        })}}
+                        <div class="blank15"></div>
+                    </div>
+                    <!--/详细信息-->
+                    <!--出售房源-->
+                    <div class="blank5"></div>
+                    <div class="lp-coltit">
+                        <h3 class="tit1 fl">出售房源</h3>
+                    </div>
+                    <div class="blank1"></div>
+                    <div class="clearfix  bdrs">
+                        {% block houses_sale %}
+                            {{house_global.sale_list({
+                                list: houses_sale,
+                                compare: 0
+                            })}}
+                        {% endblock houses_sale %}
+                    </div>
+                    <!--/出售房源-->
+                    <!--出租房源-->
+                    <div class="blank5"></div>
+                    <div class="lp-coltit">
+                        <h3 class="tit1 fl">出租房源</h3>
+                    </div>
+                    <div class="blank1"></div>
+                    <div class="clearfix  bdrs">
+                        {% block houses_rent %}
+                            {{house_global.rent_list({
+                                list: houses_rent,
+                                compare: 0
+                            })}}
+                        {% endblock houses_rent %}
+                    </div>
+                    <!--/出租房源-->
+
+                     <!--小区点评-->
+                    <div class="blank5"></div>
+                    <div class="lp-coltit">
+                        <h3 class="tit1 fl">小区点评</h3>
+                    </div>
+                    <div class="blank1"></div>
+                    <div class="clearfix  bdrs">
+                        <div id="comment" class="bd-gray p15 dzst comment min-he" >
+                            <div id="pl-list"></div>
+                        </div>
+                        {# 调用 #}
+                        {{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/comment.css')}}
+                        {% set comment_url = ('intercomment/list')|U({
+                                                    title: '点评',
+                                                    models: 'inter_housescomment',
+                                                    aid: detail.id|default('')
+                                                }) %}
+                        <script type="text/javascript">
+                            seajs.use(['comment'], function(comment) {
+                                // 点评
+                                comment.init({
+                                    list: '#pl-list',
+                                    url: '{{ comment_url }}',
+                                    loadMore: '.load-more'
+                                });
+                            })
+                        </script>
+                    </div>
+                    <!--/小区点评-->
+                </div>
+            {% endblock body_xiaoqu %}
+
+                {{house_global.sale_aside({
+                    btn: 0,
+                })}}
+                {% if sort_area_houses.data is defined and sort_area_houses.pageCount|default(0) != 0 %}
+                <div class="side">
+                    <h2 class="s-title">周边小区</h2>
+                    <div class="s-new" data-tag="lparea">
+                        <ul>
+                            {% for item in sort_area_houses.data %}
+                                <li>
+                                    <a class="name" href="{{('sale/qdetail')|U({id: item.id|default('')})}}" target="_blank">
+                                        {{- core_global.img({
+                                            src: item.thumb|default(''),
+                                            alt: item.name|default(''),
+                                            type: 2,
+                                            width: 210,
+                                            height:155
+                                        }) -}}
+                                    </a>
+                                    <p>
+                                        <a class="name" href="{{('sale/qdetail')|U({id: item.id|default('')})}}" target="_blank">{{item.name|default('')}}</a>
+                                    </p>
+                                    <p>
+                                        <span class="left">售:<em class="c-e43">{{item.sales|default('')}}</em>套</span>
+                                        <span class="right">租:<em class="c-e43">{{item.rents|default('')}}</em>套</span>
+                                    </p>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                 </div>
+                {% endif %}
+
+            <div class="blank10"></div>
+            {% block map_xiaoqu %}
+                {{
+                    house_global.map({
+                        detail: detail,
+                        data: detail,
+                        arr_round : [
+                            {ico: 42, name: '学校'},
+                            {ico: 43, name: '医院'},
+                            {ico: 44, name: '银行'},
+                            {ico: 45, name: '餐饮'},
+                            {ico: 46, name: '购物'},
+                            {ico: 47, name: '公交'},
+                            {ico: 49, name: '公园'},
+                            {ico: 50, name: '机场'},
+                            {ico: 51, name: '加油站'},
+                        ]
+                    })
+                }}
+            {% endblock map_xiaoqu %}
+            <div class="blank20"></div>
+        </div>
+    {% endblock container_houses %}
+{% endblock container %}
+
+{% block js %}
+    <script type="text/javascript">
+        seajs.use(['share'], function (share) {})
+    </script>
+{% endblock js %}

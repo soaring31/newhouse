@@ -1,0 +1,154 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set ename = app.request.get('ename') %}
+{% set typesid = app.request.get('type')|default('') %}    
+{% set mode = app.request.get('mode')|default(1) %}
+{% set aid = app.request.get('aid')|default('') %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {# {{ parent() }}  #}
+{% endblock %}
+
+{% block mainleft %}
+    {# {{ render(controller('HouseBundle:Mnews:category', {category: category, action: 'mnews/mnewsmanage'})) }} #}
+{% endblock mainleft %}
+{% set memgroup_data = ('db.mem_types')|getRow({id: typesid, findType: 1}) %}
+{% block tableMain %}
+{% if typesid   %}
+{{ core_manage.filter([
+    {
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增会员组'
+    }
+]) }}
+{% else %}
+{{ core_manage.filter([
+     {
+        method: 'selectCate',
+        title: '会员分类',
+        field: 'aid',
+        service: 'db.mem_types',
+        
+    }
+]) }}
+{% endif %}
+
+    {% set form_opt = (aid == 16) ? { _form_id: 397} : {}  %}
+
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U({ aid: aid })}}',
+        showUrl   : '{{ (action ~ '/show')|U({ aid: aid}) }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+           ename: '{{ ename }}',
+           type: '{{ typesid }}',
+           mode: '{{ mode }}',
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                    <th>会员组</th>
+                    {% if typesid is empty %}
+                     <th>会员分类</th>
+                    {% endif %}
+                    <th width="300">图标</th>
+
+                    {% if mode == 1 or mode == 4 %}
+                        <th width="300">积分区间</th>
+                    {% endif %}
+                    <th width="180" class="tac">操作</th>
+                </tr>
+
+                {% if ident.info.data is defined %}
+                {% for k, vo in ident.info.data %}
+                {% set vmode = ('db.mem_types')|getOne('mode',{ id: vo.aid }) %}    
+                    {# {{dump(vo)}} #}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td>{{ vo.id }}</td>
+                    <td>{{ vo.name }}</td>
+                     {% if typesid is empty  %}
+                        <td>
+                            {% set typesname = ('db.mem_types')|getOne('name',{id: vo.aid}) %}
+                            {{ typesname }}    
+                        </td>
+                    {% endif %}
+
+                    <td>{% if vo.ico %}
+                        {{ core_global.img({ src: vo.ico }) }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    {% if vmode == 1 or vmode == 4 %}
+                      <td>  {{ vo.mincurrency }} 到 {{ vo.maxcurrency }}</td>
+                        {% elseif typesid is empty %}
+                        <td>-</td>
+                    {% endif %}
+                   
+                    <td class="tac pr10">
+                        {% if typesid is empty %}
+                            {{ core_manage.show({
+                                url: (action ~ '/show')|U({ mode: vmode }),
+                                attr: {
+                                    title: vo.name
+                            }
+                            }) }}
+                        {% else %}
+                            {{ core_manage.show({
+                                attr: {
+                                    title: vo.name
+                                }
+                            }) }}
+                        {% endif %}
+
+                        {% if vmode != 4 %}
+                        {{ core_manage.show({
+                        url: ('mmemgroup/mmemaccess')|U({groupid: vo.id, memtype: vo.aid }|merge(form_opt)),
+                        title: '成员列表'
+                        })}}
+                        {% endif %}
+
+                        {{ core_manage.delete() }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="8" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    }
+   
+]) }}
+{% endblock %}
+
+{% block promptUl %}
+{# 提示说明 #}
+{# 1. 组内更换会员组, 可直接更换<br> #}
+1. 更换会员类别, 直接去对应类别设置即可, 如: 普通会员更换为管理组系中的权限组, 直接去权限组中添加对应账号即可, 添加成功后, 此会员将不在属于普通会员
+
+{% endblock %}
+
+
+
+

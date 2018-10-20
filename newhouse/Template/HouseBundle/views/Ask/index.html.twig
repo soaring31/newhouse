@@ -1,0 +1,283 @@
+{% extends 'HouseBundle::base_top_search.html.twig' %}
+{#  说明
+* url_category : 获取URL传过来的分类id
+* url_solved: 获取url传过来的解决状态
+* push_wdsyts : 首页文字推送
+* push_wdhdp : 首页幻灯片推送
+* nav_ask_act : 导航条判断
+* asklist: 列表数据
+* tpl_topsearch_action: 搜索地址
+* tpl_topsearch_placeholder: 搜索框提示
+#}
+{% block title %}{{cur_area_data}}房产家居装修知识问题-诸葛问答{% endblock title %}
+{% block default_title %}{% endblock default_title %}
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data}}房产问答,{{cur_area_data}}房产问题,{{cur_area_data}}家居问题,{{cur_area_data}}装修问题,诸葛问答" />
+<meta name="description" content="{{cur_area_data}}诸葛问答是专业的关于房产,家居装修问题的问答分享平台。这里有权威的行业专家为您解答房产,家居,装修的问题。无数网友在这里交流买房,卖房,租房,交易过户,贷款,装修等问题。" />
+{% endblock key_des %}
+
+{% block css %}
+    {{core_global.linkcss('static/house/css/ask.css')}}
+{% endblock css %}
+
+{% set url_category = app.request.get("category", 38) %}
+
+{% set url_solved = app.request.get("solved") %}
+
+{% set category_ask = ('house.category')|getTree({models: 'ask', checked: 1}) %}
+
+{% set solved_url_opt = [] %}
+{% if url_solved|default('') %}
+    {% set solved_url_opt = solved_url_opt|merge({solved: url_solved|default('')}) %}
+{% endif %}
+
+{# 搜索 #}
+{% set tpl_topsearch_action = 'ask/list' %}
+
+{% set tpl_topsearch_placeholder = '请输入问题关键词' %}
+
+{% set tpl_topsearch_hot = 'askkeyword' %}
+
+{% block top_search %}
+<div class="lp-top-bar">
+    {{parent()}}
+</div>
+{% endblock top_search %}
+
+{# 屏蔽广告 #}
+{% block top_ad %}{% endblock top_ad %}
+
+{# 当前位置 #}
+{% block current %}{% endblock current %}
+
+{# 内容 #}
+{% block container %}
+    {# 导航 #}
+    {% block nav_ask %}
+        <div class="ask-head">
+            <div class="container">
+                <ul class="ask-nav">
+                    {% if category_ask.data is defined %}
+                        {% for item in category_ask.data %}
+                            <li {% if item.menu.id|default('') == nav_ask_act|default('38') %}class="act"{% endif %}><a href="{{('ask/index')|U({(item.menu.ename):item.menu.id|default('')})}}">首页</a>
+                            </li>
+                            {% for item2 in item.nodes %}
+                                <li {% if item2.menu.id|default('') == nav_ask_act|default('0') %}class="act"{% endif %}><a href="{{('ask/list')|U({(item2.menu.ename):item2.menu.id|default('')})}}">{{item2.menu.name|default('')}}</a>
+                                    {% if item2.nodes is defined %}
+                                        <ol class="nav-ol">
+                                        {% for item1 in item2.nodes %}
+                                            <li><a href="{{('ask/list')|U({(item1.menu.ename):item1.menu.id|default('')})}}">{{item1.menu.name|default('')}}</a></li>
+                                        {% endfor %}
+                                    {% endif %}
+                                    </ol>
+                                </li>
+                            {% endfor %}
+                        {% endfor %}
+                    {% endif %}
+                    {#
+                    <li>
+                        <a href="{{ path('house_main') }}#/default/79" target="_blank">我的问答</a>
+                    </li>
+                    <li class="fr act">
+                        {{house_global.modal_btn({
+                            title: '马上提问',
+                            id: 'askNow',
+                            class: 'btn-tw'
+                        })}}
+                    </li>
+                    #}
+                </ul>
+            </div>
+        </div>
+        {{house_global.modal_layout({
+            id: "askNow",
+            title: "我要提问",
+            icon: "font-ask-12",
+            ajax: "ajax: {
+                data : {
+                    formflag: 'view_ask',
+                    formcls: 'common-form-lg common-form-control',
+                    category: " ~ detail.category|default(38) ~ ",
+                    type: 'ask'
+                }
+            }"
+        })}}
+    {% endblock nav_ask %}
+
+    {# 当前位置 #}
+    <div class="blank10"></div>
+    <div class="container">
+        <div class="current-location">
+            {{block('current_default')}}
+            {% block current_ask %}
+                <span>问答</span>
+            {% endblock current_ask %}
+        </div>
+    </div>
+    <div class="blank10"></div>
+
+    {# 推送位 #}
+    {#
+    {% block push_ask %}
+        <div class="container">
+            <div class="push">
+                <!-- 文字推送  -->
+                <div class="push-text" data-tag="wdsyts">
+                    {% set push_wdsyts = ('wdsyts')|getPush(20) %}
+                    {% if push_wdsyts is defined %}
+                        {% for item in push_wdsyts %}
+                            {% if loop.index == 1 or loop.index % 8 == 0 %}
+                                {% if loop.index % 8 == 0 %}
+                                    </ul>
+                                    <div class="blank25"></div>
+                                    <div class="line"></div>
+                                    <div class="blank25"></div>
+                                {% endif %}
+                                    <h2><a href="{{item.url|default('#')}}" target="_blank">{{item.name|default('')}}</a></h2>
+                                {% else %}
+                                    <li><a href="{{item.url|default('#')}}" target="_blank">{{item.name|default('')}}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <!-- 图片推送  -->
+                {% set push_wdhdp = ('wdhdp')|getPush(10) %}
+                <div id="focus2" class="focus jqDuang" data-duang=1 data-autoplay="0" data-obj="li" data-prevbtn=".focusBtnL" data-nextbtn=".focusBtnR" data-effect="left" data-cell=".foucsTit" data-actclass="on" data-tag="wdhdp" data-lazyload="src">
+                    {% if push_wdhdp|default('') %}
+                        <div>
+                            <ul  class="focusImgs">
+                                {% for item in push_wdhdp %}
+                                    <li class="on">
+                                        <a href="{{item.url|default('#')}}" target="_blank">
+                                            {{- core_global.data_src_img({
+                                                src: item.thumb|default(''),
+                                                alt: item.name|default(''),
+                                                type: 2,
+                                                width:680,
+                                                height: 380
+                                            }) -}}
+                                        </a>
+                                        <h3 class="tit yh f18">
+                                            <a href="{{item.url|default('#')}}" target="_blank">{{item.name|default('')}}</a>
+                                        </h3>
+                                        <div class="bg"></div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="foucsTit"></div>
+                        <!-- 编辑不需要修改 -->
+                        <div class="focusBtnL">
+                            <span class="img-ask-01"></span>
+                            {{- core_global.img({
+                                src: item.thumb|default(''),
+                                alt: item.name|default(''),
+                                type: 2,
+                                width: 100,
+                                height: 56
+                            }) -}}
+                        </div>
+                        <div class="focusBtnR">
+                            <span class="img-ask-02"></span>
+                             {{- core_global.img({
+                                src: item.thumb|default(''),
+                                alt: item.name|default(''),
+                                type: 2,
+                                width: 100,
+                                height: 56
+                            }) -}}
+                        <!-- 编辑不需要修改 -->
+                        </div>
+                        <!-- /banner切换 -->
+                    {% else %}
+                        {{- core_global.img({
+                            src: '',
+                            alt: '',
+                            type: 2,
+                            width: 680,
+                            height: 380
+                        }) -}}
+                    {% endif %}
+                </div>
+                <div class="blank30"></div>
+            </div>
+        </div>
+    {% endblock push_ask %}
+    #}
+    {# 内容 #}
+    {% block container_ask %}
+        <div class="container">
+            <div class="ask-main">
+                {# 侧栏 #}
+                <div class="ask-side">
+                    <div class="side-head">
+                        <h2>全部分类</h2>
+                    </div>
+                    <div class="side-item">
+                        <div class="blank20"></div>
+                        {% if category_ask.data is defined %}
+                            {% for item in category_ask.data %}
+                                {% if item.nodes is defined %}
+                                    {% for item2 in item.nodes %}
+                                        <div class="filter-item">
+                                            <dl class="clearfix">
+                                                <dt><a href="{{('ask/list')|U({(item2.menu.ename):item2.menu.id|default('')}|merge(solved_url_opt))}}" class="{% if url_category|default('') == item2.menu.id|default('') %}act{% endif %}">{{item2.menu.name|default('')}}</a></dt>
+                                               {% if item2.nodes is defined %}
+                                                <dd>
+                                                   {% for item3 in item2.nodes %}
+                                                    <a href="{{('ask/list')|U({(item3.menu.ename):item3.menu.id|default('')}|merge(solved_url_opt))}}" class="{% if url_category|default('') == item3.menu.id|default('') %}act{% endif %}">{{item3.menu.name|default('')}}</a>
+                                                   {% endfor %}
+                                                </dd>
+                                               {% endif %}
+                                            </dl>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                            {% else %}
+                                <p>暂时没有分类</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {# 侧栏 #}
+                {# 右侧 #}
+                <div class="ask-content">
+                    <!-- 问答列表 -->
+                    <div class="ask-list">
+                        <div class="ask-l-head">
+                            <a href="{{(action)|U({solved:'',category:url_category|default('')})}}" {% if url_solved == null %}class="act"{% endif %} >全部问答</a>
+                            <!-- <a href="{{(action)|U({solved:1,category:url_category|default('')})}}" {% if url_solved == '1' %}class="act"{% endif %}>已解决的问题</a>
+                            <a href="{{(action)|U({solved:0,category:url_category|default('')})}}" {% if url_solved == '0' %}class="act"{% endif %}>待解决的问题</a> -->
+                        </div>
+                        <!-- item -->
+                        {{house_global.ask_list({
+                            list: ident.list
+                        })}}
+                    </div>
+                    {% block page_ask %}{% endblock page_ask %}
+                </div>
+                {# 右侧 #}
+            </div>
+        </div>
+    {% endblock container_ask %}
+    <div class="blank20"></div>
+{% endblock container %}
+
+{% block js %}
+    <script type="text/javascript">
+        seajs.use(['jqduang', 'lazyload', 'jqmodal'], function(jqduang, lazyload, jqmodal) {
+            var $duang = $('[data-duang=1]');
+
+            $duang.on('after.jd', function() {
+                $('.focusBtnL img').attr('src', $duang.jqDuang('get', 'prev').find('img').attr('src'))
+                $('.focusBtnR img').attr('src', $duang.jqDuang('get', 'next').find('img').attr('src'))
+            })
+            .on('mouseenter mouseleave', '.focusBtnL', function() {
+                $(this).toggleClass('focusBtnLHover')
+            })
+            .on('mouseenter mouseleave', '.focusBtnR', function() {
+                $(this).toggleClass('focusBtnRHover')
+            });
+        });
+    </script>
+{% endblock js %}

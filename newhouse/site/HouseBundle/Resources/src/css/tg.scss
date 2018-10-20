@@ -1,0 +1,405 @@
+/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+*/
+
+@import 'static/ats';
+// 工具类 每个文件都要导入
+
+@import 'font-number';
+// 数字
+@import 'top-search';
+// 顶部搜索
+
+@import 'lp-list';
+// 列表公用样式
+@import 'font-lp';
+// 楼盘图标
+
+//主色调
+$major-color: #e43 !default;
+$tg-body-w: 900px !default;
+$tg-aside-w: 270px !default;
+.tg-body {
+    width: $tg-body-w;
+}
+.tg-aside {
+    width: $tg-aside-w;
+}
+
+/* ==========
+list
+========== */
+.list-item {
+    border: 1px solid #ddd;
+    color: #666;
+    margin-bottom: 40px;
+    padding-top: 0px;
+    h2 {
+        font-size: 24px;
+        line-height: 62px;
+        padding-left: 20px;
+        overflow: hidden;
+        height: 62px;
+    }
+    .info {
+        padding-left: 20px;
+        width: 387px;
+        p {
+            height: auto;
+        }
+        .item-text {
+            height: 36px;
+            line-height: 36px;
+            overflow: hidden;
+            a {
+                line-height: 36px;
+            }
+        }
+    }
+    .other {
+        margin-right: 20px;
+
+        width: 250px;
+        .btn {
+            background: $major-color;
+            color: #fff;
+            display: block;
+            font-size: 20px;
+            height: 46px;
+            line-height: 46px;
+            margin-top: 2px;
+            text-align: center;
+            text-decoration: none;
+            width: 170px;
+            &.disable {
+                background: #dbdbdb;
+                color: #666;
+                cursor: default;
+                border-color: #dbdbdb;
+            }
+        }
+    }
+    .time {
+        line-height: 29px;
+        span {
+            background: #eee;
+            border-radius: 5px;
+            color: $major-color;
+            display: inline-block;
+            font-weight: 700;
+            margin: 0 3px;
+            padding: 0 7px;
+            vertical-align: middle;
+        }
+    }
+    .num {
+        line-height: 24px;
+        text-align: center;
+        width: 170px;
+    }
+    .tel {
+        font-weight: 700;
+    }
+}
+.list-item.first {
+    h2 {
+        height: 70px;
+        line-height: 70px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        clear: both;
+    }
+    .recom {
+        background: url('../images/tuangou.png') no-repeat 0 0;
+        color: #fff;
+        padding-left: 8px;
+        width: 180px;
+    }
+    .dis_recom {
+        background: url('../images/tuangou_dis.png') no-repeat 0 0;
+    }
+    dl {
+        font-size: 12px;
+        width: 125px;
+        dd,
+        dt {
+            float: left;
+        }
+        p {
+            line-height: 16px;
+        }
+        dt {
+            i{font-size: 28px;
+                line-height: normal;
+                margin-right: 8px;
+            }
+        }
+    }
+    .btn {
+        margin-top: 34px;
+    }
+}
+
+/* ==========
+aside
+========== */
+.tg-aside {
+    .panel {
+        padding: 5px 8px;
+    }
+    h3 {
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1;
+        margin-bottom: 15px;
+    }
+}
+.bm-list {
+    li {
+        border-bottom: 1px dashed #ddd;
+        color: #666;
+        height: 34px;
+        line-height: 34px;
+        overflow: hidden;
+        a {
+            color: $major-color;
+        }
+        &:last-child {
+            border-bottom-color: #fff;
+        }
+    }
+    .time {
+        width: 100px;
+    }
+    .tel {
+        width: 84px;
+    }
+    .name {
+        width: 64px;
+    }
+}
+.tg-lc {
+    border-left: 2px solid #ebebeb;
+    margin-left: 16px;
+    li {
+        padding-left: 23px;
+        position: relative;
+    }
+    .ico {
+        background: $major-color;
+        border: 1px solid #fff;
+        border-radius: 10px;
+        height: 8px;
+        width: 8px;
+        position: absolute;
+        left: -6px;
+        top: 18px;
+    }
+    dl {
+        margin-bottom: 20px;
+    }
+    dt {
+        color: #666;
+        font-size: 16px;
+        height: 44px;
+        line-height: 44px;
+        i {
+            font-size: 18px;
+            margin-right: 5px;
+            vertical-align: -4px;
+        }
+    }
+    dd {
+        color: #999;
+        line-height: 26px;
+    }
+}
+
+/* ==========
+detail
+========== */
+.detail-panel {
+    .panel-hd {
+        background: #f7f7f7;
+        height: 36px;
+        line-height: 36px;
+        overflow: hidden;
+        padding-left: 10px;
+        h3 {
+            font-size: 14px;
+            font-weight: 700;
+        }
+        a {
+            color: #999;
+            &:hover {
+                color: $major-color;
+            }
+        }
+    }
+    .panel-bd {
+        min-height: 240px;
+    }
+    min-height: 240px;
+    .hdsm {
+        color: #666;
+        line-height: 2;
+        padding: 30px;
+    }
+    .xmxq {
+        padding: 8px;
+    }
+    .tab-hd {
+        border-bottom: 1px solid #ddd;
+        li {
+            border: 1px solid #ddd;
+            cursor: pointer;
+            float: left;
+            height: 30px;
+            line-height: 30px;
+            margin-bottom: -1px;
+            margin-right: 10px;
+            text-align: center;
+            width: 114px;
+            position: relative;
+            z-index: 2;
+            &.act {
+                border-bottom-color: #fff;
+            }
+        }
+    }
+    .item {
+        display: none;
+        height: 240px;
+        padding: 10px;
+        overflow-y: auto;
+    }
+    .chart-wrap {
+        padding: 40px 50px 40px 30px;
+    }
+}
+
+
+//月排行
+.tg-ph {
+    div {
+        float: left;
+    }
+    dt,
+    dd {
+        height: 30px;
+        line-height: 30px;
+        overflow: hidden;
+        @extend %clearfix;
+    }
+    dt {
+        background: #eee;
+        font-weight: 700;
+    }
+    dd {
+        cursor: pointer;
+        .num {
+            color: #bd2928;
+            text-align: center;
+        }
+    }
+    .name {
+        text-indent: 10px;
+        width: 126px;
+    }
+    .add {
+        width: 50px;
+        height: 30px;
+    }
+    .num {
+        width: 60px;
+    }
+    .link {
+        width: 32px;
+        a {
+            color: #4688be;
+            &:hover {
+                color: #f60;
+            }
+        }
+    }
+}
+//热门楼盘
+.tg-rmlp {
+    margin-top: 18px;
+    li {
+        height: 30px;
+        line-height: 30px;
+        overflow: hidden;
+        padding-left: 30px;
+        position: relative;
+        &:last-child.hover {
+            border-bottom-color: #fafafa;
+        }
+        &:first-child.hover {
+            border-top-color: #fafafa;
+        }
+    }
+    i {
+        color: #999;
+        font-family: arial;
+        font-weight: 700;
+        height: 20px;
+        left: 0;
+        line-height: 20px;
+        margin: 0 5px;
+        overflow: hidden;
+        position: absolute;
+        text-align: center;
+        top: 5px;
+        width: 20px;
+    }
+    .pic {
+        border: 1px solid #ccc;
+        display: none;
+        float: left;
+        margin-right: 5px;
+        padding: 1px;
+        &:hover {
+            background: #bd2928;
+        }
+    }
+    h4 {
+        font-size: 14px;
+    }
+    p {
+        color: #bd2928;
+        display: none;
+        height: 20px;
+        line-height: 20px;
+        overflow: hidden;
+    }
+    .arial {
+        font-family: arial;
+    }
+    .fs-12{
+        font-size: 12px;
+    }
+    .hover {
+        background: #fafafa none repeat scroll 0 0;
+        border-bottom: 1px solid #d8d8d8;
+        border-top: 1px solid #d8d8d8;
+        height: 60px;
+        padding: 7px 0 7px 30px;
+        i {
+            background: #f60 none repeat scroll 0 0;
+            color: #fff;
+            top: 7px;
+        }
+        .pic,
+        p {
+            display: block;
+        }
+        h4 {
+            height: 20px;
+            line-height: 20px;
+            overflow: hidden;
+        }
+    }
+}

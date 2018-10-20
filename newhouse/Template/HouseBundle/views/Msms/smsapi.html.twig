@@ -1,0 +1,254 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% block js %}
+
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }}
+{% endblock %}
+
+{% block tableMain %}
+<script type="text/javascript">
+seajs.use(["core"],function(core){
+    var $text_input = $('.form').find('input[type!="radio"]');
+    var $submit = $('#submit');
+    // 启用
+    $(document).on('click', '[data-sms="1"]', function () {
+        $text_input.removeAttr('disabled');
+        $submit.removeAttr('disabled');
+        var $this = $(this);
+        var key = $this.find('input').val();
+        $('[data-key]').hide();
+        $('[data-key="' + key + '"], [data-key="1"]').show();
+    });
+    // 关闭
+    // $('[data-sms-close="1"]').click(function () {
+    //     $text_input.attr('disabled', 'disabled');
+    //     $submit.attr('disabled', 'disabled');
+    // });
+    // 默认执行
+    $('input[name="sms_api"]:checked').trigger('click');
+});
+</script>
+<section class="list-con table-inline" data-height="580" data-param='{
+        fixed     : ".filter",
+        list      : ".list-con",
+        data      : {
+        }
+    }'>
+    <div class="list">
+        <form class="form" action="{{ (action)|U }}" method="post" name="form">
+            <table class="popup-form-table" style="width:100%;">
+                <tr>
+                    <th colspan="2">接口基本设置</th>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div id="group_dysjset">
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright" for="enable">启用选择</label>
+                                </div>
+                                <div class="form-errors">
+
+                                </div>
+                                <div class="form-cell">
+                                    {% for key, name in sms_cfgs %}
+                                    {% set url = sms_urls[key] %}
+                                    <label data-sms="1">
+                                        <input class="radio" name="sms_api" value="{{key}}" {{ sms_api|isChecked(key) }} type="radio" />
+                                        {% if(url) %}<a href='{{url}}' target='_blank'>{{name}}</a>{% else %}{{name}}{% endif %}
+                                    </label>
+                                    {% endfor %}
+                                    <label data-sms-close="1">
+                                        <input class="radio" name="sms_api" value="" {{ sms_api|isChecked('') }} type="radio" />[关闭接口]
+                                    </label>
+                                    <span class="tip"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {# 创瑞 #}
+                <tr data-key='apicr6868'>
+                    <td>
+                        <div id="group_dysjset">
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright" for="enable">序列号</label>
+                                </div>
+                                <div class="form-errors">
+
+                                </div>
+                                <div class="form-cell">
+                                    <label>
+                                        <input type="text" id="sms_appid" name="sms_appid" rev="序列号" rule="text" minlength="1" maxlength="200" value="{{ ('sms_appid')|C|default('') }}">
+                                    </label>
+                                    <span class="tip"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr data-key='apicr6868'>
+                    <td>
+                        <div id="group_dysjset">
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright" for="enable">密钥</label>
+                                </div>
+                                <div class="form-errors">
+
+                                </div>
+                                <div class="form-cell">
+                                    <label>
+                                        <input type="password" id="sms_appsecret" name="sms_appsecret" rev="" rule="text" minlength="1" maxlength="200" value="{{ ('sms_appsecret')|C|default('') }}">
+                                    </label>
+                                    <span class="tip"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {# 创瑞 #}
+                {# 阿里大于 #}
+                <tr data-key='apialiyun'>
+                    <td>
+                        <div id="group_dysjset">
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright" for="enable">Access Key ID</label>
+                                </div>
+                                <div class="form-errors">
+
+                                </div>
+                                <div class="form-cell">
+                                    <label>
+                                        <input type="text" id="sms_accesskeyid" name="sms_accesskeyid" rev="帐号" rule="text" minlength="1" maxlength="200" value="{{ ('sms_accesskeyid')|C|default('') }}">
+                                    </label>
+                                    <span class="tip"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr data-key='apialiyun'>
+                    <td>
+                        <div id="group_dysjset">
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright" for="enable">Access Key Secret</label>
+                                </div>
+                                <div class="form-errors">
+
+                                </div>
+                                <div class="form-cell">
+                                    <label>
+                                        <input type="password" id="sms_accesskeysecret" name="sms_accesskeysecret" rev="" rule="text" minlength="1" maxlength="200" value="{{ ('sms_accesskeysecret')|C|default('') }}">
+                                    </label>
+                                    <span class="tip"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr data-key='apialiyun'>
+                    <td>
+                        <div id="group_dysjset">
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright" for="enable">签名名称</label>
+                                </div>
+                                <div class="form-errors">
+
+                                </div>
+                                <div class="form-cell">
+                                    <label>
+                                        <input type="text" id="sms_signname" name="sms_signname" rev="签名名称" rule="text" minlength="1" maxlength="200" value="{{ ('sms_signname')|C|default('') }}">
+                                    </label>
+                                    <span class="tip"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {# 阿里大于 #}
+                <tr data-key='1'>
+                    <td>
+                        <div id="group_dysjset">
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright" for="enable">管理员手机</label>
+                                </div>
+                                <div class="form-errors">
+
+                                </div>
+                                <div class="form-cell">
+                                    <label>
+                                        <input type="text" id="sms_admtel" name="sms_admtel" rev="" rule="text" minlength="1" maxlength="200" value="{{ ('sms_admtel')|C|default('') }}">
+                                    </label>
+                                    <span class="tip"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr data-key='1'>
+                    <td>
+                        <div id="group_dysjset">
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright" for="enable">单号码发送限额</label>
+                                </div>
+                                <div class="form-errors">
+
+                                </div>
+                                <div class="form-cell">
+                                    <label>
+                                        <input type="text" id="sms_lmtday" name="sms_lmtday" rev="" rule="int" minlength="1" maxlength="200" value="{{ ('sms_lmtday')|C|default('') }}">
+                                    </label>
+                                    <span class="tip">单个号码,一天内(24小时)最多能发送短信的次数; 默认为10，请根据短信运营商设置。</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr data-key='1'>
+                    <td>
+                        <div id="group_dysjset">
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright" for="enable">单IP发送时间间隔</label>
+                                </div>
+                                <div class="form-errors">
+
+                                </div>
+                                <div class="form-cell">
+                                    <label>
+                                        <input type="text" id="sms_lmtip" name="sms_lmtip" rev="" rule="text" minlength="1" maxlength="200" value="{{ ('sms_lmtip')|C|default('') }}">
+                                    </label>
+                                    <span class="tip">单位(秒)，单个IP两次发送信息的最短时间间隔，0为不限制，请根据短信运营商设置。</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <div class="popup-submit"></div>
+            <div class="tac p10">
+                <div>
+                    <button type="submit" id="submit" name="submit" data-role="submit" class="btn font-ico-22 fz12">提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+<script type='text/javascript'>
+var defTel = '{{sms_admtel|default('')}}';
+var defMsg = '{{def_msg|default('')}}';
+</script>
+</section>
+{% endblock tableMain %}
+
+{% block promptUl %}
+{% endblock %}

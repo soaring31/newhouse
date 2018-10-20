@@ -1,0 +1,23 @@
+{% extends app.request.get('ajax') ? 'HouseBundle:Clist:xiangce_list.html.twig' : 'HouseBundle:Business:detail.html.twig' %}
+
+{% block b_title %}
+图片相册,户型图,样板间图,装修效果图,实景图
+{% endblock b_title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}图片相册,{{detail.name|default('')}}户型图,{{detail.name|default('')}}样板间图,{{detail.name|default('')}}装修效果图" />
+<meta name="description" content="{{detail.name|default('')}}图片相册,{{detail.name|default('')}}小区网为您提供{{detail.name|default('')}}图片，包含户型图、样板间图、装修效果图、交通图、实景图等{{detail.name|default('')}}图片相册，为您买房、挑选户型、装修提供参考。"/>
+{% endblock key_des %}
+
+{# 导航高亮 #}
+{% block nav_business %}
+{% set nav_business_act = 5 %}
+{{parent()}}
+{% endblock nav_business %}
+
+{% block bus_detail %}
+	{{house_global.detail_photos_common({
+		ajax_url: action|U({ajax: 1, id: detail.id|default(0)}),
+		aid: detail.id|default(0)
+	})}}
+{% endblock bus_detail %}

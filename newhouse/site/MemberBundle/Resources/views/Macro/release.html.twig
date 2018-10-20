@@ -1,0 +1,92 @@
+{# 调用说明开始 #}
+{# {{ 'qq'|trans({}, 'HomeBundle') }} #}
+{# {% import "ManageBundle:Form:popedit.html.twig" as forms %} #}
+{# {{ forms.popEdit(dbForm,'formclass') }} #}
+{# 调用说明结束 #}
+{% macro popEdit(form, formclass) %}
+{% if form is defined and form is not empty %}
+    {# {{dump(form)}} #}
+{% set id = app.request.get('id')|default(0) %}
+{# {% set pid = app.request.get('pid')|default(0) %} #}
+<form data-id="{{id}}" action="{{ form.vars.action }}" method="{{ form.vars.method }}" class="{{ formclass|default('form') }}" {{ form_enctype(form) }}>
+{% if form.vars.errors|length>0 %}
+<div class="alert alert-error">
+{% for error in form.vars.errors %}
+{% if loop.index>1 %}<br>{% endif %}
+{{ error.messageTemplate|trans(error.messageParameters, 'validators') }}
+{% endfor %}
+</div>
+{% endif %}
+
+
+
+<div class="wrap" style=" width:1000px; margin:0 auto;">
+
+{# {{dump(form.children)}} #}
+
+   {% for key,v in form.children %}
+        {% if key != 'csrf_token' and key != 'submit' %}
+   {% if v.children and v.children.year is not defined and v.children.month is not defined %}         {# {% if level == 0 %} #}
+
+<table class="popup-table popup-form-table" style="width:100%;" {{v.vars.block_prefixes[1]|default('') }}>
+    <tbody>
+        <tr>
+             <th width="25%" class=" tal">{{v.vars.label|trans({}) }}</th>
+        </tr>
+        <tr >
+            <td class="tal">{{ form_widget(v) }}</td>
+        </tr>
+    </tbody>
+</table>
+{% else %}
+
+<table class="popup-table popup-form-table" style="width:100%;" {{v.vars.block_prefixes[1]|default('') }}>
+    <tbody>
+        <tr >
+            <td >
+<div>
+    
+    <div class="form-row">
+        <div class="form-cell-label">               
+         {{v.vars.label|trans({}) }}
+
+     </div>
+        <div class="form-errors"></div>
+        <div class="form-cell">
+            {{ form_widget(v) }}
+        </div>
+
+</div>
+</div>
+
+
+    </td>
+            
+        </tr>
+    </tbody>
+</table>
+
+
+
+    {% endif %}
+
+
+
+
+            {# {% endif %} #}
+        {% endif %}
+        {% endfor %}
+
+
+
+
+
+
+
+        
+<div class="popup-submit">{{ form.submit is defined?form_widget(form.submit):'' }}</div>
+{{ form_rest(form) }}
+</div>
+</form>
+{% endif %}
+{% endmacro %}

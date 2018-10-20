@@ -1,0 +1,326 @@
+$font-ico-fz: inherit !default;
+
+@font-face {
+	font-family: "ico";
+    font-weight: normal;
+    font-style: normal;
+	src: url('../fonts/ico.eot');
+	src: url('../fonts/ico.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/ico.woff') format('woff');//,
+		//url('../fonts/ico.ttf') format('truetype'),
+		//url('../fonts/ico.svg#ico') format('svg');
+}
+$font-ico-fz: inherit !default;
+$font-ico-fl: none !default;
+$font-ico-m: 0 !default;
+$font-ico-va: -.25em !default;
+[class^="font-ico-"],
+[class*=" font-ico-"] {
+	font-family: "ico";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-size: $font-ico-fz;
+	float: $font-ico-fl;
+	margin: $font-ico-m;
+	vertical-align: $font-ico-va;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; only necessary if not using the private unicode range (firstdata option) 
+	text-decoration: none;
+	text-transform: none;
+}
+
+
+.font-ico-1:before {
+	content: "\EA01";
+}
+
+.font-ico-10:before {
+	content: "\EA02";
+}
+
+.font-ico-11:before {
+	content: "\EA03";
+}
+
+.font-ico-12:before {
+	content: "\EA04";
+}
+
+.font-ico-13:before {
+	content: "\EA05";
+}
+
+.font-ico-14:before {
+	content: "\EA06";
+}
+
+.font-ico-15:before {
+	content: "\EA07";
+}
+
+.font-ico-16:before {
+	content: "\EA08";
+}
+
+.font-ico-17:before {
+	content: "\EA09";
+}
+
+.font-ico-18:before {
+	content: "\EA0A";
+}
+
+.font-ico-19:before {
+	content: "\EA0B";
+}
+
+.font-ico-2:before {
+	content: "\EA0C";
+}
+
+.font-ico-20:before {
+	content: "\EA0D";
+}
+
+.font-ico-21:before {
+	content: "\EA0E";
+}
+
+.font-ico-22:before {
+	content: "\EA0F";
+}
+
+.font-ico-23:before {
+	content: "\EA10";
+}
+
+.font-ico-24:before {
+	content: "\EA11";
+}
+
+.font-ico-25:before {
+	content: "\EA12";
+}
+
+.font-ico-26:before {
+	content: "\EA13";
+}
+
+.font-ico-27:before {
+	content: "\EA14";
+}
+
+.font-ico-28:before {
+	content: "\EA15";
+}
+
+.font-ico-29:before {
+	content: "\EA16";
+}
+
+.font-ico-3:before {
+	content: "\EA17";
+}
+
+.font-ico-30:before {
+	content: "\EA18";
+}
+
+.font-ico-31:before {
+	content: "\EA19";
+}
+
+.font-ico-33:before {
+	content: "\EA1A";
+}
+
+.font-ico-4:before {
+	content: "\EA1B";
+}
+
+.font-ico-5:before {
+	content: "\EA1C";
+}
+
+.font-ico-6:before {
+	content: "\EA1D";
+}
+
+.font-ico-7:before {
+	content: "\EA1E";
+}
+
+.font-ico-8:before {
+	content: "\EA1F";
+}
+
+.font-ico-9:before {
+	content: "\EA20";
+}
+
+.font-ico-ad:before {
+	content: "\EA21";
+}
+
+.font-ico-arrow-down:before {
+	content: "\EA22";
+}
+
+.font-ico-arwl:before {
+	content: "\EA23";
+}
+
+.font-ico-arwr:before {
+	content: "\EA24";
+}
+
+.font-ico-bj:before {
+	content: "\EA25";
+}
+
+.font-ico-carlevel:before {
+	content: "\EA26";
+}
+
+.font-ico-chk:before {
+	content: "\EA27";
+}
+
+.font-ico-chked:before {
+	content: "\EA28";
+}
+
+.font-ico-close:before {
+	content: "\EA29";
+}
+
+.font-ico-copy:before {
+	content: "\EA2A";
+}
+
+.font-ico-del:before {
+	content: "\EA2B";
+}
+
+.font-ico-detail:before {
+	content: "\EA2C";
+}
+
+.font-ico-down:before {
+	content: "\EA2D";
+}
+
+.font-ico-edit:before {
+	content: "\EA2E";
+}
+
+.font-ico-exit:before {
+	content: "\EA2F";
+}
+
+.font-ico-file:before {
+	content: "\EA30";
+}
+
+.font-ico-fj:before {
+	content: "\EA31";
+}
+
+.font-ico-ind:before {
+	content: "\EA32";
+}
+
+.font-ico-jg:before {
+	content: "\EA33";
+}
+
+.font-ico-local:before {
+	content: "\EA34";
+}
+
+.font-ico-man:before {
+	content: "\EA35";
+}
+
+.font-ico-man1:before {
+	content: "\EA36";
+}
+
+.font-ico-man2:before {
+	content: "\EA37";
+}
+
+.font-ico-mb:before {
+	content: "\EA38";
+}
+
+.font-ico-menu:before {
+	content: "\EA39";
+}
+
+.font-ico-menu1:before {
+	content: "\EA3A";
+}
+
+.font-ico-nr:before {
+	content: "\EA3B";
+}
+
+.font-ico-pf:before {
+	content: "\EA3C";
+}
+
+.font-ico-plus:before {
+	content: "\EA3D";
+}
+
+.font-ico-plus0:before {
+	content: "\EA3E";
+}
+
+.font-ico-plus1:before {
+	content: "\EA3F";
+}
+
+.font-ico-plus11:before {
+	content: "\EA40";
+}
+
+.font-ico-plus12:before {
+	content: "\EA41";
+}
+
+.font-ico-plus1e:before {
+	content: "\EA42";
+}
+
+.font-ico-set:before {
+	content: "\EA43";
+}
+
+.font-ico-sort:before {
+	content: "\EA44";
+}
+
+.font-ico-sortdown:before {
+	content: "\EA45";
+}
+
+.font-ico-sortup:before {
+	content: "\EA46";
+}
+
+.font-ico-tp:before {
+	content: "\EA47";
+}
+
+.font-ico-up:before {
+	content: "\EA48";
+}
+
+.font-ico-weixin:before {
+	content: "\EA49";
+}
+

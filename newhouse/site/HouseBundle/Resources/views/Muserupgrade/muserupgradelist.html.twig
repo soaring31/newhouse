@@ -1,0 +1,96 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+    {% set aid = app.request.get('aid') %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }} 
+     {{ core_manage.jump(
+        {
+            title: '升级经纪人',
+            url: ( 'muserupgrade/agent')|U({ _form_id:362 })      
+        }
+        ) }}
+        {{ core_manage.jump(
+        {
+            title: '升级经纪公司',
+            url: ( 'muserupgrade/agent')|U({_form_id:363})      
+        }
+        ) }}
+{% endblock %}
+
+{% block mainleft %}
+  {#   {{ render(controller('HouseBundle:Mnews:category', {category: category, action: 'mnews/mnewsmanage'})) }} #}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ core_manage.filter([
+   
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th class="pl10">会员账号邮箱手机</th>
+                    <th width="100">申请类型</th>
+                    <th width="100">申请时间</th>
+                    <th width="90">审核</th>
+                    <th width="90">操作</th>
+                </tr>
+                {% if ident.info.data is defined and ident.info.pageCount|default('') != 0 %}
+            {% for k, vo in ident.info.data %}
+                <tr data-id='{{vo.id}}'>
+                   <td class="pl10">{{ ('db.users')|getOne('username',{'id':vo.uid})}}</td>
+                   <td>{{ ('db.mem_group')|getOne('name',{'id':vo.group_id})}}</td>
+                   <td>{{ vo.create_time|default('0')|date('Y-m-d') }}</td>
+                   <td>{{ core_global.formField({value: vo.checked}) }}</td>
+                   <td> 
+                    {% if vo.group_id == 24 %}
+                        {% set form_id = 363 %} 
+                    {% else %}
+                        {% set form_id = 362 %}    
+                    {% endif %}  
+                    {{ core_manage.show({
+                        url: ('mmemupgradelist/show')|U({_id: vo.id, _form_id: form_id}),
+                        title: '完善资料'
+                    }) }}</td>
+
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+{{ core_manage.oprate([
+  
+]) }}
+{% endblock %}
+
+{% block promptUl %}
+{# 提示说明 #}
+{% endblock %}
+
+
+
+

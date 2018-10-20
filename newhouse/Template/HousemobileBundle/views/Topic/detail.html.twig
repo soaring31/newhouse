@@ -1,0 +1,52 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+
+{# 说明 
+ * detail: 当前数据
+#}
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% block key_des %}
+    <meta name="keywords" content="{{ detail.keywords|default('') }}" />
+    <meta name="description" content="{{ detail.abstract|default('') }}" />
+{% endblock %}
+
+{% block title %}
+    {{detail.name|default('看房团详情')}}
+{% endblock title %}
+
+{% block header_title %}
+    {{core_mobile_global.title({title: '看房团详情' })}}
+{% endblock header_title %}
+
+{% block container %}
+	<div data-block="{
+	    bParams: true,
+	    ajax:{
+	        url: '{{ ('topic/detail')|U }}',
+	        data: {
+	            id: '{{ detail.id|default('') }}',
+	            tpl: 'Topic:{{detail.tplcfg|default('defaultdetail')}}'
+	        }
+	    }
+	}"></div>
+{% endblock container %}
+
+{% block popup %}
+	{{ housemobile_global.popup({
+	    name: 'popup-apply',
+	    title: '报名',
+	    content: {
+	        bParams: true,
+	        ajax:{
+	            url: ('topic/detail')|U,
+	            data: {
+	                topic: detail.id|default(''),
+	                formflag: 'view_showingsnews',
+	                tpl: 'Common:forms'
+	            }
+	        }
+	    }
+	}) }} 
+{# {% include 'HousemobileBundle:Topic:baomingblock.html.twig' ignore missing with {tpl_id: detail.id|default('')} %} #}
+{% endblock popup %}

@@ -1,0 +1,73 @@
+{% extends 'HouseBundle::base.html.twig' %}
+{# 说明
+ * url_id: url传的id
+ * detail: 当前红包数据
+ * detail_houses: 当前红包所属楼盘
+ * push_loupanhongbaoguize: 红包规则
+#}
+
+{% set url_id = app.request.get("id")|default(0) %}
+
+{% set detail = ('house.red')|getRow({checked:1, id: url_id|default(''), findType: 1}) %}
+
+{% set detail_houses = ('house.houses')|getRow({checked:1, id: detail.aid|default(0)}) %}
+
+{% block title %}{{detail_houses.name|default('')}}_{{detail.name|default('')}}{% endblock title %}
+
+{% block css %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/hongbao-detail.css')}}
+{% endblock css %}
+{% block body %}
+    <div class="popmask" style="display:none"></div>
+    <div class="pophb" style="display:none">
+        <div class="left fl">
+            <div class="getSuc">领取成功</div>
+            <a id="ddXiangQing" href="###" class="ckhb">客服热线：</a>
+        </div>
+        <div class="cp right fl" onclick="Outclose()"></div>
+    </div>
+    <div class="monyehead"></div>
+    <div class="monyebody">
+        <div class="w1150">
+                <div class="logHbCont fl">
+                    <div class="mongyNum">￥{{detail.price|default('')}}</div>
+                    <div class="hname"><a style="color:#fff" href="{{('houses/detail')|U({id: detail.aid|default('')})}}">{{detail_houses.name|default('')}}</a></div>
+                    <div class="humNum f14">已有<div style="display:inline;"class="count08">
+                        <span data-counts="{models: 'red', id: '{{detail.id|default('')}}', field: 'hdnum'}"></span>
+                    </div>人领取</div>
+                    <div class="bottomHb">
+                        <div class="fwhite f14">签约有效期：{{detail.limit_time|default('0')|date('Y-m-d')}} </div>
+                        <div class="ptfont f14">获取后请在有效期内完成线下签约，红包金额会抵消对应的总房款金额。</div>
+                    </div>
+                    <input type="text" id="redbagid" style="display: none" value="21113">
+                </div>
+
+            <div class="logCont fl">
+                <div class="right baoming fl">
+                    {{ render(controller('HouseBundle:Bundlebindforms:ajaxform', {
+                        formflag: 'view_red_enroll',
+                        formcls: 'form-baoming common-form-control common-form-label common-form-lg',
+                        aid: detail.id|default(0),
+                        type: 'hongbao'
+                    })) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 红包规则 -->
+    {% set push_loupanhongbaoguize = ('loupanhongbaoguize')|getPush(100) %}
+    <div class="monyefoot" >
+        <div class="detailsCont f14" data-tag="loupanhongbaoguize">
+            <div class="head mb20">{{core_global.push_tit('loupanhongbaoguize')}}</div>
+            <dt></dt>
+            <dl>
+                {% if push_loupanhongbaoguize is defined %}
+                    {% for item in push_loupanhongbaoguize %}
+                        <dt>{{item.name|default('')}}</dt>
+                        <dd>{{core_global.content({content: item.abstract|default('')})}}</dd>
+                    {% endfor %}
+                {% endif %}
+            </dl>
+        </div>
+    </div>
+{% endblock body %}

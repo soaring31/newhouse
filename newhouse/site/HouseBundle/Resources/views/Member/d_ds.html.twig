@@ -1,0 +1,17 @@
+{% extends 'HouseBundle:Member:detail.html.twig' %}
+{# 标题 #}
+{% set title_users_act = '介绍' %}
+{# 导航高亮 #}
+{% set nav_users_act = 3 %}
+
+{% block right %}
+	<div class="jshao">
+	    <div class="subT">
+	        <p><i></i>公司介绍</p>
+	    </div>
+	    <div class="jshao-main">
+	    	{# {{detail_info.dpgg|default('暂无介绍')|raw}} #}
+	    	{{detail_info.companyjs|default('暂无介绍')|raw}}
+	    </div>
+	</div>
+{% endblock right %}

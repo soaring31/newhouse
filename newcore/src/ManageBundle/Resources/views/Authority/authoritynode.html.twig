@@ -1,0 +1,38 @@
+{% extends 'ManageBundle::mainlayout.html.twig' %}
+{% import "ManageBundle:Form:lists.html.twig" as lists %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+{% block tableMain %}
+<span class="tableDesc">
+  <select id="selectsearch_bundle">
+      <option value="">&nbsp;</option>
+      {% if bundles is defined %}
+      {% for key in bundles|keys %}
+      {% set _key = key|replace({'Bundle': ''})|lower  %}
+      <option value="{{ _key }}" {{ app.request.get('bundle','')|isSelected(_key) }}>{{ key }}</option>
+      {% endfor %}
+      {% endif %}
+  </select>
+  <select id="selectsearch_type">
+      <option value="">&nbsp;</option>
+      <option value="0" {{ app.request.get('type','')|isSelected(0) }}>未定义</option>
+      <option value="1" {{ app.request.get('type','')|isSelected(1) }}>已定义</option>
+  </select>
+  <input type="text" id="search_controller" value="{{ app.request.get('controller','') }}" data-source="{{ app.request.get('controller','') }}" />
+</span>
+<section>
+    {{ lists.list(ident.info|default('')) }}
+</section>
+{% endblock %}
+
+{% block page %}
+{{lists.page(ident.info|default(''))}}
+{% endblock %}
+
+{% block submit %}{% endblock %}
+{% block promptUl %}
+提示说明
+{% endblock %}

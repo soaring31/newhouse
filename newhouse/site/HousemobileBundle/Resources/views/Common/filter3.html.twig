@@ -1,0 +1,184 @@
+{% set selected = [] %}
+{% set filter_rows = filter_rows|default(3) %}
+{% set filter_action = filter_action|default(action) %}
+{# 默认为搜索值 #}
+{% set filter_url_opt = filter_url_opt|default([]) %}
+{# 处理一系列的配置 #}
+{% for k, v in filter_opt %}
+    {# 默认参数 #}
+    {% set sql_opt = {pageSize: 50, ename: k, pid: 'neq|0', order: 'sort|asc'}|merge(v.sql_opt|default({})) %}
+    {% set src = v.src|default('house.category') %}
+        {# add==0 时 不参与联合搜索 #}
+    {% set add = v.add|default(1) %}
+    {# /默认参数 #}
+    {% set data1 = [] %}
+    {# 当前值 #}
+    {% set value = app.request.get(k) %}
+    {# 已选择项 #}
+    {% if value and add %}
+        {% set filter_url_opt = filter_url_opt|merge({(k): value}) %}
+    {% endif %}
+    {# 已选择 #}
+        {# data #}
+    {% if v.type|default('') == 'form' %}
+        {% set data = (src)|getFormField(k) %}
+    {% else %}
+        {% set data = (src)|getAll(sql_opt).data %}
+    {% endif %}
+        {# /data #}
+    {% for k1, v1 in data %}
+        {# 处理自动类系 #}
+        {% set v1_value = v1.sqlstr|default('')?:v1.id %}
+        {# 组装一组新数据 #}
+        {% set n_data = {value: v1_value, name: v1.name} %}
+        {# 当传过来的值与循环值相等保存数据 #}
+        {% if value == v1_value %}
+            {% set selected = selected|merge({(k): n_data}) %}
+        {% endif %}
+        {% set data1 = data1|merge([n_data]) %}
+    {% endfor %}
+    {# 保存到配置变量里 #}
+    {% set kv = filter_opt[(k)]|merge({data1: data1, value: value, data: data}) %}
+    {% set filter_opt = filter_opt|merge({(k): kv}) %}
+{% endfor %} {# /filter_opt #}
+
+{% if filter_type|default('1') == 1 %}
+<div class="buttons-tab buttons-tab-ex" data-target="#list-filter-con" style="z-index:10">
+    {% for k, v in filter_opt %}
+        {% if loop.index <= filter_rows %}
+            <a href="#filter{{loop.index}}" class="tab-link1 external button">
+                {% if v.value|default('') %}
+                    {{selected[(k)].name|default('')}} 
+                {% else %}
+                    {{v.title|default('')}} 
+                {% endif %}
+            </a>
+        {% endif %}
+    {% endfor %}
+    {% if filter_opt|length > filter_rows %}
+        <a href="#filter{{filter_rows + 1}}" class="tab-link1 external button">
+            <span class="icon font-f-7"></span>
+            更多
+        </a>
+    {% endif %}
+</div>
+<script id="list-filter-con" type="text/html">
+    <div class="tabs fliter_opt">
+        {% for k, v in filter_opt %}
+            {% if loop.index <= filter_rows %}
+                <div id="filter{{loop.index}}" class="tab">
+                    <div class="list-block list-block-modal list-block-link">
+                        <ul class="">
+                            {% set url_opt = filter_url_opt|merge({(k): null}) %}
+                            <li>
+                                <a data-ajax="1" class="item-content {% if v.value is null %}act{% endif %}" href="{{ (filter_action)|UU(url_opt) }}"  data-name="{{k}}">
+                                    <div class="item-inner">
+                                        <div class="item-title item-title-p0">不限</div>
+                                    </div>
+                                </a>
+                            </li>
+                            {% for v1 in v.data1 %}
+                            {% set url_opt = filter_url_opt|merge({(k): v1.value}) %}
+                            <li>
+                                <a data-ajax="1" class="item-content {% if v.value == v1.value %}act{% endif %}" href="{{ (filter_action)|UU(url_opt) }}" data-name="{{k}}">
+                                    <div class="item-inner">
+                                        <div class="item-title item-title-p0">{{v1.name}}</div>
+                                    </div>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+        {% if filter_opt|length > filter_rows %}
+            <div id="filter{{filter_rows + 1}}" class="tab active row row-all no-gutter">
+        {% endif %}
+                <div class="col-50">
+                    <div class="list-block list-block-modal list-block-level-1 media-list">
+                        <ul>
+                            {% for k,v in filter_opt %}
+                                {% if loop.index > filter_rows %}
+                                    <li>
+                                        <a class="external item-content item-link tab-link2" href="#{{k}}">
+                                            <div class="item-inner ">
+                                                <div class="item-title-row">
+                                                    <div class="item-title item-title-p0">
+                                                        {{v.title|default('')}}
+                                                    </div>
+                                                    <div class="item-after">
+                                                        {% if v.value|default('') %}
+                                                            {{selected[(k)].name|default('')}} 
+                                                        {% else %}
+                                                            不限 
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-50">
+                    {% for k,v in filter_opt %}
+                        {% if loop.index > filter_rows %}
+                            <div class="list-block list-block-modal list-block-level-2" id="{{k}}">
+                                <ul class="">
+                                    {% set url_opt = filter_url_opt|merge({(k): null}) %}
+                                    <li>
+                                        <a data-ajax="1" class="external item-content tab-link2 {% if v.value is null %}act{% endif %}" href="{{ (filter_action)|UU(url_opt) }}" data-name="{{k}}">
+                                            <div class="item-inner ">
+                                                <div class="item-title item-title-p0">不限</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    {% for v1 in v.data1 %}
+                                        {% set url_opt = filter_url_opt|merge({(k): v1.value}) %}
+                                            <li>
+                                                <a data-ajax="1" class="external item-content  {% if v.value == v1.value %}act{% endif %}" href="{{ (filter_action)|UU(url_opt) }}" data-name="{{k}}">
+                                                    <div class="item-inner ">
+                                                        <div class="item-title item-title-p0">{{v1.name|default('')}}</div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+        {% if filter_opt|length > filter_rows %}
+            </div>
+        {% endif %}
+    </div>
+</script>
+{% elseif filter_type|default('1') == 2 %}
+{% if filter_opt is defined %}
+    <ul class="index-cate">
+    {% for k, v in filter_opt %}
+        <li>
+            <div class="item-content">
+                <a class="item-media more-btn external" href="#{{mobile_index}}{{loop.index}}" data-class="index-more" data-down='<i class="icon font-f-35"></i><span class="icon {{v.icon|default('')}}"></span><p>{{v.title|default('')}}</p>'>
+                    <i class="icon font-f-34"></i>
+                    <span class="icon {{v.icon|default('')}}"></span>
+                    <p>
+                        {{v.title|default('')}}
+                    </p>
+                </a>
+                <div class="item-inner" id="{{mobile_index}}{{loop.index}}">
+                    {% for k1, v1 in v.data1 %}
+                        <a href="{{(filter_action)|UU({(k): v1.value|default('')})}}">
+                            {{v1.name|default('')}}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </li>
+    {% endfor %}
+    </ul>
+{% endif %}
+{% endif %}

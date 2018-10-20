@@ -1,0 +1,54 @@
+{# Tripod/Manage/Resources/views/layout.html.twig #}
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+        <meta charset="{{ _charset }}" />
+        <meta name="robots" content="noindex,nofollow" />
+        <title>提示信息</title>
+        <link rel="icon" sizes="16x16" href="{{ asset('favicon.ico', absolute=true) }}" />
+        <link type="text/css" rel="stylesheet" href="{{ asset('bundles/core/css/redirect/css/public.css') }}" />
+        <link type="text/css" rel="stylesheet" href="{{ asset('bundles/core/css/redirect/css/index.css') }}" />
+        <link type="text/css" rel="stylesheet" href="{{ asset('bundles/core/css/redirect/css/404.css') }}" />
+		<script type="text/javascript">
+        	var jsbase = "{{ asset('bundles') }}";
+        </script>
+        <script type="text/javascript" src="{{ asset('bundles/core/js/vendor/sea.main.js', absolute=true) }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/core/js/vendor/sea.map.js', absolute=true) }}"></script>
+        <script type="text/javascript">
+        seajs.use(["core/js/jumppage.js"],function(j){
+            j.init("main");
+        });
+        </script>
+    </head>
+	<body>
+        <div class="mianBox">
+            {% if status is defined and status %}
+            <img src="{{ asset('bundles/core/css/redirect/images/404/yun0.png') }}" alt="" class="yun yun0"/>
+            <img src="{{ asset('bundles/core/css/redirect/images/404/yun1.png') }}" alt="" class="yun yun1" />
+            <img src="{{ asset('bundles/core/css/redirect/images/404/yun2.png') }}" alt="" class="yun yun2"/>
+            <img src="{{ asset('bundles/core/css/redirect/images/404/disk.png') }}" alt="" class="disk"/>
+            <img src="{{ asset('bundles/core/css/redirect/images/404/light.png') }}" alt="" class="light"/>
+            <img src="{{ asset('bundles/core/css/redirect/images/404/man.png') }}" alt="" class="man"/>
+            <img src="{{ asset('bundles/core/css/redirect/images/404/picv.png') }}" alt="" class="picv"/>
+            <div class="tipInfo">
+                <div class="in">
+                    <div class="textThis">
+                        <h2>{{info|default('')}}</h2>
+            {% else %}
+            <img src="{{ asset('bundles/core/css/redirect/images/404/yun0.png') }}" alt="" class="yun yun0"/>
+            <img src="{{ asset('bundles/core/css/redirect/images/404/yun1.png') }}" alt="" class="yun yun1" />
+            <img src="{{ asset('bundles/core/css/redirect/images/404/yun2.png') }}" alt="" class="yun yun2"/>
+            <img src="{{ asset('bundles/core/css/redirect/images/404/bird.png') }}" alt="" class="bird"/>
+            <img src="{{ asset('bundles/core/css/redirect/images/404/san.png') }}" alt="" class="san"/>
+            <div class="tipInfo">
+                <div class="in">
+                    <div class="textThis">
+                        <h2>{{info|default('')}}</h2>
+            {% endif %}
+                        <p><span>页面自动<a id="href" href="{{ url|default(app.request.server.get('HTTP_REFERER')) }}">跳转</a></span><span>等待<b id="wait">{{ waitSecond|default(5) }}</b>秒</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

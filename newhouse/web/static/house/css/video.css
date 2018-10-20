@@ -1,0 +1,610 @@
+@charset "UTF-8";
+/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+*/
+/**
+ * @method 清除浮动 %clearfix 
+ * @description 清除浮动
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %clearfix;
+ * }
+ * ```
+ * 
+ * ```css
+ * 	div {
+	    *zoom: 1;
+	}
+	div:after {
+	    display: block;
+	    clear: both;
+
+	    height: 0;
+
+	    content: '\20';
+	}
+ * ```
+ */
+/**
+ * @method 去掉虚线框 %outline 
+ * @description 去掉虚线框
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @ extend %outline;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		outline: thin dotted;
+		outline: 5px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
+ * ```
+ */
+/**
+ * @method 文字不换行后面加省略号 %text-overflow 
+ * @description 文字不换行后面加省略号
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %text-overflow;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+ * ```
+ */
+/**
+ * @method 透明层opacity 
+ * @description 透明层 内容也透明
+ * @param {number} $opacity - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include opacity(.5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+	  opacity: .5;
+	  filter: alpha(opacity=50);
+ * }
+ * ```
+ */
+/**
+ * @method 背景透明层transparent 
+ * @description 透明层只处理背景透明
+ * @param {string} $color - 背景透明层的颜色
+ * @param {number} $alpha - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include transparent(#000, .5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+ *    	background-color: transparent;
+		background-color: (0,0,0,.5);
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7fffffff, endColorstr=#7fffffff,);
+		zoom: 1;
+ * }
+ * ```
+ */
+/**
+ * @method triangle 
+ * @description 生成一个三角形图标
+ * @param {string} $size - 三角的大小
+ * @param {string} $color - 三角颜色
+ * @param {string} $direction - 三角的方向 up, down, left, right
+ * @example 调用
+ * 
+ * ```scss
+ * i {
+ *    @include triangle(5px, #bbb, up); 
+ * }
+ * ```
+ * 
+ * ```css
+ * i {
+ *    width: 0;
+      height: 0;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent;
+      border-bottom-color: #bbb;
+ * }
+ * ```
+ */
+/**
+* @method 水平线hr nav-divider 
+* @description 透明层 内容也透明
+* @param {string} $color=#e5e5e5 - 线的颜色
+* @param {string} $line-height-computed - 线的高度，空间
+* @example 调用
+* 
+* ```scss
+* div {
+*    @include nav-divider(#e5e5e5, 24px);
+* }
+* ```
+* 
+* ```css
+* div {
+	  height: 1px;
+	  margin: 11px 0;
+	  overflow: hidden;
+	  background-color: #e5e5e5;
+* }
+* ```
+*/
+@font-face {
+  font-family: "video";
+  font-weight: normal;
+  font-style: normal;
+  src: url("../fonts/video.eot");
+  src: url("../fonts/video.eot?#iefix") format("embedded-opentype"), url("../fonts/video.woff") format("woff");
+}
+
+[class^="font-video-"],
+[class*=" font-video-"] {
+  font-family: "video"!important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: inherit;
+  float: none;
+  margin: 0;
+  vertical-align: -0.25em;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  text-decoration: none;
+  text-transform: none;
+}
+
+.font-video-1:before {
+  content: "\EA01";
+}
+
+.color999 {
+  background: #999;
+  min-width: 1200px;
+}
+
+a:hover {
+  color: #f60;
+}
+
+/*!
+ * @name video
+ * @author ahuing
+ * @date 2016-1-15
+ * @dec top toolbar popular search terms containing the search and
+ */
+/*
+top-bar
+*/
+.top-bar {
+  background: #f3f3f3;
+  min-width: 1200px;
+  padding: 15px 0 10px 0;
+}
+
+.top-bar .search-bar {
+  float: left;
+}
+
+.top-bar .list {
+  margin-left: 68px;
+}
+
+.top-bar .list li {
+  float: left;
+  margin-right: 22px;
+  font-size: 14px;
+  margin-top: 9px;
+  margin-top: 12px;
+  display: inline;
+  overflow: hidden;
+}
+
+.top-bar .list li a {
+  height: 20px;
+  line-height: 20px;
+  text-decoration: none;
+  color: #686465;
+  overflow: hidden;
+}
+
+.top-bar .list li a:hover {
+  color: #f00;
+}
+
+.top-bar .list li a i {
+  font-size: 20px;
+  float: left;
+  margin-right: 4px;
+  margin-top: 2px;
+}
+
+.videos-logo {
+  float: left;
+  margin-top: 6px;
+}
+
+/* ===========
+panel
+=========== */
+.video .panel .panel-title {
+  font-size: 24px;
+  overflow: hidden;
+  padding-left: 10px;
+}
+
+/* ==========
+header
+========== */
+.video-header {
+  padding-bottom: 30px;
+  padding-top: 20px;
+}
+
+.video-header .logo {
+  color: #0099ff;
+  display: block;
+  font-family: '宋体';
+  font-size: 24px;
+  font-weight: 700;
+  height: 28px;
+  line-height: 28px;
+  margin-left: 6px;
+  margin-top: 4px;
+}
+
+.video-header .logo img {
+  vertical-align: -3px;
+}
+
+.video-header .logo:hover {
+  text-decoration: none;
+}
+
+/* ==========
+search
+========== */
+.search-bar {
+  float: right;
+}
+
+.search-bar .search-input {
+  border-color: #f60;
+}
+
+.search-bar .search-btn {
+  background: #f60;
+}
+
+/* ==========
+nav
+========== */
+.video-nav {
+  background: #f8f8f8;
+}
+
+.video-nav li {
+  float: left;
+  height: 60px;
+  line-height: 60px;
+  margin-right: 50px;
+}
+
+.video-nav li a {
+  font-size: 18px;
+}
+
+.video-nav li a:hover {
+  text-decoration: none;
+}
+
+.video-nav li a.act {
+  font-weight: 700;
+  color: #333;
+}
+
+/* ==========
+current
+========== */
+.current-location {
+  border-bottom: 1px solid #eee;
+}
+
+/* ==========
+container
+========== */
+.video .body {
+  width: 900px;
+}
+
+.video .aside {
+  width: 300px;
+}
+
+.video-focus {
+  height: 320px;
+  margin-right: 19px;
+  overflow: hidden;
+  position: relative;
+  width: 425px;
+}
+
+.video-focus li {
+  height: 320px;
+  width: 425px;
+  position: relative;
+}
+
+.video-focus li .focus-title {
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  height: 50px;
+  line-height: 50px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.video-focus li .title-icon {
+  background-color: #f90;
+  font-size: 26px;
+  height: 50px;
+  text-align: center;
+  width: 50px;
+}
+
+.video-focus li .title-text {
+  overflow: hidden;
+  padding-left: 20px;
+  width: 350px;
+}
+
+.video-focus .thumb {
+  position: absolute;
+  bottom: 55px;
+  right: 5px;
+}
+
+.video-focus .thumb i {
+  background-color: #676767;
+  color: #fff;
+  cursor: pointer;
+  display: block;
+  float: left;
+  font-size: 12px;
+  font-style: normal;
+  height: 25px;
+  line-height: 25px;
+  margin-right: 5px;
+  text-align: center;
+  width: 25px;
+}
+
+.video-focus .thumb i.act {
+  background: #f90;
+}
+
+/* ============
+video-list
+============ */
+.video-list {
+  width: 888px;
+}
+
+.video-list li {
+  float: left;
+  margin-right: 17px;
+  margin-bottom: 17px;
+  overflow: hidden;
+  padding: 130px 5px 5px;
+  position: relative;
+  width: 195px;
+}
+
+.video-list li a:hover {
+  text-decoration: none;
+}
+
+.video-list li img {
+  height: 130px;
+  width: 195px;
+  position: absolute;
+  top: 0;
+  left: 5px;
+}
+
+.video-list li .list-tag {
+  background: #f90;
+  color: #fff;
+  font-size: 12px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  width: 42px;
+  position: absolute;
+  top: 0;
+  left: 158px;
+}
+
+.video-list li .list-title {
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  height: 30px;
+  line-height: 30px;
+  overflow: hidden;
+  padding-right: 15px;
+  text-indent: 15px;
+  width: 180px;
+  position: absolute;
+  top: 100px;
+  left: 5px;
+}
+
+.video-list li .list-desc {
+  height: 23px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+
+.video-list li .list-time {
+  color: #999;
+}
+
+.video-floor .panel-title h2 {
+  font-size: 24px;
+  height: 80px;
+  line-height: 80px;
+  text-align: left;
+}
+
+.video-floor .panel-title h2 a:hover {
+  text-decoration: none;
+}
+
+.video-floor .panel-title h2 .more-video {
+  float: right;
+  margin-right: 35px;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+/* ============
+detail
+============ */
+.video-detail-title {
+  font-size: 24px;
+}
+
+.video-toolbar {
+  background-color: #f8f8f8;
+  font-size: 12px;
+  line-height: 27px;
+  padding: 17px 10px;
+}
+
+.video-toolbar .fr {
+  color: #999;
+}
+
+.video-article {
+  margin-top: 50px;
+}
+
+.video-article p {
+  color: #666;
+  line-height: 24px;
+  margin-bottom: 25px;
+}
+
+.video-article p img {
+  margin-bottom: 0;
+}
+
+.video-article img {
+  display: block;
+  margin: 0 auto 25px;
+  max-width: 100%;
+  width: auto;
+}
+
+/* ==========
+aside
+========== */
+.aside-floor .panel-title h2 {
+  font-size: 24px;
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.aside-floor .panel-body {
+  background: #f8f8f8;
+  padding-bottom: 20px;
+}
+
+.aside-video-push li {
+  padding: 20px 20px 0;
+  position: relative;
+}
+
+.aside-video-push li .push-img {
+  float: left;
+  margin-right: 20px;
+}
+
+.aside-video-push li .push-title {
+  font-size: 14px;
+  height: 24px;
+  margin-bottom: 5px;
+  padding-top: 8px;
+  overflow: hidden;
+}
+
+.aside-video-push li .push-time {
+  color: #999;
+  font-size: 12px;
+}
+
+.aside-video-push li i {
+  background: #adadad;
+  color: #fff;
+  font-style: normal;
+  font-size: 14px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  width: 20px;
+  position: absolute;
+  top: 20px;
+  left: 0;
+}
+
+.aside-video-push li i.hot {
+  background: #f90;
+}
+
+.aside-video-push li.first-step {
+  background: #ebebeb;
+  height: 67px;
+  padding-left: 140px;
+  padding-top: 0;
+}
+
+.aside-video-push li.first-step .push-img {
+  display: none;
+}
+
+.aside-video-push li.first-step i {
+  font-size: 30px;
+  height: 67px;
+  line-height: 67px;
+  width: 120px;
+  top: 0;
+}
+
+/*# sourceMappingURL=video.css.map */

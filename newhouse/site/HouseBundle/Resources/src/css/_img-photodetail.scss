@@ -1,0 +1,68 @@
+
+$img-photodetail-big-next:(31px,61px,-201px,-188px,img-photodetail-big-next);
+
+$img-photodetail-big-prev:(31px,61px,-160px,-188px,img-photodetail-big-prev);
+
+$img-photodetail-btn-enter-hover:(111px,34px,0,-144px,img-photodetail-btn-enter-hover);
+
+$img-photodetail-btn-enter:(111px,34px,-121px,-144px,img-photodetail-btn-enter);
+
+$img-photodetail-btn-replay-hover:(112px,35px,0,-99px,img-photodetail-btn-replay-hover);
+
+$img-photodetail-btn-replay:(112px,35px,-122px,-99px,img-photodetail-btn-replay);
+
+$img-photodetail-end-comment-hover:(16px,16px,-268px,-188px,img-photodetail-end-comment-hover);
+
+$img-photodetail-end-comment:(16px,16px,-242px,-188px,img-photodetail-end-comment);
+
+$img-photodetail-end-qzone-hover:(19px,18px,-284px,-144px,img-photodetail-end-qzone-hover);
+
+$img-photodetail-end-qzone:(19px,18px,-286px,-99px,img-photodetail-end-qzone);
+
+$img-photodetail-end-wb-hover:(15px,17px,-242px,-214px,img-photodetail-end-wb-hover);
+
+$img-photodetail-end-wb:(15px,17px,-267px,-214px,img-photodetail-end-wb);
+
+$img-photodetail-last-close-hover:(14px,14px,-160px,-259px,img-photodetail-last-close-hover);
+
+$img-photodetail-last-close:(14px,14px,-292px,-214px,img-photodetail-last-close);
+
+$img-photodetail-slide-search-hover:(32px,32px,-244px,-99px,img-photodetail-slide-search-hover);
+
+$img-photodetail-slide-search:(32px,32px,-242px,-144px,img-photodetail-slide-search);
+
+$img-photodetail-small-next-hover:(30px,107px,-120px,-188px,img-photodetail-small-next-hover);
+
+$img-photodetail-small-next:(30px,107px,-80px,-188px,img-photodetail-small-next);
+
+$img-photodetail-small-prev-hover:(30px,107px,-40px,-188px,img-photodetail-small-prev-hover);
+
+$img-photodetail-small-prev:(30px,107px,0,-188px,img-photodetail-small-prev);
+
+$img-photodetail-smask:(130px,89px,0,0,img-photodetail-smask);
+
+$img-photodetail-toolbar-bg-hover:(166px,32px,-140px,0,img-photodetail-toolbar-bg-hover);
+
+$img-photodetail-toolbar-bg:(166px,32px,-140px,-42px,img-photodetail-toolbar-bg);
+
+$img-photodetail: ($img-photodetail-big-next,$img-photodetail-big-prev,$img-photodetail-btn-enter-hover,$img-photodetail-btn-enter,$img-photodetail-btn-replay-hover,$img-photodetail-btn-replay,$img-photodetail-end-comment-hover,$img-photodetail-end-comment,$img-photodetail-end-qzone-hover,$img-photodetail-end-qzone,$img-photodetail-end-wb-hover,$img-photodetail-end-wb,$img-photodetail-last-close-hover,$img-photodetail-last-close,$img-photodetail-slide-search-hover,$img-photodetail-slide-search,$img-photodetail-small-next-hover,$img-photodetail-small-next,$img-photodetail-small-prev-hover,$img-photodetail-small-prev,$img-photodetail-smask,$img-photodetail-toolbar-bg-hover,$img-photodetail-toolbar-bg,);
+
+@mixin img-photodetail($sprites) {
+  %icophotodetail {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/photodetail.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+      @extend %icophotodetail;
+    }
+  }
+}

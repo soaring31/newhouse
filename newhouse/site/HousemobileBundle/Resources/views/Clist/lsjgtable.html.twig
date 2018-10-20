@@ -1,0 +1,44 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+** ajax调用：历史价格列表
+#}
+{% block result %}
+
+{% set list = ('house.houses_price')|getAll({aid: app.request.get('id'), checked: 1, order: 'jtime', orderBy: 'desc', pageSize: 100}) %}
+
+{% if app.request.get('json', 0) %}
+{
+    "pageCount": "{{list.pageCount|default(0)}}"
+}
+{% else %}
+	{% spaceless %}
+	    {% if list.data is defined and list.pageCount|default('') != 0 %}
+	        {% for item in list.data %}
+	            <li class="item-content lsjg-item"  {% if loop.last %}data-page="{
+                    pageIndex: {{list.pageIndex}},
+                    pageCount: {{list.pageCount}},
+                    pageSize: {{list.pageSize}}
+                 }"{% endif %}>
+			        <div class="item-inner">
+			        	<div class="item-title-row">
+			        		<div class="item-title">价格：<span class="dqjg">{{item.dj|default('')}}</span></div>
+				            <div class="item-after">{{item.jtime.date|default('-')|date('Y-m-d')}}</div>
+			            </div>
+			        	<div class="item-title-row">
+			        		最低价：{{item.jdjj|default('-')}}
+				            <div class="item-after">
+				            	最高价：{{item.jgjj|default('-')}}
+				            </div>
+			            </div>
+			            <div class="item-subtitle">
+			            	{{item.bdsm|default('-')}}
+			            </div>
+			        </div>
+			    </li>
+	        {% endfor %}
+	    {% else %}
+	        <li class="mobile-list-none">暂无更多价格</li>
+	    {% endif %}
+	{% endspaceless %}
+{% endif %}
+{% endblock result %}

@@ -1,0 +1,240 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% block js %}
+
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }}
+{% endblock %}
+
+{% block tableMain %}
+<script type="text/javascript">
+    seajs.use("manage/js/webconfig.js",function(main){
+        main.init('cfupfile');
+    });
+</script>
+<section class="list-con table-inline" data-height="580" data-param='{
+        fixed     : ".filter",
+        list      : ".list-con",
+        data      : {
+        }
+    }'>
+    <div class="list">
+        <form class="form" action="{{ (action)|U }}" method="post" name="form">
+            <table class="popup-form-table" style="width:100%;">
+                <tr>
+                    <th colspan="2">附件设置</th>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div id="group_dysjset">
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright required" for="enable">保存方式</label>
+                                </div>
+                                <div class="form-errors">
+
+                                </div>
+                                <div class="form-cell">
+                                    <input type="radio" name="upload_type" id="upload_type1" {{ 'upload_type'|C|isChecked('local') }} value="local" /><label for="upload_type1">本地服务器</label>
+                                    {# <input type="radio" name="upload_type" id="upload_type2" {{ 'upload_type'|C|isChecked('upyun') }} value="upyun" /><label for="upload_type2">云服务器</label> #}
+                                   {#  <input type="radio" name="upload_type" id="upload_type3" {{ 'upload_type'|C|isChecked('remote') }} value="remote" /><label for="upload_type3">远程服务器</label> #}
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="{{ 'upload_type'|C != 'upyun' ? 'hide' : '' }}" id="upyun_bucket">
+                    <td>
+                        <div>
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright required" for="enable">BUCKET</label>
+                                </div>
+                                <div class="form-errors"></div>
+                                <div class="form-cell">
+                                    <input class="w200" type="text" name="up_bucket" value="{{ 'up_bucket'|C  }}" />
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="{{ 'upload_type'|C != 'upyun' ? 'hide' : '' }}" id="upyun_secret">
+                    <td>
+                        <div>
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright required" for="enable">FORM_API_SECRET</label>
+                                </div>
+                                <div class="form-errors"></div>
+                                <div class="form-cell">
+                                    <input class="w200" type="text" name="up_form_api_secret" value="{{ 'up_form_api_secret'|C  }}" />
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="{{ 'upload_type'|C != 'upyun' ? 'hide' : '' }}" id="upyun_username">
+                    <td>
+                        <div>
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright required" for="enable">用户名</label>
+                                </div>
+                                <div class="form-errors"></div>
+                                <div class="form-cell">
+                                    <input class="w200" type="text" name="up_username" value="{{ 'up_username'|C  }}" />
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="{{ 'upload_type'|C != 'upyun' ? 'hide' : '' }}" id="upyun_password">
+                    <td>
+                        <div>
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright required" for="enable">密码</label>
+                                </div>
+                                <div class="form-errors"></div>
+                                <div class="form-cell">
+                                    <input class="w200" type="password" name="up_password" value="{{ 'up_password'|C  }}" />
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="{{ 'upload_type'|C != 'upyun' ? 'hide' : '' }}" id="upyun_domainname">
+                    <td>
+                        <div>
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright required" for="enable">云存储域名</label>
+                                </div>
+                                <div class="form-errors"></div>
+                                <div class="form-cell">
+                                    <input class="w200" type="text" name="up_domainname" value="{{ 'up_domainname'|C  }}" />
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+				<tr class="{{ 'upload_type'|C != 'remote' ? 'hide' : '' }}" id="remote_token">
+                    <td>
+                        <div>
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright required" for="enable">TOKEN</label>
+                                </div>
+                                <div class="form-errors"></div>
+                                <div class="form-cell">
+                                    <input class="w200" type="text" name="up_remote_token" value="{{ 'up_remote_token'|C  }}" />
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="{{ 'upload_type'|C != 'remote' ? 'hide' : '' }}" id="remote_domainname">
+                    <td>
+                        <div>
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright required" for="enable">远程储存域名</label>
+                                </div>
+                                <div class="form-errors"></div>
+                                <div class="form-cell">
+                                    <input class="w200" type="text" name="up_remote_domainname" value="{{ 'up_remote_domainname'|C  }}" />
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="{{ 'upload_type'|C != 'remote' ? 'hide' : '' }}" id="remote_url">
+                    <td>
+                        <div>
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright required" for="enable">远程上传地址</label>
+                                </div>
+                                <div class="form-errors"></div>
+                                <div class="form-cell">
+                                    <input class="w200" type="text" name="up_remote_url" value="{{ 'up_remote_url'|C  }}" />
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright required" for="enable">上传文件类型</label>
+                                </div>
+                                <div class="form-errors">
+
+                                </div>
+                                <div class="form-cell">
+                                    <input class="w200" type="text" name="up_exts" value="{{ 'up_exts'|C  }}" />
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright required" for="enable">上传文件大小限制(MB)</label>
+                                </div>
+                                <div class="form-errors">
+
+                                </div>
+                                <div class="form-cell">
+                                    <input class="w200" type="text" name="up_file_size" value="{{ 'up_file_size'|C }}" />
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright required" for="enable">上传图片大小限制(MB)</label>
+                                </div>
+                                <div class="form-errors">
+
+                                </div>
+                                <div class="form-cell">
+                                    <input class="w200" type="text" name="up_image_size" value="{{ 'up_image_size'|C }}" />
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <div class="popup-submit"></div>
+            <div class="tac">
+                <div>
+                    <button type="submit" id="submit" name="submit" data-role="submit" class="btn font-ico-22 fz12 mt20">提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock tableMain %}
+
+{% block prompt %}
+<div class="prompt">
+    <div class="prompt-inner">
+        <div class="promptTitle">提示说明</div>
+        <div class="promptUl">
+                                 远程服务器：设置远程附件上传，需要在远程服务器上搭建远程系统，绑定系统的域名，以及在远程系统中注册上传账户。成功获取远程储存域名、账户的token，并正确填写到附件设置中。
+        </div>
+    </div>
+</div>
+{% endblock %}

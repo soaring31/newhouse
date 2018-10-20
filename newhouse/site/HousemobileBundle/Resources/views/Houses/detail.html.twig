@@ -1,0 +1,111 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+
+{# 说明 
+ * detail: 新房详情数据
+#}
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% block title %}
+    {{detail.name|default('')}}-
+    {% block h_title %}
+    楼盘详情
+    {% endblock h_title %}
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}, {{cur_area_data|default('')}}{{detail.name|default('')}}，{{detail.name|default('')}}楼盘详情" />
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}({{'maindomain'|C}})提供{{cur_area_data|default('')}}{{detail.name|default('')}}售楼电话({{detail.tel|default('')}})、实时房价({{detail.dj|default('')}}元/平米)、户型图、地址{{detail.address|default('')}}、交通和周边配套、开盘动态、怎么样等楼盘信息。活跃、集聚众多人气的{{detail.name|default('')}}业主论坛，及时的{{detail.name|default('')}}楼盘信息尽在{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}!"/>
+{% endblock key_des %}
+
+{% block moblie_header %}
+    {{core_mobile_global.go_back()}}
+    {% block d_header %}
+    {{core_mobile_global.title({title: detail.name|default('新房详情')})}}
+    {% endblock d_header %}
+{% endblock moblie_header %}
+
+{% block header_right %}
+{{ core_mobile_global.bar_nav_btn({
+    title: '分享',
+    icon: 'font-f-29',
+    class: 'share-actions',
+    attr: {
+        'data-text': detail.name|default(''),
+        'data-abstract': detail.abstract|default(''),
+        'data-url': ('houses/detail')|U({id: detail.id|default('')}),
+        'data-pic': core_global.img_url({src: detail.thumb|default('')}),
+    }
+}) }}
+{% endblock header_right %}
+
+{% block popup %}
+{# 地图弹窗 #}
+{{ housemobile_global.popup({
+    name: 'popup-map',
+    title: '新房地图',
+    content: {
+        bParams: true,
+        ajax: {
+            url: ('houses/detail')|U,
+            data: {
+                id: detail.id|default(''),
+                tpl: 'Common:mapblock'
+            }
+        }
+    }
+}) }}
+
+{# 楼盘订阅 #}
+
+{{ housemobile_global.popup({
+    name: 'popup-yxiang',
+    title: '楼盘订阅',
+    content: {
+        bParams: true,
+        ajax:{
+            url: ('houses/detail')|U,
+            data: {
+                aid: detail.id|default(''),
+                formflag: 'view_houses_intent',
+                tpl: 'Common:forms',
+            }
+        }
+    }
+}) }} 
+{% endblock popup %}
+
+
+{% block container %}
+    <div data-block="{
+        bParams: true,
+        ajax:{
+            url: '{{ ('houses/detail')|U }}',
+            data: {
+                id: '{{ detail.id|default('') }}',
+                tpl: 'Houses:detailblock'
+            }
+        }
+    }"></div>
+     {# 微信分享只能放当前页 #}
+    {{ housemobile_global.weixin_share({
+        text    : detail.name|default,
+        abstract: detail.abstract|default,
+        url     : ('houses/detail')|U({id: detail.id|default}, true),
+        thumb   : detail.thumb|default,
+    }) }}
+{% endblock container %}
+{# 导航 #}
+{% block secondary %}
+    <div data-block="{
+        bParams: true,
+        ajax:{
+            url: '{{ ('houses/detail')|U }}',
+            data: {
+                id: '{{ detail.id|default('') }}',
+                tpl: 'Houses:navblock',
+                active: {{nav_active|default(0)}}
+            }
+        }
+    }"></div>
+{% endblock secondary %}

@@ -1,0 +1,5 @@
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+
+{% extends (core_global.mconfigtostring({name: 'salemodule', ename: 'mabled'}) != '0') ? 'HouseBundle::base_top_search.html.twig' : 'HouseBundle:Fenxiao:sell_close.html.twig' %}
+
+{% set nav_act = 3 %}

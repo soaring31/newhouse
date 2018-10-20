@@ -1,0 +1,61 @@
+{% extends 'HouseBundle:Museragent:museragentlist.html.twig' %}
+{% block tableMain %}
+{{ core_manage.filter([
+   
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ ('musermycomlist/show')|U }}',
+        submitUrl : '{{ ('musermycomlist/save')|U }}',
+        deleteUrl : '{{ ('musermycomlist/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            models: '{{ models }}',
+            category: '{{ category }}'
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                        <th width="100">经纪人</th>
+                        <th width="100">最近访问</th>
+                        <th width="100">现金</th>
+                        <th width="100">二手房源上架</th>
+                        <th width="100">仓库</th>
+                        <th width="100">出租房源上架</th>
+                        <th width="100">仓库</th>
+                </tr>
+                {% if ident.info.data is defined and ident.info.pageCount|default('') != 0 %}
+                {% for k, vo in ident.info.data %}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                        <td>{{ ('db.users')|getOne('username',{ id:vo.mid })}}</td>                   
+                        <td> - </td>
+                        <td>现金</td>
+                        <td >{{core_global.count({models: 'sale', sql_opt: {valid: 'gt|' ~ now_time|default(''), uid: vo.mid} })}}</td>
+                        <td >{{core_global.count({models: 'sale', sql_opt: { uid: vo.mid} })}}</td>
+                        <td >{{core_global.count({models: 'rent', sql_opt: {valid: 'gt|' ~ now_time|default(''), uid: vo.mid} })}}</td>
+                        <td >{{core_global.count({models: 'rent', sql_opt: { uid: vo.mid} })}}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+{{ core_manage.oprate([
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'checked',
+        title: '审核',
+    }
+    
+]) }}
+{% endblock %}

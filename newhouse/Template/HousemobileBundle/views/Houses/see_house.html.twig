@@ -1,0 +1,180 @@
+<div class="shadow">
+    <div class="see_house noload">
+        <div class="top_activies"><i class="title_">立即报名</i><i class="top_close">&#10006;</i></div>
+        <div class="body_activies">
+            <p class="active_name line2">科技大宅，内成都家</p>
+            <div class="a_input_block">
+                <i class="iconfont icon-dianhua2 hh aicon"></i>
+                <input class="a_input phone_" placeholder="请输入联系人手机号">
+            </div>
+            <div class="a_input_block">
+                <i class="iconfont icon-duanxinyanzheng aicon"></i>
+                <input class="a_input mess_input" placeholder="请输入短信验证码">
+                <input type="button" value="发送验证码" class="btn_mess" id="btn_mess" readonly>
+            </div>
+            <p class="a_re">新用户将自动注册，并视为同意<a class="re">《诸葛找房用户协议》</a></p>
+            <button class="submit_btn">立即报名</button>
+        </div>
+    </div>
+
+    {#<div class="see_house onload" style="display:none;">#}
+        {#<div class="top_activies">立即报名<i class="top_close">&#10006;</i></div>#}
+        {#<div class="body_activies">#}
+            {#<p class="active_name line2">科技大宅，内成都家</p>#}
+            {#<p class="a_n_text">手机号</p>#}
+            {#<p class="a_phone">186 2345 6789</p>#}
+            {#<button class="submit_btn">立即报名</button>#}
+        {#</div>#}
+    {#</div>#}
+
+    {#<div class="see_house noload" style="display:none;">#}
+        {#<div class="top_activies">专车看房<i class="top_close">&#10006;</i></div>#}
+        {#<div class="body_activies">#}
+            {#<p class="active_name look">科技大宅，内成都家<br>你确定你</p>#}
+            {#<div class="a_input_block">#}
+                {#<i class="iconfont icon-dianhua2 hh aicon"></i>#}
+                {#<input class="a_input" placeholder="请输入联系人手机号">#}
+            {#</div>#}
+            {#<div class="a_input_block">#}
+                {#<i class="iconfont icon-duanxinyanzheng aicon"></i>#}
+                {#<input class="a_input mess_input" placeholder="请输入短信验证码">#}
+                {#<input type="button" value="发送短信验证码" class="btn_mess">#}
+            {#</div>#}
+            {#<p class="a_re">新用户将自动注册，并视为同意<a class="re">《诸葛找房用户协议》</a></p>#}
+            {#<button class="submit_btn">立即报名</button>#}
+        {#</div>#}
+    {#</div>#}
+
+    {#<div class="see_house onload">#}
+        {#<div class="top_activies">大巴看房<i class="top_close">&#10006;</i></div>#}
+        {#<div class="body_activies">#}
+            {#<p class="active_name look">科技大宅，内成都家<br>你确定你</p>#}
+            {#<p class="a_n_text">手机号</p>#}
+            {#<p class="a_phone">186 2345 6789</p>#}
+            {#<button class="submit_btn">立即报名</button>#}
+        {#</div>#}
+    {#</div>#}
+</div>
+
+
+<script>
+    seajs.use([],function () {
+        var xs_url = seajs.data.vars.apiUrl;
+        var type,title,yid,aid,vid,mess,data='';
+        $('.dtype').click(function () {
+            var all_title=$('.title').text();
+            console.log($(this),'this')
+            type=$(this).data('type');
+            title=$(this).data('title');
+            yid=$(this).data('yid');
+            vid=$(this).data('vid');
+            $('.title_').text(title);
+            $('.active_name').text(all_title);
+            $('.shadow,.noload').show();
+        });
+
+        $('.submit_btn').click(function () {
+            var phone=$('.phone_').val();
+            mess=$('.mess_input').val();
+            var reg = /^1(3|4|5|6|7|8|9)\d{9}$/;
+            if(!phone.match(reg)){
+                alert('请输入正确的手机号');return false;
+            }
+            if(!mess){
+                alert('请输入短信验证码');return false;
+            }
+            post(type,yid,aid,title,mess,phone)
+        });
+        
+
+        function post(type,yid,aid,title,mess,tel){
+            var did='{{ detail.id|default('') }}';
+            var area='{{ app.session.get('area')|default(0) }}';
+            if(title=='活动报名'){
+                data={type:type,tel:tel,promotion_id:vid,code:mess}
+            }
+            if(title=='降价通知'){
+                data={type:type,tel:tel,yid:yid,did:did,area:area,code:mess}
+            }
+            if(title=='开盘通知'){
+                data={type:type,tel:tel,yid:yid,did:did,area:area,code:mess}
+            }
+            $.ajax({
+                url: xs_url + '/promotion/order',
+                type:'post',
+                data:data,
+                success:function (data) {
+                    if(data.error==0){
+                        if(type==1) {
+                            alert('报名成功');
+                        }
+                        if(type==3){
+                            alert('订阅成功');
+                            $('.a_input').val('');
+                        }
+                        defPopup();
+                        $('.shadow,.noload').hide();
+                    }else{
+                        alert(data.message);return false;
+                    }
+                }
+            })
+        }
+
+
+        //获取手机验证码
+        $('body').on('click','.btn_mess',function () {
+            $(".btn_mess").attr('disabled','disabled');
+            var phone=$('.phone_').val();
+            var reg = /^1(3|4|5|6|7|8|9)\d{9}$/;
+            if(!phone.match(reg)){
+                alert('请输入正确的手机号');return false;
+            }
+            $.ajax({
+                url: xs_url + '/promotion/order/sends/mobilecodes',
+                type:'post',
+                data:{tel:phone},
+                success:function (data) {
+                    if(data.error==0){
+                        settime();
+                    }else{
+                        alert(data.message);return false;
+                    }
+                }
+            })
+        });
+
+        //  短信验证码发送时间
+        var countdown = 59;
+        var this_input = $('.btn_mess');
+        function settime() {
+            if (countdown == '-1') {
+                this_input.removeAttr("disabled");
+                this_input.css({"color":"#FF8400"});
+                this_input.val("发送验证码");
+                countdown = 59;
+            } else {
+                this_input.attr("disabled", true);
+                this_input.css({"color":"gray"});
+                this_input.val("重新发送(" + countdown + ")");
+                countdown--;
+                setTimeout(function () {
+                    settime()
+                }, 1000);
+            }
+        }
+
+        //初始化手机号文本框和倒计时
+        function defPopup() {
+            countdown = -1;
+            $('.phone_').val('');
+            $('.mess_input').val('');
+        }
+
+        //关闭立即报名弹窗
+        $('.top_close').click(function () {
+            defPopup();
+            $('.shadow,.noload').hide();
+        })
+    })
+</script>

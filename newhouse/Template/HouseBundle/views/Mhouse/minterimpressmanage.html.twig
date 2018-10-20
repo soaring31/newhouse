@@ -1,0 +1,87 @@
+{# 印象 #}
+{% extends 'HouseBundle:Mhouse:mhousesarc.html.twig' %}
+{% block tableMain %} 
+   {{ core_manage.filter([
+        {
+            method: 'selectFormField',
+            title: '审核',
+            form: 'checked',
+            field: 'checked',
+        },
+        {
+            method: 'search',
+            field: 'name',
+        }
+    ]) }}
+    <div class="list-con" data-param="{{ params }}">
+        <div class="list">
+          <table class="right-table table-hover">
+                <tbody>
+                    <tr data-id>
+                        <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                        <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                        {# <th width="120">所属楼盘</th> #}
+                        <th>楼盘印象</th>
+                        <th width="100" data-role="sort" data-sort="hdnum" class="sort">人数</th>
+                        <th width="100" data-role="sort" data-sort="create_time" class="sort">添加时间</th>
+                        {% if (action ~ '/show')|P %}
+                        <th width="120" class="tac">操作</th>
+                        {% endif %}
+                    </tr>
+                    {% if ident.info.data|length %}
+                        {% for k, vo in ident.info.data %}
+                            <tr data-id="{{ vo.id }}">
+                                <td class="tac">
+                                    {{core_manage.checkbox()}}
+                                </td>
+                                <td>
+                                    {{ vo.id }}
+                                </td>
+                                <td class="tov" title="{{ vo.yinxiang|default('') }}">
+                                    <span data-role="itemEdit" data-name="yinxiang" class="edit">
+                                        {{core_global.substr(vo.yinxiang|default(''), 15, 1)}}
+                                    </span>
+                                </td>
+                                <td>
+                                    {{ vo.hdnum }}
+                                </td>
+                                <td>
+                                    {{ vo.create_time|default('0')|date('Y-m-d') }}
+                                </td>
+                                {% if (action ~ '/show')|P %}
+                                    <td class="tar pr10">
+                                        {{ core_manage.show({url: (action ~ "/show")|U({id: vo.id}) }) }}
+                                        {{ core_manage.delete() }}
+                                    </td>
+                                {% endif %}  
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="tac">
+                                没有数据！
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        {{core_manage.page(ident.list)}}
+    </div>
+    {% if (action ~ '/show')|P %}  
+        {{ core_manage.oprate([
+            {
+                method: 'delete',
+                title: '<i class="font-ico-del mr5"></i>批量删除',
+            }
+        ]) }}
+    {% endif %}
+{% endblock %}
+
+{% block promptUl %}
+
+{% endblock %}
+
+
+
+

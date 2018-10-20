@@ -1,0 +1,85 @@
+{% extends 'MemberBundle::base_show.html.twig' %}
+{% set mid = app.user.id|default('') %}
+{% set models = app.request.get('models') %} 
+
+{% block js %}
+<script type="text/javascript">
+seajs.use(['utils'], function (utils) {
+    utils.copySelect();
+})
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+   
+    {{parent()}}
+    {# {{ core_manage.jump(
+        {
+            title: '专用邀请',
+            url: ('muserselllink/muserselllinklist')|U,    
+            class: 'on'
+        }
+    ) }}
+    {{ core_manage.jump(
+        {
+            title: '邀请下线明细',
+            url: ('muserselllink/musersellsubordinate')|U,    
+            class: ''
+        }
+    ) }}
+ #}
+ 
+{% endblock mainMenu %}
+
+{% block body %}
+<form class="form">
+    <table class="popup-form-table" style="width: 100%;">
+        <tbody>
+            <tr>
+                <td>
+                    <div>
+                        <div class="form-row">
+                            <div class="form-cell-label">推广说明</div>
+                            <div class="form-cell">  
+                                {{ core_global.mconfigtreplace({name: 'fenxiaoguides', ename: 'mmemberguides', replace: 'sellrate,sellpoeplenum,sellunnum,selltime'}) }}
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <div class="form-row">
+                            <div class="form-cell-label">推广口号</div>
+                            <div class="form-cell">
+                                {{ core_global.mconfigtreplace({name: 'sellword' ,ename: 'msell', replace: 'sellrate,sellpoeplenum,sellunnum,selltime'}) }}
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <div class="form-row">
+                            <div class="form-cell-label">推广连接</div>
+                            <div class="form-cell">
+                                {{ ('register/index')|U({ fxpid: app.user.id|default('') }, {absolute: true}) }}
+                                <input type="text" value="{{ core_global.mconfigtreplace({name: 'sellword', ename: 'msell', replace: 'sellrate,sellpoeplenum,sellunnum,selltime'}) ~ ('register/index')|U({ fxpid: app.user.id|default('') }, {absolute: true}) }}" id="selectCopy" style="opacity: 0" readonly="readonly" />
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="popup-submit tac p10">
+        <button class="btn" data-copy="selectCopy">复制链接</button>
+    </div>
+</form>
+{% endblock body %}
+
+{% block promptUl %}
+{{ core_global.mconfigtreplace({name: 'fenxiao2guide', ename: 'mmemberguides', replace: 'sellrate,sellpoeplenum,sellunnum,selltime'}) }}
+{% endblock promptUl %}

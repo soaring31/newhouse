@@ -1,0 +1,1290 @@
+@charset "UTF-8";
+/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+*/
+/**
+ * @method 清除浮动 %clearfix 
+ * @description 清除浮动
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %clearfix;
+ * }
+ * ```
+ * 
+ * ```css
+ * 	div {
+	    *zoom: 1;
+	}
+	div:after {
+	    display: block;
+	    clear: both;
+
+	    height: 0;
+
+	    content: '\20';
+	}
+ * ```
+ */
+.tg-ph dt,
+.tg-ph dd {
+    *zoom: 1;
+}
+
+.tg-ph dt:after,
+.tg-ph dd:after {
+    display: block;
+    clear: both;
+    height: 0;
+    content: '\20';
+}
+
+/**
+ * @method 去掉虚线框 %outline 
+ * @description 去掉虚线框
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @ extend %outline;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		outline: thin dotted;
+		outline: 5px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
+ * ```
+ */
+/**
+ * @method 文字不换行后面加省略号 %text-overflow 
+ * @description 文字不换行后面加省略号
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %text-overflow;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+ * ```
+ */
+/**
+ * @method 内容换行 %word-wrap 
+ * @description 内容换行
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %word-wrap;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+	    word-wrap: break-word;
+	    white-space: pre-wrap;
+	    word-break: break-all;
+	}
+ * ```
+ */
+/**
+ * @method 透明层opacity 
+ * @description 透明层 内容也透明
+ * @param {number} $opacity - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include opacity(.5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+	  opacity: .5;
+	  filter: alpha(opacity=50);
+ * }
+ * ```
+ */
+/**
+ * @method 背景透明层transparent 
+ * @description 透明层只处理背景透明
+ * @param {string} $color - 背景透明层的颜色
+ * @param {number} $alpha - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include transparent(#000, .5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+ *    	background-color: transparent;
+		background-color: (0,0,0,.5);
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7fffffff, endColorstr=#7fffffff,);
+		zoom: 1;
+ * }
+ * ```
+ */
+/**
+ * @method triangle 
+ * @description 生成一个三角形图标
+ * @param {string} $size - 三角的大小
+ * @param {string} $color - 三角颜色
+ * @param {string} $direction - 三角的方向 up, down, left, right
+ * @example 调用
+ * 
+ * ```scss
+ * i {
+ *    @include triangle(5px, #bbb, up); 
+ * }
+ * ```
+ * 
+ * ```css
+ * i {
+ *    width: 0;
+      height: 0;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent;
+      border-bottom-color: #bbb;
+ * }
+ * ```
+ */
+/**
+* @method 水平线hr nav-divider 
+* @description 透明层 内容也透明
+* @param {string} $color=#e5e5e5 - 线的颜色
+* @param {string} $line-height-computed - 线的高度，空间
+* @example 调用
+* 
+* ```scss
+* div {
+*    @include nav-divider(#e5e5e5, 24px);
+* }
+* ```
+* 
+* ```css
+* div {
+	  height: 1px;
+	  margin: 11px 0;
+	  overflow: hidden;
+	  background-color: #e5e5e5;
+* }
+* ```
+*/
+@font-face {
+    font-family: "number";
+    font-weight: normal;
+    font-style: normal;
+    src: url("../fonts/number.eot");
+    src: url("../fonts/number.eot?#iefix") format("embedded-opentype"), url("../fonts/number.woff") format("woff");
+}
+
+[class^="font-number-"],
+[class*=" font-number-"] {
+    font-family: "number";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: inherit;
+    float: none;
+    margin: 0;
+    vertical-align: -0.25em;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    text-decoration: none;
+    text-transform: none;
+}
+
+.font-number-1:before {
+    content: "\EA01";
+}
+
+.font-number-10:before {
+    content: "\EA02";
+}
+
+.font-number-2:before {
+    content: "\EA03";
+}
+
+.font-number-3:before {
+    content: "\EA04";
+}
+
+.font-number-4:before {
+    content: "\EA05";
+}
+
+.font-number-5:before {
+    content: "\EA06";
+}
+
+.font-number-6:before {
+    content: "\EA07";
+}
+
+.font-number-7:before {
+    content: "\EA08";
+}
+
+.font-number-8:before {
+    content: "\EA09";
+}
+
+.font-number-9:before {
+    content: "\EA0A";
+}
+
+/*!
+ * @name tg
+ * @author ahuing
+ * @date 2016-1-15
+ * @dec top toolbar popular search terms containing the search and
+ */
+/*
+top-bar
+*/
+.top-bar {
+    background: #f3f3f3;
+    min-width: 1200px;
+    padding: 15px 0 10px 0;
+}
+
+.top-bar .search-bar {
+    float: left;
+}
+
+.top-bar .list {
+    margin-left: 68px;
+}
+
+.top-bar .list li {
+    float: left;
+    margin-right: 22px;
+    font-size: 14px;
+    margin-top: 9px;
+    margin-top: 12px;
+    display: inline;
+    overflow: hidden;
+}
+
+.top-bar .list li a {
+    height: 20px;
+    line-height: 20px;
+    text-decoration: none;
+    color: #686465;
+    overflow: hidden;
+}
+
+.top-bar .list li a:hover {
+    color: #f00;
+}
+
+.top-bar .list li a i {
+    font-size: 20px;
+    float: left;
+    margin-right: 4px;
+    margin-top: 2px;
+}
+
+/*!
+ * @name lp-list.css
+ * @author xying
+ * @date 2016-8-5
+ * @dec common lp list
+ */
+/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+* @dec sort btn
+*/
+/* sort */
+.sort .sort-btn {
+    background: #fafafa;
+    border: 1px solid #ddd;
+    color: #888;
+    float: left;
+    height: 22px;
+    line-height: 22px;
+    margin-left: 10px;
+    padding: 3px 8px;
+}
+
+.sort .sort-btn:hover {
+    color: #888;
+    text-decoration: none;
+}
+
+.sort .sort-btn i {
+    position: relative;
+    top: 3px;
+}
+
+.sort .sort-btn i.up {
+    right: -8px;
+    top: -5px;
+}
+
+.sort .sort-btn.default i {
+    display: none;
+}
+
+.sort .sort-btn.act {
+    background: #fff;
+    border-color: #e43;
+    color: #e43;
+}
+
+.sort .sort-btn.act.desc .up {
+    color: #888;
+}
+
+.sort .sort-btn.act.asc .down {
+    color: #888;
+}
+
+.lp-body {
+    width: 930px;
+}
+
+/*
+title
+*/
+.body-tit {
+    border-bottom: 2px solid #e43;
+}
+
+.body-tit h2 a {
+    background: #fff;
+    display: block;
+    float: left;
+    font-size: 18px;
+    padding: 9px 20px;
+}
+
+.body-tit h2 a:hover {
+    text-decoration: none;
+    background-color: #fafafa;
+}
+
+.body-tit h2 a.act {
+    background: #e43;
+    color: #fff;
+}
+
+.body-tit h2 a.act .ico {
+    color: inherit;
+}
+
+.body-tit h2 .ico {
+    margin-right: 10px;
+    vertical-align: 0;
+    color: #f00;
+}
+
+.body-tit .sort {
+    margin-top: 8px;
+}
+
+/*
+list
+*/
+.list-item {
+    border-bottom: 1px dashed #ddd;
+    padding-top: 30px;
+}
+
+.list-item a {
+    color: #666;
+    text-decoration: none;
+}
+
+.list-item a:hover {
+    color: #f00;
+}
+
+.list-item .pic {
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 180px;
+    position: relative;
+}
+
+.list-item .pic img {
+    height: 135px;
+    width: 180px;
+}
+
+.list-item .pic i {
+    border-radius: 3px;
+    background: #e43;
+    color: #fff;
+    font-size: 12px;
+    font-family: simsun;
+    height: auto;
+    line-height: 20px;
+    padding: 0 5px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.list-item .info {
+    width: 550px;
+}
+
+.list-item .info h3 {
+    height: 27px;
+    overflow: hidden;
+}
+
+.list-item .info .fx {
+    font-size: 14px;
+}
+
+.list-item .info p {
+    line-height: 34px;
+    height: 34px;
+}
+
+.list-item .info .tag {
+    border-radius: 3px;
+    color: #fff;
+    display: inline-block;
+    font-size: 12px;
+    margin-left: 8px;
+    padding: 1px 6px;
+}
+
+.list-item .info .tag.on-sale {
+    background: #f60;
+}
+
+.list-item .info .tag.dis-sale {
+    background: #aaa;
+}
+
+.list-item .info .tag.on-sale-114 {
+    background-color: #06a897;
+}
+
+.list-item .info .tag.on-sale-115 {
+    background-color: #1cbaff;
+}
+
+.list-item .info .tag.on-sale-116 {
+    background-color: #f60;
+}
+
+.list-item .info .tag.on-sale-117 {
+    background-color: #ce9b86;
+}
+
+.list-item .info .tag.on-sale-118 {
+    background-color: #afafaf;
+}
+
+.list-item .info .tag.on-sale-159 {
+    background-color: #e43;
+}
+
+.list-item .tit {
+    color: #666;
+    font-size: 18px;
+}
+
+.list-item .tit:hover {
+    color: #f00;
+    text-decoration: none;
+}
+
+.list-item .ico-word {
+    margin-right: 15px;
+}
+
+.list-item .ico-word i {
+    color: #e4e4e4;
+}
+
+.list-item .other {
+    text-align: right;
+    width: 160px;
+}
+
+.list-item .other .total-price {
+    color: #f50;
+    font-family: georgia;
+    font-size: 28px;
+    line-height: 18px;
+}
+
+.list-item .other .mj {
+    margin-left: 10px;
+}
+
+.list-item .other .dj {
+    line-height: 36px;
+}
+
+.list-item .other .btn {
+    border-radius: 3px;
+    float: right;
+    line-height: 30px;
+    height: 30px;
+    margin-top: 26px;
+    width: 151px;
+}
+
+.list-item .other .btn i {
+    font-size: 16px;
+    margin-left: 5px;
+}
+
+.list-item .other .fill-btn {
+    cursor: pointer;
+    background: #e43;
+    border: 1px solid #e43;
+    color: #fff;
+    text-align: center;
+}
+
+.list-item .other .fill-btn:hover {
+    background: #e43;
+    border-color: #e43;
+}
+
+.list-item .other .disable-btn {
+    font-size: 12px;
+    background: #aaa;
+    border: 1px solid #aaa;
+    color: #fff;
+    text-align: center;
+}
+
+.list-item .other .disable-btn:hover {
+    background: #aaa;
+    border-color: #aaa;
+}
+
+.list-item:hover {
+    background: #f9f9f9;
+}
+
+.list-item .tags span {
+    border: 1px solid #ccc;
+    color: #666;
+    display: inline-block;
+    height: 22px;
+    line-height: 22px;
+    margin-right: 5px;
+    overflow: hidden;
+    padding: 0 5px;
+}
+
+@font-face {
+    font-family: "lp";
+    font-weight: normal;
+    font-style: normal;
+    src: url("../fonts/lp.eot");
+    src: url("../fonts/lp.eot?#iefix") format("embedded-opentype"), url("../fonts/lp.woff") format("woff");
+}
+
+[class^="font-lp-"],
+[class*=" font-lp-"] {
+    font-family: "lp";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: inherit;
+    float: none;
+    margin: 0;
+    vertical-align: -0.25em;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    text-decoration: none;
+    text-transform: none;
+}
+
+.font-lp-1:before {
+    content: "\EA01";
+}
+
+.font-lp-10:before {
+    content: "\EA02";
+}
+
+.font-lp-11:before {
+    content: "\EA03";
+}
+
+.font-lp-12:before {
+    content: "\EA04";
+}
+
+.font-lp-13:before {
+    content: "\EA05";
+}
+
+.font-lp-14:before {
+    content: "\EA06";
+}
+
+.font-lp-15:before {
+    content: "\EA07";
+}
+
+.font-lp-16:before {
+    content: "\EA08";
+}
+
+.font-lp-17:before {
+    content: "\EA09";
+}
+
+.font-lp-18:before {
+    content: "\EA0A";
+}
+
+.font-lp-19:before {
+    content: "\EA0B";
+}
+
+.font-lp-2:before {
+    content: "\EA0C";
+}
+
+.font-lp-20:before {
+    content: "\EA0D";
+}
+
+.font-lp-21:before {
+    content: "\EA0E";
+}
+
+.font-lp-22:before {
+    content: "\EA0F";
+}
+
+.font-lp-23:before {
+    content: "\EA10";
+}
+
+.font-lp-24:before {
+    content: "\EA11";
+}
+
+.font-lp-25:before {
+    content: "\EA12";
+}
+
+.font-lp-26:before {
+    content: "\EA13";
+}
+
+.font-lp-27:before {
+    content: "\EA14";
+}
+
+.font-lp-28:before {
+    content: "\EA15";
+}
+
+.font-lp-29:before {
+    content: "\EA16";
+}
+
+.font-lp-3:before {
+    content: "\EA17";
+}
+
+.font-lp-30:before {
+    content: "\EA18";
+}
+
+.font-lp-31:before {
+    content: "\EA19";
+}
+
+.font-lp-32:before {
+    content: "\EA1A";
+}
+
+.font-lp-33:before {
+    content: "\EA1B";
+}
+
+.font-lp-34:before {
+    content: "\EA1C";
+}
+
+.font-lp-35:before {
+    content: "\EA1D";
+}
+
+.font-lp-36:before {
+    content: "\EA1E";
+}
+
+.font-lp-37:before {
+    content: "\EA1F";
+}
+
+.font-lp-38:before {
+    content: "\EA20";
+}
+
+.font-lp-39:before {
+    content: "\EA21";
+}
+
+.font-lp-4:before {
+    content: "\EA22";
+}
+
+.font-lp-40:before {
+    content: "\EA23";
+}
+
+.font-lp-41:before {
+    content: "\EA24";
+}
+
+.font-lp-42:before {
+    content: "\EA25";
+}
+
+.font-lp-43:before {
+    content: "\EA26";
+}
+
+.font-lp-44:before {
+    content: "\EA27";
+}
+
+.font-lp-45:before {
+    content: "\EA28";
+}
+
+.font-lp-46:before {
+    content: "\EA29";
+}
+
+.font-lp-47:before {
+    content: "\EA2A";
+}
+
+.font-lp-48:before {
+    content: "\EA2B";
+}
+
+.font-lp-49:before {
+    content: "\EA2C";
+}
+
+.font-lp-5:before {
+    content: "\EA2D";
+}
+
+.font-lp-50:before {
+    content: "\EA2E";
+}
+
+.font-lp-51:before {
+    content: "\EA2F";
+}
+
+.font-lp-52:before {
+    content: "\EA30";
+}
+
+.font-lp-53:before {
+    content: "\EA31";
+}
+
+.font-lp-54:before {
+    content: "\EA32";
+}
+
+.font-lp-55:before {
+    content: "\EA33";
+}
+
+.font-lp-56:before {
+    content: "\EA34";
+}
+
+.font-lp-6:before {
+    content: "\EA35";
+}
+
+.font-lp-7:before {
+    content: "\EA36";
+}
+
+.font-lp-8:before {
+    content: "\EA37";
+}
+
+.font-lp-9:before {
+    content: "\EA38";
+}
+
+.tg-body {
+    width: 900px;
+}
+
+.tg-aside {
+    width: 270px;
+}
+
+/* ==========
+list
+========== */
+.list-item {
+    border: 1px solid #ddd;
+    color: #666;
+    margin-bottom: 40px;
+    padding-top: 0px;
+}
+
+.list-item h2 {
+    font-size: 24px;
+    line-height: 62px;
+    padding-left: 20px;
+    overflow: hidden;
+    height: 62px;
+}
+
+.list-item .info {
+    padding-left: 20px;
+    width: 387px;
+}
+
+.list-item .info p {
+    height: auto;
+}
+
+.list-item .info .item-text {
+    height: 36px;
+    line-height: 36px;
+    overflow: hidden;
+}
+
+.list-item .info .item-text a {
+    line-height: 36px;
+}
+
+.list-item .other {
+    margin-right: 20px;
+    width: 250px;
+}
+
+.list-item .other .btn {
+    background: #e43;
+    color: #fff;
+    display: block;
+    font-size: 20px;
+    height: 46px;
+    line-height: 46px;
+    margin-top: 2px;
+    text-align: center;
+    text-decoration: none;
+    width: 170px;
+}
+
+.list-item .other .btn.disable {
+    background: #dbdbdb;
+    color: #666;
+    cursor: default;
+    border-color: #dbdbdb;
+}
+
+.list-item .time {
+    line-height: 29px;
+}
+
+.list-item .time span {
+    background: #eee;
+    border-radius: 5px;
+    color: #e43;
+    display: inline-block;
+    font-weight: 700;
+    margin: 0 3px;
+    padding: 0 7px;
+    vertical-align: middle;
+}
+
+.list-item .num {
+    line-height: 24px;
+    text-align: center;
+    width: 170px;
+}
+
+.list-item .tel {
+    font-weight: 700;
+}
+
+.list-item.first h2 {
+    height: 70px;
+    line-height: 70px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    clear: both;
+}
+
+.list-item.first .recom {
+    background: url("../images/tuangou.png") no-repeat 0 0;
+    color: #fff;
+    padding-left: 8px;
+    width: 180px;
+}
+
+.list-item.first .dis_recom {
+    background: url("../images/tuangou_dis.png") no-repeat 0 0;
+}
+
+.list-item.first dl {
+    font-size: 12px;
+    width: 125px;
+}
+
+.list-item.first dl dd,
+.list-item.first dl dt {
+    float: left;
+}
+
+.list-item.first dl p {
+    line-height: 16px;
+}
+
+.list-item.first dl dt i {
+    font-size: 28px;
+    line-height: normal;
+    margin-right: 8px;
+}
+
+.list-item.first .btn {
+    margin-top: 34px;
+}
+
+/* ==========
+aside
+========== */
+.tg-aside .panel {
+    padding: 5px 8px;
+}
+
+.tg-aside h3 {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 15px;
+}
+
+.bm-list li {
+    border-bottom: 1px dashed #ddd;
+    color: #666;
+    height: 34px;
+    line-height: 34px;
+    overflow: hidden;
+}
+
+.bm-list li a {
+    color: #e43;
+}
+
+.bm-list li:last-child {
+    border-bottom-color: #fff;
+}
+
+.bm-list .time {
+    width: 100px;
+}
+
+.bm-list .tel {
+    width: 84px;
+}
+
+.bm-list .name {
+    width: 64px;
+}
+
+.tg-lc {
+    border-left: 2px solid #ebebeb;
+    margin-left: 16px;
+}
+
+.tg-lc li {
+    padding-left: 23px;
+    position: relative;
+}
+
+.tg-lc .ico {
+    background: #e43;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    height: 8px;
+    width: 8px;
+    position: absolute;
+    left: -6px;
+    top: 18px;
+}
+
+.tg-lc dl {
+    margin-bottom: 20px;
+}
+
+.tg-lc dt {
+    color: #666;
+    font-size: 16px;
+    height: 44px;
+    line-height: 44px;
+}
+
+.tg-lc dt i {
+    font-size: 18px;
+    margin-right: 5px;
+    vertical-align: -4px;
+}
+
+.tg-lc dd {
+    color: #999;
+    line-height: 26px;
+}
+
+/* ==========
+detail
+========== */
+.detail-panel {
+    min-height: 240px;
+}
+
+.detail-panel .panel-hd {
+    background: #f7f7f7;
+    height: 36px;
+    line-height: 36px;
+    overflow: hidden;
+    padding-left: 10px;
+}
+
+.detail-panel .panel-hd h3 {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.detail-panel .panel-hd a {
+    color: #999;
+}
+
+.detail-panel .panel-hd a:hover {
+    color: #e43;
+}
+
+.detail-panel .panel-bd {
+    min-height: 240px;
+}
+
+.detail-panel .hdsm {
+    color: #666;
+    line-height: 2;
+    padding: 30px;
+}
+
+.detail-panel .xmxq {
+    padding: 8px;
+}
+
+.detail-panel .tab-hd {
+    border-bottom: 1px solid #ddd;
+}
+
+.detail-panel .tab-hd li {
+    border: 1px solid #ddd;
+    cursor: pointer;
+    float: left;
+    height: 30px;
+    line-height: 30px;
+    margin-bottom: -1px;
+    margin-right: 10px;
+    text-align: center;
+    width: 114px;
+    position: relative;
+    z-index: 2;
+}
+
+.detail-panel .tab-hd li.act {
+    border-bottom-color: #fff;
+}
+
+.detail-panel .item {
+    display: none;
+    height: 240px;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.detail-panel .chart-wrap {
+    padding: 40px 50px 40px 30px;
+}
+
+.tg-ph div {
+    float: left;
+}
+
+.tg-ph dt,
+.tg-ph dd {
+    height: 30px;
+    line-height: 30px;
+    overflow: hidden;
+}
+
+.tg-ph dt {
+    background: #eee;
+    font-weight: 700;
+}
+
+.tg-ph dd {
+    cursor: pointer;
+}
+
+.tg-ph dd .num {
+    color: #bd2928;
+    text-align: center;
+}
+
+.tg-ph .name {
+    text-indent: 10px;
+    width: 126px;
+}
+
+.tg-ph .add {
+    width: 50px;
+    height: 30px;
+}
+
+.tg-ph .num {
+    width: 60px;
+}
+
+.tg-ph .link {
+    width: 32px;
+}
+
+.tg-ph .link a {
+    color: #4688be;
+}
+
+.tg-ph .link a:hover {
+    color: #f60;
+}
+
+.tg-rmlp {
+    margin-top: 18px;
+}
+
+.tg-rmlp li {
+    height: 30px;
+    line-height: 30px;
+    overflow: hidden;
+    padding-left: 30px;
+    position: relative;
+}
+
+.tg-rmlp li:last-child.hover {
+    border-bottom-color: #fafafa;
+}
+
+.tg-rmlp li:first-child.hover {
+    border-top-color: #fafafa;
+}
+
+.tg-rmlp i {
+    color: #999;
+    font-family: arial;
+    font-weight: 700;
+    height: 20px;
+    left: 0;
+    line-height: 20px;
+    margin: 0 5px;
+    overflow: hidden;
+    position: absolute;
+    text-align: center;
+    top: 5px;
+    width: 20px;
+}
+
+.tg-rmlp .pic {
+    border: 1px solid #ccc;
+    display: none;
+    float: left;
+    margin-right: 5px;
+    padding: 1px;
+}
+
+.tg-rmlp .pic:hover {
+    background: #bd2928;
+}
+
+.tg-rmlp h4 {
+    font-size: 14px;
+}
+
+.tg-rmlp p {
+    color: #bd2928;
+    display: none;
+    height: 20px;
+    line-height: 20px;
+    overflow: hidden;
+}
+
+.tg-rmlp .arial {
+    font-family: arial;
+}
+
+.tg-rmlp .fs-12 {
+    font-size: 12px;
+}
+
+.tg-rmlp .hover {
+    background: #fafafa none repeat scroll 0 0;
+    border-bottom: 1px solid #d8d8d8;
+    border-top: 1px solid #d8d8d8;
+    height: 60px;
+    padding: 7px 0 7px 30px;
+}
+
+.tg-rmlp .hover i {
+    background: #f60 none repeat scroll 0 0;
+    color: #fff;
+    top: 7px;
+}
+
+.tg-rmlp .hover .pic,
+.tg-rmlp .hover p {
+    display: block;
+}
+
+.tg-rmlp .hover h4 {
+    height: 20px;
+    line-height: 20px;
+    overflow: hidden;
+}
+
+/*# sourceMappingURL=tg.css.map */

@@ -1,0 +1,67 @@
+
+// 问答的列表
+
+.ask-list-item {
+	padding-top: 0;
+	height: 52px;
+	width: 100%;
+	line-height: 52px;
+	border-bottom: 1px dashed #ccc;
+	overflow: hidden;
+	@extend %clearfix;
+
+	.icon {
+		font-size: 12px;
+		font-family: simsun;
+		color: #fff;
+		padding: 3px 5px;
+		border-radius: 2px;
+		margin-right: 8px;
+	}
+
+	.icon1 {
+		background: #ff7400;
+	}
+
+	.icon2 {
+		background: #f71900;
+	}
+
+	.icon3 {
+		background: #b3df27;
+	}
+
+	.icon4 {
+		background: #3ac1eb;
+	}
+}
+
+.ask-item-left {
+	float: left;
+	font-size: 15px;
+	text-indent: 10px;
+	color: #353535;
+
+	i {
+		font-size: 10px;
+		color: #aaa;
+	}
+}
+
+.ask-item-text {
+	width: 400px;
+	overflow: hidden;
+	margin-right: 30px;
+}
+
+.ask-item-right {
+	float: right;
+	font-size: 14px;
+	color: #888;
+	margin-right: 20px;
+	.num {
+		color: #f00;
+	}
+}
+
+

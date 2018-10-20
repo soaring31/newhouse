@@ -1,0 +1,33 @@
+{% extends 'HouseBundle::base_top_search.html.twig' %}
+{# 检索头部 #}
+{% set head_data = {
+    quyu: {
+        title: '区域',
+        icons: 'font-filter-9',
+        url: ('sale/xqlist')|U
+    },
+    school: {
+        title: '学区',
+        icons: 'font-filter-10',
+        url: ('sale/xlist')|U
+    },
+    map: {
+        title: '地图',
+        icons: 'font-filter-11',
+        url: ('map/sale')|U,
+        target: '_blank'
+    }
+} %}
+
+{% block top_search %}
+    {% set tpl_topsearch_hot = 'salekeyword' %}
+    {{ parent() }}
+{% endblock top_search %}
+
+{% block top_ad %}
+    {% set top_ad = {tag: 'esfads'} %}
+    {{ parent() }}
+{% endblock top_ad %}
+
+{# 主导航高亮 #}
+{% set nav_act = 4 %}

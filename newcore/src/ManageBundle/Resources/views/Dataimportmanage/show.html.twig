@@ -1,0 +1,18 @@
+{% extends "ManageBundle::poplayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+
+</script>
+{% endblock %}
+{% block body %}
+{% import "ManageBundle:Form:popedit.html.twig" as forms %}
+{{ forms.popEdit(form|default(''),'form') }}
+<div class="promptTitle">
+提示说明：
+</div>
+<div class="promptUl">
+SQL中，规定m为主表别名，只有一个表也用m别名<br>
+Fomid条件：格式:`usertype=4` 或 models=news, 不要引号<br>
+来源模型ID：自定义格式,如user2,arc3,news5
+</div>
+{% endblock %}

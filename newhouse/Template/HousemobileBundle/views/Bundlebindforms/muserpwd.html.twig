@@ -1,0 +1,17 @@
+{% extends 'HousemobileBundle:Bundlebindforms:bundlebase.html.twig' %}
+
+{% block result %}
+<div class="content bg-white">
+    {{core_mobile_forms.forms({
+        formName: formName,
+        Form: Form,
+        buttons: {
+            0: {
+                name: '确 定',
+                class: ' button-big button-fill button-success',
+                attr: 'data-role="submit"'
+            }
+        }
+    })}}
+</div>
+{% endblock result %}

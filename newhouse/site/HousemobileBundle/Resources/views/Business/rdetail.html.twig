@@ -1,0 +1,98 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+{# 说明
+ * detail: 当前数据
+ * tpl_title: 模板标题
+ * tpl_id: 模板id
+ * d_models: 当前数据模型
+#}
+{% set detail = ident.detail.data[0]|default('') %}
+
+{% set tpl_title = detail.officetype|default('') ? '写字楼' : '商铺' %}
+
+{% block title %}
+{{detail.lpmc|default('')}}小区租房,{{- house_global.huxing({data: detail|default(''), tpl: '%shi%%ting%%wei%'}) -}},{{detail.name|default('')}}, {{detail.address|default('')}}租房
+{% endblock title %}
+	
+{% block key_des %}
+<meta name="keywords" Content="{{core_global.region({id: detail.region|default(''), tpl: '%value%'})}}租房网，{{core_global.region({id: detail.region|default(''), tpl: '%value%'})}}租房，{{detail.lpmc|default('')}}租房"/>
+<meta name="description" content="{{core_global.region({id: detail.region|default(''), tpl: '%value%'})}}{{detail.lpmc|default('')}}小区{{- house_global.huxing({data: detail|default(''), tpl: '%shi%%ting%%wei%'}) -}}出租，{{ core_global.formField({value: detail.zlfs|default(''), form: 'rent', field:'zlfs'}) }}，租金{{detail.czj|default('')}}元/月，{{house_global.lptag({value: detail|default(''), tpl: '%value%', con: 'zxcd'})}}，{{detail.mj|default('')}}㎡，小区地址：{{detail.address|default('')}}。房子{{house_global.lptag({value: detail|default(''), tpl: '%value%', con: 'zxcd'})}}"/>
+{% endblock key_des %}
+
+{% block header_title %}
+{{core_mobile_global.title({title: tpl_title ~ '出租'})}}
+{% endblock header_title %}
+
+{% block container %}
+	<div data-block="{
+	    bParams: true,
+	    ajax:{
+	        url: '{{ ('business/rdetail')|U }}',
+	        data: {
+	            id: '{{ detail.id|default('') }}',
+	            tpl: 'Business:rdetailblock',
+	            d_models: 'rent',
+	            tpl_title: '{{tpl_title}}'
+	        }
+	    }
+	}"></div>
+{% endblock container %}
+
+{% block popup %}
+	{# 预约 #}
+	{{ housemobile_global.popup({
+	    name: 'popup-yy',
+	    title: '预约',
+	    content: {
+	        bParams: true,
+	        ajax:{
+	            url: ('business/rdetail')|U,
+	            data: {
+	                id: detail.id|default(''),
+	                formflag: 'view_sale_intent',
+	                tpl: 'Common:forms',
+	                submit_id: 'yuyue',
+	                models: 'sale',
+	                cate_pushs: 'syixiang'
+	            }
+	        }
+	    }
+	}) }} 
+
+	{# 举报 #}
+	{{ housemobile_global.popup({
+	    name: 'popup-jbao',
+	    title: '举报',
+	    content: {
+	        bParams: true,
+	        ajax:{
+	            url: ('business/rdetail')|U,
+	            data: {
+	                id: detail.id|default(''),
+	                formflag: 'view_sale_report',
+	                tpl: 'Common:forms',
+	                submit_id: 'jubao',
+	                models: 'sale',
+	                cate_pushs: 'sreport'
+	            }
+	        }
+	    }
+	}) }} 
+
+	{# 地图弹窗 #}
+
+	{{ housemobile_global.popup({
+	    name: 'popup-map',
+	    title: '二手地图',
+	    content: {
+	        bParams: true,
+	        ajax: {
+	            url: ('business/rdetail')|U,
+	            data: {
+	                id: detail.id|default(''),
+	                tpl: 'Common:mapblock'
+	            }
+	        }
+	    }
+	}) }}
+{% endblock popup %}

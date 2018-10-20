@@ -1,0 +1,45 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+{# 说明 
+* prices： 当前区域价格表
+* month_now：本月价格
+* month_prev：上月价格
+* push_rexiaoloupantuijian: 热门楼盘推荐
+#}
+{% set prices = ident.prices|default('') %}
+
+{% set month_now = prices.data[0]|default('') %}
+
+{% set month_prev = prices.data[1]|default('') %}
+
+{% block title %}
+    {{cur_area_data|default('')}}房价_{{cur_area_data|default('')}}房价走势{{'now'|date('Y')}}-{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}查房价网
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data|default('')}}房价,{{cur_area_data|default('')}}房价走势,{{cur_area_data|default('')}}房价走势图,{{cur_area_data|default('')}}房价走势最新消息，{{cur_area_data|default('')}}查房价。" />
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}查房价网提供{{cur_area_data|default('')}}房价走势最新消息，发布{{cur_area_data|default('')}}房价走势信息，{{cur_area_data|default('')}}房价全部查询。" />
+{% endblock key_des %}
+
+{% block header_title %}
+    {{core_mobile_global.title({
+        title: ''~ cur_area_data|default('') ~'房价查询'
+    })}}
+{% endblock header_title %}
+
+{% block container %}
+    <div data-block="{
+        bParams: true,
+        ajax:{
+            url: '{{ ('houses/cfj')|U }}',
+            data: {
+                tpl: 'Houses:cfjblock'
+            }
+        }
+    }"></div>
+{% endblock container %}
+
+{% block popup_search %}
+    {% set search_action = ('houses/list')|UU %}
+    {{ parent() }}
+{% endblock popup_search %}

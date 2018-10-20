@@ -1,0 +1,30 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% import "ManageBundle:Form:lists.html.twig" as lists %}
+{% block js %}
+<script type="text/javascript">
+
+</script>
+{% endblock %}
+
+{% block tableMain %}
+<span class="tableDesc">
+        角色列表>>
+  {{ lists.EDIT({'id':0},{'field':'id','params':{0:'新增角色',1:'search-btn'}},action) }}
+</span>
+
+{# 列表 #}
+{{ lists.list(ident.info|default('')) }}
+{% endblock %}
+
+{#提交按钮#}
+{% block submit %}{% endblock %}
+
+{# 翻页参数 #}
+{% block page %}
+{{ lists.page(ident.info|default('')) }}
+{% endblock %}
+
+{# 提示说明 #}
+{% block promptUl %}
+	<li></li>
+{% endblock %}

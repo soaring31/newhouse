@@ -1,0 +1,38 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+** ajax调用：问答列表
+** ask/list
+#}
+{% block result %}
+    
+{% if app.request.get("id") %}
+    {% set list = list|default(('house.houses_arc')|getBlock({ename: 'wenda'}, {pageSize: 12,pageIndex: app.request.get("pageIndex", 1), checked: 1, aid: app.request.get("id"), findType: 1, _multi: 1})) %}
+{% else %}
+    {% set list = list|default(app.request.get('list', ident.list|default(''))) %}
+{% endif %}
+    {% spaceless %}
+    {% if list.data is defined and list.pageCount|default(0) != 0 %}
+        {% for item in list.data %}    
+        <li {% if loop.last %}data-page="{
+                            pageIndex: {{list.pageIndex}},
+                            pageCount: {{list.pageCount}}
+                        }" {% endif %} class="item-content ask-list">
+            <div class="item-inner">
+                <div class="item-title-row">
+                    <a href="{{- core_global.url(item|merge({models: 'ask'})) -}}" class="external p-default item-title ask-title">{{  item.name|default('')}}
+                    </a>
+                </div>
+                <div class="mt10">
+                    <span class=" pull-left">{{item.create_time|default('')|date('Y-m-d')}}</span>
+                    <i class="ml10 mr5 pull-left icon font-f-39"></i><span>{{item.asknum|default('0')}}</span>
+                    <a class=" ask-answer pull-right external" href="{{- core_global.url(item|merge({models: 'ask'})) -}}">
+                       <span class="icon icon-edit font-f-23"></span>
+                       立即回答
+                    </a>   
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    {% endif %}
+    {% endspaceless %}
+{% endblock result %}

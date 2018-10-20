@@ -1,0 +1,145 @@
+$font-lp-fz: inherit !default;
+
+@font-face {
+	font-family: "lp";
+    font-weight: normal;
+    font-style: normal;
+	src: url('../fonts/lp.eot');
+	src: url('../fonts/lp.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/lp.woff') format('woff');//,
+		//url('../fonts/lp.ttf') format('truetype'),
+		//url('../fonts/lp.svg#lp') format('svg');
+}
+$font-lp-fz: inherit !default;
+$font-lp-fl: none !default;
+$font-lp-m: 0 !default;
+$font-lp-va: -.25em !default;
+[class^="font-lp-"],
+[class*=" font-lp-"] {
+	font-family: "lp";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-size: $font-lp-fz;
+	float: $font-lp-fl;
+	margin: $font-lp-m;
+	vertical-align: $font-lp-va;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; only necessary if not using the private unicode range (firstdata option) 
+	text-decoration: none;
+	text-transform: none;
+}
+.font-lp-1:before {
+	content: "\EA01";
+}.font-lp-10:before {
+	content: "\EA02";
+}.font-lp-11:before {
+	content: "\EA03";
+}.font-lp-12:before {
+	content: "\EA04";
+}.font-lp-13:before {
+	content: "\EA05";
+}.font-lp-14:before {
+	content: "\EA06";
+}.font-lp-15:before {
+	content: "\EA07";
+}.font-lp-16:before {
+	content: "\EA08";
+}.font-lp-17:before {
+	content: "\EA09";
+}.font-lp-18:before {
+	content: "\EA0A";
+}.font-lp-19:before {
+	content: "\EA0B";
+}.font-lp-2:before {
+	content: "\EA0C";
+}.font-lp-20:before {
+	content: "\EA0D";
+}.font-lp-21:before {
+	content: "\EA0E";
+}.font-lp-22:before {
+	content: "\EA0F";
+}.font-lp-23:before {
+	content: "\EA10";
+}.font-lp-24:before {
+	content: "\EA11";
+}.font-lp-25:before {
+	content: "\EA12";
+}.font-lp-26:before {
+	content: "\EA13";
+}.font-lp-27:before {
+	content: "\EA14";
+}.font-lp-28:before {
+	content: "\EA15";
+}.font-lp-29:before {
+	content: "\EA16";
+}.font-lp-3:before {
+	content: "\EA17";
+}.font-lp-30:before {
+	content: "\EA18";
+}.font-lp-31:before {
+	content: "\EA19";
+}.font-lp-32:before {
+	content: "\EA1A";
+}.font-lp-33:before {
+	content: "\EA1B";
+}.font-lp-34:before {
+	content: "\EA1C";
+}.font-lp-35:before {
+	content: "\EA1D";
+}.font-lp-36:before {
+	content: "\EA1E";
+}.font-lp-37:before {
+	content: "\EA1F";
+}.font-lp-38:before {
+	content: "\EA20";
+}.font-lp-39:before {
+	content: "\EA21";
+}.font-lp-4:before {
+	content: "\EA22";
+}.font-lp-40:before {
+	content: "\EA23";
+}.font-lp-41:before {
+	content: "\EA24";
+}.font-lp-42:before {
+	content: "\EA25";
+}.font-lp-43:before {
+	content: "\EA26";
+}.font-lp-44:before {
+	content: "\EA27";
+}.font-lp-45:before {
+	content: "\EA28";
+}.font-lp-46:before {
+	content: "\EA29";
+}.font-lp-47:before {
+	content: "\EA2A";
+}.font-lp-48:before {
+	content: "\EA2B";
+}.font-lp-49:before {
+	content: "\EA2C";
+}.font-lp-5:before {
+	content: "\EA2D";
+}.font-lp-50:before {
+	content: "\EA2E";
+}.font-lp-51:before {
+	content: "\EA2F";
+}.font-lp-52:before {
+	content: "\EA30";
+}.font-lp-53:before {
+	content: "\EA31";
+}.font-lp-54:before {
+	content: "\EA32";
+}.font-lp-55:before {
+	content: "\EA33";
+}.font-lp-56:before {
+	content: "\EA34";
+}.font-lp-6:before {
+	content: "\EA35";
+}.font-lp-7:before {
+	content: "\EA36";
+}.font-lp-8:before {
+	content: "\EA37";
+}.font-lp-9:before {
+	content: "\EA38";
+}

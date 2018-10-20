@@ -1,0 +1,33 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+{% block mainMenu %}
+    {# {{ parent() }} #}
+{% endblock %}
+
+{% block tableMain %}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+        }
+    }">
+    <div class="list">
+        <div class="tac" style="line-height: 10">即将上线...!~</div>
+    </div>
+</section>
+{% endblock tableMain %}
+
+{% block promptUl %}
+{% endblock %}
+
+
+

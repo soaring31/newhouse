@@ -1,0 +1,46 @@
+﻿/*!
+ * @name {{name}}
+ * @author ahuing
+ * @date 2016-1-15
+ * @dec top toolbar popular search terms containing the search and
+ */
+/*
+top-bar
+*/
+.top-bar{
+    background: #f3f3f3;
+    min-width: $min-screen;
+    padding: 15px 0 10px 0;
+    // margin-top: 20px\9;
+    .search-bar{
+        float: left;
+    }
+    .list{
+        margin-left: 68px;
+        li{
+            float: left;
+            margin-right: 22px;
+            font-size: 14px;
+            margin-top: 9px;
+            margin-top: 12px;
+            display: inline;
+            overflow: hidden;
+            a{
+                height: 20px;
+                line-height: 20px;
+                text-decoration: none;
+                color: #686465;
+                overflow: hidden;
+                &:hover{
+                    color: $hover-color;
+                }
+                i{
+                    font-size: 20px;
+                    float: left;
+                    margin-right: 4px;
+                    margin-top: 2px;
+                }
+            }
+        }
+    }
+}

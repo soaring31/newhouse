@@ -1,0 +1,16 @@
+services:
+    # Search Engine
+    sphinx.search:
+        class: '%sphinx.search.class%'
+        file: '%sphinx.sphinx_api.file%'
+        arguments:
+            - '%sphinx.searchd.host%'
+            - '%sphinx.searchd.port%'
+            - '%sphinx.searchd.socket%'
+        calls:
+            - [setBridge, ["@sphinx.doctrine.bridge"]]
+
+    # Doctrine Bridge
+    sphinx.doctrine.bridge:
+        class: '%sphinx.doctrine.bridge.class%'
+        arguments: ["@service_container", "%sphinx.doctrine.entity_manager%", "%sphinx.indexes%"]

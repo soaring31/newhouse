@@ -1,0 +1,165 @@
+{{core_global.linkcss('static/house/css/common.css?time=201804201145')}}
+<div class="broker-mask-layer shadow">
+    {#报名看房团已登录#}
+    <div class="block_activies on_load1">
+        <div class="top_activies">报名看房团<i class="top_close">&#10006;</i></div>
+        <div class="activies_body">
+            <div class="a_jump">
+                <div class="a_cell">
+                    <span class="cell_back"><i class="iconfont icon-baoming"></i></span>
+                    <p style="font-size:10px;">在线报名</p>
+                </div>
+                <div class="a_line"></div>
+                <div class="a_cell">
+                    <span class="cell_back"><i class="iconfont icon-dianhua2"></i></span>
+                    <p style="font-size:10px;">电话确认</p>
+                </div>
+                <div class="a_line"></div>
+                <div class="a_cell">
+                    <span class="cell_back"><i class="iconfont icon-zhuanche"></i></span>
+                    <p style="font-size:10px;">专车锁定</p>
+                </div>
+                <div class="a_line"></div>
+                <div class="a_cell">
+                    <span class="cell_back"><i class="iconfont icon-gouwu"></i></span>
+                    <p style="font-size:10px;">特价购房</p>
+                </div>
+            </div>
+            <p class="a_name time">2018年03月31日 星期六 | 南部精品线</p>
+            <p class="a_n_text">手机号</p>
+            <p class="a_phone">18623456789</p>
+            <button class="submit_btn">立即报名</button>
+        </div>
+    </div>
+    {#报名看房团未登录#}
+    <div class="block_activies no_load1" style="display:none;">
+        <div class="top_activies">报名看房团<i class="top_close">&#10006;</i></div>
+        <div class="activies_body">
+            <div class="a_jump">
+                <div class="a_cell">
+                    <span class="cell_back"><i class="iconfont icon-baoming"></i></span>
+                    <p style="font-size:10px;">在线报名</p>
+                </div>
+                <div class="a_line"></div>
+                <div class="a_cell">
+                    <span class="cell_back"><i class="iconfont icon-dianhua2"></i></span>
+                    <p style="font-size:10px;">电话确认</p>
+                </div>
+                <div class="a_line"></div>
+                <div class="a_cell">
+                    <span class="cell_back"><i class="iconfont icon-zhuanche"></i></span>
+                    <p style="font-size:10px;">专车锁定</p>
+                </div>
+                <div class="a_line"></div>
+                <div class="a_cell">
+                    <span class="cell_back"><i class="iconfont icon-gouwu"></i></span>
+                    <p style="font-size:10px;">特价购房</p>
+                </div>
+            </div>
+            <p class="a_name time">2018年03月31日 星期六 | 南部精品线</p>
+            <div class="a_input_block one_">
+                <i class="iconfont icon-dianhua2 hh"></i>
+                <input class="a_input phone_" placeholder="请输入联系人手机号">
+            </div>
+            <div class="a_input_block two_">
+                <i class="iconfont icon-duanxinyanzheng"></i>
+                <input class="a_input mess_input" placeholder="请输入短信验证码">
+                <input type="button" value="发送短信验证码" class="btn_mess" readonly>
+            </div>
+            <p class="a_re">新用户将自动注册，并视为同意<a class="re">《诸葛找房用户协议》</a></p>
+            <button class="submit_btn tour_load">立即报名</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    seajs.use([],function () {
+        var tour_id,a_id;
+        $('.tour_,.free_click').click(function () {
+            tour_id=$(this).data('id');
+            a_id=$(this).data('ad');
+            $('.shadow,.no_load1').show();
+        });
+
+        $('.tour_load').click(function () {
+            var phone = $(this).siblings('.one_').find('.phone_').val();
+            var mess = $(this).siblings('.two_').find('.mess_input').val();
+            var reg = /^1(3|4|5|6|7|8|9)\d{9}$/;
+            if(!phone.match(reg)){
+                alert('请输入正确的手机号');return false;
+            }
+            if(!mess){
+                alert('请输入短信验证码');return false;
+            }
+            post_huodong(mess,phone,tour_id)
+        });
+
+        function post_huodong(mess,phone,id){
+            if(a_id){
+                var data = {type:2, tel: phone, code: mess, aid: id,pid:a_id};
+            }else {
+                var data = {type: 2, tel: phone, code: mess, aid: id, pid: '{{ detail.id|default }}'};
+            }
+            $.ajax({
+                url:'{{ apiUrl }}'+'/api/v1/promotion/order',
+                type:'post',
+                data:data,
+                success:function (data) {
+                    if(data.error==0){
+                        alert('报名成功');
+                        $('.shadow,.no_load1').hide();
+                        $('.phone_,.mess_input').val('');
+                    }else{
+                        alert(data.message);return false;
+                    }
+                }
+            })
+        }
+
+
+
+        $('body').on('click','.btn_mess',function () {
+            var phone=$(this).parent('.a_input_block').prev('.a_input_block').children('.phone_').val();
+            var reg = /^1(3|4|5|6|7|8|9)\d{9}$/;
+            if(!phone.match(reg)){
+                alert('请输入正确的手机号');return false;
+            }
+            $.ajax({
+                url:'{{ apiUrl }}'+'/api/v1/promotion/order/sends/mobilecodes',
+                type:'post',
+                data:{tel:phone},
+                success:function (data) {
+                    if(data.error==0){
+                        settime();
+                    }else{
+                        alert(data.message);return false;
+                    }
+                }
+            })
+        });
+
+        //  短信验证码发送时间
+        var countdown = 59;
+        var this_input = $('.btn_mess');
+        function settime() {
+            if (countdown == '-1') {
+                this_input.removeAttr("disabled");
+                this_input.css({"color":"#FF8400"});
+                this_input.val("发送短信验证码");
+                countdown = 59;
+            } else {
+                this_input.attr("disabled", true);
+                this_input.css({"color":"gray"});
+                this_input.val("重新发送(" + countdown + ")");
+                countdown--;
+                setTimeout(function () {
+                    settime()
+                }, 1000);
+            }
+        }
+
+        $('.top_close').click(function () {
+            $('.shadow,.no_load').hide();
+        });
+    })
+</script>

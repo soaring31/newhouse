@@ -1,0 +1,225 @@
+HouseBundle\Entity\Wxusers:
+    type: entity
+    table: wxusers
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        usemodel:
+            options:
+                comment: 所属模型
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        name:
+            options:
+                comment: 公众号名称
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        sid:
+            options:
+                comment: 公众号原始id
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        wxaccount:
+            options:
+                comment: 微信号
+                unsigned: false
+            nullable: false
+            type: string
+            length: 50
+        appid:
+            options:
+                comment: 微信appid
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        appsecret:
+            options:
+                comment: 微信AppSecret
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        auth_type:
+            options:
+                comment: '0普通,1第三方授权'
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        encode:
+            options:
+                comment: 消息加密方式
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        easkey:
+            options:
+                comment: 消息加解密密钥
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        token:
+            options:
+                comment: 微信Token
+                unsigned: false
+            nullable: false
+            type: string
+            length: 255
+        actoken:
+            options:
+                comment: AccessToken
+                unsigned: false
+            nullable: false
+            type: string
+            length: 255
+        acexp:
+            options:
+                comment: Token更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        uid:
+            options:
+                comment: 所属用户
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        type:
+            options:
+                comment: 类型
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 3
+        component_verify_ticket:
+            options:
+                comment: 验证对象
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        component_access_token:
+            options:
+                comment: access_token对象
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        mchid:
+            options:
+                comment: 商户ID
+                unsigned: false
+            nullable: false
+            type: string
+            length: 50
+        pushs:
+            options:
+                comment: 推送文档id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        paysignkey:
+            options:
+                comment: 支付密钥
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        wxplan:
+            options:
+                comment: 微信方案
+                unsigned: false
+            nullable: false
+            type: string
+            length: 10
+        aid:
+            options:
+                comment: 楼盘id
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        models:
+            options:
+                comment: 模型
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        checked:
+            options:
+                comment: 启用
+                unsigned: false
+                default: '1'
+            nullable: false
+            default: '1'
+            type: string
+            length: 100
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

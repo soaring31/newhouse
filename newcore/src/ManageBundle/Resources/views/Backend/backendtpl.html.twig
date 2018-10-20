@@ -1,0 +1,46 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+seajs.use("{{ bundlepath }}/js/models",function(m){
+	//js入口	    
+	m.init('main');
+});
+</script>
+{% endblock %}
+
+{% block tableMain %}
+<span class="tableDesc">
+        菜单列表<input type="button" id="btnfun_show" data="{{ (action~'/show')|U }}" class="search-btn" value="新增主菜单" />
+</span>
+<table class="right-table">
+	<tbody>
+		<tr>
+			<th class="w35"></th>
+			<th class="txtleft">名称</th>
+			<th class="w300 txtleft">描述</th>
+			<th class="w50 txtleft">排序</th>
+			<th class="w250">操作</th>
+		</tr>
+		{% if ident.views.data is defined %}
+		{% for key,item in ident.views.data %}
+		<tr>
+		    <td>{{ item.t1 }}</td>
+		    <td>{{ item.t2 }}</td>
+		    <td>{{ item.t3 }}</td>
+		    <td>{{ item.t4 }}</td>
+		    <td class="txtcenter">{{ item.t5 }}|{{ item.t6 }}|{{ item.t7 }}</td>
+		</tr>
+		{% endfor %}
+		{% endif %}
+	</tbody>
+</table>
+{% endblock %}
+
+{% block submit %}{% endblock %}
+{% if ident.views is defined %}
+{% block pageIndex %}{{ident.views.pageIndex|default(1)}}{% endblock %}
+{% block pageCount %}{{ident.views.pageCount|default(1)}}{% endblock %}
+{% endif %}
+{% block promptUl %}
+	<li></li>
+{% endblock %}

@@ -1,0 +1,43 @@
+@import 'img-mobiledown'; //导入css 标识-文件名
+@include img-mobiledown($img-mobiledown); //调用全部样式， 标识-文件名($标识-文件名);
+
+// 手机客户端
+.khd-logo{
+    vertical-align:middle;
+    text-align: center;
+    padding-top: 10%;
+    
+}
+.p-title{
+    font-size: 0.9rem;
+    color:#000;
+    text-align: center;
+}
+.khd-bg{
+    vertical-align:middle;
+    text-align: center;
+    overflow-x:hidden; 
+}
+.downlink{
+    width: 166px;
+    margin: 0 auto;
+    margin-top:1rem;
+    z-index: 100;
+    margin-bottom:20px; 
+    a{
+        display: block;
+        margin: 4% auto;
+    }
+    .item-inner {
+        .p-text{
+            width: 168px;
+            padding: 0.4rem 0.5rem;
+            color: #333;
+            border: 0.05rem solid #FAD04C;
+            background-color: #F9FAEC;
+            font-size: 0.5rem;
+        }
+    }
+    
+}
+

@@ -1,0 +1,337 @@
+@charset "UTF-8";
+/*!
+* @name info.css
+* @author xying
+* @date 2016-8-8
+* @dec contrast
+*/
+/**
+ * @method 清除浮动 %clearfix 
+ * @description 清除浮动
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %clearfix;
+ * }
+ * ```
+ * 
+ * ```css
+ * 	div {
+	    *zoom: 1;
+	}
+	div:after {
+	    display: block;
+	    clear: both;
+
+	    height: 0;
+
+	    content: '\20';
+	}
+ * ```
+ */
+/**
+ * @method 去掉虚线框 %outline 
+ * @description 去掉虚线框
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @ extend %outline;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		outline: thin dotted;
+		outline: 5px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
+ * ```
+ */
+/**
+ * @method 文字不换行后面加省略号 %text-overflow 
+ * @description 文字不换行后面加省略号
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %text-overflow;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+ * ```
+ */
+/**
+ * @method 透明层opacity 
+ * @description 透明层 内容也透明
+ * @param {number} $opacity - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include opacity(.5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+	  opacity: .5;
+	  filter: alpha(opacity=50);
+ * }
+ * ```
+ */
+/**
+ * @method 背景透明层transparent 
+ * @description 透明层只处理背景透明
+ * @param {string} $color - 背景透明层的颜色
+ * @param {number} $alpha - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include transparent(#000, .5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+ *    	background-color: transparent;
+		background-color: (0,0,0,.5);
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7fffffff, endColorstr=#7fffffff,);
+		zoom: 1;
+ * }
+ * ```
+ */
+/**
+ * @method triangle 
+ * @description 生成一个三角形图标
+ * @param {string} $size - 三角的大小
+ * @param {string} $color - 三角颜色
+ * @param {string} $direction - 三角的方向 up, down, left, right
+ * @example 调用
+ * 
+ * ```scss
+ * i {
+ *    @include triangle(5px, #bbb, up); 
+ * }
+ * ```
+ * 
+ * ```css
+ * i {
+ *    width: 0;
+      height: 0;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent;
+      border-bottom-color: #bbb;
+ * }
+ * ```
+ */
+/**
+* @method 水平线hr nav-divider 
+* @description 透明层 内容也透明
+* @param {string} $color=#e5e5e5 - 线的颜色
+* @param {string} $line-height-computed - 线的高度，空间
+* @example 调用
+* 
+* ```scss
+* div {
+*    @include nav-divider(#e5e5e5, 24px);
+* }
+* ```
+* 
+* ```css
+* div {
+	  height: 1px;
+	  margin: 11px 0;
+	  overflow: hidden;
+	  background-color: #e5e5e5;
+* }
+* ```
+*/
+/*!
+ * @name info
+ * @author ahuing
+ * @date 2016-1-15
+ * @dec top toolbar popular search terms containing the search and
+ */
+/*
+top-bar
+*/
+.top-bar {
+    background: #f3f3f3;
+    min-width: 1200px;
+    padding: 15px 0 10px 0;
+}
+
+.top-bar .search-bar {
+    float: left;
+}
+
+.top-bar .list {
+    margin-left: 68px;
+}
+
+.top-bar .list li {
+    float: left;
+    margin-right: 22px;
+    font-size: 14px;
+    margin-top: 9px;
+    margin-top: 12px;
+    display: inline;
+    overflow: hidden;
+}
+
+.top-bar .list li a {
+    height: 20px;
+    line-height: 20px;
+    text-decoration: none;
+    color: #686465;
+    overflow: hidden;
+}
+
+.top-bar .list li a:hover {
+    color: #f00;
+}
+
+.top-bar .list li a i {
+    font-size: 20px;
+    float: left;
+    margin-right: 4px;
+    margin-top: 2px;
+}
+
+.list-db {
+    border-left: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+}
+
+.list-db .td0 {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.list-db ul {
+    float: left;
+    width: 220px;
+}
+
+.list-db ul.col0 {
+    font-weight: bold;
+    width: 99px;
+}
+
+.list-db li {
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+
+.list-db .hover, .list-db .active {
+    background: #e2e9ec;
+}
+
+.list-db li div {
+    padding: 5px;
+    word-break: break-all;
+}
+
+.list-db li div img {
+    width: 100%;
+}
+
+.list-head-outer {
+    height: 72px;
+}
+
+.list-head-inner {
+    width: 100%;
+}
+
+.list-head-inner .container {
+    background-color: #fff;
+}
+
+.list-head {
+    background: #f5f5f5;
+}
+
+.list-head li div {
+    height: 30px;
+    overflow: hidden;
+    padding: 20px 10px;
+    position: relative;
+    vertical-align: top;
+    background: #fff;
+}
+
+.list-head .txt {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #abadb3;
+    font-family: Microsoft yahei;
+    font-size: 14px;
+    height: 28px;
+    line-height: 28px;
+    overflow: hidden;
+    text-indent: 10px;
+    padding-right: 30px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.reset {
+    background: url("../images/close-ico.png") no-repeat 0 0;
+    cursor: pointer;
+    display: none;
+    height: 15px;
+    position: absolute;
+    right: 15px;
+    top: 27px;
+    width: 15px;
+}
+
+.reset:hover {
+    background-position: 0 bottom;
+}
+
+.nav-db {
+    background: #f5f5f5 none repeat scroll 0 0;
+    border-bottom: 3px solid #e43;
+}
+
+.nav-db li {
+    display: inline;
+    float: left;
+    margin-bottom: -3px;
+    margin-left: 30px;
+}
+
+.nav-db li a {
+    float: left;
+    font-size: 20px;
+    padding: 12px 23px;
+}
+
+.nav-db li a:hover {
+    text-decoration: none;
+}
+
+.nav-db li.act a {
+    background: #fff none repeat scroll 0 0;
+    border-color: #e43 #e43 #fff;
+    border-image: none;
+    border-radius: 5px 5px 0 0;
+    border-style: solid;
+    border-width: 3px;
+    color: #e43;
+    padding: 9px 20px;
+    position: relative;
+}
+
+/*# sourceMappingURL=info.css.map */

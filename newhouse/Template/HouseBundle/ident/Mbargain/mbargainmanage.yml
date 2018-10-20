@@ -1,0 +1,22 @@
+info:
+    tableName: special
+    subTableName: ''
+    aliasName: b
+    listGrid: {  }
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 12
+    order: id
+    orderBy: desc
+    searchFun: EXISTS
+    dataModel: 0
+    autoQuery: '1'
+    alias: {  }
+    query:
+        name:
+            orX: 'orX|name,like,%[name]%|id,eq,[name]|lpmc,like,%[name]%'
+    query1: {  }
+    groupBy: ''
+    attribute: '0'

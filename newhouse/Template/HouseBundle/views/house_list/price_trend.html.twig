@@ -1,0 +1,110 @@
+{#房价走势#}
+{{core_global.linkcss('static/house/css/newhouse-details/public.css?time=201804201145')}}
+{{core_global.linkcss('static/house/css/newhouse-details/newhouse-common.css?time=201804201145')}}
+{{core_global.linkcss('static/house/css/newhouse-details/newhouseDetail.css?time=201804201145')}}
+<style>
+    .right-list{padding:20px 15px 10px!important;width:auto;}
+    .right-list h2{margin-right:0!important;margin-bottom:0!important;}
+    #zst{width:290px;height:151px;}
+    .price-right .echarts{width:290px;overflow:visible;}
+</style>
+<div id="priceRight">
+    <div class="right-list">
+        <h2><a href="#">{{cur_area_data|default('')}}房价走势</a></h2>
+        <div class="price-right">
+            <a href="">
+                <p><i class="month_last">-</i>月均价 : <b><i class="price_last">-</i>元/平</b> </p>
+                <div>
+                    比<i class="monthq">-</i>月<i class="type_">上涨</i> : <span><b class="type_c">-</b><i class="type_p">-</i></span>
+                </div>
+                <div class="echarts">
+                    <div class="chart-con bd-gray">
+                        <div id="zst" ></div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="{{ asset('static/house/js/echarts.js') }}"></script>
+<script>
+    seajs.use([], function () {
+        $.ajax({
+            url: '{{ apiUrl }}'+"/api/v1/trends",
+            type: "post",
+            data: {
+                "city": '{{ cityad }}',// 当前城市简称
+                "area":'{{ cityid }}'// 当前城市ID
+            },
+            success:function (data) {
+                var list=data.data.new_house_price;
+                var p_list=list.tagout_price;
+                var month=[];
+                var price=[];
+                var percentage=list.percentage;
+                if(percentage>0){
+                    $('.type_').text('上涨');
+                    $('.type_c').text('↑');
+                }else if(percentage<0){
+                    $('.type_').text('下降');
+                    $('.type_c').text('↓');
+                }else{
+                    $('.type_').text('持平');
+                    $('.type_c').text('');
+                }
+                $('.type_p').text(percentage+'%');
+                for(var i=0;i<p_list.length;i++){
+                    month.push(p_list[i].date.slice(-2));
+                    price.push(p_list[i].price);
+                    if(i==p_list.length-1){
+                        $('.month_last').text(p_list[i].date.slice(-1));
+                        $('.monthq').text(parseInt(p_list[i].date.slice(-1))-1);
+                        $('.price_last').text(p_list[i].price);
+                    }
+                }
+                var myChart = echarts.init(document.getElementById('zst'));
+                option = {
+                    grid: {
+                        left:'0',
+                        right: '0',
+                        top: '20',
+                        bottom: '50',
+                    },
+                    color:['#ff8400'],
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: true,
+                        data: month,
+                        axisLine:{
+                            show:true,
+                            lineStyle:{
+                                color:'#636363'
+                            },
+                        },
+                        axisTick:{
+                            show:false,
+                            lineStyle:{
+                                color:'#eeeeee'
+                            }
+                        },
+
+                    },
+                    yAxis: {
+                        type: 'value',
+                    },
+                    series: [{
+                        data: price,
+                        type: 'line',
+                        label: {
+                            normal: {
+                                show: true
+                            }
+                        }
+                    }]
+                };
+                myChart.setOption(option);
+            }
+        });
+    })
+</script>

@@ -1,0 +1,54 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明 
+ * detail: 当前数据
+ * detail_images: 当前数据图集
+#}
+{% set detail = detail|default(cident.detail.data[0]|default('')) %}
+{% set detail_images = detail.images|sourceImg %}
+
+{% block result %}
+<nav class="bar bar-tab">
+    {{ core_mobile_global.bar_nav_btn({
+        title: '分享',
+        icon: 'font-f-29',
+        class: 'share-actions tab-item button-horizontal pull',
+        attr: {
+            'data-text': detail.name|default(''),
+            'data-abstract': detail.abstract|default(''),
+            'data-url': ('news/detail')|U({id: detail.id|default('')}),
+            'data-pic': core_global.img_url({src: detail.thumb|default('')}),
+        }
+    }) }}
+    {{ core_mobile_global.bar_nav_btn({
+        title: '评论',
+        icon: 'font-f-1',
+        class: 'tab-item button-horizontal pull',
+        popup: {
+            title: detail.name ~ '评论',
+            popup: '.popup-photos',
+        }
+    }) }}
+</nav>
+<div class="content">
+    <div class="swiper-container door-swiper" data-lazy-loading="true" data-lazy-loading-in-prev-next='true' data-pagination=".door-page" data-pagination-element="li">
+        <div class="swiper-wrapper">
+            {% if detail_images is defined %}
+                {% for item in detail_images %}
+                    <div class="swiper-slide">
+                        <img class="swiper-lazy" data-src="{{ core_global.img_url({
+                                src: item.href|default(''),
+                                type: 0
+                            }) }}" alt="{{item.desc|default('')}}">
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="swiper-pagination door-page"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    seajs.use(['share'], function(share) {
+         $('.door-swiper').swiper({spaceBetween: 10})
+    })
+</script>
+{% endblock result %}

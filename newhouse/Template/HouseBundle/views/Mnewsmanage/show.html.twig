@@ -1,0 +1,34 @@
+{% extends "HouseBundle::base_show.html.twig" %}
+{% set aid = app.request.get('aid') %}
+{% block js %}
+<script id="kwlist" type="text/html">
+<div class="keywordList">
+<div class="listinner">
+    <h2><span>热门关键词</span><i class="font-ico-28"></i></h2>
+    <div class="listbox">
+    <% for(var i=0; i< kwlist.length; i++) { %>
+        <a href="javascript:;"><%= kwlist[i] %></a>&nbsp;|&nbsp;
+    <% } %>
+    </div>
+
+</div>
+</div>
+</script>
+<script type="text/javascript">
+   /* seajs.use(['searchxq'], function ( searchxq) {
+        $('#keywords').autocomplete('dispose');
+    
+        searchxq.search({
+            xq: '#keywords',
+            url: '{{("majaxaction/keywords")|U()}}'
+        });
+
+        searchxq.keywords({
+            keyword: '#keywords'
+        });
+    })  */
+</script>
+{% endblock %}
+{% block body %}
+{{ core_manage.form(form|default(''),'form') }}
+{% endblock %}

@@ -1,0 +1,116 @@
+﻿/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+* @dec 求租 求购
+*/
+
+@import 'static/ats';
+// 工具类 每个文件都要导入
+
+@import 'sale';
+// 二手公用模块
+
+@import 'filter';
+// 选择分类
+
+@import 'font-lp'; // 楼盘图标
+
+@import 'sale-filter-hd'; // 分类头部
+
+@import 'list-hd'; // 列表头部
+
+.main {
+	float: left;
+	width: 930px;
+}
+
+.sale-body {
+	width: 930px;
+}
+// list
+.need-sort {
+	border-bottom: 1px solid #ddedfc;
+	height: 30px;
+	line-height: 30px;
+}
+.need-item {
+	border-bottom: 1px dashed #ddd;
+	vertical-align: top;
+	@extend %clearfix;
+	&:hover {
+		background: #fafafa none repeat scroll 0 0;
+	}
+	span {
+		float: left;
+		height: 40px;
+		line-height: 40px;
+		overflow: hidden;
+	}
+	.td1 {
+		color: #999;
+		width: 400px;
+		a {
+			color: #333;
+			font-size: 14px;
+			&:hover {
+				color: #f00;
+			}
+		}
+	}
+	.td2 {
+		width: 100px;
+		text-align: center;
+	}
+	.td3 {
+		width: 130px;
+		.c-e43 {
+			font-family: arial, "helvetica neue", helvetica, sans-serif;
+			font-size: 18px;
+		}
+	}
+	.td4 {
+		width: 110px;
+	}
+	.td5 {
+		color: #999;
+		width: 90px;
+	}
+}
+// detail
+.need-detail {
+	line-height: 2;
+	.title {
+		font-size: 22px;
+		margin-bottom: 20px;
+	}
+	.font-icons-19{
+		vertical-align: -3px;
+		margin-right: 3px;
+		font-size: 16px;
+	}
+	.info {
+		li{
+			min-height: 28px;
+		}
+		overflow: hidden;
+		b {
+			float: left;
+		}
+	}
+	.tel {
+		line-height: auto;
+		margin: 10px 0 3px;
+		padding-top: 10px;
+		.ico-tel {
+			border: 2px solid #e43;
+			border-radius: 5px;
+			color: #e43;
+			float: left;
+			font-size: 30px;
+			line-height: 30px;
+			margin: 4px 10px 0 0;
+			padding: 8px;
+		}
+	}
+}

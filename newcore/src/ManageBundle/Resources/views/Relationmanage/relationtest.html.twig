@@ -1,0 +1,46 @@
+{% extends "ManageBundle::poplayout.html.twig" %}
+{% block js %}
+<script>
+/*seajs.use("{{ bundlepath }}/js/relationtest",function(c){	    
+	c.init('main');
+});*/
+
+var source = $.parseJSON($("#master").attr('data-source'));
+$("#master").off().on("change", function(){
+	var id = $(this).val();
+	var slave = $("#slave");
+
+	$("option", slave).remove(); //也可使用slave.empty(); 
+	if(!source[id])
+		return false;
+
+	$.each(source[id], function(key, item){ 
+		var option = "<option value='"+key+"'>"+item+"</option>";
+		slave.append(option);
+	});
+});
+
+</script>
+{% endblock %}
+{% block body %}
+
+<table class="popup-table" style="width:100%;">
+    <tbody>
+        <tr choice="">
+			<th class="w150 rtd txtright">主从测试</th>
+			<td class="txtleft">
+				<select id="master" name="master" class="w100" data-source='{{ (data.relation)|raw }}'>
+					<option value=0>请选择</option>
+					{% for key,v in data.master %}
+						<option value="{{ v.id }}">{{ v.name }}</option>
+					{% endfor %}
+                </select>
+                <select id="slave" name="slave" class="w100" data-source=''>
+					<option id='default' value=""></option>
+                </select>
+        	</td>
+		</tr>
+    </tbody>
+</table>
+
+{% endblock %}

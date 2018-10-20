@@ -1,0 +1,18 @@
+﻿{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+{% set input = app.request.get('input')|default('') %}
+{% set map = core_global.mconfigtostring({name: "map", ename: 'mwebset'}).__toString %}
+{% set arr_map = (map == 0 ? '' : map)|split(',') %}
+{% set type = app.request.get('type')|default('marker') %}
+    <div data-map="{
+    minZoom: 8,
+    point: {
+        lng: {{arr_map[0]|default(116.404556)}},
+        lat: {{arr_map[1]|default(39.916042)}}
+    },
+    zoom: {{arr_map[2]|default(14)}}
+    {# zoom: 14 #}
+        }"
+        data-picker="{
+    type: '{{type}}',
+    inputID:  '#{{input}}',
+        }" style="height: 100%;"></div>

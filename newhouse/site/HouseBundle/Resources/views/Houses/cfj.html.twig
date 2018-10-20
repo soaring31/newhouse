@@ -1,0 +1,297 @@
+{% extends 'HouseBundle:Houses:lp_list_layout.html.twig' %}
+{# 说明
+** cfjArea: 所有地区
+** houseArea: 当前地区楼盘
+** housePrice: 当期楼盘的价格
+** cur_area_data: 当前区域数据值
+** area_data_area: 当前区域底下地区
+** prices： 当前区域价格表
+** month_now：本月价格
+** month_prev：上月价格
+#}
+
+{% set prices = ident.prices|default('') %}
+
+{% set month_now = prices.data[0]|default('') %}
+
+{% set month_prev = prices.data[1]|default('') %}
+
+{% block title %}{{cur_area_data|default('')}}房价_{{cur_area_data|default('')}}房价走势{{'now'|date('Y')}}-{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}查房价网{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data|default('')}}房价,{{cur_area_data|default('')}}房价走势,{{cur_area_data|default('')}}房价走势图,{{cur_area_data|default('')}}房价走势最新消息，{{cur_area_data|default('')}}查房价。" />
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}查房价网提供{{cur_area_data|default('')}}房价走势最新消息，发布{{cur_area_data|default('')}}房价走势信息，{{cur_area_data|default('')}}房价全部查询。" />
+{% endblock key_des %}
+
+{% block css %}
+    {{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/cfj.css')}}
+    <style type="text/css">
+        .filter-bd {
+            border: 0;
+        }
+    </style>
+{% endblock css %}
+
+{# 当前位置 #}
+{% block current_houses %}
+<span>{{cur_area_data|default('')}}房价走势</span>
+{% endblock current_houses %}
+
+{% block container %}
+ <div class="fj-container">
+    <div class="container">
+        {% block filters %}
+            {{house_global.filter_cfg({
+                head_data: head_data,
+                action: action
+            })}}
+        {% endblock filters %}
+        <div class="bd-gray">
+            <div class="pl30 clearfix mt20">
+                <div class="chart fl">
+                    <div class="fj-tit">{{cur_area_data|default('')}}房价走势图</div>
+                    <div class="chart-con bd-gray">
+                        <div id="zst" ></div>
+                    </div>
+                </div>
+                <div class="data fl">
+                    <div class="fj-tit">参考数据</div>
+                    <p>
+                        <span class="fl">
+                            <span class='big'>
+                                {{cur_area_data|default('')}}{{month_now.months|default('')|date('m')}}月房产均价{{house_global.if_dj({value: month_now.price|default(''), tpl: ' <em class="major-c">%value%</em>%danwei%'})}}
+                            </span>
+                            {% if month_prev.price|default('') %}
+                                {% if month_now.price|default('') > month_prev.price|default('') %}
+                                    {% set tpl_icons = 'i1' %}
+                                {% elseif month_now.price|default('') < month_prev.price|default('') %}
+                                    {% set tpl_icons = 'i2' %}
+                                {% elseif month_now.price|default('') == month_prev.price|default('') %}
+                                    {% set tpl_icons = 'i0' %}
+                                {% endif %}
+                                <span class="duibi">
+                                    环比上月 <em class="major-c">{{ (100 * (month_now.price|default('') - month_prev.price|default(''))|abs / (month_prev.price|default('') ? month_prev.price|default('') : 1) )|round(2) }}%</em>  <i class="trend {{tpl_icons|default('')}}"></i>
+                                </span>
+                            {% endif %}
+                        </span>
+                    </p>
+                    {% if month_prev %}
+                        <p>
+                            <span class="fl">
+                                {{cur_area_data|default('')}}{{month_prev.months|default('')|date('m')}}月房产均价{{house_global.if_dj({value: month_prev.price|default(''), tpl: '
+                                <em class="major-c">%value%</em>
+                                %danwei%'})}}
+                            </span>
+                        </p>
+                    {% endif %}
+                    <p>
+                        查看{{cur_area_data|default('')}}更多<a href="{{('houses/list')|U}}" target="_blank" class="major-c">新房房源</a>，更多<a href="{{('sale/list')|U}}" target="_blank" class="major-c">二手房源</a>，更多<a href="{{('rent/list')|U}}" target="_blank" class="major-c">租房房源</a>
+                    </p>
+                </div>
+                <div class="compute fl">
+                    <div class="fj-tit">计算工具</div>
+                    <ul class="clearfix">
+                        <li>
+                            <a href="{{('tools/index')|U({id: '1'})}}" target="_blank">
+                                <p class="ico"> <i class="font-tools-1"></i>
+                                </p>
+                                <p class="txt">购房能力评估</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{('tools/index')|U({id: '5'})}}" target="_blank">
+                                <p class="ico"> <i class="font-tools-6"></i>
+                                </p>
+                                <p class="txt">提前还款计算器</p>
+                            </a>
+                        </li>
+                        <li class="li03">
+                            <a href="{{('tools/index')|U({id: '6'})}}" target="_blank">
+                                <p  class="ico">
+                                    <i class="font-tools-7"></i>
+                                </p>
+                                <p class="txt">税费计算器</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{('tools/index')|U({id: '3'})}}" target="_blank">
+                                <p class="ico">
+                                    <i class="font-tools-2"></i>
+                                </p>
+                                <p class="txt">公积金贷款额度评估</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{('tools/index')|U({id: '2'})}}" target="_blank">
+                                <p class="ico">
+                                    <i class="font-tools-3"></i>
+                                </p>
+                                <p class="txt">商业贷款</p>
+                            </a>
+                        </li>
+                        <li class="li06">
+                            <a href="{{('tools/index')|U({id: '3'})}}" target="_blank">
+                                <p class="ico">
+                                    <i class="font-tools-4"></i>
+                                </p>
+                                <p class="txt">公积金贷款</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{('tools/index')|U({id: '4'})}}" target="_blank">
+                                <p class="ico">
+                                    <i class="font-tools-5"></i>
+                                </p>
+                                <p class="txt">组合贷款</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--热销楼盘-->
+        {% set area_data_area = ('db.area')|getAll({pid: sess_area, checked: 1, pageSize: 9}) %}
+        {% if area_data_area.data is defined and area_data_area.pageCount|default(0) != 0 %}
+            <div class="fj-area clearfix">
+                {% for item in area_data_area.data %}
+                    {% set houseArea = ('house.houses')|getAll({checked: 1, region: item.id|default(''), pageSize: 20, type: 0}) %}
+                    <div class="item">
+                        <div class="fj-tit">
+                            <h3>{{item.name|default('')}}</h3>
+                        </div>
+                        <div class="con">
+                            <ul>
+                                {% for house in houseArea.data %}
+                                    <li class="clearfix">
+                                        <i class="ico"></i>
+                                        <span class="txt">
+                                            <a href="{{('houses/detail')|U({id: house.id|default('')})}}">{{house.name|default('')}}</a>
+                                        </span>
+                                        <span class="price">
+                                            {{house_global.if_dj({value: house.dj|default(''), tpl: '%value%%danwei%'})}}
+                                        </span>
+                                        <em class="trend i{{item.trend|default('')}}"></em>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <!--/热销楼盘-->
+        <div class="blank10"></div>
+        <!--panel-->
+        {% set rexiaoloupantuijian = ('rexiaoloupantuijian')|getPush(5) %}
+        {% if rexiaoloupantuijian|default('') %}
+            <div class="tj-wrap">
+                <!--title-->
+                <div class="fj-tit">
+                    <h3>热销楼盘推荐</h3>
+                </div>
+                <!--/title-->
+                <!--body-->
+                <div class="tj-list bd-gray" data-tag="rexiaoloupantuijian">
+                    <div class="blank20"></div>
+                    <ul>
+                        {% for item in rexiaoloupantuijian %}
+                            <li>
+                                <a href="{{item.url|default('')}}" target="_blank" class="img">
+                                    {{- core_global.lazy_img({
+                                        src: item.thumb|default(''),
+                                        alt: item.name|default(''),
+                                        type: 2,
+                                        width:200 ,
+                                        height: 150
+                                    }) -}}
+                                </a>
+                                <p class="clearfix">
+                                    <span class="price fr">
+                                        {{house_global.if_dj({value: item.dj|default(''), tpl: '%value%%danwei%'})}}
+                                    </span>
+                                    <a href="{{item.url|default('')}}" title="{{item.name|default('')}}" target="_blank">{{item.name|default('')}}</a>
+                                </p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <!--/body-->
+            </div>
+        {% endif %}
+        <!--/panel-->
+        <div class="blank10"></div>
+        <!--panel-->
+        {% set fjzs_nknzzz = ('fjzs_nknzzz')|getPush(5) %}
+        {% if fjzs_nknzzz|default('') %}
+            <div class="tj-wrap">
+                <!--title-->
+                <div class="fj-tit">
+                    <h3>你可能正在找</h3>
+                </div>
+                <!--/title-->
+                <!--body-->
+                <div class="tj-list bd-gray" data-tag="fjzs_nknzzz">
+                    <div class="blank20"></div>
+                    <ul>
+                        {% for item in fjzs_nknzzz %}
+                            <li>
+                                <a href="{{item.url|default('')}}" target="_blank" class="img">
+                                    {{- core_global.lazy_img({
+                                        src: item.thumb|default(''),
+                                        alt: item.name|default(''),
+                                        type: 2,
+                                        width: 200,
+                                        height: 150
+                                    }) -}}
+                                </a>
+                                <p class="clearfix">
+                                    <span class="price fr">
+                                        {{house_global.if_dj({value: item.dj|default(''), tpl: '%value%%danwei%'})}}
+                                    </span>
+                                    <a href="{{item.url|default('')}}" title="{{item.name|default('')}}" target="_blank">{{item.name|default('')}}</a>
+                                </p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <!--/body-->
+            </div>
+        {% endif %}
+        <!--/panel-->
+        <div class="blank30"></div>
+    </div>
+</div>
+{% endblock container %}
+
+{% block js %}
+    <script type="text/javascript">
+        {# 走势图 #}
+        {# 横坐标 #}
+        var zstMouth = [{% if prices.data is defined %}
+            {% for item in prices.data %}
+                {% if loop.index <= 12 %}
+                "{{item.months|default('')|date('m')}}月",
+                {% endif %}
+            {% endfor %}
+        {% endif %}];
+        {# 数据 #}
+        var dzstDta = [{% if prices.data is defined %}
+            {% for item in prices.data %}
+                {% if loop.index <= 12 %}
+                ["{{item.months|default('')|date('m')}}", {{item.price|default('')}}],
+                {% endif %}
+            {% endfor %}
+        {% endif %}];
+        var jsonData = {
+            "title": "",
+            "series": [{
+                "name": "{{cur_area_data|default('')}}房价走势",
+                "datatype": "house",
+                "data": dzstDta.reverse()
+            }],
+            "color": ["#ee4433", "#F8CE5D", "#339966"],
+            "month_s": zstMouth.reverse()
+        };
+        seajs.use(['zst', 'lazyload'], function (zst, lazyload) {})
+    </script>
+{% endblock js %}

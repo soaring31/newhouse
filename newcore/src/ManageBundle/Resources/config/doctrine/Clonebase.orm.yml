@@ -1,0 +1,14 @@
+ManageBundle\Entity\Clonebase:
+    type: entity
+    table: clonebase
+    id:
+        id:
+            type: integer
+            nullable: false
+            id: true
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    lifecycleCallbacks: {  }

@@ -1,0 +1,18 @@
+{% extends 'HousemobileBundle:Door:detail.html.twig' %}
+
+{% set header_class = 'bar-op door-bar' %}
+
+{% block header_title %}{% endblock header_title %}
+
+{% block container %}
+	<div data-block="{
+	    bParams: true,
+	    ajax:{
+	        url: '{{ ('door/detail')|U }}',
+	        data: {
+	            id: '{{ app.request.get('id')|default('') }}',
+	            tpl: 'Door:huxingsblock'
+	        }
+	    }
+	}"></div>
+{% endblock container %}

@@ -1,0 +1,389 @@
+﻿/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+*/
+
+@import 'static/ats';
+// 工具类 每个文件都要导入
+
+@import 'lp';
+// 楼盘公用样式
+
+@import 'font-number';
+// 数字图标
+@import 'lp-map';// 地图
+
+@import 'lp-list';
+// 楼盘公用列表样式
+
+
+//nav
+.photo-nav{
+    margin-top: 7px;
+    a{
+        border-radius: 3px;
+        font-size: 16px;
+        margin-left: 10px;
+        padding: 5px 10px;
+        &.act,
+        &:hover{
+            background: #e43 none repeat scroll 0 0;
+            color: #fff;
+            text-decoration: none;
+        }
+    }
+}
+
+.left-list {
+    width: 902px;
+    float: left;
+    @extend %clearfix;
+}
+
+.kf-right {
+    float: right;
+    width: 270px;
+    @extend %clearfix;
+    // 看房团流程
+    .r-title {
+        font-size: 16px;
+        color: #2c2c2c;
+        line-height: 55px;
+        text-indent: 18px;
+        font-weight: 700;
+    }
+    .flow {
+        margin-left: 24px;
+        margin-bottom: 16px;
+        padding-right: 25px;
+        border-left: 2px solid #ebebeb;
+        li {
+            padding-top: 1px;
+            padding-left: 16px;
+            padding-bottom: 22px;
+            position: relative;
+        }
+        h3 {
+            font-size: 16px;
+            line-height: 1;
+            margin: 14px 0;
+            color: #666;
+        }
+        i {
+            font-size: 20px;
+            margin-right: 6px;
+        }
+        p {
+            font-size: 14px;
+            color: #999;
+            line-height: 26px;
+        }
+        .point {
+            position: absolute;
+            top: 22px;
+            left: -6px;
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            background: #e43;
+        }
+    }
+    // 看房团流程
+}
+
+// 报名
+.r-table {
+    h2 {
+        font-size: 16px;
+        color: #2c2c2c;
+        line-height: 60px;
+        font-weight: 700;
+        text-indent: 12px;
+    }
+    table {
+        width: 268px;
+        font-size: 14px;
+        color: #666;
+        text-align: center;
+        th {
+            height: 50px;
+            line-height: 50px;
+            background: #fafafa;
+        }
+        .list {
+        }
+        .red {
+            color: #e43;
+        }
+        td {
+            height: 38px;
+            border-bottom: 1px dashed #ddd;
+        }
+    }
+}
+
+// 看房须知
+.f-text {
+    margin-top: 38px;
+    padding: 6px 18px 10px 12px;
+    font-size: 14px;
+    color: #666;
+    h3 {
+        line-height: 32px;
+        font-weight: 700;
+        text-indent: 8px;
+    }
+    p {
+        line-height: 26px;
+        text-indent: 14px;
+    }
+}
+// 免责声明
+.f-t-2 {
+    margin-top: 20px;
+    padding: 10px;
+    font-size: 14px;
+    line-height: 30px;
+    span {
+        color: #fe0000;
+    }
+}
+
+// 标题
+.t-title {
+    font-size: 16px;
+    line-height: 46px;
+    font-weight: 700;
+    color: #2c2c2c;
+    text-indent: 18px;
+    margin-top:15px;
+}
+
+// 看房列表
+.list-item {
+    border-bottom-width: 0;
+    position: relative;
+    padding: 20px 0;
+    .info {
+        p {
+            overflow: hidden;
+        }
+    }
+    .list-item-circle {
+        position: absolute;
+        top: 20px;
+        left: -6px;
+        height: 10px;
+        width: 10px;
+        border-radius: 50%;
+        background: $major-color;
+    }
+}
+.topic-group-list {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    ul {
+        border-left: 2px solid #ddd;
+        margin: 20px 0 20px 24px;
+    }
+}
+
+// 地图
+.lp-coltit {
+    // padding: 15px 0;
+    h3 {
+        font-size: 16px;
+        line-height: 40px;
+        // float: left;
+        margin-top: 6px;
+        color: #2c2c2c;
+        font-weight: 700;
+    }
+}
+
+$rount-left-W: 100px;
+$rount-right-W: 100px;
+$rount-table-W: 680px;
+$btn-H: 45px;
+$btn-W: 170px;
+
+.kft-list {
+    border: 1px solid  #dddddd;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    padding: 10px;
+    .list-img {
+        float: left;
+    }
+    .list-content {
+        float: left;
+        margin-left: 20px;
+        margin-right: 20px;
+        width: 320px;
+        font-size: 16px;
+        &>div {
+            margin-top: 5px;
+            overflow: hidden;
+            height: 28px;
+        }
+    }
+    .list-operate {
+        float: right;
+        text-align: right;
+        width: 260px;
+        [class^='font-'] {
+            vertical-align: -2px;
+            margin-right: 5px;
+            color: #e43;
+        }
+        .btn {
+            font-size: 18px;
+            height: $btn-H;
+            line-height: $btn-H;
+            width: $btn-W;
+            text-align: center;
+            cursor: pointer;
+        }
+    }
+    .list-name {
+        font-size: 18px;
+    }
+    .list-keywords {
+        span {
+            display: inline-block;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 5px;
+            font-size: 12px;
+            padding: 0 5px;
+        }
+    }
+    .list-enroll {
+        margin-right: 44px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+    .list-time {
+        height: 24px;
+        margin-bottom: 28px;
+        span {
+            background: #eee;
+            border-radius: 5px;
+            color: $major-color;
+            display: inline-block;
+            font-weight: 700;
+            margin: 0 3px;
+            padding: 0 7px;
+            vertical-align: middle;
+        }
+        .c-e43 {
+            width: $btn-W;
+            text-align: center;
+            padding: 0 12px;
+            display: inline-block;
+        }
+    }
+
+    .list-route {
+        position: relative;
+        padding: 25px 0 30px 0;
+        margin-top: 20px;
+        margin-bottom: 30px;
+        &-left {
+            position: absolute;
+            width: $rount-left-W;
+            top: -5px;
+            left: 0;
+            z-index: 2;
+            span {
+                background: $major-color;
+                color: #fff;
+                border-radius: 50%;
+                height: 46px;
+                width: 40px;
+                display: block;
+                padding: 7px 10px;
+                text-align: center;
+            }
+        }
+        &-right {
+            float: right;
+            width: $rount-right-W;
+        }
+        &-line {
+            position: absolute;
+            top: 24px;
+            left: 0px;
+            height: 2px;
+            width: 100%;
+            background: #ccc;
+        }
+        &-table {
+            width: $rount-table-W;
+            table-layout: fixed;
+            text-align: center;
+            margin-left: $rount-left-W;
+            td {
+                position: relative;
+            }
+        }
+        &-td {
+            &-circle {
+                display: block;
+                height: 10px;
+                width: 10px;
+                border-radius: 50%;
+                background: $major-color;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                margin-left: -5px;
+                margin-top: -5px;
+                z-index: 10;
+            }
+            &-name {
+                position: absolute;
+                top: -15px;
+                width: 100%;
+                text-align: center;
+                max-height: 55px;
+                line-height: 90px;
+                overflow: hidden;
+            }
+        }
+        &-houses {
+            border-radius: 5px;
+            position: absolute;
+            background: #fff;
+            border: 1px solid #e43;
+            z-index: 3;
+            width: 334px;
+            display: none;
+            text-align: left;
+            padding: 10px;
+            bottom: 16px;
+            left: 50%;
+            &-img {
+                float: left;
+            }
+            &-content {
+                margin-left: 145px;
+                p {
+                    margin-top: 8px;
+                    max-height: 44px;
+                    overflow: hidden;
+                }
+            }
+        }
+    }
+
+    .sanjiao {
+        display: none;
+        position: absolute;
+        top: -16px;
+        left: 50%;
+        margin-left: -9px;
+        @include triangle(18px, #e43, down);
+    }
+}

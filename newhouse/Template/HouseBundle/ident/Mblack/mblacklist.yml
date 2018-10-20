@@ -1,0 +1,26 @@
+info:
+    tableName: users
+    subTableName: ''
+    aliasName: u
+    listGrid: {  }
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    groupBy: ''
+    order: id
+    orderBy: desc
+    searchFun: EXISTS
+    dataModel: 0
+    autoQuery: '1'
+    alias: {  }
+    query:
+        status:
+            eq: '0'
+        username:
+            orX: 'username,like,%[name]%|email,like,%[name]%|tel,like,%[name]%|id,eq,[name]'
+        id:
+            eq: '[usertype]'
+    query1: {  }
+    attribute: '0'

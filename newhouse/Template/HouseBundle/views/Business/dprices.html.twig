@@ -1,0 +1,44 @@
+{% extends 'HouseBundle:Business:ddetail.html.twig' %}
+
+{% block b_title %}
+房价_{{detail.name|default('')}}价格_{{detail.name|default('')}}均价
+{% endblock b_title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}房价,{{detail.name|default('')}}价格,{{detail.name|default('')}}均价, {{detail.name|default('')}}房价走势" />
+<meta name="description" content="{{detail.name|default('')}}房价,{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}为您提供{{detail.name|default('')}}价格、均价，实时{{detail.name|default('')}}房价走势，帮您分析房价走势、记录成交价格，查找{{detail.name|default('')}}均价价格就上搜房网！"/>
+{% endblock key_des %}
+
+{# 导航高亮 #}
+{% block nav_business %}
+{% set nav_business_act = 4 %}
+{{parent()}}
+{% endblock nav_business %}
+
+{% block d_body %}
+    <!--价格走势-->
+    <div class="d-fjzs">
+        <div class="lp-coltit">
+            <h3 class="tit1">
+                价格走势
+            </h3>
+        </div>
+        <div class="p15 bd-gray">
+            <div class="mb10 ico-word">
+                <a target="_blank" class="calculator fr" href="{{('tools/index')|U}}"><i class="font-lp-24 c-f00"></i>房贷计算器</a>住宅参考价格：{{house_global.if_dj({value: detail.dj|default(''), tpl: '<b class="fz22 arial c-f00">%value%</b>%danwei%', danwei: '元/平米' })}}<br>
+                <span class="c-f00"><i class="font-lp-1 mr5"></i>{{detail.bdsm|default('')}}</span>
+            </div>
+            <!--走势图-->
+            {{house_global.prices_info({
+                aid: detail.id|default(0),
+                chart: 1,
+                name: detail.name
+            })}}
+            <!--/走势图-->
+        </div>
+    </div>
+    {{house_global.prices_info({
+        aid: detail.id|default(0),
+        table: 1
+    })}}
+{% endblock d_body %}

@@ -1,0 +1,21 @@
+{% extends app.request.get('ajax', 0) ?  'HouseBundle:Clist:door_list.html.twig' : 'HouseBundle:Sale:qdetail.html.twig' %}
+{# # 说明:
+** nav_houses_act: 当前页面
+#}
+
+{% block title %}{{detail.name|default('')}}-户型图{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}户型,{{detail.name|default('')}}户型图,{{detail.name|default('')}}户型大全" />
+<meta name="description" content="{{detail.name|default('')}}户型图,{{cur_area_data|default('')}}{{detail.name|default('')}}小区网为您提供最新、最全的{{detail.name|default('')}}户型图，包含一居室户型、二居室户型、三居室户型等所有大小户型图，查找{{detail.name|default('')}}户型图就上{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}。 "/>
+{% endblock key_des %}
+
+{# 高亮导航 #}
+{% set nav_houses_act = 5 %}
+
+{% block container_houses %}
+	{{house_global.detail_planintro_common({
+		ajax_url: action|U({ajax: 1, id: detail.id|default(0)}),
+		aid: detail.id|default(0)
+	})}}
+{% endblock container_houses %}

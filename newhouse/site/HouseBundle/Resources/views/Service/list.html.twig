@@ -1,0 +1,137 @@
+{% extends 'HouseBundle:Service:index.html.twig' %}
+{# 说明：
+ * url_category: 传回来的是当前分类的id
+ * url_name: url传回来的name
+ * category: 获取当前分类，以便获取其相应的属性
+ * category_service: 左侧菜单
+ * category_parents: 当前位置获取父级分类
+#}
+{% set url_name = app.request.get('name') %}
+
+{% set url_category = app.request.get('category', 7) %}
+
+{% set category = (url_category)|getCategoryById() %}
+
+{% set container_class = 'service-container' %}
+
+{% set category_parents = ('house.category')|getParents(url_category|default('')) %}
+
+{% if category.pid|default('') != 7 %}
+    {% set nav_service_act = category.pid|default('') %}
+{% else %}
+    {% set nav_service_act = category.id|default('') %}
+{% endif %}
+
+{% block title %}&nbsp;{{category.name|default('')}}{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" Content="{{category.keywords|default('')}}"/>
+<meta name="description" content="{{category.description|default('')}}"/>
+{% endblock key_des %}
+
+{% block service_bread %}
+    {{house_global.service_shortcut_recommend()}}
+    {# 当前位置 #}
+    <div class="current-location container pb20">
+        <a href="{{('service/index')|U}}">首页</a>
+        {% block service_current %}
+        {% if url_name|default('') %}
+            <span>&gt;</span>
+            {{url_name|default('') ~ '搜索结果'}}
+        {% else %}
+            {% for item in category_parents.data %}
+                {% if not loop.first %}
+                    <span>&gt;</span>
+                    <a href="{{('service/list')|U({category: item.id|default('')})}}">{{item.name|default('')}}</a>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        {% endblock service_current %}
+    </div>
+{% endblock service_bread %}
+
+{% block service_left %}
+    <div class="fl aside">
+        <h2 class="title-h2">可选列表</h2>
+        <ul class="aside-nav" id="level1">
+            {% block left_menu %}
+            {% if category_service.data is defined %}
+            {% for item in category_service.data %}
+                {% for levelone in item.nodes %}
+                    {% if levelone.menu.id == 12 %}
+                        {% set levelone_url = ('service/ask')|U({category: levelone.menu.id}) %}
+                    {% else %}
+                        {% set levelone_url = ('service/list')|U({category: levelone.menu.id}) %}
+                    {% endif %}
+                    <li class="level-1 {% if levelone.menu.id == category.id|default('') %}cur{% endif %}">
+                        <a href="{{levelone_url}}" class="item-tit">
+                            <div class="level-btn">
+                                <i class="font-service-arrow"></i>
+                            </div>
+                            {{levelone.menu.name}}
+                        </a>
+                        <ul class="level2">
+                        {% for leveltwo in levelone.nodes %}
+                            <li class="level-2 {% if leveltwo.menu.id == category.id|default('') %}cur{% endif %}">
+                                <a href="{{('service/list')|U({category:leveltwo.menu.id})}}" class="item-tit">
+                                    {{leveltwo.menu.name}}
+                                </a>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            {% endfor %}
+            {% endif %}
+            {% endblock left_menu %}
+        </ul>
+        {{block('online_block')}}
+    </div>
+{% endblock service_left %}
+
+{% block service_right %}
+    <div class="body fr">
+        {{block('search_block')}}
+        <div class="service-list clearfix">
+            <ul class="clearfix">
+                {{house_global.service_list({
+                    list: ident.list
+                })}}
+            </ul>
+            <!--page-->
+            {{core_global.page(ident.list|default(''))}}
+            <!--page-->
+        </div>
+    </div>
+{% endblock service_right %}
+
+
+{% block js %}
+<script type="text/javascript">
+seajs.use([],function(){
+    // 初始化
+    $('.aside-nav').find('.level-2').map(function (k, v) {
+        var $this = $(this)
+        var $level1 = $this.closest('.level-1');
+        if($this.hasClass('cur')) {
+            $level1.addClass('open');
+            console.log($level1.find('.level-btn').find('i'))
+            $level1.find('.level-btn').find('i').removeClass('font-service-arrow').addClass('font-service-3')
+        };
+    });
+    // 点击
+    $(".level-btn").click(function (e) {
+        e.preventDefault();
+        var $this = $(this);
+        var $level1 = $this.closest('.level-1');
+        if ($level1.hasClass('open')) {
+            return false;
+        } else {
+            $level1.addClass('open').siblings().removeClass('open').find('.level-btn').find('i').removeClass('font-service-3').addClass('font-service-arrow');
+            $level1.find('.level-btn').find('i').removeClass('font-service-arrow').addClass('font-service-3');
+        };
+    })
+});
+</script>
+{% block js_service %}{% endblock js_service %}
+{% endblock js %}

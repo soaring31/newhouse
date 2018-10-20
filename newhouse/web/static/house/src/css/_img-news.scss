@@ -1,0 +1,33 @@
+$img-news-10:(16px, 16px, 0, -80px, img-news-10);
+$img-news-11:(16px, 15px, -42px, -55px, img-news-11);
+$img-news-01:(23px, 45px, 0, 0, img-news-01);
+$img-news-02:(23px, 45px, -99px, 0, img-news-02);
+$img-news-03:(23px, 45px, -33px, 0, img-news-03);
+$img-news-04:(23px, 45px, -66px, 0, img-news-04);
+$img-news-05:(7px, 7px, -112px, -55px, img-news-05);
+$img-news-06:(7px, 7px, -26px, -80px, img-news-06);
+$img-news-07:(12px, 8px, -90px, -55px, img-news-07);
+$img-news-08:(12px, 8px, -68px, -55px, img-news-08);
+$img-news-09:(32px, 15px, 0, -55px, img-news-09);
+
+$img-news: ($img-news-10,$img-news-11,$img-news-01,$img-news-02,$img-news-03,$img-news-04,$img-news-05,$img-news-06,$img-news-07,$img-news-08,$img-news-09);
+
+@mixin img-news($sprites) {
+  %iconews {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/news.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+        @extend %iconews;
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{% extends 'HouseBundle:Muserhand:muserhandlist.html.twig' %}
+ {% set models = 'houses' %}
+{% block mainMenu %}
+    {{ core_manage.jump(
+        {
+            class: 'on',
+           title: '<i class="mr5"></i>收藏楼盘',
+           url: (action)|U({models: models, type: 0})       
+        }
+        ) }}
+      {{ core_manage.jump(
+        {
+           title: '<i class="mr5"></i>收藏小区',
+           url: (action)|U({models: models,type: 1})       
+        }
+        ) }} 
+{% endblock %}
+

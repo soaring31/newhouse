@@ -1,0 +1,16 @@
+{% extends 'CoreBundle::base_manage_block.html.twig' %}
+
+{% block js %}
+{% endblock js %}
+{% block mainleft %}{% endblock mainleft %}
+{% block tableMain %}
+<section class="list-con list-con-show" data-list-con-show="1">
+	<div class="list">
+	    {% block body %}{% endblock body %}
+		{# 提示说明 #}
+	    <div class="prompt">
+	    	{{ block('prompt') }}
+	    </div>
+	</div>
+</section>
+{% endblock %}

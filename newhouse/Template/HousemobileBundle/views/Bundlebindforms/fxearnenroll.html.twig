@@ -1,0 +1,85 @@
+{% extends 'HousemobileBundle:Bundlebindforms:bundlebase.html.twig' %}
+{% set aid = app.request.get("aid")|default('') %}
+
+{% set yongjin = app.request.get("yongjin")|default('') %}
+
+{% set url_myself = app.request.get("myself") %}
+
+{% if url_myself|default('') %}
+{% set user_data = app.user %}
+
+{% set user_name = user_data.userinfo.nicename|default(user_data.username|default('')) %}
+
+{% set user_tel = user_data.tel|default('') %}
+{% endif %}
+
+{% block result %}
+{% set form = Form %}
+<div class="mobile-form">
+    <form action="{{ form.vars.action|default('')|U({}, true) }}" class="form" method="post">
+        <input type="hidden" name="aid" value="{{aid}}"/>
+        <input type="hidden" name="yongjin" value="{{yongjin}}"/>
+        {{ form_widget(form.uid) }}
+        {{ form_widget(form.checked) }}
+        {{ form_widget(form.status) }}
+        <div class="list-block">
+            <ul>
+                <li class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title label item-title-p0 required">
+                            {% if url_myself|default('') %}
+                                姓&nbsp;名
+                                 <input type="hidden" name="xftype" value="yuding"/>
+                            {% else %}
+                                朋友姓名
+                                <input type="hidden" name="xftype" value="tuijian"/>
+                            {% endif %}
+                        </div>
+                        <div class="item-input">
+                            <input type="text" class="infor-text text-wl" name="name" id="name" value="{{user_name|default('')}}" placeholder="请输入姓名">
+                        </div>
+                    </div>
+                </li>
+                <li class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title label item-title-p0 required">
+                            联系电话
+                        </div>
+                        <div class="item-input">
+                            <input type="tel" class="infor-text text-wl" name="tel" id="tel" value="{{user_tel|default('')}}" placeholder="请输入联系电话">
+                        </div>
+                    </div>
+                </li>
+                {% if url_myself|default('') != 1 or user_data|default('') is empty %}
+                <li class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title label item-title-p0 required">
+                            意向单价
+                        </div>
+                        <div class="item-input item-input-flex">
+                            {{core_mobile_forms.choice_form(form.dj.vars)}}
+                        </div>
+                    </div>
+                </li>
+                {% endif %}
+                <li class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title label item-title-p0 required">
+                            验证码
+                        </div>
+                        <div class="item-input code-input">
+                            {{ core_mobile_forms.captcha_form(form.codeText.vars) }}
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        {{ form_widget(form.csrf_token) }}
+        <div class="content-block">
+            <div class="row">
+                <div class="col-100"><a data-role="submit" data-title="提交" class="button button-big button-fill button-success">提交</a></div>
+            </div>
+        </div>
+    </form>    
+</div>
+{% endblock result %}

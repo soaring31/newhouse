@@ -1,0 +1,62 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% block mainMenu %}
+{{ parent() }}
+<li id='mainmenu_{{0|tripodEncode}}' data-url='{{ ('controllerstemplate')|U }}'><a href="javascript:void(0);">模版管理</a></li>
+<li class="on"><a href="javascript:void(0);">标识管理</a></li>
+{% endblock %}
+{% block js %}
+<script>
+seajs.use("{{ bundlepath }}/js/controllers",function(c){
+	//js入口	    
+	c.init('main');
+});
+</script>
+{% endblock %}
+{% block tableMain %}
+<span class="tableDesc">
+       标识列表>><input type="button" id="btnfun_edit" data="{{ (action~"/show")|U({'pid':app.request.get('id'),'bundleName':_bundleName,'controllerName':_controllerName}) }}" class="btn" value="新增标识" />&nbsp;&nbsp;
+  {{ views|default('') }}
+</span>
+<table class="right-table">
+	<tbody>
+		<tr>
+			<th class="w30"></th>
+            <th class="txtleft">标识名称</th>
+            <th class="w200 txtleft">表名称</th>
+            <th class="w80 txtleft">表别名</th>
+            <th class="w80 txtleft">读取类型</th>
+            <th class="w80 txtleft">当前页码</th>
+            <th class="w80 txtleft">每页数量</th>
+            <th class="w100 txtleft">排序字段</th>
+            <th class="w80 txtleft">升降序</th>
+			<th class="w200">操作</th>
+		</tr>
+		{% if info is defined %}
+		{% for key,vo in info %}
+		<tr>
+		    <td></td>
+			<td>{{ key|default('') }}</td>
+			<td>{{ vo.tableName|default('') }}</td>
+			<td>{{ vo.aliasName|default('') }}</td>
+			<td>{{ vo.storagetype|default('') }}</td>
+			<td>{{ vo.pageIndex|default('') }}</td>
+			<td>{{ vo.pageSize|default('') }}</td>
+			<td>{{ vo.order|default('') }}</td>
+			<td>{{ vo.orderBy|default('') }}</td>
+			<td class="txtcenter">
+			    <input type="button" id="btnfun_edit_{{key}}" data="{{ (action~'/show')|U({'pid':app.request.get('id'),'bundleName':_bundleName,'controllerName':_controllerName,'id':key|default('')}) }}" class="btn" value="编辑" />&nbsp;&nbsp;
+			    <input type="button" id="btnfun_edit_{{key}}" data="{{ (action~'/show1')|U({'pid':app.request.get('id'),'bundleName':_bundleName,'controllerName':_controllerName,'id':key|default('')}) }}" class="btn" value="编辑关联" />&nbsp;&nbsp;
+				<input type="button" id="btnfun_delete_{{key}}" data="{{ (action~'/delete')|U({'pid':app.request.get('id'),'bundleName':_bundleName,'controllerName':_controllerName,'id':key|default('')}) }}" class="btn" value="删除" />
+			</td>
+		</tr>
+		{% endfor %}
+		{% endif %}
+	</tbody>
+</table>
+{% endblock %}
+{% block submit %}{% endblock %}
+{% if info is defined %}
+{% block pageIndex %}{{ info.pageIndex|default(1) }}{% endblock %}
+{% block pageCount %}{{ info.pageCount|default(1) }}{% endblock %}
+{% endif %}
+{% block promptUl %}{% endblock %}

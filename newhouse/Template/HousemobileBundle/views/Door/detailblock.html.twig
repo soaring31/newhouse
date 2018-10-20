@@ -1,0 +1,127 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明 
+ * detail: 当前数据
+ * detail_tujis: 当前数据图集
+ * detail_houses: 当前数据所属楼盘
+ * detail_topic_arc_aid: 当前数据所属看房团id
+ * detail_topic: 当前数据所属看房团数据
+#}
+
+{% set detail = detail|default(cident.door_detail.data[0]|default('')) %}
+
+{% set detail_tujis = detail.tujis|default('')|sourceImg %}
+
+{% set detail_houses = ('house.houses')|getRow({checked: 1, id: detail.aid|default(''), findType: 1}) %}
+
+{% set detail_topic_arc_aid = ('house.topic_arc')|getCol('aid', { checked: 1, fromid: detail.aid|default(''), cate_pushs: 'loupan', pageSize: 1000, orderBy: 'desc', order: 'id' }) %}
+
+{% set detail_topic = ('house.topic')|getAll({id: 'in|' ~ detail_topic_arc_aid|join(','), category: 82, checked: 1, pageSize: 1}).data[0]|default('') %}
+
+{% block result %}
+<div class="content">
+	<div class="swiper-container" data-pagination=".swiper-pagination" data-lazyloading="true" data-lazy-loading-in-prev-next='true' style="padding-bottom: 0;">
+        <div class="swiper-wrapper">
+            {% if detail_tujis is defined %}
+                {% for item in detail_tujis %}
+                    <div class="swiper-slide">
+                        <a href="{{('door/huxings')|UU({id: detail.id|default('')})}}">
+                            {{core_global.img({
+                                src: item.href|default(''),
+                                alt: item.desc|default('')
+                            })}}
+                        </a>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+
+    <div class="list-block list-block-rent list-block-rent-mt0">
+        <ul>
+            <li class="item-content">
+                <div class="item-inner">
+                    <div class="m">
+                        <div class="t">
+                            {{detail.name|default('')}}
+                            {{ core_global.formData({value: detail.cate_status|default(''), tpl: '<span class="button button-sm btn-2">%value%</span>'}) }}
+                        </div>
+                    </div>
+                    <div class="item-after">
+                        {{house_global.if_dj({value: detail.dj|default(''), tpl: '<span class="p-red fz-jg">%value%</span><span class="pull-right mt5">%danwei%</span>'})}}                       
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+
+    {# 属性 #}
+    <div class="list-block panel-block">
+        <div class="item-content1 p-gray">
+            <div class="item-inner2">
+                <div class="row">
+                    <div class="col-50">
+                        户型：{{house_global.huxing({data: detail|default(''), tpl: '%shi%%ting%%wei%%chu%'})}}
+                    </div>
+                    <div class="col-50">
+                        面积：{{house_global.if_mj({value: detail.mj|default('')})}}
+                    </div>
+                    <div class="col-50">
+                        物业类型：{{core_global.formData({value: detail.cate_type|default('')})}}
+                    </div>                    
+                    <div class="col-50">
+                        主力户型：{{ core_global.formField({value: detail.zlhx|default(''), form: 'houses_door', field:'zlhx'}) }}
+                    </div>
+                    <div class="col-100">
+                        电话：{{detail_houses.tel|default('-')}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ul>
+            <li class="item-content item-link">
+                <a href="{{('houses/detail')|UU({id: detail_houses.id|default('')})}}" class="item-inner p-default">
+                    <div class="item-title item-title-p0">
+                        所属楼盘：{{detail_houses.name|default('')}}
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+
+    {% if detail_topic|default('') %}
+    <div class="list-block panel-block">
+        <ul>
+            <li class="item-content item-link">
+                <a href="{{('topic/detail')|UU({id: detail_topic.id|default('')})}}" class="item-inner p-default">
+                    <div class="item-title item-title-p0">
+                        <span class="button button-red button-sm button-fill mr5">团</span>{{detail_topic.name|default('')}}
+                    </div>
+                    <div class="item-after p-default">
+                        已报名：<span class="p-red">{{detail_topic.enroll|default('')}}</span>人
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+    {% endif %}
+
+    {# 说明 #}
+    {{housemobile_global.content({
+        title: '户型说明',
+        content: detail.abstract|default(''),
+        default: '暂无说明'
+    })}}
+
+    {% set sort_houses_door = ('house.door')|getAll({checked: 1, aid: detail.aid|default(''), id: 'neq|' ~ detail.id|default(''), pageSize: 10, findType: 1}) %}
+    <div class="list-block panel-block media-list" data-tag="same_lp_door">
+        {{housemobile_global.panel_title({title: '同楼盘户型'})}}
+        <ul>
+        	{{ render(controller('HouseBundle:Clist:door_list', {_isApp: url_isApp, list: sort_houses_door})) }}
+        </ul>
+    </div>
+	{{ render(controller('HouseBundle:Common:footer', {_isApp: url_isApp, })) }}
+</div>
+{% endblock result %}

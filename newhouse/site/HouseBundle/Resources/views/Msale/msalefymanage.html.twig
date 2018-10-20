@@ -1,0 +1,85 @@
+{% extends 'HouseBundle:Msale:msalearc.html.twig' %}
+    {% block tableMain %}
+    {# {{dump(block_active_data)}} #}
+    {# {% if ename is defined %}
+    {% set filterOpt = [
+        {
+            method: 'selectFormField',
+            title: '审核',
+            form: 'checked',
+            field: 'checked',
+        },
+        {
+            method: 'search',
+            field: 'name',
+        }
+    ] %}
+    {% endif %}
+    {{ core_manage.filter(filterOpt|default('')) }} #}
+
+    {{ core_manage.filter([
+        {
+            method: 'selectFormField',
+            title: '审核',
+            form: 'checked',
+            field: 'checked',
+        },
+        {
+            method: 'selectFormField',
+            field: 'cate_album',
+            form: 'sale_album',
+            title: '类型',
+        },
+        {
+            method: 'search',
+            field: 'name',
+            title: '请搜索名称'
+        }
+    ]) }}
+
+    <div class="list-con" data-param="{{ params }}">
+        <div class="list list-thumb">
+        <ul>
+           {% if block_arc_data.data|length %}
+           {% for k, vo in block_arc_data.data %} 
+                    {{ vo.value }} 
+            <li data-id="{{ vo.id }}">
+                <div data-role="checkbox" class="img">
+                    <img src="{{assetImg(vo.value|default(''), {type: 2, width: 100, height: 100})}}" alt="">
+                    <i class="font-ico-1"></i>
+                </div>
+                <div class="bar">
+                    <span class="text">{{ vo.id|default('') }}</span>
+                    <a title="编辑" data-role="show" href="{{ (action ~ "/show")|U({id: vo.id}) }}" class="font-ico-2"></a>
+                    <a title="删除" data-role="delete" href="#" class="font-ico-3"></a>                    
+                </div>
+                <div class="t" class="list-thumb-name" title="{{vo.name|default('')}}">[{{ core_global.formField({value: vo.checked}) }}] {{ vo.name|default('') }}  </div>                     
+            </li>
+            {% endfor %}
+            {% else %}
+            <li class="tac">没有数据！</li>
+            {% endif %}
+        </ul>
+    </div>
+        {{core_manage.page(block_arc_data)}}
+    </div>
+        
+    {{ core_manage.oprate([
+        {
+            method: 'delete',
+            title: ' <i class="font-ico-del mr5"></i>批量删除',
+        },
+        {
+            method: 'dropdownFormField',
+            field: 'checked',
+            form: 'checked',
+            title: '审核',
+        },
+        {
+            method: 'dropdownFormField',
+            field: 'cate_album',
+            form: 'sale_album',
+            title: '类型',
+        }
+    ]) }}
+    {% endblock %}

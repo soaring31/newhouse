@@ -1,0 +1,8 @@
+member_homepage:
+    path:     /hello
+    defaults: { _controller: 'MemberBundle:Default:index' }
+member_homepages:
+    path:     /hellos
+    defaults: { _controller: 'MemberBundle:Default:index' }
+    status: 1
+    remark: 'sss'

@@ -1,0 +1,13 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+{% block result %}
+{% set user_data = app.user|default('') %}
+{
+    "id": "{{user_data.id|default('')}}",
+    "name": "{{user_data.nicename|default(user_data.username|default(''))}}",
+    "image": "{{core_global.img_url({src: user_data.image|default('')})}}",
+    "usertype": "{{user_data.userinfo.usertype|default('')}}",
+    "url": "../main/login.html",
+    "infoid": "{{user_data.userinfo.id|default('')}}"
+}
+{% endblock result %}

@@ -1,0 +1,27 @@
+{% extends 'HouseBundle:Member:detail.html.twig' %}
+{# 标题 #}
+{% set title_users_act = '经纪人' %}
+{# 高亮导航 #}
+{% set nav_users_act = 4 %}
+{# 搜索 #}
+{% block search_member %}
+    {% set searchUrl = 'member/d_jjr' %}
+    {{parent()}}
+{% endblock search_member %}
+
+{% block right %}
+    <div class="gs-jjr">
+        <div class="subT">
+            <p><i></i>经纪人</p>
+        </div>
+        <div class="sale-list agn-con">
+            {{house_global.member_j_list({
+                list: ident.list,
+            })}}
+        	<div class="blank20"></div>
+        	<!--page-->
+        	{{core_global.page(ident.list)}}
+        	<!--page-->
+        </div>
+    </div>    
+{% endblock right %}

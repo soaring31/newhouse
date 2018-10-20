@@ -1,0 +1,27 @@
+{#相关热点#}
+{{core_global.linkcss('static/house/css/newhouse-details/public.css?time=201804201145')}}
+{{core_global.linkcss('static/house/css/newhouse-details/newhouse-common.css?time=201804201145')}}
+{{core_global.linkcss('static/house/css/newhouse-details/newhouseDetail.css?time=201804201145')}}
+<style>
+    .vhg-recommend-txt{height:auto!important;display:block;}
+    .host_img{width:280px;height:197px;background:orange;}
+    .vhg-recommend-title.none{border:none;height:auto;}
+    .hot_name{font-size:16px;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;margin:10px 0;}
+    .hot_content{font-size:12px;color:#999999;display: -webkit-box;-webkit-box-orient: vertical;
+        -webkit-line-clamp:2;overflow: hidden;}
+    .vhg-recommend-txt:hover{color:orange;}
+</style>
+
+{% set sort_clicks_news = ('house.news')|getAll({checked: 1, orderBy: 'desc', order: 'clicks', pageSize:4, findType: 1}|merge(other_spl|default({}))) %}
+{% if sort_clicks_news.data %}
+    <div class="vhg-recommend">
+        <p class="vhg-recommend-title col-333 fb fz22 none">相关热点</p>
+        {% for item in sort_clicks_news.data %}
+            <a class="vhg-recommend-txt por" href="{{ 'news/detail/'~item.id~'.html' }}">
+                <div class="host_img" style="background:url({{ item.thumb }}) center no-repeat;background-size:cover;"></div>
+                <p class="hot_name">{{ ('house.category')|getOne('name',{id: item.category|default('')}) }} | {{ item.name }}</p>
+                <p class="hot_content">摘要：{{ item.abstract|raw }}</p>
+            </a>
+        {% endfor %}
+    </div>
+{% endif %}

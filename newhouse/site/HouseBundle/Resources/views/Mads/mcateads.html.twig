@@ -1,0 +1,97 @@
+{% extends "HouseBundle:Mblock:mblockmanage.html.twig" %}
+{% block js %}
+
+{% endblock %}
+
+{% block mainleft %}
+{% endblock mainleft %}
+
+
+{% block list %}
+<section class="list-con" data-param="{{ param }}">
+    <div class="list">
+        <table data-level="top" data-type="singleToggle" class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="50" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="60" class="tac" data-role="sort" data-sort="id" class="sort">ID</th>
+                    <th width="40">&nbsp;</th>
+                    <th>区块名称</th>
+                    <th width="180">区块标识(ename)</th>
+                    <th width="60"data-role="sort" data-sort="sort" class="sort">排序</th>
+                    <th width="200" class="tac">操作</th>
+                </tr>
+                {% if block_data.data is defined %}
+                {% set colspan = 9 %}
+                {# 一级 #}
+                {% for item in block_data.data %}
+                <tr data-level="1" data-id="{{ item.menu.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td class="tac">{{item.menu.id}}</td>
+                    <td class="tac {% if item.nodes %}plusico{% endif %}"></td>
+                    <td><span data-role="itemEdit" data-name="name" class="edit">{{item.menu.name}}</span></td>
+                    <td>{{ item.menu.ename|default('-') }}</td>
+                    <td><span data-role="itemEdit" data-name="sort" class='edit'>{{item.menu.sort}}</span></td>
+                    <td>
+                        {{core_manage.show()}}
+                        {{core_manage.delete()}}
+                        {{core_manage.show({
+                            title: '添加子菜单',
+                            url: (_action~'/show')|U('pid='~item.menu.id)
+                        })}}
+                    </td>
+                </tr>
+                {% if item.nodes is defined %}
+                <tr data-level="next" class="subtr">
+                {# <tr data-level="next" class="subtr" style="display:none;" id='subtr_{{item.id}}' > #}
+                    <td colspan="{{colspan}}">
+                        <table class="subright-table">
+                            {# 二级 #}
+                            {% for item1 in item.nodes %}
+                            <tr data-level="1" data-id="{{ item1.menu.id }}">
+                                <td width="50" class="tac">{{core_manage.checkbox()}}</td>
+                                <td width="60" class="tac">{{item1.menu.id}}</td>
+                                <td width="40" class="tac pl20 {% if item1.nodes %}plusico{% endif %}"></td>
+                                <td><span data-role="itemEdit" data-name="name" class='edit'>{{item1.menu.name}}</span></td>
+                                <td width="180">{{item1.menu.ename|default('-') }}</td>
+                                <td width="60"><span data-role="itemEdit" data-name="sort" class='edit'>{{item1.menu.sort}}</span></td>
+                                <td width="200">
+                                    {{core_manage.show()}}
+                                    {{core_manage.delete()}}
+                                    {{core_manage.show({
+                                        title: '复制',
+                                        url: (_action~'/show')|U({_copy: 1, id: item1.menu.id})
+                                    })}}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(block_data)}}
+</section>
+{% endblock list %}
+
+{% block oprate %}
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'pushs_img_ad',
+        title: '设置状态',
+    }
+]) }}
+{% endblock oprate %}
+{% block promptUl %}
+    
+{% endblock %}

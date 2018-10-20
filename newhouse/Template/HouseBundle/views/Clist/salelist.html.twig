@@ -1,0 +1,8 @@
+{% extends 'HouseBundle::base_list.html.twig' %}
+{% block list %}
+	{{house_global.sale_list({
+	    list: list,
+	    page: 1
+	})}}
+{% endblock list %}
+            

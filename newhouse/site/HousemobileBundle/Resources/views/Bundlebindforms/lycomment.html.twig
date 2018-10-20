@@ -1,0 +1,16 @@
+{% extends 'HousemobileBundle:Bundlebindforms:bundlebase.html.twig' %}
+{% set aid = app.request.get("aid")|default() %}
+{% block result %}
+{{core_mobile_forms.forms({
+    Form: Form,
+    formName: formName,
+    buttons: {
+        0: {
+            name: '提交评论',
+            class: ' button-big button-fill button-success',
+            attr: 'data-role="submit"'
+        }
+    },
+    aid: aid
+})}}
+{% endblock result %}

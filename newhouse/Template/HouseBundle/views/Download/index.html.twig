@@ -1,0 +1,17 @@
+{% extends 'HouseBundle::base.html.twig' %}
+
+{% set nav_act = 9 %}
+
+{% block title %}手机客户端{% endblock title %}
+
+{% block css %}
+    {{core_global.linkcss('static/'~bundlepath~'/css/download-index.css')}}
+{% endblock css %}
+
+{% block body %}
+<div class="bg"><img src="{{asset('static/'~bundlepath~'/images/downbg.png')}}"></div>
+{% endblock body %}
+
+{% block footer%}
+    {% include 'HouseBundle::footer.html.twig' %}
+{% endblock footer %}

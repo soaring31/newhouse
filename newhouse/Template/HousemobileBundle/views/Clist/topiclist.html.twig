@@ -1,0 +1,60 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+** ajax调用：看房团
+#}
+{% if ident.list is defined %}
+    {% set list = ident.list %}
+    {% set tpl_now = 'now'|date('U') %}
+{% endif %}
+{% block result %}
+    {% spaceless %}
+    {% if list.data is defined and list.pageCount|default('') != 0 %}
+        {% for item in list.data %}
+            {% if item.show_time.date|date('U') > tpl_now|default('') %}
+                {% set item_btn_attr = 'button-danger tg' %}
+
+                {% set item_time = '<span class="time format-time group-time-data pull-left" data-endtime="' ~ item.show_time.date|default('') ~ '" data-noend="永久有效！" data-end="活动结束" data-type="1" data-timetype="1">截止时间: ' ~ item.show_time.date|default('')|date('Y-m-d') ~ '</span>' %}
+            {% else %}
+                {% set item_btn_attr = 'button-gray' %}
+
+                {% set item_time = '<span class="c-e43">活动结束</span>' %}
+            {% endif %}
+            <li {% if loop.last %}data-page="{
+                    pageIndex: {{list.pageIndex}},
+                    pageCount: {{list.pageCount}},
+                    pageSize: {{list.pageSize}}
+                 }"{% endif %}>
+                <a href="{{('topic/detail')|UU({id: item.id|default('')})}}" class="item-content p-default">
+                    <div class="item-media">
+                        {{- core_global.img({
+                            src: item.thumb|default(''),
+                            alt: item.name|default(''),
+                            type: 2,
+                            width:107 ,
+                            height: 80
+                        }) -}}
+                    </div>
+                    <div class="item-inner">
+                        {{housemobile_global.list_title({title: item.name|default('')})}}
+                        <div class="item-subtitle item-subtitle-ex">
+                            {{item_time|raw}}
+                        </div>
+                        <div class="item-subtitle item-subtitle-ex">
+                           {{item.venue|default('待定')}}
+                        </div>
+                        <div class="item-subtitle item-subtitle-ex already-registered">
+                           <span class="mt5 pull-left">已报名：&nbsp;{{item.enroll|default('')}}&nbsp;人</span>
+                           <span class="button pull-right {{item_btn_attr|default('')}}">报名组团</span>
+                        </div>
+                    </div>
+                </a>
+            </li>
+        {% endfor %}
+    {% else %}
+        <li class="mobile-list-none">暂无看房团</li>
+    {% endif %}
+    <script type="text/javascript">
+        seajs.use(['formattime'])
+    </script>
+    {% endspaceless %}
+{% endblock result %}

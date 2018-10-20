@@ -1,0 +1,5 @@
+{# 统一ajax调用入口 #}
+{# {% set tpl = app.request.get('tpl') %}
+{% extends ':' in tpl ? 'HousemobileBundle:' ~ tpl ~ '.html.twig' : 'HousemobileBundle:Clist:' ~ tpl ~ '.html.twig' %} #}
+{% set tpl = app.request.get('tpl', '') %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}

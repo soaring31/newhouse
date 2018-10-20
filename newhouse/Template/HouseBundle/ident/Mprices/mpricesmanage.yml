@@ -1,0 +1,28 @@
+info:
+    tableName: prices
+    subTableName: category
+    aliasName: p
+    listGrid: {  }
+    listDesc: ''
+    subJoinField: category
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    groupBy: ''
+    order: id
+    orderBy: desc
+    searchFun: EXISTS
+    dataModel: 4
+    autoQuery: '1'
+    alias: {  }
+    query:
+        category:
+            eq: 'null'
+        months:
+            orX: 'months,like,%[name]%'
+        area:
+            in: '{areasub}'
+    query1:
+        id:
+            eq: '[category]'
+    attribute: '0'

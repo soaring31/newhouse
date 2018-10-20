@@ -1,0 +1,368 @@
+{% extends 'HouseBundle:Topic:extend.html.twig' %}
+{#
+/**
+ *  detail : 获取ID对应的详细数据
+ *  push_xqxf : 学区现房的楼盘推送
+ *  push_dtxf : 地铁现房的楼盘推送
+ *  xqxfAttrs : 学区现房的详细属性
+ *  dtxfAttrs : 地铁现房的详细属性
+ */
+ #}
+
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% set  push_xqxf = ('house.topic_arc')|getBlock({ename:'xqxf'},{aid: detail.id|default(''),checked: 1,cate_status: 116,pageSize:6}).data %}
+
+{% set push_dtxf = ('house.topic_arc')|getBlock({ename:'dtxf'},{aid: detail.id|default(''),checked: 1,cate_status: 116,pageSize:6}).data %}
+
+{% block key_des %}
+<meta name="keywords" content="{{ detail.keywords|default('') }}" />
+<meta name="description" content="{{ detail.abstract|default('') }}" />
+{% endblock key_des%}
+
+{% block title %}专题模板3{% endblock title %}
+
+{% block css %}
+    {{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/special-3.css')}}
+{% endblock css %}
+
+{% block body %}
+
+<body>
+    <div class="banner"></div>
+    <div class="text-banner">
+        <p>
+           {{core_global.substr(detail.abstract|default(''),200,1)}}
+        </p>
+        <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-3/daodu.jpg'}) -}}" alt="导读">
+        <div class="cl"></div>
+    </div>
+    <!--现房期房-->
+    <div class="tit-big">
+        <a href="#" target="_blank">
+            <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-3/tit1.jpg'}) -}}" alt="现房"></a>
+    </div>
+    <div class="w1170 xf">
+        <div class="left">
+            <p class="line1">
+                <span>现房优点：</span>
+                优点在于建成的房屋质量、小区环境和配套设施一目了然，产权清晰，可以一手交钱一手交房，不用等待很长时间，且地段一般处在市中心，交通便利，投资回报周期短；
+            </p>
+            <p>
+                <span>现房缺点：</span>
+                缺点是价格稍贵。
+            </p>
+        </div>
+        <div class="middleimg">
+            <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-3/m.jpg'}) -}}" width="248" height="203" alt="人物"></div>
+        <div class="right">
+            <p class="line1">
+                <span>期房优点：</span>
+                优点在于，价格较现房更为实惠，可以提早挑选自己中意的房源，且施工期间可以随时查看工程质量；
+            </p>
+            <p>
+                <span>期房缺点：</span>
+                缺点在于先交款后交房存在风险，开发商若出现资金问题，则房屋可能成为烂尾楼，浪费时间金钱。
+            </p>
+        </div>
+        <div class="cl"></div>
+    </div>
+
+    <div class="tit-big">
+        <a href="#" target="_blank">
+            <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-3/tit2.jpg'}) -}}" alt="现房标题"></a>
+    </div>
+    <div class="w1170 xf2">
+        <div class="inner_txt">
+            一处楼盘如果是现房或准现房销售，那么该项目的楼体施工、内部房屋构架，以及园区配套设施等就已经完工或基本完工。项目本身清晰可见的建筑外观，园区内完善的基础设施和配套建设，不仅有利于提升项目的形象感和价值感，还很容易打消购房者对于购买期房的疑虑，从而增强其购房信心。
+        </div>
+
+        <div class="tit-inner" style="margin-top:0;">
+            <a href="#" target="_blank" style="cursor:pointer;text-decoration:none;">
+                <span>实景呈现，质量可见</span>
+            </a>
+            <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-3/sanjiao.jpg'}) -}}" width="41" height="58" alt="三角">
+            <div class="cl"></div>
+        </div>
+        <p>
+            看得见、摸得着，买着才放心。购买现房可以到实体楼中，实地考察户型是否喜欢，格局是否称心，光照是否充足，有无挡光情况等，看房子的各种情况自己能不能都接受，衡量房子值不值所销售的价格，买得明明白白。
+        </p>
+
+        <div class="tit-inner">
+            <span>无需等待，即买即住</span>
+            <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-3/sanjiao.jpg'}) -}}" width="41" height="58" alt="三角">
+            <div class="cl"></div>
+        </div>
+        <p>
+            对于着急入住的购房者而言，现房是极佳的选择。因为现房大多已完成验收，能够实现交钱就入住，真正的买房、装修、入住一气呵成。如果是租房族买现房，还能够节省一大笔租房费用，时间、金钱统统都能省下不少。
+        </p>
+
+        <div class="tit-inner">
+            <span>五证齐全，靠谱安心</span>
+            <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-3/sanjiao.jpg'}) -}}" width="41" height="58" alt="三角">
+            <div class="cl"></div>
+        </div>
+        <p>
+            买期房，多多少少都会存在楼盘因开发商资金链断裂而“烂尾”，导致购房者“钱房两空”。但买现房不同，现房已经建完，而且通常五证齐全，既不会有“烂尾”风险，又不会因证件不全而办不下来房证，还有很多现房可以“即买即住即办产权证”，让买房少了很多后顾之忧，买得更安心。
+        </p>
+
+        <div class="kaung1">
+            <div class="tit-inner">
+                <a href="#" target="_blank" style="cursor:pointer;text-decoration:none;">
+                    <span>细节之处见品质</span>
+                </a>
+                <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-3/sanjiao.jpg'}) -}}" width="41" height="58" alt="三角">
+                <div class="cl"></div>
+            </div>
+            <p>
+                现在很多的商品房消费纠纷针对的并不是主体工程质量，而是小区的环境以及配套设施上所暴露的小细节：比如小区里树太少、草太多等问题。现房、准现房小区环境以及配套设施的大致轮廓已经确定，绿化、楼间距、设施设备等一些重要指标已经可以一目了然。买现房、准现房，这些细节部分因为都展现在眼前，可以及时向开发商询问并提出要求，以免由于买卖双方沟通不到位，造成不必要的麻烦。
+            </p>
+        </div>
+        <div class="tit-inner">
+            <a href="#" target="_blank" style="cursor:pointer;text-decoration:none;">
+                <span>配套到不到位早知道</span>
+            </a>
+            <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-3/sanjiao.jpg'}) -}}" width="41" height="58" alt="三角">
+            <div class="cl"></div>
+        </div>
+       <p>某楼盘的业主入住后，发现到了晚上小区周边就冷冷清清，周边配套还未建起来，全是工地，气氛很吓人。</p>
+        <p>
+            如果一个规模庞大、分多期开发的项目，配套设施是否完善是比景观环境够不够好更需要引起重视的问题，因为一般情况下，在这样的项目中配套设施总是要等到后面几期开始动工以后才会逐步完善。
+        </p>
+        <div class="kaung2">
+            <div class="tit-inner">
+                <a href="#" target="_blank">
+                    <span>“货”“板”对照不吃亏</span>
+                </a>
+                <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-3/sanjiao.jpg'}) -}}" width="41" height="58" alt="三角">
+                <div class="cl"></div>
+            </div>
+            <p>
+                现房具有较强的安全性和直观性。现房是已经建好的实物，对于现房来说，房屋的品质看得见，摸得着。在购房前可以到项目进行实地考察，将实地调查的结果与宣传单页上的介绍进行对照比较。
+            </p>
+        </div>
+        <div class="tit-inner">
+            <a href="#" target="_blank">
+                <span>买了就能用，合算</span>
+            </a>
+            <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-3/sanjiao.jpg'}) -}}" width="41" height="58" alt="三角">
+            <div class="cl"></div>
+        </div>
+        <p>
+            从经济角度看，买期房在付了首付、交了按揭以后，少则一年半载多则两三年才能入住，如果是无房户在这期间还得继续租房住，又是一笔开销。这就意味着，业主在既不能控制又不能使用所购物业的情况下，反过来还要为开发商融资买单。这点正是购房者希望能现房、准现房销售的最主要原因。
+        </p>
+    </div>
+
+    <div class="tit-big">
+        <a href="#" target="_blank">
+            <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-3/tit6.jpg'}) -}}" alt="如何办理房产证"></a>
+    </div>
+    <div class="w1170 fcz">
+        <div class="zysx">
+            <span>注意事项</span>
+            ：在准备材料时，要保证合同﹑发票﹑契证等各个凭证资料的内容一致性， 认真核对，各项数据﹑日期等一致无误。
+        </div>
+        <table cellpadding="0" border="0" cellspacing="0">
+            <tbody>
+                <tr bgcolor="#fbefbb">
+                    <td width="50%">1、房屋所有权转移登记申请书（开发商提供）</td>
+                    <td width="50%">2、增量房转移登记询问笔录（开发商提供）</td>
+                </tr>
+                <tr>
+                    <td colspan="2">3、房屋共有权人登记约定书，共有房产提供共有关系证明（开发商提供）</td>
+                </tr>
+                <tr bgcolor="#fbefbb">
+                    <td>4、契税完税凭证原件及复印件（发票+契证）</td>
+                    <td>5、维修基金收据原件</td>
+                </tr>
+                <tr>
+                    <td>6、已备案商品房买卖合同原件</td>
+                    <td>7、居民身份证原件及复印件</td>
+                </tr>
+                <tr bgcolor="#fbefbb">
+                    <td>8、结婚证原件和复印件</td>
+                    <td>9、户口本原件和复印件</td>
+                </tr>
+                <tr>
+                    <td>10、不动产发票原件和复印件</td>
+                    <td>11、贷款需提供抵押和借款合同等资料</td>
+                </tr>
+                <tr bgcolor="#fbefbb">
+                    <td colspan="2">12、房产证所需费用：80元</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="fzbz">
+            * 按照上述材料准备好，就可以去办理房产证了，办理流程比以前简略了许多，不需要跟开发商预约，手续齐全个人就能办理，当天就能领取房产证。小编在这里友情提醒，因房产局的人较多办理产权证要提早出门，避免造成时间上的浪费。
+        </div>
+        <div class="cl"></div>
+    </div>
+
+    <div class="tit-big">
+        <a href="#" target="_blank">
+            <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-3/tit3.jpg'}) -}}" alt="误区"></a>
+    </div>
+    <div class="w1170 sf">
+        <div class="left">
+            <span>误区一、通知收房就算交房</span>
+            <p>
+                开发商有时会说：只要通知你收房了，就算交房了。这是错误的观点。开发商所交付的房屋应符合法律规定的标准，符合合同的约定，否则就不能算按期交房，交房不能以通知业主收房为标志。 此外，开发商应至少提前7天通知购房人收房的时间、地点。
+            </p>
+        </div>
+        <div class="middleimg">
+            <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-3/m2.jpg'}) -}}" alt="误区二"></div>
+        <div class="right">
+            <span>误区二、物业代表开发商</span>
+            <p>
+                收房时,物业态度并非代表开发商的态度，对于物业的承诺要区分对待。如果物业是受开发商委托负责收房工作，一旦出了问题业主仍要找开发商承担责任。 如果物业是以管理小区的身份出面，让购房人签物业管理合同，购房人可以签，物业费也可以交。
+            </p>
+        </div>
+        <div class="cl"></div>
+    </div>
+    <!--各方视角分析利弊 房源-->
+    <div class="tit-big">
+        <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-3/tit4.jpg'}) -}}" alt="视角分析"></div>
+    <div class="w1170 fy">
+        <div class="sj">
+            <ul>
+                <li>
+                    <div class="left">消费者</div>
+                    <p>
+                        购买现房和准现房产品使消费者有安全感；小区内楼宇及配套设施已初现，房型、楼间距等重要因素一目了然，消费者能根据房屋质量、周边环境等方面做出一个理性判断。
+                    </p>
+                </li>
+                <li>
+                    <div class="middle" style="line-height:36px;padding-top:30px;height:102px;">
+                        市场
+                        <br>认可度</div>
+                    <p>
+                        房子属于耐久型消费品，规划再好，毕竟只是停留在虚拟的阶段。而一个社区从规划、到建造、到装修，到最后成品交到业主手中，任何一个环节出了问题，都会导致产品“走样”。现房最为吸引消费者的优势在于：所见既所得。
+                    </p>
+                </li>
+                <li>
+                    <div class="right">房价</div>
+                    <p>对消费者而言自然是交钱拿现房更加“实在”，现房降低了投资风险。也避免了楼盘质量投诉、延迟或拒绝交房事件发生。</p>
+                </li>
+                <div class="cl"></div>
+            </ul>
+        </div>
+        <div class="cl"></div>
+
+        <div class="sj xx">
+            <ul>
+                <li>
+                    <div class="left">
+                        <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-3/t1.jpg'}) -}}" alt="可选范围小"></div>
+                    <p>
+                        在楼市销售火热的时候，一个楼盘如果进入到“现房销售”，其所剩房源便仅占全部房源的1%-36。目前有现房在售的楼盘中，很多已是尾盘，仅剩三五套、七八套产品在售的并不少，而且户型、朝向都不是很全，选择范围不及期房那样广，所以建议购房者实地考察，说不定会遇见“为你而留”的那一套。
+                    </p>
+                </li>
+                <li>
+                    <div class="middle">
+                        <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-3/t2.jpg'}) -}}" alt="售价略高">
+                        <br>认可度</div>
+                    <p>
+                        由于现房是已经完工了的房子，园区景观等各项设施比较齐全，房产证办理起来也相对更快，所以现房售价普遍高于期房，加之现房的优惠相对较少，而且当开发商资金回笼后便追求更高利润，房价自然上调，也导致现房实际成交价格会略高于期房。当然，也并不排除有些开发商急于清盘，而打出清盘特价，所以购房者需要多走多看多问，把握置业时机。
+                    </p>
+                </li>
+                <li>
+                    <div class="right">
+                        <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-3/t3.jpg'}) -}}" alt="优惠较少"></div>
+                    <p>
+                        期房销售的开发商为了快速回笼资金或聚拢人气，往往会推出“低首付”活动，或进行打折、赠礼等方式的促销，从而拉低房价。但现房开发商大多已完成销售任务，加之现房优势众多，所以“不愁卖”，导致优惠较少。
+                    </p>
+                </li>
+                <div class="cl"></div>
+            </ul>
+        </div>
+        <div class="cl"></div>
+    </div>
+
+    <div class="tit-big">
+        <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-3/tit5.jpg'}) -}}" alt="哪些现房值得购买？"></div>
+
+    <div class="w1170 fy" style="padding-top:24px;">
+
+        <!--学区——现房-->
+        <div class="tit-bottom">
+            <span>学区——现房</span>
+        </div>
+        <div class="text-fy">快开学了，学区房还没有选定，别着急，现房可以解决你的后顾之优，小编为你整理了沈城优质学区房源，总有一个适合你！</div>
+        <div class="fyinfo">
+        <div class="right">
+            <ul>
+                {% if push_xqxf is defined %}
+                    {% for item in push_xqxf %}
+                        {% set xqxfAttrs = ('house.houses')|getRow({id: item.fromid|default(''), checked: 1, findType: 1}) %}
+
+                            <li>
+                                <a href="{{('houses/detail')|U({id: item.fromid|default('')})}}" target="_blank">
+                                   {{core_global.lazy_img({
+                                        width: 339,
+                                        height: 211,
+                                        src: item.thumb|default(''),
+                                        alt: item.name|default(''),
+                                        type: 2
+                                    })}}
+                                   </a>
+                                <div class="name">
+                                    <span>{{ core_global.formField({value: item.lcs|default(''), form: 'lcs', field: 'lcs', tpl: '%title%&nbsp;'}) }}
+                                       {{item.dj|default('')}}元/平起</span>
+                                    <a href="{{('houses/detail')|U({id: item.fromid|default('')})}}" target="_blank">{{item.name|default('')}}</a>
+                                    <div class="cl"></div>
+                                </div>
+                                <div class="jiaofang">{{xqxfAttrs.attributes.jfrq.value|default('更新中...')}}交房</div>
+                            </li>
+                    {% endfor %}
+                {% endif %}
+                <div class="cl"></div>
+            </ul>
+        </div>
+        <div class="cl"></div>
+        </div>
+        <!--地铁——现房-->
+        <div class="tit-bottom">
+            <span>地铁——现房</span>
+        </div>
+        <div class="text-fy">
+            开车太堵坐车太慢，还是坐地铁吧。2016年开始楼市也将真正迎来地铁时代，小编为大家精心挑选了以下楼盘，看看哪个楼盘更合你心意！
+        </div>
+        <div class="fyinfo">
+            <div class="right">
+               <ul>
+                    {% if push_dtxf is defined %}
+                        {% for item in push_dtxf %}
+                            {% set dtxfAttrs = ('house.houses')|getRow({id: item.fromid|default(''), checked: 1, findType: 1}) %}
+                                <li>
+                                    <a href="{{('houses/detail')|U({id: item.fromid|default('')})}}" target="_blank">
+                                       {{core_global.lazy_img({
+                                            width: 339,
+                                            height: 211,
+                                            src: item.thumb|default(''),
+                                            alt: item.name|default(''),
+                                            type: 2
+                                        })}}
+                                       </a>
+                                    <div class="name">
+                                        <span>{{ core_global.formField({value: item.lcs|default(''), form: 'lcs', field: 'lcs', tpl: '%title%&nbsp;'}) }}
+                                           {{item.dj|default('')}}元/平起</span>
+                                        <a href="{{('houses/detail')|U({id: item.fromid|default('')})}}" target="_blank">{{item.name|default('')}}</a>
+                                        <div class="cl"></div>
+                                    </div>
+                                    <div class="jiaofang">{{dtxfAttrs.attributes.jfrq.value|default('更新中...')}}交房</div>
+                                </li>
+
+                        {% endfor %}
+                    {% endif %}
+                    <div class="cl"></div>
+                </ul>
+            </div>
+            <div class="cl"></div>
+        </div>
+
+    </div>
+
+    <div class="cl"></div>
+
+</body>
+{% endblock body %}

@@ -1,0 +1,630 @@
+@charset "UTF-8";
+/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+*/
+/**
+ * @method 清除浮动 %clearfix 
+ * @description 清除浮动
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %clearfix;
+ * }
+ * ```
+ * 
+ * ```css
+ * 	div {
+	    *zoom: 1;
+	}
+	div:after {
+	    display: block;
+	    clear: both;
+
+	    height: 0;
+
+	    content: '\20';
+	}
+ * ```
+ */
+/**
+ * @method 去掉虚线框 %outline 
+ * @description 去掉虚线框
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @ extend %outline;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		outline: thin dotted;
+		outline: 5px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
+ * ```
+ */
+/**
+ * @method 文字不换行后面加省略号 %text-overflow 
+ * @description 文字不换行后面加省略号
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %text-overflow;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+ * ```
+ */
+/**
+ * @method 透明层opacity 
+ * @description 透明层 内容也透明
+ * @param {number} $opacity - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include opacity(.5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+	  opacity: .5;
+	  filter: alpha(opacity=50);
+ * }
+ * ```
+ */
+/**
+ * @method 背景透明层transparent 
+ * @description 透明层只处理背景透明
+ * @param {string} $color - 背景透明层的颜色
+ * @param {number} $alpha - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include transparent(#000, .5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+ *    	background-color: transparent;
+		background-color: (0,0,0,.5);
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7fffffff, endColorstr=#7fffffff,);
+		zoom: 1;
+ * }
+ * ```
+ */
+/**
+ * @method triangle 
+ * @description 生成一个三角形图标
+ * @param {string} $size - 三角的大小
+ * @param {string} $color - 三角颜色
+ * @param {string} $direction - 三角的方向 up, down, left, right
+ * @example 调用
+ * 
+ * ```scss
+ * i {
+ *    @include triangle(5px, #bbb, up); 
+ * }
+ * ```
+ * 
+ * ```css
+ * i {
+ *    width: 0;
+      height: 0;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent;
+      border-bottom-color: #bbb;
+ * }
+ * ```
+ */
+/**
+* @method 水平线hr nav-divider 
+* @description 透明层 内容也透明
+* @param {string} $color=#e5e5e5 - 线的颜色
+* @param {string} $line-height-computed - 线的高度，空间
+* @example 调用
+* 
+* ```scss
+* div {
+*    @include nav-divider(#e5e5e5, 24px);
+* }
+* ```
+* 
+* ```css
+* div {
+	  height: 1px;
+	  margin: 11px 0;
+	  overflow: hidden;
+	  background-color: #e5e5e5;
+* }
+* ```
+*/
+/*!
+ * @name zb
+ * @author ahuing
+ * @date 2016-1-15
+ * @dec top toolbar popular search terms containing the search and
+ */
+/*
+top-bar
+*/
+.top-bar {
+    background: #f3f3f3;
+    min-width: 1200px;
+    padding: 15px 0 10px 0;
+}
+
+.top-bar .search-bar {
+    float: left;
+}
+
+.top-bar .list {
+    margin-left: 68px;
+}
+
+.top-bar .list li {
+    float: left;
+    margin-right: 22px;
+    font-size: 14px;
+    margin-top: 9px;
+    margin-top: 12px;
+    display: inline;
+    overflow: hidden;
+}
+
+.top-bar .list li a {
+    height: 20px;
+    line-height: 20px;
+    text-decoration: none;
+    color: #686465;
+    overflow: hidden;
+}
+
+.top-bar .list li a:hover {
+    color: #f00;
+}
+
+.top-bar .list li a i {
+    font-size: 20px;
+    float: left;
+    margin-right: 4px;
+    margin-top: 2px;
+}
+
+/*** splist ***/
+.w860 {
+    width: 860px;
+}
+
+.w900 {
+    width: 900px;
+}
+
+.w300 {
+    width: 300px;
+}
+
+.photo-nav {
+    margin-top: 7px;
+}
+
+.photo-nav a {
+    border-radius: 3px;
+    font-size: 16px;
+    margin-left: 10px;
+    padding: 5px 10px;
+}
+
+.photo-nav a.act, .photo-nav a:hover {
+    background: #e43 none repeat scroll 0 0;
+    color: #fff;
+    text-decoration: none;
+}
+
+.zb-list li {
+    float: left;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.zb-list li p {
+    border-bottom: 1px dotted #ccc;
+    height: 24px;
+    line-height: 24px;
+    overflow: hidden;
+}
+
+.zb-list li p.ny {
+    height: auto;
+}
+
+.zb-list li p .c {
+    color: #999;
+    white-space: nowrap;
+}
+
+.zb-list li em {
+    color: #0056a9;
+    font-weight: bold;
+}
+
+.zb-list .pic {
+    border: 1px solid #ccc;
+    display: inline;
+    float: left;
+    height: 124px;
+    margin-right: 15px;
+    padding: 2px;
+    width: 182px;
+}
+
+.zb-list a:hover,
+.zb-list a.act {
+    color: #046bd4;
+}
+
+.coltit {
+    line-height: 32px;
+    height: 32px;
+    border-bottom: 1px solid #ddd;
+}
+
+.coltit .more {
+    float: right;
+    margin-right: 10px;
+    color: #666;
+}
+
+.coltit .tit {
+    position: relative;
+    margin-bottom: -1px;
+    border-bottom: 2px solid #e43;
+}
+
+.coltit h3 {
+    font-size: 16px;
+    line-height: 31px;
+    display: inline;
+    float: left;
+    padding: 0 10px;
+}
+
+.coltit .tit a:hover,
+.coltit h3 span {
+    color: #333;
+    font-weight: 700;
+}
+
+.tlist {
+    width: 100%;
+}
+
+.tlist li {
+    overflow: hidden;
+    padding-left: 10px;
+}
+
+.tlist .pic {
+    height: auto;
+    margin-bottom: 4px;
+    padding: 6px 0;
+}
+
+.tlist .pic img {
+    float: left;
+    margin-right: 8px;
+}
+
+.tlist .pic h4 {
+    font-size: 14px;
+    line-height: 26px;
+    overflow: hidden;
+    height: 75px;
+    padding-top: 2px;
+}
+
+.tlist .pic h4 a:hover {
+    text-decoration: none;
+    color: #2e9ee8;
+}
+
+.tabbar2 {
+    position: absolute;
+    top: 2px;
+    left: 8px;
+}
+
+.tabbar2 .act {
+    padding: 0 14px;
+    color: #327acf;
+    border: 1px solid #eaeaea;
+    border-top: 1px solid #327acf;
+    border-bottom: none;
+    background: #fff;
+}
+
+.tabbar2 span {
+    font-family: simsun;
+    font-size: 14px;
+    line-height: 28px;
+    display: inline;
+    float: left;
+    height: 30px;
+    padding: 1px 15px;
+    cursor: pointer;
+}
+
+/* detail */
+select {
+    padding: 0;
+}
+
+.all {
+    background: url(../images/zb/zhibo-bg.jpg) no-repeat #70bce1 center 34px;
+    color: #333;
+}
+
+.wrap-detail {
+    width: 1000px;
+    min-width: 1000px;
+}
+
+.view-warp {
+    margin-top: 210px;
+    padding: 20px 20px 25px;
+}
+
+.vieo-title {
+    font-size: 30px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #fff;
+}
+
+.vieo-title span {
+    font-size: 36px;
+    text-decoration: underline;
+    color: #fafc32;
+}
+
+.video {
+    float: left;
+    width: 565px;
+    margin-right: 30px;
+    border: 7px solid #fff;
+}
+
+.video-txt {
+    font-size: 14px;
+    line-height: 26px;
+    float: left;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 350px;
+    height: 442px;
+    color: #fff;
+}
+
+.video-txt h2 {
+    font-size: 18px;
+    font-weight: 800;
+    margin: 15px 0 15px 0;
+    text-align: center;
+}
+
+.warps {
+    position: relative;
+    margin-top: 25px;
+}
+
+.warps .hd {
+    position: relative;
+    height: 65px;
+    background: url(../images/zb/zhibo-t-b.png) no-repeat;
+}
+
+.warps .bd {
+    margin-top: -20px;
+    background: #ecf8ff;
+}
+
+#text-live .bd {
+    padding: 30px 10px 20px 20px;
+}
+
+.text-txt {
+    font-size: 14px;
+    position: relative;
+    overflow-y: auto;
+    height: 690px;
+    background-color: #fff;
+}
+
+.text-txt .loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 32px;
+    height: 32px;
+    margin: -16px 0 0 -16px;
+    padding: 10px;
+    border-radius: 5px;
+    background: #fafafa url(../images/zb/loading1.gif) no-repeat center center;
+}
+
+.text-btn {
+    line-height: 30px;
+    height: 30px;
+    cursor: pointer;
+    text-align: center;
+    background: #ddd;
+}
+
+#text-live dl {
+    font-size: 14px;
+    line-height: 26px;
+    padding: 15px 10px;
+    border-bottom: 1px dotted #bebebe;
+}
+
+#text-live dl span {
+    margin-right: 5px;
+}
+
+#text-live dl em {
+    font-weight: 800;
+}
+
+#text-live dl em.u-s {
+    color: #364877;
+}
+
+.r-t {
+    font-size: 12px;
+    position: relative;
+    top: 17px;
+    right: 20px;
+    color: #fff;
+}
+
+.r-t a {
+    color: #fff;
+}
+
+.refresh-btn {
+    visibility: hidden;
+    padding: 4px 6px 3px;
+    vertical-align: top;
+    border: 1px solid #128ace;
+    background: #44bbea;
+}
+
+.refresh-btn:hover {
+    text-decoration: none;
+}
+
+/* 图片直播 */
+#pic-live .hd {
+    background-position: 0 -67px;
+}
+
+#pic-live .bd {
+    padding: 50px 15px 25px 15px;
+}
+
+#pic-live .bd .pages {
+    line-height: 20px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    height: 20px;
+    text-align: right;
+}
+
+#pic-live .bd .pages i {
+    line-height: 100;
+    display: inline-block;
+    overflow: hidden;
+    width: 15px;
+    height: 15px;
+    margin-left: 10px;
+    cursor: pointer;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 1px 2px #22a7e8;
+}
+
+#pic-live .bd .pages i.act {
+    background: #666;
+}
+
+#pic-live dl {
+    display: inline;
+    float: left;
+    width: 260px;
+    margin-right: 35px;
+    text-align: center;
+}
+
+#pic-live dl dt img {
+    padding: 3px;
+    border: 1px solid #bebfbf;
+    background: #fff;
+}
+
+#pic-live dl dd {
+    padding-top: 10px;
+}
+
+.scrollWarp {
+    display: inline;
+    float: left;
+    overflow: hidden;
+    width: 850px;
+    margin-left: 30px;
+}
+
+.moveBox {
+    width: 9999px;
+}
+
+.prevBtn,
+.nextBtn {
+    display: block;
+    width: 28px;
+    height: 41px;
+    margin-top: 80px;
+    background: url(../images/zb/zhibo-btns.gif) no-repeat;
+}
+
+.prevBtn {
+    float: left;
+    background-position: 0 0;
+}
+
+.nextBtn {
+    float: right;
+    background-position: -30px 0;
+}
+
+/* 往期回顾 */
+#over-live .hd {
+    background-position: 0 -134px;
+}
+
+#over-live .bd {
+    padding: 50px 10px 20px 20px;
+}
+
+#over-live li {
+    display: inline;
+    float: left;
+    width: 200px;
+    margin-left: 33px;
+}
+
+#over-live li p {
+    line-height: 26px;
+    overflow: hidden;
+    height: 26px;
+    text-align: center;
+}
+
+/*# sourceMappingURL=zb.css.map */

@@ -1,0 +1,14 @@
+{% extends 'HouseBundle:Release:usale.html.twig' %}
+
+{% block title %}发布求购{% endblock title %}
+
+{% block form_release %}
+    {# 渲染表单 #}
+    {{ render(controller('HouseBundle:Bundlebindforms:ajaxform', {
+        formjumpurl: path('house_main') ~ '#/default/349',
+        models: app.request.get('models')|default(''),
+        formflag: 'usesdemand',
+        formcls: 'form-fy',
+        formlabel: true
+    })) }}
+{% endblock form_release %}

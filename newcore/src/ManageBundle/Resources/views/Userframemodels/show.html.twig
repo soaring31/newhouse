@@ -1,0 +1,20 @@
+{% extends "ManageBundle::poplayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+seajs.use(["{{ bundlepath }}/js/models.js"],function(l){
+	l.init('modelsformattr');
+});
+</script>
+{% endblock %}
+{% block body %}
+{% import "ManageBundle:Form:popedit.html.twig" as forms %}
+{{ forms.popEdit(form|default(''),'form') }}
+
+<div class="promptTitle">提示说明</div>
+<ul class="promptUl">
+	<li>1. 手动审核 需要管理员审核通过。</li>
+	<li>2. 自动审核 相当于不使用审核功能。</li>
+	<li>3. Email激活 通过向注册Email发送激活链接，确保Email可用，并可有效防止滥注册。</li>
+	<li>4. Email模板设置：系统设置 附属设置 邮件模板</li>
+</ul>
+{% endblock %}

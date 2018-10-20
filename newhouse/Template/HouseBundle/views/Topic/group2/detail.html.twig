@@ -1,0 +1,121 @@
+{% extends 'HouseBundle:Topic:extend.html.twig' %}
+{#
+/**
+ * block_loupan : 推送过来的楼盘
+ */
+ #}
+{% block title %}看房团模板2{% endblock title %}
+
+{% block css %}
+    {{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/special-7.css')}}
+{% endblock css %}
+
+{% block body %}
+    {% set block_loupan = ('house.topic_arc')|getBlock({ename:'loupan'},{checked: 1, aid: detail.id|default(''), pageSize: 8}) %}
+    {% set kanfangchetuiguangtu = ('kanfangchetuiguangtu')|getPush(1)[0]|default('') %}
+    <div class="bzTb01 clearfix">
+        {{core_global.ads({tag: 'kanfangchetuiguangtu', width: 'auto', height: 'auto', class: "kft-ad"})}}
+        <div class="ntes_nav_wrap"></div>
+        <div class="kfc">
+            {{ render(controller('HouseBundle:Bundlebindforms:ajaxform', {
+                formflag: 'view_showingsnews',
+                formcls: 'common-form-label',
+                topic: detail.id|default('')|default('')
+            })) }}
+        </div>
+        <table class="bzTb28" align="center" border="0" cellpadding="0" cellspacing="0" width="1190" style="margin-top:30px;">
+            <tbody>
+                <tr>
+                    <td class="bzTb26" width="85">
+                        <span class="bzTb27">
+                            <a href= "#">重点推荐楼盘</a>
+                        </span>
+                    </td>
+                    <td class="bzTb29" width="746">
+                        <a href= "{{('houses/list')|U({})}}" target="_blank">查看更多&gt;&gt;</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <span class="blank12"></span>
+        <div class="box">
+            {% if block_loupan.data is defined %}
+                {% for item in block_loupan.data %}
+                    <div class="bzTb25" valign="top" width="33%">
+                        <div class="img">
+                            {{core_global.lazy_img({
+                                width: 265,
+                                height: 155,
+                                src: item.thumb|default(''),
+                                alt : item.name|default('')
+                            })}}
+                        </div>
+                        <div class="middle">
+                            <div class="title">
+                                <h2><a href="{{('houses/detail')|U({id:item.fromid})}}" target="_blank">{{item.name|default('')}}</a></h2>
+                            </div>
+                            <a href="{{('houses/detail')|U({id:item.fromid})}}" target="_blank" class="che">
+                              详情
+                            </a>
+                        </div>
+                        <div class="info">
+                            {{core_global.region({id: item.region|default(''), tpl: '[<span>%value%</span>]'})}}
+                            {{core_global.substr(item.content|default('')|raw,100,1)}}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <table align="center" border="0" cellpadding="0" cellspacing="0" width="1190"></table>
+        <span class="blank20"></span>
+    </div>
+
+    <table class="bzTb28" align="center" border="0" cellpadding="0" cellspacing="0" width="1190">
+      <tbody>
+        <tr>
+          <td class="bzTb26" width="70">
+            <span class="bzTb27">
+              <a href= "#">看房车问答</a>
+            </span>
+          </td>
+          <td class="bzTb29" width="746"></td>
+        </tr>
+      </tbody>
+    </table>
+    <span class="blank20"></span>
+    {% set push_kanfangchewenda = ('kanfangchewenda')|getPush(20) %}
+    <table border="0" cellpadding="0" cellspacing="0" width="1190" style="background-color:#fff; border:1px solid #e7e7e7; text-align:left;margin:0 auto;" data-tag='kanfangchewenda'>
+        <tbody>
+        {% if push_kanfangchewenda is defined %}
+            {% for item in push_kanfangchewenda %}
+            {% if loop.index % 3 == 1 %}
+            <tr>
+            {% endif %}
+                <td class="bzTb45" valign="top" width="32%">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tbody>
+                            <tr>
+                              <td class="bzTb42">{{loop.index}}、{{item.name|default('')}}</td>
+                            </tr>
+                            <tr>
+                                <td class="bzTb43">{{item.abstract|default('')}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            {% if loop.index % 3 == 0 %}
+            </tr>
+            {% endif %}
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+    <div class="blank20"></div>
+{% endblock body %}
+
+{% block js %}
+    <script type="text/javascript">
+        seajs.use(['lazyload'], function(lazyload) {})
+    </script>
+{% endblock js %}

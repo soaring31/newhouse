@@ -1,0 +1,7 @@
+# Twig extension
+services:
+    sphinx.twig.extension_0:
+        class: SphinxBundle\Twig\SphinxsearchExtension
+        arguments: ["@sphinx.search", "@service_container"]
+        tags:
+            - {name: twig.extension}

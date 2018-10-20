@@ -1,0 +1,122 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set cate_pushs = app.request.get('cate_pushs', 'tuangou') %}
+{% set form = app.request.get('form', 'houses_groupbuy') %}
+    
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+{% block mainMenu %}
+
+    {{parent()}}
+    {{ core_manage.jump({
+        title: '<i class="font-ico-man1 mr5"></i>报名',
+        url: 'mgroupbuymanage/mgroupordermanage'|U
+    }) }}
+{% endblock %}
+{% block tableMain %}
+{{ core_manage.filter([
+    {
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增团购'
+    },
+    {
+        method: 'selectFormField',
+        title: '审核',
+        form: 'checked',
+        field: 'checked',
+    },
+    {
+        method: 'search',
+        field: 'name',
+        title: '请搜索名称/ID/楼盘',
+    }
+]) }}
+
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            cate_pushs: '{{ cate_pushs }}',
+            form: '{{form}}'
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+                <tbody>
+                    <tr data-id>
+                        <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                        <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                        <th>名称</th>
+                        <th width="150">楼盘名称</th>
+                        <th width="80">报名</th>
+                        <th width="80">审核</th>
+                        <th width="100"data-role="sort" data-sort="create_time" class="sort">添加时间</th>
+                        <th width="100"data-role="sort" data-sort="enddate" class="sort">结束时间</th>
+                        <th width="150" class="tac">操作</th>
+                    </tr>
+
+                    {% if ident.info.data is defined and ident.info.pageCount|default('') != 0 %}
+                    {% for k, vo in ident.info.data %}
+
+                    <tr data-id="{{ vo.id }}">
+                        <td class="tac">{{core_manage.checkbox()}}</td>
+                        <td>{{vo.id}}</td>
+                        <td class="tov" title="{{ vo.name|default('') }}">
+                            <a href="{{('groupbuy/detail')|U({id: vo.id})}}" target="_blank">{% if vo.thumb %}<i class="font-ico-tp mr5 fcr"></i>{% endif %}{{core_global.substr(vo.name|default(''), 18, 1)}}</a>
+                        </td>
+                        <td>
+                            <a href="{{('houses/detail')|U({id: vo.aid})}}" target="_blank">
+                                {{ vo.lpmc|default('-') }}
+                            </a>
+                        </td>
+                        <td>
+                            <a title="{{ vo.name }}的报名" data-role="show" href="{{ (action ~ '/mgroupordermanage')|U({aid:  vo.id}) }}">[{{vo.hdnum|default(0)}}]</a>
+                            {# {{dump(vo)}} #}
+                        </td>
+                        <td>{{ core_global.formField({ value: vo.checked }) }}</td>
+                        <td>{{ vo.create_time|default('0')|date('Y-m-d') }}</td>
+                        <td>{{ core_manage.valid_date(vo.enddate|default('0'), 'Y-m-d') }}</td>
+                        <td class="tac">
+                            {{ core_manage.show() }}
+                            {{ core_manage.delete() }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+
+</section>
+
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'checked',
+        title: '审核',
+    },
+]) }}
+
+{% endblock %}
+
+{% block promptUl %}
+提示：新增团购的时候必须从所属楼盘中关联到搜索的楼盘，否则会提示楼盘id必须填写
+{% endblock %}
+
+
+
+

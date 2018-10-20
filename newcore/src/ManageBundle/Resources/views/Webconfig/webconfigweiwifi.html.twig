@@ -1,0 +1,51 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+seajs.use("{{bundlepath}}/js/webconfig.js",function(main){
+	main.init('cfweiwifi');
+});
+</script>
+{% endblock %}
+{% block tableMain %}
+<form class="form" action="{{ (action)|U }}" method="post" name="form">
+<table class="right-table">
+	<tr>
+		<th colspan="2" class="conlist">微WIFI设置</th>
+	</tr>
+	<tr>
+		<td class="w300 txtright fB pright10">开通说明</td>
+		<td><a href="http://b1.rippletek.com/wx_service_explain.pdf" target="_blank">点击查看</a></td>
+	</tr>
+	<tr>
+		<td class="txtright fB pright10">设备绑定用户名</td>
+		<td><input class="w200" type="text" name="rptk_bind_name" value="{{ 'rptk_bind_name'|C  }}" /></td>
+	</tr>
+	<tr>
+		<td class="txtright fB pright10">设备绑定密码</td>
+		<td><input class="w200" type="text" name="rptk_bind_key" value="{{ 'rptk_bind_key'|C  }}" /></td>
+	</tr>
+	<tr>
+		<td class="txtright fB pright10">节点API ID</td>
+		<td><input class="w200" type="text" name="rptk_node_api_id" value="{{ 'rptk_node_api_id'|C  }}" /></td>
+	</tr>
+	<tr>
+		<td class="txtright fB pright10">节点API KEY</td>
+		<td><input class="w200" type="text" name="rptk_node_api_key" value="{{ 'rptk_node_api_key'|C  }}" /></td>
+	</tr>
+	<tr>
+		<td class="txtright fB pright10">认证API ID</td>
+		<td><input class="w200" type="text" name="rptk_wx_auth_api_id" value="{{ 'rptk_wx_auth_api_id'|C  }}" /></td>
+	</tr>
+	<tr>
+		<td class="txtright fB pright10">认证API KEY</td>
+		<td><input class="w200" type="text" name="rptk_wx_auth_api_key" value="{{ 'rptk_wx_auth_api_key'|C  }}" /></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td><input class="submit-btn ajax-post confirm" target-form="form" value="保 存" type="submit"></td>
+	</tr>
+</table>
+</form>
+{% endblock %}
+{% block submit %}{% endblock %}
+{% block promptUl %}<li></li>{% endblock %}

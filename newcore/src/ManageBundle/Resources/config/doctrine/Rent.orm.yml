@@ -1,0 +1,538 @@
+ManageBundle\Entity\Rent:
+    type: entity
+    table: rent
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            options:
+                comment: 标题
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        thumb:
+            options:
+                comment: 缩略图
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        lpmc:
+            options:
+                comment: 小区名称
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        louxing:
+            options:
+                comment: 楼型
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        fdname:
+            options:
+                comment: 房东姓名
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        fdtel:
+            options:
+                comment: 房东电话
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        fdnote:
+            options:
+                comment: 内部备注
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        czj:
+            options:
+                comment: 租价
+                unsigned: false
+            nullable: false
+            type: float
+            length: 100
+        mj:
+            options:
+                comment: 出租面积
+                unsigned: false
+            nullable: false
+            type: float
+            length: 100
+        fl:
+            options:
+                comment: 房龄
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        shi:
+            options:
+                comment: 室
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        ting:
+            options:
+                comment: 厅
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        chu:
+            options:
+                comment: 厨
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        wei:
+            options:
+                comment: 卫
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        yangtai:
+            options:
+                comment: 阳台
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        szlc:
+            options:
+                comment: 所在楼层
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        zlc:
+            options:
+                comment: 总楼层
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        zxcd:
+            options:
+                comment: 装修程度
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        cx:
+            options:
+                comment: 朝向
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        fwpt:
+            options:
+                comment: 房屋配套
+                unsigned: false
+            nullable: false
+            type: string
+            length: 40
+        content:
+            options:
+                comment: 房源描述
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        tel:
+            options:
+                comment: 联系人电话
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        xingming:
+            options:
+                comment: 联系人
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        address:
+            options:
+                comment: 地址
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        fkfs:
+            options:
+                comment: 付款方式
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        zlfs:
+            options:
+                comment: 租赁方式
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        keywords:
+            options:
+                comment: 关键词
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        abstract:
+            options:
+                comment: 描述
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        author:
+            options:
+                comment: 作者
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        source:
+            options:
+                comment: 来源
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        area:
+            options:
+                comment: 区域
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        uid:
+            options:
+                comment: 会员id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        czlx:
+            options:
+                comment: 出租类型
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        top:
+            options:
+                comment: 房源置顶
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        jian:
+            options:
+                comment: 店铺推荐
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        valid:
+            options:
+                comment: 上下架
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        office_lx:
+            options:
+                comment: 写字楼类型
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        office_jb:
+            options:
+                comment: 写字楼级别
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        office_ts:
+            options:
+                comment: 特色
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        shops_lx:
+            options:
+                comment: 商铺类型
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        shops_hy:
+            options:
+                comment: 商铺行业
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        shops_type:
+            options:
+                comment: 类别
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        shops_ts:
+            options:
+                comment: 特色
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        zjdate:
+            options:
+                comment: 截至日期
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        tujis:
+            options:
+                comment: 图集
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        srcid_:
+            options:
+                comment: srcid_
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        models:
+            options:
+                comment: 模型
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        cid:
+            options:
+                comment: 经纪公司id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        job:
+            options:
+                comment: 是否在职
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        map:
+            options:
+                comment: 地图
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        fid:
+            options:
+                comment: 发布人id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        checked:
+            options:
+                comment: 审核
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        aid:
+            options:
+                comment: 楼盘id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        usertype:
+            options:
+                comment: 会员类型
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        clicks:
+            options:
+                comment: 点击
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        enddate:
+            options:
+                comment: 过期时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        refreshdate:
+            options:
+                comment: 刷新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        cate_metro:
+            options:
+                comment: 地铁站
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        cate_line:
+            options:
+                comment: 地铁
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        cate_circle:
+            options:
+                comment: 商圈
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        eid:
+            options:
+                comment: 委托房源id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        region:
+            options:
+                comment: 区域
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        lng:
+            options:
+                comment: 经度
+                unsigned: false
+            nullable: false
+            type: float
+            length: 100
+        lat:
+            options:
+                comment: 纬度
+                unsigned: false
+            nullable: false
+            type: float
+            length: 100
+        shopindustry:
+            options:
+                comment: 商铺行业
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        shoptype:
+            options:
+                comment: 商铺类型
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        officelevel:
+            options:
+                comment: 写字楼级别
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        officetype:
+            options:
+                comment: 写字楼类型
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

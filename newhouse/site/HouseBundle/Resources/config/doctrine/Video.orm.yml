@@ -1,0 +1,190 @@
+HouseBundle\Entity\Video:
+    type: entity
+    table: video
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            options:
+                comment: 标题
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        category:
+            options:
+                comment: 栏目id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        checked:
+            options:
+                comment: 审核
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        thumb:
+            options:
+                comment: 缩略图
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        author:
+            options:
+                comment: 作者
+                unsigned: false
+            nullable: false
+            type: string
+            length: 10
+        source:
+            options:
+                comment: 来源
+                unsigned: false
+            nullable: false
+            type: string
+            length: 50
+        abstract:
+            options:
+                comment: 摘要
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        keywords:
+            options:
+                comment: 关键字
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        models:
+            options:
+                comment: 模型
+                unsigned: false
+                default: video
+            nullable: false
+            default: video
+            type: string
+            length: 100
+        content:
+            options:
+                comment: 视频说明
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        upvideo:
+            options:
+                comment: 上传视频
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        srcid_:
+            options:
+                comment: srcid_
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 11
+        dujia:
+            options:
+                comment: 独家
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        code:
+            options:
+                comment: 通用代码
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        clicks:
+            options:
+                comment: 点击
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        uid:
+            options:
+                comment: 用户id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        area:
+            options:
+                comment: 区域
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        comnum:
+            options:
+                comment: 评论数
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

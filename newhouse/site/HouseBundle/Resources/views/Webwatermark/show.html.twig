@@ -1,0 +1,17 @@
+{% extends "HouseBundle::base_show.html.twig" %}
+{% set id = app.request.get("id")|default('') %}
+{% block js %}
+	<script>
+	seajs.use('', function(){
+		var id = '{{id}}';
+		if(id != ''){
+			$('#ename').parents('.form-row').hide();
+			
+		}
+	});
+	</script>
+{% endblock %}
+{% block body %}
+{{ core_manage.form(form|default(''),'form', 'house.webtw') }}
+
+{% endblock %}

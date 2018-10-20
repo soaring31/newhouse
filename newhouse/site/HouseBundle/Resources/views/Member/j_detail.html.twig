@@ -1,0 +1,93 @@
+{% extends 'HouseBundle:Member:detail_layout.html.twig' %}
+{# 说明 
+** urlId: 传回来的id值
+** detail: 当前经纪人数据
+** member_nav: 导航
+** list: 经纪人二手房
+** filter_opt:检索配置
+** member: 分类设置
+#}
+
+{% set url_id = app.request.get('id') %}
+
+{% set nav_member = {
+    0: {
+        name: '二手房',
+        url: ('member/j_detail')|U({id: url_id|default('')})
+    },
+    1: {
+        name: '出租',
+        url: ('member/j_d_rent')|U({id: url_id|default('')})
+    },
+    2: {
+        name: '介绍',
+        url: ('member/j_d_ds')|U({id: url_id|default('')})
+    },
+    3: {
+        name: '店铺留言',
+        url: ('member/j_d_ly')|U({id: url_id|default('')})
+    },
+    4: {
+        name: '委托房源',
+        url: ('release/wthouse')|U({models: 'rent', mid: url_id})
+    }
+} %}
+
+{% block current_member %}
+    <a href="{{('member/j_list')|U}}" target="_blank">经纪人列表</a>
+    <span>&gt;</span>
+    <span>{{detail_name|default('')}}的店铺</span> 
+{% endblock current_member %}
+
+{% block right %}
+    {# 检索数据源 #}
+    {% set cate_data = house_global.cate_data({ 
+        tag: 'member_jjgs_sale',
+        url_opt: { 
+            id: url_id
+        } 
+    }).__toString|json_decode %}
+    {# 筛选条件 #}
+    {{house_global.filter_cfg({
+        show_selected: 1,
+        action: action,
+        class: 'filter-member'
+    }|merge(cate_data))}}
+    <div class="esf-list">
+        <div class="list-title">
+            <div class="l-ttitle-l">
+                共找到<span>{{ident.list.pageCount|default(0)}}</span>套符合要求房源信息
+            </div>
+            <!-- 排序 -->
+            <div class="l-title-r">
+                <div class="sort">
+                    {{ core_global.sort({
+                        action: action,
+                        data: {
+                            def: {
+                                title: '默认'
+                            },
+                            mj: {
+                                title: '面积'
+                            },
+                            zj: {
+                                title: '总价'
+                            },
+                            dj: {
+                                title: '单价'
+                            }
+                        }
+                    }|merge(cate_data)) }}
+               </div>
+            </div>
+        </div>
+        <!-- 二手房列表 -->
+        <div class="sale-list esf-l-box">
+            {# 列表 #}
+            {{house_global.sale_list({
+                list: ident.list,
+                page: 1
+            })}}
+        </div>
+    </div>
+{% endblock right %}

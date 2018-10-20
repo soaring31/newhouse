@@ -1,0 +1,67 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+seajs.use("{{ bundlepath }}/js/trash",function(c){
+	//js入口
+	c.init('main');
+});
+</script>
+{% endblock %}
+{% block mainMenu %}
+{{ parent() }}
+<li class="on"><a href="javascript:void(0);">回收站</a></li>
+{% endblock %}
+{% block tableMain %}
+<span class="tableDesc">
+       回收站列表>><input type="button" id="btnfun_delete" data-url="{{ (action~'/deleteall')|U('sid='~app.request.get('id')) }}" class="btn reload" value="清空回收站" />&nbsp;&nbsp; 
+</span>
+<table class="right-table">
+	<tbody>
+		<tr>
+			<th class="w30"></th>
+			<th class="w150 txtleft">数据名称</th>
+            <th class="w150 txtleft">操作员</th>
+            <th class="w150 txtleft">创建日期</th>
+			<th class="w150 txtleft">删除日期</th>
+            <th class="w150 txtleft">服务名称</th>
+			<th class="">操作</th>
+		</tr>
+		{% if result.data is defined %}
+		{% for key,vo in result.data %} 
+		<tr>
+		    <td></td>
+			<td>
+				{% if vo.name is defined %}
+					{% set name = vo.name %}
+				{% elseif vo.title is defined %}
+					{% set name = vo.title %}
+				{% else %}
+					{% set name = '-' %}
+				{% endif %}
+				{{ name }}
+			</td>
+			<td></td>
+			<td>{{ vo.createTime|date('Y-m-d')  }}</td>
+			<td>{{ vo.updateTime|date('Y-m-d H:i:s')  }}</td>
+			<td>{{ serviceName }}</td>
+			<td class="txtcenter">
+				<input type="button" id="btnfun_preview_{{vo.id}}" data-url="{{ (action~'/show')|U('id='~vo.id~'&sid='~app.request.get('id')) }}" class="btn" value="详情" />
+				<input type="button" id="btnfun_delete_{{vo.id}}" data-url="{{ (action~'/delete')|U('id='~vo.id~'&sid='~app.request.get('id')) }}" class="btn" value="删除" />
+				<input type="button" id="btnfun_delete_{{vo.id}}" data-url="{{ (action~'/undelete')|U('id='~vo.id~'&sid='~app.request.get('id')) }}" class="btn" value="恢复" />
+				<input type="button" id="btnfun_preview_{{vo.id}}" data-url="{{ (action~'/log')|U('id='~vo.id~'&sid='~app.request.get('id')) }}" class="btn" value="日志" title="{{ name }}" />
+			</td>
+			<td></td>
+		</tr>
+		 {% endfor %}
+		{% endif %}
+	</tbody>
+</table>
+{% endblock %}
+{% block submit %}{% endblock %}
+{% if result is defined %}
+{% block pageIndex %}{{ result.pageIndex|default(1) }}{% endblock %}
+{% block pageCount %}{{ result.pageCount|default(1) }}{% endblock %}
+{% endif %}
+{% block promptUl %}
+	<li></li>
+{% endblock %}

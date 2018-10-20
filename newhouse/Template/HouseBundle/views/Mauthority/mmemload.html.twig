@@ -1,0 +1,98 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set group_id = app.request.get('group_id') %}
+{% set aid = app.request.get('aid') %}
+{% set name = app.request.get('name') %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {# {{ parent() }}  #}
+   
+{% endblock %}
+
+{% block mainleft %}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ core_manage.filter([
+   {
+        method: 'search',
+        field: 'name',
+    }
+]) }}
+
+ {% set search_opt = {
+            username: 'orX|username,like,%' ~ name ~ '%'
+        } %}
+
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            aid: '{{ aid }}'
+        }
+    }">
+    {% set uids = ('db.auth_access_area')|getCol('uid')|default(0) %}
+    {% set utypes = ('db.userinfo')|getCol( 'uid', { usertype: 16, uid: 'notIn|' ~ uids|join(',') }) %}  
+    {% set uinfo = ('db.users')|getAll({ id: 'in|' ~ utypes|join(',') }|merge(search_opt) ) %}
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    {# <th width="40" data-role="sort" data-sort="id" class="sort">ID</th> #}
+                    <th>会员账号</th>
+                </tr>
+                {% if uinfo.data is defined and uinfo.pageCount|default('') != 0 %}
+                {% for k, vo in uinfo.data %}
+                    {# {{dump(vo)}} #}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    {# <td>{{ vo.id }}</td> #}
+                    <td>{{ vo.username }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="5" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(uinfo)}}
+</section>
+<div class="tac">
+    
+    
+{{ core_manage.oprate([
+        {
+            method: 'submit',
+            title: '确定加载',
+            url: ('mauthorityaccessarea/save')|U({_form_id: 384 }),
+            attr: {
+                'data-add': {
+                    uid: 'id'
+                }
+            },
+            params: {
+                aid: aid
+            },
+            class: 'fz12'
+        }
+    ]) }} 
+</div>
+{% endblock %}
+
+{% block promptUl %}
+{# 提示说明 #}
+{% endblock %}
+
+
+
+

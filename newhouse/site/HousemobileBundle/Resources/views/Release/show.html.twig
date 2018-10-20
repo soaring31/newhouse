@@ -1,0 +1,38 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+
+{% block header_title %}
+{# {% include 'HousemobileBundle:Release:headerblock.html.twig' ignore missing with {models: models|default('')} %} #}
+    <div data-block="{
+        bParams: true,
+        ajax:{
+            url: '{{ ('release/show')|U }}',
+            data: {
+                tpl: 'Release:headerblock',
+                models: '{{app.request.get("models")}}',
+                category: '{{app.request.get("category")}}',
+                _id: '{{app.request.get("_id")}}'
+            }
+        }
+    }" class="dn"></div>
+{% endblock header_title %}
+
+{% block title %}
+发布
+{% endblock title %}
+
+{% block container %}
+	<div data-block="{
+        bParams: true,
+        ajax:{
+            url: '{{ ('release/show')|U }}',
+            data: {
+                tpl: 'Release:detailblock',
+                models: '{{app.request.get("models")}}',
+                formflag: '{{app.request.get("formflag")}}',
+                category: '{{app.request.get("category")}}',
+                _id: '{{app.request.get("_id")}}'
+            }
+        }
+    }"></div>
+{% endblock container %}    

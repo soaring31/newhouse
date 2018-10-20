@@ -1,0 +1,206 @@
+/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+*/
+
+@import 'static/ats';
+// 工具类 每个文件都要导入
+
+@import 'lp';
+// 楼盘公用样式
+
+/*
+list
+*/
+.kfs-list{
+    margin-left: -20px;
+    .item{
+        border: 1px solid #f0f0f0;
+        float: left;
+        height: 80px;
+        margin-left: 20px;
+        margin-bottom: 20px;
+        overflow: hidden;
+        padding: 20px;
+        width: 548px;
+        &:hover{
+            border-color: $major-color;
+        }
+    }
+    .img{
+        border: 1px solid #ddd;
+        display: block;
+        float: left;
+        height: 80px;
+        margin-right: 20px;
+        width: 134px;
+        img{
+            height: 80px;
+            width: 134px;
+        }
+    }
+    .info{
+        float: left;
+        width: 390px;
+        a{
+            font-weight: 700;
+        }
+        p{
+            color: #666;
+            line-height: 26px;
+        }
+        i{
+            color: $major-color;
+            font-size: 12px;
+            vertical-align: -1px;
+        }
+    }
+}
+
+/* ==========
+detail
+========== */
+.busines-card{
+    background: url('../images/kfs.gif') repeat-x 0 -145px #fff;
+    border: 1px solid #000;
+    height: 144px;
+    .logo{
+        background: url('../images/kfs.gif') no-repeat scroll 200px 0 #fff;
+        height: 144px;
+        margin-right: 20px;
+        width: 250px;
+        img{
+            padding: 36px 16px;
+        }
+    }
+    .info{
+        color: #fff;
+        height: 144px;
+        line-height: 2;
+        h1{
+            font-size: 24px;
+            height: 36px;
+            line-height: 36px;
+            a {
+                font-size: 14px;
+                font-weight: normal;
+                color: #fff;
+                margin-left: 10px;
+                &:hover {
+                    color: #fff;
+                }
+            }
+        }
+    }
+}
+.kfs-body{
+    width: 920px;
+    .title{
+        border-bottom: 1px solid #ccc;
+        height: 40px;
+        line-height: 40px;
+        margin: 0 20px;
+        padding: 10px 0;
+        h2{
+            font-size: 24px;
+            font-weight: bold;
+            overflow: hidden;
+            i{
+                font-size: 18px;
+            }
+        }
+        a{
+            color: #f00;
+            margin-left: 15px;
+        }
+        i{
+            vertical-align: -1px;
+        }
+    }
+    .con{
+        color: #666;
+        font-size: 14px;
+        line-height: 28px;
+        margin: 10px 12px;
+        overflow: hidden;
+        word-wrap: break-word;
+        img{
+            max-width: 900px;
+        }
+    }
+}
+.kfs-pp{
+    font-size: 18px;
+    margin-top: 90px;
+    padding-left: 1px;
+    li{
+        border: 1px solid #ddd;
+        float: left;
+        height: 48px;
+        line-height: 48px;
+        margin-left: -1px;
+        margin-top: -1px;
+        overflow: hidden;
+        padding: 0 10px;
+        text-align: center;
+        width: 208px;
+    }
+}
+/*==========
+aside
+========== */
+.kfs-aside{
+    width: 250px;
+}
+.aside-tit{
+    height: 36px;
+    line-height: 36px;
+    h3{
+        border-bottom: 2px solid $major-color;
+        color: $major-color;
+        float: left;
+        font-size: 14px;
+        font-weight: 700;
+    }
+}
+.asdie-con{
+    border: 1px solid #ddd;
+    padding: 10px;
+    li{
+        height: 15px;
+        line-height: 15px;
+        overflow: hidden;
+        padding: 6px 0;
+        i{
+            background: #aaa;
+            color: #fff;
+            float: left;
+            font-family: arial,helvetica,sans-serif;
+            height: 15px;
+            line-height: 16px;
+            margin-top: 2px;
+            overflow: hidden;
+            text-align: center;
+            width: 16px;
+            &.red{
+                background: $major-color;
+            }
+        }
+        a{
+            float: left;
+            height: 18px;
+            line-height: 18px;
+            overflow: hidden;
+            padding-left: 8px;
+            width: 195px;
+        }
+        em{
+            float: left;
+            font-size: 22px;
+            margin-top: 2px;
+        }
+    }
+}
+
+

@@ -1,0 +1,69 @@
+{% extends 'HouseBundle::base_show.html.twig' %}
+{% block js %}
+
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }} 
+{% endblock %}
+
+{% block body %}
+    {# {{action}} #}
+{% set info = ('db.integralcash')|getAll().data %}
+{% for vo in info %}
+{% set sidname = ('house.integral')|getOne('name',{id: vo.sid}) %}
+{% set eidname = ('house.integral')|getOne('name',{id: vo.eid}) %}  
+{% set sidename =  ('house.integral')|getOne('ename',{id: vo.sid}) %}
+<form id="forms" class="form-duihuan" action="{{('musercash/save')|U}}">
+<input type="hidden" name="cashid" value="{{ vo.id }}"> {# 来源积分id #}
+<table class="popup-form-table" style="width:99%;" >
+    <tbody>
+        <tr>
+           <th width="25%" data="">{{sidname}}兑换{{eidname}}</th>
+        </tr>
+        <tr>
+        <td>
+            <div id="group_set">
+                <div class="form-row">
+                    <div class="form-cell-label">                
+                        <label class="w150 rtd txtright" for="name" aria-required="true">现有{{ sidname }}</label>
+                    </div>
+                    <div class="form-cell">      
+                        {{- core_global.attr({name: sidename, id: app.user.userinfo.id}) -}}
+                    </div>
+                   </div>                        
+                 <div class="form-row">
+                    <div class="form-cell-label">                
+                        <label class="w150 rtd txtright" for="name" aria-required="true">兑换比例</label>
+                    </div>
+                    <div class="form-cell">                
+                        {{ vo.scurrency }}{{ sidname }} : {{ vo.ecurrency}}{{ eidname }}
+                    </div>
+                   </div>        
+                   <div class="form-row">
+                    <div class="form-cell-label">                
+                        <label class="w150 rtd txtright" for="scurrency">兑换数量</label>
+                    </div>
+                    <div class="form-cell">                
+                        <input type="text"  name="scurrency"  class="inputsty">
+                    </div>
+                </div>        <div class="error-wrap"></div>
+            </div>    
+        </td>
+        </tr>
+    </tbody>
+</table>
+<div class="popup-submit"></div>
+<div class="tac p10"><div><button type="submit" id="submit" name="submit" class="btn font-ico-22" data-role="submit" data-reload="1" data-close="1">提交</button></div></div>
+<div class="blank15"></div>
+</form>
+
+{% endfor %}
+<style type="text/css">
+    .form-duihuan {
+        min-height: auto !important;
+    }
+</style>
+{% endblock body %}
+
+{% block promptUl %}{% endblock %}

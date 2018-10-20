@@ -1,0 +1,33 @@
+{% extends 'HousemobileBundle:Sale:detailblock.html.twig' %}
+{% set tpl_title = '出租' %}
+{% set d_models = 'rent' %}
+
+{% block tpl_tj %}
+{% if sort_houses_models.data is defined and sort_houses_models.pageCount > 0 %}
+<div class="list-block panel-block media-list">
+    {{- housemobile_global.panel_title({title:'同小区出租'})-}}
+    <ul id="xqRent" class="attr-con">
+        {{ render(controller('HouseBundle:Clist:rentlist', {_isApp: url_isApp, list: sort_houses_models})) }}
+    </ul>
+    {{- core_mobile_global.more_con({id: 'xqRent'}) -}}
+</div>
+{% endif %}
+{% if sort_area_models.data is defined and sort_area_models.pageCount > 0 %}
+<div class="list-block panel-block media-list">
+    {{- housemobile_global.panel_title({title:'同区域出租'})-}}
+    <ul id="qyRent" class="attr-con">
+        {{ render(controller('HouseBundle:Clist:rentlist', {_isApp: url_isApp, list: sort_area_models})) }}
+    </ul>
+    {{- core_mobile_global.more_con({id: 'qyRent'}) -}}
+</div>
+{% endif %}
+{% if sort_prices_models.data is defined and sort_prices_models.pageCount > 0 %}
+<div class="list-block panel-block media-list">
+    {{- housemobile_global.panel_title({title:'同价格出租'})-}}
+    <ul id="jgRrent" class="attr-con">
+        {{ render(controller('HouseBundle:Clist:rentlist', {_isApp: url_isApp, list: sort_prices_models})) }}
+    </ul>
+    {{- core_mobile_global.more_con({id: 'jgRrent'}) -}}
+</div>
+{% endif %}
+{% endblock tpl_tj %}

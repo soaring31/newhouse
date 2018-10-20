@@ -1,0 +1,15 @@
+{% extends 'MemberBundle::base_show.html.twig' %}
+
+{% block mainMenu %}
+    {# {{ parent() }}  #}
+{% endblock %}
+
+{% block body %}
+    {# {{action}} #}
+{% set forms = ('db.mem_types')|getOne( 'form_id', { id: app.user.usertype}) %}
+{% set formname = ('db.model_form')|getOne('name', { id: forms}) %}
+{% set form = (form[formname]) %} 
+{{ core_manage.form_cfg(form|default('')) }}
+{% endblock body %}
+
+{% block promptUl %}{% endblock %}

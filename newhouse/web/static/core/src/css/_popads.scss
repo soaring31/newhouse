@@ -1,0 +1,155 @@
+// .jqModal {
+//     .m-pop_ads {
+
+//         overflow: visible;
+//         .m-close {
+//             position: absolute;
+//             top: -25px;
+//             right: -25px;
+//             height: 50px;
+//             width: 50px;
+//             font-size: 35px;
+//             line-height: 50px;
+//             text-align: center;
+//             color: #fff;
+//             background: rgba(50, 50, 50, .64);
+//             border-radius: 50%;
+           
+//             cursor: pointer;
+
+//             &:hover {
+//                 transform: rotate(0deg);
+//                 text-transform: rotate(90deg);
+//             }
+//         }
+
+//         .m-body {
+//             padding: 0;
+//         }
+//     }
+    
+// }
+
+// 背投广告
+.pop_ads {
+    display: none;
+    height: 0;
+    overflow: hidden;
+    position: relative;
+
+    .ad_close {
+        position: absolute;
+        display: none;
+        z-index: 100;
+        cursor: pointer;
+        height: 60px;
+        width: 60px;
+        color: #fff;
+        text-align: center;
+        line-height: 60px;
+        border-radius: 50%;
+        background: rgba(50, 50, 50, .64);
+        transition: .2s all ease-out;
+
+        i { 
+            height: 100%;
+            font-size: 30px;
+            font-weight: lighter;
+        }
+
+        &:hover {
+           
+            transform: rotate(180deg);
+        }
+    }
+
+    .ad_close_float {
+        left: 100px;
+        top: 30px;
+    }
+
+    .ad_close_fix {
+        right:-30px;
+        top:-30px;
+        display: block;
+    }
+}
+
+
+.floatShow {
+    position: relative;
+    z-index: 100;
+    
+    .triangle {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100px;
+        width: 100px;
+        cursor: pointer;
+        background: url('../images/ad1.png') 0 0 no-repeat;
+        // @include triangle(120px, red, up);
+        // transform: translate(-60px,-60px)rotate(-45deg);
+    }
+
+
+    // .text {
+    //     color: #fff;
+    //     position: absolute;
+    //     z-index: 200;
+    //     left: 0;
+    //     top: 0;
+    //     width: 60px;
+    //     transform: translate(10px,20px)rotate(-45deg);
+    // }
+}
+
+.fixShow {
+    position: fixed;
+    z-index: 99999;
+    left: 50%;
+    bottom: 50%;
+    height: 80px;
+    width: 80px;
+    color: #fff;
+    font-size: 27px;
+    text-align: center;
+    background: #b8babe;
+    cursor: pointer;
+    transition: .5s all ease-out;
+
+    &:hover {
+        text-decoration: none;
+        // background: #e43;
+        color: #fff;
+    }
+
+    .triangle {
+        display: inline-block;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background-size: 100% 100% !important;
+
+        em {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+
+        }
+    }
+}
+
+// 遮罩
+.ad_mark {
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    background: rgba(0,0,0,0.2);
+}

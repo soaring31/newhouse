@@ -1,0 +1,296 @@
+{# {% extends 'HouseBundle:Fenxiao:list.html.twig' %} #}
+{# 说明
+* detail: 详情数据
+* detail_houses: 所属楼盘
+* block_huxing: 楼盘户型
+* block_xiangce： 楼盘相册
+* sort_area_houses: 相同区域楼盘
+* sort_cate_type_houses：相同类型楼盘
+#}
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% extends detail ? 'HouseBundle:Fenxiao:list.html.twig' : 'CoreBundle:Dispatch:errorcontent.html.twig' %}
+
+{% set detail_houses = ('house.houses')|getRow({id: detail.aid|default(''), checked: 1, findType: 1}) %}
+
+{% set sort_area_houses = ('house.houses')|getAll({checked: 1, region: detail_houses.region|default(''), id: 'neq|' ~ detail_houses.id|default(0), pageSize: 5, type: detail_houses.type|default('')}) %}
+
+{% set sort_cate_type_houses = ('house.houses')|getAll({checked: 1, cate_type: detail_houses.cate_type|default(''), id: 'neq|' ~ detail_houses.id|default(0), pageSize: 5, type: detail_houses.type|default('')}) %}
+
+{% set tpl_now = 'now'|date("U") %}
+
+{% if detail.enddate.date|default('')|date('U') > tpl_now %}
+
+{% set tpl_tuijian_attr = 'href="' ~('fenxiao/earn')|U({id: detail.id|default('')}) ~ '" class="btn1"' %}
+
+{% set tpl_goufang_attr = 'href="' ~('fenxiao/earn')|U({id: detail.id|default(''), myself: 1}) ~ '" class="btn2"' %}
+
+{% else %}
+
+{% set tpl_tuijian_attr = 'href="javascript:;" class="btn1 btn-disable"' %}
+
+{% set tpl_goufang_attr = 'href="javascript:;" class="btn2 btn-disable"' %}
+
+{% endif %}
+
+
+{% block title %}{{detail.name|default('')}}{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" Content="{{detail.keywords|default('')}}"/>
+<meta name="description" content="{{detail.abstract|default('')}}"/>
+{% endblock key_des %}
+
+{# 当前位置 #}
+{% block current_container %}
+    <span>&gt;</span>
+    <span>{{detail.name|default('')}}</span>
+{% endblock current_container %}
+
+{% block css %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/neirong.css')}}
+{% endblock css %}
+
+{% block container %}
+   <div class="container">
+<!-- 内容top -->
+    <div class="con-top">
+        <h2>{{detail.name|default('')}}
+            <em>
+                {{core_global.region({id: detail_houses.region|default('')})}}
+                价格：{{house_global.if_dj({value: detail.shichangjia|default('')})}}
+            </em>
+        </h2>
+        <p><a href="#">为您推荐&gt;</a>{{detail.yhsm|default('')}}</p>
+    </div>
+    <!-- 内容1 -->
+        <div class="con-1">
+        <!-- 图片 -->
+            <div class="con-focus fl">
+                {{- core_global.img({
+                    src: detail.thumb|default(''),
+                    alt: detail.name|default(''),
+                    type: 0,
+                    width:700 ,
+                    height:293
+                }) -}}
+                <div class="bg">
+                    <div class="con1-text jqDuang" data-visible='4' data-steps='1'  data-obj="li" data-effect='left' data-autoplay="1000">
+                        <ul class="new clearfix">
+                            <li>该楼已成交<span>{{detail.yichengjiao|default('')}}</span>套</li>
+                            {# <li>已预订<span>{{detail.yiyuding|default('')}}</span>套</li> #}
+                            <li>已推荐<span>{{detail.yituijian|default('')}}</span>套</li>
+                            <li>推荐佣金<span>{{detail.yongjin|default('')}}</span>起</li>
+                            <li>活动截止时间:{{detail.enddate|default('')|date('Y-m-d')}}</li>
+                        </ul>
+                    </div>
+                    <div class="bt">
+                        <a {{tpl_tuijian_attr|raw}} target="_blank">推荐朋友</a>
+                        <a {{tpl_goufang_attr|raw}} target="_blank">我要购房</a>
+                    </div>
+                </div>
+            </div>
+        <!-- 文字 -->
+            <div class="con-text fl">
+                <p>物业类型：<span>{{core_global.formData({value: detail_houses.cate_type|default(''), tpl: '%value%&nbsp;&nbsp;'})}}</span></p>
+                <p>地理位置：<span>{{detail_houses.address|default('')}}</span></p>
+                <p>建筑面积：<span>{{house_global.if_mj({value: detail_houses.jzmj|default('')})}}</span></p>
+                <p>开盘时间：<span>{{detail_houses.kpdate|default('')|date('Y-m-d')}}</span></p>
+                <p>入住时间：<span>{{detail_houses.jfrq|default('')}}</span></p>
+                <p>物业费：<span>{{detail_houses.wyf|default('')}}</span></p>
+                <p>售楼地址：<span>{{detail_houses.sldz|default('')}}</span></p>
+                <p>开发商：<span>{{detail_houses.house_developer|default('')}}</span></p>
+                <div class="phone">
+                    <i class="font-lp-13"></i>
+                    <span>{{detail_houses.tel|default('')}}</span>
+                </div>
+            </div>
+        </div>
+
+<div class="con-le fl">
+    <!-- 内容户型 -->
+        <div class="panel">
+            <h3>
+                楼盘户型
+                <a href="{{('houses/dplanintro')|U({id: detail_houses.id|default('')})}}" target="_blank" class="more">更多&gt;&gt;</a>
+            </h3>
+            <div class="panel-bd">
+                {% set block_huxing = ('house.door')|getAll({aid: detail_houses.id|default(''), checked: 1, pageSize: 4}) %}
+                <ul class="plist-mod lp-plist1 clearfix">
+                    {% include 'HouseBundle:Clist:door_list.html.twig' ignore missing with {list: block_huxing} %}
+                </ul>
+            </div>
+        </div>
+        <!-- 内容相册 -->
+        <div class="panel">
+            <h3>
+                楼盘相册
+                <a href="{{('houses/dphotos')|U({id: detail_houses.id|default('')})}}" target="_blank" class="more">更多&gt;&gt;</a>
+            </h3>
+            <div class="panel-bd">
+                {% set block_xiangce = ('house.inter_album')|getAll({checked: 1, aid: detail_houses.id|default(''), pageSize: 8}) %}
+                <ul class="plist-mod lp-plist1 clearfix" id="lightgallery">
+                    {% include 'HouseBundle:Clist:xiangce_list.html.twig' ignore missing with {list: block_xiangce|default('')} %}
+                </ul>
+            </div>
+        </div>
+        <!-- 内容文字 -->
+        <div class="text jqDuang panel" data-obj=".item" data-cell=".text-nav" data-autoplay="0"  data-actclass='active'>
+            <div class="text-nav ">
+                <span class="jieshao  active">项目介绍</span>
+                <span class="peitao">项目配套</span>
+                <span class="jiaotong ">交通状况</span>
+                <span class="zhuangxiu ">建材装修</span>
+                <span class="loucen ">楼层状况</span>
+                <span class="chewei">车位信息</span>
+                <span class="xiangguang ">相关信息</span>
+            </div>
+            <div class="text-box">
+                <div class="item" style="display: block;">
+                    {{detail_houses.content|default('')|raw}}
+                </div>
+                <div class="item">
+                    {% set category_around = ('house.category')|getAll({checked: 1, pid: 54}) %}
+                    {% set block_zhoubian = ('house.houses_arc')|getBlock({form: 'houses_around'}, {checked: 1, aid: detail_houses.id|default('')}) %}
+                    {% if category_around.data is defined %}
+                        {% for item in category_around.data %}
+                            <p>
+                            {% if block_zhoubian.data is defined %}
+                                {% for item2 in block_zhoubian.data if item2.category|default('') == item.id|default('') %}
+                                    {% if loop.index == 1 %}
+                                        {{item.name|default('')}}:
+                                    {% endif %}
+                                        <a href="{% if item2.category|default('') == 55 %}{{core_global.url(item2|merge({controller: 'sale/xdetail'}))}}{% else %}{{('around/detail')|U({id: item2.id|default('')})}}{% endif %}" target="_blank">
+                                            {{item2.name|default('')}}
+                                        </a>、
+                                {% endfor %}
+                            {% endif %}
+                            </p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="item">
+                    {{detail_houses.jtxl|default('')}}
+                </div>
+                <div class="item">
+                    {{core_global.formData({value: detail_houses.zxcd|default('')})}}
+                </div>
+                <div class="item">
+                    {{- house_global.lptag({value: detail_houses|default(''), con: 'lcs', tpl: '<span class="mr10">%value%</span>'}) -}}
+                </div>
+                <div class="item">
+                    {{detail_houses.cksm|default('')}}
+                </div>
+                <div class="item">
+                    <p>
+                    <strong>建筑面积:</strong>&nbsp; {{house_global.if_mj({value:detail_houses.jzmj|default('')})}}
+                    </p>
+                    <p>
+                    <strong>占地面积:</strong>&nbsp;{{detail_houses.zdmj|default('')}}
+                    </p>
+                    <p>
+                    <strong>得 房 率:</strong>&nbsp;{{detail_houses.dfl|default('')}}
+                    </p>
+                    <p>
+                    <strong>绿 化 率:</strong>&nbsp;{{detail_houses.lhl|default('')}}
+                    </p>
+                    <p>
+                    <strong>容 积 率:</strong>&nbsp;{{detail_houses.rjl|default('')}}
+                    </p>
+                    <p>
+                    <strong>许可证号:</strong>&nbsp;{{detail_houses.xkzh|default('')}}
+                    </p>
+                    <p>
+                    <strong>物业公司:</strong>&nbsp;{{detail_houses.wygs|default('')}}
+                    </p>
+                    <p>
+                    <strong>物业地址:</strong>&nbsp;{{detail_houses.sldz|default('')}}
+                    </p>
+                    <p>
+                    <strong>物 业 费:</strong>&nbsp;{{detail_houses.wyf|default('')}}
+                    </p>
+                    <p>
+                    <strong>开盘日期:</strong>&nbsp;{{detail_houses.kpdate.date|default('')|date('Y-m-d')}}
+                    </p>
+                    <p>
+                    <strong>交房日期:</strong>&nbsp;{{detail_houses.jfrq|default('')}}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="con-r fr">
+    <!-- 右侧栏1 -->
+        <div class="r-1 fr">
+            <h3>同地区楼盘</h3>
+            <ul class="r-1con" data-tag="lparea">
+                {% if sort_area_houses.data is defined %}
+                    {% for item in sort_area_houses.data %}
+                        <li>
+                            <a href="{{('houses/detail')|U({id: item.id|default('')})}}" target="_blank">
+                                {{- core_global.img({
+                                    src: item.thumb|default(''),
+                                    alt: item.name|default(''),
+                                    type: 2,
+                                    width:210 ,
+                                    height: 155
+                                }) -}}
+                            </a>
+                            <p>
+                                <a href="{{('houses/detail')|U({id: item.id|default('')})}}" class="name" target="_blank">
+                                {{item.name|default('')}}
+                                </a>
+                                <span class="dj">
+                                    {{house_global.if_dj({value: item.dj|default(''), tpl: '<i>%value%</i>%danwei%'})}}
+                                </span>
+                            </p>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+    <!-- 右侧栏2 -->
+        <div class="r-1 fr">
+            <h3>同类型楼盘</h3>
+            <ul class="r-1con" data-tag="same_lp_cata_type">
+                {% if sort_cate_type_houses.data is defined %}
+                    {% for item in sort_cate_type_houses.data %}
+                        <li>
+                            <a href="{{('houses/detail')|U({id: item.id|default('')})}}" target="_blank">
+                                {{- core_global.img({
+                                    src: item.thumb|default(''),
+                                    alt: item.name|default(''),
+                                    type: 2,
+                                    width:210 ,
+                                    height: 155
+                                }) -}}
+                            </a>
+                            <p>
+                                <a href="{{('houses/detail')|U({id: item.id|default('')})}}" class="name" target="_blank">
+                                {{item.name|default('')}}
+                                </a>
+                                <span class="dj">
+                                    {{house_global.if_dj({value: item.dj|default(''), tpl: '<i>%value%</i>%danwei%'})}}
+                                </span>
+                            </p>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+</div>
+{% endblock container %}
+
+{% block js %}
+<script type="text/javascript">
+seajs.use(['jqduang', 'lightgallery', 'jqmodal'], function (jqduang, lightgallery, jqmodal) {
+    $('#lightgallery').lightGallery();
+    $('.btn-disable').click(function () {
+        $.jqModal.tip('分销已结束，如需要推荐客户请选择尚未结束的楼盘!');
+    });
+});
+</script>
+{% endblock js %}

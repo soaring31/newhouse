@@ -1,0 +1,91 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+{% set aid = app.request.get('aid') %}
+{% set now_time = ('now')|date('U') %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }} 
+    {{ core_manage.jump({
+        title: '经纪人申请',
+        url: 'museragent/museragentlistnc'|U
+    }) }}
+{% endblock %}
+
+{% block mainleft %}
+    {# {{ render(controller('HouseBundle:Mnews:category', {category: category, action: 'mnews/mnewsmanage'})) }} #}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ core_manage.filter([
+    {
+        method: 'search',
+        field: 'name',
+    }
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ ('musermycomlist/show')|U }}',
+        submitUrl : '{{ ('musermycomlist/save')|U }}',
+        deleteUrl : '{{ ('musermycomlist/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            models: '{{ models }}',
+            category: '{{ category }}'
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th >经纪人</th>
+                    <th width="100">电话</th>
+                    <th width="100">最近访问</th>
+                    <th width="100">二手房源上架</th>
+                    <th width="100">仓库</th>
+                    <th width="100">出租房源上架</th>
+                    <th width="100">仓库</th>
+                </tr>
+                {% if ident.info.data is defined and ident.info.pageCount|default('') != 0 %}
+                {% for k, vo in ident.info.data %}
+                {% set nid = ('house.nexus_arc')|getOne('id',{ aid: app.user.id, mid: vo.id }) %}
+                <tr data-id="{{ nid }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td> {{ vo.username }}</td>                   
+                    <td> {{ vo.tel }}</td>                   
+                    <td> {{ (vo.logintime)|date("Y-m-d")}} </td>
+                    <td >{{core_global.count({models: 'sale', sql_opt: {valid: 'gt|' ~ now_time|default(''), uid: vo.mid} })}}</td>
+                    <td >{{core_global.count({models: 'sale', sql_opt: { uid: vo.mid} })}}</td>
+                    <td >{{core_global.count({models: 'rent', sql_opt: {valid: 'gt|' ~ now_time|default(''), uid: vo.mid} })}}</td>
+                    <td >{{core_global.count({models: 'rent', sql_opt: { uid: vo.mid} })}}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+{{ core_manage.oprate([
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'checked',
+        title: '审核',
+    }
+    
+]) }}
+{% endblock %}
+{% block promptUl %}
+经纪人申请经济公司, 经经纪公司审核通过, 才能成为旗下经纪人
+{% endblock %}

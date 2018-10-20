@@ -1,0 +1,27 @@
+{% extends 'ManageBundle::mainlayout.html.twig' %}
+{% import 'ManageBundle:Form:lists.html.twig' as lists %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block tableMain %}
+<section>
+    <span class="tableDesc">
+    {{ ident.info.listDesc|default('') }}&gt;&gt;
+    <input type="button" id="btnfun_edit" data="{{ (action~'/show')|U }}" class="btn" value="新增{{ ident.info.listDesc|default('') }}" />
+    </span>
+    {{ lists.list(ident.info) }}
+</section>
+{% endblock %}
+
+{% block page %}
+{{lists.page(ident.info)}}
+{% endblock %}
+{% block submit %}{% endblock %}
+{% block promptUl %}
+08cms旧系统导入提示：先导入会员，再导入文档，最后导入交互。<br>
+清除记录：同时清除导入的记录
+{% endblock %}
+

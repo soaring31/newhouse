@@ -1,0 +1,36 @@
+{% extends "ManageBundle::poplayout.html.twig" %}
+{% block js %}
+<script>
+seajs.use("{{bundlepath}}/js/backendmenu",function(l){
+	//js入口	    
+	l.init('main');
+});
+</script>
+{% endblock %}
+{% block body %}
+<table class="popup-table" style="width:100%;">
+	<tbody>
+		<tr>
+			<th class="rtd w50">ID</th>
+			<th class="rtd">菜单名称</th>
+			<th class="rtd w160">所属动作</th>
+			<th class="rtd w50">排序</th>
+			<th class="w100">操作</th>
+		</tr>
+		{% if info.data is defined %}
+		{% for item in info.data %}
+		<tr>
+			<td class="txtcenter rtd">{{item.id}}</td>
+			<td class="txtcenter rtd" url="{{ 'save'|U('id='~item.id~'&_form_id='~formId|default(0)) }}"><span style='width:80%;' id='backendmenu_{{ item.id }}_name' class='editspan'>{{item.name}}</span></td>
+			<td class="txtcenter rtd" url="{{ 'save'|U('id='~item.id~'&_form_id='~formId|default(0)) }}"><span style='width:80%;' id='backendmenu_{{ item.id }}_action' class='editspan'>{{item.action}}</span></td>
+			<td class="txtcenter rtd" url="{{ 'save'|U('id='~item.id~'&_form_id='~formId|default(0)) }}"><span style='width:80%;' id='backendmenu_{{ item.id }}_sort' class='editspan'>{{item.sort}}</span></td>
+			<td class="txtcenter" url="{{ 'delete'|U('id='~item.id) }}">
+			    <input id='popupsub_{{item.id}}_delete' class='search-btn' value='删除' type='button' />
+			</td>
+		</tr>
+		{% endfor %}
+		{% endif %}
+	</tbody>
+</table>
+<div class="popup-submit"><input id="popupsub_backendmenu_add" url="{{ 'save'|U('_form_id='~formId|default(0)~'&pid='~app.request.get('pid')) }}" class="search-btn" value="添加菜单" type="button"></div>
+{% endblock %}

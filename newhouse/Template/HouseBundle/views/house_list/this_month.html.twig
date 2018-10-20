@@ -1,0 +1,55 @@
+{#周边楼盘#}
+{{core_global.linkcss('static/house/css/newhouse-details/public.css?time=201804201145')}}
+{{core_global.linkcss('static/house/css/newhouse-details/newhouse-common.css?time=201804201145')}}
+{{core_global.linkcss('static/house/css/newhouse-details/newhouseDetail.css?time=201804201145')}}
+<style>
+    .vhg-recommend-txt.t{height:auto!important;}
+    .vhg-recommend.zhou{width:285px;border-radius:0;}
+    .build_{overflow:hidden;}
+    .build_>li{height:46px;border-bottom:1px dashed #efefef;width:100%;color:#333;line-height:46px;}
+    .build_>li:first-child>a{color:#636363;}
+    .build_>li>a{display:block;overflow:hidden;}
+    .build_>li>a>i{width:20%;text-align:center;display:block;float:left;font-size:13px;text-overflow:ellipsis;
+    overflow:hidden;white-space:nowrap;}
+    .build_>li>a>i:last-child{width:40%;color:orange;}
+    .build_>li>a>i:first-child{width:40%;text-align:left;height: 46px}
+</style>
+
+{#本月的第一天#}
+{% set now = ("now")|date('Y-m') %}
+{% set now_1 = now~'-01' %}
+{#本月的最后一天#}
+{% set next_1 = ("now")|date_modify('+1 months')|date('Y-m') %}
+{% set next_2 = next_1~'-01' %}
+{% set now_last = next_2|date_modify('-1 days')|date('Y-m-d') %}
+{% set all = ('house.houses_info')|getAll({firstnew_delivertime:"between|"~"'"~now_1~"'"~","~"'"~now_last~"'",pageSize:10,area:detail.region|default(cityid)}) %}
+
+{#{{ dump(all) }}#}
+{% if all and all.data|length>0 %}
+    <div class="vhg-recommend zhou">
+        <p class="vhg-recommend-title col-333 fb fz22">{{ cur_area_data }}本月入住</p>
+        {#<a href="{{ '/xinfang' }}" class="vhg-recommend-more fz12 col-333">更多&gt;&gt;</a>#}
+        <ul class="build_">
+            <li>
+                <a>
+                    <i>楼盘名称</i>
+                    <i>区县</i>
+                    <i>价格</i>
+                </a>
+            </li>
+
+            {% for item in all.data %}
+            {% set catyarea_name = ('db.area')|getRow({id: item.region|default,checked:1}) %}
+            <li>
+                <a style="width: 100%" href="{{ '/xinfang/detail/'~item.aid~'.html' }}" target="_blank">
+                    <i>{{ ('house.houses')|getOne('name',{id:item.aid|default('')})|default('--') }}</i>
+                    {% set area=('house.houses')|getOne('region',{id:item.aid|default('')}) %}
+                    {% set catyarea_name = ('db.area')|getRow({id:area|default,checked:1}) %}
+                    <i>{{ catyarea_name.name|default('--') }}</i>
+                    <i>{{ item.developer_offer|default('待定') }}</i>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}

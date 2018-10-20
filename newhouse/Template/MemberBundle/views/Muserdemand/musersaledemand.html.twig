@@ -1,0 +1,119 @@
+
+{% extends 'HouseBundle::mainlayout.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+    {% set aid = app.request.get('aid') %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }} 
+    
+{% endblock %}
+
+{% block mainleft %}
+  {#   {{ render(controller('HouseBundle:Mnews:category', {category: category, action: 'mnews/mnewsmanage'})) }} #}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ lists.filter([
+    {
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增资讯'
+    },
+    {
+        method: 'selectFormField',
+        title: '审核',
+        form: 'checked',
+        field: 'checked',
+    },
+    {
+        method: 'search',
+        field: 'name',
+    }
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            models: '{{ models }}',
+            category: '{{ category }}'
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{forms.checkbox()}}</th>
+                    <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                    <th>名称</th>
+                    <th width="100">评论</th>
+                    <th width="100">栏目</th>
+                    <th width="100" data-role="sort" data-sort="clicks" class="sort">点击</th>
+                    <th width="100">审核</th>
+                    <th width="100" data-role="sort" data-sort="create_time" class="sort">添加时间</th>
+                    <th width="120" class="tac">操作</th>
+                </tr>
+                {% if ident.info.data is defined %}
+                {% for k, vo in ident.info.data %}
+                    {# {{dump(vo)}} #}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{forms.checkbox()}}</td>
+                    <td>{{ vo.id }}</td>
+                    <td class="tov" title="{{ vo.name|default('') }}"><a href="{{ 'news/detail'|U({id: vo.id}) }}" target="_blank">{{ vo.name }}</a></td> 
+                    <td><a data-role="show" title="{{vo.name}}的评论" href="{{('mintercomment/mintercommentmanage')|U({aid: vo.id})}}">[0]</a></td>
+                    <td>{# {{core_global.formData({value: vo.category})}} #}</td>
+                    <td>{{ vo.clicks|default('0') }}</td>
+                    <td>{{ lists.formField({value: vo.checked}) }} </td>
+                    <td>{{ vo.create_time|default('0')|date('Y-m-d') }}</td>
+                    <td class="tar pr10">
+                        {{ forms.show() }}
+                        {{ forms.delete() }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{lists.page(ident.info)}}
+</section>
+
+{{ lists.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'checked',
+        title: '审核',
+    },
+    {
+        method: 'dropdownCate',
+        field: 'category',
+        service: 'house.category',
+        where: {
+            models: models
+        }
+    }
+]) }}
+{% endblock %}
+
+{% block promptUl %}
+提示说明
+{% endblock %}
+
+
+
+

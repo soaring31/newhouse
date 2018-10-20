@@ -1,0 +1,32 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+** ajax调用：新房列表
+#}
+{% block result %}
+	{% set models = app.request.get("models", 'houses') %}
+
+	{% set tpl_extends = 'HouseBundle:Clist:houseslist' %}
+
+	{% if models == 'sale' %}
+		{% set tpl_extends = 'HouseBundle:Clist:salelist' %}
+	{% elseif models == 'rent' %}
+		{% set tpl_extends = 'HouseBundle:Clist:rentlist' %}  
+	{% endif %}
+
+	{% set lng = app.request.get("lng")|default() %}
+
+	{% set lat = app.request.get("lat")|default() %}
+
+	{% set range = ('mother')|getMconfig('aroundrange').value|default(1) %}
+
+
+	{% set ranges = app.request.get("ranges", range * 1000) %}
+
+	{% set result = ('house.'~models)|searchRange(lng,lat,ranges) %}
+
+	{% set lists = result|default(app.request.get('lists', ident.lists|default(''))) %}
+		
+	{% spaceless %}
+		{{ render(controller(tpl_extends,{_isApp: url_isApp, list: lists})) }}
+	{% endspaceless %}
+{% endblock result %}

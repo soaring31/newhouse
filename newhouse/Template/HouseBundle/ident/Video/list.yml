@@ -1,0 +1,28 @@
+list:
+    tableName: video
+    subTableName: category
+    aliasName: list
+    listGrid: {  }
+    listDesc: ''
+    subJoinField: category
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 20
+    groupBy: ''
+    order: 'dujia|desc,id'
+    orderBy: desc
+    searchFun: EXISTS
+    dataModel: 4
+    attribute: '0'
+    autoQuery: '1'
+    alias: {  }
+    query:
+        checked:
+            eq: '1'
+        name:
+            orX: 'name,like,%[name]%|keywords,like,%[name]%'
+        category:
+            eq: 'null'
+    query1:
+        id:
+            eq: '[category]?16'

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title>photodetail</title>    
+    <style type="text/css">
+
+ 
+    .img-photodetail-big-next,
+ 
+    .img-photodetail-big-prev,
+ 
+    .img-photodetail-btn-enter-hover,
+ 
+    .img-photodetail-btn-enter,
+ 
+    .img-photodetail-btn-replay-hover,
+ 
+    .img-photodetail-btn-replay,
+ 
+    .img-photodetail-end-comment-hover,
+ 
+    .img-photodetail-end-comment,
+ 
+    .img-photodetail-end-qzone-hover,
+ 
+    .img-photodetail-end-qzone,
+ 
+    .img-photodetail-end-wb-hover,
+ 
+    .img-photodetail-end-wb,
+ 
+    .img-photodetail-last-close-hover,
+ 
+    .img-photodetail-last-close,
+ 
+    .img-photodetail-slide-search-hover,
+ 
+    .img-photodetail-slide-search,
+ 
+    .img-photodetail-small-next-hover,
+ 
+    .img-photodetail-small-next,
+ 
+    .img-photodetail-small-prev-hover,
+ 
+    .img-photodetail-small-prev,
+ 
+    .img-photodetail-smask,
+ 
+    .img-photodetail-toolbar-bg-hover,
+ 
+    .img-photodetail-toolbar-bg,
+
+    .a {
+        display: inline-block;
+        *zoom: 1;
+        *display: inline;
+        background-image: url(photodetail.png);
+    }
+
+    .img-photodetail-big-next {
+        width: 31px;
+        height: 61px;
+        background-position: -201px -188px;
+    }
+
+    .img-photodetail-big-prev {
+        width: 31px;
+        height: 61px;
+        background-position: -160px -188px;
+    }
+
+    .img-photodetail-btn-enter-hover {
+        width: 111px;
+        height: 34px;
+        background-position: 0 -144px;
+    }
+
+    .img-photodetail-btn-enter {
+        width: 111px;
+        height: 34px;
+        background-position: -121px -144px;
+    }
+
+    .img-photodetail-btn-replay-hover {
+        width: 112px;
+        height: 35px;
+        background-position: 0 -99px;
+    }
+
+    .img-photodetail-btn-replay {
+        width: 112px;
+        height: 35px;
+        background-position: -122px -99px;
+    }
+
+    .img-photodetail-end-comment-hover {
+        width: 16px;
+        height: 16px;
+        background-position: -268px -188px;
+    }
+
+    .img-photodetail-end-comment {
+        width: 16px;
+        height: 16px;
+        background-position: -242px -188px;
+    }
+
+    .img-photodetail-end-qzone-hover {
+        width: 19px;
+        height: 18px;
+        background-position: -284px -144px;
+    }
+
+    .img-photodetail-end-qzone {
+        width: 19px;
+        height: 18px;
+        background-position: -286px -99px;
+    }
+
+    .img-photodetail-end-wb-hover {
+        width: 15px;
+        height: 17px;
+        background-position: -242px -214px;
+    }
+
+    .img-photodetail-end-wb {
+        width: 15px;
+        height: 17px;
+        background-position: -267px -214px;
+    }
+
+    .img-photodetail-last-close-hover {
+        width: 14px;
+        height: 14px;
+        background-position: -160px -259px;
+    }
+
+    .img-photodetail-last-close {
+        width: 14px;
+        height: 14px;
+        background-position: -292px -214px;
+    }
+
+    .img-photodetail-slide-search-hover {
+        width: 32px;
+        height: 32px;
+        background-position: -244px -99px;
+    }
+
+    .img-photodetail-slide-search {
+        width: 32px;
+        height: 32px;
+        background-position: -242px -144px;
+    }
+
+    .img-photodetail-small-next-hover {
+        width: 30px;
+        height: 107px;
+        background-position: -120px -188px;
+    }
+
+    .img-photodetail-small-next {
+        width: 30px;
+        height: 107px;
+        background-position: -80px -188px;
+    }
+
+    .img-photodetail-small-prev-hover {
+        width: 30px;
+        height: 107px;
+        background-position: -40px -188px;
+    }
+
+    .img-photodetail-small-prev {
+        width: 30px;
+        height: 107px;
+        background-position: 0 -188px;
+    }
+
+    .img-photodetail-smask {
+        width: 130px;
+        height: 89px;
+        background-position: 0 0;
+    }
+
+    .img-photodetail-toolbar-bg-hover {
+        width: 166px;
+        height: 32px;
+        background-position: -140px 0;
+    }
+
+    .img-photodetail-toolbar-bg {
+        width: 166px;
+        height: 32px;
+        background-position: -140px -42px;
+    }
+
+
+    * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    .container {
+        width: 1200px;
+        margin: 20px auto;
+    }
+    li {
+        float: left;
+        padding: 5px;
+        margin: 5px;
+        border: 1px solid #eee;
+        text-align: center;
+        font-family: arial;
+        color: #fff;
+        height: 165px;
+        width: 176px;
+        line-height: 1.5;
+        background-color: #272822;
+        position: relative;
+    }
+    .class {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 48px;
+        width: 100%;
+        cursor: pointer;
+    }
+    pre {
+        margin: 15px 0;
+        color: #FD8520;
+        font-family: Consolas;
+        font-size: 14px;
+        padding: 15px;
+        background-color: #272822;
+    }
+    .bg i {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        margin-left: 10px;
+        cursor: pointer;
+        background-color: #22D5BB;
+        float: right;
+    }
+    .bg i:nth-child(2) {
+        background-color: #E1F4D8;
+    }
+    .bg i:nth-child(3) {
+        background-color: #8B9D37;
+    }
+    .bg i:nth-child(4) {
+        background-color: #FE842E;
+    }
+    .bg i:nth-child(5) {
+        background-color: #272822;
+    }
+    
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <h3>
+            <a class="index"> <i class="img-demo-face1"></i> 返回首页 </a> | <a class="font-demo-home" href="../">上一级</a>
+        </h3>
+        <h2>调用方式</h2>
+
+        <h3>css</h3>
+<pre>
+@import 'img-photodetail'; //导入css 标识-文件名
+@include img-photodetail($img-photodetail); //调用全部样式， 标识-文件名($标识-文件名);
+.img-demo-home {
+    width: nth($img-photodetail, 1);
+    height: nth($img-photodetail, 2);
+    background-position: nth($img-photodetail, 3) nth($img-photodetail, 4);
+}
+</pre>
+        <h3>html</h3>
+<pre>
+&lt;i class="img-demo-home"&gt;&lt;/i&gt; //class 标识+合成后文件名+单个文件名
+</pre>
+
+        <h3><span class="fr bg"><i></i><i></i><i></i><i></i><i></i></span>详细代码</h3>
+        点击下面文字直接复制到剪切板
+    </div>
+</div>
+<ul>
+
+<li>
+    <i class="img-photodetail-big-next"></i>
+    <div class="class">img-photodetail-big-next</div>
+</li>
+
+<li>
+    <i class="img-photodetail-big-prev"></i>
+    <div class="class">img-photodetail-big-prev</div>
+</li>
+
+<li>
+    <i class="img-photodetail-btn-enter-hover"></i>
+    <div class="class">img-photodetail-btn-enter-hover</div>
+</li>
+
+<li>
+    <i class="img-photodetail-btn-enter"></i>
+    <div class="class">img-photodetail-btn-enter</div>
+</li>
+
+<li>
+    <i class="img-photodetail-btn-replay-hover"></i>
+    <div class="class">img-photodetail-btn-replay-hover</div>
+</li>
+
+<li>
+    <i class="img-photodetail-btn-replay"></i>
+    <div class="class">img-photodetail-btn-replay</div>
+</li>
+
+<li>
+    <i class="img-photodetail-end-comment-hover"></i>
+    <div class="class">img-photodetail-end-comment-hover</div>
+</li>
+
+<li>
+    <i class="img-photodetail-end-comment"></i>
+    <div class="class">img-photodetail-end-comment</div>
+</li>
+
+<li>
+    <i class="img-photodetail-end-qzone-hover"></i>
+    <div class="class">img-photodetail-end-qzone-hover</div>
+</li>
+
+<li>
+    <i class="img-photodetail-end-qzone"></i>
+    <div class="class">img-photodetail-end-qzone</div>
+</li>
+
+<li>
+    <i class="img-photodetail-end-wb-hover"></i>
+    <div class="class">img-photodetail-end-wb-hover</div>
+</li>
+
+<li>
+    <i class="img-photodetail-end-wb"></i>
+    <div class="class">img-photodetail-end-wb</div>
+</li>
+
+<li>
+    <i class="img-photodetail-last-close-hover"></i>
+    <div class="class">img-photodetail-last-close-hover</div>
+</li>
+
+<li>
+    <i class="img-photodetail-last-close"></i>
+    <div class="class">img-photodetail-last-close</div>
+</li>
+
+<li>
+    <i class="img-photodetail-slide-search-hover"></i>
+    <div class="class">img-photodetail-slide-search-hover</div>
+</li>
+
+<li>
+    <i class="img-photodetail-slide-search"></i>
+    <div class="class">img-photodetail-slide-search</div>
+</li>
+
+<li>
+    <i class="img-photodetail-small-next-hover"></i>
+    <div class="class">img-photodetail-small-next-hover</div>
+</li>
+
+<li>
+    <i class="img-photodetail-small-next"></i>
+    <div class="class">img-photodetail-small-next</div>
+</li>
+
+<li>
+    <i class="img-photodetail-small-prev-hover"></i>
+    <div class="class">img-photodetail-small-prev-hover</div>
+</li>
+
+<li>
+    <i class="img-photodetail-small-prev"></i>
+    <div class="class">img-photodetail-small-prev</div>
+</li>
+
+<li>
+    <i class="img-photodetail-smask"></i>
+    <div class="class">img-photodetail-smask</div>
+</li>
+
+<li>
+    <i class="img-photodetail-toolbar-bg-hover"></i>
+    <div class="class">img-photodetail-toolbar-bg-hover</div>
+</li>
+
+<li>
+    <i class="img-photodetail-toolbar-bg"></i>
+    <div class="class">img-photodetail-toolbar-bg</div>
+</li>
+
+</ul>
+<script type="text/javascript">
+    var BASE_URL = window.location.href.replace('./images/photodetail.html'.replace('./', ''), '') + '/';
+</script>
+<script type="text/javascript">document.write('<script src="' + BASE_URL + 'js/seajs.js"><\/script>');</script>
+
+<script type="text/javascript">
+seajs.use(['clipboard'], function() {
+    $(function() {
+        $('.index').click(function(event) {
+            location.href = BASE_URL;
+        });
+        var $icons = $('.class, .text');
+        $('body').on('copy', '.class, .text', function(e) {
+                $icons.removeAttr('style');
+                e.clipboardData.clearData();
+                e.clipboardData.setData("text/plain", $(this).css({color:'#f00'}).text());
+                e.preventDefault();
+            })
+            .on('click', '.bg i', function() {
+                $('li').css({
+                    backgroundColor: $(this).css('background-color'),
+                })
+            })
+    });
+})
+</script>
+</body>
+</html>

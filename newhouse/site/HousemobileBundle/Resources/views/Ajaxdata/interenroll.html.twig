@@ -1,0 +1,29 @@
+{% extends 'CoreBundle::base_ajax.html.twig' %}
+
+{% block result %}
+{# {% spaceless %}
+{ {% for k,v in form.children %}{% if loop.index != 1 %},{% endif %}
+{{k}}: {% if v.vars|is_array %}{ {% for k1, v1 in v.vars %}{% if loop.index != 1 %},{% endif %}{{k1}}: {{v1|default('')}}{% endfor %} }{% else %}{{v|default('')}}{% endif %}{% endfor %} }
+{% endspaceless %} #}
+{# {{house_mobile_global.formsss(form.children)}} #}
+{{dump(form)}}
+{{dump(form.vars)}}
+
+{% set aaa = {
+    "che": "111",
+    "bbb": "22",
+    "aaaa": {
+        "ccc": "1"
+    }
+} %}
+{% set bbb = [
+
+] %}
+{{aaa}}
+{{aaa|json_encode}}
+{{dump(form.children['dyfl'].vars.choices)}}
+{{form.children['dyfl'].vars.choices|json_encode}}
+{% for k,v in form %}
+    {{k}}
+{% endfor %}
+{% endblock result %}

@@ -1,0 +1,46 @@
+{% extends 'HousemobileBundle::base.html.twig' %}
+{% block title %}
+   在线提问
+{% endblock title %}
+
+{% block header_title %}
+    {{core_mobile_global.title({title: '在线提问'})}}
+{% endblock header_title %}
+
+
+{% block container %}
+    {% set list_header %}
+    <div data-block="{
+        bParams: true,
+        ajax: {
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                title: '问题',
+                formflag: 'view_webtw',
+                tpl: 'Common:forms'
+            }
+        }
+    }"></div>
+    {{housemobile_global.panel_title({title: '网站提问列表'})}}
+    {% endset %}
+
+    {# 列表链接 js调用列表需要 #}
+    {% set list_url = ('intercomment/list')|U({checked: 1, models: 'webtw', checkreply: 1}) %}
+    {{core_mobile_global.list_scroll({
+        list_header: list_header|default(''),
+        url: list_url|default('')
+    })}}
+    <script type="text/javascript">
+        seajs.use(['comment'], function (comment){
+            comment.init({
+                list: '[data-container="list"]',
+                url: '{{ list_url }}',
+                removeItem: '.up',
+                btnload: 1
+            });
+        });
+    </script>
+{# {% include 'HousemobileBundle:Service:askblock.html.twig' ignore missing %} #}
+{% endblock container %}
+
+

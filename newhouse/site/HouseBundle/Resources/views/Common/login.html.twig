@@ -1,0 +1,126 @@
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+
+{% set mconfig_sinalogin = core_global.mconfigtostring({name: 'sinalogin', ename: 'mloginset'}).__toString %}
+{% set mconfig_qqlogin = core_global.mconfigtostring({name: 'qqlogin', ename: 'mloginset'}).__toString %}
+{% set mconfig_wxlogin = core_global.mconfigtostring({name: 'mwxlogin', ename: 'mloginset'}).__toString %}
+
+<div id="login" class="loginbar" data-login="1"
+    data-config="{
+        tpl: '#logintpl',
+        url: '{{("viewinter/logininfo")|U}}',
+        logoutUrl : '{{ path( "house_logout") }}',
+        loginUrl: '{{("viewinter/viewlogin")|U}}',
+        modal: '.winlogin'
+    }">
+    {% block logout %}
+        <div class="login-out">
+            <div class="login-out-btn">
+                <a href="{{ path('house_login') }}"  data-modal=".winlogin"  title="登录">
+                    <i class="font-icons-2"></i>登录
+                </a>
+                <a href="{{ path('house_register')}}" title="注册" target="_blank">
+                    <i class="font-icons-30"></i>注册
+                </a>
+            </div>
+            {% if mconfig_sinalogin == 1 or mconfig_qqlogin == 1 or mconfig_wxlogin == 1 %}
+            <ul class="login-quick login-btn">
+                {% if mconfig_qqlogin == 1 %}
+                <li>
+                    <a href="{{('/connect/qq')|U}}">
+                        <i class="font-icons-38 qq"></i>
+                        QQ登录
+                    </a>
+                </li>
+                {% endif %}
+                {% if mconfig_sinalogin == 1 %}
+                <li>
+                    <a href="{{('/connect/weibo')|U}}">
+                        <i class="font-icons-36 sina"></i>
+                        微博登录
+                    </a>
+                </li>
+                {% endif %}
+                {% if mconfig_wxlogin == 1 %}
+                <li>
+                    <a  href="{{('/connect/weilogin')|U}}">
+                        <i class="font-icons-37 weixin"></i>
+                        微信登录
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+            {% endif %}
+        </div>
+    {% endblock logout %}
+</div>
+
+<script>
+    seajs.use(['jqhoverS'], function ( jqhoverS){
+        // logincom.init({
+            // url: '{{("viewinter/logininfo")|U}}',
+            // logoutUrl : '{{ path( "house_logout") }}'
+            // logoutUrl: '{{("viewinter/logout")|U}}',
+
+        // });
+
+        $('#login').on('backfn', function() {
+            $('.login-info').hoverSlider({
+                offsetx:0,
+                obj:'.login-operate',
+                delay: 10
+            });
+            $('.login-out-btn').hoverSlider({
+                offsetx:0,
+                obj:'.login-quick',
+                delay: 10
+            })
+        });
+    });
+</script>
+
+<script id="logintpl" type="text/html">
+    <% if (data.loginstate == 1) { %>
+        <div class="login-in">
+            <div class="login-info" > <i class="font-icons-2"></i>
+                <span><%= data.name %></span> <i class="font-icons-1"></i>
+            </div>
+            <ul class="login-operate login-btn">
+                <% if(data.type == 'MemberBundle') { %>
+                <li>
+                    <a href="{{ path('house_main') }}#/default/1747" title="我的收藏" target="_blank">
+                        <i class="font-icons-3"></i>
+                        我的收藏
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('house_main') }}#/default/54" title="我要发布" target="_blank">
+                        <i class="font-icons-5"></i>
+                        我要发布
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('house_main') }}" title="会员中心" target="_blank"> <i class="font-icons-6"></i>
+                        会员中心
+                    </a>
+                </li>
+                <% } else { %>
+                    <li>
+                        <a href="{{ path('house_main') }}" title="后台管理" target="_blank">
+                            <i class="font-icons-6"></i>
+
+                            后台管理
+                        </a>
+                    </li>
+                <% } %>
+                <li>
+                    <a data-logout="1" href="javascript:;" title="安全退出">
+                        <i class="font-icons-7"></i>
+                        安全退出
+                    </a>
+                </li>
+            </ul>
+        </div>
+    <% } else { %>
+        {{ block('logout') }}
+    <% } %>
+</script>

@@ -1,0 +1,97 @@
+{% set tpl_extends = 'HousemobileBundle::list_layout.html.twig' %}
+{% set tpl_extends_data = {
+    'ajax': 'HousemobileBundle:Clist:business_list.html.twig',
+    'maptype': 'HousemobileBundle:map:mapinfo.html.twig'
+} %}
+
+{% for k,v in tpl_extends_data %}
+    {% if app.request.get(k) %}
+        {% set tpl_extends = v %}
+    {% endif %}
+{% endfor %}
+
+
+{% extends tpl_extends|default('') %}
+
+
+{% block title %}
+【{{cur_area_data|default('')}}楼盘】_{{cur_area_data|default('')}}新楼盘_{{cur_area_data|default('')}}房价_{{cur_area_data|default('')}}新写字楼
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" Content="{{'now'|date('Y')}}{{cur_area_data|default('')}}楼盘信息,{{'now'|date('Y')}}{{cur_area_data|default('')}}新楼盘信息,{{cur_area_data|default('')}}新写字楼信息"/>
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}新房网为您提供最真实的{{cur_area_data|default('')}}新房出售信息及最新{{cur_area_data|default('')}}楼盘,新楼盘价格信息。大量优质最新楼盘信息实时更新,为您创造最佳新房购房体验。"/>
+{% endblock key_des %}
+
+{% block header_title %}
+    {{core_mobile_global.title({title: '写字楼楼盘'})}}
+{% endblock header_title %}
+
+{% block header_right %}
+    {{ core_mobile_global.bar_nav_btn({
+        title: '搜索',
+        icon: 'font-f-8',
+        popup: {
+            title: '写字楼搜索',
+            popup: '.popup-search',
+        }
+    }) }}
+{% endblock header_right %}
+
+{# 列表链接 js调用列表需要 #}
+{% set list_url = ('business/list')|U({ajax: 1}) %}
+    
+{% block container %}
+    {% set list_header %}
+    <div class="filter" data-block="{
+        ajax: {
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                tpl: 'Common:filter',
+                tag: 'office_houses'
+            }
+        }
+    }"></div>
+    {% endset %}
+    {{ parent() }}
+{% endblock container %}
+
+{% block popup_nav %}
+    {# {% include 'HousemobileBundle:Sale:navblock.html.twig' ignore missing %} #}
+    {% set current_nav = {
+        title: '商业地产',
+        data: [
+            {
+                name: '写字楼楼盘',
+                url: ('business/list')|UU
+            },
+            {
+                name: '写字楼出售',
+                url: ('business/xsalelist')|UU
+            },
+            {
+                name: '写字楼出租',
+                url: ('business/xrentlist')|UU
+            },
+            {
+                name: '商铺楼盘',
+                url: ('business/slist')|UU
+            },
+            {
+                name: '商铺出售',
+                url: ('business/ssalelist')|UU
+            },
+            {
+                name: '商铺出租',
+                url: ('business/srentlist')|UU
+            },
+        ]
+    } %}
+    {{ parent() }}
+{% endblock popup_nav %}
+
+{# 搜索 #}
+{% block popup_search %}
+    {% set search_action = ('business/list')|UU %}
+    {{ parent() }}
+{% endblock popup_search %}

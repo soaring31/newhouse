@@ -1,0 +1,26 @@
+{{'{% extends \'HouseBundle::mainlayout.html.twig\' %}
+{% block js %}
+<script type="text/javascript">
+    seajs.use(\'dialog\', function(dialog) {
+        window.dialog = dialog;
+    })  
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }} 
+{% endblock %}
+
+{% block tableMain %}
+    {# {{action}} #}
+{% import "HouseBundle:Macro:config_form.html.twig" as forms %}
+<section class="list-con table-inline" data-height="580" data-param=\'{
+        fixed     : ".filter",
+        list      : ".list-con"
+    }\'>
+    {{ forms.popEdit(form|default(\'\'), action) }}
+</section>
+{% endblock tableMain %}
+
+{% block promptUl %}{% endblock %}
+'}}

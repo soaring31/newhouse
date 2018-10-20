@@ -1,0 +1,61 @@
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+{% set toid = app.request.get("toid") %}
+{% if ident.info.data is defined %}
+    {% for item in ident.info.data %}
+        {% set item_user = ('db.users')|getRow({id: item.uid|default('0'),checked: 1}) %}
+        {% set item_user_info = ('db.userinfo')|getRow({uid: item.uid|default('')}) %}
+        {% set item_user_name = item_user_info.nicename|default(item_user.username|default('')) %}
+        <div class="anthor-item pl-box" data-cid="{{item.id}}" {% if loop.last and toid == '0' %}
+                data-page="{
+                    pageIndex: {{ident.info.pageIndex}},
+                    pageCount: {{ident.info.pageCount}},
+                    pageSize: {{ident.info.pageSize}}
+                }"{% endif %}>
+            <p class="man">
+                {{- core_global.img({
+                    src: item_user_info.image|default(''),
+                    alt: item_user_name|default(''),
+                    type: 2,
+                    width: 50,
+                    height: 50
+                }) -}}
+                回答者&nbsp;:&nbsp;
+                <span>{{item_user_name|default('游客')}}</span>
+                <span>{{item.create_time|default('')|date('Y-m-d')}}</span>
+                <span>&nbsp;{{ core_global.get_user_info(item.user_agent|default(''))}}</span>
+            </p>
+            <p class="item-answer pt10 pb10">
+                {{ item.content }}
+            </p>
+           <div class="zc_btn">
+               <a class="zc vote" data-vote="{models: 'answer', id: {{item.id|default('')}}, field: 'vote'}"><i class="icon font-cmt-6"></i>
+                   支持 ( <em data-vote-num="{{item.vote|default(0)}}" class="vote-num">{{item.vote|default(0)}}</em>
+                   )
+               </a>
+               {% if item.toid == 0 %}
+                <a class="wyhf"> <i class="icon font-cmt-5"></i>
+                    回复
+                </a>
+                <a class="replys"> <i class="icon font-cmt-7"></i>
+                    查看回复
+                </a>
+                {% endif %}
+           </div>
+        </div>
+    {% else %}
+        {% if toid|default('') is empty %}
+            <p class="noinfo">没有其他回答</p>
+        {% else %}
+            <div style="width: 100%; text-align: center;padding: 10px">暂无回答</div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<script type="text/javascript">
+    seajs.use(['vote'], function(vote) {
+        // 顶
+        vote.init({
+            saveUrl: '{{("viewinter/vote")|U}}'
+        });
+    })  
+</script>

@@ -1,0 +1,37 @@
+services:
+    db.wxnews:
+        class: WeixinBundle\Services\DB\Wxnews
+        arguments:
+            - '@service_container'
+    weixin.wxfans:
+        class: WeixinBundle\Services\DB\Wxfans
+        arguments:
+            - '@service_container'
+    db.wxkeyword:
+        class: WeixinBundle\Services\DB\Wxkeyword
+        arguments:
+            - '@service_container'
+    db.wxdefault:
+        class: WeixinBundle\Services\DB\Wxdefault
+        arguments:
+            - '@service_container'
+    db.wxpipeline:
+        class: WeixinBundle\Services\DB\Wxpipeline
+        arguments:
+            - '@service_container'
+    db.wxhardware:
+        class: WeixinBundle\Services\DB\Wxhardware
+        arguments:
+            - '@service_container'
+    db.wxshakearound:
+        class: WeixinBundle\Services\DB\Wxshakearound
+        arguments:
+            - '@service_container'
+    db.eventcoupon:
+        class: WeixinBundle\Services\DB\Eventcoupon
+        arguments:
+            - '@service_container'
+    db.wxpoi:
+        class: WeixinBundle\Services\DB\Wxpoi
+        arguments:
+            - '@service_container'

@@ -1,0 +1,13 @@
+services:
+    oauth.alipay:
+        class: OAuthBundle\Services\AliPay\AliPay
+        public: false
+        arguments: ['@service_container']
+    oauth.alipay_submit:
+        class: OAuthBundle\AliPay\AliPaySubmit
+        parent: 'oauth.alipay'
+        public: true
+    oauth.alipay_notify:
+        class: OAuthBundle\AliPay\AliPayNotify
+        parent: 'oauth.alipay'
+        public: true

@@ -1,0 +1,203 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+
+{# 说明
+ * detail: 新房详情数据
+#}
+{% set detail = cident.detail.data[0]|default('') %}
+
+{#
+{% block title %}
+    {{detail.name|default('')}}-
+    {% block h_title %}
+    楼盘详情
+    {% endblock h_title %}
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}, {{cur_area_data|default('')}}{{detail.name|default('')}}，{{detail.name|default('')}}楼盘详情" />
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}({{'maindomain'|C}})提供{{cur_area_data|default('')}}{{detail.name|default('')}}售楼电话({{detail.tel|default('')}})、实时房价({{detail.dj|default('')}}元/平米)、户型图、地址{{detail.address|default('')}}、交通和周边配套、开盘动态、怎么样等楼盘信息。活跃、集聚众多人气的{{detail.name|default('')}}业主论坛，及时的{{detail.name|default('')}}楼盘信息尽在{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}!"/>
+{% endblock key_des %}
+#}
+
+{% block tkd %}
+{{- housemobile_global.tkd({
+   type:'2',
+   city:cur_area_data,
+   lpName:detail.name|default,
+   phoneNum:detail.tel|default
+}) -}}
+{% endblock tkd %}
+
+
+
+{% block moblie_header %}
+    {{core_mobile_global.go_back()}}
+    {% block d_header %}
+    {{core_mobile_global.title({title: detail.name|default('新房详情')})}}
+    {% endblock d_header %}
+{% endblock moblie_header %}
+
+{% block header_right %}
+{#{{ core_mobile_global.bar_nav_btn({
+    title: '分享',
+    icon: 'font-f-29',
+    class: 'share-actions',
+    attr: {
+        'data-text': detail.name|default(''),
+        'data-abstract': detail.abstract|default(''),
+        'data-url': ('houses/detail')|U({id: detail.id|default('')}),
+        'data-pic': core_global.img_url({src: detail.thumb|default('')}),
+    }
+}) }}#}
+
+   {# {{ core_global.collect_btn({
+        aid: detail.id|default(''),
+        models: detail.models|default('houses'),
+        class: 'button-ver external',
+        icons: 'icon font-f-30 icon-cent'
+    }) }}#}
+    {{ core_mobile_global.bar_nav_btn({
+        title: '',
+        icon: 'font-f-8',
+        popup: {
+            placeholder: '楼盘名称/拼音/地址',
+            title: '新房搜索',
+            popup: '.popup-search',
+        }
+    }) }}
+{% endblock header_right %}
+
+{% block popup %}
+<input type="hidden" id="j_houseId" name="" value="{{detail.id|default('')}}">
+{# 地图弹窗 #}
+{{ housemobile_global.popup({
+    name: 'popup-map',
+    title: '新房地图',
+    content: {
+        bParams: true,
+        ajax: {
+            url: ('houses/detail')|U,
+            data: {
+                id: detail.id|default(''),
+                tpl: 'Common:mapblock'
+            }
+        }
+    }
+}) }}
+
+{# 楼盘订阅 #}
+
+{{ housemobile_global.popup({
+    name: 'popup-yxiang',
+    title: '楼盘订阅',
+    content: {
+        bParams: true,
+        ajax:{
+            url: ('houses/detail')|U,
+            data: {
+                aid: detail.id|default(''),
+                formflag: 'view_houses_intent',
+                tpl: 'Common:forms',
+            }
+        }
+    }
+}) }}
+
+{% endblock popup %}
+
+    {% if '/xinfang/detail' in app.request.uri %}
+        {% block css %}
+            {{core_global.linkcss('static/' ~ bundlepath ~ 'mobile/css/detail.css')}}
+            <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5ulnp3fPzXQaP38hsxAVxc83cqd5i2jp"></script>
+        {% endblock css %}
+    {% endif %}
+
+{% block container %}
+    <div data-block="{
+        bParams: true,
+        ajax:{
+            url: '{{ ('houses/detail')|U }}',
+            data: {
+                id: '{{ detail.id|default('') }}',
+                tpl: 'Houses:detailblock'
+            }
+        }
+    }"></div>
+     {# 微信分享只能放当前页 #}
+    {{ housemobile_global.weixin_share({
+        text    : detail.name|default,
+        abstract: detail.abstract|default,
+        url     : ('houses/detail')|U({id: detail.id|default}, true),
+        thumb   : detail.thumb|default,
+    }) }}
+    <div id="cyHTML" style="display: none">
+        <!-- AdSame ShowCode: WAP / 新房详情页 / 猜你喜欢1 Begin -->
+        <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~'12103101' }}" charset="gbk" ></script>
+        <!-- AdSame ShowCode: WAP / 新房详情页 / 猜你喜欢1 End -->
+        <!-- AdSame ShowCode: WAP / 新房详情页 / 猜你喜欢2 Begin -->
+        <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~'12103102' }}" charset="gbk" ></script>
+        <!-- AdSame ShowCode: WAP / 新房详情页 / 猜你喜欢2 End -->
+        <!-- AdSame ShowCode: WAP / 新房详情页 / 猜你喜欢3 Begin -->
+        <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~'12103103' }}" charset="gbk" ></script>
+        <!-- AdSame ShowCode: WAP / 新房详情页 / 猜你喜欢3 End -->
+        <!-- AdSame ShowCode: WAP / 新房详情页 / 猜你喜欢4 Begin -->
+        <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~'12103104' }}" charset="gbk" ></script>
+        <!-- AdSame ShowCode: WAP / 新房详情页 / 猜你喜欢4 End -->
+    </div>
+
+{% endblock container %}
+
+
+{# 导航 #}
+{% block secondary %}
+    {% if '/xinfang/detail' not in app.request.uri %}
+    <div data-block="{
+        bParams: true,
+        ajax:{
+            url: '{{ ('houses/detail')|U }}',
+            data: {
+                id: '{{ detail.id|default('') }}',
+                tpl: 'Houses:navblock',
+                active: {{nav_active|default(0)}}
+            }
+        }
+    }"></div>
+    {% endif %}
+{% endblock secondary %}
+
+{%block js%}
+
+<script>
+        seajs.use([], function() {
+          $(function(){
+            var url = '';//跳回首页需要的
+            var type = 'newhousedetail';//本次定义的参数
+            //拿取id并拼接url
+            {# 当前分站id #}
+            {% set sess_area = app.session.get('area')|default(0) %}
+            {% set city = ('db.auth_group_area')|getAll({
+                rulesarea:sess_area,
+                pageSize: 1,
+                order   : 'sort',
+                orderBy : 'asc'
+            }) %}
+            {% set cityName = city.data[0].city%}
+            url="{{ 'http://m.zhugefang.com/'~cityName}}";
+
+            //获取url上特定参数
+            {% set urlForm = app.request.get('newhousedetail') %}
+            var urlForm = '{{urlForm}}';
+            //调用公共方法跳回首页
+            zgCommon.backIndex(url,urlForm,type);
+            //免责声明
+            zgCommon.agreement(".a_re .re",'agreement');
+            // app投放页面处理
+            zgCommon.appFyxq();
+           })
+        })
+</script>
+    {% block js_con %}
+
+    {% endblock %}
+{%endblock%}

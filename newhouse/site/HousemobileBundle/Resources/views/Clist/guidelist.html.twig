@@ -1,0 +1,50 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+** ajax调用：置业指南
+#}
+{% block result %}
+{% set list = cident.list %}
+{% if app.request.get('json', 0) %}
+{
+    "pageCount": "{{list.pageCount|default(0)}}"
+}
+{% else %}
+    {% spaceless %}
+        {% if list.data is defined and list.pageCount|default(0) != 0 %}
+        {% for item in list.data %}
+             <li {% if loop.last %}data-page="{
+                    pageIndex: {{list.pageIndex}},
+                    pageCount: {{list.pageCount}},
+                    pageSize: {{list.pageSize}}
+                 }"{% endif %}>
+                <a href="{{('guide/detail')|UU({id:item.id|default('')})}}" class="color-6 item-content">
+                  <div class="item-media">
+                    {{core_global.img({
+                            src: item.thumb|default(''),
+                            title: item.name|default(''),
+                            type: 2,
+                            width:120 ,
+                            height: 90
+                        })}}   
+                  </div>
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                        {{housemobile_global.list_title({title: item.name|default('')})}}
+                    </div>
+                    <div class="item-text">
+                        {{ core_global.content({content: item.abstract|default(''), default: '暂无简介'}) }}
+                    </div>
+                    <div class="item-subtitle mt5">
+                        {{core_global.keywords({keywords: item.keywords|default(''), tpl: '<span class="btns mr5">%keywords%</span>'})}}
+                    </div>
+                    
+                  </div>
+                </a>               
+              </li>
+        {% endfor %}
+        {% else %}
+            <li class="mobile-list-none">暂无更多置业指南</li>
+        {% endif %}
+    {% endspaceless %}
+{% endif %}
+{% endblock result %}

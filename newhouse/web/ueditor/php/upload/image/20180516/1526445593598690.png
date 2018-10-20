@@ -1,0 +1,4 @@
+<br />
+<b>Warning</b>:  readfile(): php_network_getaddresses: getaddrinfo failed: ��֪������������  in <b>D:\PHPStudy\WWW\newhouse\newcore\src\CoreBundle\Functions\Common.php</b> on line <b>2152</b><br />
+<br />
+<b>Warning</b>:  readfile(http://yu.zhuge.comueditor/php/upload/image/20180516/1526445593598690.png): failed to open stream: php_network_getaddresses: getaddrinfo failed: ��֪������������  in <b>D:\PHPStudy\WWW\newhouse\newcore\src\CoreBundle\Functions\Common.php</b> on line <b>2152</b><br />

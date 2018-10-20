@@ -1,0 +1,228 @@
+HouseBundle\Entity\Wxpoi:
+    type: entity
+    table: wxpoi
+    indexes:
+        business_name:
+            columns:
+                - business_name
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        sid:
+            options:
+                comment: 商户自己的id
+                unsigned: false
+            nullable: false
+            type: string
+            length: 50
+        business_name:
+            options:
+                comment: 总公司商户名称
+                unsigned: false
+            nullable: false
+            type: string
+            length: 30
+        branch_name:
+            options:
+                comment: 分店名称
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        province:
+            options:
+                comment: 门店所在的省份
+                unsigned: false
+            nullable: false
+            type: string
+            length: 20
+        city:
+            options:
+                comment: 门店所在的城市
+                unsigned: false
+            nullable: false
+            type: string
+            length: 20
+        district:
+            options:
+                comment: 门店所在地区
+                unsigned: false
+            nullable: false
+            type: string
+            length: 20
+        address:
+            options:
+                comment: 详细街道地址
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        telephone:
+            options:
+                comment: 门店的电话
+                unsigned: false
+            nullable: false
+            type: string
+            length: 20
+        categories:
+            options:
+                comment: 门店的类型
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        offset_type:
+            options:
+                comment: 坐标类型
+                unsigned: false
+                default: '1'
+            nullable: false
+            default: '1'
+            type: integer
+            length: 10
+        longitude:
+            options:
+                comment: 门店位置经度
+                unsigned: false
+            nullable: false
+            type: float
+            length: 100
+        latitude:
+            options:
+                comment: 门店位置纬度
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        photo_list:
+            options:
+                comment: 门店图集
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        recommend:
+            options:
+                comment: 推荐品
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        special:
+            options:
+                comment: 特色服务
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        introduction:
+            options:
+                comment: 商户简介
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        open_time:
+            options:
+                comment: 营业时间
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        avg_price:
+            options:
+                comment: 人均价格
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        authtest:
+            options:
+                comment: 测试模型id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        token:
+            options:
+                comment: 微信token
+                unsigned: false
+            nullable: false
+            type: string
+            length: 50
+        is_sync:
+            options:
+                comment: 是否更新
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+        is_base:
+            options:
+                comment: 是否总店基本信息
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+        checked:
+            options:
+                comment: 是否审核
+                unsigned: false
+            nullable: false
+            type: boolean
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

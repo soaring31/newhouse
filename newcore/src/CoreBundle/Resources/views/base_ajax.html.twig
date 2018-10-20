@@ -1,0 +1,42 @@
+{% import "HousemobileBundle:Macro:global.html.twig" as house_mobile_global %}
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+{% import "HouseBundle:Macro:global.html.twig" as house_global %}
+{% import "CoreBundle:Macro:manage.html.twig" as core_manage %}
+{% import "CoreBundle:Macro:mobile_forms.html.twig" as core_mobile_forms %}
+{#
+    // json
+    {
+        status: 1,
+        b: 1
+    }
+    // jsonp
+    callback({
+        a: 1,
+        b: 1
+    })
+    // jsonpStr
+    callback('zzzzz')
+    // script
+    var result = "{
+        a: 1,
+        b: 1
+    }"
+#}
+{%- set datatype = app.request.get('datatype') -%}
+{%- set result -%}
+   {% spaceless %}{%- block result -%}{%- endblock result -%} {% endspaceless %}
+{%- endset -%}
+
+{%- if datatype in ['jsonp', 'jsonpStr'] -%}
+    {%- set callback = app.request.get('callback') -%}
+    {% if datatype == 'jsonp' %}
+        {{- callback -}} ({{-result|raw-}})
+    {% else  %}
+        {{- callback -}}('{{-result|e('js')-}}')
+    {% endif %}
+{%- elseif datatype == 'script' -%}
+    {%- set varible = app.request.get('varible') -%}
+    var {{- varible ? : ' result' -}} = {{-result-}};
+{%- else -%}
+    {{-result-}}
+{%- endif -%}

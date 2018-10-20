@@ -1,0 +1,143 @@
+HouseBundle\Entity\HouseSemTel:
+    type: entity
+    table: house_sem_tel
+    indexes:
+        sem_id:
+            columns:
+                - sem_id
+        house_id:
+            columns:
+                - house_id
+        sem_type:
+            columns:
+                - sem_type
+        sem_platform:
+            columns:
+                - sem_platform
+        sem_channel:
+            columns:
+                - sem_channel
+        status:
+            columns:
+                - status
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        sem_id:
+            options:
+                comment: 'house_sem表 id'
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        house_id:
+            options:
+                comment: 楼盘id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        sem_type:
+            options:
+                comment: 存值
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        sem_platform:
+            options:
+                comment: 存值
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        sem_channel:
+            options:
+                comment: 存值
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        status:
+            options:
+                comment: '1: 已绑定 2: 已解绑'
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        bigcodetel:
+            options:
+                comment: 大号
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        extcode:
+            options:
+                comment: 分机号
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        checked:
+            options:
+                comment: 是否审核
+                unsigned: false
+            nullable: false
+            type: boolean
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

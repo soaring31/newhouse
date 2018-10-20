@@ -1,0 +1,1419 @@
+{# 调用说明开始 #}
+{# {% import "HousemobileBundle:Macro:mobile_lists.html.twig" as house_mobile_global %} #}
+{# {{ core_mobile_global.title({href: item.url|default('')}) }} #}
+{# 调用说明结束 #}
+
+{# mobile seo tkd #}
+{#
+/**
+ * @description seo title keywords description
+ * @param {type} 必须 - 1为列表页，2为楼盘详情页，3为房价走势
+ * @param {data} 必须 - 查表所得seo模板
+ * @param {city}  必须- 城市名
+ * @param {pageCount}  非必须- 列表页筛选房源总数
+ * @param lpName  非必须- 详情页楼盘名称
+ * @example
+ * ```twig
+ * {{- house_global.tkd({type: type,city: city,data:data}) -}}
+ * ```
+ */
+ #}
+{%- macro tkd(o) -%}
+    {% set opt = {
+       type:'',
+       data:'',
+       city:'',
+       pageCount:'',
+       lpName:'',
+       phoneNum:''
+    }|merge(o)%}
+    {# 检索筛选数据源 #}
+    {# % set cate_data = _self.cate_data({
+        tag: 'houses',
+        switch: {
+            cate_circle: 1,
+            cate_line: 1,
+            hxs: 1
+        }
+    }).__toString|json_decode % #}
+    {# % set selected = cate_data.selected|default('') % #}
+    {% set cityName = opt.city|default('')|slice(0,-1) %}
+    {# % set regionData = selected.cate_circle|default('') ? selected.cate_circle.name|default('') : selected.region.name|default('') % #}
+    {# % set metroData = selected.cate_metro|default('') ? selected.cate_metro.name|default('') : selected.cate_line.name|default('') % #}
+    {% set title = '' %}
+    {% set keywords = '' %}
+    {% set description = '' %}
+    {% if opt.type == '1' %}
+        {# % set seoCont = opt.data|default('') % #}
+        {% set title = '【#城市#新房总价_新房户型__新楼盘_新开楼盘信息】-#城市#诸葛找房网'|replace({
+            '#城市#':cityName,
+        }) %}
+        {% set keywords = '#城市#新楼盘，#城市#新房价格 , #城市#新房网'|replace({
+            '#城市#':cityName
+        }) %}
+        {% set description = '#城市#诸葛找房新房网频道-汇聚全网#城市#新房总价 , 新房户型 , 新房房源#实时楼盘数量#个新楼盘, 提供即时新开楼盘信息,新房房源信息,让您全面了解#城市#新房总价 , 新房户型 , 新开楼盘信息等,诸葛找房房地产界的搜索引擎,买房购房查找房源首选#城市#诸葛找房网'|replace({
+            '#城市#':cityName,
+            '#实时楼盘数量#':opt.pageCount|default('')
+        }) %}
+    {% endif %}
+
+    {% if opt.type == '2' %}
+        {# % set seoCont = opt.data|default('') % #}
+        {% set title = '【#楼盘名#_楼盘详情】-#城市#诸葛找房网'|replace({
+            '#城市#':cityName,
+            '#楼盘名#':opt.lpName|default(''),
+        }) %}
+        {% set keywords = '#楼盘名#楼盘信息 , #楼盘名#楼盘详情'|replace({
+            '#楼盘名#':opt.lpName|default(''),
+        }) %}
+        {% set description = '北京诸葛找房网提供#楼盘名#售楼处电话#楼盘电话#楼盘地址、楼盘价格，楼盘动态，楼盘点评，全网比价等信息'|replace({
+            '#城市#':cityName,
+            '#楼盘名#':opt.lpName|default(''),
+            '#楼盘电话#':opt.phoneNum|default('')
+        }) %}
+    {% endif %}
+
+    {% spaceless %}
+        <title>{{title}}</title>
+        <meta name="keywords" content="{{keywords}}">
+        <meta name="description" content="{{description}}">
+    {% endspaceless %}
+{%- endmacro -%}
+{#
+/**
+* @method content(o)
+* @description 内容简介部分
+* @param {String} o.title=内容简介 - 标题
+* @param {String} o.content - 内容介绍数据
+* @param {String} o.conclass - 样式
+* @param {Boolean} o.btn - 是否显示更多按钮
+* @param {String} o.default - 没有内容的时候显示
+* @example 调用
+* ```twig
+* {{- housemobile_global.content({title: '内容简介', content: houses_detail.content|default('')})-}}
+* ```
+*/
+#}
+{%- macro content(o) -%}
+    {% spaceless %}
+        {% set opt = {
+            id: 'con'
+        }|merge(o) %}
+        {% from "CoreBundle:Macro:global.html.twig" import content %}
+        <div class="list-block panel-block {{opt.conclass|default('')}} ">
+            {{_self.panel_title(o)}}
+            <div class="item-content1 p-gray">
+                <div class="item-inner2">
+                    <div class="con" id="{{opt.id}}">
+                        {{ content(opt) }}
+                    </div>
+                    {% if o.content|default('')|badKeywords('')|hotKeywords('') and o.btn|default('1') %}
+                        {{_self.more_con({
+                            id: opt.id,
+                            addclass: 'con-more',
+                            down: '收起详情<span class="icon font-f-35 ml"></span>',
+                            up: '查看更多详情<span class="icon font-f-34 ml"></span>'
+                        }|merge(o))}}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endspaceless %}
+{%- endmacro content -%}
+
+{#
+/**
+ * @method lptag(o)
+ * @description 楼盘属性, con里面包含要显示的值必须在`field`和`service`这两个变量中存在，否则不会显示
+ * @param {Array} o.value - 所属数据
+ * @param {string} o.con - 要显示的字段，多个字段之间使用(,)分隔如(zxcd,cate_type)
+ * @param {string} o.tpl - 模板
+ * @param {Object} field - 内部变量，需要从表单中获取数据的字段，增加规则为，key=要显示的字段名称,value=需要在哪个表单中查找该字段
+ * @param {Object} service - 内部变量，需要从数据库中获取数据的字段，增加规则为，key=要显示的字段名称，value=表示需要查询的数据表名，默认分类表(house.category)
+ * @example
+ * ```twig
+ * {{- house_global.lptag({value: detail, tpl:'<span>%value%</span>' con: 'zxcd,cate_type'}) -}}
+ * ```
+ */
+ #}
+ {%- macro lptag(o) -%}
+{% spaceless %}
+    {% import "CoreBundle:Macro:global.html.twig" as core_global %}
+    {% set opt = {
+        tpl: '%value%'
+    }|merge(o) %}
+
+    {% set tag = opt.value %}
+    {#
+        表单字段：k 表示需要查询的字段，v 表示需要查询的表单名称
+    #}
+    {% set field = {
+        'tslp': 'houses_common',
+        'lcs': 'houses_common',
+        'louxing': 'houses_common',
+        'office_ts': 'office_ts',
+        'shops_ts': 'shops_ts',
+        'buildingfacilities': 'houses_attr_common'
+    } %}
+    {#
+        数据库查询：k 表示需要查询的字段，v 表示需要查询的数据表名，默认分类表'house.category'
+    #}
+    {% set service = {
+        'cate_line': 'house.cate_line',
+        'cate_metro': 'house.cate_metro',
+        'cate_status': '',
+        'zxcd': '',
+        'cx': '',
+        'cate_type': '',
+        'officetype': '',
+        'officelevel': '',
+        'shoptype': '',
+        'shopindustry': ''
+    } %}
+    {% for item in opt.con|default('')|split(',') %}
+        {% for k, v in field %}
+            {# 表单查询 #}
+            {% if tag[k]|default('') and item == k %}
+                {{core_global.formField(o|merge({
+                        value: tag[k]|default(''),
+                        form: v,
+                        field: k,
+                        tpl: opt.tpl|replace({'%value%': '%title%'})
+                    })
+                )}}
+            {% endif %}
+        {% endfor %}
+
+        {% for k,v in service %}
+            {# 数据库 #}
+            {% if tag[k]|default('') and item == k %}
+                {{core_global.formData(o|merge({
+                        value: tag[k]|default(''),
+                        form: v|default('house.category'),
+                        tpl: opt.tpl
+                    })
+                )}}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+{% endspaceless %}
+ {%- endmacro -%}
+
+
+{#
+/**
+* @method panel_title(o)
+* @description 小模块标题
+* @param {String} o.title=内容简介 - 标题
+* @param {String} o.after_title - 右侧内容
+* @parma {String} o.class - 样式
+* @param {String} o.target=div - 标签名
+* @param {String} o.url - 链接
+* @example 调用
+* ```twig
+* {{- housemobile_global.panel_title({title: '内容简介'})-}}
+* ```
+*/
+#}
+{% macro panel_title(o) %}
+{% set opt = {
+    title: '标题',
+    after_title: '右侧',
+    target: 'div',
+    tpl: '<div class="item-title">%title%</div>'
+}|merge(o) %}
+{% spaceless %}
+<{{opt.target}} {% if opt.url|default('') %}href="{{opt.url|default('')}}"{% endif %} class="item-content-title item-content panel-title {{opt.class|default('')}}">
+    <div class="item-inner">
+        {{opt.tpl|replace({
+            '%title%': opt.title,
+            '%after_title%': opt.after_title,
+        })|raw}}
+    </div>
+</{{opt.target}}>
+{% endspaceless %}
+{% endmacro %}
+
+{#
+/**
+* @method list_title(o)
+* @description 列表标题
+* @param {String} o.title - 标题
+* @parma {String} o.class - 样式
+* @example 调用
+* ```twig
+* {{- housemobile_global.list_title({title: item.name|default('')})-}}
+* ```
+*/
+#}
+{%- macro list_title(o) -%}
+{% spaceless %}
+    {{o.tpl|default('<div class="item-list-title item-title item-title-p0 %class%">%title%</div>')|replace({
+        '%title%': o.title|default(''),
+        '%class%': o.class|default('')
+    })|raw}}
+{% endspaceless %}
+{%- endmacro list_title -%}
+
+{#
+/**
+* @method list_line_one(o)
+* @description 单行列表
+* @param {String} o.name - 内容
+* @parma {String} o.class - 样式
+* @param {String} o.hot - 标记样式
+* @param {String} o.url - 链接
+* @param {Number} o.num - 标记(num)条数据
+* @param {Number} o.index - 当前index
+* @example 调用
+* ```twig
+* {{- housemobile_global.list_line_one({name: item.name|default('')})-}}
+* ```
+*/
+#}
+{%- macro list_line_one(o) -%}
+{% spaceless %}
+<li class="item-content">
+    <a href="{{o.url|default('')}}" class="item-inner {{o.class|default('')}}">
+        {% if o.num|default('') %}
+            {% if o.num >= o.index|default('') %}
+                {% set hot = o.hot|default('') %}
+            {% else %}
+                {% set hot = '' %}
+            {% endif %}
+        {% endif %}
+        {{o.tpl|default('<div class="item-title item-title-p0">%name%</div>')|replace({
+            '%name%': o.name|default(''),
+            '%index%': o.index|default(''),
+            '%hot%': hot|default('')
+        })|raw}}
+    </a>
+</li>
+{% endspaceless %}
+{%- endmacro -%}
+
+{#
+/**
+* @method more_con(o)
+* @description 查看更多
+* @parma {String} o.class - 样式
+* @param {String} o.id - 需要控制收缩的区块id
+* @param {String} o.addclass=more-con - 展开时增加的样式
+* @param {String} o.down - 展开时显示的内容
+* @param {String} o.up - 收起时显示的内容
+* @example 调用
+* ```twig
+* {{- core_mobile_global.more_con({id: 'con'})-}}
+* ```
+*/
+#}
+{%- macro more_con(o) -%}
+{% set opt = {
+    addclass: 'more-con',
+    down: '收起<span class="icon font-f-35 ml"></span>',
+    up: '查看更多<span class="icon font-f-34 ml"></span>'
+}|merge(o) %}
+{% spaceless %}
+    <div class="tac {{opt.class|default('')}}">
+        <a href="#{{opt.id|default('')}}" data-class="{{opt.addclass}}" data-down="{{opt.down}}" class="button2 more-btn external">
+            {{opt.up|raw}}
+        </a>
+    </div>
+{% endspaceless %}
+{%- endmacro -%}
+
+{#
+/**
+ * @method map(0)
+ * @description 地图图片
+ * @parma {String} o.popup - popup弹出层的选择器
+ * @parma {String} o.width - 地图的宽度
+ * @parma {String} o.height - 地图的高度
+ * @parma {String} o.map - 地图覆盖物的坐标
+ * @example 示例
+ * ```twig
+ * {{housemobile_global.map({
+ *      title: houses_detail.name|default(''),
+ *      map: detail.map|default(''),
+ *      popup : 'map-open'
+ * })}}
+ * ```
+ */
+ #}
+{%- macro map(o) -%}
+{% spaceless %}
+    {% set opt = {
+        popup: '.map-open',
+        width: 600,
+        height: 260,
+        copyright: 1,
+        map: '',
+        title: '地图'
+    }|merge(o) %}
+
+    {% if opt.map %}
+        {% set mapseat = opt.map|split(',') %}
+        {% set markers = mapseat[0]|default(0) ~ ',' ~ mapseat[1]|default(0) %}
+        {% set zoom = mapseat[2]|default(13) %}
+    <a class="tab-item external {{opt.popup ? 'open-popup' : '' }}" data-popup="{{opt.popup}}" href="javascript:;" style="width: 100%;" >
+        <img src="http://api.map.baidu.com/staticimage?width={{opt.width}}&height={{opt.height}}&copyright={{opt.copyright}}&zoom={{zoom}}&markers={{markers}}" alt="{{opt.title}}" height="100%" width="100%">
+    </a>
+    {% else %}
+        <div class="tac">没有坐标！</div>
+    {% endif %}
+{% endspaceless %}
+{%- endmacro -%}
+
+{#
+/**
+ * @method searchHot(o)
+ * @description 热门关键词
+ * @param {String} o.ename='' - 标识
+ * @param {object} o.data - 热门关键词数据
+ * @示例 调用
+ * ```twig
+ * {{ housemobile_global.searchHot({data: hotKeys}) }}
+ * ```
+ * ```twig
+ * {{ housemobile_global.searchHot({ename: mobilehotkey, pageSize: 10})}}
+ * ```
+ */
+ #}
+{% macro searchHot(o) %}
+{% set opt = {
+    ename: '',
+    pageSize: 5
+}|merge(o) %}
+{% if opt.data|default('')|is_array %}
+    {% set data = opt.data|default('') %}
+{% else %}
+    {% set data = (opt.ename)|getPush(opt.pageSize) %}
+{% endif %}
+{% spaceless %}
+    {% if data is defined %}
+        {% for item in data %}
+            {% if item.fromid|default('') > 0 %}
+                {% set url = ('db.hotkeywords')|getOne('url',{checked:1, id: item.fromid}) %}
+            {% else %}
+                {% set url = item.url|default('') %}
+            {% endif %}
+            <div class="item-inner item-inner-db">
+                <a href="{{url|UU}}" title="{{item.keyword|default('')}}" class="button1">{{item.keyword|default('')}}</a>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endspaceless %}
+{% endmacro searchHot %}
+{#
+/**
+ * @method mobile_ad(o)
+ * @description 生成单个广告
+ * @param {object} o - 配置
+ * @param {String} o.id - 广告的id
+ * @param {String} o.html - 自定义广告区HTML内容
+ * @param {String} o.image - 广告图片的路径
+ * @param {String} o.url - 广告链接地址
+ * @param {String} o.img - 广告位小图标
+ * @param {Boolean} o.ad - 是否属于广告位
+ * @param {String} o.name - 标题
+ * @param {Number} o.width - 图片宽度
+ * @param {Number} o.height - 图片高度
+ * @param {String} o.class=mb5 - 父级样式
+ *
+ * @示例 调用
+ * ```twig
+ * {{ housemobile_global.mobile_ad(item|merge({'height': '70', 'class': 'mb5'})) }}
+ * ```
+ * 生成
+ * ```html
+ *  <div class="house-ad mb5">
+        <a href=""><img src="aaa.jpg" alt=""></a>
+    </div>
+ * ```
+ *
+ */
+ #}
+{%- macro mobile_ad(o) -%}
+{% set o = {
+    'height': '7.2rem',
+    'class': ''
+}|merge(o) %}
+<div class="house-ad {{o.class|default('')}}" style="height:{{o.height}}">
+    {%- if o.html|default('') != '' -%}
+        {{- o.html|default('')|raw -}}
+    {%- elseif o.thumb|default('') != '' -%}
+        <a data-ad="{models: 'pushs', id: {{o.id|default('')}}, field: 'clicks' }" href="{{o.url|default('#')}}" title="{{o.name|default('')}}" style="display: block; width:100%;height:100%;background: url({{assetImg(o.thumb, {absolute: true})}}) 50% 0px / auto {{o.height}} no-repeat rgb(208, 217, 229)">
+        </a>
+    {%- elseif o.thumb|default('') == '' -%}
+        <a data-ad="{models: 'pushs', id: {{o.id|default('')}}, field: 'clicks' }" href="{{o.url|default('#')}}" title="{{o.name|default('')}}" style="display: none;">
+        </a>
+    {% else %}
+        <a data-ad="{models: 'pushs', id: {{o.id|default('')}}, field: 'clicks' }" href="{{o.url|default('#')}}" title="">{{o.name|default('')}}</a>
+    {%- endif -%}
+    {% if o.ad|default('0') != '0' %}
+        <div class="ad-txt" {%- if o.img|default('') != '' -%}style="background-image: url({{o.img|default('')}})"{%- endif -%}></div>
+    {% endif %}
+</div>
+{%- endmacro mobile_ad -%}
+
+
+{#
+/**
+ * @method mobile_ads(o)
+ * @description 生成广告列表
+ * @param {object} o - 配置
+ * @param {string} [o.class] 外框的`class`
+ * @param {string} o.tag - 推送位标识
+ * @param {string} [o.pageSize=10] - 数量
+ * @param {string} [o.data] - 推送位的数据, 为空时自动调用pushs
+ * @其它配置 见ad()
+ *
+ * @example
+ * ```twig
+ * {{ housemobile_global.mobile_ads({
+        tag: 'aaa',
+        data: data
+    }) }}
+ * ```
+ * 生成
+ * ```html
+ * <div data-tag="aaa">
+        <div class="house-ad mb5">
+            <a href=""><img src="aaa.jpg" alt=""></a>
+        </div>
+        <div class="house-ad mb5">
+            <a href=""><img src="aaa.jpg" alt=""></a>
+        </div>
+        <div class="house-ad mb5">
+            <a href=""><img src="aaa.jpg" alt=""></a>
+        </div>
+ * </div>
+ * ```
+ */
+ #}
+{% macro mobile_ads(o) %}
+    {% if o.data is not defined %}
+        {% set o = o|merge({data: (o.tag)|getPush(o.pageSize|default(10))})  %}
+    {% endif %}
+    {% if o.data|default('') %}
+    <div class="{{o.class|default('')}} lalala" data-tag="{{o.tag|default('')}}">
+        {% for item in o.data %}
+            {{- _self.mobile_ad(o|merge(item)) -}}
+        {% endfor %}
+    </div>
+    {% endif %}
+{% endmacro mobile_ads %}
+
+{#
+/**
+* @method swiper_v_nav(o)
+* @description 纵向滑动导航(仅限于户型、相册使用)
+* @param {String} o.data - 循环数据
+* @param {String} o.url - 链接原型
+* @param {String} o.cate - 分类字段
+* @param {String} o.class - 样式名
+* @param {String} o.otherdata - 其他配置
+* @param {Number} o.perview=10 - 每页显示条数
+* @param {String} o.tpl - 循环中的内容
+* @example 调用
+* ```twig
+* {{- housemobile_global.swiper_v_nav({data: jdt|default('')}) -}}
+* ```
+*/
+#}
+{%- macro swiper_v_nav(o) -%}
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+{% set opt = {
+    perview: 10,
+    cate: 'name',
+    tpl: '%name%'
+}|merge(o) %}
+    {% spaceless %}
+    {% set active = app.request.get(opt.cate|default('')) %}
+    <div class="swiper-container swiper_v_nav {{opt.class|default('')}}" data-slides-per-view="{{opt.perview}}" data-free-mode="true" data-direction="vertical" {{opt.otherdata|default('')|raw}}>
+        <div class="swiper-wrapper">
+            {% if opt.data is defined %}
+                {% for item in opt.data %}
+
+                    {# 筛选条件 #}
+                    {% if attribute(item, opt.cate) %}
+                        {% set url = '#' ~ opt.cate|default('') ~ '=' ~ attribute(item, opt.cate) %}
+                    {% else %}
+                        {% set url = '#' %}
+                    {% endif %}
+                    {% if opt.cate == 'shi' %}
+                        {# 户型名称 #}
+                        {% set title = item.shi|default('') ? core_global.formData({value: item.shi|default('')}) : item.name|default('') %}
+                        {#{{ dump(title) }}#}
+                    {% else %}
+                        {# 图库名称 #}
+                        {% set title = item.cate_album|default('') ?  core_global.formField({value: item.cate_album|default(''), form: 'houses_album', field:'cate_album'}) : item.name|default('') %}
+                    {% endif %}
+                    <div class="swiper-slide {% if active|default('') == attribute(item, opt.cate) %}active{% endif %}" data-filterbtn="1" >
+                        {{opt.tpl|replace({
+                            '%name%' : item.name|default(''),
+                            '%title%': title|default(''),
+                            '%url%'  : url|default(''),
+                        })|raw}}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    {% endspaceless %}
+    <script type="text/javascript">
+        seajs.use(['filter', 'sm'], function(filter) {
+            // 左侧导航滚动效果
+            $('.swiper_v_nav').swiper();
+
+            var hash = location.hash;
+            // 初始化高亮
+            $('a[href="'+ hash +'"]').closest('.swiper-slide').addClass('active')
+                .siblings('.swiper-slide').removeClass('active');
+            // 点击
+            $('[data-filterbtn="1"]')
+                .off('.filterbtn')
+                .on('click.filterbtn', function() {
+                    $(this).addClass('active').siblings('.swiper-slide').removeClass('active');
+                    // 刷新列表
+                    filter.refresh();
+                })
+        })
+    </script>
+{%- endmacro swiper_v_nav -%}
+
+{# 检索条件 #}
+{% macro filter(o) %}
+    {# 导入通用宏 #}
+    {% import "CoreBundle:Macro:global.html.twig" as core_global %}
+
+    {% import "HouseBundle:Macro:global.html.twig" as house_global %}
+
+    {% set _opt = {
+        tag: 'houses',
+        cate_circle: 0,
+        cate_line: 0,
+        switch_hxs: 0,
+        filter_url_opt: [],
+        filter_opt: '',
+        filter_action: '',
+        filter_rows: 3
+    }|merge(o) %}
+
+    {# 获取数据 #}
+    {% set cate_data = house_global.cate_data({
+        tag: _opt.tag,
+        switch: {
+            cate_circle: 1,
+            cate_line: 1,
+            hxs: 1,
+            shi:1
+        }
+    }).__toString|json_decode %}
+
+    {% set nextdata = '' %}
+    {% set filter_opt = cate_data.cate_opt %}
+    {# 列表检索，多个分类时的内容 #}
+    {% set list_filter %}
+
+    <div id="listDeviation" class="container" data-buttons-tab="1" data-condition="1">
+        <section class="screen-box">
+            <a id="areaTag" listType="areaList" tag="areaTag" data-field="" class="element_content">
+            区域
+            </a>
+            <a id="rentTag" listType="rentList" tag="rentTag" data-field="" class="element_content">
+            单价
+            </a>
+            <a id="houseTypeTag" listType="houseTypeList" tag="houseTypeTag" data-field="" class="element_content">
+            户型
+            </a>
+            <a id="moreTag" listType="moreList" tag="moreTag" data-field="" class="element_content">
+            更多
+            </a>
+        </section>
+        <div id="screenBox" class="screen-list-box condition">
+            <div id="areaList" class="area-list-box">
+                <!-- 第一级 开始 -->
+                <div id="levelOne" class="area-items border-right-e7e7e7 w-30-item">
+                    <ul id="itemList">
+                        {% if filter_opt and filter_opt.region|default('') and  filter_opt.region|default('')|length > 0 %}
+                        <li class="border-bottom-e7e7e7 hover" id="areaItem" type="region">区域
+                        </li>
+                        {% endif %}
+
+                        {% if filter_opt and filter_opt.cate_line|default('') and  filter_opt.cate_line|default('')|length > 0 %}
+                        <li class="border-bottom-e7e7e7" id="subwayItem" type="cate_line">
+                            地铁
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <!-- 第一级 结束 -->
+                {% for k, v in filter_opt[0 : 2] %}
+                {% if  v.data and v.data|length > 0 %}
+                    <!-- 第二级 开始 -->
+                    <div class="levelTow area-items w-30-item {% if k == 'cate_line' %}display-no{% endif %} {{k}} list-block-modal" >
+                        <ul  class="areaClassOne border-right-e7e7e7" >
+                            <li class="border-bottom-e7e7e7">
+                                <label data-condition-item="1" class="label-checkbox item-content default">
+                                    <input type="radio" value="" name="{{k}}">
+                                    {% if k == 'region' %}
+                                        <input type="radio" value="" name="cate_circle" >
+                                        <input type="radio" value="" name="cate_line">
+                                        <input type="radio" value="" name="cate_metro" >
+                                    {% else %}
+                                        <input type="radio" value="" name="region">
+                                        <input type="radio" value="" name="cate_circle" >
+                                        <input type="radio" value="" name="cate_metro" >
+                                    {% endif %}
+                                    <div class="item-inner">
+                                        <div class="item-title hover">
+                                            不限
+                                        </div>
+                                    </div>
+                                </label>
+                            </li>
+                            {% for  k1,v1 in v.data %}
+                            <li class="border-bottom-e7e7e7 leveltow-{{k}}-{{v1.value}}" contro="{{k}}-{{v1.value}}" pid="{{v1.value}}" type="{{k}}">
+                                <label class="label-checkbox item-content stopsearch" data-condition-item="1">
+                                    <input type="radio" value="{{v1.value|default('')}}" name="{{k}}" {% if v.value == v1.value %}checked="checked"{% endif %} {% if k == 'region' %}data-point="{{v1.map|default('')}}"{% endif %}>
+
+                                    <div class="item-inner">
+                                        <div class="item-title">
+                                            {{v1.name|default('')}}
+                                        </div>
+                                    </div>
+                                </label>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <!-- 第二级 结束 -->
+                {% endif %}
+
+                <!-- 第三级 开始 -->
+                {% if  v.data and v.data|length > 0 %}
+                    {% for  k1,v1 in v.data %}
+                        {% if k == 'region' %}
+                            {% set nextdata = ('house.cate_circle')|getAll({pageSize: 100,pid:v1.value}).data|default({})%}
+                            {% set nowtype = 'cate_circle' %}
+                        {% elseif k == 'cate_line' %}
+                            {% set nextdata = ('house.cate_metro')|getAll({pageSize: 100,pid:'find|'~v1.value}).data|default({})%}
+                            {% set nowtype = 'cate_metro' %}
+                        {% endif %}
+
+                        <div class="levelThree display-no area-items border-right-e7e7e7 w-30-item {{k}}-{{v1.value}}">
+                            <ul class="areaClassTow">
+                                <!-- start 区域 -->
+                                <li class="border-bottom-e7e7e7">
+                                    <label data-condition-item="1" class="label-checkbox item-content default">
+                                        <input type="radio" class="{{k}}-all" value="" name="{{k}}">
+                                        {% if k == 'region' %}
+                                            <input type="radio" class="" value="" name="cate_circle">
+                                            <input type="radio" value="" name="cate_line">
+                                            <input type="radio" value="" name="cate_metro" >
+                                        {% elseif k == 'cate_line' %}
+                                            <input type="radio" class="" value="" name="cate_metro">
+                                            <input type="radio" value="" name="region">
+                                            <input type="radio" value="" name="cate_circle" >
+                                        {% endif %}
+
+                                        <div class="item-inner">
+                                            <div class="item-title hover">
+                                                不限
+                                            </div>
+                                        </div>
+                                    </label>
+                                </li>
+                                {% if nextdata and nextdata|length > 0 %}
+                                    {% for k2,v2 in nextdata %}
+                                    <li class="border-bottom-e7e7e7 levelthree-{{nowtype | default}}-{{v2.id}}"  pid="{{v1.value}}" type="{{k}}" name="{{nowtype | default}}">
+                                        <label data-condition-item="1" class="label-checkbox item-content">
+                                            {% if k == 'region' %}
+                                                <input type="radio" value="{{v1.value}}" name="region" >
+                                                <input type="radio" value="" name="cate_line">
+                                                <input type="radio" value="" name="cate_metro" >
+                                            {% else %}
+                                                <input type="radio" value="{{v1.value}}" name="cate_line" >
+                                                <input type="radio" value="" name="region">
+                                                <input type="radio" value="" name="cate_circle" >
+                                            {% endif %}
+                                            <input type="radio" value="{{v2.id|default('')}}" name="{{nowtype | default}}" {% if k == 'region' %}data-point="{{v1.map|default('')}}"{% endif %}>
+
+                                            <div class="item-inner">
+                                                <div class="item-title">
+                                                    {{v2.name|default('')}}
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </li>
+                                    {% endfor %}
+                                {% endif %}
+
+                                <!-- end 区域 -->
+                            </ul>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+
+                <!-- 第三级 结束 -->
+                {% endfor %}
+            </div>
+            <!-- 价格筛选 开始 -->
+            {% if filter_opt.dj|default({}) and filter_opt.dj.data|default({}) and filter_opt.dj.data|default({})|length > 0 %}
+            <div id="rentList" class="rent-list-box">
+                <ul id="rentItemListBox">
+                    <li class="border-bottom-e7e7e7">
+                        <label data-condition-item="1" class="label-checkbox item-content default">
+                            <input type="radio" value="" checked="checked" name="dj">
+                            <div class="item-inner">
+                                <div class="item-title">
+                                    不限
+                                </div>
+                            </div>
+                        </label>
+                    </li>
+                    {% for k,v in filter_opt.dj.data %}
+                       <li class="border-bottom-e7e7e7">
+                        <label data-condition-item="1" class="label-checkbox item-content">
+                            <input type="radio" value="{{v.value|default('')}}" name="dj">
+                            <div class="item-inner">
+                                <div class="item-title">
+                                    {{v.name|default('')}}
+                                </div>
+                            </div>
+                        </label>
+                    </li>
+                    {% endfor %}
+
+                </ul>
+                <div class="rent-list-bottom-box border-top-e7e7e7">
+                    <span>自定义价钱：</span>
+                    <input id="minPriceTxt" type="text" placeholder="最小" class="rent-txt"
+                           value="">
+                    <i class="rent-split"></i>
+                    <input id="maxPriceTxt" type="text" placeholder="最大" class="rent-txt"
+                           value="">
+                    <span class="no-left">元</span>
+                    <label data-condition-item="1" class="label-checkbox price-confirm">
+                        <input type="radio" value="" name="dj" class="j_priceValue">
+                        <div class="price-confirm-btn j_priceConfirm">确定</div>
+                    </label>
+                </div>
+            </div>
+            {% endif %}
+            <!-- 价格筛选 结束 -->
+            <!-- 户型筛选 开始 -->
+            {% if filter_opt.shi|default({}) and filter_opt.shi.data|default({}) and filter_opt.shi.data|default({})|length > 0 %}
+            <div id="houseTypeList" class="house-type-list-box">
+                <ul id="layoutList">
+                    <li class="border-bottom-e7e7e7">
+                        <label data-condition-item="1" class="label-checkbox item-content default">
+                            <input type="radio" value="" checked="checked" name="shi">
+                            <div class="item-inner">
+                                <div class="item-title">
+                                    不限
+                                </div>
+                            </div>
+                        </label>
+                    </li>
+                    {% for k,v in filter_opt.shi.data %}
+                    <li class="border-bottom-e7e7e7">
+                        <label data-condition-item="1" class="label-checkbox item-content">
+                            <input type="radio" value="{{v.value|default('')}}" name="shi">
+                            <div class="item-inner">
+                                <div class="item-title">
+                                    {{v.name|default('')}}
+                                </div>
+                            </div>
+                        </label>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            <!-- 户型筛选 结束 -->
+            <div id="moreList" class="more-list-box condition-more" data-condition-more="1">
+                <div id="moreDataBox" class="more-top-list-box">
+                    {% for k,v in filter_opt %}
+                        {% if k == 'cate_type' or k == 'tslp' or k == 'cate_status' or k == 'zxcd' or k == 'hxs'%}
+                            {% if(v.title == '类型' or v.title == '特色') %}
+                                <div class="more-item-title-box">{{v.title}}</div>
+                                <ul id="" class="more-item-list-box" ischeck="" key="">
+                                    {% for k1,v1 in v.data %}
+                                    <li>
+                                        <label data-condition-item="1" class="label-checkbox item-content">
+                                            <input type="radio" value="{{v1.value|default('')}}" name="{{k}}">
+                                            <div class="item-inner">
+                                                <div class="item-title">
+                                                    {{v1.name|default('')}}
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </li>
+                                    {% endfor %}
+
+                                </ul>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+
+                    <span class="">展开更多来源</span>
+                </div>
+                <div class="more-bottom-list-box">
+                    <a href="javascript:;" data-condition-submit="{
+                                type: 'reset',
+                                sendAjax: false,
+                                container: '.condition-more',
+                            }" class="clear_term"><span></span>清空条件</a>
+                    <a href="javascript:;" data-condition-submit="{
+                                container: '#list-filter-con',
+                            }" class="button button-big button-single button-fill button-success">确定</a>
+                </div>
+            </div>
+        </div>
+        <!--条件筛选结束-->
+        <div id="popLayer" class="pop-layer animated fast inOpa"></div>
+         <script type="text/javascript">
+            seajs.use(['filter'], function(filter) {
+                filter.filterInit({
+                    el: '[data-buttons-tab] .tab-link1'
+                });
+            })
+        </script>
+    </div>
+    {#
+
+        <!-- 顶部外部展示 开始 -->
+        <div data-buttons-tab="1" class="buttons-tab buttons-tab-ex" data-target="#list-filter-con" 898>
+            {% for k, v in filter_opt %}
+                {% if loop.index <= _opt.filter_rows %}
+                    <a href="#{{k}}" class="tab-link1 external button" data-field="{{k}}">
+                        <span class="icon font-f-7"></span>
+                        <span class="tit">{{v.title|default('')}}111</span>
+                    </a>
+                {% endif %}
+                {% if loop.index == _opt.filter_rows and filter_opt|length > _opt.filter_rows %}
+                    <a href="#more" class="tab-link1 external button" data-field="more">
+                        <span class="icon font-f-7"></span>
+                        <span class="tit">更多</span>
+                        <span class="num"></span>
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <!-- 顶部外部展示 结束 -->
+
+        <div id="list-filter-con" style="display: none;">
+            <div class="tabs">
+                <!-- 区域、地铁、价格 内部筛选项 开始 -->
+                {% for k, v in filter_opt[0 : _opt.filter_rows] %}
+                    <div class="tab condition" 9999>
+                        <!-- 第一级 -->
+                        <div class="level-1 level level-1-ex">
+                            <div class="list-block list-block-modal">
+                                <ul class="">
+                                    <li>
+                                        <label data-condition-item="1" class="label-checkbox item-content default">
+                                            <input type="radio" value="" name="{{k}}" {% if v.value|default(null) is null %}checked="checked"{% endif %}>
+                                            <div class="item-inner">
+                                                <div class="item-title">
+                                                    不限
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </li>
+                                    {% for k1, v1 in v.data|default('') %}
+                                        <li>
+                                            <label data-condition-item="1" class="label-checkbox item-content">
+                                                <input type="radio" value="{{v1.value|default('')}}" name="{{k}}" {% if v.value == v1.value %}checked="checked"{% endif %} {% if k == 'region' %}data-point="{{v1.map|default('')}}"{% endif %}>
+
+                                                <div class="item-inner">
+                                                    <div class="item-title">
+                                                        {{v1.name|default('')}}
+                                                    </div>
+                                                </div>
+                                            </label>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="bar bar-big2">
+                                <a href="javascript:;" data-condition-submit="{
+                                    type: 'reset',
+                                    container: '#list-filter-con',
+                                }" class="button button-big button-single button-fill">重置所有条件</a>
+                            </div>
+                        </div>
+                        <!-- /第一级 -->
+                    </div>
+                {% endfor %}
+                <!-- 区域、地铁、价格 内部筛选项 结束 -->
+
+                <!-- 更多筛选项 开始 -->
+                <div data-condition-more="1" class="tab condition-more" 888>
+                    <!-- 第一级 -->
+                    <div class="level-1 level level-1-ex">
+                        <div class="list-block list-block-modal">
+                            {% for k, v in filter_opt[_opt.filter_rows : ] %}
+                                <h4>{{ v.title }}</h4>
+                                <ul class="">
+                                    <li>
+                                        <label data-condition-item="1" class="item-content default">
+                                            <input type="radio" value="" name="{{k}}" {% if v.value|default(null) is null %}checked="checked"{% endif %}>
+                                            <div class="item-inner">
+                                                <div class="item-title">
+                                                    不限
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </li>
+                                    {% for k1, v1 in v.data|default('') %}
+                                        <li>
+                                            <label data-condition-item="1" class="item-content">
+                                                <input type="radio" value="{{v1.value|default('')}}" name="{{k}}" {% if v.value == v1.value %}checked="checked"{% endif %}>
+                                                <div class="item-inner">
+                                                    <div class="item-title">
+                                                        {{v1.name|default('')}}
+                                                    </div>
+                                                </div>
+                                            </label>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endfor %}
+                        </div>
+                        <div class="bar bar-big2">
+                            <a href="javascript:;" data-condition-submit="{
+                                type: 'reset',
+                                sendAjax: false,
+                                container: '.condition-more',
+                            }" class="button button-big button-single button-fill">重置当前条件</a>
+                            <a href="javascript:;" data-condition-submit="{
+                                container: '#list-filter-con',
+                            }" class="button button-big button-single button-fill button-success">筛 选</a>
+                        </div>
+                    </div>
+                    <!-- /第一级 -->
+                </div>
+                <!-- 更多筛选项 结束 -->
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            seajs.use(['filter'], function(filter) {
+                filter.filterInit({
+                    el: '[data-buttons-tab] .tab-link1'
+                });
+            })
+        </script>
+        #}
+    {% endset %}
+    {# 只有一个分类时的内容 暂时没有用到#}
+    {% set list_single_filter %}
+        {% set filter_opt_children = {} %}
+        <div data-buttons-tab="1" data-condition="1" class="buttons-tab buttons-tab-ex" data-target="#list-filter-con" >
+            {% for k, v in filter_opt[0 : 1] %}
+                {% for k1, v1 in v.data|default([])[0 : 4] %}
+                    <a href="javascript:;" data-condition-item="1" class="external button element_content">
+                        <input type="radio" value="{{v1.value|default('')}}" name="{{k}}">
+                        <span class="tit"> {{v1.name|default('')}} </span>
+                    </a>
+                {% endfor %}
+                {% if v.data|default([])|length > 4 %}
+                <a href="javascript:;" class="tab-link1 external button keep element_content" data-field="{{k}}">
+                    <span class="icon font-f-7"></span>
+                    <span class="tit">更多</span>
+                </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div id="list-filter-con" style="display: none;">
+            <div class="tabs">
+                <div class="tab condition"></div>
+                <div class="tab condition"></div>
+                <div class="tab condition"></div>
+                <div class="tab condition"></div>
+                {% for k, v in filter_opt[0 : 1] %}
+                <div class="tab condition" >
+                    <!-- 第一级 -->
+                    <div class="level-1 level level-1-ex">
+                        <div class="list-block list-block-modal">
+                            <ul class="">
+                                {% for k1, v1 in v.data|default([])[4 : ] %}
+                                    <li>
+                                        <label data-condition-item="1" class="label-checkbox item-content">
+                                            <input type="radio" value="{{v1.value|default('')}}" name="{{k}}" {% if v.value == v1.value %}checked="checked"{% endif %}>
+                                            <div class="item-inner">
+                                                <div class="item-title">
+                                                    {{v1.name|default('')}}
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="bar bar-big2">
+                            <a href="javascript:;" data-condition-submit="{
+                                type: 'reset',
+                                container: '[data-condition]'
+                            }" class="button button-big button-single button-fill">重置所有条件</a>
+                        </div>
+                    </div>
+                    <!-- /第一级 -->
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <script type="text/javascript">
+            seajs.use(['filter'], function(filter) {
+                filter.filterInit({
+                    el: '[data-buttons-tab] .tab-link1'
+                });
+            })
+        </script>
+    {% endset %}
+    {# 首页检索 #}
+    {% set index_filter %}
+        {% if filter_opt is defined %}
+            <ul class="index-cate">
+            {% for k, v in filter_opt %}
+                <li>
+                    <div class="item-content">
+                        <a class="item-media more-btn external" href="#{{k ~ _opt.tag}}" data-class="index-more" data-down='<i class="icon font-f-35"></i><span class="icon {{v.icon|default('')}}"></span><p>{{v.title|default('')}}</p>'>
+                            <i class="icon font-f-34"></i>
+                            <span class="icon {{v.icon|default('')}}"></span>
+                            <p>
+                                {{v.title|default('')}}
+                            </p>
+                        </a>
+                        <div class="item-inner" id="{{k ~ _opt.tag}}">
+                            {% for k1, v1 in v.data|default('') %}
+                                <a href="{{(_opt.filter_action)|UU}}#{{k}}={{v1.value}}">
+                                    {{v1.name|default('')}}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endset %}
+    {# 输出 #}
+    {% if filter_opt|length == 1 %}
+        {{ list_single_filter }}
+    {% elseif _opt.tpl_tag == 'index' %}
+        {{ index_filter }}
+    {% elseif _opt.tpl_tag == 'list' %}
+        {{ list_filter }}
+    {% endif %}
+{% endmacro filter %}
+{# 弹窗 #}
+{% macro popup(o) %}
+{% import "CoreBundle:Macro:mobile_global.html.twig" as core_mobile_global %}
+{# 默认配置 #}
+{% set _opt = {
+            name: 'popup-major-nav',
+            cls: '',
+            title: '',
+            content_bar: '',
+            content: '',
+        }|merge(o) %}
+
+<div class="popup {{_opt.name}} {{_opt.cls}}">
+    {#把地图的头部隐藏重新加上buy田莉莉#}
+    <header class="bar bar-nav">
+        {{core_mobile_global.go_back({class: 'pull-right close-popup', href: 'javascript:;',icon: 'font-f-21'})}}
+        {{core_mobile_global.title({title: _opt.title})}}
+    </header>
+    {#end#}
+    {% if _opt.content_bar %}
+    <div class="bar bar-header-secondary">
+        {{ _opt.content_bar }}
+    </div>
+    {% endif %}
+    {# 如果是对象表示是用ajax请求内容 #}
+    <div class="content">
+    {% if _opt.content is iterable %}
+        <div class="popup-block" data-block-{{_opt.name}}="1"></div>
+    {% else %}
+        {{ _opt.content }}
+    {% endif %}
+    </div>
+</div>
+{# 如果是对象表示是用ajax请求内容 #}
+{% if _opt.content is iterable %}
+<script type="text/javascript">
+    seajs.use(['common'], function(common) {
+        $('.{{_opt.name}}')
+            .off('opened')
+            .on('opened', function() {
+                var $this = $(this);
+                $this.find('.title').text(function(i, v) {
+                    return $($this.data('btn')).data('title') || v;
+                })
+            })
+            .one('opened', function() {
+                // ajax调用内容
+                common.block('[data-block-{{_opt.name}}]', {{ _opt.content|json_encode|raw }});
+            })
+    })
+</script>
+{% endif %}
+{% endmacro popup %}
+
+{% macro popup_nav(o) %}
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+{# 默认配置 #}
+{% set _opt = {
+            current_nav: '',
+        }|merge(o) %}
+
+{# 频道导航 #}
+{% set content %}
+{% set navs_data = ('house.navs')|getAll({
+                                    cate_pushs: 'mobile_zdh',
+                                    checked   : 1,
+                                    pid       : 0,
+                                    pageSize  : 100,
+                                    order     : "sort",
+                                    orderBy   : 'asc'
+                                }) %}
+{% if _opt.current_nav %}
+{% set current_nav = _opt.current_nav %}
+<div class="current-nav">
+    <div class="list-block list-block-m0 panel-block media-list">
+        <ul>
+            <li class="item-content">
+                <div class="item-inner">
+                    <div class="item-title">
+                        {{current_nav.title|default('当前导航')}}
+                    </div>
+                    <div class="current-nav-btn">
+                        {% for item in current_nav.data %}
+                            {% if item.url|default('') %}
+                                {% set url = item.url|default('') %}
+                            {% else %}
+                                {% set url = current_nav.url_set|default('')|replace({'%id%': item.id|default('')}) %}
+                            {% endif %}
+                            <a href="{{url|default('')}}" class="button button-gray">
+                                {{item.name|default('')}}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+    {# {% include 'HousemobileBundle:Clist:current_nav.html.twig' ignore missing with {current_nav: current_nav|default('')} %} #}
+{% endif %}
+<div class="list-block media-list mobile-dh list-block-m0">
+    <ul>
+        <li class="item-content item-link">
+            <div class="item-inner">
+                <div class="item-title-row">
+                    <a href="{{('index/index')|UU }}" class="item-title item-title-p0">
+                        <img alt="{{ core_global.mconfig({name: 'hostname', ename: 'mwebset'}) }}" style="display: inherit;" width="140" height="20" src="{{ core_global.img_url({src: core_global.mconfig({name: 'user_mobilelogo', ename: 'mvariables_user'}), type: 0}) }}"/>
+                    </a>
+                    <a href="{{('main/mindex')|UU }}" class="item-after " style="line-height: 28px;">
+                        个人中心
+                    </a>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+<div class="list-block panel-block menu-block"></div>
+{% if navs_data.data is defined %}
+    <div class="list-block panel-block">
+        <div class="row no-gutter">
+            {% for item in navs_data.data %}
+                <a href="{{item.url|UU|default('')}}" data-title="{{ item.url }}" class="col-25">
+                    <i class="icon {{item.navicon|default('')}} m-ico-color{{loop.index0}}"></i>
+                    <p>
+                        {{item.name|default('')}}
+                    </p>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
+<script id="menus" type="text/template">
+
+// <div class="row no-gutter">
+//     <% for (var i=0; i<data.length; i++) { %>
+//         <a href="<%= data[i].url %>" data-title="<%= data[i].name %>" class="col-25">
+//             <i class="icon <%= data[i].icon %> m-ico-color<%= i %>"></i>
+//             <p>
+//                 <%= data[i].name %>
+//             </p>
+//      </a>
+//     <% } %>
+// </div>
+</script>
+
+{% endset %}
+
+{{ _self.popup({
+    name: 'popup-major-nav',
+    title: '频道导航',
+    content: content
+}) }}
+{% endmacro popup_nav %}
+
+
+
+
+{% macro popup_fabu(o) %}
+{# {% import "CoreBundle:Macro:global.html.twig" as core_global %} #}
+{# 默认配置 #}
+{% set _opt = {
+        }|merge(o|default({})) %}
+
+    {% set content %}
+    <div class="content-add">
+        <div class="row no-gutter">
+            <div class="col-50">
+                <a href="{{ ('msalemanage/show')|UU({formflag: 'sale', models:'sale'}) }}" class="external">
+                    <span class="icon font-f-114 m-ico-color4"></span>
+                    二手房
+                </a>
+            </div>
+            <div class="col-50">
+                <a href="{{ ('mrentmanage/show')|UU({formflag: 'rent', models:'rent'}) }}" class="external">
+                    <span class="icon font-f-115 m-ico-color5"></span>
+                    出租房
+                </a>
+            </div>
+            <div class="col-50">
+                <a href="{{ ('mdemandmanage/show')|UU({formflag: 'sdemand', models:'demand', category: 297}) }}" class="external">
+                    <span class="icon font-f-116 m-ico-color6"></span>
+                    求购
+                </a>
+            </div>
+            <div class="col-50">
+                <a href="{{ ('mdemandmanage/show')|UU({formflag: 'rdemand', models:'demand', category: 298}) }}" class="external">
+                    <span class="icon font-f-117 m-ico-color7"></span>
+                    求租
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endset %}
+
+    {{ _self.popup({
+        name: 'popup-about',
+        title: '发布',
+        content: content
+    }) }}
+{% endmacro popup_fabu %}
+
+{# 快捷登录 #}
+{%- macro quick_login() -%}
+    {% import 'CoreBundle:Macro:global.html.twig' as core_global %}
+    {% spaceless %}
+        <nav class="bar-tab login-bar">
+            <div class="login-bar-title">快捷登录</div>
+            {% if core_global.mconfigtostring({name: 'qqlogin', ename: 'mloginset'}).__toString == 1 %}
+                <a href="{{('/connect/qq')|UU({}, true)}}" class="tab-item tab-item-qq">
+                    <span class="icon font-f-113"></span>
+                    <span class="tab-label">QQ登录</span>
+                </a>
+            {% endif %}
+            {% if core_global.mconfigtostring({name: 'sinalogin', ename: 'mloginset'}).__toString == 1 %}
+                <a href="{{('/connect/weibo')|UU({}, true)}}" class="tab-item tab-item-wb">
+                    <span class="icon font-f-38"></span>
+                    <span class="tab-label">微博登录</span>
+                </a>
+            {% endif %}
+            {% if core_global.mconfigtostring({name: 'wxlogin', ename: 'mloginset'}).__toString == 1 and core_global.operating_environment('weixin') %}
+                <a  href="{{('/connect/weixin')|UU({}, true)}}" class="tab-item tab-item-wx">
+                    <span class="icon font-f-112"></span>
+                    <span class="tab-label">微信登录</span>
+                </a>
+            {% endif %}
+        </nav>
+    {% endspaceless %}
+{%- endmacro quick_login -%}
+
+{# 微信分享 #}
+{% macro weixin_share(opt) %}
+{% if opt|default %}
+
+    {% set _opt = {
+        url: '',
+        name: '',
+        abstract: '',
+        thumb: ''
+    }|merge(opt|default) %}
+
+    {% import "CoreBundle:Macro:global.html.twig" as core_global %}
+    {% set signPackage = ('')|getWxConfig %}
+    {% set img_url = core_global.img_url({src:  _opt.thumb }) %}
+
+<script type="text/javascript">
+seajs.use(['https://res.wx.qq.com/open/js/jweixin-1.0.0.js'], function(wx) {
+    wx.config({
+        debug: false,
+        /*appId: '', // 必填，公众号的唯一标识
+        timestamp: , // 必填，生成签名的时间戳
+        nonceStr: '', // 必填，生成签名的随机串
+        signature: '',// 必填，签名，见附录1 */
+
+        appId: '{{ signPackage["appId"] }}',
+        timestamp: '{{ signPackage["timestamp"] }}',
+        nonceStr: '{{ signPackage["nonceStr"] }}',
+        signature: '{{ signPackage["signature"] }}',
+        jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+      });
+    wx.ready(function(){
+        wx.onMenuShareAppMessage({
+            title: '{{ _opt.name }}', // 分享标题
+            desc: '{{ _opt.abstract|replace({'\n': '', '\r': ''}) }}', // 分享描述
+            link: '{{ _opt.url }}', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: '{{ img_url }}', // 分享图标
+            type: '', // 分享类型,music、video或link，不填默认为link
+            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            success: function () {
+                // 用户确认分享后执行的回调函数
+                // alert('success')
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+                // alert('cancel')
+            }
+        });
+
+        wx.onMenuShareTimeline({
+            title: '{{ _opt.name }}', // 分享标题
+            link: '{{ _opt.url }}', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: '{{ img_url }}', // 分享图标
+            success: function () {
+                // alert('success')
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // alert('cancel')
+                // 用户取消分享后执行的回调函数
+            }
+        });
+    });
+})
+</script>
+{% else %}
+    请设置基本配置信息, url、name、abstract、thumb
+{% endif %}
+{% endmacro %}
+{%- macro linkcss(href) -%}
+    {%- spaceless -%}
+        {% set url_isApp = app.request.get('_isApp', 0) %}
+        {# 兼容app #}
+        <link rel="stylesheet" href="{{ url_isApp ? '..' ~ asset(href)|replace({ (asset('bundles')): '' }) : asset(href, absolute=true) }}" />
+        {# <link rel="stylesheet" href="{{asset(href, absolute=true)}}?v=2017-08-08" /> #}
+    {%- endspaceless -%}
+{%- endmacro -%}

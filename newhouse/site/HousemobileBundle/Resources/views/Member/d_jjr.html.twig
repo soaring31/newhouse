@@ -1,0 +1,19 @@
+{% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:jjr_list.html.twig' : 'HousemobileBundle:Member:detail.html.twig' %}
+
+{% block header_title %}
+    {{core_mobile_global.title({title: '经纪人'})}}
+{% endblock header_title %}
+
+{% block nav %}
+	{% set nav_users_act = 4 %}
+	{{parent()}}
+{% endblock nav %}
+
+{% block container %}
+    {# 列表链接 js调用列表需要 #}
+    {% set list_url = ('member/d_jjr')|U({ajax: 1, id: detail.id|default(0)}) %}
+
+    {{core_mobile_global.list_scroll({
+	    url: list_url|default('')
+	})}}
+{% endblock container %}

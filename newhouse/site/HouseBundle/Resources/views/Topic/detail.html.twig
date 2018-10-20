@@ -1,0 +1,36 @@
+{% set detail = cident.detail.data[0]|default('') %}
+	
+{% extends detail|default('') ? 'HouseBundle:Topic:index.html.twig' : 'CoreBundle:Dispatch:errorcontent.html.twig' %}
+{# 说明
+ * detail: 当前数据
+ * nav_topic_act: 导航高亮
+#}
+{% set nav_topic_act = detail.category|default('') %}
+
+{% block css %}
+	{{parent()}}
+	{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/zt-detail.css')}}
+{% endblock css %}
+
+{% block title %}{{detail.name|default('')}}{% endblock title %}
+
+{# 当前位置 #}
+{% block current_topic %}
+	<a href="{{('topic/list')|U({category: detail.category|default('')})}}">
+		{{core_global.formData({value: detail.category|default('')})}}
+	</a>
+	<span>&gt;</span>
+	{{detail.name|default('')}}
+{% endblock current_topic %}
+
+{# 屏蔽推送位 #}
+{% block push_topic %}{% endblock push_topic %}
+
+{% block container_topic %}
+    <div class="chief content">
+        <h3 >{{detail.name|default('')}}</h2>
+        <div>
+        	{{core_global.content({content: detail.content|default('')})}}
+        </div>
+    </div>
+{% endblock container_topic %}

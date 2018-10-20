@@ -1,0 +1,25 @@
+{% extends 'ManageBundle::base_manage.html.twig' %}
+
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block tableMain %}
+<section>
+    <span class="tableDesc">
+    {{ ident.info.listDesc|default('') }}列表&gt;&gt;
+    <input type="button" id="btnfun_edit" data="{{ (action~'/show')|U }}" class="btn" value="新增{{ ident.info.listDesc|default('') }}" />
+    </span>
+    {{ core_manage.list(ident.info) }}
+</section>
+{% endblock %}
+
+{% block page %}
+{{core_manage.page(ident.info)}}
+{% endblock %}
+{% block submit %}{% endblock %}
+{% block promptUl %}
+提示说明
+{% endblock %}

@@ -1,0 +1,192 @@
+{% extends 'HouseBundle::base.html.twig' %}
+{% block top_search %}{% endblock top_search %}
+{% block title %}
+    {{"郑重声明"|default('')}}{% block title_houses %}{% endblock title_houses %}
+{% endblock title %}
+{# 样式 #}
+{% block css %}
+    {{ core_global.linkcss('static/' ~ bundlepath ~ '/css/lp-detail.css') }}
+    {{ core_global.linkcss('static/' ~ bundlepath ~ '/css/aboutsfd.css') }}
+    {{ core_global.linkcss('static/' ~ bundlepath ~ '/css/newhouse-details/public.css') }}
+    {{ core_global.linkcss('static/' ~ bundlepath ~ '/css/newhouse-details/newhouse-common.css') }}
+    {{ core_global.linkcss('static/' ~ bundlepath ~ '/css/newhouse-details/newhouseDetail.css') }}
+{% endblock css %}
+{% block body %}
+    {% block header %}
+        {% endblock %}
+{#详情页公共头部#}
+ {% block logo_header %}
+     {#<div class="user-header-search header-search">
+         <div class="header-search-box">
+             <i class="header-search-logo"></i>
+             <div class="nav_go_wrap">
+                 <div class="nav_go">
+                     <a href="/">{{ city.data[0].name~"房地产网" }}</a>
+                     <span>&gt;</span>
+                     <span class="now_span">关于我们</span>
+                 </div>
+             </div>
+         </div>
+     </div>#}
+
+ {% endblock logo_header %}
+{% block container %}
+    <div class="fd-box">
+        <div class="fd-banner">
+            <div class="banner-title">
+                <span><a id="backIndex" href=""></a></span>
+                <div class="banner_right">
+                    <a href="/download" class="download" id="download_roll">客户端</a>
+                </div>
+                <!-- 下载客户端 开始 -->
+                {#<div class="client_box">
+                    <div class="top_bg"></div>
+                    <ul class="client_list">
+                        <li>
+                            <div class="client_logo"></div>
+                            <h5>诸葛找房</h5>
+                            <div class="client_code"></div>
+                            <p>iphone & Android</p>
+                        </li>
+                        <li class="line"></li>
+                        <li>
+                            <div class="client_logo jjr_logo"></div>
+                            <h5>诸葛找房-经纪人版</h5>
+                            <div class="client_code jjr_code"></div>
+                            <p>iphone & Android</p>
+                        </li>
+                    </ul>
+                </div>#}
+                <!-- 下载客户端 结束 -->
+            </div>
+            <div class="fd-wa">
+                <span class="fd-line"></span>
+                <div class="fd-sm">诸葛找房关于仿冒我公司进行不正当竞争行为的郑重声明</div>
+            </div>
+
+
+        </div>
+        <div class="fd-content">
+            <div class="fd-statement">
+                <p>
+                    我公司，北京诸葛找房信息技术有限公司（以下简称“我公司”、“诸葛找房”），近期发现存在一些以“诸葛找房”、“小诸葛”等与我公司类似或相似名义的个人及公司仿冒我公司进行不正当竞争行为，造成了广大用户的误认和混淆。
+                </p>
+                <p>
+                    为更好地让广大用户及合作方准确识别我公司，避免发生误认、混淆的情形，我公司现作出郑重声明如下：
+                </p>
+                <p>
+                    一、我公司（包括我公司的子公司及其他分支机构拥有自主设计、研发的商标、计算机软件著作权、注册域名等知识产权，受《中华人民共和国商标法》、《中华人民共和国著作权法》、《中华人民共和国不正当竞争法》等法律、法规和规范性文件的保护。
+                </p>
+                <p>
+                    二、对于任何侵犯我公司知识产权、或通过仿冒、假冒我公司进行不正当竞争或以其他侵权或恶意行为侵犯我公司商誉的第三方，我司保留追究其法律责任的权利。
+                </p>
+                <p>
+                    三、我公司主要通过官方网站及自主研发的应用程序开展业务，截至本声明发布之日，我公司没有开设任何线下门店，亦没有委托任何第三方开设线下门店。任何以包括但不限于“诸葛找房”、“诸葛”、“小诸葛”等与“诸葛找房”相关或相类似名义开设门店，均不属于我公司开设的门店，该等行为均系未经我公司授权的行为，涉嫌假冒、仿冒我公司从事不正当竞争行为，我公司将保留追究该等门店及其经营者、负责人法律责任的权利。
+                </p>
+                <p>
+                    四、我公司现发布本公司官方网站、平台及其他重要公司标识，望广达用户及合作方周知。如发现任何第三方存在仿冒或假冒我公司进行不正当竞争行为的，用户及合作方可通过拨打我公司的咨询、投诉热线<span>400-810-5188</span>或通过在我公司官方微博、官方微信公众号中私信/留言的方式告知我公司该等情形，我公司将予以处理。
+                </p>
+            </div>
+            <div class="fd-identification">
+                <p>
+                    我公司官方网站、平台及其他重要公司标识具体如下：
+                </p>
+                <div class="identification-gfwz">
+                    <h5>（一）官方网站（“官网”）</h5>
+                    <p>我公司设有统一的官网，为用户提供所在城市的房产信息搜索服务、提供房地产交易相关的新闻与资讯，为用户与合作房产经纪公司提供沟通、交流平台，提高用户线上找房的效率。 </p>
+                    <p>官网名称：诸葛找房</p>
+                    <p>官网地址：<a href="http://zhuge.com/">http://zhuge.com/</a></p>
+                    <p>官网截图：</p>
+                    <span></span>
+                </div>
+                <div class="identification-gfwb">
+                    <h5>（二）官方微博</h5>
+                    <p>我公司设有专门的新浪官方微博，用户、合作方能够直接从微博上了解诸葛找房最新动态，关注与房地产交易相关的新闻与资讯，多渠道了解房地产交易市场与资源。</p>
+                    <p>新浪微博名称：诸葛找房</p>
+                    <p>新浪微博地址：<a href="https://weibo.com/zhugefang">https://weibo.com/zhugefang</a></p>
+                    <p>新浪微博截图：</p>
+                    <span></span>
+                </div>
+                <div class="identification-wxgzh">
+                    <h5>（三）官方微信公众号</h5>
+                    <p>我公司设有专门的微信公众号，用户、合作方能够直接从微信公众号推送信息中了解房地产交易市场的最新动态，关注与房地产交易相关的新闻与咨询，多渠道了解房地产交易市场与资源。</p>
+                    <p>微信公众号名称：诸葛找房</p>
+                    <p>微信号：zhugefangnews</p>
+                    <p>微信公众号截图：</p>
+                    <span></span>
+                </div>
+                <div class="identification-gfapp">
+                    <h5>（四）官方APP</h5>
+                    <p>我公司设计并研发了一款专门从事房地产交易的APP软件，分为经纪人版和用户端，用户可以通过用户端查找房源信息、了解房地产交易的相关动态，并与相关房产经纪公司及其经纪人沟通、交流相关房产交易信息，为用户与房产经纪公司及其经纪人提供沟通、交流平台。</p>
+                    <p>APP名称：诸葛找房、云门店、</p>
+                    <p>APP图样：</p>
+                    <span></span>
+                </div>
+                <div class="identification-gsxx">
+                    <h5>（五）公司形象</h5>
+                    <p>我公司对外形象（包括名片、文具、工牌等）均系统一设计并定制的，用户及合作方可从我公司对外形象识别诸葛找房：</p>
+                    <ul>
+                        <li class="gslg">
+                            <p>1.公司lOGO：</p>
+                            <span></span>
+                        </li>
+                        <li class="gsmp">
+                            <p>2.名片</p>
+                            <span></span>
+                        </li>
+                        <li class="gsfz">
+                            <p>3.服装：</p>
+                            <div class="fz-one">
+                                <p>服装-1：</p>
+                                <span></span>
+                            </div>
+                            <div class="fz-two">
+                                <p>服装-2：</p>
+                                <span></span>
+                            </div>
+                            <div class="fz-three">
+                                <p>服装-3：</p>
+                                <span></span>
+                            </div>
+                            <div class="fz-five">
+                                <p>服装-5：</p>
+                                <span></span>
+                            </div>
+                            <div class="fz-six">
+                                <p>服装-6：</p>
+                                <span></span>
+                            </div>
+                        </li>
+                        <li class="ppxcy">
+                            <p>4.品牌宣传语：</br> 文字：“找房比价，诸葛一下” </br>图示：</p>
+                            <span></span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+            <div class="fd-lk">
+                <p class="lk-one">望广大用户及合作方知悉我公司上述官方网站、微博、APP等标识及对外形象，并准确识别我公司。如我公司拟更新上述标识或对外形象的，我公司将于第一时间向公众发布。</p>
+                <p class="lk-two">北京诸葛找房信息技术有限公司<br>2018年5月26日</p>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock container %}
+{% endblock %}
+{% block js %}
+    <script>
+        seajs.use([],function () {
+            $(".speed_open_list li a").removeClass("act");
+            $(".speed_open_list li").each(function () {
+                if ($(this).hasClass("关于我们")) {
+                    $(this).find('a').addClass("act");
+                }
+            });
+            //跳回首页
+            var url = 'http://' + window.location.host;
+            $("#backIndex").attr("href",url);
+        });
+    </script>
+{% endblock js %}

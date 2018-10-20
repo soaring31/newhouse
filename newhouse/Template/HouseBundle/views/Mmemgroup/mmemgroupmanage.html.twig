@@ -1,0 +1,109 @@
+
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }} 
+    {{core_manage.jump({
+        url: ('mmemgroup/mmemtypes')|U,
+        title: '会员组',
+        target: '.main-bd'
+        
+    })
+        
+    }}
+   
+{% endblock %}
+
+{% block mainleft %}
+   {#  {{ render(controller('HouseBundle:Mnews:category', {category: category, action: 'mnews/mnewsmanage'})) }} #}
+{% endblock mainleft %}
+
+{% block tableMain %}
+
+{{ core_manage.filter([
+    {
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增会员分类'
+    },
+    {
+        method: 'search',
+        field: 'name',
+        title: '请搜索名称',
+    }
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            models: '{{ models }}',
+            category: '{{ category }}'
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                    <th>名称</th>
+                    <th width="120" >处理模式</th>
+                    <th width="120" >积分类型</th>
+                    <th width="180" class="tac">操作</th>
+                </tr>
+                {% if ident.info.data is defined and ident.info.pageCount|default('') != 0 %}
+                {% for k, vo in ident.info.data %}
+                    {# {{dump(vo)}} #}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td>{{ vo.id }}</td>
+                    <td>{{ vo.name }}</td>
+                    <td>{{ core_global.formField({form: 'mem_group',field: 'mode', value: vo.mode}) }}</td>
+                    <td>{{ ('house.integral' )|getOne('name', {id: vo.integral}) }}</td>
+                    <td class="tac pr10">
+                        {{ core_manage.show() }}
+                        {{ core_manage.show({
+                            title: '会员组',
+                            url: ('mmemgroup/mmemtypes')|U({  aid: vo.id, mode: vo.mode, type: 1})
+                        })}}
+                        {{ core_manage.delete({issystem: vo.issystem|default(0)}) }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="6" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    }
+]) }}
+{% endblock %}
+
+{% block promptUl %}
+<p>自动升级: 根据积分自动升级 如: 普通会员分类</p>
+<p>付费升级: 通过充值购买会员组</p>
+<p>管理设置: 后台管理分类, 一般用户后台管理</p>
+<p>附加分类: 可以设置根据积分自动升级升级</p>
+{% endblock %}
+
+
+
+

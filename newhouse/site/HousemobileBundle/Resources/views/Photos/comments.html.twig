@@ -1,0 +1,47 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+
+{% set url_id = app.request.get("id") %}
+
+{% block result %}
+<div class="popup popup-photos">
+    <header class="bar bar-nav">
+        {{core_mobile_global.go_back({class: 'font-f-21 pull-left close-popup', href: 'javascript:;'})}}
+        {{core_mobile_global.title({title: '评论页', class: 'search-popup'})}}
+    </header>
+    <div class="content infinite-scroll bg-white">
+        <div class="panel-block">
+            {{housemobile_global.panel_title({title: '评论'})}}            
+        </div>
+
+        {{ render(controller('HouseBundle:Bundlebindforms:comment', {
+            _isApp: url_isApp, 
+            formName: 'view_comment', 
+            aid: url_id|default(''),
+            models: 'photos'
+        })) }}
+        {# <div id="comment"></div> #}
+
+        <div class="list-block panel-block media-list s-list">
+            {{housemobile_global.panel_title({title: '其他评论'})}}
+            <div class="answers comment-list"></div>
+            <div class="infinite-scroll-preloader">
+                <div >加载更多</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% if tpl_js|default('') %}
+<script type="text/javascript">
+    seajs.use(['comment' ,'vote', 'ajax'], function (comment, vote, ajax){
+        vote.init({
+             saveUrl: '{{("viewinter/vote")|U({})}}'
+        });
+        comment.init({
+            list: '.comment-list',
+            url: '{{("intercomment/photolist")|U({checked: "1", aid: url_id, models: "photos"})}}',
+            btnload: 1
+        });
+    });
+</script>
+{% endif %}
+{% endblock result %}

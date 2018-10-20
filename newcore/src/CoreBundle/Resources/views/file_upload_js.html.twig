@@ -1,0 +1,221 @@
+<script type="text/javascript">
+    /*
+         //对象的实例的参数
+         var options = {
+             //点击选择文件ID
+             gui_id: '',
+             //元素类型的输入ID
+             input_id: '',
+             //文件容器ID
+             list_wrap_id: '',
+             //上传的URL地址
+             upload_url: '',
+             //删除文件的URL地址
+             remove_url: '',
+             //已存在的文件的容器
+             ex_list_wrap_id: false,
+             //已存在的删除URL地址
+             ex_remove_url: false
+         };
+     */
+
+
+    function fileUpload(options) {
+        this.bindFileUploader = function () {
+            $(options.gui_id).click(function (event) {
+                event.preventDefault();
+                $(options.input_id).click();
+            });
+
+            $(options.input_id).change($.proxy(function () {
+
+                var container = $(options.list_wrap_id);
+                var file = document.querySelector(options.input_id);
+
+//				container.empty();
+                for (var i = 0; i < file.files.length; i++) {
+                    var f = file.files[i];
+                    container.append(
+                            $('<a href="/remove/this/attach" data-filename="' + f.name + '"><img src="{{ asset('bundles/tripodupload/images/progress.gif') }}"> ' + f.name + '</a>')
+                    );
+                    this.upload(f);
+                }
+
+                this.bindFileRemovers();
+
+            }, this));
+
+            this.bindFileRemovers();
+            this.bindExFileRemovers();
+        };
+
+        this.bindFileRemovers = function () {
+            var removers = $(options.list_wrap_id + ' [data-filename]');
+            removers.unbind();
+            removers.click($.proxy(function (event) {
+                event.preventDefault();
+                if ($(event.target).find('img').length == 0) {
+
+                    var filename = $(event.target).attr('data-filename');
+                    $.ajax({
+                        url: options.remove_url,
+                        type: 'DELETE',
+                        dataType: 'json',
+                        data: JSON.stringify({'name': filename}),
+                        headers: {
+                            'Content-Type': 'application/json; charset=utf-8'
+                        },
+                        success: $.proxy(function (data) {
+                            if (data.status == 'ok') {
+                                $(options.list_wrap_id + ' [data-filename]').each($.proxy(function (index, element) {
+                                    if ($(element).attr('data-filename') == filename) {
+                                        $(element).remove();
+                                    }
+                                }, this));
+                            }
+                        }, this)
+                    });
+
+                }
+            }, this));
+        };
+
+        this.bindExFileRemovers = function () {
+            if (options.ex_list_wrap_id && options.ex_remove_url) {
+                var removers = $(options.ex_list_wrap_id + ' [data-filename]');
+                removers.unbind();
+                removers.click($.proxy(function (event) {
+                    event.preventDefault();
+
+                    var filename = $(event.target).attr('data-filename');
+                    $.ajax({
+                        url: options.ex_remove_url,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: JSON.stringify({'name': filename}),
+                        headers: {
+                            'Content-Type': 'application/json; charset=utf-8'
+                        },
+                        success: $.proxy(function (data) {
+                            if (data.status == 'ok') {
+                                $(options.ex_list_wrap_id + ' [data-filename]').each($.proxy(function (index, element) {
+                                    if ($(element).attr('data-filename') == filename) {
+                                        $(element).remove();
+                                    }
+                                }, this));
+                            }
+                        }, this)
+                    });
+
+                }, this));
+            }
+        };
+
+        this.setProgress = function (f, progress) {
+            $(options.list_wrap_id + ' [data-filename]').each($.proxy(function (index, element) {
+                if ($(element).attr('data-filename') == f.name && progress == 100) {
+                    $(element).find('img').remove();
+                }
+            }, this));
+        };
+
+        this.upload = function (f) {
+            if (f.size > 2097152 /* 2M */) {
+                // Chunk send
+                this.sendChunk(0, f);
+            } else {
+                // Send
+                this.sendFile(f);
+            }
+        };
+
+        this.sendFile = function (f) {
+            var freader = new FileReader();
+            freader.readAsBinaryString(f);
+            freader.onload = $.proxy(function (e) {
+                var sendData = {
+                    'type': f.type,
+                    'size': f.size,
+                    'name': f.name,
+                    'chunked': false,
+                    'content': btoa(e.target.result)
+                };
+                $.ajax({
+                    url: options.upload_url,
+                    dataType: 'json',
+                    type: 'PUT',
+                    data: JSON.stringify(sendData),
+                    headers: {
+						'Content-Type': 'application/json; charset=utf-8'
+                    },
+                    success: $.proxy(function (data) {
+                        this.setProgress(f, 100);
+                    }, this),
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        //
+                    }
+                });
+            }, this);
+        };
+
+        // i - chunk
+        this.sendChunk = function (i, f) {
+            var to;
+            if (((i * 2097152) + (2097152)) > f.size) {
+                to = f.size;
+            } else {
+                to = (i * 2097152) + (2097152);
+            }
+
+            var b = f.slice(i * 2097152, to);
+            var freader = new FileReader();
+            freader.readAsBinaryString(b);
+            freader.onload = $.proxy(function (e) {
+                var sendData = {
+                    'type': f.type,
+                    'size': f.size,
+                    'name': f.name,
+                    'chunked': true,
+                    'chunk': i,
+                    'chunkSize': b.size,
+                    'content': btoa(e.target.result),
+                    'startByte': i * 2097152,
+                    'to': to
+                };
+                $.ajax({
+                    url: options.upload_url,
+                    dataType: 'json',
+                    type: 'PUT',
+                    headers: {
+						'Content-Type': 'application/json; charset=utf-8'
+                    },
+                    data: JSON.stringify(sendData),
+                    success: $.proxy(function (data) {
+                        if ((i + 1) < Math.ceil(f.size / 2097152)) {
+                            this.sendChunk(i + 1, f);
+                            this.setProgress(f, ((i * 2097152) * 100) / f.size);
+                        } else {
+                            this.setProgress(f, 100);
+                        }
+                    }, this),
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        //
+                    }
+                });
+            }, this);
+        };
+
+        this.bindFileUploader();
+    }
+    seajs.use("jquery",function(l){
+	    new fileUpload({
+	        gui_id: '#gui_id',
+	        input_id: '#hid_input',
+	        list_wrap_id: '#files_wrap',
+	        upload_url: '{{ path('upload_uploadfile') }}',
+	        remove_url: '{{ path('upload_removefile') }}',
+	        ex_list_wrap_id: '#exfiles_wrap',
+	        ex_remove_url: false
+	    });
+	});
+</script>

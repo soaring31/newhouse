@@ -1,0 +1,505 @@
+ManageBundle\Entity\Houses:
+    type: entity
+    table: houses
+    indexes:
+        cate_type:
+            columns:
+                - cate_type
+        area:
+            columns:
+                - area
+        kpdate:
+            columns:
+                - kpdate
+        uid:
+            columns:
+                - uid
+        region:
+            columns:
+                - region
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            options:
+                comment: 标题
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        thumb:
+            options:
+                comment: 缩略图
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        cate_type:
+            options:
+                comment: 物业类型
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        area:
+            options:
+                comment: 区域
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        cate_status:
+            options:
+                comment: 销售状态
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        loupanlogo:
+            options:
+                comment: 楼盘logo
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        lphf:
+            options:
+                comment: 楼盘横幅
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        dj:
+            options:
+                comment: 均价
+                unsigned: false
+            nullable: false
+            type: float
+            length: 100
+        jgjj:
+            options:
+                comment: 最高价
+                unsigned: false
+            nullable: false
+            type: float
+            length: 100
+        jdjj:
+            options:
+                comment: 最低价
+                unsigned: false
+            nullable: false
+            type: float
+            length: 100
+        bdsm:
+            options:
+                comment: 价格说明
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        map:
+            options:
+                comment: 地图
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        address:
+            options:
+                comment: 楼盘地址
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        wygs:
+            options:
+                comment: 物业公司
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        tel:
+            options:
+                comment: 销售电话
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        wydz:
+            options:
+                comment: 物业地址
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        kpdate:
+            options:
+                comment: 开盘日期
+                unsigned: false
+            nullable: false
+            type: date
+            length: 10
+        kpsm:
+            options:
+                comment: 开盘说明
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        zxcd:
+            options:
+                comment: 装修程度
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        lcs:
+            options:
+                comment: 楼层
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        hxs:
+            options:
+                comment: 环线
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        tslp:
+            options:
+                comment: 特色楼盘
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        top:
+            options:
+                comment: 置顶
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        type:
+            options:
+                comment: 小区楼盘
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        checked:
+            options:
+                comment: 审核
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        house_developer:
+            options:
+                comment: 楼盘开发商
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        wyf:
+            options:
+                comment: 物业费
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        xkzh:
+            options:
+                comment: 许可证号
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        sldz:
+            options:
+                comment: 售楼地址
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        content:
+            options:
+                comment: 楼盘介绍
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        srcid_:
+            options:
+                comment: 导入来源id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 11
+        ename:
+            options:
+                comment: 拼音
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        geohash:
+            options:
+                comment: 地图hash
+                unsigned: false
+            nullable: false
+            type: string
+            length: 20
+        jfrq:
+            options:
+                comment: 交房日期
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        models:
+            options:
+                comment: 模型
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        uid:
+            options:
+                comment: 会员id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        dzsp:
+            options:
+                comment: 电子沙盘
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        sales:
+            options:
+                comment: 二手房数量
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        rents:
+            options:
+                comment: 出租数量
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        clicks:
+            options:
+                comment: 点击
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        comnum:
+            options:
+                comment: 评论数
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        cate_metro:
+            options:
+                comment: 地铁站
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        cate_line:
+            options:
+                comment: 地铁
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        cate_circle:
+            options:
+                comment: 商圈
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        sale_jgjj:
+            options:
+                comment: 二手最高价
+                unsigned: false
+            nullable: false
+            type: float
+            length: 100
+        rent_jgjj:
+            options:
+                comment: 出租最高价
+                unsigned: false
+            nullable: false
+            type: float
+            length: 100
+        sale_jdjj:
+            options:
+                comment: 二手最低价
+                unsigned: false
+            nullable: false
+            type: float
+            length: 100
+        rent_jdjj:
+            options:
+                comment: 出租最低价
+                unsigned: false
+            nullable: false
+            type: float
+            length: 100
+        officetype:
+            options:
+                comment: 写字楼类型
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        shoptype:
+            options:
+                comment: 商铺类型
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        polyline:
+            options:
+                comment: 地图范围
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        lng:
+            options:
+                comment: 经度
+                unsigned: false
+            nullable: false
+            type: float
+            length: 100
+        lat:
+            options:
+                comment: 纬度
+                unsigned: false
+            nullable: false
+            type: float
+            length: 100
+        rednum:
+            options:
+                comment: 红包数量
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        region:
+            options:
+                comment: 区域
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        officelevel:
+            options:
+                comment: 写字楼等级
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        shopindustry:
+            options:
+                comment: 商铺行业
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        doornum:
+            options:
+                comment: 户型数量
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        albumnum:
+            options:
+                comment: 相册数量
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        keywords:
+            options:
+                comment: SEO用法
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        abstract:
+            options:
+                comment: 同时也用于SEO中的description
+                unsigned: false
+            nullable: false
+            type: string
+            length: 0
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

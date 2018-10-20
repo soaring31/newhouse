@@ -1,0 +1,39 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default('Houses:detail') ~ '.html.twig' %}
+
+{% block title %}
+    {{detail.name|default('')}}-
+    {% block h_title %}
+    基本信息,售楼处电话,物业费,物业电话,开发商
+    {% endblock h_title %}
+{% endblock title %}
+
+{% block d_header %}
+    <h1 class="title">楼盘详情</h1>
+{% endblock %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}售楼处地址,{{detail.name|default('')}}售楼电话,班芙春天物业费电话,{{detail.name|default('')}}开发商" />
+<meta name="description" content="{{cur_area_data|default('')}}{{detail.name|default('')}}为您提供{{detail.name|default('')}}基本信息，包括售楼处地址，售楼电话，物业费，物业电话，开发商等{{detail.name|default('')}}楼盘相关信息，为您选房、买房提供参考!"/>
+{% endblock key_des %}
+
+{% block container %}
+{# {% include 'HousemobileBundle:Houses:ddetailblock.html.twig' ignore missing with {detail: detail} %} #}
+<div data-block="{
+    bParams: true,
+    ajax:{
+        url: '{{ ('houses/detail')|U }}',
+        data: {
+            id: '{{ detail.id|default('') }}',
+            tpl: 'Houses:ddetailblock'
+        }
+    }
+}"></div>
+{% endblock container %}
+
+{# 导航 #}
+{% block secondary %}
+    {#{% set nav_active = 1 %}#}
+    {#{{ parent() }}#}
+{% endblock secondary %}
+{% block popup %}{% endblock popup %}

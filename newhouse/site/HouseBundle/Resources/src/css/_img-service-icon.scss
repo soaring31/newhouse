@@ -1,0 +1,50 @@
+
+$img-service-icon-service-find-psd-hover:(40px,40px,-50px,0,img-service-icon-service-find-psd-hover);
+
+$img-service-icon-service-find-psd:(40px,40px,-50px,-100px,img-service-icon-service-find-psd);
+
+$img-service-icon-service-house-hover:(40px,40px,0,-50px,img-service-icon-service-house-hover);
+
+$img-service-icon-service-house:(40px,40px,-50px,-50px,img-service-icon-service-house);
+
+$img-service-icon-service-idcard-hover:(40px,40px,-100px,0,img-service-icon-service-idcard-hover);
+
+$img-service-icon-service-idcard:(40px,40px,-100px,-50px,img-service-icon-service-idcard);
+
+$img-service-icon-service-login-hover:(40px,40px,0,-100px,img-service-icon-service-login-hover);
+
+$img-service-icon-service-login:(40px,40px,0,0,img-service-icon-service-login);
+
+$img-service-icon-service-money-hover:(40px,40px,-100px,-100px,img-service-icon-service-money-hover);
+
+$img-service-icon-service-money:(40px,40px,-150px,0,img-service-icon-service-money);
+
+$img-service-icon-service-order-hover:(40px,40px,-150px,-50px,img-service-icon-service-order-hover);
+
+$img-service-icon-service-order:(40px,40px,-150px,-100px,img-service-icon-service-order);
+
+$img-service-icon-service-resgist-hover:(40px,40px,0,-150px,img-service-icon-service-resgist-hover);
+
+$img-service-icon-service-resgist:(40px,40px,-50px,-150px,img-service-icon-service-resgist);
+
+$img-service-icon: ($img-service-icon-service-find-psd-hover,$img-service-icon-service-find-psd,$img-service-icon-service-house-hover,$img-service-icon-service-house,$img-service-icon-service-idcard-hover,$img-service-icon-service-idcard,$img-service-icon-service-login-hover,$img-service-icon-service-login,$img-service-icon-service-money-hover,$img-service-icon-service-money,$img-service-icon-service-order-hover,$img-service-icon-service-order,$img-service-icon-service-resgist-hover,$img-service-icon-service-resgist,);
+
+@mixin img-service-icon($sprites) {
+  %icoservice-icon {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/service-icon.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+      @extend %icoservice-icon;
+    }
+  }
+}

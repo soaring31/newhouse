@@ -1,0 +1,82 @@
+{% extends 'HouseBundle:Business:business_layout.html.twig' %}
+
+{% set head_data = [
+    {
+        title: '写字楼楼盘',
+        url: ('business/list')|U
+    },
+    {
+        title: '写字楼出售',
+        url: ('business/xsalelist')|U
+    },
+    {
+        title: '写字楼出租',
+        url: ('business/xrentlist')|U
+    },
+    {
+        title: '商铺楼盘',
+        url: ('business/slist')|U
+    },
+    {
+        title: '商铺出售',
+        url: ('business/ssalelist')|U
+    },
+    {
+        title: '商铺出租',
+        url: ('business/srentlist')|U
+    },
+] %}
+
+{% block container %}
+    {# 筛选 #}
+    {% block filters %}
+        {# 筛选条件 #}
+        {{house_global.filter_cfg({
+            head_data: head_data,
+            action: action
+        }|merge(cate_data))}}
+    {% endblock filters %}
+    <div class="blank30"></div>
+
+    <div class="container">
+        <div class="main">
+            <div class="tag">
+                <div class="tag-head">
+                    <ul class="t-h-l">
+                        <li class="active">
+                            <a href="javascript:;" class="act">
+                                {{'全部' ~ tpl_title|default('') }}
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="t-h-r">
+                        <p>共有<span class="num">{{list_ident.pageCount|default('0')}}</span>个房源符合您的需求</p>
+                  </div>
+                </div>
+                <div class="tag-middle">
+                    <div class="t-m-r">
+                        <div class="sort fr">
+                            {% block list_sort %}
+                                {{ core_global.sort({
+                                action: action,
+                                data: sort_data|default('')
+                            }|merge(cate_data)) }}
+                            {% endblock list_sort %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bs-content">
+                {# 列表 #}
+                {% block business_list %}
+                {% endblock business_list %}
+            </div>
+            <div class="blank20"></div>
+            <!--page-->
+            {{core_global.page(list_ident)}}
+        </div>
+        {# 侧栏 #}
+        {% block business_aside %}{% endblock business_aside %}
+    </div>
+    <div class="blank20"></div>
+{% endblock container %}

@@ -1,0 +1,105 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+    {% set aid = app.request.get('aid') %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+{% block mainMenu %}
+    {{ parent() }} 
+  
+{% endblock %}
+{% block mainleft %}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ core_manage.filter([
+    {
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增微信推送'
+    },
+    {
+        method: 'selectFormField',
+        title: '审核',
+        form: 'checked',
+        field: 'checked',
+    },
+    {
+        method: 'search',
+        field: 'name',
+        title: '请搜索标题',
+    }
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            models: '{{ models }}',
+            category: '{{ category }}'
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                    <th>标题</th>
+                    <th width="150">公众号</th>
+                    <th width="100" data-role="sort" data-sort="create_time" class="sort">添加时间</th>
+                    <th width="120" class="tac">操作</th>
+                </tr>
+                {% if ident.info.data is defined %}
+                {% for k, vo in ident.info.data %}
+                    {# {{dump(vo)}} #}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td>{{ vo.id }}</td>
+                    <td>{{ vo.name }}</td>
+                    <td>{{('db.wxusers')|getOne('name',{appid:vo.appid})}}</td>
+                    <td>{{ vo.create_time|default('0')|date('Y-m-d') }}</td>
+                    <td class="tar pr10">
+                        {{ core_manage.show() }}
+                        {{ core_manage.delete() }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="6" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'checked',
+        title: '审核',
+    }
+]) }}
+{% endblock %}
+
+{% block promptUl %}
+  <p>1.手动推送：即管理员在文档/会员列表的批量操作中 或 在推送位管理的“加载信息”中设置的推送信息；</p>
+  <p>2.手动添加：即管理员在推送位管理列表中点[>>手动添加]的推送信息，这类信息“来源ID”一般为空；</p>
+  <p>3.自动推送：即发布文档等信息时，自动推动的信息，这种来源需要推送位开启[添加资料时自动推送]设置；</p>  
+{# 提示说明 #}
+{% endblock %}
+
+
+
+

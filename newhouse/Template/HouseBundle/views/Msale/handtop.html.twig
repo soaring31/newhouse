@@ -1,0 +1,25 @@
+{% extends 'HouseBundle:Msale:mpay.html.twig' %}
+{% set aid = app.request.get('aid') %}
+{% set models = app.request.get('models') %}
+{% set tops = app.user.userinfo.tops|default('0') %}
+{% set ctime = ('now')|date('U') %}    
+{% block content %}
+    <div class="handref tac ">
+        <p>信息置顶后：排名靠前，时间显示最新。能获得更多浏览机会！</p>
+        <p>您还有 <font color="#f00">{{tops}}</font> 天免费置顶，确定要置顶吗？</p> 
+        <div class="bottom-confirm" data-id="{{ aid }}">
+            {% set col = (models == 'sale')?'msalemanage': 'mrentmanage' %}
+            <form data-id="0" action="{{ ( col ~ '/refreshtop')|U({ _form_id: 386, id: aid })}}" method="POST" class="form" novalidate="novalidate">
+                {% set form = (386)|getForm %}
+                {{ form_widget(form.csrf_token) }}
+                <input type="hidden" name="zjdate" value="{{ ctime }}">
+                    <input type="hidden" name="id" value="{{ aid }}">
+                        {% if tops == 0 %}
+                          <input type="submit" id="submit" disabled="disabled" style="background-color: #bbb;" name="submit" class="mszd-btn disabled" data-role="disabled" data-reload="1" data-close="1" value="马上置顶"> 
+                    {% else %}
+                <button type="submit" id="submit" name="submit" class="mszd-btn" data-role="submit" data-reload="1" data-close="1">马上置顶</button>
+                {% endif %}
+             </form>
+        </div>
+    </div>    
+{% endblock %}    

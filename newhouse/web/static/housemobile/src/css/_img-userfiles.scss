@@ -1,0 +1,46 @@
+
+$img-userfiles-ico_1:(17px,16px,-143px,-78px,img-userfiles-ico_1);
+
+$img-userfiles-ico_10:(84px,16px,0,0,img-userfiles-ico_10);
+
+$img-userfiles-ico_2:(33px,16px,0,-108px,img-userfiles-ico_2);
+
+$img-userfiles-ico_3:(50px,16px,-94px,-52px,img-userfiles-ico_3);
+
+$img-userfiles-ico_4:(66px,16px,-94px,0,img-userfiles-ico_4);
+
+$img-userfiles-ico_5:(82px,16px,0,-26px,img-userfiles-ico_5);
+
+$img-userfiles-ico_6:(16px,16px,-43px,-108px,img-userfiles-ico_6);
+
+$img-userfiles-ico_7:(34px,16px,-99px,-78px,img-userfiles-ico_7);
+
+$img-userfiles-ico_8:(51px,16px,-94px,-26px,img-userfiles-ico_8);
+
+$img-userfiles-ico_9:(67px,16px,0,-52px,img-userfiles-ico_9);
+
+$img-userfiles-idcard:(40px,20px,0,-78px,img-userfiles-idcard);
+
+$img-userfiles-license:(39px,20px,-50px,-78px,img-userfiles-license);
+
+$img-userfiles: ($img-userfiles-ico_1,$img-userfiles-ico_10,$img-userfiles-ico_2,$img-userfiles-ico_3,$img-userfiles-ico_4,$img-userfiles-ico_5,$img-userfiles-ico_6,$img-userfiles-ico_7,$img-userfiles-ico_8,$img-userfiles-ico_9,$img-userfiles-idcard,$img-userfiles-license,);
+
+@mixin img-userfiles($sprites) {
+  %icouserfiles {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/userfiles.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+      @extend %icouserfiles;
+    }
+  }
+}

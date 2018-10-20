@@ -1,0 +1,19 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+
+{% block result %}
+{% spaceless %}
+    {% if app.user.id|default('') %}
+        <a href="{{ ('main/mindex')|UU }}" class="col-33">
+            <span>
+                用户:{{app.user.nicename|default(app.user.username|default(''))}}
+            </span>
+        </a>
+    {% else %}
+        <a href="{{ ('house/login')|UU }}" class="col-33">
+            <span>
+                登录
+            </span>
+        </a>
+    {% endif %}
+{% endspaceless %}
+{% endblock result %}

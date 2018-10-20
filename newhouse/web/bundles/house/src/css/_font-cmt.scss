@@ -1,0 +1,47 @@
+$font-cmt-fz: inherit !default;
+
+@font-face {
+	font-family: "cmt";
+    font-weight: normal;
+    font-style: normal;
+	src: url('../fonts/cmt.eot');
+	src: url('../fonts/cmt.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/cmt.woff') format('woff');//,
+		//url('../fonts/cmt.ttf') format('truetype'),
+		//url('../fonts/cmt.svg#cmt') format('svg');
+}
+$font-cmt-fz: inherit !default;
+$font-cmt-fl: none !default;
+$font-cmt-m: 0 !default;
+$font-cmt-va: -.25em !default;
+[class^="font-cmt-"],
+[class*=" font-cmt-"] {
+	font-family: "cmt";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-size: $font-cmt-fz;
+	float: $font-cmt-fl;
+	margin: $font-cmt-m;
+	vertical-align: $font-cmt-va;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; only necessary if not using the private unicode range (firstdata option) 
+	text-decoration: none;
+	text-transform: none;
+}
+.font-cmt-1:before {
+	content: "\EA01";
+}.font-cmt-2:before {
+	content: "\EA02";
+}.font-cmt-3:before {
+	content: "\EA03";
+}.font-cmt-4:before {
+	content: "\EA04";
+}.font-cmt-5:before {
+	content: "\EA05";
+}.font-cmt-6:before {
+	content: "\EA06";
+}.font-cmt-7:before {
+	content: "\EA07";
+}

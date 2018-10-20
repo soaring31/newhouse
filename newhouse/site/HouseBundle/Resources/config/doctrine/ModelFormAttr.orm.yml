@@ -1,0 +1,238 @@
+HouseBundle\Entity\ModelFormAttr:
+    type: entity
+    table: model_form_attr
+    indexes:
+        model_form_id:
+            columns:
+                - model_form_id
+        status:
+            columns:
+                - status
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            options:
+                comment: 表单字段名称
+                unsigned: false
+            nullable: false
+            type: string
+            length: 50
+        type:
+            options:
+                comment: 表单字段类型
+                unsigned: false
+            nullable: false
+            type: string
+            length: 50
+        label:
+            options:
+                comment: 表单字段label
+                unsigned: false
+            nullable: false
+            type: string
+            length: 50
+        attr:
+            options:
+                comment: 表单字段属性
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        choices:
+            options:
+                comment: 下拉框参数
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        required:
+            options:
+                comment: 0否，1是
+                unsigned: false
+                default: '1'
+            nullable: false
+            default: '1'
+            type: boolean
+            length: 1
+        entitypath:
+            options:
+                comment: entity路径
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        property:
+            options:
+                comment: entity关联字段名
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        model_form_id:
+            options:
+                comment: 关联表单ID
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        status:
+            options:
+                comment: 1启用，0禁用
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+        validate_rule:
+            options:
+                comment: 验证规则
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        validate_time:
+            options:
+                comment: '验证时间,3始终,1新增,2编辑'
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 2
+        error_info:
+            options:
+                comment: 出错提示
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        auto_type:
+            options:
+                comment: '自动完成方式function比函数,field字段,string字符串'
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        auto_rule:
+            options:
+                comment: 自动完成规则
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        isonly:
+            options:
+                comment: 是否唯一，0否，1是
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        query_builder:
+            options:
+                comment: 查询规则
+                unsigned: false
+            nullable: false
+            type: string
+            length: 200
+        value:
+            options:
+                comment: 默认值
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        g_type:
+            options:
+                comment: 组
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        iswatermark:
+            options:
+                comment: 水印方案
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        dealhtml:
+            options:
+                comment: HTML处理
+                unsigned: false
+            nullable: false
+            type: string
+            length: 24
+        dealhtmltags:
+            options:
+                comment: HTML处理项
+                unsigned: false
+            nullable: false
+            type: string
+            length: 255
+        bundle:
+            options:
+                comment: 所属Bundle
+                unsigned: false
+            nullable: false
+            type: string
+            length: 64
+        checked:
+            options:
+                comment: 是否审核
+                unsigned: false
+            nullable: false
+            type: boolean
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

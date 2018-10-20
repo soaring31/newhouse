@@ -1,0 +1,66 @@
+$font-mindex-fz: inherit !default;
+
+@font-face {
+	font-family: "mindex";
+    font-weight: normal;
+    font-style: normal;
+	src: url('../fonts/mindex.eot');
+	src: url('../fonts/mindex.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/mindex.woff') format('woff');//,
+		//url('../fonts/mindex.ttf') format('truetype'),
+		//url('../fonts/mindex.svg#mindex') format('svg');
+}
+$font-mindex-fz: inherit !default;
+$font-mindex-fl: none !default;
+$font-mindex-m: 0 !default;
+$font-mindex-va: -.25em !default;
+[class^="font-mindex-"],
+[class*=" font-mindex-"] {
+	font-family: "mindex";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-size: $font-mindex-fz;
+	float: $font-mindex-fl;
+	margin: $font-mindex-m;
+	vertical-align: $font-mindex-va;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; only necessary if not using the private unicode range (firstdata option) 
+	text-decoration: none;
+	text-transform: none;
+}
+
+
+.font-mindex-1:before {
+	content: "\EA01";
+}
+
+.font-mindex-2:before {
+	content: "\EA02";
+}
+
+.font-mindex-home:before {
+	content: "\EA03";
+}
+
+.font-mindex-map:before {
+	content: "\EA04";
+}
+
+.font-mindex-menu:before {
+	content: "\EA05";
+}
+
+.font-mindex-sc:before {
+	content: "\EA06";
+}
+
+.font-mindex-search:before {
+	content: "\EA07";
+}
+
+.font-mindex-tel:before {
+	content: "\EA08";
+}
+

@@ -1,0 +1,181 @@
+.right-table, .subright-table {
+    table-layout: fixed;
+    width: 100%;
+    // margin: 0 auto;
+    // 表格内图标样式
+    &[data-level="top"] {
+        table-layout: auto;
+        .subright-table {
+            table-layout: auto;
+        }
+    }
+    %tb-ico {
+        font-size: 14px !important;
+        -webkit-user-select:none;
+        user-select:none;
+        color: #999;
+        cursor: pointer;
+        @extend [class^="font-ico-"];
+    }
+    tr:nth-child(2n + 1) {
+        background-color: #f8f8f8;
+    }
+    th {
+        background: #eee;
+        font-size: 12px;
+    }
+    th, td {
+        text-align: left;
+        padding: 5px 0;
+        // line-height: $tb-lh;
+        line-height: 30px;
+        border-bottom: 1px solid $tb-bdc;
+        vertical-align: middle;
+    }
+    .tov {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    .subtr {
+        display: none;
+        &:hover {
+            background: none;
+        }
+        > th, > td {
+            padding: 0;
+            border-bottom: none;
+        }
+    }
+    .on {
+        display: table-row;
+        > .plusico:before {
+            @extend .font-ico-plus1e:before;
+        }
+    }
+    select {
+        height: $sel-h;
+        vertical-align: middle;
+    }
+    .item_input {
+        textarea {
+            line-height: 1.8;
+        }
+    }
+    .ltd, .rtd {
+        border-left: 1px solid $tb-bdc;
+    }
+    .rtd {
+        border-right: 1px solid $tb-bdc;
+    }
+    a {
+        text-decoration: none;
+        &:hover {
+            text-decoration: none;
+        }
+    }
+    // 筛选框
+    [data-role="checkbox"]:before {
+        @extend .font-ico-chk;
+        @extend %tb-ico;
+    }
+    .chked {
+        background: #ddd !important;
+        [data-role="checkbox"]:before {
+            @extend .font-ico-chked;
+        }
+    }
+    .plusico:before {
+        @extend .font-ico-plus1:before;
+        @extend %tb-ico;
+    }
+    // 排序
+    [data-sort] {
+        cursor: pointer;
+    }
+    [data-sort]:after, .asc:after, .desc:after {
+        vertical-align: -2px !important;
+        @extend %tb-ico;
+    }
+    [data-sort]:after {
+        @extend .font-ico-sort:before;
+    }
+    .asc:after {
+        @extend .font-ico-sortup:before;
+    }
+    .desc:after {
+        @extend .font-ico-sortdown:before;
+    }
+    [data-role="itemEdit"] {
+        display: block;
+        cursor: pointer;
+        position: relative;
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            text-align: inherit;
+        }
+    }
+    [data-role="itemEdit"]:after {
+        // content: '双击编辑';
+        position:absolute;
+        top:0;
+        left:0;
+        padding: 5px;
+        line-height: 1;
+        border-radius: 3px;
+        white-space: nowrap;
+        background-color:rgba(0,0,0,0.5);
+        color:#fff;
+        font-size:12px;
+        text-shadow:-1px -1px 0 rgba(0,0,0,0.8);
+        opacity: 0;
+        transition:all 0.3s ease;
+    }
+    [data-role="itemEdit"]:hover:after{
+        top: 50%;
+        margin-top: -11px;
+        opacity: 1;
+    }
+}
+
+.table-hover {
+    tr {
+        &:hover {
+            background: #eee;
+        }
+    }
+}
+.table-nobtn {
+    th, td {
+        padding: 10px 0;
+    }
+}
+.subright-table {
+    margin-right: 0;
+}
+
+.table-inline {
+    background-color: #fff;
+}
+
+.right-table {
+    tr.hover {
+        background: #625B39;
+    }
+
+    .js-resize {
+        width: 250px;
+        height: 100px;
+    }
+}
+
+.btn:before {
+    margin-right: 5px;
+    vertical-align: -2px;
+}
+
+.edit input {
+    padding: 0 5px;
+    box-sizing: border-box;
+}

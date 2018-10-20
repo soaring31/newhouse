@@ -1,0 +1,260 @@
+{# 意向 #}
+{% extends 'HouseBundle:Mhouse:mhousesarc.html.twig' %}
+{% set search_keyword = app.request.get('name') %}
+{% set order = app.request.get('order') %}
+{% set aid = app.request.get('aid') %}
+{% set usertype = app.user.usertype %}
+{% set usertplid = ('db.mem_types')|getOne('usertplid',{ id: usertype })|default('') %}
+{# 搜索字串的数组 #}
+{% set search_arr = [
+        'orX',
+        'name,like,%' ~ search_keyword ~ '%',
+        'tel,like,%' ~ search_keyword ~ '%',
+    ] %}
+
+{% set search_opt = ({pageSize: 10})|merge(search_keyword ? {name: search_arr|join('|')} : {}) %} 
+{# 意向分类筛选 #}
+{% set dyfl = app.request.get('dyfl') %}
+{% set search_opt = dyfl ? search_opt|merge({dyfl: 'find|' ~ dyfl}) : search_opt %}
+
+{% set all_houses_id = ('house.houses')|getCol('id', {uid: app.user.id}) %}
+
+{% if aid|default('') is empty and usertplid|default('') %}
+{% set add_opt = {
+    aid: 'in|' ~ all_houses_id|default([0])|join(',')
+} %} 
+{% endif %}
+{% block tableMain %} 
+
+    {{ core_manage.filter([
+        {
+            method: 'selectFormField',
+            field: 'dyfl',
+            form: 'houses_intent',
+            title: '分类',
+        },
+        {
+            method: 'search',
+            field: 'name',
+            title:'请搜索姓名/电话'
+        }
+    ]) }}
+    
+    <div class="list-con" data-param="{{ params }}">
+        <div class="list">
+            <table class="right-table table-hover">
+                <tbody>
+                    <tr data-id>
+                        <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                        <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                        <th width="150">姓名</th>
+                        {% if aid|default('') is empty %}
+                        <th width="150">楼盘名称</th>
+                        {% endif %}
+                        <th>意向分类</th>
+                        <th width="100">电话</th>
+                        <th width="80">审核</th>
+                        <th width="100" data-role="sort" data-sort="create_time" class="sort">添加时间</th>
+                         {% if (action ~ '/show')|P %}
+                        <th width="120" class="tac">操作</th>
+                    {% endif %}
+                    </tr>
+                    {% if ident.info.data|length %}
+                        {% for k, vo in ident.info.data %} 
+                            {% set houses_data = ('house.houses')|getRow({id: vo.aid|default(''), checked: 1}) %}
+                            <tr data-id="{{ vo.id }}" data-tel="{{vo.tel}}" data-lpmc="{{houses_data.name|default('')}}" data-dj="{{core_global.if_dw({value: houses_data.dj|default(''), danwei: '元/m&sup2;', default_tips: '待定', tpl: '%value%%danwei%'})}}" data-kpdate="{{houses_data.kpdate|default('')|date('Y-m-d')}}">              
+                                <td class="tac">
+                                    {{core_manage.checkbox()}}
+                                </td>
+                                <td>
+                                    {{ vo.id }}
+                                </td>
+                                <td class="tov" title="{{ vo.name|default('') }}">
+                                    <span data-role="itemEdit" data-name="name" class="edit">{{ vo.name }}</span>
+                                </td>                      
+                                {% if aid|default('') is empty %}
+                                    <td>
+                                        {{ houses_data.name|default('') }}
+                                    </td>
+                                {% endif %}
+                                <td>
+                                    {{ core_global.formField({value: vo.dyfl, form: 'houses_intent', field: 'dyfl', tpl: '%title%,'}) }}
+                                </td>
+                                 <td class="tov" title="{{ vo.tel|default('') }}">
+                                     <span data-role="itemEdit" data-name="tel" class="edit">{{ vo.tel }}</span>
+                                 </td>
+                                <td>
+                                    {{ core_global.formField({value: vo.checked}) }}
+                                </td>
+                                <td>
+                                    {{ vo.create_time|default('0')|date('Y-m-d') }}
+                                </td>
+                                {% if (action ~ '/show')|P %}
+                                    <td class="tar pr10">
+                                        {{ core_manage.show({url: (action ~ "/show")|U({id: vo.id}) }) }}
+                                        {{ core_manage.delete() }}
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="9" class="tac">
+                                没有数据！
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>    
+        {{core_manage.page(ident.info)}}
+    </div>
+{% if (action ~ '/show')|P %}
+    {{ core_manage.oprate([
+        {
+            method: 'delete',
+            title: '<i class="font-ico-del mr5"></i>批量删除',
+        },
+        {
+            method: 'dropdownFormField',
+            field: 'checked',
+            form: 'checked',
+            title: '审核',
+        },
+        {
+            method: 'dropdownFormField',
+            field: 'dyfl',
+            form: 'houses_intent',
+            title: '分类',
+        },
+        {
+            method: 'btn',
+            title: '发送短信',
+            class: 'fz12 btn-jqModal',
+            url: '#send-sms'
+        }
+    ]) }}
+        {# {
+            method: 'submit',
+            title: '发送短信',
+            class: 'fz12',
+            attr: {
+                'data-modal-opt': {
+                    txt: '请输入短信信息',
+                    field: 'msg'
+                },
+                'data-add': 'tel' 
+            },
+            url: ('sms/smstpl')|U({tpl: 'home'})
+        }, #}
+    
+    <div id="send-sms" data-head="发送信息" style="display: none;">
+        {% set sms_tpl = ('db.smstpls')|getAll({open: 1}) %}
+        <form action="{{('sms/smstpl')|U({id: 'smscode'})}}" class="form">
+            <input type="hidden" class="input-sm" id="tel" name="tel">
+            <input type="hidden" class="input-sm" id="dj" name="dj">
+            <input type="hidden" class="input-sm" id="kpdate" name="kpdate">
+            <input type="hidden" class="input-sm" id="lpmc" name="lpmc">
+            <table class=" popup-form-table" style="width:100%;">
+                <tbody>
+                    <tr>
+                        <td>
+                            <div>
+                                <div class="form-row">
+                                    <div class="form-cell-label">
+                                        <label class="w150 rtd txtright required">短信模板</label>
+                                    </div>
+                                    <div class="form-cell">
+                                        <select id="tpl" name="tpl" class="valid">
+                                            {% for item in sms_tpl.data %}
+                                                <option value="{{item.tid}}">{{item.name|default('')}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-cell-label">
+                                        <label class="w150 rtd txtright required">短信内容</label>
+                                    </div>
+                                    <div class="form-cell">
+                                        <textarea id="msg" name="msg" data-msg-required="短信内容不能为空" data-tpl="" aria-required="true" class="error" aria-invalid="true"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="tac p10">
+                <div>
+                    <button data-btn-sms="1" class="btn btn-sms">提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+        
+    <script type="text/javascript">
+        seajs.use(['jqmodal', 'validate', 'manage'], function(a, b, manage) {
+            var $modal = $('#send-sms');
+            // 表单验证
+            // $modal.validate();
+            $('.btn-jqModal').click(function (e) {
+                var $chked
+
+                $chked = $('.right-table').find('.chked');
+
+                var $sendsms = $('#send-sms');
+
+                $sendsms.find('form')[0].reset();
+
+                if ($chked.length > 0) {
+                    $sendsms.find('#tel').val(manage.getListData('tel'));
+                    $sendsms.find('#dj').val(manage.getListData('dj'));
+                    $sendsms.find('#kpdate').val(manage.getListData('kpdate'));
+                    $sendsms.find('#lpmc').val(manage.getListData('lpmc'));
+                } else {
+                    $.jqModal.tip('请选择发送人');
+                    return false;
+                };
+            });
+
+            $('[data-btn-sms="1"]')
+                .off('click')
+                .on('click', function() {
+                    var $this = $(this);
+                    var $thisForm = $(this.form);
+                    var $msg = $thisForm.find("#msg");
+                    if (!$.trim($msg.val())) {
+                        $.jqModal.tip($msg.data('msg-required'));
+                        return false;
+                    };
+                    $.ajax({
+                        url: $(this.form).attr('action'),
+                        type: 'POST',
+                        dataType: 'json',
+                        data: $thisForm.serializeArray(),
+                    })
+                    .done(function(res) {
+                        $modal.jqModal('hide');
+                    })
+                    .fail(function() {
+                        $.jqModal.tip('服务器错误！');
+                    })
+                    .always(function() {
+                    });
+                    return false;
+                    
+                })
+        })    
+    </script>
+    {% endif %}
+{% endblock tableMain %}
+
+
+{% block promptUl %}
+
+{% endblock %}
+
+
+
+

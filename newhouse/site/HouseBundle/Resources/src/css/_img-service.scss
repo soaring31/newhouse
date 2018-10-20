@@ -1,0 +1,26 @@
+$img-service-1:(19px, 19px, -123px, 0, img-service-1);
+$img-service-2:(19px, 19px, -123px, -29px, img-service-2);
+$img-service-3:(19px, 19px, -123px, -58px, img-service-3);
+$img-service-online:(113px, 131px, 0, 0, img-service-online);
+
+$img-service: ($img-service-1,$img-service-2,$img-service-3,$img-service-online);
+
+@mixin img-service($sprites) {
+  %icoservice {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/service.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+        @extend %icoservice;
+    }
+  }
+}

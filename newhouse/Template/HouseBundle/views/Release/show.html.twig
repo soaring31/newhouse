@@ -1,0 +1,68 @@
+{% extends 'HouseBundle::base.html.twig' %}
+{% set _form_id = app.request.get('_form_id') %}
+{% set form = _form_id|getForm %}
+
+{% block css %}
+    {{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/relform.css')}}
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        seajs.config({
+            preload: ['ueditor.conf', 'codemirror'], // 预加载项
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+{% set models = app.request.get('models') %}
+    <div class="container"> 
+        <div class="fmtype">
+            <a href="{{('release/show')|U({_form_id:171,models:"sale"})}}" {% if _form_id==171 %} class="on"{% endif %}>发布二手<i></i></a>
+            <a href="{{('release/show')|U({_form_id:157,models:"rent"})}}" {% if _form_id==157 %} class="on"{% endif %}>发布出租<i></i></a>
+            <a href="{{('release/show')|U({_form_id:119,models:"demand"})}}" {% if _form_id==119 %} class="on"{% endif %}>发布求购<i></i></a>
+            <a href="{{('release/show')|U({_form_id:120,models:"demand"})}}" {% if _form_id==120 %} class="on"{% endif %}>发布求租<i></i></a>
+            <a href="{{('release/show')|U({_form_id:172,models:"sale"})}}" {% if _form_id==172 %} class="on"{% endif %}>二手写字楼<i></i></a>
+            <a href="{{('release/show')|U({_form_id:173,models:"sale"})}}" {% if _form_id==173 %} class="on"{% endif %}>二手商铺<i></i></a>
+            <a href="{{('release/show')|U({_form_id:174,models:"rent"})}}" {% if _form_id==174 %} class="on"{% endif %}>出租写字楼<i></i></a>
+            <a href="{{('release/show')|U({_form_id:175,models:"rent"})}}" {% if _form_id==175 %} class="on"{% endif %}>出租商铺<i></i></a>
+            <a href="{{('release/show')|U({_form_id:249, models:"sale"})}}" {% if _form_id==320 and models == 'sale' %} class="on"{% endif %}>委托求租<i></i></a>
+            <a href="{{('release/show')|U({_form_id:249, models:"rent"})}}" {% if _form_id==320 and models == 'rent' %} class="on"{% endif %}>委托求购<i></i></a>
+        </div>
+        <div class="blank15"></div>
+        <div class="tag-son tag-form view-form  form ">
+            {% if form.children is defined %}
+                <form action="{{ form.vars.action }}"  class="jqvalidate">
+                    {% for v in form.children %}
+                        {% if v.vars.id == 'submit' %}
+                        {% else %}
+                            <table class=" popup-form-table" style="width:100%;" {{v.vars.block_prefixes[1]|default('') }}>
+                                <tbody>
+                                    <tr >
+                                        <td >
+                                            <div>
+                                                <div class="form-row">
+                                                    <div class="form-cell-label top-label">
+                                                        {{v.vars.label|trans({}) }}
+                                                    </div>
+                                                    <div class="form-errors"></div>
+                                                    <div class="form-cell top-level">
+                                                        {{ form_widget(v) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        {% endif %}
+                    {% endfor %}  
+                    <div class="popup-submit">
+                        {{ form.submit is defined?form_widget(form.submit):'' }}
+                    </div>                  
+                </form>
+            {% endif %}
+        </div>
+    </div>
+    <div class="blank10"></div>
+{% endblock %}

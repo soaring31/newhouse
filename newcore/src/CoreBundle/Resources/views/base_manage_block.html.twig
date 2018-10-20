@@ -1,0 +1,60 @@
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+{% import "CoreBundle:Macro:manage.html.twig" as core_manage %}
+{% block css %}{% endblock css %}
+{% set session_area = app.session.get('area') %}
+{% set pid = app.request.get('pid')|default('') %}
+{% block js %}{% endblock %}
+
+{% block mainleft %}
+    {{ core_manage.main_left({action: _action|default(action)}) }}
+{% endblock mainleft %}
+<script type="text/javascript">
+    var CSRF_TOKEN = csrf_token = '{{csrf_token}}';
+</script>
+<div class="main-through">
+    {% if pid is empty -%}
+    <section id="main-hd" class="main-hd" data-target=".main-bd">
+        {# <nav class="nav">
+            <i class="font-ico-local fz14"></i>
+            当前位置：{{navurl.data.name|default('')}}
+        </nav> -#}
+        <menu class="sub-menu">
+            {% block mainMenu %}
+            {% if navurl.childs is defined   %}
+            {% for item in navurl.childs if item.menu.checked|default('') == 1 %}
+            {% set purl = (item.menu.bundle~"/"~item.menu.controller~"/"~item.menu.action)|P() %}
+            {% if purl %}
+            {% set url = (item.menu.bundle~"/"~item.menu.controller~"/"~item.menu.action)|U(item.menu.urlparams) %}
+            {{ core_manage.jump({
+                url: url,
+                attr: {
+                    'data-route': item.menu.ename ? : item.menu.action
+                },
+                ico: item.menu.remark ? 'mr5 font-ico-' ~ item.menu.remark : '',
+                title: item.menu.name,
+                class: action == item.menu.action ? 'on' : '',
+            }) }}
+           {% endif %}
+
+            {% endfor %}
+            {% endif %}
+            {% endblock mainMenu %}
+        </menu>
+    </section>
+    {% endif %}
+    <section class="main-bd">
+    {% block tableMain %}{% endblock tableMain %}
+    <div class="prompt" data-prompt-list="1">
+        {% block prompt %}
+        <div class="prompt-inner">
+            <div class="promptTitle">{% block promptTitle %}提示说明{% endblock %}</div>
+            <div class="promptUl">
+                {% block promptUl %}{% endblock %}
+            </div>
+        </div>
+        {% endblock prompt %}
+    </div>
+    </section>
+</div>
+<!-- 块模板路径：{{ bundlename ~ '/Resources/views/' ~ controller ~ '/' ~ action ~ '.html.twig' }} -->
+

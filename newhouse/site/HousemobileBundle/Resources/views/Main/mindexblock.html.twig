@@ -1,0 +1,217 @@
+{% extends 'HousemobileBundle:Common:header.html.twig' %}
+{# 说明 
+ * user_data: 当前登录用户
+ * user_id: 当前登录用户id
+ * user_name: 当前登录用户名称
+ * user_image: 当前登录用户头像
+#}
+
+{% set user_data = app.user|default('') %}
+
+{% set user_id = user_data.id|default('') %}
+
+{% set user_name = user_data.userinfo.nicename|default(user_data.username|default('')) %}
+
+{% set user_image = user_data.userinfo.image|default('') %}
+
+{% block result %}
+<div class="content">
+    <div class="bg-gradient conact conact1" >
+        <div class="info1">
+            {% if user_image|default('') %}
+                <a class="external" href="{{('museraccount/muserinfo')|UU({_id: user_data.userinfo.id|default('')})}}">
+                    {{core_global.img({
+                        src: user_image|default(''),
+                        alt: user_name|default(''),
+                        attr: 'class=image-radius'
+                    })}}
+                </a>
+            {% else %}
+                <a class="external" href="javascript:;">
+                    <span class="icon font-f-5"></span>
+                </a>
+            {% endif %}
+        </div>
+        <div class="info2">
+            {% if user_id|default('') is empty %}
+                <a href="{{('house/login')|UU }}">请登录</a>
+            {% else %}
+                <a href="{{('museraccount/muserinfo')|UU({_id: user_data.userinfo.id|default('')})}}">{{user_name|default('')}} <span class="icon font-f-24" style="vertical-align: 0"></span></a>
+            {% endif %}
+            {# <a class="" href="个人资料.html">已经登录,个人资料</a> #}
+        </div>
+    </div>
+
+    <div class="list-block list-block-my">
+        <ul>
+            <li>
+                <a class="item-content item-link" href="javascript:;">
+                    <div class="item-media item-media-ex"> <i class="icon font-f-24"></i>
+                    </div>
+                    <div class="item-inner">
+                        <div class="item-title item-title-p0">发布房源</div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <div class="row no-gutter mains">
+                    <a href="{{ ('msalemanage/show')|UU({formflag: 'sale', models:'sale'}) }}" class="col-25">
+                        <i class="icon font-f-114 icon-cent"></i>
+                        二手房
+                    </a>
+                    <a href="{{ ('mrentmanage/show')|UU({formflag: 'rent', models:'rent'}) }}" class="col-25">
+                        <i class="icon font-f-115 icon-cent"></i>
+                        出租
+                    </a>
+                    <a href="{{ ('mdemandmanage/show')|UU({formflag: 'rdemand', models:'demand', category: 298}) }}" class="col-25">
+                        <i class="icon font-f-116 icon-cent"></i>
+                        求租
+                    </a>
+                    <a href="{{ ('mdemandmanage/show')|UU({formflag: 'sdemand', models:'demand', category: 297}) }}" class="col-25">
+                        <i class="icon font-f-117 icon-cent"></i>
+                        求购
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="list-block list-block-my">
+        <ul>
+            <li>
+                <a class="item-content item-link" href="javascript:;">
+                    <div class="item-media item-media-ex"> <i class="icon font-f-24"></i>
+                    </div>
+                    <div class="item-inner">
+                        <div class="item-title item-title-p0">我的发布</div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <div class="row no-gutter mains">
+                    <a href="{{('sale/list')|UU({uid: user_id|default('')})}}" class="col-25">
+                        <i class="icon font-f-25 icon-cent"></i>
+                        我的二手房
+                    </a>
+                    <a href="{{('rent/list')|UU({uid: user_id|default('')})}}" class="col-25">
+                        <i class="icon font-f-26 icon-cent"></i>
+                        我的出租
+                    </a>
+                    <a href="{{('demand/list')|UU({category: 298, uid: user_id|default('')})}}" class="col-25">
+                        <i class="icon font-f-27 icon-cent"></i>
+                        我的求租
+                    </a>
+                    <a href="{{('demand/list')|UU({category: 297, uid: user_id|default('')})}}" class="col-25">
+                        <i class="icon font-f-28 icon-cent"></i>
+                        我的求购
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="list-block list-block-my">
+        <ul>
+            <li>
+                <a class="item-content item-link" href="{{ ('musersell/muserselllist')|UU({uid: user_id|default('')}) }}">
+                    <div class="item-media item-media-ex"> <i class="icon font-f-56"></i>
+                    </div>
+                    <div class="item-inner">
+                        <div class="item-title item-title-p0">我的分销</div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <div class="row no-gutter mains">
+                    <a href="{{ ('muserbrokerage/muserbrokeragelist')|UU({uid: user_id|default('')}) }}" class="col-25">
+                        <i class="icon font-f-122 icon-cent"></i>
+                        佣金管理
+                    </a>
+                    <a href="{{ ('muserbrokerage/muserextract')|UU({uid: user_id|default('')}) }}" class="col-25">
+                        <i class="icon font-f-121 icon-cent"></i>
+                        提取佣金
+                    </a>
+                    <a href="{{ ('muserselllink/muserselllinklist')|UU({uid: user_id|default('')}) }}" class="col-25">
+                        <i class="icon font-f-120 icon-cent"></i>
+                        推广链接
+                    </a>
+                    {#  <a href="{{ ('muserbrokerage/musersubordinate')|UU({uid: user_id|default('')}) }}" class="col-25">
+                        <i class="icon font-f-119 icon-cent"></i>
+                        我的下级
+                    </a> #}
+                    <a href="{{ ('muserselllink/musersellsubordinate')|UU({uid: user_id|default('')}) }}" class="col-25">
+                        <i class="icon font-f-119"></i>
+                        我的下级
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="list-block list-block-my">
+        <ul>
+             <li>
+                <a class="item-content item-link open-popup" data-popup=".popup-pay" href="javascript:;">
+                    <div class="item-media item-media-ex bg-blue">
+                        <i class="icon font-f-122"></i>
+                    </div>
+                    <div class="item-inner">
+                        <div class="item-title item-title-p0">充值</div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="list-block list-block-my">
+        <ul>
+             <li>
+                <a class="item-content item-link" href="{{('muserhand/muserhandlist')|UU({models: 'houses',uid: user_id|default(''), _action: 'handlist'})}}">
+                    <div class="item-media item-media-ex bg-blue">
+                        <i class="icon font-f-27"></i>
+                    </div>
+                    <div class="item-inner">
+                        <div class="item-title item-title-p0">我的收藏</div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    {# <div class="list-block list-block-my">
+        <ul>        
+            <li>
+                <div class="item-content remove-local">
+                    <div class="item-media item-media-ex">
+                        <i class="icon font-f-37"></i>
+                    </div>
+                    <div class="item-inner">
+                        <div class="item-title item-title-p0">清除缓存</div>
+                    </div>
+                </div>
+            </li>
+             
+        </ul>
+    </div> #}
+    
+    {% if user_data %}
+        <div class="content-block">
+            <div class="col-100">
+                <a class="button button-big button-fill" {% if url_isApp %}data-logout="1"{% endif %} href="{{ ('house/logout')|U }}" >退出登录</a>
+            </div>
+        </div>
+    {% endif %}
+
+</div>
+
+
+<script type="text/javascript">
+    // seajs.use(['utils', 'sm'], function (utils, sm) {
+    //     $('.remove-local').click(function () {
+    //         utils.localStorage.removeItem(/app_/);
+    //         $.alert('清除成功！')
+    //         return false;
+    //     })
+    // })
+    
+</script>
+{% endblock result %}

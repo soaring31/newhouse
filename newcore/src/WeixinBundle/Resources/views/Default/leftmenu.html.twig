@@ -1,0 +1,13 @@
+{% if menus is defined %}
+	{% for item in menus %}
+		{% if item.nodes is defined %}
+			<h4>{{item.menu.name}}</h4>
+			<ul>
+			{% for vo in item.nodes %}
+			    {% set url = (vo.menu.bundle~'/'~vo.menu.controller~'/'~vo.menu.action)|U %}
+				<li data="{{ url }}" title="{{ url }}"><a href="javascript:void(0);">{{vo.menu.name}}</a></li>
+			{% endfor %}
+			</ul>
+		{% endif %}
+	{% endfor %}
+{% endif %}

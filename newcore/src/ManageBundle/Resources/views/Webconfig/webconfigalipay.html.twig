@@ -1,0 +1,50 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+seajs.use("{{bundlepath}}/js/webconfig.js",function(main){
+	main.init('cfalipay');
+});
+</script>
+{% endblock %}
+{% block tableMain %}
+<form class="form" action="{{ (action)|U }}" method="post" name="form">
+<table class="right-table">
+	<tr>
+		<th colspan="2" class="conlist">在线支付设置</th>
+	</tr>
+	<tr>
+		<td class="w300 txtright fB pright10">支付方式</td>
+		<td>
+			<div><input type="radio" name="pay_type" {{ 'pay_type'|C|isChecked('alipay') }} value="alipay" /><label>支付宝</label></div>
+			<div><input type="radio" name="pay_type" {{ 'pay_type'|C|isChecked('tenpay') }} value="tenpay" /><label>财付通</label></div>
+		</td>
+	</tr>
+	<tr id="tenpay_bucket" class="{{ 'pay_type'|C=='alipay'?'hide':'' }}">
+		<td class="txtright fB pright10">财付通partnerId</td>
+		<td><input class="w250" type="text" name="tenpay_partnerid" value="{{ 'tenpay_partnerid'|C  }}" /></td>
+	</tr>
+	<tr id="tenpay_secret" class="{{ 'pay_type'|C=='alipay'?'hide':'' }}">
+		<td class="txtright fB pright10">财付通partnerKey</td>
+		<td><input class="w250" type="text" name="tenpay_partnerkey" value="{{ 'tenpay_partnerkey'|C  }}" /></td>
+	</tr>
+	<tr id="alipay_username" class="{{ 'pay_type'|C=='tenpay'?'hide':'' }}">
+		<td class="txtright fB pright10">支付宝帐号</td>
+		<td><input class="w250" type="text" name="alipay_name" value="{{ 'alipay_name'|C  }}" /></td>
+	</tr>
+	<tr id="alipay_password" class="{{ 'pay_type'|C=='tenpay'?'hide':'' }}">
+		<td class="txtright fB pright10">支付宝PID</td>
+		<td><input class="w250" type="text" name="alipay_pid" value="{{ 'alipay_pid'|C  }}" /></td>
+	</tr>
+	<tr id="alipay_domainname" class="{{ 'pay_type'|C=='tenpay'?'hide':'' }}">
+		<td class="txtright fB pright10">支付宝KEY</td>
+		<td><input class="w250" type="text" name="alipay_key" value="{{ 'alipay_key'|C  }}" /></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td><input class="submit-btn ajax-post confirm" target-form="form" value="保 存" type="submit"></td>
+	</tr>
+</table>
+</form>
+{% endblock %}
+{% block submit %}{% endblock %}
+{% block promptUl %}<li></li>{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "CoreBundle::base.html.twig" %} 
+{% block css %}
+<link rel="stylesheet" href="{{ asset("bundles/core/css/core.css") }}" />
+<link rel="stylesheet" href="{{ asset("bundles/manage/css/login.css") }}" />
+	{# {{core_global.linkcss('bundles/' ~ bundlepath ~ 'bundles/manage/css/login.css')}} #}
+{% endblock css %} 
+
+{% block body %}
+<div id='loginBody'>
+	<div id="loginBezel">
+		<div id="loginChildTop">
+			<img src="{{ asset("bundles/manage/images/logo-right.png") }}"
+				width="57" height="50" align="absbottom" /> {{ ("site_name")|C }}管理平台
+		</div>
+		<form action="{{ action|U }}" method="post" class="loginform view-form">
+		<div id="loginChildBottom">
+			<table width="100%" height="95%">
+				    {% for k,v in form.children if k != "csrf_token" and k != "submit" %}
+					<tr {{v.vars.block_prefixes[1]|default("") }}>
+						<td align="right">{{v.vars.label|trans({}) }}：</td>
+						<td align="left" width="65%">{{ form_widget(v) }}</td>
+					</tr>
+					{% endfor %}
+					{# <tr>
+						<td align="right">验证码：</td>
+						<td align="left">
+						    <input type="text" id="codeText" name="codeText" />&nbsp;
+						    <span id="checkNumResult">
+						        <img id='codeImg' src="{{ path(bundlepath~"_captcha") }}" data-src="{{ path(bundlepath~"_captcha") }}" align="absbottom" alt="验证码" title="点击更换验证码" />
+						    </span>
+						</td>
+					</tr> #}
+					<tr>
+						<td align="center" colspan="2">
+						    {# {{ form_rest(form) }} #}
+						    <input type="checkbox" name="rememberMe" /><span class="rememberMe">记住<span>
+						    <input data-role="submit" type="submit" value="登　录" id="loginBtn" target-form="loginform" class="ajax-post" />
+						</td>
+					</tr>
+			</table>
+		</div>
+		</form>
+	</div>
+</div>
+{% endblock %}
+
+{% block footer %}
+	
+{% endblock footer %}

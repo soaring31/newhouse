@@ -1,0 +1,1413 @@
+{% extends 'HouseBundle::base.html.twig' %}
+{# 说明
+* indexnewsmodule: 资讯模块是否显示
+* sydt: 商业动态(商业地产右侧)
+* nav_act: 导航高亮
+* jdt: 轮播图(全屏广告)
+* nav_data: 快速链接
+* houseindexhdp: 资讯左侧幻灯片
+* zxtj1: 资讯推荐1
+* toutiao: 头条
+* zxtj2: 头条底下推荐
+* jxzt: 专题精选
+* thzq: 特惠专区
+* mxlp: 明星楼盘
+* rxlp: 热销楼盘
+* kft: 看房团已报名
+* index_xftg: 新房团购
+* index_kft: 看房团
+* index_tejiafang: 特价房
+* index_zhuanyongjin:赚佣金
+* fczx: 房产资讯(特惠楼盘右侧)
+* cate_pushs_fczx: 房产资讯名称
+* index_dazheyouhui: 打折优惠
+* index_xhxtz: 小户型投资
+* index_jiaoyudichan: 教育地产
+* index_lvyoudichan: 旅游地产
+* index_yijishengtai: 宜居生态
+* index_dimijisuo: 低密居所
+* index_gydc: 公园地产
+* zxkp: 最新开盘
+* rqlp: 人气楼盘
+* adxptjy: 广告轮播转换(新盘推荐右侧)
+#}
+{# 导航高亮 #}
+
+
+{% block key_des %}
+<meta name="keywords" content="{{ core_global.mconfig({name: 'cmskeyword', ename: 'mwebset'}) }}" />
+<meta name="description" content="{{ core_global.mconfig({name: 'cmsdescription', ename: 'mwebset'}) }}" />
+{% endblock key_des %}
+
+{% block default_title %}
+    {{- core_global.mconfig({name: 'cmstitle', ename: 'mwebset'}) -}}
+{% endblock default_title %}
+{% block header %}
+    {% include default_themes ~ ':Index:headerblock.html.twig' %}
+{% endblock header %}
+{% block css %}
+{{core_global.linkcss('static/' ~ bundlepath ~ '/css/index.css')}}
+{% endblock css %}
+{# 当前分站id #}
+{% set sess_area = app.session.get('area')|default(0) %}
+{% set City_id = ('db.auth_group_area')|getOne('id',{rulesarea:sess_area}) %}
+{% set cYCity_id = 100+City_id %}
+
+{% block body %}
+    {#
+       *******
+       新房定义变量
+       *******
+    #}
+    {% set t_ad = ('ad_xfsb_280_558,ad_xfhb_580_288,ad_xfzxxf_300_81,ad_zgzxyx_300_81')|getPushMuti(1) %}
+    {% set t_ad1= ('ad_lsjj_580_286,ad_zgzx_580_266')|getPushMuti() %}
+    {% set t_zgzx= ('zhugezixun')|getPushMuti(2) %}
+    {% set t_rhzx = ('zg_rhzx')|getPush(11) %}
+    {# % set t_xf = ('index_house_tj')|getPushMuti(2) % #}
+    {% set t_tj = ('jj_lptj,thzq')|getPushMuti(4) %}
+    {#  热销楼盘_278*380、品牌楼盘_278*380、新房上方通栏广告_1200*188、诸葛资讯_580*266、24小时降价房源广告_300*180 、焦点图_1920*600、新房下方广告_1200*88,资讯下方通栏广告_1200*88、降价房源下方通栏广告_1200*88、楼市聚焦下方通栏广告_1200*88#}
+    {% set indexads = ('ad_rxlp_270_380,ad_bt_278_380,ad_xfsftl_1200_188,ad_zgzx_580_266,ad_24xsjjfy_300_180,ad_jdt_1920_600,ad_xxxf_1200_88,ad_zxxftl_1200_88,ad_jjfyxftl_1200_88,ad_lsjjxftl_1200_88,ad_bt_1000_530')|getPushMuti(5,{area:cityid,checked:1}) %}
+    {% set jdt = indexads['ad_jdt_1920_600']|default({}) %}
+
+    <div id="slider-wrap" class="slider-wrap" data-tag="jdt">
+        <div class="jqDuang ma" data-duang="1" data-nextbtn=".next-btn" data-prevbtn=".prev-btn" data-cell=".small-btn" data-obj=".slider">
+            <div class="slider-content">
+
+                <!-- AdSame ShowCode: PC / 首页 / 全景视窗1 Begin -->
+                <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101102" }}" charset="gbk" ></script>
+                <!-- AdSame ShowCode: PC / 首页 / 全景视窗1 End -->
+
+                <!-- AdSame ShowCode: PC / 首页 / 全景视窗2 Begin -->
+                <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101103" }}" charset="gbk" ></script>
+                <!-- AdSame ShowCode: PC / 首页 / 全景视窗2 End -->
+
+                <!-- AdSame ShowCode: PC / 首页 / 全景视窗3 Begin -->
+                <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101104" }}" charset="gbk" ></script>
+                <!-- AdSame ShowCode: PC / 首页 / 全景视窗3 End -->
+
+                {#
+                {% if jdt|length > 0 %}
+                    {% for item in jdt %}
+                    <div class="slider house-ad right-top">
+                        <a href="{{item.url|default('')}}" style="background: url({{ core_global.img_url({
+                                height: 600,
+                                src: item.thumb,
+                                type: 0
+                            }) }}) center center no-repeat;background-size:cover;" target="_blank">
+                            {% if item.ad|default('') %}
+                                <div class="ad-txt"></div>
+                            {% endif %}
+                        </a>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="slider house-ad right-top">
+                        <a href="/" style="background: url({{asset('static/'~bundlepath~'/images/base/loginbg.png')}}) center center no-repeat;background-size:cover;" target="_blank">
+                            {% if item.ad|default('') %}
+                                <div class="ad-txt"></div>
+                            {% endif %}
+                        </a>
+                    </div>
+                {% endif %}
+                #}
+            </div>
+            <div class="small-btn"></div>
+            <div class="prev-btn">
+                <i class="font-ico-arwl"></i>
+            </div>
+            <div class="next-btn">
+                <i class="font-ico-arwr"></i>
+            </div>
+        </div>
+        {#品牌词#}
+        {#<div class="logo-p">
+            <i></i>
+             <p class="">诸葛找房 </br>只讲真话的房产搜索</p>
+        </div>#}
+        <!-- 表单 -->
+        <div class="search_wrap">
+            <div class="search-list-box">
+                <ul class="select_list">
+                    <li class="select-li hover j_isOpenNewhouse" house_type="3">
+                        <p>新房</p>
+                        <i class="triangle"></i>
+                    </li>
+                    <li  house_type="1" class="select-li j_isOpenHouse">
+                        <p>二手房</p>
+                        <i class="triangle"></i>
+                    </li>
+                    <li house_type="2" class="select-li j_isOpenRent">
+                        <p>租房</p>
+                        <i class="triangle"></i>
+                    </li>
+                    <!-- <li house_type="4">
+                        <p>找小区</p>
+                        <i class="triangle"></i>
+                    </li> -->
+                    <li>
+                        <p><a href="/news" target="_blank">资讯</a></p>
+                        <i class="triangle"></i>
+                    </li>
+                </ul>
+            </div>
+            <div class="input_search_box index-search-txt">
+                <div class="input_box">
+                    <input type="text" placeholder="请输入楼盘／商圈／地铁" class="input_text" id="searchTxt">
+                    <input type="button" value="开始搜索" class="search_btn" id="searchBtn">
+                </div>
+                <div class="select_box" id="autoSearchList">
+                </div>
+            </div>
+        </div>
+        <a class="toAboutsfd" href="/houses/aboutsfd">《诸葛找房关于仿冒我公司进行不正当竞争行为的郑重声明》</a>
+
+        <!-- /表单 -->
+    </div>
+
+    <!-- container -->
+    <div class="index_content content_1200">
+    <!-- 首页热销新盘,降价二手房选项卡 -->
+    <div class="indextab j_tabConter j_isOpenNewhouse">
+        <ul class="indextab-selection j_indextabSelection">
+
+            <li class="active">热销新盘</li>
+            <li>品牌楼盘</li>
+            <li class="rightli">24小时降价二手房</li>
+        </ul>
+        <ul class="indextab-list j_indextabList">
+            <li class="indextab-item listhot activeList  j_indextabItem">
+                <!-- 热销楼盘 -->
+                <ol>
+                    <!-- AdSame ShowCode: PC / 首页 / 黄金眼1 Begin -->
+                    <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101119" }}" charset="gbk" ></script>
+                    <!-- AdSame ShowCode: PC / 首页 / 黄金眼1 End -->
+                    <!-- AdSame ShowCode: PC / 首页 / 黄金眼2 Begin -->
+                    <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101120" }}" charset="gbk" ></script>
+                    <!-- AdSame ShowCode: PC / 首页 / 黄金眼2 End -->
+                    <!-- AdSame ShowCode: PC / 首页 / 黄金眼3 Begin -->
+                    <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101121" }}" charset="gbk" ></script>
+                    <!-- AdSame ShowCode: PC / 首页 / 黄金眼3 End -->
+
+                </ol>
+            </li>
+            {#
+            {% if  indexads['ad_rxlp_270_380'] and  indexads['ad_rxlp_270_380']|length > 0 %}
+            <li class="indextab-item listhot activeList  j_indextabItem">
+                <!-- 热销楼盘 -->
+                <ol>
+                   {% for key,item in indexads['ad_rxlp_270_380'] %}
+                        {% if item.checked == 1 %}
+                           <li class="{% if key == 2  %}nomar{% endif %}" style="background:url({{asset(item.thumb|default(''))}});background-position:center center;background-size:cover;">
+                                <a href="{{item.url|default('')}}" target="_blank">
+                                    <div class="bottom">
+                                        <h1>{{item.name|default('')}}</h1>
+                                        <p>{{item.subname|default('')}}</p>
+                                    </div>
+                                </a>
+                            </li>
+                        {% endif %}
+                   {% endfor %}
+                </ol>
+            </li>
+            {% endif %}
+            #}
+            <li class="indextab-item listbrand j_indextabItem">
+                <!-- 品牌楼盘 -->
+                <ol>
+                    <!-- AdSame ShowCode: PC / 首页 / 黄金眼4 Begin -->
+                    <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101122" }}" charset="gbk" ></script>
+                    <!-- AdSame ShowCode: PC / 首页 / 黄金眼4 End -->
+                    <!-- AdSame ShowCode: PC / 首页 / 黄金眼5 Begin -->
+                    <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101123" }}" charset="gbk" ></script>
+                    <!-- AdSame ShowCode: PC / 首页 / 黄金眼5 End -->
+                    <!-- AdSame ShowCode: PC / 首页 / 黄金眼6 Begin -->
+                    <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101124" }}" charset="gbk" ></script>
+                    <!-- AdSame ShowCode: PC / 首页 / 黄金眼6 End -->
+                </ol>
+            </li>
+            {#
+            {% if indexads['ad_bt_278_380'] and indexads['ad_bt_278_380']|length > 0  %}
+            <li class="indextab-item listbrand j_indextabItem">
+                <!-- 品牌楼盘 -->
+                <ol>
+                    {% for key,item in indexads['ad_bt_278_380'] %}
+                        {% if item.checked == 1 %}
+                           <li class="{% if key == 2  %}nomar{% endif %}" style="background:url({{asset(item.thumb|default(''))}});background-position:center center;background-size:cover;">
+                                <a href="{{item.url|default('')}}" target="_blank">
+                                    <div class="bottom">
+                                        <h1>{{item.name|default('')}}</h1>
+                                        <p>{{item.subname|default('')}}</p>
+                                    </div>
+                                </a>
+                            </li>
+                        {% endif %}
+                   {% endfor %}
+                </ol>
+            </li>
+            {% endif %}
+            #}
+            <li class="indextab-item listhot listlower  j_indextabItem">
+                <ul class="price-ul">
+
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <!-- AdSame ShowCode: PC / 首页 / 通栏 Begin -->
+    <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101106" }}" charset="gbk" ></script>
+    <!-- AdSame ShowCode: PC / 首页 / 通栏 End -->
+    {#
+    {% if indexads['ad_xfsftl_1200_188'] and  indexads['ad_xfsftl_1200_188']|length > 0 %}  <!-- 中部广告 -->
+        {% for key,item in indexads['ad_xfsftl_1200_188'] %}
+            {% if item.checked == 1 and  key == 0 %}
+            <div class="midad">
+                <a href="{{item.url}}" target="_blank">
+                    <img src="{{asset(item.thumb)}}" alt="" class="midad-pic">
+                </a>
+            </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    #}
+    <!-- 热门楼盘 -->
+    <div class="j_isOpenNewhouse">
+        <div class="section-box">
+            <div class="section-top">
+                <h5 class="section-title">新房</h5>
+                <div class="section-italine">
+                    <div class="line"></div>
+                </div>
+                <ul class="section-ul">
+                    <li><a href="/news/list/317" target="_blank" class="homepage_newhouse_dtzx">动态资讯</a></li>
+                    <li class="interval"></li>
+                    <li><a href="/houses/prices" target="_blank" class="homepage_newhouse_fjzs">房价走势</a></li>
+                    <li class="interval"></li>
+                    <li><a href="/xinfang" target="_blank" class="homepage_newhouse_gdxp">更多新盘 &gt;</a></li>
+                    <!-- <li class="interval"></li>
+                    <li><a href="" target="_blank">视频专区 &gt;</a></li> -->
+                </ul>
+                <div class="section-line"></div>
+            </div>
+        </div>
+        <div class="hotbuild section-box">
+            <!-- 左侧广告 -->
+            <div class="hotbuild-leftBanner">
+                <!-- AdSame ShowCode: PC / 首页 / 立式1 Begin -->
+                <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101105" }}" charset="gbk" ></script>
+                <!-- AdSame ShowCode: PC / 首页 / 立式1 End -->
+            </div>
+            {#
+            {% if t_ad.ad_xfsb_280_558[0]|default %}
+            <div class="hotbuild-leftBanner">
+                <a href="{{ t_ad.ad_xfsb_280_558[0].url|default }}" target="_blank">
+                    <img src="{{ asset(t_ad.ad_xfsb_280_558[0].thumb|default) }}" alt="{{ t_ad.ad_xfsb_280_558[0].name|default }}" class="leftBanner-pic">
+                </a>
+            </div>
+            {% endif %}
+            #}
+            <!-- 中部广告+楼盘展示 -->
+            <div class="hotbuild-mid">
+                <div class="picshow">
+                    <div class="picshow-top">
+                        <!-- AdSame ShowCode: PC / 首页 / 聚焦视窗 Begin -->
+                        <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101131" }}" charset="gbk" ></script>
+                        <!-- AdSame ShowCode: PC / 首页 / 聚焦视窗 End -->
+                        {#
+                        <a href="{{ t_ad.ad_xfhb_580_288[0].url|default }}" class="picshow-a" target="_blank">
+                            <img src="{{ asset(t_ad.ad_xfhb_580_288[0].thumb|default) }}" alt="{{ t_ad.ad_xfhb_580_288[0].name|default }}" class="picshow-pic">
+                        </a>
+                        #}
+                    </div>
+                </div>
+                <ul class="buildshow">
+
+                    <!-- AdSame ShowCode: PC / 首页 / 新品橱窗1 Begin -->
+                    <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101125" }}" charset="gbk" ></script>
+                    <!-- AdSame ShowCode: PC / 首页 / 新品橱窗1 End -->
+                    <!-- AdSame ShowCode: PC / 首页 / 新品橱窗2 Begin -->
+                    <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101126" }}" charset="gbk" ></script>
+                    <!-- AdSame ShowCode: PC / 首页 / 新品橱窗2 End -->
+
+                    {#
+                    {% for i in t_xf['index_house_tj'] %}
+                    <li {% if loop.index==2 %}class="nomar"{% endif %}>
+                        <a href="{{'/xinfang/detail/'~i.fromid~'.html'}}" target="_blank">
+                            <div class="buildshow-pic" style="background:url({{ i.thumb }}) center center;"></div>
+                        </a>
+                        <a href="{{'/xinfang/detail/'~i.fromid~'.html'}}" target="_blank">
+                            <div class="buildshow-intro">
+                                <div class="intro1">
+                                    <h3>{{ i.name }}
+                                        {% if i.region and i.region != 0 %}
+                                        【{{core_global.region({id: i.region|default('')})}}】
+                                        {% endif %}
+                                    </h3>
+                                    <p><span>{{house_global.if_dj({value: i.dj|default(''), tpl: '%value%%danwei%'})}}</span></p>
+                                </div>
+                                <span class="intro2 text-over">
+                                    {% if i.content and i.content != '0' %}
+                                    {{ i.content }}
+                                    {% else %}
+                                    {{ i.address }}
+                                    {% endif %}
+
+                                </span>
+                            </div>
+                        </a>
+                    </li>
+                    {% endfor %}
+                    #}
+                </ul>
+            </div>
+            <!-- 右侧测评 -->
+            {% set fczx = ('fczx')|getPush(11) %}
+            {% set cate_pushs_fczx = ('house.cate_pushs')|getRow({ename: 'fczx'}) %}
+            <div class="hotbuild-right">
+                <div class="evaluation">
+                    <ul>
+                        {% if fczx is defined %}
+                            {% for key,item in fczx %}
+                                {% if item.category is defined %}
+                                    {% set fczxcate1 = item.category|getCategoryById() %}
+                                    {% if loop.index==1 %}
+                                        <li class="frist-li">
+                                            <a href="{{item.url}}" title="{{item.name|trans}}" target="_blank" class="til homepage_newhouse_list_1">{{item.name|trans}}</a>
+                                        </li>
+                                    {% else %}
+                                        {% if loop.index!=7 %}
+                                            <li class="item">
+                                                <p class="item-til item-til-dif">
+                                                    {#{% if  fczxcate1 and fczxcate1.name  %}
+                                                        <a class="til-icon homepage_newhouse_list_{{loop.index}}" href="{{('news/list')|U({category: fczxcate1.id|default('')})}}" title="{{fczxcate1.name|default('')|trans}}" target="_blank">{{fczxcate1.name|default('')|trans}}</a>
+                                                    {% endif %}
+                                                    #}
+                                                    
+                                                    <a href="{{item.url}}" title="{{item.name|trans}}" target="_blank" class="title homepage_newhouse_list_{{loop.index}}" style="width:300px;">{{item.name|trans}}</a>
+                                                </p>
+                                                {% if loop.index==2 and item.abstract is defined  %}
+                                                <p class="item-content"><a href="{{item.url}}" class="homepage_newhouse_list_{{loop.index}}">{{ item.abstract }}</a></p>
+                                                <p class="line"></p>
+                                                {% endif %}
+                                            </li>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                                {% if loop.index==7 %}
+                                        </ul>
+                                    </div>
+                                    <div class="evaluation">
+                                        <ul>
+                                            <li>
+                                                <a href="{{item.url}}" title="{{item.name|trans}}" target="_blank" class="til homepage_newhouse_list_{{loop.index}}">{{item.name|trans}}</a>
+                                            </li>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+                <a class="free" href="/download" target="_blank">
+                    <span class="icon iconfont icon-kehuduan"></span>
+                    <span class="free-text">下载诸葛找房APP</span>
+                    <button class="btn homepage_newhouse_ljxz">立即下载</button>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="ads-img-div ad_xxxf_1200_88">
+        <ul class="ads-ul">
+        <!-- AdSame ShowCode: PC / 首页 / 旗帜1 Begin -->
+        <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101107" }}" charset="gbk" ></script>
+        <!-- AdSame ShowCode: PC / 首页 / 旗帜1 End -->
+        <!-- AdSame ShowCode: PC / 首页 / 旗帜2 Begin -->
+        <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101108" }}" charset="gbk" ></script>
+        <!-- AdSame ShowCode: PC / 首页 / 旗帜2 End -->
+        <!-- AdSame ShowCode: PC / 首页 / 旗帜3 Begin -->
+        <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101109" }}" charset="gbk" ></script>
+        </ul>
+    </div>
+    <!-- AdSame ShowCode: PC / 首页 / 旗帜3 End -->
+    {#
+    {% if indexads['ad_xxxf_1200_88'] and  indexads['ad_xxxf_1200_88']|length > 0 %}
+    <!-- 新房底部广告位 开始 -->
+    <div class="ads-img-div ad_xxxf_1200_88">
+        <ul class="ads-ul">
+            {% for item in indexads['ad_xxxf_1200_88'] %}
+            {% if item.checked == 1 %}
+                <li><a href="{{item.url}}" target="_blank"><img src="{{asset(item.thumb)}}"></a></li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    <!-- 新房底部广告位 结束 -->
+    {% endif %}
+    #}
+
+    <!-- 楼市聚焦 开始 -->
+    <div class="section-box hot-lp j_isOpenNewhouse">
+        <div class="section-top">
+            <h5 class="section-title">楼市聚焦</h5>
+            <div class="section-italine">
+                <div class="line"></div>
+            </div>
+            <ul class="section-ul">
+                <li><a href="/special/list" target="_blank" class="homepage_lsjj_yhlp">优惠楼盘 </a></li>
+                <li class="interval"></li>
+                <li><a href="/xinfang?order=kpdate%7Cdesc" target="_blank" class="homepage_lsjj_zxlp">最新楼盘 </a></li>
+                <li class="interval"></li>
+                <li><a href="/xinfang" target="_blank" class="homepage_lsjj_gdlp">更多楼盘 &gt;</a></li>
+            </ul>
+            <div class="section-line"></div>
+        </div>
+        <div class="section-content">
+            <div class="section-cleft">
+                <ul class="lp-ul">
+                    <li class="lp-adv">
+                        <div class="ad-banner loushi-focus ads-jujiao">
+                            <div class="ad-carousel">
+                            <ul class="ad-carousel-image">
+                                <!-- AdSame ShowCode: PC / 首页 / 楼市聚焦1 Begin -->
+                                <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101132" }}" charset="gbk" ></script>
+                                <!-- AdSame ShowCode: PC / 首页 / 楼市聚焦1 End -->
+
+                                <!-- AdSame ShowCode: PC / 首页 / 楼市聚焦2 Begin -->
+                                <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101133" }}" charset="gbk" ></script>
+                                <!-- AdSame ShowCode: PC / 首页 / 楼市聚焦2 End -->
+                                <!-- AdSame ShowCode: PC / 首页 / 楼市聚焦3 Begin -->
+                                <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101134" }}" charset="gbk" ></script>
+                                <!-- AdSame ShowCode: PC / 首页 / 楼市聚焦3 End -->
+                            </ul>
+                                {#
+                            {% if t_ad1['ad_lsjj_580_286'] and t_ad1['ad_lsjj_580_286']|length > 0  %}
+                              <ul class="ad-carousel-image">
+                                {% for item in t_ad1['ad_lsjj_580_286'] %}
+                                <li><a href="{{item.url}}"  target="_blank"><img src="{{asset(item.thumb)}}" alt="{{ item.name }}" ></a><p>{{ item.name }}</p></li>
+                                {% endfor %}
+                            {% endif %}
+                              </ul>
+                            #}
+                              <!--轮播底部栏目-->
+
+                              <div class="ad-carousel-bottom">
+
+                                <ol class="ad-carousel-index">
+
+                                </ol>
+
+                              </div>
+
+                            </div>
+
+                          </div>
+
+                    </li>
+                    <!-- AdSame ShowCode: PC / 首页 / 特惠橱窗1 Begin -->
+                    <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101127" }}" charset="gbk" ></script>
+                    <!-- AdSame ShowCode: PC / 首页 / 特惠橱窗1 End -->
+
+
+                    <!-- AdSame ShowCode: PC / 首页 / 特惠橱窗2 Begin -->
+                    <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101128" }}" charset="gbk" ></script>
+                    <!-- AdSame ShowCode: PC / 首页 / 特惠橱窗2 End -->
+
+                    <!-- AdSame ShowCode: PC / 首页 / 特惠橱窗3 Begin -->
+                    <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101129" }}" charset="gbk" ></script>
+                    <!-- AdSame ShowCode: PC / 首页 / 特惠橱窗3 End -->
+                    <!-- AdSame ShowCode: PC / 首页 / 特惠橱窗4 Begin -->
+                    <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101130" }}" charset="gbk" ></script>
+                    <!-- AdSame ShowCode: PC / 首页 / 特惠橱窗4 End -->
+                    {#
+                    {% if t_tj['jj_lptj'] and t_tj['jj_lptj']|length > 0  %}
+                    {% for i in t_tj['jj_lptj'] %}
+                    <li class="{% if loop.index!=2 %}ml-20{% endif %} {% if loop.index!=1 %}mt-20 list-240{% endif %}">
+                        <a href="{{'/xinfang/detail/'~i.fromid~'.html'}}" target="_blank">
+                        <p class="img-box" style="background:url({{ i.thumb }}) center center;background-size: cover;"></p>
+                        <div class="lp-titlt">
+                            <p class="lp-area">
+                                {% if i.region and i.region != 0 %}
+                                [{{core_global.region({id: i.region|default('')})}}]
+                                {% endif %}
+                            {{ i.name }}</p>
+                            <p class="lp-price">{{house_global.if_dj({value: i.dj|default(''), tpl: '%value%%danwei%'})}}</p>
+                        </div>
+                        <p class="lp-addr text-over">{{ i.address }}</p>
+                        {% if i.content %}
+                            <p class="lp-advs text-over">{{ i.content|striptags }}</p>
+                        {% endif %}
+                        </a>
+                    </li>
+                    {% endfor %}
+                    {% endif %}
+                    #}
+                </ul>
+            </div>
+            <div class="section-cright">
+                <div class="top-div">
+                    <i class="tip"></i>
+                    <p class="hot-title">热销楼盘</p>
+                    {% if t_tj['thzq'] and t_tj['thzq']|length > 0 %}
+                        {% for i in t_tj['thzq'] %}
+                        <div class="hot-cont">
+                            <a href="{{'/xinfang/detail/'~i.fromid~'.html'}}" target="_blank" class="homepage_lsjj_rxlp_{{loop.index}}">
+                                <p class="text-over">{{ i.name }}</p>
+                                <span>{{house_global.if_dj({value: i.dj|default(''), tpl: '%value%%danwei%'})}}</span>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="hot-cont">暂无数据</div>
+                    {% endif %}
+                </div>
+                <div class="lp-scroll" style="{% if t_tj['thzq'] %}height:360px;{% else %}height:520px;{% endif %}">
+                    <ul class="hot-list">
+                        {% set last = ("now")|date_modify('-5 months')|date('Y-m-d') %}
+                        {% set next = ("now")|date_modify('+5 months')|date('Y-m-d') %}
+                        {% set last_all = ('house.houses')|getAll({kpdate:"between|"~"'"~last~"'"~","~"'"~next~"'",pageSize:20}) %}
+                        {% if last_all and last_all.data and last_all.data|length > 0 %}
+                        {% set d=last_all.data[0].kpdate|date('Y年m月d日') %}
+                        {% for i in last_all.data %}
+                            {% set d1=i.kpdate|date('Y年m月d日') %}
+                                {% if loop.index==1 %}
+                                    <li class="padding-li">
+                                    <i class="tip"></i>
+                                    <p class="hot-time">
+                                        {{ i.kpdate|date('m月d日') }}
+                                    </p>
+                                    </li>
+                                    <li>
+                                {% endif %}
+                                {% if loop.index>1 %}
+                                    {% if d!=d1 %}
+                                        {% set d=last_all.data[loop.index0].kpdate|date('Y年m月d日')  %}
+                                        <li class="padding-li">
+                                        <i class="tip"></i>
+                                        <p class="hot-time">
+                                            {{ i.kpdate|date('m月d日') }}
+                                        </p>
+                                        </li>
+                                    {% else %}
+                                    <li>
+                                    {% endif %}
+                                {% endif %}
+                                <div class="hot-cont">
+                                    <a href="{{'/xinfang/detail/'~i.id~'.html'}}" target="_blank" class="homepage_lsjj_rxlp_list_{{loop.index}}">
+                                    <p>{{ i.name }}</p>
+                                    <span>{{house_global.if_dj({value: i.dj|default(''), tpl: '%value%%danwei%'})}}</span>
+                                    </a>
+                                </div>
+                            </li>
+                        {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 楼市聚焦 结束 -->
+    <div class="ads-img-div ad_lsjjxftl_1200_88">
+        <ul class="ads-ul">
+        <!-- AdSame ShowCode: PC / 首页 / 旗帜4 Begin -->
+        <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101110" }}" charset="gbk" ></script>
+        <!-- AdSame ShowCode: PC / 首页 / 旗帜4 End -->
+        <!-- AdSame ShowCode: PC / 首页 / 旗帜5 Begin -->
+        <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101111" }}" charset="gbk" ></script>
+        <!-- AdSame ShowCode: PC / 首页 / 旗帜5 End -->
+        <!-- AdSame ShowCode: PC / 首页 / 旗帜6 Begin -->
+        <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101112" }}" charset="gbk" ></script>
+        </ul>
+    </div>
+    <!-- AdSame ShowCode: PC / 首页 / 旗帜6 End -->
+    {#
+    {% if indexads['ad_lsjjxftl_1200_88'] and  indexads['ad_lsjjxftl_1200_88']|length > 0 %}
+    <!-- 楼市聚焦底部广告位 开始 -->
+    <div class="ads-img-div ad_lsjjxftl_1200_88">
+        <ul class="ads-ul">
+            {% for item in indexads['ad_lsjjxftl_1200_88'] %}
+            {% if item.checked == 1 %}
+                <li><a href="{{item.url}}" target="_blank"><img src="{{asset(item.thumb)}}"></a></li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    <!-- 楼市聚焦底部广告位 结束 -->
+    {% endif %}
+    #}
+    <!-- 诸葛资讯 开始 -->
+    <div class="section-box news">
+        <div class="section-top">
+            <h5 class="section-title">诸葛资讯</h5>
+            <div class="section-italine">
+                <div class="line"></div>
+            </div>
+            <ul class="section-ul">
+                <li><a href="/news/list/325" target="_blank" class="homepage_zgzx_rmlx">热门头条 </a></li>
+                <li class="interval"></li>
+                <li><a href="/news/list/323" target="_blank" class="homepage_zgzx_bkpd">百科频道 </a></li>
+                <li class="interval"></li>
+                <li><a href="/news/list/324" target="_blank" class="homepage_zgzx_zgzb">诸葛周报 </a></li>
+                <li class="interval"></li>
+                <li><a href="/news" target="_blank" class="homepage_zgzx_gdlx">更多楼讯 &gt;</a></li>
+            </ul>
+            <div class="section-line"></div>
+        </div>
+        <div class="section-content">
+            <div class="section-cleft">
+                <div class="news-imgbox">
+                        <div class="news-banner2">
+                            <div class="ad-banner loushi-focus ads-zunxun">
+                            <div class="ad-carousel">
+                                <ul class="ad-carousel-image">
+                                    <!-- AdSame ShowCode: PC / 首页 / 资讯聚焦1 Begin -->
+                                    <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101135" }}" charset="gbk" ></script>
+                                    <!-- AdSame ShowCode: PC / 首页 / 资讯聚焦1 End -->
+                                    <!-- AdSame ShowCode: PC / 首页 / 资讯聚焦2 Begin -->
+                                    <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101136" }}" charset="gbk" ></script>
+                                    <!-- AdSame ShowCode: PC / 首页 / 资讯聚焦2 End -->
+                                    <!-- AdSame ShowCode: PC / 首页 / 资讯聚焦3 Begin -->
+                                    <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101137" }}" charset="gbk" ></script>
+                                    <!-- AdSame ShowCode: PC / 首页 / 资讯聚焦3 End -->
+                                </ul>
+                                {#
+                           {% if t_ad1['ad_zgzx_580_266'] and t_ad1['ad_zgzx_580_266']|length > 0  %}
+                              <ul class="ad-carousel-image">
+                                {% for item in t_ad1['ad_zgzx_580_266'] %}
+                                <li><a href="{{item.url}}"  target="_blank"><img src="{{asset(item.thumb)}}" alt="{{ item.name }}" ></a><p>{{ item.name }}</p></li>
+                                {% endfor %}
+
+                              </ul>
+                              {% endif %}
+                            #}
+                              <!--轮播底部栏目-->
+
+                              <div class="ad-carousel-bottom">
+
+                                <ol class="ad-carousel-index">
+
+                                </ol>
+
+                              </div>
+
+                            </div>
+
+                          </div>
+                        </div>
+                    <ul class="news-imgul">
+                        {% for i in t_zgzx.zhugezixun %}
+                        <li>
+                            <a href="{{ i.url }}" target="_blank" class="homepage_zgzx_twzx_{{loop.index}}">
+                                <div class="news_img" style="background:url({{ asset(i.thumb) }}) center center;background-size: cover;"></div>
+                                <div class="left_p">
+                                    <div class="title_box">
+                                        <p>{{ i.name }}</p>
+                                    </div>
+                                    <div class="description">{{ i.content|default('')|striptags|replace({'&amp;': '', '&nbsp;': '','&quot':''})}}</div>
+                                </div>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="news-titlebox">
+                    <div class="hotbuild-right">
+                        <div class="evaluation evaluation1">
+                            <ul>
+                                {% if t_rhzx is defined %}
+                                    {% for item in t_rhzx %}
+                                        {% if item.category is defined %}
+                                            {% set fczxcate1 = item.category|getCategoryById() %}
+                                            {% if loop.index==1 %}
+                                                <li>
+                                                    <a href="{{item.url|default}}" title="{{item.name|trans}}" target="_blank" class="til homepage_zgzx_list_1">{{item.name|trans}}</a>
+                                                </li>
+                                            {% else %}
+                                                {% if loop.index!=7 %}
+                                                    <li class="item">
+                                                        <p class="item-til item-til-dif">
+                                                            <a href="{{item.url|default('')}}" title="{{item.name|trans}}" target="_blank" class="title homepage_zgzx_list_{{loop.index}}" style="width:280px;">{{item.name|trans}}</a>
+                                                        </p>
+                                                        {% if (loop.index==2 and item.abstract is defined) or (loop.index==8 and item.abstract is defined)  %}
+                                                            <p class="item-content">{{ item.abstract }}</p>
+                                                            <p class="line"></p>
+                                                        {% endif %}
+                                                    </li>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endif %}
+                                        {% if loop.index==7 %}
+                                            </ul>
+                                        </div>
+                                        <div class="evaluation evaluation1">
+                                            <ul>
+                                                <li>
+                                                    <a href="{{item.url|default}}" title="{{item.name|trans}}" target="_blank" class="til homepage_zgzx_list_{{loop.index}}">{{item.name|trans}}</a>
+                                                </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section-cright">
+                <ul class="exp-ul">
+                    <li class="li-border j_expNewHouse j_isOpenNewhouse">
+                        <div class="exp-title"><p>新房</p></div>
+                        <div class="price-box">
+                            <p class="title">近一月均价</p>
+                            <p class="price j_price"><span></span> 元/平</p>
+                            <p class="trend j_trend">环比上月 <span></span></p>
+                        </div>
+                        <div class="sale">
+                            <p class="title">当前在售</p>
+                            <p class="sale-num j_sellNum"><span></span> 个</p>
+                            <p class="trend j_newNum">本月新开 <span></span> 个</p>
+                        </div>
+                    </li>
+                    <li class="house-exp j_expHouse j_isOpenHouse">
+                        <div class="exp-title"><p>二手房</p></div>
+                        <div class="price-box">
+                            <p class="title">近一月均价</p>
+                            <p class="price j_price"><span></span> 元/平</p>
+                            <p class="trend j_trend">环比上月 <span></span></p>
+                        </div>
+                        <div class="sale">
+                            <p class="title">当前在售</p>
+                            <p class="sale-num j_sellNum"><span></span> 个</p>
+                            <p class="trend j_newNum">今日新上 <span></span> 个</p>
+                        </div>
+                    </li>
+                </ul>
+                <div class="exp-trend">
+                    <div id="trend"></div>
+                    <div class="trend-title"></div>
+                </div>
+                <!-- 专业顾问服务 -->
+                <a class="counselor" href="/houses/abouts" target="_blank" style="display:block;">
+                    <i class="iconfont icon-shangye"></i>
+                    <p>我们是做什么的？</p>
+                    <button class="homepage_zgzx_qkk">去看看</button>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- 诸葛资讯 结束 -->
+    <div class="ads-img-div ad_zxxftl_1200_88">
+        <ul class="ads-ul">
+        <!-- AdSame ShowCode: PC / 首页 / 旗帜7 Begin -->
+        <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101113" }}" charset="gbk" ></script>
+        <!-- AdSame ShowCode: PC / 首页 / 旗帜7 End -->
+        <!-- AdSame ShowCode: PC / 首页 / 旗帜8 Begin -->
+        <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101114" }}" charset="gbk" ></script>
+        <!-- AdSame ShowCode: PC / 首页 / 旗帜8 End -->
+        <!-- AdSame ShowCode: PC / 首页 / 旗帜9 Begin -->
+        <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101115" }}" charset="gbk" ></script>
+        </ul>
+    </div>
+    <!-- AdSame ShowCode: PC / 首页 / 旗帜9 End -->
+    {#
+    {% if indexads['ad_zxxftl_1200_88'] and  indexads['ad_zxxftl_1200_88']|length > 0 %}
+    <!-- 诸葛资讯底部广告位 开始 -->
+    <div class="ads-img-div ad_zxxftl_1200_88">
+        <ul class="ads-ul">
+            {% for item in indexads['ad_zxxftl_1200_88'] %}
+            {% if item.checked == 1 %}
+                <li><a href="{{item.url}}" target="_blank"><img src="{{asset(item.thumb)}}"></a></li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    <!-- 诸葛资讯底部广告位 结束 -->
+    {% endif %}
+    #}
+    <!-- 24小时降价房源 开始 -->
+    <div class="section-box news open-house j_isOpenHouse">
+        <div class="section-top">
+            <h5 class="section-title house-title-price">24小时降价房源</h5>
+            <div class="section-italine">
+                <div class="line"></div>
+            </div>
+            <ul class="section-ul">
+                <li><a href="http://{{cityad}}.house.zhuge.com/t1" target="_blank" class="homepage_jjfy_24hzj">24小时涨价 </a></li>
+                <li class="interval"></li>
+                <li><a href="http://{{cityad}}.house.zhuge.com/t0" target="_blank" class="homepage_jjfy_24hjj">24小时降价 </a></li>
+                <li class="interval"></li>
+                <li><a href="http://{{cityad}}.house.zhuge.com/t2" target="_blank" class="homepage_jjfy_xsfy">新上房源 </a></li>
+                <li class="interval"></li>
+                <li><a href="http://{{cityad}}.house.zhuge.com" target="_blank" class="homepage_jjfy_gdesf">更多二手房 &gt;</a></li>
+            </ul>
+            <div class="section-line"></div>
+        </div>
+        <div class="section-content ad_24xsjjfy_300_180">
+            <div class="section-cleft">
+                <ul class="house-ul">
+                </ul>
+            </div>
+            {% if indexads['ad_24xsjjfy_300_180'] and indexads['ad_24xsjjfy_300_180']|length > 0 %}
+            <ul class="section-cright ">
+                {#{% for key,item in indexads['ad_24xsjjfy_300_180'] %}
+                {% if item.checked == 1 and key < 3%}#}
+                <li class="section-cright-img1">
+                    <!-- AdSame ShowCode: PC / 首页 / 底部橱窗1 Begin -->
+                    <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101138" }}" charset="gbk" ></script>
+                    <!-- AdSame ShowCode: PC / 首页 / 底部橱窗1 End -->
+                </li>
+
+
+                <li class="section-cright-img2">
+                    <!-- AdSame ShowCode: PC / 首页 / 底部橱窗2 Begin -->
+                    <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101139" }}" charset="gbk" ></script>
+                    <!-- AdSame ShowCode: PC / 首页 / 底部橱窗2 End -->
+                </li>
+
+                <li class="section-cright-img3">
+                    <!-- AdSame ShowCode: PC / 首页 / 底部橱窗3 Begin -->
+                    <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101140" }}" charset="gbk" ></script>
+                    <!-- AdSame ShowCode: PC / 首页 / 底部橱窗3 End -->
+                </li>
+                {#{% endif %}
+                {% endfor %}#}
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+    <div class="ads-img-div ad_jjfyxftl_1200_88">
+        <ul class="ads-ul">
+            <!-- AdSame ShowCode: PC / 首页 / 旗帜10 Begin -->
+            <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101116" }}" charset="gbk" ></script>
+            <!-- AdSame ShowCode: PC / 首页 / 旗帜10 End -->
+            <!-- AdSame ShowCode: PC / 首页 / 旗帜11 Begin -->
+            <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101117" }}" charset="gbk" ></script>
+            <!-- AdSame ShowCode: PC / 首页 / 旗帜11 End -->
+            <!-- AdSame ShowCode: PC / 首页 / 旗帜12 Begin -->
+            <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101118" }}" charset="gbk" ></script>
+            <!-- AdSame ShowCode: PC / 首页 / 旗帜12 End -->
+        </ul>
+    </div>
+    {#
+    <!-- 24小时降价房源 结束 -->
+    {% if indexads['ad_jjfyxftl_1200_88'] and  indexads['ad_jjfyxftl_1200_88']|length > 0 %}
+    <!-- 24小时降价房源底部广告位 开始 -->
+    <div class="ads-img-div ad_jjfyxftl_1200_88">
+        <ul class="ads-ul">
+            {% for item in indexads['ad_jjfyxftl_1200_88'] %}
+            {% if item.checked == 1 %}
+                <li><a href="{{item.url}}" target="_blank"><img src="{{asset(item.thumb)}}"></a></li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    <!-- 24小时降价房源底部广告位 结束 -->
+    {% endif %}
+    #}
+    <!-- 首页霸屏广告 开始 -->
+
+    {#{% if indexads['ad_bt_1000_530'] and  indexads['ad_bt_1000_530']|length > 0 %}#}
+
+    <!-- 首页霸屏广告蒙版 开始 -->
+
+       <div class="select_bg"></div>
+
+        <!-- 首页霸屏广告蒙版 结束 -->
+        <div class="select_city_wrap" >
+
+            <div class="index-close-ad j_cls_ad">关闭广告</div>
+            <!-- AdSame ShowCode: PC / 首页 / 弹屏 Begin -->
+            <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13101101" }}" charset="gbk" ></script>
+            <!-- AdSame ShowCode: PC / 首页 / 弹屏 End -->
+
+            {#
+            {% for item in indexads['ad_bt_1000_530'] %}
+
+                  <img src="{{asset(item.thumb)}}" class="index-bp-ad">
+
+            {% endfor %}
+            #}
+        </div>
+
+    {#{% endif %}#}
+
+</div>
+{% endblock body %}
+
+{% block js %}
+<script type="text/javascript" src="{{asset('static/house/js/index.js')}}{{version}}"></script>
+<script type="text/javascript" src="{{asset('static/house/js/echarts.js')}}{{version}}"></script>
+<script type="text/javascript">
+         /*
+            = jqhoverS:左侧详情筛选
+            = jqduang：幻灯片、选项卡、slider
+            = placeholder：兼容低版本输入框文字提示
+            = autocomplete：搜索框自动补全提示
+        */
+        seajs.use([
+            'jqhoverS',
+            'jqduang',
+            'advertise',
+            'lazyload',
+            'cookie'
+            ], function (jqhoverS, jqduang, advertise, lazyload,cookie) {
+            var resetUrl = '';
+            //搜索选择
+            $('.search-cate').on('mouseover', 'a', function() {
+                var $this = $(this);
+                var pama = $this.data("pama");
+                var $searchInput = $(pama.target || '.search-input');
+                var url = $this.attr('href');
+                resetUrl = url;
+                var type = $this.attr('type');
+                if(type == 'house'){
+                    $('.search-input').attr('name', 'type');
+                    $this.addClass("act").siblings().removeClass("act")
+                    .closest('form').attr('action', url).attr('type','house');
+                }else{
+                    $this.addClass("act").siblings().removeClass("act")
+                    .closest('form').attr('action', url).attr('type','xinfang');
+                }
+                $searchInput
+                    .val('')
+                    .attr('placeholder', pama.searchword)
+                    .autocomplete('hide')
+                    // 是否启用自动完成
+                if (pama.autocomplete === 0) {
+                    $searchInput.autocomplete('disable');
+                } else {
+                    $searchInput.autocomplete('enable')
+                        .autocomplete('setOptions', {
+                            serviceUrl: url
+                        });
+                };
+            });
+            // banner轮播判断
+            if($('.slider').length <= 1 ){
+                $('.prev-btn').hide();
+                $('.next-btn').hide();
+            }
+
+            // 关键词搜索 二手房 租房切换系统
+            $('.search-input').on('input',function(){
+                var type = $('.search-form').find('form').attr('type');
+                var url = '';
+                if(type == 'house'){
+                    var keyValue = $(".search-input").val();
+                    if(keyValue.trim()){
+                        url = resetUrl + 'v_'+keyValue.trim()+'_'
+                        $('.search-form').find('form').attr('action',url)
+                    }
+
+                }
+
+            });
+            // 热销楼盘 品牌楼盘 24小时降价房源 切换
+            $('.j_indextabSelection li').on('click',function(){
+                var index = $(this).index();
+                $(this).addClass('active').siblings().removeClass('active');
+                $('.j_indextabItem').eq(index).addClass('activeList').siblings().removeClass('activeList');
+            });
+            $('.j_indextabSelection li').on('mouseover',function(){
+                var index = $(this).index();
+                $(this).addClass('active').siblings().removeClass('active');
+                $('.j_indextabItem').eq(index).addClass('activeList').siblings().removeClass('activeList');
+            });
+            var tabIndex = 0;
+            var timer = null;
+            var indexIncrease = function(){
+                var maxLength = $('.j_indextabSelection li').length;
+                tabIndex++ ;
+                $('.j_indextabSelection li:eq('+ tabIndex +')').trigger('click')
+
+                if(tabIndex > maxLength){
+                    tabIndex  =  -1
+                }
+            }
+
+            timer = setInterval(indexIncrease,3000);
+
+            function closeAd(){
+                if($.cookie('bpadisshow') ){
+
+                    return;
+
+                }
+
+
+                if($('.index-bp-ad').attr('src')) {
+                    $('.select_bg').addClass('ad-show');
+
+                    $('.select_city_wrap').addClass('ad-show');
+
+                    $('body').addClass('fix');
+                }
+
+                if($('.select_city_wrap').hasClass('ad-show')){
+
+                    clearInterval(timer);
+
+                }
+
+                $('.j_cls_ad').click(function(){
+
+                    $('.select_bg').removeClass('ad-show');
+
+                    $('.select_city_wrap').removeClass('ad-show');
+
+                    $('body').removeClass('fix');
+
+                    timer = setInterval(indexIncrease,3000);
+
+                    $.cookie('bpadisshow', '1');
+
+                })
+
+            }
+
+            closeAd();
+
+            // 计算热销楼盘 品牌楼盘 24小时降价房源 盒子宽度
+            function listWd(){
+                var length = $('.j_indextabSelection li').length;
+                $('.j_indextabSelection li').css('width',(1200-2*length)/length);
+                if(length==0){
+                    $('.j_tabConter').hide();
+                }else{
+                    $('.j_tabConter').show();
+                }
+                $('.j_tabConter').mouseover(function(){
+
+                    clearInterval(timer)
+
+                }).mouseout(function(){
+
+                    timer = setInterval(indexIncrease,3000)
+
+                })
+
+            }
+            listWd();
+            //slider左右箭头的显示隐藏
+            $("#slider-wrap").hover(function() {
+                $(this).find(".prev-btn,.next-btn").css("opacity", ".8");
+            }, function() {
+                $(this).find(".prev-btn,.next-btn").css("opacity", "0");
+            });
+            //首页header浮动导航
+            roll()
+            function roll() {
+                $(window).on("scroll",function () {
+                    $(".header_").addClass("header_b").removeClass("header_w");
+                    var scrollTop = $(document).scrollTop();
+                    if(scrollTop >= '580') {
+                        $(".header_").addClass("header_w").removeClass("header_b").removeClass("header_z");
+                        $(".select_").addClass("select_city_change").removeClass("select_city");
+                        $(".speed_open_list li .nava").addClass("change_a").removeClass("change");
+                        $("#logo_roll").addClass("logo_roll").removeClass("logo");
+                        $("#download_roll").addClass("download_roll").removeClass("download");
+                        $('.login-a').addClass('color-333').removeClass('color-fff');
+                    }else{
+                        $(".header_").addClass("header_b").removeClass("header_w").removeClass("header_z");
+                        $(".select_").addClass("select_city").removeClass("select_city_change");
+                        $(".speed_open_list li .nava").addClass("change").removeClass("change_a");
+                        $("#logo_roll").addClass("logo").removeClass("logo_roll");
+                        $("#download_roll").addClass("download").removeClass("download_roll");
+                        $('.login-a').addClass('color-fff').removeClass('color-333');
+                    }
+                })
+            }
+            ~$(function () {
+                var AdSlide = function (ele) {
+                    this.index = 0;
+                    this.timer = null;
+                    this.$ele = $(ele);
+                    this.oLis = $(ele + ' li');
+                    this.len =  this.oLis.length;
+                    this.eleW = this.oLis.width();
+                };
+
+                AdSlide.prototype = {
+                    constructor:AdSlide,
+                    init : function () {
+                        var that = this;
+                        var firstimg = that.oLis.first().clone(); //克隆第一张图片塞到最后
+                        that.$ele.find('.ad-carousel-image').append(firstimg).width( (that.len+1) * that.eleW );
+                        that.carouselAuto();
+                        that.mouseoverPause();
+                        that.pointsMove();
+                    },
+
+                    carouselAnimate : function () {
+                        var that = this;
+                        that.$ele.find('.ad-carousel-image').animate({left:-( that.eleW * that.index ) },600);
+                        that.$ele.find('.ad-carousel-index li:eq('+ that.index % that.len +')').addClass('active').siblings().removeClass('active');
+                    },
+
+                    carouselAuto : function () {
+                        var that = this;
+                        var wrapperWidth = (that.len + 1) * that.eleW;
+                        that.$ele.find('.ad-carousel-image').width(wrapperWidth);
+                        if(that.len >1){
+                            this.timer = setInterval(function(){
+                                that.index++;
+                                if (that.index > that.len) {
+                                    that.index = 1;
+                                    that.$ele.find('.ad-carousel-image').css({ left: 0 });
+                                }
+                                that.carouselAnimate();
+                            },3000);
+                        }
+                    },
+
+                    mouseoverPause : function () {
+                        var that = this;
+                        $('.ad-carousel').mouseover(function(){
+                            clearInterval(that.timer);
+                        }).mouseout(function(){
+                            that.carouselAuto();
+                        });
+                    },
+
+                    pointsMove : function () {
+                        var that = this;
+                        if(that.len >1){
+                            for (var j = 0; j < that.len; j++) {
+                                that.$ele.find('.ad-carousel-index').append('<li></li>');
+                            }
+                        }
+                        var elePoint = that.$ele.find('.ad-carousel-index li');
+                        var pointW = elePoint.width();
+                        var pointWrapW = that.len * (pointW + 10);
+                        that.$ele.find('.ad-carousel-index').width(pointWrapW);
+                        elePoint.first().addClass('active');
+                        elePoint.mouseover(function(){
+                            if (!$('.ad-carousel-image').is(':animated')) {
+                                that.index = $(this).index();
+                                that.carouselAnimate()
+                            }
+                        });
+                    }
+                };
+                var newSlide1 = new AdSlide('.ads-jujiao');
+                newSlide1.init();
+                var newSlide2 = new AdSlide('.ads-zunxun');
+                newSlide2.init();
+
+            });
+            $('.lp-scroll').mouseover(function(){
+                $('body').addClass('fix');
+            }).mouseout(function(){
+                $('body').removeClass('fix');
+            })
+
+            // 背投广告
+            advertise.init({showing: 20000});
+            $(function () {
+                //  24小时降价房源二手房 bnner下面
+                $.ajax({
+                    url:'{{ externalLinks }}'+"/API/House/getPriceUpdateHouse",
+                    type:"post",
+                    data:{
+                        "city":"{{cityad}}",
+                        "showNum": 12,
+                        "houseType":1,
+                        "token":"bY0ffBrxJ8grLM9pDlV6Hb7xfeQHIwBV9JzRImukuu--StK6RyAcjbg6yEwMO_-3yLkpjrLq1FBvlCPfwsWoVg%3D%3D",
+                        "appName":'zgzf',
+                        "platformType":'2'
+                    },
+                    success:function (xhr) {
+                        var strHtml = '';
+                        var className = '';
+                        if(xhr && xhr.code ==200 && xhr.data && xhr.data.length>=12){
+                            for(var i=0;i<xhr.data.length;i++){
+                                if(i%2 == 0){
+                                    className = 'odd';
+                                }else{
+                                    className = '';
+                                }
+
+                                strHtml += '<li class="'+className+'">\
+                                        <p class="ell liname"><a href="http://{{cityad}}.house.zhuge.com/'+xhr.data[i].boroughId+'/'+xhr.data[i].houseId+'.html">'+xhr.data[i].title+'</a></p>\
+                                        <p class="ell source">'+xhr.data[i].sourceName+'</p>\
+                                        <p class="price">\
+                                            <span class="origin">原价:'+xhr.data[i].historyPrice+'</span>\
+                                            <span class="present">现价:'+xhr.data[i].minPrice+'万</span>\
+                                        </p>\
+                                        <p class="down">\
+                                            <span class="iconfont icon-jiangjia"></span>'+xhr.data[i].updatePrice+'万\
+                                        </p>\
+                                        <p class="drop">降幅：'+xhr.data[i].updatePercent+'</p>\
+                                    </li>';
+                            }
+                            $('.price-ul').html(strHtml);
+                        }else{
+                            // 没有24小时降价房源时，读取默认列表数据
+                            $.ajax({
+                                url:'{{ externalLinks }}'+"/API/House/search",
+                                type:"post",
+                                data:{
+                                    "city":"{{cityad}}",
+                                    'pageStart': '1',
+                                    'pageLimit': '12',
+                                    'houseType': '1',
+                                    "token":"bY0ffBrxJ8grLM9pDlV6Hb7xfeQHIwBV9JzRImukuu--StK6RyAcjbg6yEwMO_-3yLkpjrLq1FBvlCPfwsWoVg%3D%3D",
+                                    "appName":'zgzf',
+                                    "platformType":'2'
+                                },
+                                success:function (xhr) {
+                                    var strHtml = '';
+                                    var className = '';
+                                    if(xhr && xhr.code ==200 && xhr.data && xhr.data.list && xhr.data.list.length >0 ){
+                                        var dataList = xhr.data.list;
+                                        for(var i=0;i<dataList.length;i++){
+                                            if(i%2 == 0){
+                                                className = 'odd';
+                                            }else{
+                                                className = '';
+                                            }
+                                    strHtml += '<li class=" '+className+'">\
+                                            <p class="area-p ellipsis-p">[  '+dataList[i].cityarea+ ' '+dataList[i].cityarea2+'  ]  '+dataList[i].borough_name+'</p>\
+                                            <p class="title-p ellipsis-p">\
+                                                <a href="http://{{cityad}}.house.zhuge.com/'+dataList[i].borough_id+'/'+dataList[i].id+'.html">'+dataList[i].house_title+'</a>\
+                                            </p>\
+                                            <p class="price-p">'+dataList[i].min_price+'万</p>\
+                                        </li>';
+                                        }
+                                        $('.price-ul').html(strHtml);
+                                        $('.rightli').html('优选好房');
+                                        listWd();
+                                    }else{
+                                        $('.rightli').remove();
+                                        listWd();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+                // 底部24小时降价房源
+                $.ajax({
+                    url:'{{ externalLinks }}'+"/API/House/search",
+                    type:"post",
+                    data:{
+                        "city":"{{cityad}}",
+                        'pageStart': '1',
+                        'pageLimit': '6',
+                        'houseType': '1',
+                        'filter': {"tag":{"content":"1102"}},
+                        "token":"bY0ffBrxJ8grLM9pDlV6Hb7xfeQHIwBV9JzRImukuu--StK6RyAcjbg6yEwMO_-3yLkpjrLq1FBvlCPfwsWoVg%3D%3D",
+                        "is_cms_top": 1,
+                        "appName":'zgzf',
+                        "platformType":'2'
+                    },
+                    success:function (xhr) {
+                        if(xhr && xhr.code ==200 && xhr.data && xhr.data.list && xhr.data.list.length >=6 ){
+                            var dataList = xhr.data.list;
+                            var strHtml= '';
+                            var cName = '';
+                            var agent = '';
+                            var downPrice ;
+                            for(var i=0 ; i < dataList.length;i++){
+                                agent = '';
+                                if((i+1)%3 == 0){
+                                    cName = '';
+                                }else{
+                                    cName = "mr-20";
+                                }
+                                if(dataList[i].agency && dataList[i].agency.length>0){
+                                    for(var j=0;j<dataList[i].agency.length;j++){
+                                        agent += '<div class="list_box">\
+                                                    <img src="'+dataList[i].agency[j].small_logo_url+'">\
+                                                </div>';
+                                    }
+
+                                }
+                                if((Number(dataList[i].history_price) - Number(dataList[i].min_price)).toString().indexOf('.')>0){
+                                    downPrice = Number(Number(dataList[i].history_price) - Number(dataList[i].min_price)).toFixed(2);
+                                }else{
+                                    downPrice = Number(Number(dataList[i].history_price) - Number(dataList[i].min_price));
+                                }
+                              strHtml +=   '<li class="'+cName+'">\
+                                    <a class="homepage_jjfy_'+(i+1)+'" href="http://{{cityad}}.house.zhuge.com/'+dataList[i].borough_id+'/'+dataList[i].id+'.html?pageEntrance=xinfang" target="_blank">\
+                                        <div class="img_div" style="background: url('+dataList[i].house_thumb+');background-size: cover;background-position: center center;">\
+                                        <p class="price-down">'+dataList[i].company_name+' 降'+downPrice+'万</p>\
+                                        </div>\
+                                        <div class="title_box">\
+                                            <h5>['+dataList[i].cityarea+dataList[i].cityarea2+']'+dataList[i].house_title+'</h5>\
+                                            <p>'+dataList[i].min_price+'万</p>\
+                                        </div>\
+                                        <div class="describe">'+dataList[i].house_totalarea+'平 | '+dataList[i].house_room+'室'+dataList[i].house_hall+'厅 | '+dataList[i].borough_name+'</div>\
+                                        <div class="platform_box">\
+                                            <p>委托中介：</p>\
+                                            <div class="platform_list">'+agent+'</div>\
+                                        </div>\
+                                    </a>\
+                                </li>';
+                            }
+                            $('.house-ul').html(strHtml);
+                            $('.house-title-price').html('24小时降价房源');
+                        }else{
+                            // 没有24小时降价房源时，读取默认列表数据
+                            $.ajax({
+                                url:'{{ externalLinks }}'+"/API/House/search",
+                                type:"post",
+                                data:{
+                                    "city":"{{cityad}}",
+                                    'pageStart': '1',
+                                    'pageLimit': '6',
+                                    'houseType': '1',
+                                    "token":"bY0ffBrxJ8grLM9pDlV6Hb7xfeQHIwBV9JzRImukuu--StK6RyAcjbg6yEwMO_-3yLkpjrLq1FBvlCPfwsWoVg%3D%3D",
+                                    "appName":'zgzf',
+                                    "platformType":'2'
+                                },
+                                success:function (xhr) {
+                                    if(xhr && xhr.code ==200 && xhr.data && xhr.data.list && xhr.data.list.length >0 ){
+                                    var dataList = xhr.data.list;
+                                    var strHtml= '';
+                                    var cName = '';
+                                    var agent = '';
+                                    for(var i=0 ; i < dataList.length;i++){
+                                        agent = '';
+                                        if((i+1)%3 == 0){
+                                            cName = '';
+                                        }else{
+                                            cName = "mr-20";
+                                        }
+                                        if(dataList[i].agency && dataList[i].agency.length>0){
+                                            for(var j=0;j<dataList[i].agency.length;j++){
+                                                agent += '<div class="list_box">\
+                                                            <img src="'+dataList[i].agency[j].small_logo_url+'">\
+                                                        </div>';
+                                            }
+
+                                        }
+                                      strHtml +=   '<li class="'+cName+'">\
+                                        <a class="homepage_jjfy_'+ (i+1) +'" href="http://{{cityad}}.house.zhuge.com/'+dataList[i].borough_id+'/'+dataList[i].id+'.html?pageEntrance=xinfang" target="_blank">\
+                                            <div class="img_div" style="background: url('+dataList[i].house_thumb+');background-size: cover;background-position: center center;">\
+                                            </div>\
+                                            <div class="title_box">\
+                                                <h5>['+dataList[i].cityarea+dataList[i].cityarea2+']'+dataList[i].house_title+'</h5>\
+                                                <p>'+dataList[i].min_price+'万</p>\
+                                            </div>\
+                                            <div class="describe">'+dataList[i].house_totalarea+'平 | '+dataList[i].house_room+'室'+dataList[i].house_hall+'厅 | '+dataList[i].borough_name+'</div>\
+                                            <div class="platform_box">\
+                                                <p>委托中介：</p>\
+                                                <div class="platform_list">'+agent+'</div>\
+                                            </div>\
+                                        </a>\
+                                    </li>';
+                                    }
+                                    $('.house-ul').html(strHtml);
+                                    $('.house-title-price').html('优选二手房');
+                                    }else{
+                                        $('.open-house').hide();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            })
+        })
+    </script>
+    <script type="text/javascript" src="{{asset('static/house/js/search.js')}}{{version}}"></script>
+
+{% endblock js %}

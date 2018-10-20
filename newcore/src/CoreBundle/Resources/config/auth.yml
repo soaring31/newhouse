@@ -1,0 +1,4 @@
+services:
+    auth.base:
+        class: 'CoreBundle\Services\Rbac\Auth\Auth'
+        arguments: ['@service_container']

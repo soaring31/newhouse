@@ -1,0 +1,26 @@
+info:
+    tableName: msglog
+    subTableName: ''
+    aliasName: p
+    listGrid: {  }
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 1
+    pageIndex: 1
+    pageSize: 8
+    groupBy: ''
+    order: id
+    orderBy: desc
+    searchFun: EXISTS
+    dataModel: 0
+    attribute: '0'
+    autoQuery: '0'
+    alias: {  }
+    query:
+        name:
+            orX: 'name,like,%[name]%'
+        create_time:
+            lt: '[create_time]'
+        type:
+            eq: mail
+    query1: {  }

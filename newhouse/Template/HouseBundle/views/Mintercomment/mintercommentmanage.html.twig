@@ -1,0 +1,173 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+{% set aid = app.request.get('aid') %}
+{% set toid = app.request.get("toid") %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+{% block mainleft %}
+    
+{% endblock mainleft %}
+{% block mainMenu %}
+    {# {{ parent() }} #}
+{% endblock %}
+
+{% block tableMain %}
+{% set filterOpt = [
+    {
+        method: 'selectFormField',
+        title: '审核',
+        form: 'checked',
+        field: 'checked',
+    },
+    {
+        title: '添加时间',
+        attr: {
+            'data-selectdate': {
+                unix: 1
+            }
+        },
+        data: [
+            {
+                id: '1M',
+                name: '一个月前'
+            },
+            {
+                id: '3M',
+                name: '三个月前'
+            }
+        ],
+        field: 'create_time',
+        method: 'selectFilter'
+    },
+    {
+        method: 'search',
+        field: 'content',
+        title:'请搜索内容',
+    }
+] %}
+
+{% if aid %}
+    {% set filterOpt = [{
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增评论'
+    }]|merge(filterOpt) %}
+{% endif %}
+
+{{ core_manage.filter(filterOpt) }}
+<section class="list-con"  data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ "/show")|U }}',
+        submitUrl : '{{ (action ~ "/save")|U }}',
+        deleteUrl : '{{ (action ~ "/delete")|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            models: '{{ models }}',
+            aid: '{{ aid }}',
+            category: '{{ category }}',
+            toid: '{{toid}}'
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="50" data-role="sort" data-sort="id" class="sort">ID</th>
+                    {% if aid is null %}<th  width="200">文章</th>{% endif %}
+                    <th width="100" class="tac">评论员</th>
+                    <th>评论内容</th>
+                    {% if toid < 1 %}
+                    <th width="50">回复</th>
+                    {% endif %}
+                    <th width="50" data-role="sort" data-sort="vote" class="sort">赞</th>
+                    <th width="50">审核</th>
+                    <th width="80" data-role="sort" data-sort="create_time" class="sort">添加时间</th>
+                    <th width="80" class="tac">来源</th>
+                    <th width="120" class="tac">操作</th>
+                </tr>
+                {% if ident.info.data is defined and ident.info.data|length != 0 %}
+                {% for k, vo in ident.info.data %}
+                {% set vo0 = vo.0 %}
+                {% set user_data = ('db.users')|getRow({id: vo0.uid}) %}
+                <tr data-id="{{ vo0.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td>{{ vo0.id }}</td>
+                    {% if aid is null %}<td class="tov">
+                        <a href="{{(models ~ '/detail')|U({id: vo.id}) }}" target="_blank">
+                        {{core_global.substr(vo.name|default(''), 20, 1)}}
+                    </a></td>{% endif %}
+                    <td class="tac">{{user_data.username|default('-')}}</td>
+                    <td class="tov" title="{{ vo0.content|default('') }}">
+                        {{core_global.substr(vo0.content|default(''), 20, 1)}}
+                    </td>
+                    {% if vo0.toid == 0  %}
+                    {# 判断是否独立显示评论 #}
+                    {% if aid %}
+                        {# 每条数据中独有的评论只需传toid即可 #}
+                        {% set opt = {toid: vo0.id} %}
+                    {% else %}
+                        {# 全部评论显示的列表还需要把所属数据的id，即aid传过去 #}
+                        {% set opt = {toid: vo0.id, aid: vo0.aid} %}
+                    {% endif %}
+                    <td>
+                        <a data-role="show" title="{{vo.name}}的回复" href="{{('mintercomment/mintercommentmanage')|U(opt)}}">
+                            [{{
+                            core_global.count({models: 'inter_comment', sql_opt: {
+                                    models: vo0.models
+                                }|merge(opt)
+                            })}}]
+                        </a>
+                    </td>
+                    {# 已经属于回复的数据禁止重复回复 #}
+                    {# {% else %}
+                    {% if toid is empty %}
+                    <td>
+                        -
+                    </td>
+                    {% endif %} #}
+                    {% endif %}
+                    <td>{{ vo0.vote|default('0') }}</td>
+                    <td>{{ core_global.formField({value: vo0.checked}) }} </td>
+                    <td>{{ vo0.create_time|default('0')|date('Y-m-d') }}</td>
+                    <td class="tac">{{ core_global.get_user_info(vo0.user_agent|default(''))}}</td>
+                    <td class="tar pr10">
+                        {{ core_manage.show({
+                            url: (action ~ "/show")|U({id: vo0.id})
+                        }) }}
+                        {{ core_manage.delete() }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="12" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'checked',
+        title: '审核',
+    }
+]) }}
+{% endblock %}
+
+{% block promptUl %}
+{% endblock %}
+
+
+

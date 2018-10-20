@@ -1,0 +1,139 @@
+{# 说明
+ * url_id: url传过来的id
+ * guide_detail_info: 当前数据
+ * guide_detail； 当前数据
+ * push_cnxh: 猜你喜欢推送
+ * lastDetail : 根据当前ID获取上一个数据
+ * nextDetail : 根据当前ID获取下一个数据
+#}
+{% set url_id = app.request.get('id') %}
+
+{% set guide_detail_info = ('house.news')|getRow({id: url_id|default(''), checked: 1, findType: 1}, {'field':'content','pageIndex':app.request.get('pageIndex',1)}) %}
+
+{% set guide_detail = guide_detail_info.data|default('') %}
+
+{% extends guide_detail ? 'HouseBundle:Guide:list.html.twig' : 'CoreBundle:Dispatch:errorcontent.html.twig' %}
+
+{% set category_guide = ('house.category')|getTree({checked: 1, pid: 36}) %}
+
+{% set category_guides = [] %}
+{% for item in category_guide.data|default({}) %}
+    {% set category_guides = category_guides|merge([item.menu.id|default('')]) %}
+    {% for item2 in item.nodes|default('') %}
+        {% set category_guides = category_guides|merge([item2.menu.id|default('')]) %}
+    {% endfor %}
+{% endfor %}
+
+{% set lastDetail = ('house.news')|getAll({id: 'lt|' ~ url_id|default(''), checked: 1, pageSize: 1, orderBy: 'desc', order: 'id', category: 'in|' ~ category_guides|join(',') }).data[0]|default('') %}
+
+{% set nextDetail = ('house.news')|getRow({id: 'gt|' ~ url_id, checked: 1, category: 'in|' ~ category_guides|join(',')}) %}
+
+{% set push_cnxh = ('cnxh')|getPush(5) %}
+
+{% set guide_detail_category = guide_detail.category|default('')|getCategoryById() %}
+
+{% block title %}{{- guide_detail.name|default('置业指南-内容页') -}}{% endblock %}
+
+{% block key_des %}
+    {{- core_global.key_des({keywords: guide_detail.keywords,description: guide_detail.abstract}) -}}
+{% endblock key_des %}
+
+{% block current_guide %}
+    <a href="{{('guide/list')|U({category: guide_detail_category.id|default('')})}}" target="_blank">
+        {{guide_detail_category.name|default('')}}
+    </a>
+    <span>&gt;</span>
+    <span>{{guide_detail.name|default('')}}</span>
+{% endblock current_guide %}
+
+
+{% block css %}
+    {{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/guide-article.css')}}
+{% endblock css %}
+
+{% block container %}
+    <!-- 主体 -->
+    <div class="g-article container">
+        <div class="main clearfix">
+            <!-- 正文 -->
+            <div class="article">
+                <!-- 头条 -->
+                <div class="title">
+                    <h2>{{guide_detail.name}}</h2>
+                    <div class="info clearfix">
+                        <div class="data">
+                            {{guide_detail.creat_time|default('')|date('Y/m/d')}}
+                        </div>
+                        <p>
+                            浏览量&nbsp;(&nbsp;
+                            <i data-counts="{models: 'news', field: 'clicks', id: '{{guide_detail.id|default('')}}'}"></i>
+                            &nbsp;)
+                        </p>
+                    </div>
+                </div>
+                <!-- 内容 -->
+                <div class="text pt20">
+                    {{ core_global.content({ content: guide_detail.content|default('') }) }}<br/>
+
+                    {% if guide_detail_info['pageCount']|default('') > 1 %}
+                        <div class="ptb20">
+                            <div class="p-bar">
+                                {{ guide_detail_info['pageIndex']|pager(guide_detail_info['pageSize'],guide_detail_info['pageCount'])|raw }}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                <!-- 正文尾部 -->
+                <div class="in-foot">
+                    <div class="point2" data-vote="{models: 'news', id: {{guide_detail.id|default('')}}, field: 'vote'}">
+                        <a class="font-gd-p" href="javascript:;" ></a>
+                        <p>
+                            (
+                            <span data-vote-num="{{guide_detail.vote|default(0)}}">{{guide_detail.vote|default(0)}}</span>
+                            )
+                        </p>
+                    </div>
+                    <!-- 上下篇 -->
+                    <div class="link">
+                        <h3>
+                            上一篇 ：
+                            {% if lastDetail.id is defined %}
+                            <a href="{{('guide/detail')|U({id:lastDetail.id|default('')})}}">{{lastDetail.name|default('')}}</a>
+                            {% else %}
+                                没有上一篇
+                            {% endif %}
+                        </h3>
+                        <h3>
+                            下一篇 ：
+                            {% if nextDetail.id is defined %}
+                            <a href="{{('guide/detail')|U({id:nextDetail.id|default('')})}}">{{nextDetail.name|default('')}}</a>
+                            {% else %}
+                                没有下一篇
+                            {% endif %}
+                        </h3>
+                    </div>
+                    <!-- 更多 -->
+                    <div class="more">
+                        <a href="{{('guide/list')|U({category: guide_detail.category|default('36')})}}">查看更多手册内容>></a>
+                    </div>
+                </div>
+            </div>
+            <!-- 侧边框 -->
+            <div class="side">
+                {{house_global.guide_recommend({
+                    list: push_cnxh,
+                    tag: 'cnxh',
+                    title: '猜你喜欢'
+                })}}
+                {{house_global.guide_recommend({
+                    list: ident.guideHots.data,
+                    tag: 'clicks',
+                    title: '热门问答'
+                })}}
+            </div>
+        </div>
+    </div>
+    <div class="blank20"></div>
+{% endblock container %}
+
+{% block lmenu_js %}{% endblock lmenu_js %}

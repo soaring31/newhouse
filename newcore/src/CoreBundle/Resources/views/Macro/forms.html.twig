@@ -1,0 +1,184 @@
+{# 调用说明开始 #}
+{# {% import "CoreBundle:Macro:forms.html.twig" as cfm %} #}
+{# {{cfm.xxx}} #}
+{# 调用说明结束 #}
+
+{% macro input(o) %}
+    {% set attr = o.attr|default('') %}
+    {% if o.autocomplete|default('') %}
+    {% set attr = attr ~ ' data-autocomplete="1"' %}
+    {% elseif o.placeholderie|default('') %}
+    {% set attr = attr ~ ' data-placeholder="1"' %}
+    {% endif %}
+
+    <input {{attr|raw}} type="{{o.type|default('text')}}" name="{{o.name|default('')}}" value="{{o.value|default('')}}" size="{{o.size|default('')}}" maxlength="{{o.len|default('')}}" class="{{o.class|default('')}}" id="{{o.id|default('')}}" placeholder="{{o.placeholder|default('')}}" />
+{% endmacro %}
+
+{% macro search_input(o) %}
+
+    {% set opt = {
+        autocomplete: o.autocomplete|default(''),
+        placeholderie:  o.placeholderie|default(''),
+        class       : 'search-input fl',
+        value       : app.request.get('name')|default(''), 
+        name        : 'name'
+    }|merge(o) %}
+
+    {{_self.input(opt)}}
+{% endmacro %}
+
+{# 
+/**
+ * @method search(o)
+ * @description 通用搜索控件
+ * @param {String} o.placeholder 文本框的`placeholder`
+ * @param {String} o.action 提交地址
+ * @param {String} o.target=_self form的target
+ * @param {String} o.autocomplete=0 是否启用自动完成
+ * @param {String} o.text 按钮的标题
+ * @param {String} o.class=search-input input 的 样式
+ * @param {String} o.size input 的 size
+ * @param {String} o.wrapclass 外层div的class
+ * 
+ * @示例 调用
+ * ```twig
+    {{v_forms.search({
+        action: ('house/list')|U,
+        class: 'aa',
+        target: '_self',
+        text: '搜索',
+        placeholder: o.placeholder|default('请输入楼盘名称/地址/拼音')
+    })}}
+ * ```
+ * 生成
+ * ```twig
+ * <form action="house/list" target='_self'>
+ *      <div class="search-bar clearfix aa">
+            <input type="text" name="name" value="name" class="class"  placeholder="请输入楼盘名称/地址/拼音" />
+            <button type="type" class="search-btn fl">搜索</button>
+        </div>
+ * </form>
+ * ```
+ */
+ #}
+
+{% macro search(o) %}
+    {% set opt = {
+    }|merge(o) %}
+
+    <form action="{{ opt.action|default('#')|U }}" target="{{ opt.target|default('_self') }}" method="get">
+        <div class="search-bar clearfix {{opt.wrapclass|default('')}}">
+            {{_self.search_input(opt)}}
+            <button type="type" class="search-btn fl"><i class="font-icons-17"></i>{{opt.text|default('')}}</button>
+        </div>
+    </form>
+{% endmacro %}
+{# 
+/**
+ * @method inter(o)
+ * @description 交互表单
+ * @param {String} o.action=grouporder/save, form的action
+ * @param {number} o.aid=null, 交互的文档ID
+ * @param {number} o.topic=null, 看房团ID
+ * @param {number} o.form_id=274, 交互的表单ID
+ * @param {String} o.cate_pushs, 区块标识 如果是区块文档 需要指定
+ * @param {String} o.form, 表单标识 如果是区块文档 需要指定
+ * @param {String} o.class=bm-form, 外层的class
+ * @param {String} o.submit_title=立即报名, 按钮的内容
+ * @param {String} o.submit_cls=null,  按钮的class
+ * @param {String} o.models=null,  所属的模型
+ * @param {String} o.submit_cls=null,  按钮的class
+ * 
+ * @示例 调用
+ * ```twig
+    {{cfm.inter({
+        form_id: 275,
+        aid: 11,
+        submit_title: '立即订阅',
+        action: 'grouporder/save',
+    })}}
+ * ```
+ * 生成代码
+ * ```html
+    <div class="bm-form view-form">
+        <!-- 表单 -->    
+        <form action="/newcore/web/app_dev.php/house/grouporder/save" method="post" class="form-control">
+            <input type="hidden" name="_form_id" value="275"/>    
+            <ul class="p10">
+                <li class="item text">
+                    <input type="text" id="name" name="name" class="text" placeholder="您的姓名" rev="姓名" rule="text" min="1" max="200" init="请输1到200字符" data-tpl="" />    
+                </li>
+                <li class="item text">
+                    <input type="text" id="tel" name="tel" required="required" class="text" placeholder="您的电话" rev="电话" rule="text" min="1" max="200" init="请输1到200字符" data-tpl="" />    
+                </li>
+                <input type="hidden" id="aid" name="aid" data-tpl="" value="11" />    
+                <li class="item captcha">
+
+                    <div class="code-wrap">
+                        <div class="code-item code-item-input">
+                            <input type="text" id="codeText" name="codeText" required="required" width="100" height="28" placeholder="验证码" data-title="换一张" class="yzm txt text code-txt" length="5" data-tpl="" />    
+                        </div>
+                        <div class="code-item code-item-img">
+                            <img id='codeImg' src="/newcore/web/app_dev.php/manage/captcha?width=100&amp;height=28&amp;placeholder=%E9%AA%8C%E8%AF%81%E7%A0%81&amp;data-title=%E6%8D%A2%E4%B8%80%E5%BC%A0&amp;class=yzm+txt+text+code-txt&amp;length=5&amp;name=codeText&amp;t=20161116092532" data-src="/newcore/web/app_dev.php/manage/captcha?width=100&amp;height=28&amp;placeholder=%E9%AA%8C%E8%AF%81%E7%A0%81&amp;data-title=%E6%8D%A2%E4%B8%80%E5%BC%A0&amp;class=yzm+txt+text+code-txt&amp;length=5&amp;name=codeText&amp;t=20161116092532" class="code-img" align="absbottom" alt="验证码" title="点击更换验证码" />    
+                            <a href="javascript:;" class="code-title">换一张</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="item">
+                    <button type="submit" id="submit" disabled="disabled" name="submit" class="btn" data-role="submit"> <i class="font-cmt-4 mr5"></i>
+                        立即订阅
+                    </button>
+                </li>
+            </ul>
+        </form>
+        <!-- /表单 --> 
+    </div>
+ * ```
+ * 
+ */
+ #}
+{% macro inter(o) %}
+    {% set opt = {
+        action: 'grouporder/save',
+        aid: null,
+        topic:null,
+        form_id: 274,
+        form: null,
+        cate_pushs: null,
+        class: 'bm-form',
+        submit_title: '立即报名',
+        submit_cls: null,
+        is_modal: 0,
+        models: null
+    }|merge(o) %}
+
+    {% set form = opt.form_id|getForm %}
+        {# {{ dump(form) }} #}
+    <div class="{{opt.class}} view-form">
+        <!-- 表单 -->
+        <form action="{{opt.action|U}}" method="post" class="form-control">
+            <input type="hidden" name="_form_id" value="{{opt.form_id}}"/>
+            <ul class="">
+                {% for v in form.children %}
+                {% if v.vars.id == 'submit' %}
+                {% elseif v.vars.id in ['form', 'aid', 'cate_pushs', 'topic', 'models'] %}
+                {{ form_widget(v, {value: opt[(v.vars.id)]}) }}  
+                {% elseif v.vars.id in ['currency', 'category'] %}
+                 <li class="item {{v.vars.block_prefixes[1]|default('') }}">
+                    <p>{{v.vars.label|default('')}}</p>
+                    {{ form_widget(v) }}
+                </li>
+                {% else %}
+                <li class="item {{v.vars.block_prefixes[1]|default('') }}">
+                    {{ form_widget(v) }}
+                </li>
+                {% endif %}
+                {% endfor %}
+                <li class="item">
+                    <button type="submit" id="submit" disabled="disabled" name="submit" class="btn" data-role="submit"><i class="font-cmt-4 mr5"></i>{{opt.submit_title}}</button>
+                </li>
+            </ul>
+        </form>
+        <!-- /表单 --> 
+    </div>
+{% endmacro %}

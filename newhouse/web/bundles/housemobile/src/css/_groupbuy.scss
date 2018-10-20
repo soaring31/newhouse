@@ -1,0 +1,69 @@
+/*!
+ * @name groupbuy.css
+ * @author xying
+ * @date 2016-1-15
+ */
+// 价格
+.group-detail-p {
+	dd {
+		float: left;
+		margin-right: 20px;
+		span {
+			color: $major-color;
+		}
+	}
+}
+
+// 报名
+.groupbuy-apply-hd.more-attr-open {
+	margin-bottom: 0;
+}
+.groupbuy-apply {
+	.list-block {
+		margin: 0;
+	}
+}
+
+// 导航
+.groupbuy-nav {
+	background: #1685e1;
+	.tab-item {
+		color: #fff;
+	}
+	.tel {
+		border-right: 1px solid #fff;
+	}
+	.apply {
+
+	}
+}
+
+// 侧栏数据
+.groupbuy-aside {
+	background: #fff;
+	margin: 0;
+	a {
+		color: #5f646e;
+	}
+	.list-block {
+		margin: 0;
+	}
+	.media-list {
+		span {
+			color: $major-color;
+		}
+	}
+}
+
+// 团购列表
+.tg{
+	background-color: #f6383a;
+	color: #fff;
+}
+
+// 倒计时
+.format-time {
+    span {
+        color: #e43;
+    }
+}

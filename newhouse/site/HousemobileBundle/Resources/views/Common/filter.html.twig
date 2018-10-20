@@ -1,0 +1,21 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 
+ * filter_rows: 显示数量
+ * cate_circle: 开启商圈
+ * cate_metro: 开启地铁
+ * tpl_tag: 框
+ * filter_action: 链接
+ * filter_url_opt: 其他关联条件
+#}
+{%- block result -%}
+    {{ housemobile_global.filter({
+        filter_rows: app.request.get('filter_rows', 3),
+        cate_circle: app.request.get('switch_circle', 0),
+        cate_line: app.request.get('switch_line', 0),
+        switch_hxs: app.request.get('switch_hxs', 0),
+        tpl_tag: app.request.get('tpl_tag')|default('list'),
+        filter_action: app.request.get('filter_action')|default(''),
+        tag: app.request.get('tag')|default('houses'),
+        filter_url_opt: app.request.get('filter_url_opt', [])
+    }) }}
+{%- endblock result -%}

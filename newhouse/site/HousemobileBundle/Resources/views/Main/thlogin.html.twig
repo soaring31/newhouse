@@ -1,0 +1,26 @@
+{% extends 'HousemobileBundle::base.html.twig' %}
+
+{% block title %}
+{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}注册
+{% endblock title %}
+
+{% block header_title %}
+{{core_mobile_global.title({title: '绑定账号'})}}
+{% endblock header_title %}
+
+{% block container %}
+<div class="content bg-white">
+   <div class="content-block"></div>
+    <div data-block="{
+        bParams: true,
+        ajax:{
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                formflag: 'thlogin',
+                tpl: 'Common:forms',
+                formattr: 'data-jumurl={{('main/mindex')|UU}}'
+            }
+        }
+    }"></div>
+</div>
+{% endblock container %}

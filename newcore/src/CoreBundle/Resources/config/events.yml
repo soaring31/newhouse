@@ -1,0 +1,61 @@
+parameters:
+    security.exception_listener.class: CoreBundle\EventListener\Firewall\ExceptionListener
+services:
+    db_prefix_listener_event:
+        class: CoreBundle\EventListener\DbPrefixListener
+        arguments: ['%_tblprefix%']
+        tags:
+            - {name: doctrine.event_subscriber}
+    token_listener_event:
+        class: CoreBundle\EventListener\TokenListener
+        arguments: ['@service_container']
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+    httpcache_listener_event:
+        class: CoreBundle\EventListener\HttpCacheListener
+        arguments: ['@service_container']
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+    remember_listener_event:
+        class: CoreBundle\EventListener\RememberListener
+        arguments: ['@service_container']
+        tags:
+            - { name: kernel.event_listener, event: security.interactive_login, method: onKernelController }
+    notfoundhttp_listener_event:
+        class: CoreBundle\EventListener\NotFoundHttpListener
+        calls:
+            - [ setContainer, ["@service_container"] ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+    database_event.listener:
+        class: CoreBundle\EventListener\DbLifecycleListener
+        arguments: ['@service_container']
+        tags:
+            - { name: doctrine.event_listener, event: preUpdate, method: preUpdate }
+            - { name: doctrine.event_listener, event: postUpdate, method: postUpdate }
+            - { name: doctrine.event_listener, event: prePersist, method: prePersist }
+            - { name: doctrine.event_listener, event: postPersist, method: postPersist }
+            - { name: doctrine.event_listener, event: preRemove, method: preRemove }
+            - { name: doctrine.event_listener, event: postRemove, method: postRemove }
+            - { name: doctrine.event_listener, event: postLoad, method: postLoad }
+    core.exception_subscriber:
+        class: CoreBundle\EventListener\ExceptionSubscriber
+        arguments: ['@service_container']
+        tags:
+            - { name: kernel.event_subscriber }
+    core.cors_listener:
+        class: CoreBundle\EventListener\CorsListener
+        tags:
+           - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+    core.locale_listener:
+        class: CoreBundle\EventListener\LocaleListener
+        arguments: ["%kernel.default_locale%"]
+        tags:
+            - { name: kernel.event_subscriber }
+#    core.user_locale_listener:
+#        class: CoreBundle\EventListener\UserLocaleListener
+#        arguments: ['@session']
+#        tags:
+#            - { name: kernel.event_listener, event: security.interactive_login, method: onInteractiveLogin }

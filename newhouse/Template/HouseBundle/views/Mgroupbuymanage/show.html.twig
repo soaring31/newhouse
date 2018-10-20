@@ -1,0 +1,30 @@
+{% extends "HouseBundle::base_show.html.twig" %}
+{% set url_aid = app.request.get('aid') %}
+{% set url = ('majaxaction/xiaoqu')|U({name: url_aid}) %}
+{% block js %}
+<script type="text/javascript">
+	seajs.use(['searchxq'], function(searchxq) {
+		{% if app.request.get('_id') %}
+			searchxq.addTitle();
+		{% elseif url_aid %}
+		    searchxq.addTitle({
+				url: "{{url}}"
+			});
+		{% else %}
+			searchxq.search({
+				xq: '#lpmc',
+				url: '{{("majaxaction/xiaoqu")|U({type: 0})}}',
+				autofill: ['name', 'aid']
+			});
+		{% endif %}
+	})
+</script>
+{% endblock %}
+{% block body %}
+{# {{ core_manage.form(form|default(''), {
+	data: {
+		models: 'groupbuy'
+	}
+}) }} #}
+{{ core_manage.form(form|default(''),'form', 'house.groupbuy') }}
+{% endblock %}

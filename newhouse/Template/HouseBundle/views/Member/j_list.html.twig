@@ -1,0 +1,20 @@
+{% extends 'HouseBundle:Member:list.html.twig' %}
+
+{% block title %}经纪人列表{% endblock title %}
+
+{% block current_member %}
+    <span>经纪人列表</span>
+{% endblock current_member %}
+{% set tpl_title = '经纪人' %}
+{% block list_member %}
+    <div class="sale-list agn-con">
+        {# 列表 #}
+        {{house_global.member_j_list({
+            list: list_ident,
+        })}}
+        <div class="blank20"></div>
+        <!--page-->
+        {{core_global.page(list_ident)}}
+        <!--page-->
+    </div>   
+{% endblock list_member %}

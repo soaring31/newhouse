@@ -1,0 +1,29 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{% block result %}
+    {% set navs = ('house.navs')|getAll({cate_pushs: 'mobile_zdh', checked: 1, pid: 0, pageSize: 100, order: "sort", orderBy: 'asc'}) %}
+    <!-- 导航 -->
+    {% if navs.data %}
+    <div class="swiper-container ajax-swiper home-span s-nav" data-pagination='.swiper-menu1' data-pagination-type="bullets">
+        <div class="swiper-wrapper" >
+            <div class="swiper-slide">
+                {% for item in navs.data %}
+                    {% if loop.index % 8 == 1 and loop.index != 1 %}
+            </div>
+            <div class="swiper-slide">
+                    {% endif %}
+                <a class="help external" href="{{item.url|UU}}"><div class="icon {{item.navicon}} m-ico-color{{loop.index}}"></div><span>{{item.name}}</span></a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="swiper-pagination swiper-menu1"></div>
+    </div>
+
+<script type="text/javascript">
+    seajs.use(['sm'], function(sm){
+        $('.ajax-swiper').swiper({
+            pagination: '.swiper-menu1'
+        });
+    })
+</script>
+    {% endif %}
+{% endblock result %}

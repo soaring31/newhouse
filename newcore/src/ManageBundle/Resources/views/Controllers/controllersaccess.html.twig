@@ -1,0 +1,50 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+
+</script>
+{% endblock %}
+
+{% block tableMain %}
+<section class="mt10">
+    <span class="tableDesc">
+              汽车列表&gt;&gt;&nbsp;&nbsp;
+    <input type="text" id="search_name" data-source="{{ app.request.get('name','') }}" value="{{ app.request.get('name','') }}" />
+    </span>
+	<table class="right-table">
+		<tbody>
+			<tr>
+				<th class="w30"></th>
+				<th class="w100 txtleft">序号</th>
+				<th class="w300 txtleft">新车名称</th>
+				<th class="w100 txtleft">指导价(万元)</th>
+				<th class="w100 txtleft">排量(ml)</th>
+				<th class="txtleft">新车描述</th>
+				<th class="w160">操作{{ info.time|default('') }}</th>
+			</tr>			
+			{% if info.data is defined %}
+			{% for key,vo in info.data %}
+			<tr>
+			    <td></td>
+			    <td>{{ vo.id|default("") }}</td>
+				<td>{{ vo.name|sphinx_highlight('large_data', app.request.get('name',''), {limit:30}) }}</td>
+				<td>{{ vo.guidePrice|default("") }}</td>
+				<td>{{ vo.displacement|default("") }}</td>
+				<td>{{ vo.abstract|default("") }}</td>
+				<td></td>	
+			</tr>
+			{% endfor %}
+			{% endif %}
+		</tbody>
+	</table>
+</section>
+{% endblock %}
+
+{% block submit %}{% endblock %}
+{% if info is defined %}
+{% block pageIndex %}{{info.pageIndex|default(1)}}{% endblock %}
+{% block pageCount %}{{info.pageCount|default(1)}}{% endblock %}
+{% endif %}
+{% block promptUl %}
+	<li></li>
+{% endblock %}

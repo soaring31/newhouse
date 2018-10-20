@@ -1,0 +1,204 @@
+{% extends "ManageBundle::poplayout.html.twig" %}
+{% block js %}
+<script>
+seajs.use("{{ bundlepath }}/js/controllerident",function(c){
+	//js入口
+	c.init('show');
+});
+</script>
+{% endblock %}
+{% block body %}
+<form action="{{ 'save'|U({'pid':app.request.get('pid'),'bundleName':app.request.get('bundleName'),'controllerName':app.request.get('controllerName')}) }}" method="POST" class="form">
+<table class="popup-table" style="width:100%;">
+    <tbody>
+        <tr>
+            <th class="w150 rtd txtright">标识名称：</th>
+            <td class="txtleft"><input type="text" name="identName" required="required" value="{{ app.request.get('id') }}" class="w300" /><div class="tip">只能输入英文字母</div></td>
+        </tr>
+        <tr>
+            <th class="rtd txtright">表名称：</th>
+            <td class="txtleft"><input type="text" name="tableName" required="required" value="{{ info.tableName|default('') }}" class="w300" /><div class="tip">输入对应表名称</div></td>
+        </tr>
+        <tr>
+            <th class="rtd txtright">表别名：</th>
+            <td class="txtleft"><input type="text" name="aliasName" required="required" value="{{ info.aliasName|default('') }}" class="w300" /><div class="tip">只能输入英文字母</div></td>
+        </tr>
+        <tr>
+            <th class="rtd txtright">列表参数：</th>
+            <td class="txtleft"><textarea name="listGrid" required="required" class="w300">{{ info.listGrid|default('')|join('\r\n') }}</textarea></td>
+        </tr>
+        <tr>
+            <th class="rtd txtright">列表描述：</th>
+            <td class="txtleft"><textarea name="listDesc" required="required" class="w300">{{ info.listDesc|default('') }}</textarea></td>
+        </tr>
+        <tr>
+            <th class="rtd txtright">读取类型：</th>
+            <td class="txtleft">
+                <select class="w100" name="storagetype">
+                    <option value="1" {{ info.storagetype|default(3)|isSelected(1) }}>数据库</option>
+                    <option value="2" {{ info.storagetype|default(3)|isSelected(2) }}>文件库</option>
+                    <option value="3" {{ info.storagetype|default(3)|isSelected(3) }}>全部</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th class="rtd txtright">字段别名：</th>
+            <td class="txtleft">
+                {% if info.alias is defined %}
+                {% for k, v in info.alias %}
+                <div>
+                    <input class="w100" name="dataAliasK[]" value="{{ k }}" type="text">-
+                    <select name="dataAliasV[]">
+                        {% if fieldInfo.data is defined %}
+                        {% for key, item in fieldInfo.data %}
+                        <option value="{{ key }}" {{ v|default('')|isSelected(key) }}>{{ item }}</option>
+                        {% endfor %}
+                        {% endif %}
+                    </select>
+                    <input class="detail-btn" id="node_alias_delete_{{ v }}" value="删除" type="button" />
+                </div>
+                {% endfor %}
+                {% endif %}
+                <div><input class="search-btn" id="node_alias_add" data-url="{{ ('getjson')|U }}" value="添加别名" type="button" /></div>
+            </td>
+        </tr>
+        <tr>
+            <th class="rtd txtright">查询参数：</th>
+            <td class="txtleft">
+                {% if info.query is defined %}
+                {% for k, v in info.query %}
+                <div>
+                    <select name="dataQueryS[]">
+                        {% if fieldInfo.data is defined %}
+                        {% for key, item in fieldInfo.data %}
+                        <option value="{{ key }}" {{ k|default('')|isSelected(key) }}>{{ item }}</option>
+                        {% endfor %}
+                        {% endif %}
+                    </select>
+
+                    {% for ko, vo in v %}
+                    <select name="dataQueryK[]">
+                        {% if fieldInfo.symbol is defined %}
+                        {% for key, item in fieldInfo.symbol %}
+                        <option value="{{ key }}" {{ ko|default('')|isSelected(key) }}>{{ item }}</option>
+                        {% endfor %}
+                        {% endif %}
+                    </select>
+                    <input class="w250" name="dataQueryV[]" type="text" value="{{ vo }}" />
+                    {% endfor %}
+                    <input class="detail-btn" value="删除" id="node_query_delete" type="button" />
+                </div>
+                {% endfor %}
+                {% endif %}
+                <div><input id="node_query_add" data-url="{{ ('getjson')|U }}" class="search-btn" value="添加查询" type="button" /></div>
+            </td>
+        </tr>
+        <tr>
+            <th class="rtd txtright">是否查询属性表：</th>
+            <td class="txtleft">
+                <select name="attribute">
+                    <option value=0 {{ info.attribute|default(0)|isSelected(0) }}>否</option>
+                    <option value=1 {{ info.attribute|default(0)|isSelected(1) }}>是</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th class="rtd txtright">自动条件查询：</th>
+            <td class="txtleft">
+                <select name="autoQuery">
+                    <option value=0 {{ info.autoQuery|default(0)|isSelected(0) }}>否</option>
+                    <option value=1 {{ info.autoQuery|default(0)|isSelected(1) }}>是</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th class="rtd txtright">当前页码：</th>
+            <td class="txtleft"><input type="text" name="pageIndex" required="required" class="w100" value="{{ info.pageIndex|default(1) }}" /></td>
+        </tr>
+        <tr>
+            <th class="rtd txtright">每页数量：</th>
+            <td class="txtleft"><input type="text" name="pageSize" required="required" class="w100" value="{{ info.pageSize|default(8) }}" /></td>
+        </tr>
+        <tr>
+            <th class="rtd txtright">分组字段：</th>
+            <td class="txtleft"><input type="text" name="groupBy" required="required" class="w100" value="{{ info.groupBy|default('') }}" /></td>
+        </tr>
+        <tr>
+            <th class="rtd txtright">排序字段：</th>
+            <td class="txtleft"><textarea name="order" class="w300">{{ info.order|default('') }}</textarea></td>
+        </tr>
+        <tr>
+            <th class="rtd txtright">升降序：</th>
+            <td class="txtleft">
+                <select name="orderBy">
+                    <option value="asc" {{ info.orderBy|default('')|isSelected('asc') }}>升序</option>
+                    <option value="desc" {{ info.orderBy|default('')|isSelected('desc') }}>降序</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th class="rtd txtright">数据模式：</th>
+            <td class="txtleft">
+                <select name="dataModel">
+                    <option value="0" {{ info.dataModel|default(0)|isSelected(0) }}>普通结构</option>
+                    <option value="1" {{ info.dataModel|default(0)|isSelected(1) }}>树形结构</option>
+                    <option value="2" {{ info.dataModel|default(0)|isSelected(2) }}>内嵌查询</option>
+                    <option value="3" {{ info.dataModel|default(0)|isSelected(3) }}>二叉树子查询</option>
+                    <option value="4" {{ info.dataModel|default(0)|isSelected(4) }}>二叉树叶子</option>
+                </select>
+            </td>
+        </tr>
+        <tr id="dataModel_1" class="hide">
+            <th class="rtd txtright">查询方式：</th>
+            <td class="txtleft">
+                <select name="searchFun">
+                    <option value="EXISTS" {{ info.searchFun|default('EXISTS')|isSelected('EXISTS') }}>EXISTS</option>
+                    <option value="NOT EXISTS" {{ info.searchFun|default('EXISTS')|isSelected('NOT EXISTS') }}>NOT EXISTS</option>
+                </select>
+            </td>
+        </tr>
+        <tr id="dataModel_2" class="hide">
+            <th class="rtd txtright">子表名称：</th>
+            <td class="txtleft"><input type="text" name="subTableName" value="{{ info.subTableName|default('') }}" class="w300" /></td>
+        </tr>
+        <tr id="dataModel_3" class="hide">
+            <th class="rtd txtright">子表关联字段：</th>
+            <td class="txtleft"><input type="text" name="subJoinField" value="{{ info.subJoinField|default('') }}" class="w300" /></td>
+        </tr>
+        <tr id="dataModel_4" class="hide">
+            <th class="rtd txtright">子表查询参数：</th>
+            <td class="txtleft">
+                {% if info.query1 is defined %}
+                {% for k, v in info.query1 %}
+                <div>
+                    <select name="dataQueryS1[]">
+                        {% if fieldInfo1.data is defined %}
+                        {% for key, item in fieldInfo1.data %}
+                        <option value="{{ key }}" {{ k|default('')|isSelected(key) }}>{{ item }}</option>
+                        {% endfor %}
+                        {% endif %}
+                    </select>
+
+                    {% for ko, vo in v %}
+                    <select name="dataQueryK1[]">
+                        {% if fieldInfo1.symbol is defined %}
+                        {% for key, item in fieldInfo1.symbol %}
+                        <option value="{{ key }}" {{ ko|default('')|isSelected(key) }}>{{ item }}</option>
+                        {% endfor %}
+                        {% endif %}
+                    </select>
+                    <input class="w100" name="dataQueryV1[]" type="text" value="{{ vo }}" />
+                    {% endfor %}
+                    <input class="detail-btn" value="删除" id="node_query_delete" type="button" />
+                </div>
+                {% endfor %}
+                {% endif %}
+                <div><input id="node_query1_add" data-url="{{ ('getjson')|U }}" class="search-btn" value="添加查询" type="button" /></div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div class="popup-submit"><button type="submit" name="submit" class="search-btn ajax-post reload" target-form="form">提交</button></div>
+<input name="csrf_token" value="{{ csrf_token }}" type="hidden">
+</form>
+{% endblock %}

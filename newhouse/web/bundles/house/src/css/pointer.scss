@@ -1,0 +1,38 @@
+/*!
+ * @name <%= name %>
+ * @author <%= author %>
+ * @date <%= date %>
+ */
+
+@import 'static/ats';
+// 工具类 每个文件都要导入
+
+@import 'lp-map';
+
+@import 'font-lp';
+
+.lp-coltit {
+  display: none;
+}
+html,
+body,
+.big-map-wrap,
+.map-wrap {
+	height: 100%;
+}
+.map-wrap{
+	.show {
+		height: 100%;
+	}
+}
+.map-label {
+	display: block;
+}
+.map-wrap {
+	.assort-distance {
+		display: block;	
+	}	
+}
+.vista-wrap {
+	display: none;
+}

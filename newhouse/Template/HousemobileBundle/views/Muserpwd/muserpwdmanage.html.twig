@@ -1,0 +1,16 @@
+{% extends 'HousemobileBundle:Museraccount:muserinfo.html.twig' %}
+
+{% block header_title %}
+{{core_mobile_global.title({title: '修改密码'})}}
+{% endblock header_title %}
+
+{% block title %}
+	修改密码
+{% endblock title %}
+
+{% block container %}
+{{ render(controller('HouseBundle:Bundlebindforms:muserpwd',{
+	_isApp: url_isApp, 
+	formName: 'regpwd'
+})) }}
+{% endblock container%}

@@ -1,0 +1,26 @@
+{% extends 'ManageBundle::mainlayout.html.twig' %}
+{% import 'ManageBundle:Form:lists.html.twig' as lists %}
+{% block js %}
+<script type="text/javascript">
+
+</script>
+{% endblock %}
+
+{% block tableMain %}
+<section>
+    <span class="tableDesc">
+    {{ ident.info.listDesc|default('') }}列表&gt;&gt;
+    <input type="button" id="btnfun_edit" data="{{ (action~'/show')|U }}" class="btn" value="新增{{ ident.info.listDesc|default('') }}" />
+    <input type="button" id="btnfun_all" data-url="{{ (action~'/structure')|U }}" class="search-btn" value="重置结构" />
+    </span>
+    {{ lists.list(ident.info) }}
+</section>
+{% endblock %}
+
+{% block page %}
+{{lists.page(ident.info)}}
+{% endblock %}
+{% block submit %}{% endblock %}
+{% block promptUl %}
+提示说明
+{% endblock %}

@@ -1,0 +1,215 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+
+{% set cate_pushs = app.request.get('cate_pushs')|default('') %}
+{% set cate_pushs_act_data = ('house.cate_pushs')|getRow({ename: cate_pushs}) %}
+
+{# 列表排序 #}
+{% set pushs_order = app.request.get('order') %}
+
+{% set _form_id = ('db.model_form')|getOne('id', {name: cate_pushs_act_data.form}) %}
+
+{# 侧栏数据 #}
+{% set cate_pushs_menu = app.request.get('menu')|default('') %}
+{% set cate_pushs_data = ('house.cate_pushs')|getTree({menu: cate_pushs_menu, pageSize: 50, checked: 1, order: 'sort|asc'}) %}
+
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+{% block mainleft %}
+<section class="main-left" data-target=".main-through">
+    <div data-level="top" data-trigger-next="1" class="level1">
+        {% if cate_pushs_data.data is defined %}
+        {%- for item1 in cate_pushs_data.data -%}
+        {#- 1级 -#}
+        <a data-level="1" title="{{item1.menu.name}}" class="{% if item1.nodes %}has-child{% endif %}">{{item1.menu.name}}</a>
+        <div data-level="next" class="level2">
+            {% if item1.nodes is defined %}
+            {%- for item2 in item1.nodes -%}
+                {% if item2.menu.menu != 10 %}
+                {#- 2级 -#}
+                <a data-level="1" title="{{item2.menu.name}}" href="{{ (action)|U({cate_pushs: item2.menu.ename}) }}" data-route="{{item2.menu.ename}}" data-role="jump">{{item2.menu.name}}</a>
+                {% endif %}
+            {% endfor -%}
+            {% endif -%}
+        </div>
+        {% endfor -%}
+        {% endif -%}
+    </div>
+</section>
+{% endblock mainleft %}
+
+{% set models_data = ('db.models')|getAll({name: 'in|' ~ cate_pushs_act_data.models}) %}
+{% block mainMenu %}
+{% if cate_pushs -%}
+    {# 推荐位信息 #}
+    <div data-target=".main-bd">
+        {# {{dump(models)}} #}
+    {{ core_manage.jump({
+        url: ('mpushslist')|U({cate_pushs: cate_pushs}), 
+        title: '<i class="font-ico-detail mr5"></i>推送管理',
+        class: 'on',
+    }) }}
+    {% if models_data.data is defined %}
+    {% if models_data.data|length == 1 %}
+        {# {{ dump((cate_pushs_act_data.urlparams|getQuery)) }} #}
+    {# 单个分类 #}
+        {{ core_manage.jump({
+            title: '<i class="font-ico-sort mr5"></i>加载推送',
+            url: (action ~ '/loadpushs')|U({models: models_data.data[0].name, cate_pushs: cate_pushs}|merge(cate_pushs_act_data.urlparams|getQuery)),
+        }) }}
+    {% elseif models_data.data|length > 1 %}
+    {# 多个分类 #}
+        <div class="dropdown" >
+            <button class="btn btn-sm dropdown-toggle" type="button" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <i class="font-ico-sort mr5"></i>加载推送
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdown1">
+                {# <li role="separator" class="divider"></li> #}
+                {%- for item in models_data.data -%}
+                <li><a data-role="jump" href="{{ (action ~ '/loadpushs')|U({models: item.name, cate_pushs: cate_pushs}) ~ '&' ~ cate_pushs_act_data.urlparams }}">{{ item.title }}</a>
+                </li>
+                {% endfor -%}
+            </ul>
+        </div>
+    {% endif %}
+    {% endif %}
+    </div>
+{%- endif %}
+{% endblock mainMenu %}
+{# 列表数据 #}
+{% set pageIndex = app.request.get('pageIndex')|default(1) %}
+    
+{% set search_keyword = app.request.get('name') %}
+{% set search_opt = search_keyword ? {name: 'orX|name,like,%' ~ search_keyword ~ '%|id,eq,' ~ search_keyword ~ ''} : {} %}
+{% set pushs_data = ('house.pushs')|getBlock({ename: cate_pushs}, {from_data: 0, pageSize: 10, pageIndex: pageIndex, timeflag: 1, _multi: 1, order: (pushs_order ? : 'sort|asc')}|merge(search_opt)) %}
+
+{%- set param -%}
+    {
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ "/show")|U({_form_id: _form_id ? : '' }) }}',
+        submitUrl : '{{ (action ~ "/save")|U({_form_id: _form_id ? : '' }) }}',
+        deleteUrl : '{{ (action ~ "/delete")|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data : {
+            cate_pushs: '{{ cate_pushs }}'
+        }
+    }
+{%- endset -%}
+
+{% block tableMain %}
+{# 需要手动添加 #}
+{% if cate_pushs_act_data.isadd|default('') %}
+{% set filterOpt = [{
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>手动添加'
+    }] %}
+
+{% endif %}   
+{# 菜单不需要筛选 #}
+{% set filterOpt = filterOpt|default([])|merge([
+    {
+        method: 'search',
+        field: 'name',
+        title: '请搜索名称/来源ID',
+    }
+]) %}
+{# {% set houses_ask_data = ('house.pushs')|getBlock({ename: 'wenda'}, {pageSize: 5, checked: 1}) %} #}
+{{ core_manage.filter(filterOpt|default('')) }} 
+<div class="list-con"  data-param="{{ param }}">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th>名称</th>
+                    <th width="100">模型</th>
+                    <th width="130">推送用户名</th>
+                    <th width="70" data-role="sort" data-sort="fromid" class="sort">来源ID</th>
+                    <th width="50" data-role="sort" data-sort="sort_fixed" class="sort">固位</th>
+                    <th width="50" data-role="sort" data-sort="sore" class="sort">排序</th>
+                    <th width="50">状态</th>
+                    <th width="100" data-role="sort" data-sort="start_time" class="sort">开始时间</th>
+                    <th width="100" data-role="sort" data-sort="end_time" class="sort">到期时间</th>
+                    <th width="100" data-role="sort" data-sort="create_time" class="sort">推送时间</th>
+                    <th width="120" class="tac">操作</th>
+                </tr>
+               
+                {% if pushs_data.data is defined  and pushs_data.pageCount|default('') != 0 %}
+                {% for item in pushs_data.data -%}
+                <tr data-id="{{ item.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td class="tov">
+                        {# 会员表获取名称 #}
+                        {% if models_data.data[0].name|default("") == 'users' and item.fromid|default(0) != 0 %}
+                            {% set item_users = ('db.userinfo')|getRow({uid: item.fromid}) %}
+                            {% set item_users_name = item_users.company|default(item_users.cpltd|default(item_users.nicename|default(item.name|default('')))) %}
+                        {% endif %}
+                        {# {{ dump(item_users|default('')) }} #}
+                        {# item_users_name 优先读取会员表名称 #}
+                        {{ item_users_name|default(item.name|default(item.keyword|default(item.username|default('')))) }}
+                    </td>
+
+                    <td>{{ item.models|default('手动添加') }}</td>
+                    {# <td>{{core_global.substr(item.username|default('-'), 10, 0)}}</td> #}
+                     <td>{{ ("db.users")|getOne('username', {id: item.uid})|default('-') }}</td>
+                    <td>{{ item.fromid|default('-') }}</td>
+                    <td><span data-role="itemEdit" data-name="sort_fixed" data-size="5" class="edit">{{ item.sort_fixed|default('0') }}</span></td>
+                    <td><span data-role="itemEdit" data-name="sort" data-size="5" class="edit">{{ item.sort|default('0') }}</span></td>
+                    <td>{{core_global.formField({
+                        value: item.checked,
+                        form: 'pushs_img_ad',
+                        field: 'checked'
+                    })}} </td>
+                    <td>{{ item.start_time|default(0)|date('Y-m-d') }}</td>
+                    <td>{{ core_manage.valid_date(item.end_time, 'Y-m-d') }}</td>
+                    <td>{{ item.create_time|default(0)|date('Y-m-d') }}</td>
+                    <td class="tar pr10">
+                        {{ core_manage.show() }}
+                        {{ core_manage.delete() }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="12" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    
+    {{core_manage.page(pushs_data)}}
+</div>
+    
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'pushs_img_ad',
+        title: '设置状态',
+    },
+    {
+        method: 'btn_date',
+        field: 'start_time',
+        title: '开始时间',
+    },
+    {
+        method: 'btn_date',
+        field: 'end_time',
+        title: '到期时间',
+    }
+]) }}
+{% endblock tableMain %}
+
+{% block promptUl %}
+    <p>1.手动推送：即管理员在文档/会员列表的批量操作中 或 在推送位管理的“加载信息”中设置的推送信息；<p>
+    <p>2.手动添加：即管理员在推送位管理列表中点[>>手动添加]的推送信息，这类信息“来源ID”一般为空；</p>
+    <p>3.自动推送：即发布文档等信息时，自动推动的信息，这种来源需要推送位开启[添加资料时自动推送]设置；</p>
+{% endblock promptUl %}
+

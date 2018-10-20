@@ -1,0 +1,10 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{%- block result -%}
+{% set class = app.request.get('class')|replace('_', ' ') %}
+{% if class|default('') %}
+	{% set _class = {
+		class: class|default('')
+	} %}
+{% endif %}
+{{core_mobile_global.list_scroll({footer: 0}|merge(_class|default({})))}}
+{%- endblock result -%}

@@ -1,0 +1,224 @@
+{{core_global.linkcss('static/house/css/common.css?time=201804201145')}}
+ {#当前分站id#}
+{% set sess_area = app.session.get('area')|default(0) %}
+ {#当前城市的简称#}
+{% set city = ('db.auth_group_area')|getAll({
+    rulesarea:sess_area,
+    pageSize: 1,
+    order   : 'sort',
+    orderBy : 'asc'
+}) %}
+
+{#本月的第一天#}
+{% set now = ("now")|date('Y-m') %}
+{% set now_1 = now~'-01' %}
+{#本月的最后一天#}
+{% set next_1 = ("now")|date_modify('+1 months')|date('Y-m') %}
+{% set next_2 = next_1~'-01' %}
+{% set now_last = next_2|date_modify('-1 days')|date('Y-m-d') %}
+{#当月新盘数据#}
+{% set last_all = ('house.houses')|getAll({pageSize:10}) %}
+{#本月楼盘#}
+{#{% set all = ('house.houses')|getAll({kpdate:"between|"~"'"~now_1~"'"~","~"'"~now_last~"'",pageSize:10,area:detail.area}) %}#}
+
+{% macro select_m(start,end) %}
+    {% set all_ = ('house.houses')|getAll({kpdate:"between|"~"'"~start~"'"~","~"'"~end~"'",pageSize:10}) %}
+{% endmacro %}
+
+<div class="footer-content">
+    <div class="list-box-1">
+        <div class="box-header">
+            <div>
+                <h2>{{ city.data[0].name|default('') }}热门楼盘</h2>
+                {#<p>查看更多&gt;&gt;</p>#}
+            </div>
+            <ul>
+                <li class="first">楼盘名称</li>
+                <li>区县</li>
+                <li>价格</li>
+                <li class="last">评分</li>
+            </ul>
+        </div>
+        {% if sort_clicks_houses.data %}
+        <ul class="box-list">
+            {% for key,i in sort_clicks_houses.data %}
+            <li>
+                <a href="{{(i.models|default ~ '/detail')|U({id:i.id|default('')})}}">
+						<span class="first">
+							<b {% if key<3 %}class="color"{% endif %}>{{ key+1 }}</b>{{ i.name|default }}
+						</span>
+                    <span>
+                        <span class="list-qx">
+                            {{ (('db.area')|getRow({id: i.region,checked:1}).name)|default('--') }}
+                        </span>
+                    </span>
+                    <span>
+                        {{house_global.if_dj({value: i.dj|default(''), tpl: '<b>%value%</b>%danwei%'})}}
+                    </span>
+                    <span class="last">
+                        {{ ('house.inter_housescomment')|getOne("overall",{aid:i.id})|default('暂无') }}
+                    </span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <ul class="box-list" style="text-align:center;">暂无相关数据</ul>
+        {% endif %}
+    </div>
+    <div class="list-box-2">
+        <div class="box-header">
+            <div>
+                <h2>{{ city.data[0].name|default('') }}新盘</h2>
+                {#<p>查看更多&gt;&gt;</p>#}
+            </div>
+            <ul>
+                <li class="first">楼盘名称</li>
+                <li>区县</li>
+                <li>价格</li>
+                <li class="last">评分</li>
+            </ul>
+        </div>
+        {% if last_all.data %}
+        <ul class="box-list">
+            {% for key,i in last_all.data %}
+            <li>
+                <a href="{{'/xinfang/detail/'~i.id~'.html'}}" target="_blank">
+                    <span class="first">
+                        <b {% if key<3 %}class="color"{% endif %}>{{ key+1 }}</b>{{ i.name }}
+                    </span>
+                    <span>
+                        <span>{{ (('db.area')|getRow({id: i.region,checked:1}).name)|default('--') }}</span>
+                    </span>
+                    <span>
+                       {{house_global.if_dj({value: i.dj|default(''), tpl: '<b>%value%</b>%danwei%'})}}
+                    </span>
+                    <span class="last">
+                        {{ ('house.inter_housescomment')|getOne("overall",{aid:i.id})|default('暂无') }}
+                    </span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <ul class="box-list" style="text-align:center;">暂无相关数据</ul>
+        {% endif %}
+    </div>
+    <div class="list-box-3">
+        <div class="box3-header">
+            <div>
+                <h2>本月新盘</h2>
+                {#<p>查看更多&gt;&gt;</p>#}
+            </div>
+            <ul>
+                <li class="year">{{ ("now")|date('Y') }}</li>
+                <li class="left j_left" data-m="2">&lt;</li>
+                <li class="month_ j_month">
+                    <div>
+                        {% for i in 1..12 %}
+                        <span {% if i==("now")|date('m') %}class="active"{% endif %}>{{ i }}</span>
+                        {% endfor %}
+                    </div>
+                </li>
+                <li class="right j_right" data-m="12">&gt;</li>
+            </ul>
+        </div>
+        <ul class="box-list last_">
+        </ul>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    seajs.use([],function () {
+        $(function () {
+            var year = '{{ ("now")|date('Y') }}';
+            var time_start = '',time_end='',month='';
+            var all_day='';
+            {#本月的第一天#}
+            {% set now = ("now")|date('Y-m') %}
+            {% set now_1 = now~'-01' %}
+            {#本月的最后一天#}
+            {% set next_1 = ("now")|date_modify('+1 months')|date('Y-m') %}
+            {% set next_2 = next_1~'-01' %}
+            {% set now_last = next_2|date_modify('-1 days')|date('Y-m-d') %}
+            get_lp('{{ now_1 }}','{{ now_last }}');
+            $('.j_month>div>span').click(function () {
+                $('.j_month>div>span').removeClass('active');
+                $(this).addClass('active');
+                month=$(this).text();
+                if(month<10){
+                    month='0'+month;
+                }
+                all_day=getDaysInOneMonth(year,month);
+                time_start=year+'-'+month+'-01';
+                time_end=year+'-'+month+'-'+all_day;
+                get_lp(time_start,time_end);
+            });
+            function getDaysInOneMonth(year, month){
+                var d= new Date(year, month, 0);
+                return d.getDate();
+            }
+
+            var ml=$('.j_left').data('m');
+            var mr=$('.j_right').data('m');
+            $('.j_left').click(function () {
+                $('.box3-header .month_ div').css('left','3px');
+            });
+            $('.j_right').click(function () {
+                $('.box3-header .month_ div').css('left','-65px');
+            });
+
+
+            function get_lp(start,end) {
+                $.ajax({
+                    url:'{{ apiUrl }}'+'/api/front/houses/info',
+                    type:'get',
+                    data:{
+                        begin_kpdate:start,
+                        end_kpdate:end,
+                        area:'{{ detail.area|default('') }}',
+                        page:1,
+                        limit:10
+                    },
+                    success:function (data) {
+                        var list=data.data.data;
+                        var len=list.length;
+                        var html='';
+                        if(list.length>0) {
+                            for (var i = 0; i < len; i++) {
+                                html += '<li>';
+                                var url = '{{ '/xinfang/detail/'~'9999'~'.html' }}'.replace('9999',list[i].id);
+                                var area='{{(('db.area')|getRow({id:'9999',checked:1}).name)|default('--')}}'.replace('9999',list[i].region);
+                                var price='{{house_global.if_dj({value:'9999'|default(''), tpl:'<b>%value%</b>%danwei%'})}}'.replace('9999',list[i].dj);
+                                var star='{{ ('house.inter_housescomment')|getOne("overall",{aid:'9999'})|default('暂无') }}'.replace('9999',list[i].id);
+                                var num=parseInt(i+1);
+                                html +=
+                                    '                <a href="'+url+'" target="_blank">' +
+                                    '                    <span class="first">';
+                                if(i<3){
+                                    html +=  '<b class="color">'+num+'</b>'+list[i].name;
+                                }else {
+                                    html +=  '<b class="">'+num+'</b>'+list[i].name;
+                                }
+                                html +=
+                                    '                    </span>' +
+                                    '                    <span>' +
+                                    '                        <span>'+area+'</span>' +
+                                    '                    </span>' +
+                                    '                    <span>'+price+'</span>' +
+                                    '                    <span class="last">'+star+'</span>' +
+                                    '                </a>' +
+                                    '            </li>'
+                            }
+                            $('.last_').html(html);
+                        }else{
+                            $('.last_').html('当月暂无数据').css('text-align','center');
+                        }
+                    }
+                })
+            }
+        })
+    });
+
+</script>

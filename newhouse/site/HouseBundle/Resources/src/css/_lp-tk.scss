@@ -1,0 +1,62 @@
+﻿/*!
+ * @name lp-tk.css
+ * @author xying
+ * @date 2016-8-5
+ * @dec common lp detail tk
+ */
+
+@import 'lightgallery'; // 加载幻灯片样式
+
+.lp-plist1 {
+    position: relative;
+    margin-right: -50px;
+    *zoom: 1;
+    min-height: 186px;
+}
+.lp-plist1 li {
+    float: left;
+    width: 184px;
+    padding: 20px 20px 0 0;
+}
+
+.plist-mod .item-img{
+    height: 134px;
+    width: 184px;
+    border: 1px solid #ddd;
+    margin-bottom: 6px;
+    img {
+        display: block;
+        margin: 0 auto;
+    }
+}
+.plist-mod em {
+    font-size: 14px;
+    line-height: 24px;
+    display: block;
+    overflow: hidden;
+    height: 24px;
+    text-align: center;
+    word-wrap: break-word;
+}
+.plist-mod li a {
+    display: block;
+}
+.plist-mod li a:hover {
+    color: #f00;
+}
+.plist-mod li a:hover em.fcg {
+    color: #f00;
+}
+
+.lp-plist-more {
+    background: $major-color;
+    border-radius: 3px;
+    border: none;
+    color: #fff;
+    height: 34px;
+    line-height: 34px;
+    padding: 0 12px;
+    &:hover{
+        color: #fff;
+    }
+}

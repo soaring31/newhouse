@@ -1,0 +1,24 @@
+
+$img-icons-30:(200px,200px,0,0,img-icons-30);
+
+$img-icons: ($img-icons-30,);
+
+@mixin img-icons($sprites) {
+  %icoicons {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/icons.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+      @extend %icoicons;
+    }
+  }
+}

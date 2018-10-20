@@ -1,0 +1,65 @@
+{% extends 'CoreBundle::base_ajax.html.twig' %}
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+{% set url_id = app.request.get("id")|default(0) %}
+{% set models = app.request.get("models")|default('') %}
+{% set formid = app.request.get("formid")|default('') %}
+{% set form = formid|getForm %}
+{% set results = ('house.' ~ models)|getAll({id: 'in|' ~ url_id, findType:1, checked: 1}) %}
+{% block result %}
+{% spaceless %}
+{% set tpl_a = ',' %}
+{% if results.data is defined and results.data|length > 0 %}
+    {
+    {% for item in results.data %}
+        {% if loop.index != 1 %},{% endif %}"{{ loop.index }}": {
+            "default_first":"-"
+            {% for k,v in form.children %}
+                {# one #}
+                {% if v.children is defined and v.children|length == 0 and v.vars.label|default('') != null and k not in  ['type','models','checked','group_top','ename','submit','top','aid','uid','usertype','eid', 'csrf_token', 'cid'] %}
+                   {{tpl_a|default('')}}"{{(k)}}-{{(v.vars.label)}}": "{{attribute(item,k) is defined ? attribute(item,k)|raw: ''}}" 
+                {% endif %}
+                {% if v.children is defined and v.children|length > 0 %}
+                    {% for k2,v2 in v.children %}
+                        {% if  v2.children is defined and v2.children|length == 0 and v2.vars.label|default('') != null and  k2 not in ['qqqun', 'content', 'top', 'tujis'] %}
+                            {% if k2  in ['tslp','cate_type','cate_status','zxcd','cx','czlx','jian'] %}
+                                {{tpl_a|default('')}}"{{(k2)}}-{{(v2.vars.label)}}": "{{attribute(item,k2) is defined ? '' ~ core_global.formData({value: attribute(item,k2)}) ~ '' : ''}}"
+                            {% elseif k2 in ['fwpt']%}
+                                {{tpl_a|default('')}}"{{(k2)}}-{{(v2.vars.label)}}": "{{attribute(item,k2) is defined ? '' ~ core_global.formField({value: attribute(item,k2), form: 'srv_common', field: '' ~ k2 ~ '', tpl: '%title%、'}) ~ '' : ''}}"
+                            {% elseif k2 in ['thumb','loupanlogo','lphf'] %}
+                                {{tpl_a|default('')}}"{{(k2)}}-{{(v2.vars.label)}}": "{{(attribute(item,k2) is defined ? '' ~ core_global.img_url({src: attribute(item,k2)}) ~ '' : '')}}"
+                            {% else %}
+                                {% if  v2.vars.data|default('') == '' %}
+                                    {{tpl_a|default('')}}"{{(k2)}}-{{(v2.vars.label)}}": "{{attribute(item,k2) is defined ? attribute(item,k2)|raw : ''}}"
+                                {% else %}
+                                    {{tpl_a|default('')}}"{{(k2)}}-{{(v2.vars.label)}}": "{{attribute(item,k2).date is defined ? attribute(item,k2).date : ''}}"
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                        {% if v2.children is defined and v2.children|length > 0 %}
+                            {% for k3,v3 in v2.children %}
+                                {% if v3.vars.label|default('') != null %}
+                                    {% if k3 in ['region'] %}
+                                        {{tpl_a|default('')}}"{{(k3)}}-{{(v3.vars.label)}}": "{{attribute(item,k3) is defined ? '' ~ core_global.region({id: attribute(item,k3),tpl: '%value%'}) ~ '' : ''}}"
+                                    {% elseif k3 in ['cate_circle' ,'cate_metro'] %}
+                                        {{tpl_a|default('')}}"{{(k3)}}-{{(v3.vars.label)}}": "{{attribute(item,k3) is defined ? '' ~ core_global.formData({value: attribute(item,k3), form: 'house.' ~ k3}) ~ '' : ''}}"
+                                    {% elseif k3 in ['zlfs','fkfs'] %}
+                                         {{tpl_a|default('')}}"{{(k3)}}-{{(v3.vars.label)}}": "{{attribute(item,k3) is defined ? core_global.formField({value: attribute(item,k3), form: 'rent', field: '' ~ k3 ~ ''}) : ''}}"
+                                    {% elseif k3 in ['zxcd','cx'] %}
+                                        {{tpl_a|default('')}}"{{(k3)}}-{{(v3.vars.label)}}": "{{attribute(item,k3) is defined ? '' ~ core_global.formData({value: attribute(item,k3)}) ~ '' : ''}}"
+                                    {% else %}
+                                        {{tpl_a|default('')}}"{{(k3)}}-{{(v3.vars.label)}}": "{{attribute(item,k3) is defined ? '' ~ core_global.formData({value: attribute(item,k3)}) ~ '' : ''}}"
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}   
+                {% endif %}
+            {% endfor %}   
+        }
+    {% endfor %}
+    }
+{% endif %}
+{% endspaceless %}
+{% endblock result %}
+
+{# {{attribute(item,k2) is defined ? core_global.img_url({src: attribute(item,k2)}) : ''}}" #}

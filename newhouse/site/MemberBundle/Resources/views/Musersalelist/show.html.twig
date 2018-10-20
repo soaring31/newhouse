@@ -1,0 +1,9 @@
+{% extends "MemberBundle:Main:main.html.twig" %}
+
+{% block body %}
+
+{% import "MemberBundle:Macro:release.html.twig" as forms %}
+
+{{ forms.popEdit(form|default(''),'form', 'house.sale') }}
+
+{% endblock %}

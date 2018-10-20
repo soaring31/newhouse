@@ -1,0 +1,202 @@
+HouseBundle\Entity\Around:
+    type: entity
+    table: around
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            options:
+                comment: 标题
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        abstract:
+            options:
+                comment: 介绍
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        thumb:
+            options:
+                comment: 缩略图
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        map:
+            options:
+                comment: 地图
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        tel:
+            options:
+                comment: 电话
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        jibie:
+            options:
+                comment: 级别
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 2
+        leibie:
+            options:
+                comment: 类别
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 2
+        address:
+            options:
+                comment: 地址
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        checked:
+            options:
+                comment: 审核
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        houses:
+            options:
+                comment: 楼盘id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        category:
+            options:
+                comment: 周边类别
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        area:
+            options:
+                comment: 区域
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        school_type:
+            options:
+                comment: 学校分类
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 2
+        geohash:
+            options:
+                comment: 地图hash
+                unsigned: false
+            nullable: false
+            type: string
+            length: 20
+        srcid_:
+            options:
+                comment: srcid_
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 11
+        polyline:
+            options:
+                comment: 地图范围
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        lng:
+            options:
+                comment: 经度
+                unsigned: false
+            nullable: false
+            type: float
+            length: 100
+        lat:
+            options:
+                comment: 纬度
+                unsigned: false
+            nullable: false
+            type: float
+            length: 100
+        clicks:
+            options:
+                comment: 浏览量
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        region:
+            options:
+                comment: 区域2
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

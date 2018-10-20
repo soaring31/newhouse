@@ -1,0 +1,84 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明 
+** ajax调用：户型
+** 商业中心列表
+** business: 变量
+** b_models: 类型
+** url: url配置
+** 使用页面： 1、 写字楼新盘  business/list
+*             2、 写字楼出售  business/xsalelist
+*             3、 写字楼出租  business/xrentlist
+*             4、 商铺新盘    business/slist
+*             5、 商铺出售    business/ssalelist
+*             6、 商铺出租    business/srentlist
+#}
+{% block result %}
+{% set list = list|default(app.request.get('list', ident.list|default(''))) %}
+{# 默认值 #}
+{% set list = {pageIndex: 1, pageCount: 0, pageSize: 8}|merge(list) %}
+{% spaceless %}
+    {% set b_models = b_models|default(app.request.get('b_models', 'houses')) %}
+    {% set tpl_url = tpl_url|default(app.request.get('tpl_url', 'detail')) %}
+    {# url设置 #}
+    {% if list.data is defined  and list.pageCount|default('') != 0 %}
+        {% for item in list.data %}
+            <li {% if loop.last %}data-page="{
+                    pageIndex: {{list.pageIndex}},
+                    pageCount: {{list.pageCount}},
+                    pageSize: {{list.pageSize}}
+                 }"{% endif %}>
+                <a href="{{('business/' ~ tpl_url|default('detail'))|UU({id: item.id|default('')})}}" class="item-content p-default">
+                    <div class="item-media por">
+                        {{- core_global.img({
+                            src: item.thumb|default(''),
+                            alt: item.name|default(''),
+                            type: 2,
+                            width: 91,
+                            height: 68
+                        }) -}}
+                        {% if item.top|default('') %}
+                            <div class="item-zd">顶</div>
+                        {% endif %}
+                    </div>
+                    <div class="item-inner">
+                        <div class="item-title-row">
+                            {{housemobile_global.list_title({title: item.name|default('')})}}
+                            <div class="item-after">
+                                {% if b_models|default('') == 'houses' %}
+                                    {{house_global.if_dj({value: item.dj|default(''),class: 'p-red'})}}
+                                {% elseif b_models|default('') == 'xsale' or b_models|default('') == 'ssale' %}
+                                    {{house_global.if_wy({value: item.dj|default(''),class: 'p-red'})}}
+                                {% elseif b_models|default('') == 'xrent' or b_models|default('') == 'srent' %}
+                                    {{house_global.if_czj({value: item.czj|default(''), class: 'p-red'})}}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="item-title-row">
+                            <div class="item-title item-title-p0">
+                                {{item.address|default('-')}}
+                            </div>
+                            {% if b_models|default('') != 'houses' %}
+                                <div class="item-after">
+                                    {{house_global.if_mj({value: item.mj|default('')})}}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="blank5"></div>
+                        <div class="item-subtitle item-list-subtitle">
+                            {{core_global.region({id: item.region|default('1'), tpl: '<span class="button button-sm btn-1">%value%</span>'})}}
+                            {% if item.officetype|default('') %}
+                                {{house_global.lptag({value: item, con: 'officetype', tpl: '<span class="button button-sm btn-2">%value%</span>'})}}
+                                {{house_global.lptag({value: item, con: 'officelevel', tpl: '<span class="button button-sm btn-3">%value%</span>'})}}
+                            {% else %}
+                                {{house_global.lptag({value: item, con: 'shoptype', tpl: '<span class="button button-sm btn-2">%value%</span>'})}}
+                            {% endif %}
+                            {{core_global.formData({value: item.zxcd|default(''), tpl: '<span class="button button-sm btn-4">%value%</span>'})}}
+                        </div>
+                    </div>
+                </a>                    
+            </li>
+        {% endfor %}
+    {% else %}
+    {% endif %}
+{% endspaceless %}
+{% endblock result %}

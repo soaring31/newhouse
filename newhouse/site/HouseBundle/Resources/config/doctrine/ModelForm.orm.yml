@@ -1,0 +1,171 @@
+HouseBundle\Entity\ModelForm:
+    type: entity
+    table: model_form
+    indexes:
+        name:
+            columns:
+                - name
+        model_id:
+            columns:
+                - model_id
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            options:
+                comment: 表单名称
+                unsigned: false
+            nullable: false
+            type: string
+            length: 50
+        title:
+            options:
+                comment: 备注
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        status:
+            options:
+                comment: 1启用，0禁用
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+        model_id:
+            options:
+                comment: 模型ID
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        type:
+            options:
+                comment: '类型,0横表,1纵表'
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        bindform:
+            options:
+                comment: 关联表单
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        bindfield:
+            options:
+                comment: 关联字段
+                unsigned: false
+            nullable: false
+            type: string
+            length: 50
+        remark:
+            options:
+                comment: 备注
+                unsigned: false
+            nullable: false
+            type: string
+            length: 50
+        parent_form:
+            options:
+                comment: 继承表单
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        fmgroup:
+            options:
+                comment: '1=继承 2=区块文档 3=文档 4=推送 5=会员认证 6=会员组'
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        initcondition:
+            options:
+                comment: 初始化条件
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        initmodel:
+            options:
+                comment: 初始化模型
+                unsigned: false
+            nullable: false
+            type: string
+            length: 64
+        url:
+            options:
+                comment: 链接
+                unsigned: false
+                default: a
+            nullable: false
+            default: a
+            type: string
+            length: 100
+        checked:
+            options:
+                comment: checked
+                unsigned: false
+                default: '1'
+            nullable: false
+            default: '1'
+            type: boolean
+            length: 1
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

@@ -1,0 +1,55 @@
+{% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:salelist.html.twig' : 'HousemobileBundle:Member:j_d_ds.html.twig' %}
+{# 说明 
+* 经纪公司出售
+#}
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% block title %}
+    {{detail.nicename|default(detail.username|default(''))}}
+{% endblock title %}
+
+{% block header_wrap %}
+    {% set header_class = '' %}
+    {{parent()}}
+{% endblock header_wrap %}
+
+{% block header_title %}
+    {{core_mobile_global.title({title: tpl_title|default('出售')})}}
+{% endblock header_title %}
+
+{% block container %}
+    {# 检索 #}
+    {% set list_header %}
+    <div class="filter" data-block="{
+        ajax: {
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                tpl: 'Common:filter',
+                tag: 'member_jjgs_sale'
+            }
+        }
+    }"></div>
+    {% endset %}
+
+    {# 列表链接 js调用列表需要 #}
+    {% set list_url = ('member/j_detail')|U({ajax: 1, id: detail.id|default(0)}) %}
+    {{core_mobile_global.list_scroll({
+        list_header: list_header|default(''),
+        url: list_url|default('')
+    })}}
+{% endblock container %}
+
+{% block nav %}
+	<div class="dn" data-block="{
+	    bParams: true,
+	    ajax:{
+	        url: '{{ ('member/d_ds')|U }}',
+	        data: {
+	            id: '{{ detail.id|default('') }}',
+	            tpl: 'Common:navbottom',
+	            nav_opt_tag: 'member_jjr',
+	            action: '{{nav_users_act|default(2)}}'
+	        }
+	    }
+	}"></div>
+{% endblock nav %}

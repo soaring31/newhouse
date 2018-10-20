@@ -1,0 +1,47 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+
+{% block title %}
+{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}登录
+{% endblock title %}
+
+{% block header_title %}
+	{{core_mobile_global.title({title: '登录'})}}
+{% endblock header_title %}
+
+{% block header_right %}
+	{{ core_mobile_global.bar_nav_btn({
+	    title: '注册',
+	    icon: 'font-f-24',
+	    href: ('register/index')|UU
+	}) }}
+{% endblock header_right %}
+
+{% block container %}
+	{% if url|default('') and url not in [('register/index')|U({},true),('login/index')|U({},true)]  %}
+	    {% set login_url = url|default('') %}
+	{% else %}
+	    {% set login_url = ('main/mindex')|UU %}
+	{% endif %}
+	<div class="content bg-white">
+		<div class="content-block"></div>
+		<div data-block="{
+		    bParams: true,
+		    ajax:{
+		        url: '{{ ('bundlebindforms/ajax')|U }}',
+		        data: {
+		        	formflag: 'login',
+		            tpl: 'Common:forms',
+		            formattr: 'data-jumurl=\'{{login_url}}\''
+		        }
+		    }
+		}"></div>
+		{# {{ render(controller('HouseBundle:Common:forms',{
+			formflag: 'login',
+            tpl: 'Common:forms',
+            formattr: 'data-jumurl=' ~ ('main/mindex')|UU ~ '',
+            _isApp: 1
+		})) }} #}
+		{{housemobile_global.quick_login()}}
+	</div>
+{% endblock container %}

@@ -1,0 +1,10 @@
+{% extends 'HouseBundle:Muserasks:museraskslist.html.twig' %}
+
+{% block mainMenu %}
+    {{ core_manage.jump(
+        {
+           title: '<i class="mr5"></i>问答收藏',
+           url: (action)|U({models: models})       
+        }
+    ) }}
+{% endblock %}

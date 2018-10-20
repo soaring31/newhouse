@@ -1,0 +1,76 @@
+{% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:topiclist2.html.twig' : 'HousemobileBundle::list_layout.html.twig' %}
+{# 说明
+ * search_action: 搜索链接
+ * url_category ：获取url传过来的分类
+ * category: 当前分类数据
+ #}
+
+{% set search_action = ('topic/list')|UU %}
+	
+{% set url_category = app.request.get("category", 77) %}
+
+{% set category = ('house.category')|getRow({id: url_category|default(''), checked: 1}) %}
+
+{% block key_des %}
+    <meta name="keywords" content="{{ category.keywords|default('') }}" />
+    <meta name="description" content="{{ category.description|default('') }}" />
+{% endblock key_des%}
+
+{% block title %}
+    专题
+{% endblock title %}
+
+{% block header_right %}
+    {{ core_mobile_global.bar_nav_btn({
+        title: '搜索',
+        icon: 'font-f-8',
+        popup: {
+            title: '专题搜索',
+            popup: '.popup-search',
+        }
+    }) }}
+{% endblock header_right %}
+
+{% block header_title %}
+    {{core_mobile_global.title({title: category.name|default('专题')})}}
+{% endblock header_title %}
+    
+{% block container %}
+    {# 检索 #}
+    {% set list_header %}
+        <div data-block="{
+            ajax: {
+                url: '{{ ('bundlebindforms/ajax')|U }}',
+                data: {
+                    tpl: 'Common:swiper',
+                    tag: 'ztsyts'
+                }
+            }
+        }"></div>
+    {% endset %}
+
+    {# 列表链接 js调用列表需要 #}
+    {% set list_url = ('topic/list')|U({ajax: 1}) %}
+    {{ parent() }}
+{% endblock container %}
+
+{% block popup_nav %}
+    {% set current_nav = {
+        title: '专题',
+        data: [
+            {
+                name: '楼盘专题',
+                url: ('topic/list')|UU({category: 78})
+            },
+            {
+                name: '开盘预告',
+                url: ('topic/list')|UU({category: 79})
+            },
+            {
+                name: '看房团',
+                url: ('topic/group')|UU({category: 82})
+            }
+        ]
+    } %}
+    {{parent()}}
+{% endblock popup_nav %}

@@ -1,0 +1,303 @@
+/*!
+ * @name <%= name %>
+ * @author <%= author %>
+ * @date <%= date %>
+ */
+
+@import 'static/ats'; // 工具类, 每个文件都要导入
+@import 'font-validate'; //表单验证图标
+
+// 表单
+
+.common-form {
+    .hidden { 
+        display: none !important;
+    }
+    $input-w: 50%;
+    textarea,
+    input[type="number"],
+    input[type="text"],
+    input[type="password"],
+    select {
+        text-indent: 10px;
+        height: 32px;
+        line-height: 32px;
+        border: 1px solid #ddd;
+        font-size: 12px;
+        font-family: simsun;
+        border-radius: 3px;  
+        width: $input-w;
+    }
+
+    button,
+    .btn {
+        width: 120px;
+        background: #e43;
+        line-height: 32px;
+        height: 34px;
+        text-indent: 0 !important;
+        &:before {
+            vertical-align: -2px;
+            margin-right: 5px;
+        }
+        &:focus {
+            outline: none;
+        }
+        &:hover {
+            opacity: .8;
+        }
+    }
+
+    // 文本框
+    textarea {
+        text-indent: 10px;
+        min-height: 34px;
+        resize: none;
+    }
+    select {
+        height: 34px;
+        text-indent: 0 !important;
+    }
+
+    .select-wrap {
+        @extend %clearfix;
+    }
+    .select-item {
+        display: inline-block;
+        vertical-align: top;
+        margin-right: 10px;
+        input {
+            margin-right: 5px;
+            vertical-align: -1px;
+        }
+    }
+    .label-group {
+        line-height: 2;
+        label {
+            display: inline-block;
+
+            margin-right: 15px;
+        }
+        input {
+            font-family: simsun;
+
+            width: 13px;
+            height: 13px;
+            margin-right: 5px;
+
+            vertical-align: -2px;
+        }
+    }    
+    // 验证码
+    .code-wrap-outer {
+        display: inline-block;
+        vertical-align: middle;
+        width: $input-w;
+    }
+    .code-wrap {
+        display: table;
+        width: 100%;
+        .input {
+            margin-right: -50px;
+        }
+            
+        .code-item {
+            display: table-cell;
+           
+            width: 100%;
+            vertical-align: top;
+        }
+        input[type="text"],
+        .code-txt {
+            width: 100% !important;
+            padding: 0;
+            text-indent: 10px;
+        }
+        .code-item-img {
+            // float: right;
+            padding-left: 15px;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .code-img {
+            width: 90px;
+            height: 32px;
+
+            vertical-align: middle;
+
+            border: 1px solid #e3e3e3;
+        }
+        .code-title {
+            padding-left: 5px;
+
+            text-decoration: none;
+
+            color: #999;
+        }
+        .code-btn {
+            font-size: 12px;
+
+            width: auto;
+            padding: 0 10px;
+
+            vertical-align: middle;
+            &.disabled {
+                cursor: no-drop;
+            }
+        }
+    }
+    ul {
+        display: table;
+        width: 100%;
+    }
+    .item {
+        // min-height: 38px;
+        height: 48px;
+        display: table-row;
+        .label {
+            width: 20%;
+            text-align: right;
+            display: table-cell;
+            padding-right: 10px;
+            padding-top: 5px;
+            vertical-align: top;
+            white-space: nowrap;
+        }
+        .field {
+            width: 80%;
+            display: table-cell;
+            vertical-align: top;
+        }
+        &.submit {
+            height: 40px;
+            .field {
+                display: block;
+                width: $input-w;
+                text-align: center;
+            }
+        }
+        &.valid-error {
+            height: auto;
+        }
+    }
+
+    &-control {
+        $input-w: 100%;
+
+        .item {
+            width: 100%;
+            
+            &.submit {
+                .field {
+                    width: $input-w;
+                }
+                input {
+                    width: $input-w;
+                }
+            }
+        }
+
+        .btn,
+        select,
+        textarea,
+        input[type="number"],
+        input[type="text"],
+        input[type="password"],
+        button,
+        .text {
+            display: block;
+            width: $input-w;
+        }
+        .code-wrap-outer {
+            width: $input-w;
+        }
+    }
+
+    &-lg {
+        input.btn,
+        button.btn,
+        input[type="number"],
+        input[type="text"],
+        input[type="password"],
+        input.text {
+            font-size: 14px;
+            line-height: 1.3333333;
+
+            height: 44px;
+            text-indent: 15px;
+            border-radius: 6px;
+        }
+
+        input.btn,
+        button.btn {
+            height: 46px;
+            line-height: 44px;
+            font-size: 16px !important;
+        }
+        textarea {
+            min-height: 46px;
+            line-height: 21px;
+            border-radius: 5px;
+        }
+        .item {
+            min-height: 70px;
+            height: 70px;
+            .label {
+                padding-top: 11px;
+            }
+        }
+        .code-wrap {
+            input[type="text"],
+            .code-txt {
+                text-indent: 15px;
+            }
+            .code-img {
+                width: 123px;
+                height: 43px;
+            }
+            .code-btn {
+                font-size: 14px !important;
+            }
+        }
+        // 模拟下拉列表
+        .chosen-container-single .chosen-single {
+            height: 46px !important;
+            line-height: 46px !important;
+            text-align: left;
+        }
+        .chosen-container-single .chosen-single div b {
+            background-position: 0 13px;
+        }
+        label.error {
+            // display: block !important;
+        }
+    }
+    label.error {
+        color: #f00;
+        font-family: simsun;
+        font-size: 12px;
+        padding-right: 5px;
+        display: inline-block;
+        &:before {
+            font-size: 16px !important;
+            margin-left: 3px !important;
+            margin-right: 3px !important;
+            vertical-align: -4px !important;
+            @extend .font-validate-33:before;
+            @extend [class^="font-validate-"];
+        }
+    }
+    .error-wrap {
+        height: 14px;
+        line-height: 1;
+        display: inline-block;
+    }
+
+    .required:before {
+        content: "* ";
+        color: #f00;
+        vertical-align: middle;
+    }
+
+}
+

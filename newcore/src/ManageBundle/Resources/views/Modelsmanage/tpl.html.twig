@@ -1,0 +1,28 @@
+{% extends "ManageBundle::poplayout.html.twig" %}
+{% block body %}
+<table class="popup-table" style="width:100%;">
+    <tbody>
+        <tr>
+			<th class="w150 rtd txtright">列表模板</th>
+			<td class="txtleft">
+			     <input type="text" name="templateList" class="w250" value="{{ info.templateList|default('') }}" />
+			     <label>（自定义的列表模板，放在App\Resources\views\）</label>
+			</td>
+		</tr>
+		<tr>
+			<th class="rtd txtright">编辑模板</th>
+			<td class="txtleft">
+			     <input type="text" name="templateEdit" class="w250" value="{{ info.templateEdit|default('') }}" />
+			     <label>（自定义的编辑模板，放在App\Resources\views\）</label>
+			</td>
+		</tr>
+		<tr>
+			<th class="rtd txtright">列表数据大小</th>
+			<td class="txtleft">
+			    <input type="text" name="listRow" class="w250" value="{{ info.listRow|default('') }}" />
+			    <label>（默认列表模板的分页属性）</label>
+			</td>
+		</tr>
+    </tbody>
+</table>
+{% endblock %}

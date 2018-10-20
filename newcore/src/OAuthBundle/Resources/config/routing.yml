@@ -1,0 +1,41 @@
+oauth_alipay:
+    path: /alipay
+    defaults:
+        _controller: 'OAuthBundle:Return:alipay'
+##支付宝页面跳转同步通知页面
+oauth_alireturn:
+    path: /alireturn
+    defaults:
+        _controller: 'OAuthBundle:Return:alireturn'
+##支付宝服务器异步通知页面
+oauth_alinotify:
+    path: /alinotify
+    defaults:
+        _controller: 'OAuthBundle:Return:alinotify'
+##微信服务器异步通知页面
+oauth_wxnotify:
+    path: /wxnotify
+    defaults:
+        _controller: 'OAuthBundle:Return:wxnotify'
+oauth_connect_registration:
+    path: /auth/registration/{key}
+    defaults:
+        _controller: 'OAuthBundle:Auth:registration'
+oauth_connect_service:
+    path: /auth/{service}
+    defaults:
+        _controller: 'OAuthBundle:Auth:connectService'
+#支付异步通知页面
+oauth_notify_service:
+    path: /notify/{service}
+    defaults:
+        _controller: 'OAuthBundle:Notify:connectService'
+#支付同步通知页面
+oauth_return_service:
+    path: /return/{service}
+    defaults:
+        _controller: 'OAuthBundle:Return:connectService'
+oauth_call_service:
+    path: /call/{wxtoken}
+    defaults:
+        _controller: 'OAuthBundle:Return:callService'

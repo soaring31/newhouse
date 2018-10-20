@@ -1,0 +1,381 @@
+@charset "UTF-8";
+.moneybtn {
+  position: fixed;
+  z-index: 1000000;
+  right: 10px;
+  bottom: 300px;
+  width: 182px;
+  height: 205px;
+  background: url(../images/hb/moneyBtn_11.png) no-repeat;
+}
+
+.moneybtn a {
+  position: absolute;
+  width: 182px;
+  height: 205px;
+}
+
+.getMoneybtn {
+  width: 87px;
+  height: 32px;
+  margin: 3px 0 0 47px;
+  cursor: pointer;
+}
+
+.hbp1 {
+  font-size: 16px;
+  margin-top: 101px;
+  margin-left: 13px;
+  color: #f30;
+}
+
+.hbp2 {
+  font-size: 12px;
+  margin-left: 30px;
+  color: #f30;
+}
+
+.hbp1 span {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/*闈炴笭閬撳箍鍛婃ゼ鐩樻悳鎴跨孩鍖�*/
+.popCont1 .pt_box {
+  font-size: 30px;
+  line-height: 30px;
+  top: 105px;
+}
+
+.pt_box_btn {
+  margin: 60px 0 0 70px !important;
+}
+
+.pt_box_text p {
+  padding-top: 20px;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.by_a1 {
+  text-decoration: none;
+  color: #fff;
+}
+
+.by_a1:hover {
+  text-decoration: none;
+  color: #fff;
+}
+
+.by_a2 {
+  text-decoration: none;
+  color: #e83532;
+}
+
+.by_a2:hover {
+  text-decoration: none;
+  color: #e83532;
+}
+
+.fwhite .by_btn {
+  margin: 60px auto 0 !important;
+}
+
+.moneybtn a:hover {
+  text-decoration: none;
+}
+
+.hbbg p {
+  text-align: center;
+}
+
+.detailPopClose {
+  position: absolute;
+  top: -30px;
+  right: 0;
+  width: 30px;
+  height: 30px;
+  background: url(../images/hb/tc_close.png) left center no-repeat;
+}
+
+.detailPopClose:hover {
+  cursor: pointer;
+  background-position: right center;
+}
+
+.popmask {
+  position: fixed;
+  z-index: 1000001;
+  top: 0;
+  left: 0;
+  display: none;
+  width: 100%;
+  height: 100%;
+  opacity: .8;
+  background: #000;
+  filter: alpha(opacity=80);
+}
+
+.monyePop {
+  position: fixed;
+  z-index: 1000002;
+  top: 50%;
+  left: 50%;
+  display: none;
+  width: 1200px;
+  height: 700px;
+  margin-top: -350px;
+  margin-left: -600px;
+}
+
+.popHead .moneyNum {
+  font-size: 30px;
+  font-weight: bold;
+  margin: 0 2px;
+}
+
+.popHead .moneyNumPos {
+  font-size: 18px;
+  font-weight: bold;
+  position: absolute;
+  top: 126px;
+  right: 332px;
+}
+
+.monyePop .headBanner {
+  margin-left: 212px;
+}
+
+.popCloseBtn {
+  position: absolute;
+  top: 155px;
+  right: 150px;
+  width: 66px;
+  height: 66px;
+  background: url(../images/hb/popclose.jpg) no-repeat;
+}
+
+.popCont {
+  margin: -36px auto 0;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.popRightPic {
+  position: absolute;
+  top: -46px;
+  right: -70px;
+}
+
+.popCont1 {
+  width: 680px;
+  padding: 53px 0;
+}
+
+.popCont1 .hbbg {
+  position: relative;
+  width: 453px;
+  height: 230px;
+  margin-left: 120px;
+  background: url(../images/hb/bigMoney.png) no-repeat;
+}
+
+.popCont1 .moneyNum {
+  font-size: 34px;
+  position: absolute;
+  top: 116px;
+  right: 307px;
+  width: 112px;
+  text-align: center;
+}
+
+.popCont1 .menNum {
+  font-size: 18px;
+  line-height: 22px;
+  position: absolute;
+  top: 155px;
+  right: 317px;
+  width: 85px;
+  opacity: .8;
+  filter: alpha(opacity=80);
+}
+
+.popCont1 .takebtn {
+  font-size: 16px;
+  font-size: 30px;
+  line-height: 60px;
+  position: absolute;
+  bottom: 6px;
+  left: 70px;
+  display: block;
+  width: 170px;
+  height: 60px;
+  text-align: center;
+  color: #e83532;
+  border-radius: 5px;
+  background: #ffeb01;
+}
+
+.takebtn:hover {
+  text-decoration: none;
+  color: #e83532;
+}
+
+.popCont1 .hbbg .right {
+  font-size: 28px;
+  line-height: 40px;
+  position: relative;
+  float: right;
+  width: 311px;
+  height: 210px;
+  margin-top: 20px;
+  margin-right: 0;
+  text-align: center;
+}
+
+.popCont2 {
+  float: left;
+  width: 910px;
+  margin-left: 141px;
+  padding: 29px 0;
+}
+
+.popCont2 .hbbg {
+  width: 340px;
+  height: 173px;
+  margin-left: 35px;
+  background: url(../images/hb/money.png) no-repeat;
+}
+
+.popCont2 .moneyNum {
+  font-size: 22px;
+  position: absolute;
+  top: 82px;
+  right: 224px;
+  width: 98px;
+  text-align: center;
+}
+
+.popCont2 .menNum {
+  font-size: 14px;
+  line-height: 18px;
+  position: absolute;
+  top: 110px;
+  right: 235px;
+  width: 85px;
+  text-align: center;
+  opacity: .8;
+  filter: alpha(opacity=80);
+}
+
+.popCont2 .takebtn {
+  font-size: 16px;
+  font-size: 22px;
+  line-height: 44px;
+  display: block;
+  width: 126px;
+  height: 44px;
+  margin: 36px 0 0 50px;
+  margin-left: 0;
+  text-align: center;
+  color: #e83532;
+  border-radius: 5px;
+  background: #ffeb01;
+}
+
+.popCont2 .hbbg .right {
+  font-size: 20px;
+  line-height: 30px;
+  float: right;
+  width: 226px;
+  margin-top: 15px;
+  margin-right: 0;
+  text-align: center;
+}
+
+.popCont3 {
+  float: left;
+  width: 1150px;
+  height: 210px;
+  margin-left: 0;
+  padding: 30px 0 33px 50px;
+}
+
+.needScrolly {
+  overflow-y: auto;
+  width: 1150px;
+  height: 210px;
+}
+
+.popCont3 .hbbg {
+  margin: 0 30px 30px 0;
+}
+
+.popRightPic1 {
+  position: absolute;
+  top: -35px;
+  right: 4px;
+}
+
+.popRightPic2 {
+  position: absolute;
+  top: 175px;
+  right: -73px;
+}
+
+.hide {
+  display: none;
+}
+
+.fred1 {
+  color: #e83532;
+}
+
+.fred2 {
+  color: #9b1b0a;
+}
+
+.fred3 {
+  color: #ef412f;
+}
+
+.fwhite {
+  color: #fff;
+}
+
+.fyellow {
+  color: #fff600;
+}
+
+.w1150 {
+  width: 1150px;
+  margin: 0 auto;
+}
+
+.moneyclose {
+  position: fixed;
+  z-index: 1000000;
+  right: 10px;
+  bottom: 300px;
+  display: none;
+  width: 70px;
+  height: 65px;
+  background: url(../images/hogbao.png) no-repeat 0 0;
+}
+
+.datas {
+  font-size: 14px;
+  position: absolute;
+  bottom: 60px;
+  right: 50px;
+}
+
+.tiale {
+  padding: 0 20px;
+  line-height: 34px;
+  font-size: 28px;
+}
+
+/*# sourceMappingURL=hongbao.css.map */

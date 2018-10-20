@@ -1,0 +1,20 @@
+{% extends 'MemberBundle:Main:main.html.twig' %}
+{% set total = app.request.get('total_fee') %}
+
+{% block body %}
+	<div class="paybox clearfix">
+		<div class="font-ico-34 succ fl"></div>
+		<div class="fl">
+			<p>支付成功, 您已成功支付<em>{{total}}</em>元 !</p>
+			<div class="spendcon">
+				付款用于{{ info.name }}
+				<a href="{{- core_global.menu_url(660) -}}">查看支付情况</a>
+			</div>
+			<div>
+				<input type="button" class="wclose" value="点击关闭" onclick="window.close();" >
+			</div>
+		</div>
+	</div>
+{% endblock %}
+{% block footer %}
+{% endblock footer %}

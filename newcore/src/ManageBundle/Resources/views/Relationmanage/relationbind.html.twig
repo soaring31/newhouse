@@ -1,0 +1,48 @@
+{% extends "ManageBundle::poplayout.html.twig" %}
+{% block js %}
+<script>
+seajs.use("{{ bundlepath }}/js/relationbind",function(c){
+	//js入口	    
+	c.init('main');
+});
+</script>
+{% endblock %}
+{% block body %}
+
+<form action="{{ (action~'/bindsave')|U('id='~id) }}" method="POST" class="form">
+<table class="popup-table" style="width:100%;">
+    <tbody>
+        <tr choice="">
+			<th class="w150 rtd txtright">主类目模型</th>
+			<td class="txtleft">
+				<select id="master" name="master" class="w200" data-source='{{ (already)|raw }}'>
+					<option value=""></option>
+					{% for key,v in master %}
+						<option value="{{ v.id }}">{{ v.name }}</option>
+					{% endfor %}
+                </select>
+        	</td>
+		</tr>
+        <tr choice="">
+			<th class="w150 rtd txtright">从类目模型</th>
+			<td class="txtleft">
+				<ul>
+				<li><label><input type="checkbox" id="parent_form" name="parent_form" value=""><font color="#f00">取消|全选</font></label></li>
+				{% for key,v in slave %}
+            		<li>
+            			<label>
+            				<li><label><input type="checkbox" id="parent_form_{{ v.id }}" name="parent_form[{{ v.id }}]" value="{{ v.name }}">{{ v.name }}</label></li>
+            			</label>
+            		</li>
+            	{% endfor %}                      
+                </ul>
+        	</td>
+		</tr>
+    </tbody>
+</table>
+
+<div class="popup-submit"><button type="submit" id="submit" name="submit" class="search-btn reload ajax-post target-form=form">提交绑定</button></div>
+<input type="hidden" id="csrf_token" name="csrf_token" data-tpl="" value="{{ csrf_token }}">
+</form>
+
+{% endblock %}

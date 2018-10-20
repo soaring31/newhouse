@@ -1,0 +1,105 @@
+{# 说明
+* url_id: url传回来的id
+* url_myself: 我要购买
+* user_usertype: 当前登录用户类型
+* tpl_extends: 模板变量
+* push_tuijianmobanbiaoyu: 说明推送
+* block_fenxiao: 当前分销
+#}
+{% set user_usertype = app.user.userinfo.usertype|default('') %}
+
+{% set url_id = app.request.get("id") %}
+
+{% set url_myself = app.request.get("myself") %}
+
+{% set user_data = app.user %}
+
+{% set block_fenxiao = ('house.sell')|getRow({checked: 1, id: url_id|default('')}) %}
+
+{% if url_myself|default('') is empty and user_data|default('') is empty %}
+    {# 没登录推荐朋友执行 #}
+    {% set tpl_title = '温馨提示' %}
+    {% set tpl_content = '推荐客户 请先登录！' %}
+    {% set tpl_abstract = '只有本站用户才能通过推荐用户，获取佣金提成！' %}
+    {% set tpl_img = 5 %}
+    {% set tpl_extends = 'CoreBundle:Dispatch:jump.html.twig' %}
+{% elseif block_fenxiao|default('') is empty %}
+    {# 当前分销不存在执行 #}
+    {% set tpl_title = '温馨提示' %}
+    {% set tpl_content = '当前分销无效' %}
+    {% set tpl_abstract = '当前分销不存在，或者已经过期，或者已被删除，请重新选择分销推荐朋友！' %}
+    {% set tpl_extends = 'CoreBundle:Dispatch:jump.html.twig' %}
+{% else %}
+    {% set tpl_extends = 'HouseBundle:Fenxiao:sell_layout.html.twig' %}
+{% endif %}
+
+{% extends tpl_extends|default('')  %}
+
+{% block title %}楼盘分销推荐{% endblock title %}
+
+{% block css %}
+    {{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/earn.css')}}
+{% endblock css %}
+
+{% block current_container %}
+    {% if url_myself|default('') %}
+        {% set bt_name = '我要购房' %}
+    {% else %}
+        {% set bt_name = '推荐客户赚佣金' %}
+    {% endif %}
+    <a href="{{('houses/list')|U}}" target="_blank">新房</a>
+    <span>&gt;</span>
+    <a href="{{('fenxiao/list')|U}}" target="_blank">楼盘分销</a>
+    <span>&gt;</span>
+    <span>{{bt_name}} </span>
+{% endblock current_container %}
+
+{% block container %}
+    <div class="container">
+        <!-- 左侧 -->
+        <div class="xinxi fl">
+            <div class="con-head">
+                <h3>赚佣金</h3>
+                <span></span>
+            </div>
+            {# {{ render_esi(controller('HouseBundle:Bundlebindforms:ajaxform', {
+                formflag: 'view_recommend',
+                formcls: 'common-form-lg common-form-label con-infor',
+                formlabel: true,
+                myself  : url_myself, 
+                id      : url_id,
+                type    : 'fxearn'
+            })) }} #}
+            {{house_global.modal_layout({
+                type: 'load',
+                ajax: "
+                    ajax: {
+                        url: '" ~ ('bundlebindforms/ajaxform')|U() ~ "',
+                        data : {
+                            formflag: 'view_recommend',
+                            formcls: 'common-form-lg common-form-label con-infor',
+                            formlabel: true,
+                            myself  : '" ~ url_myself ~ "', 
+                            aid     : '" ~ url_id ~ "',
+                            yongjin : '" ~ block_fenxiao.yongjin|default(0) ~ "',
+                            type    : 'fxearn'
+                        }
+                    }"
+            })}}
+        </div>
+        <!-- 右侧 -->
+        <div class="ad fr">
+            {% set push_tuijianmobanbiaoyu = ('tuijianmobanbiaoyu')|getPush(5) %}
+            {% if push_tuijianmobanbiaoyu|default('') %}
+                {% for item in push_tuijianmobanbiaoyu %}
+                    <h3>
+                        {{item.name|default('')}}
+                        <p>
+                            {{item.abstract|default('')}}
+                        </p>
+                    </h3>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock container %}

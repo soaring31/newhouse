@@ -1,0 +1,80 @@
+{% extends 'ManageBundle::mainlayout.html.twig' %}
+{% import 'ManageBundle:Form:lists.html.twig' as lists %}
+{% block js %}
+<script type="text/javascript">
+$(function(){
+	$w = $('.pic').width();
+	$h = $('.pic').height();
+	$w2 = $w + 20;
+	$h2 = $h + 20;
+	$('.pic').hover(function(){
+		 $(this).stop().animate({height:$h2,width:$w2,left:"-10px",top:"-10px"},500);
+	},function(){
+		 $(this).stop().animate({height:$h,width:$w,left:"0px",top:"0px"},500);
+	});
+});
+
+var tag = ''+'{{ tagname }}';
+
+$('#edit_btnfun').click(function(){
+	if(!tag){
+		alert('请选择先正确的标签！');
+		return;
+	}
+	$(this).before('<input type="text" id="edittext" onblur="editajax(value)" value="{{ tagname }}">');
+	$(this).hide();
+	$('#edittext').focus();
+});
+
+function editajax(value){
+	if(tag !== value){
+		$.ajax({
+		    url: "{{ (action~'/tagsedit')|U }}",
+		    dataType: "json",
+		    data: { "tagname": value, "oldtag": '{{ tagname }}' },
+		    type: "POST",
+		    success: function(data){
+		        $(".wk-pop-close").trigger("click");
+				//$("#flushbtn").trigger('click');
+				$("#btnfun_edit").trigger('click');
+		    },
+		    error: function(XMLHttpRequest, textStatus, errorThrown){
+		        alert(textStatus);
+		    }
+		});
+	}
+	$('#edittext').remove();
+	$('#edit_btnfun').show();
+}
+
+</script>
+<style>.pic{width:35px;height:35px;}</style>
+{% endblock %}
+
+{% block tableMain %}
+<section>
+    <span class="tableDesc">
+    {{ ident.info.listDesc|default('') }}列表&gt;&gt;
+    <input type="button" id="btnfun_edit" data="{{ (action~'/wxUpdate')|U }}" class="btn" value="同步更新" />
+    <input type="button" id="flushbtn" class="btn" style="display:none;" value="刷新" />
+    <select id="selectsearch_tagname">
+    	<option value="" {{ tagname|default('')|isSelected('') }}>全部</option>		    
+	    {% for val in tags %}
+	    <option value="{{ val }}" {{ tagname|default('')|isSelected(val) }}>{{ val }}</option>
+	    {% endfor %}				    
+	</select>
+	<input type="button" id="edit_btnfun" data="{{ (action~'/tagsedit')|U }}" class="btn" value="编辑标签" />
+	<input type="button" id="btnfun_delete" data="{{ (action~'/deletetag')|U({'tagname':app.request.get('tagname','')}) }}" class="btn" value="删除标签" />
+	<input type="text" id="search_nickname" value="{{ app.request.get('nickname','') }}" data-source="{{ app.request.get('nickname','') }}" placeholder="昵称查询" />
+    </span>
+    {{ lists.list(ident.info) }}
+</section>
+{% endblock %}
+
+{% block page %}
+{{lists.page(ident.info)}}
+{% endblock %}
+{% block submit %}{% endblock %}
+{% block promptUl %}
+提示说明
+{% endblock %}

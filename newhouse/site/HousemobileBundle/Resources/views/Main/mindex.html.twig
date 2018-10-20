@@ -1,0 +1,39 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+
+{% set user_id = app.user.id|default('') %}
+	
+{% block title %}
+    个人中心
+{% endblock title %}
+
+{% set header_class = 'bar-op' %}
+
+{% block container %}
+	<div data-block="{
+        bParams: true,
+        ajax:{
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                id: '{{ detail.id|default('') }}',
+                tpl: 'Main:mindexblock'
+            }
+        }
+    }"></div>
+{% endblock container %}
+
+{% block popup %}
+	{{ housemobile_global.popup({
+	    name: 'popup-pay',
+	    title: '充值',
+	    content: {
+	        bParams: true,
+	        ajax:{
+	            url: ('main/mindex')|U,
+	            data: {
+	                tpl: 'Main:pay',
+	            }
+	        }
+	    }
+	}) }}
+{% endblock popup %}

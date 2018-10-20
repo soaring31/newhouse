@@ -1,0 +1,34 @@
+{% extends "HouseBundle:Mblock:mblockmanage.html.twig" %}
+
+{% block mainleft %}
+{% endblock mainleft %}
+
+{% block oprate %}
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'pushs_img_ad',
+        title: '设置状态',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'from_data',
+        form: 'cate_pushs',
+        title: '数据来源',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'pushs_img_ad',
+        title: '设置状态',
+    }
+]) }}
+{% endblock oprate %}
+{% block promptUl %}
+    数据来源: 默认为“推送位”，若设置为“模型数据”,前台直接调取所选模型数据,数据不受该推送位控制。
+{% endblock %}

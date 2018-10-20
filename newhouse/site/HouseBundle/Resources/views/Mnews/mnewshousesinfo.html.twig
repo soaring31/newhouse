@@ -1,0 +1,38 @@
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+{% import "CoreBundle:Macro:manage.html.twig" as core_manage %}
+
+{% set ids = app.request.get("id") %}
+  {# {{dump(ident.info)}} #}
+{% if ident.info.data is defined %}
+
+    {% for item in ident.info.data %}
+{#         {{dump(item)}} #}
+    <section class="new_house" style="overflow:hidden;margin-bottom:20px;font-size:12px;line-height:16px;">
+        <div class="img" style="float:left">
+            {{- core_global.img({
+                height: 134,
+                width: 180,
+                src: item.thumb,
+                alt: item.name
+            }) -}}
+        </div>
+        <div class="wenxinfo" style="margin-left:196px">
+            <h3 style="color:red"><a href="{{('houses/detail')|U({id: item.id|default('')})}}" target="_blank">{{item.name|default('')}}</a></h3>
+            <p><span>物业类型：</span>{{core_global.formData({value: item.cate_type|default(''),tpl: '%value%  '})}}</p>
+            {# <p><span>开盘时间：</span>{{item.kpdate.date|default('-')|date('Y-m-d')}}</p> #}
+            <p><span>开发商：</span>{{item.house_developer|default('-')}}</p>
+            <p><span>楼盘地址：</span>{{item.address|default('-')}}</p>
+            <p><span>销售电话：</span>{{item.tel|default('')}}</p>
+            {# <p>
+                <span>占地面积:</span>{{item.attributes.zdmj.value|default('-')}}
+                <span>容积率:</span>{{item.attributes.rjl.value|default('-')}}
+                 <span>绿化率:</span>{{item.attributes.lhl.value|default('-')}}
+            </p> #}
+        </div>
+
+    </section>
+    {% endfor %}
+{% endif %}
+
+
+

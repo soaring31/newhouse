@@ -1,0 +1,56 @@
+<html>
+<head>
+	<title></title>
+	<script>
+        var csrf_token  = "{{csrf_token}}";
+        var jsbase  = "{{ asset('bundles') }}";
+        var BASE_THEME = "{{bundlepath}}";
+        window.UEDITOR_HOME_URL = "{{ asset('bundles') }}/core/js/vendor/ueditor/";
+        var REMOTE_URL = "{{'upload_type'|C == 'remote' ? 'up_remote_domainname'|C : '' }}"; // 远程图片路径拼接
+    </script>
+	<script type="text/javascript" src="{{ asset(corepath ~ '/js/seajs.js') }}"></script>
+	<script type="text/javascript" src="https://api.map.baidu.com/getscript?v=2.0&ak=LOi401eDYhqoYajLOFm45EMQFzio8U9N"></script>
+	
+	<style type="text/css">
+	*{
+		margin: 0;
+		padding: 0;
+	}
+	#allmap {
+		height: 100%;
+		width: 100%;
+	}
+	</style>
+</head>
+<body>
+<div id="allmap"></div>
+<script type="text/javascript">
+	// 渲染区块
+	var map = new BMap.Map("allmap");
+	// 初始化坐标
+	var default_map = new BMap.Point(116.404, 39.915);
+	// 渲染地图
+	map.centerAndZoom(default_map, 11);
+	// 放大、缩小
+	setTimeout(function(){
+		map.setZoom();   
+	}, 2000);  //2秒后放大到14级
+	map.enableScrollWheelZoom(true);
+	// 操作按钮
+	var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
+	var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+	var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL}); //右上角，仅包含平移和缩放按钮
+	map.addControl(top_left_control);        
+	map.addControl(top_left_navigation);     
+	map.addControl(top_right_navigation);
+	// 增加点
+	var marker = new BMap.Marker(new BMap.Point(116.404, 39.915)); // 创建点
+	map.addOverlay(marker);
+	// 创建自定义图片
+	var pt = new BMap.Point(116.417, 39.909);
+	var myIcon = new BMap.Icon('http://lbsyun.baidu.com/jsdemo/img/fox.gif', new BMap.Size(300,157));
+	var marker2 = new BMap.Marker(pt,{icon:myIcon});  // 创建标注
+	map.addOverlay(marker2);
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+
+{% block result %}
+    {% set active = app.request.get('big', 0) %}
+    
+    {% set active_index = active - 1 %}
+
+    {% set url_album = app.request.get('cate_album') %}
+
+    {% set param_album = url_album ? {cate_album: url_album} : {} %}
+    	
+    {% set data = ('house.inter_album')|getAll({aid: app.request.get('id', 0), pageSize: 500, checked: 1, order: 'id|desc'}|merge(param_album)).data %}
+
+    {{core_mobile_global.swiper({
+    	value: data|default(''), 
+    	type: 0, 
+    	class: class|default('door-swiper'), 
+    	otherdata: 'data-hashnav="true" data-pagination-type="fraction"',
+    	tpl: '<div class="swiper-slide house-ad" data-hash="slide%id%">%ad%<a href="%url%"><img class="swiper-lazy" data-src="%image%" alt="%name%"><div class="swiper-lazy-preloader"></div></a></div>'
+    })}}
+
+{% endblock result %}

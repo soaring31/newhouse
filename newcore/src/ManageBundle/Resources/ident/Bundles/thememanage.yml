@@ -1,0 +1,24 @@
+info:
+    tableName: themes
+    aliasName: p
+    listGrid:
+        - 'id:序号|txtcenter w50'
+        - 'name[EDITSPAN]:名称|txtleft'
+        - 'ename:标识|txtleft w200'
+        - 'sort:排序|txtleft w80'
+        - 'id:操作|txtcenter w300:[EDIT]编辑|btn,[DELETE]删除|btn,[EDIT]更新资源包|btn|thememanage/upsource'
+    listDesc: 主题
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    order: ''
+    orderBy: asc
+    dataModel: 0
+    alias: {  }
+    query: {  }
+    subTableName: ''
+    subJoinField: ''
+    searchFun: EXISTS
+    autoQuery: '0'
+    query1: {  }
+    groupBy: ''

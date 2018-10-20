@@ -1,0 +1,90 @@
+{% set url_category = app.request.get("category", 297) %}
+
+{% extends url_category == 297 ? 'HouseBundle:Sale:sale_layout.html.twig' : 'HouseBundle:Rent:rent_layout.html.twig' %}
+{# 说明 
+ * url_category: url传递的type
+#}
+
+{% block title %}
+    【{% if url_category|default('') != 297 %}
+    {{cur_area_data|default('')}}租房网_{{cur_area_data|default('')}}租房信息|房屋出租
+    {% else %}
+    {{cur_area_data|default('')}}二手房网_{{cur_area_data|default('')}}二手房信息|二手房出售
+    {% endif %}】
+{% endblock title %}
+
+
+{% block key_des %}
+{% if url_category|default('') != 297 %}
+<meta name="keywords" content="{{cur_area_data|default('')}}租房，{{cur_area_data|default('')}}租房网，{{cur_area_data|default('')}}出租房源租房，租房信息" />
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}租房网提供{{cur_area_data|default('')}}海量出租房源，实时更新，租房信息真实有效。{{cur_area_data|default('')}}租房子、找合租、个人房屋出租，就到{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}。" />
+{% else %}
+<meta name="keywords" content="{{cur_area_data|default('')}}二手房,{{cur_area_data|default('')}}二手房出售,{{cur_area_data|default('')}}二手房买卖" />
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}二手房网为您提供快速全面的{{cur_area_data|default('')}}二手房信息及新发布{{cur_area_data|default('')}}二手房价格。大量优质二手房实时更新，为您创造舒适二手房购房体验。" />
+{% endif %}
+{% endblock key_des %}
+
+{% block css %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/need.css')}}
+{% endblock css %}
+
+{% block top_search %}
+{{ core_global.topSearch({
+    action: 'demand/list',
+    autocomplete: 1,
+    action_opt: {
+        category: detail.category|default(url_category)
+    },
+    placeholder: '请输入关键字/拼音'
+}) }}
+{% endblock top_search %}
+
+{% if url_category|default('') != 297 %}
+    {% set tpl_title = '求租' %}
+
+    {% set tpl_models = 'rent' %}
+{% else %}
+    {% set tpl_title = '求购' %}
+
+    {% set tpl_models = 'sale' %}
+{% endif %}
+
+{% block current_container %}
+    <a href="{{('demand/list')|U({type: url_category|default('')})}}">
+        {{tpl_title}}
+    </a>
+{% endblock current_container %}
+
+
+{% block container %}
+    {# 检索数据源 #}
+    {% set cate_data = house_global.cate_data({ 
+                    tag: 'region',
+                }).__toString|json_decode %}
+
+    {{house_global.filter_cfg({
+        action: action
+    }|merge(cate_data))}}
+<div class="blank30"></div>
+<div class="container">
+    <div class="main">
+        <div class="sale-body">
+            {% block container_demand %}
+            <div class="need-list pl10 pr10">
+                <div class="need-sort">
+                    共有 <b class="c-e43">{{ident.list.pageCount}}</b>
+                    个需求符合条件
+                </div>
+                {{house_global.demand_list({
+                    list: ident.list
+                })}}
+                <div class="blank20"></div>
+                {{- core_global.page(ident.list) -}}
+            </div>
+            {% endblock container_demand %}
+        </div>
+    </div>
+    {{house_global.sale_aside({models: tpl_models})}}
+</div>
+<div class="blank20"></div>
+{% endblock container %}

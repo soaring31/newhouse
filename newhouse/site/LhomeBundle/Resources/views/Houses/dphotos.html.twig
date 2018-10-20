@@ -1,0 +1,56 @@
+{% extends 'LhomeBundle:Houses:dnews.html.twig' %}
+
+{% block title_houses %}图片相册,户型图,样板间图,装修效果图,实景图{% endblock title_houses %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}图片相册,{{detail.name|default('')}}户型图,{{detail.name|default('')}}样板间图,{{detail.name|default('')}}装修效果图" />
+<meta name="description" content="{{detail.name|default('')}}图片相册,{{detail.name|default('')}}小区网为您提供{{detail.name|default('')}}图片，包含户型图、样板间图、装修效果图、交通图、实景图等{{detail.name|default('')}}图片相册，为您买房、挑选户型、装修提供参考。"/>
+{% endblock key_des %}
+
+{% block css %}
+	{{core_global.linkcss('bundles/LhomeBundle/css/banner.css')}}
+{{core_global.linkcss('bundles/LhomeBundle/css/xiangce.css')}}
+{% endblock css %}
+
+{% block detail_sm %}
+    {# 高亮 #}
+    {% set menu_act = 4 %}
+    {{parent()}}
+{% endblock detail_sm %}
+
+{% block body %}
+	{% set detail = detail|default(cident[tpl_getrow|default('detail')].data[0]|default('')) %}
+	 {% set page = app.request.get('pageIndex')|default('1') %}
+	 {% set block_xiangce = ('house.inter_album')|getAll({pageSize: 8, pageIndex: page,_multi: 1,checked: 1, findType: 1,aid:detail.id|default('')}) %} 
+	<div class="news-glob">
+	    <div class="main-wrap xiangce">
+	        <div class="all-list">
+		            <div class="tab-group">
+		                <h4>
+		                    <a  target="_blank">{{block_xiangce.name|default('')}}</a>
+		                </h4>
+		                <ul class="tab-list clear">
+	        	{% for item in block_xiangce.data %}
+		                    <li class="item" data-xftrack="10187">
+		                        <a title="效果图" target="_blank">
+		                           {{- core_global.img({
+	                                    src: item.thumb|default(''),
+	                                    type: 2,
+	                                    width:235,
+	                                    height:178
+	                                }) -}}
+		                        </a>
+		                    </li>
+	        	{% endfor %}
+		                </ul>
+		            </div>
+	        </div>
+	    </div>
+	</div>
+	<div class="blank20"></div>
+    <!--page-->
+    {{core_global.page(block_xiangce)}}
+    <!--page-->
+    <div class="blank20"></div>
+
+{% endblock body %}

@@ -1,0 +1,96 @@
+{% extends 'MemberBundle::base_show.html.twig' %}
+
+
+{% set mid = app.user.id|default('') %}
+{% set models = app.request.get('models') %} 
+
+{% block js %}
+<script type="text/javascript">
+seajs.use(['utils'], function (utils) {
+    utils.copySelect();
+})
+</script>
+{% endblock js %}
+
+{% block mainMenu %}
+   {{parent()}}
+  
+    {# {{ core_manage.jump(
+        {
+            title: '专用邀请',
+            url: ('muserselllink/muserselllinklist')|U,    
+            class: ''
+        }
+    ) }}
+    {{ core_manage.jump(
+        {
+            title: '邀请下线明细',
+            url: ('muserselllink/musersellsubordinate')|U,    
+            class: 'on'
+        }
+    ) }}
+ #}
+{% endblock mainMenu %}
+
+{% block tableMain %}
+
+{{ core_manage.filter([
+    {
+        method: 'search',
+        field: 'name',
+        title: '请搜索用户名/电话',
+    }
+]) }}
+
+<section class="list-con" data-param="{
+    defUrl    : '{{ (action)|U }}',
+    showUrl   : '{{ (action ~ '/show')|U }}',
+    submitUrl : '{{ (action ~ '/save')|U }}',
+    deleteUrl : '{{ (action ~ '/delete')|U }}',
+    fixed     : '.filter',
+    list      : '.list-con',
+    data      : {
+    }
+}">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="50" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="300">经纪人</th>
+                    <th width="300">联系电话</th>
+                </tr>
+                {% if ident.info.data is defined and ident.info.pageCount|default(0) != 0 %}
+                    {% for k,vo in ident.info.data %}
+                        <tr data-id="{{ vo.id }}">
+                            <td class="tac">
+                                {{core_manage.checkbox()}}
+                            </td>
+                            <td>
+                                {{ vo.username|default('') ~ '（' ~ ('db.userinfo')|getOne('nicename', {uid: vo.id})|default('-') ~ '）' }}
+                            </td>
+                            <td>
+                                {{ vo.tel|default('') }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %} 
+                    <tr>
+                        <td colspan="8" class="tac">
+                            没有数据！
+                        </td>
+                    </tr>
+                {% endif %}
+                
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info|default(''))}}
+</section>
+{% endblock tableMain %}
+
+{% block promptUl %}
+{% endblock %}
+
+
+

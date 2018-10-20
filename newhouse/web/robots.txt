@@ -1,0 +1,13 @@
+#
+# robots.txt for 08CMS
+#
+
+User-agent: *
+Allow：/
+Disallow: /main
+Disallow: /login
+Disallow: /register
+Disallow: /app_dev.php
+Disallow：/ask/
+Disallow: /ask/list/*
+Disallow: /ask/detail/*.html

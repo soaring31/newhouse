@@ -1,0 +1,1037 @@
+{# CoreBundle/Resources/views/Form/fields.html.twig #} 
+{%- block self_attributes -%}
+    {%- if read_only %} readonly="readonly"{% endif -%}
+    {%- if disabled %} disabled="disabled"{% endif -%}
+    {# {%- if required %} required="required"{% endif -%} #}
+    {%- for attrname, attrvalue in attr -%}
+        {{- " " -}}
+        {%- if attrname in ['placeholder', 'title'] -%}
+            {{- attrname }}="{{ attrvalue|trans({}) }}"
+        {%- elseif attrvalue is same as(true) -%}
+            {{- attrname }}="{{ attrname }}"
+        {%- elseif attrvalue is not same as(false) -%}
+            {{- attrname }}="{{ attrvalue }}"
+        {%- endif -%}
+    {%- endfor -%}
+{%- endblock self_attributes -%}
+
+{# 处理option placeholder #}
+{%- block option_placeholder -%}
+    {# 单选时才有‘请选择’选项 #}
+    {% if type|default('') == 'radio' %}
+    {# <li class="select-item"><label><input {{ required ? 'required' : ''}} type="{{ type }}" id="{{ name }}" name="{{ full_name }}" value="" {% if value is empty %} checked="checked"{% endif %} />{{ (placeholder|default('') != '' ? placeholder : '请选择')|trans({}) }}<i class="arraw"></i></label></li> #}
+    {# 下拉列表/单选/非必填的情况下才自动加“请选择” #}
+    {%- elseif type|default('') is empty and multiple|default('') is empty and (required is not defined or required != true) -%}
+       <option value=""{% if value is empty %} selected="selected"{% endif %}>{{ (placeholder|default('') != '' ? placeholder : '请选择')|trans({}) }}</option>
+    {%- endif -%}
+{%- endblock option_placeholder -%}
+
+{% block image_widget %}
+    <script type="text/javascript">
+    // seajs.use(["core/js/image","core/css/image.css"],function(m){
+    // 	m.init('main');
+    // });
+    </script>
+    {% set tpl = attr['data-tpl']|default('') %}
+    {% set attr = attr|merge({'data-tpl': null}) %}
+    {% set element -%}
+    <div id="uploader" data-upload="{{name}}">
+
+        <input type='hidden' name='{{ name }}width' value='{{ width }}' />
+        <input type='hidden' name='{{ name }}height' value='{{ height }}' />
+        <!--用来存放item-->
+        <div id="fileList" class="uploader-list fileList {{multiple > 0 ? 'multiple' : ''}}">
+            <i class="fengmian"></i>
+            {% for item in value %}
+                <div class="file-item thumbnail" data-url="{{ item.source }}">
+                    {% if multiple > 0 %}
+                    <input name="{{ name }}[]" value="{{ item.href }}" type="hidden">
+                    {% endif %}
+                    <input name="{{ name }}source[]" value="{{ item.source }}"  type="hidden">
+                    <input name="{{ name }}X[]" id="{{ name }}X"  type="hidden">
+                    <input name="{{ name }}Y[]" id="{{ name }}Y"  type="hidden">
+                    <input name="{{ name }}W[]" id="{{ name }}W"  type="hidden">
+                    <input name="{{ name }}H[]" id="{{ name }}H"  type="hidden">
+                    <input name="{{ name }}Rotate[]" id="{{ name }}Rotate"  type="hidden">
+                    <input name="{{ name }}ScaleX[]" id="{{ name }}ScaleX"  type="hidden">
+                    <input name="{{ name }}ScaleY[]" id="{{ name }}ScaleY"  type="hidden">
+                    <img src="{{ assetImg(item.href) }}"  height="100" width="130">
+                    <div class="toolbar">
+                        {# <i title="编辑" class="edit font-ico-2" id=""></i> #}
+                        <i  class="preview font-ico-38" title="查看大图" id=""></i>
+                        <i title="删除" class="delete font-ico-3"></i>
+                    </div>
+                    {% if multiple > 0 %}
+                    <div class="textarea">
+                        <textarea placeholder='请输入描述' name="{{ name }}desc[]">{{ item.desc }}</textarea>
+                    </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        {# 扩展名 #}
+        {% set attr = {
+                extension: 'up_exts'|C|default('png,jpeg,jpg,gif,ico'),
+                offset: 2
+            }|merge(attr) 
+        %}
+        {% if multiple == 0 %}
+        {# 单图 #}
+        <input class="img-url {{attr.class|default('')}}" type="text" name="{{ name }}[]" {{ block('widget_attributes') }}  value="{{ (value|first).href|default('') }}">
+        {# 多图 #}
+        {% else %}
+        <input type="hidden" name="input_num" data-img-num="1" {% if required|default('') %}data-msg-min="请上传至少 {0} 个图片" min="1"{% endif %} extension {{ block('widget_attributes') }} value="{{value|length|default('')}}"/>
+        {% endif %}
+        <div class="filePicker">选择图片</div>
+        {# 素材 #}
+
+        {# 编辑楼盘时 根据楼盘 id选择楼盘相册 #}
+        {% if app.request.pathInfo == '/mhousemanage/show' %}
+            {% set houseId = app.request.query.get('_id', 0) %}
+            {% set dataUrl = ('main/materiallibrary')|U({'type': 'house_inter_album', 'house_id': houseId}) %}
+        {% endif %}
+
+        <a href="javascript:void(0);" class="upimages btn btn-sm" upparam="{{ upparam }}" mtip="{{ multiple }}" data-url="{{ dataUrl is defined ? dataUrl : ('main/materiallibrary')|U('type=my') }}" ><i class="font-ico-27 mr5"></i>从素材库选择</a>
+    </div>
+    <script type="text/javascript">
+        seajs.use(['webupload'], function(webupload) {
+            webupload.init({
+                type: 'image',
+                name: '{{name}}',
+                wrap: '[data-upload="{{name}}"]',
+                auto: true,
+                server: '{{"attachment/upload"|U}}',
+                pick: {
+                    multiple: {{multiple}},
+                    innerHTML: '<button type="button" class="btn btn-sm"><i class="font-ico-27 mr5"></i>上传{{multiple ? "图集" : "图片"}}</button>'
+                },
+                fileVal: 'photo[]',
+                // 可以重复添加
+                duplicate: true,
+                thumbnailWidth: 130,
+                thumbnailHeight: 100,
+                // 只允许选择图片文件。
+                accept: {
+                    title: 'Images',
+                    extensions: '{{attr.extension}}',
+                    mimeTypes: 'image/*'
+                },
+                compress:null
+            });
+        })    
+    </script>
+    {%- endset %}
+
+    {{- (tpl ? tpl|replace({'%x%': element}) : element)|raw -}}
+{% endblock image_widget %}
+
+{% block ymlfile_widget %}
+    {%- if required and placeholder is none and not placeholder_in_choices and not multiple -%}
+        {% set required = false %}
+    {%- endif -%}
+
+    <select {{ block('widget_attributes') }}>
+        {{ block('option_placeholder') }}
+        {# {%- if required != true %}
+            <option value=""{% if required and value is empty %} selected="selected"{% endif %}></option>
+        {%- endif -%} #}
+        {% for key,vo in choices %}
+        <option value="{{ key }}" {{ key|isSelected(value|default('')) }}>{{ vo }}</option>
+        {% endfor %}
+    </select>
+{% endblock ymlfile_widget %}
+
+{% block file_widget %}
+
+    {% set type = type|default('text') %}
+    {# {{ block('form_widget_simple') }} #}
+    {% set tpl = attr['data-tpl']|default('') %}
+    {% set attr = attr|merge({'data-tpl': null}) %}
+    {% set element -%}
+
+    <div id="uploader" data-upload="{{name}}">
+        {# 扩展名 #}
+        {% set attr = {
+                extension: 'up_exts'|C|default('zip,rar,swf,wmv,apk,ipa,txt,mp4'),
+                offset: 1
+            }|merge(attr) 
+        %}
+        {# 单图 #}
+        <input class="img-url {{attr.class|default('')}}" type="text" name="{{ name }}[]" {{ block('widget_attributes') }}  value="{{ value }}">
+        <div class="filePicker">上传</div>
+    </div>
+    <script type="text/javascript">
+        seajs.use(['webupload'], function(webupload) {
+            webupload.init({
+                type1: 'file',
+                name: '{{name}}',
+                wrap: '[data-upload="{{name}}"]',
+                auto: true,
+                server: '{{attr[("data-server")]|default("attachment/upload")|U}}',
+                pick: {
+                    multiple: false,
+                    innerHTML: '<button type="button" class="btn btn-sm"><i class="font-ico-file mr5"></i>上传</button>'
+                },
+                fileVal: '{{attr[("data-file")]|default("photo[]")}}',
+                // 只允许选择图片文件。
+                accept: {
+                    title: 'Files',
+                    extensions: '{{attr.extension}}',
+                    mimeTypes: '{{attr[("data-accept")]|default("*")}}'
+                },
+                 resize: false
+            });
+        })    
+    </script>
+    {%- endset %}
+
+    {{- (tpl ? tpl|replace({'%x%': element}) : element)|raw -}}
+{% endblock file_widget %}
+
+{% block switch_widget %}
+    {% set tpl = attr['data-tpl']|default('') %}
+    {% set attr = attr|merge({'data-tpl': null}) %}
+    {% set element -%}
+    <input type="hidden" data-switch-value="1" {{ block('widget_attributes') }} value="{{value|default(0)}}"/>
+    <input type="checkbox" {% if value %}checked{% endif %} data-switch="#{{name}}"/>
+    <script type="text/javascript">
+        seajs.use(['switch'], function() {
+            $('input[data-switch="#{{name}}"]')
+                .bootstrapSwitch($.extend(true, {
+                    size: 'small',
+                    onText: '{{ params[1]|default('是') }}',
+                    offText: '{{ params[0]|default('否') }}',
+                    onSwitchChange: function(el, v) {
+                        var $this = $(this);
+                        $($this.data('switch')).val($this.prop('checked') * 1);
+                    }
+                }, {{attr['data-switch-opt']|default('null')|raw}}));
+        })
+    </script>
+    {%- endset %}
+    {{- (tpl? tpl|replace({'%x%': element}) : element)|raw -}}
+{% endblock switch_widget %}
+
+{% block radio_widget %}
+    {% set tpl = attr['data-tpl']|default('') %}
+    {% set attr = attr|merge({'data-tpl': null}) %}
+    {% set element -%}
+    <ul class="select-wrap">
+        {% for key,vo in choices %}
+        <li class="select-item">
+        <label><input type="radio" {{ block('widget_attributes') }} {{ value|default(1)|isChecked(key) }} value="{{ key }}" />{{ vo }}<i class="arraw"></i></label>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endset %}
+    {{- (tpl ? tpl|replace({'%x%': element}) : element)|raw -}}
+
+    
+{% endblock radio_widget %}
+{% block checkbox_widget %}
+
+    {% set tpl = attr['data-tpl']|default('') %}
+    {% set attr = attr|merge({'data-tpl': null}) %}
+    {% set element -%}
+    <ul class="select-wrap">
+        {% for key,vo in choices %}
+        <li class="select-item">
+        <label><input type="checkbox" {{ block('widget_attributes') }} {{ key|isChecked(value|default('')) }} value="{{ key }}" />{{ vo }}<i class="arraw"></i></label>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endset %}
+    {{- (tpl ? tpl|replace({'%x%': element}) : element)|raw -}}
+
+    
+{% endblock checkbox_widget %}
+
+{% block position_widget %}
+    {% if choices is defined %}
+    {% for key,item in choices %}
+    <label><input type="radio" {{ block('widget_attributes') }} {{ key|isChecked(value|default(5)) }} value="{{ key }}" />{{ item }}</label>
+    {% if key%3==0 %}<br />{% endif %}
+    {% endfor %}
+    {% endif %}
+    <div class="tips1">请选择位置，不选则当前水印方案不生效。</div>
+{% endblock position_widget %}
+
+{%- block push_widget -%}
+    
+    {%- if required and placeholder is none and not placeholder_in_choices and not multiple -%}
+        {% set required = false %}
+    {%- endif -%}
+    <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+        {{ block('option_placeholder') }}
+
+        {# {%- if placeholder is not none -%}
+            <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ (placeholder != '' ? placeholder : '请选择')|trans({}) }}</option>
+        {%- endif -%} #}
+        {% for key, choice in choices %}
+            <option value="{{ key }}" {{ key|isSelected(value|default('')) }}>{{ choice }}</option>
+        {% endfor %}
+    </select>
+{%- endblock push_widget -%}
+
+{% block entity_widget %}
+    {# {{ dump() }} #}
+    {%- if required and placeholder is none and not placeholder_in_choices and not multiple -%}
+        {% set required = false %}
+    {%- endif -%}
+    {% set tpl = attr['data-tpl']|default('') %}
+    {% set attr = attr|merge({'data-tpl': null}) %}
+    {% set chosen = attr['data-chosen']|default('true') %}
+    {# 增加额外数据 #}
+    {% if attr['data-extradata']|default('') %}
+        {% set extradata = attr['data-extradata']|default('{}')|json_decode %}
+        {% set choices = extradata + choices %}
+    {% endif %}
+
+    {% set element -%}
+        {% if type=='checkbox' or type=='radio' %}
+        <ul class="select-wrap">
+            {{ block('option_placeholder') }}
+            {% for key,vo in choices %}
+            <li class="select-item"><label><input {{ required ? 'required' : ''}} type="{{ type }}" id="{{ name }}" name="{{ full_name }}" value="{{ key }}" {{ key|isChecked(value|default(0)) }} />{{ vo }}<i class="arraw"></i></label></li>
+            {% endfor %}
+        </ul>
+
+        {% else %}
+        {% if choices|length < 15 %}
+            {% set disable_search = true %}
+        {% else %}
+            {% set disable_search = false %}
+        {% endif %}
+        <select {{ block('widget_attributes') }} data-chosen="{{name}}">
+            {{ block('option_placeholder') }}
+            {% for key,vo in choices %}
+            <option value="{{ key }}" {{ key|isSelected(value|default('')) }}>{{ vo }}</option>
+            {% endfor %}
+        </select>
+        {% if chosen == 'true' %}
+            {{ block('chosen_js') }}
+        {% endif %}
+        {% endif %}
+    {%- endset %}
+    {{- (tpl ? tpl|replace({'%x%': element}) : element)|raw -}}
+
+{% endblock entity_widget %}
+
+{% block chosen_js %}
+<script>
+    seajs.use('chosen', function(chosen){
+        var config = {{attr['chosen-opt']|default("{}")|raw}};
+        config =  $.extend( {}, {
+            max_selected_options: '{{attr['maxlength']|default('Infinity')}}',
+            no_results_text: "没有数据",
+            search_contains: true,
+            inherit_select_classes: true,
+            placeholder_text_multiple: '请选择',
+            placeholder_text_single: '请选择',
+            disable_search: "{{disable_search}}"
+        },config);
+       $('[data-chosen="{{ name }}"]').chosen(config);
+    });
+</script>
+{% endblock %}
+
+{% block bundle_widget %}
+    {% set tpl = attr['data-tpl']|default('') %}
+    {% set attr = attr|merge({'data-tpl': null}) %}
+        
+    {% set element -%}
+       {% if type=='checkbox' or type=='radio' %}
+        <ul>
+            <li><label><input type="{{ type }}" id="{{ name }}" name="{{ full_name }}" value="" /><font color="#f00">取消选择</font></label></li>
+            {% for key,vo in choices %}
+            <li><label><input type="{{ type }}" id="{{ name }}" name="{{ full_name }}" value="{{ key }}" {{ key|isChecked(value|default(0)) }} />{{ vo }}</label></li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <select {{ block('widget_attributes') }}>
+            {{ block('option_placeholder') }}
+            {# {%- if required is not defined or required != true %}
+               <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ (placeholder|default('') != '' ? placeholder|default('') : '请选择')|trans({}) }}</option>
+            {%- endif -%} #}
+            {% for key,vo in choices %}
+            <option value="{{ key }}" {{ key|isSelected(value|default('')) }}>{{ vo }}</option>
+            {% endfor %}
+        </select>
+        {% endif %}
+    {% endset %}
+    {{- (tpl ? tpl|replace({'%x%': element}) : element)|raw -}}
+{% endblock bundle_widget %}
+{% block abstracttext_widget %}
+    {% if attr.type=='image' %}
+{#     {{ block('form_widget_simple') }}#}
+    {{ block('image_widget') }}
+    {% else %}
+    {{ block('textarea_widget') }}
+    {% endif %}
+{% endblock abstracttext_widget %}
+{% block textcolor_widget %}
+<script type="text/javascript">
+seajs.use("jscolor",function(){
+    jscolor.bindClass ='jscolor';//需要绑定的class
+	jscolor.dir = BASE_URL.replace(/\/+app_dev.php/, "") + 'attachment/jscolor/';//附件目录
+	jscolor.init();
+});
+</script>
+{% set attr = attr|merge( {'class': attr.class|default~' jscolor' }) %}
+<input type="text" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} />
+{% endblock textcolor_widget %}
+
+{% block ajaxbind_widget %}
+    {# 提示处理 #}
+    {% set tpl = attr['data-tpl']|default('') %}
+    {% set attr = attr|merge({'data-tpl': null}) %}
+    {# {% set name = attr["data-name"]|default('')|split(',') %} #}
+    <script type="text/javascript">
+    seajs.use("core/js/ajaxbind",function(c){
+        //js入口
+        c.init("ajaxBind", '{{name}}');
+    });
+    </script>
+
+    {% set element -%}
+    {% set src_name = attr['src-name']|default('') %}
+    {# <input type="hidden" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} /> #}
+    {# 一级 #}
+    {# <select {% if srcservice %}name="{{name}}"{% endif %} {% if value is not empty %} {% endif %} data-type="ajaxbind" {{ block('self_attributes') }}> #}
+    {# 只存配置用 #}
+    <span class="cfg" data-ajaxurl="{{'main/getjson'|U}}" {{ block('widget_attributes') }} data-ajax-level="{{attr['data-level']|default('level')}}"></span>
+    {# 同一个分类联动, 有值时隐藏 #}
+    <select data-type="ajaxbind" class="{% if value is not empty and src_name is empty %}hide{% endif %}" ind="1" name="{{name}}">
+        {{ block('option_placeholder') }}
+        {% for k, vo in choices %}
+            <option data-ajax-level="1" value="{{k}}" {{ value|default('')|isSelected(k) }}>{{ vo }}</option>
+        {% endfor %}
+    </select>
+    {# 二级 #}
+    {# 不同分类联动 #}
+    {% if src_name and srcinfo %}
+        {% set placeholder = attr['src-title']|default(placeholder) %}
+    <select data-type="ajaxbind" ind="2" name="{{src_name}}">
+        {{ block('option_placeholder') }}
+        {% for vo in srcinfo %}
+            <option value="{{ vo.id }}" {{ srcvalue|default('')|isSelected(vo.id) }}>{{ vo.name }}</option>
+        {% endfor %}
+    </select>
+    {# 同一个分类联动，有值时显示更换按钮 #}
+    {% elseif value is not empty and src_name is empty %}
+    <span class="p5 tit">{{ valuetext|default('') }}</span>
+    <input type="hidden" class="tit-value" name="{{name}}" value="{{value}}"/>
+    <button class="search-btn btn btn-sm btn-default" data-type="changebind" type="button"><i class="font-ico-8 mr5"></i>更换{# {{ label }} #}</button>
+    {% endif %}
+
+    {% endset %}
+    {{- (tpl ? tpl|replace({'%x%': element}) : element)|raw -}}
+{% endblock ajaxbind_widget %}
+
+{% block ajaxbind1_widget %}
+    {# 文档数据 #}
+    {% set base_data = label_attr['base-data'] %}
+    {# 总配置 #}
+    {% set cfg = {
+            service   : entitypath|default('house.category'),
+            name      : name,
+            value     : value ? : base_data[name]|default(''),
+            limitlevel: attr['limitlevel']|default(''),
+            values    : [],
+            field     : 'pid'
+        } %}
+    {# 不同分类的配置 #}
+    {% set sub_cfg = {} %}
+    {% if attr['src-name']|default('') %}
+        {% set sub_cfg = {
+            service: attr['src-service']|default(''),
+            name   : attr['src-name']|default(''),
+            value  : base_data[attr['src-name']|default('')]|default(''),
+            field  : 'pid'
+        } %}
+    {% endif %}
+    {# 提示处理 #}
+    {% set tpl = attr['data-tpl']|default('') %}
+    {% set attr = attr|merge({'data-tpl': null}) %}
+    {% set element -%}
+        {% set type = attr['type']|default(1) %}
+        {# 处理前的数据 #}
+        {% set arr_params = query_builder|getQuery %}
+        {# 排除相关字段 #}
+        {% set new_arr_params = {} %}
+        {% for k, v in arr_params if k not in [] %}
+            {% set new_arr_params = new_arr_params|merge({(k): v}) %}
+        {% endfor %}
+        {# 区域单独处理 #}
+        {% if cfg.service == 'db.area' %}
+            {% set cfg = cfg|merge({pid: app.session.get('area', 0)}) %}
+            {# {% set new_arr_params = new_arr_params|merge({pid: app.session.get('area', 0)}) %} #}
+        {% endif %}
+        {% set menus_data = (cfg.service)|getAll({checked: 1, pageSize: 1000, order: 'sort|asc'}|merge(new_arr_params)).data %}
+        {% set sub_data = [] %}
+        {# type=2 ajax联动 不需要二级 #}
+        {% if sub_cfg|default('') and type != 2 %} 
+        {# 不同字段 #}
+            {% set sub_data = (sub_cfg.service)|getAll({checked: 1, pageSize: 1000}).data %}
+        {% endif %}
+        {# type=2 时要先拿到父级的id #}
+        {% if type == 2 and cfg.value %}
+            {% set arr_parents = [] %}
+            {% set parents = (cfg.service)|getParents(cfg.value).data %}
+            {% for parent in parents %}
+                {% set arr_parents = arr_parents|merge([parent.id]) %}
+            {% endfor %}
+            {% set cfg = cfg|merge({values: arr_parents}) %}
+        {% endif %}
+        <div class="wrap-select-{{name}}"></div>
+        {# 多级联动列表 #}
+        <script type="text/javascript">
+        seajs.use(['ajaxbind1'], function(ajaxbind) {
+            ajaxbind.init({
+                el     : '.wrap-select-{{name}}',
+                dataUrl: '{{ 'house/ajaxbind/index'|U({params: cfg.field, service: sub_cfg.service|default('') ? : cfg.service}) }}',
+                data   : {{ menus_data|toArray(['name', 'id', 'pid'])|json_encode|raw }},
+                subData: {{ sub_data|toArray(['name', 'id', 'pid'])|json_encode|raw }},
+                cfg    : {{ cfg|json_encode|raw }},
+                subCfg : {{ sub_cfg|json_encode|raw }},
+                type   : {{ type }}
+            })
+        });
+        </script>
+    {% endset %}
+    {{- (tpl ? tpl|replace({'%x%': element}) : element)|raw -}}
+{% endblock ajaxbind1_widget %}
+
+
+{% block baidumap_widget %}
+
+        {% set tpl = attr['data-tpl']|default('') %}
+        {% set attr = attr|merge({'data-tpl': null}) %}
+        {% set element -%}
+            {# 内容 #}
+<script type="text/javascript">
+seajs.use(["mapLibs"]);
+</script>
+{% set m_type = attr['data-type']|default('marker') %}
+<input type="text" data-type="{{m_type}}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} />
+ <button data-map-picker-btn="1" data-input-id="#{{name}}" data-map-btn-type="{{m_type}}" class='btn btn-sm' name="{{name}}btn" type='button' data-url="{{ ('map/picker')|U({input: name, type: m_type}) }}"><i class="font-ico-local"></i> 标注</button>
+{% if m_type == 'marker' %}
+    {% if value %}
+        {% set arr_map = value|split(',') %}
+        {% set lng = arr_map[0]|default('') %}
+        {% set lat = arr_map[1]|default('') %}
+    {% endif %}
+    <input type="hidden" data-map-src="#{{name}}" name="lng" value="{{lng|default('')}}" id="lng"><input type="hidden" data-map-src="#{{name}}" name="lat" value="{{lat|default('')}}" id="lat">
+{% endif %}
+<div class="tips1"></div>
+            {# /内容 #}
+        {%- endset %}
+
+        {{- (tpl ? tpl|replace({'%x%': element}) : element)|raw -}}
+{% endblock baidumap_widget %}
+
+{%- block date_widget -%}
+    {% set value = value ? value|join('-')|date('Y-m-d') %}
+        {# {{dump(value)}} #}
+    {% set value = value == '1970-01-01' ? '' : value %}
+    {% if widget == 'single_text' %}
+        {{- block('form_widget_simple') -}}
+    {%- else -%}
+        {%- set type = type|default('text') -%}
+
+        {% set tpl = attr['data-tpl']|default('') %}
+        {% set attr = attr|merge({'data-tpl': null}) %}
+        {% set element -%}
+        <label class="label label-date">
+            <input type="{{ type }}" readonly data-date="{{name}}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} />
+        </label>
+        {%- endset %}
+
+        {{- (tpl ? tpl|replace({'%x%': element}) : element)|raw -}}
+    {%- endif -%}
+    <script type="text/javascript">
+        seajs.use(['daterangepicker'], function() {
+            var $dataDate = $('input[data-date="{{name}}"]');
+            var dateValue = $dataDate.val();
+            var $popBody = $dataDate.closest('.list');
+
+            var dateOpt = {
+                    startDate: new Date(),
+                    autoApply: true,
+                    parentEl: $popBody,
+                    locale: {
+                        format: 'YYYY-MM-DD' + ($dataDate.data('time-picker') ? ' hh:mm:ss' : '')
+                    }
+                };
+            $dataDate.daterangepicker(dateOpt, function(start, end, label) {
+                var $inputAct = this.element;
+            })
+            .on('cancel.daterangepicker', function(ev, picker) {
+                //do something, like clearing an input
+                this.value = '';
+            })
+            .on('show.daterangepicker', function(ev, picker) {
+              picker.container
+                .on('click.today', 'button.todayBtn', function() {
+                    picker.container.off('.today');
+                    picker.hide();
+                    picker.setStartDate(moment().format());
+                    picker.setEndDate(moment().format());
+                    picker.updateElement();
+                })
+                .find('.ranges').show()
+            })
+            .click(function(event) {
+                return false;
+            });
+
+            // 还原表单值
+            $dataDate.val(dateValue);
+        })    
+    </script>
+{%- endblock date_widget -%}
+
+{%- block datetimes_widget -%}
+    {% set value = value?value|join('-')|date('Y-m-d H:i:s') %}
+    {% if widget == 'single_text' %}
+        {{- block('form_widget_simple') -}}
+    {%- else -%}
+        {%- set type = type|default('text') -%}
+        <div class="label label-date"><input type="{{ type }}" data-date="1" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} /></div>
+    {%- endif -%}
+{%- endblock datetimes_widget -%}
+{# 时间戳 #}
+{%- block idate_widget -%}
+{% set value = value?value|join('-')|date('Y-m-d') %}
+    {% if value|date('U') < 0 %}
+        {% set values = 0 %}
+    {% else %}
+        {% set values = value|date('U') %}
+    {% endif %}
+    {# {{dump(value)}} #}
+{% if widget|default('') == 'single_text' %}
+    {{- block('form_widget_simple') -}}
+{%- else -%}
+    {%- set type = type|default('text') -%}
+
+    {% set tpl = attr['data-tpl']|default('') %}
+    {% set attr = attr|merge({'data-tpl': null}) %}
+    {% set element -%}
+    <label class="label label-date">
+            <input type="{{ type }}" readonly data-date="{{name}}"  {% if value is not empty %}value="{{ value }}" {% endif %} />
+            <input type="hidden" {{ block('widget_attributes') }} value="{{ values }}">
+    </label>
+    {%- endset %}
+
+    {{- (tpl ? tpl|replace({'%x%': element}) : element)|raw -}}
+{%- endif -%}
+<script type="text/javascript">
+    seajs.use(['daterangepicker'], function() {
+        var $dataDate = $('input[data-date="{{name}}"]');
+        var dateValue = $dataDate.val();
+        var $popBody = $dataDate.closest('.list');
+        
+        var dateOpt = {
+                startDate: '{{value}}' || new Date(),
+                endDate: '{{value}}' || new Date(),
+                autoApply: true,
+                parentEl: $popBody,
+                locale: {
+                    format: 'YYYY-MM-DD' + ($dataDate.data('time-picker') ? ' hh:mm:ss' : '')
+                }
+            };
+        $dataDate.daterangepicker(dateOpt, function(start, end, label) {
+            var $inputAct = this.element;
+                $inputAct.off('change.stamp').on('change.stamp', function(){
+                    var time = $(this).val();
+                    $('#{{name}}').val(new Date(time.replace('/-/g','/')).getTime() / 1000);
+
+                });
+        })
+        .on('cancel.daterangepicker', function(ev, picker) {
+            //do something, like clearing an input
+            this.value = '';
+        })
+        .on('show.daterangepicker', function(ev, picker) {
+          picker.container
+            .on('click.today', 'button.todayBtn', function() {
+                picker.container.off('.today');
+                picker.hide();
+                picker.setStartDate(moment().format());
+                picker.setEndDate(moment().format());
+                picker.updateElement();
+            })
+            .find('.ranges').show()
+        })
+        .click(function(event) {
+            return false;
+        });
+
+        // 还原表单值
+        $dataDate.val(dateValue);
+    })    
+</script>
+{%- endblock idate_widget -%}
+{#验证码样式#}
+{%- block captcha_widget -%}
+{# {% set url = path('manage_captcha',attr|merge({'name':name,'t':"now"|date('Ymdhis')})) %} #}
+{% set attr = attr|merge({class: ''}) %}
+{% set url = path('manage_captcha', {'name':name})|U({}, true) %}
+    <div class="code-wrap-outer">
+        <div class="code-wrap">
+            <div class="code-item code-item-input">{{- block('form_widget_simple') -}}</div>
+            <div data-code-{{name}}="1" class="code-item code-item-img">
+                <img id='codeImg' src="{{ url }}" data-src="{{ url }}" class="code-img" align="absbottom" alt="验证码" title="点击更换验证码" />{% if attr[('data-title')]|default('') %}<a href="javascript:;" class="code-title">{{attr[('data-title')]}}</a>{% endif %}
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        seajs.use([], function() {
+            $('[data-code-{{name}}="1"]')
+                .off('click')
+                .on('click', function() {
+                    $(this).find('img').attr('src', function(i, v) {
+                            return $(this).data('src') + '&t=' + Math.floor(Math.random() * (1000 + 1));
+                        });
+                })
+        })    
+    </script>
+{%- endblock captcha_widget -%}
+
+{%- block geetestlib_widget -%}
+<script type="text/javascript">
+seajs.use(["http://static.geetest.com/static/tools/gt.js"],function(){
+	var handlerEmbed = function (captchaObj) {
+        $("#embed-submit").click(function (e) {
+            var validate = captchaObj.getValidate();
+            if (!validate) {
+                e.preventDefault();
+            }
+        });
+        // 将验证码加到id为captcha的元素里，同时会有三个input的值：geetest_challenge, geetest_validate, geetest_seccode
+        captchaObj.appendTo("#embed-captcha");
+        captchaObj.onReady(function () {
+            //$("#wait")[0].className = "hide";
+        });
+        // 更多接口参考：http://www.geetest.com/install/sections/idx-client-sdk.html
+    };
+    $.ajax({
+        // 获取id，challenge，success（是否启用failback）
+        url: "{{ ('geetest')|U }}?t=" + (new Date()).getTime(), // 加随机数防止缓存
+        type: "get",
+        dataType: "json",
+        success: function (data) {
+            // 使用initGeetest接口
+            // 参数1：配置参数
+            // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它做appendTo之类的事件
+            initGeetest({
+                gt: data.gt,
+                challenge: data.challenge,
+                product: "float", // 产品形式，包括：float，embed，popup。注意只对PC版验证码有效
+                offline: !data.success // 表示用户后台检测极验服务器是否宕机，一般不需要关注
+                // 更多配置参数请参见：http://www.geetest.com/install/sections/idx-client-sdk.html#config
+            }, handlerEmbed);
+        }
+    });
+});
+</script>
+<div id="embed-captcha" class="embed-captcha"></div>
+{%- endblock geetestlib_widget -%}
+{# 手机验证码 #}
+{%- block telcode_widget -%}
+    {% set tel_code = attr[('data-codetpl')]|default('comcode') %}
+    {% set tel_code_data = ('db.smstpls')|getRow({ename: tel_code}) %}
+    {% set _params = {
+        tpl: tel_code_data.tid|default(tel_code_data.ename|default('comcode')),
+        id: 'smscode', 
+        open: tel_code_data.checked|default(0),
+        reg: attr[('reg')]|default('')
+    } %}
+    <div class="code-wrap-outer">
+        <div class="code-wrap">
+            <div class="code-item code-item-input">
+                {{- block('form_widget_simple') -}}
+            </div>
+            <div class="code-item code-item-img">
+                {% set url = ('sms/smstpl')|U %}
+                {% set title = attr[('data-title')]|default('获取验证码') %}
+                {# 随机字串 #}
+                {% set _code = 'now'|date('U') %}
+                <button type="button" data-codebtn-{{id}}-{{_code}}="1" class="btn code-btn" data-code="tel" data-tel="{{attr[('data-tel')]|default('tel')}}" data-title="{{title}}" title="{{title}}" data-src="{{ url }}" data-params="{{_params|json_encode()}}"><i class="font-icons-31 mr5 fz14"></i><span class="code-btn-text">{{title}}</span></button>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        seajs.use(['inter'], function(inter) {
+            inter.dynamicCode('[data-codebtn-{{id}}-{{_code}}="1"]');
+        })    
+    </script>
+{%- endblock telcode_widget -%}
+{# 邮箱验证码 #}
+{%- block mailcode_widget -%}
+    <div class="code-wrap-outer">
+        <div class="code-wrap">
+            <div class="code-item code-item-input">
+                {{- block('form_widget_simple') -}}
+            </div>
+            <div class="code-item code-item-img">
+                {% set attr_tpl = attr[('data-codetpl')]|default('emailcode') %}
+                    
+                {% set email_tpl = ('db.emailtpls')|getRow({tid: attr_tpl}) %}
+
+                {% set _params = {
+                    tpl: attr_tpl,
+                    id: 'smscode', 
+                    open: email_tpl.checked|default(0),
+                    reg: attr[('reg')]|default('')
+                } %}
+                {% set title = attr[('data-title')]|default('获取验证码') %}
+                {# 随机字串 #}
+                {% set _code = 'now'|date('U') %}
+                <button type="button" data-codebtn-{{_code}}="1" class="btn code-btn" data-code="mail" data-mail="{{attr[('data-mail')]|default('mail')}}" data-title="{{title}}" title="点击{{title}}" data-src="{{ ('sms/mailtpl')|U() }}" data-params="{{_params|json_encode()}}"><i class="font-icons-31 mr5 fz14"></i><span class="code-btn-text">{{title}}</span></button>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        seajs.use(['inter'], function(inter) {
+            inter.dynamicCode('[data-codebtn-{{_code}}="1"]');
+        })    
+    </script>
+{%- endblock mailcode_widget -%}
+
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+        {% set tpl = attr['data-tpl']|default('') %}
+        {% set attr = attr|merge({'data-tpl': null}) %}
+        {% set remote = attr['data-remote']|default('') %}
+        {% set element -%}
+            <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} {% if remote != '' %}remote="{{(remote)|U}}"{% endif %}/>
+        {%- endset %}
+
+        {{- (tpl ? tpl|replace({'%x%': element}) : element)|raw -}}
+{%- endblock form_widget_simple -%}
+
+{%- block form_row -%}
+    <div class="form-row">
+        <div class="form-cell-label">{{- form_label(form) -}}</div>
+        {# <div class="form-errors">{{- form_errors(form) -}}</div> #}
+        <div class="form-cell">{{- form_widget(form) -}}</div>
+    </div>
+{%- endblock form_row -%}
+
+{%- block form_rows -%}
+        {% set tpl = attr['data-tpl']|default('') %}
+        {% set attr = attr|merge({'data-tpl': null}) %}
+        {% set element -%}
+    {% for child in form %}
+        {# {{ dump(attr) }} #}
+        {{- form_row(child) -}}
+    {% endfor %}
+        <div class="error-wrap"></div>
+        {%- endset %}
+
+        {{- (tpl ? tpl|replace({'%x%': element}) : element)|raw -}}
+{%- endblock form_rows -%}
+
+
+{%- block button_widget -%}
+    {# {{ dump() }} #}
+    {%- if label is empty -%}
+        {%- if label_format is not empty -%}
+            {% set label = label_format|replace({
+                '%name%': name,
+                '%id%': id,
+            }) %}
+        {%- else -%}
+            {% set label = name|humanize %}
+        {%- endif -%}
+    {%- endif -%}
+    <button type="{{ type|default('button') }}" {{ block('button_attributes') }}>{{ label|trans({})|raw }}</button>
+{%- endblock button_widget -%}
+
+{%- block textarea_widget -%}
+    {% set tpl = attr['data-tpl']|default('') %}
+    {% set attr = attr|merge({'data-tpl': null}) %}
+    {% set element -%}
+    <textarea {{ block('widget_attributes') }}>{% if value is iterable  %}{{ value|join('\r\n') }}{% else %}{{ value }}{% endif %}</textarea>
+    {%- endset %}
+    
+    {{- (tpl ? tpl|replace({'%x%': element}) : element)|raw -}}
+{%- endblock textarea_widget -%}
+
+
+{%- block widget_attributes -%}
+    {% if id is defined %} id="{{ id }}"{% endif %}
+    {%- if full_name is defined and full_name %} name="{{ full_name }}"{% endif -%}
+    {%- if read_only is defined and read_only %} readonly="readonly"{% endif -%}
+    {%- if disabled is defined and disabled %} disabled="disabled"{% endif -%}
+    {%- if required is defined and required %} data-msg-required="{{label}}不能为空" required="required"{% endif -%}
+    {%- for attrname, attrvalue in attr -%}
+        {{- " " -}}
+        {%- if attrname in ['placeholder', 'title'] -%}
+            {{- attrname }}="{{ attrvalue|trans({}) }}"
+        {%- elseif attrvalue is same as(true) -%}
+            {{- attrname }}="{{ attrname }}"
+        {%- elseif attrvalue is not same as(false) -%}
+            {{- attrname }}="{{ attrvalue }}"
+        {%- endif -%}
+    {%- endfor -%}
+{%- endblock widget_attributes -%}
+
+{%- block integer_widget -%}
+    {%- set type = type|default('number') -%}
+    {% set attr = {min: 0}|merge(attr) %}
+    {{ block('form_widget_simple') }}
+{%- endblock integer_widget -%}
+
+
+{%- block choice_widget_collapsed -%}
+    {%- if required and placeholder is none and not placeholder_in_choices and not multiple -%}
+        {% set required = false %}
+    {%- endif -%}
+    {% set tpl = attr['data-tpl']|default('') %}
+    {% set attr = attr|merge({'data-tpl': null}) %}
+    {% if choices|length < 15 %}
+        {% set disable_search = true %}
+    {% else %}
+        {% set disable_search = false %}
+    {% endif %}
+    {% set type = attr['type']|default('') %}
+    {% set element -%}
+    {% if type in ['radio', 'checkbox'] %}
+    <ul class="select-wrap">
+        {{ block('option_placeholder') }}
+        {% for key,vo in choices %}
+        <li class="select-item"><label><input {{ required ? 'required' : ''}} type="{{ type }}" id="{{ name }}" name="{{ name ~ (type == 'checkbox' ? '[]' : '') }}" maxlength="{{attr['maxlength']|default('')}}" value="{{ vo.value }}" {{ vo.value|isChecked(value|default(0)) }} />{{ vo.label }}<i class="arraw"></i></label></li>
+        {% endfor %}
+    </ul>
+
+    {% else %}
+    <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %} data-chosen="{{name}}">
+        {{ block('option_placeholder') }}
+        {%- if preferred_choices|length > 0 -%}
+            {% set options = preferred_choices %}
+            {{- block('choice_widget_options') -}}
+            {%- if choices|length > 0 and separator is not none -%}
+                <option disabled="disabled">{{ separator }}</option>
+            {%- endif -%}
+        {%- endif -%}
+        {%- set options = choices -%}
+        {{- block('choice_widget_options') -}}
+    </select>
+    {{ block('chosen_js') }}
+    {% if attr['data-formgroup0']|default(0) or attr['data-formgroup1']|default(0) %}
+    <script type="text/javascript">
+    seajs.use(['searchxq'],function(searchxq){
+        searchxq.formField('.form-row');
+    }); 
+    </script>
+    {% endif %}
+    {% endif %}
+    {%- endset %}
+    
+    {{- (tpl ? tpl|replace({'%x%': element}) : element)|raw -}} 
+{%- endblock choice_widget_collapsed -%}
+
+{%- block form_label -%}
+    {% if label is not same as(false) -%}
+        {% if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif %}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif %}
+        {% if label is empty -%}
+            {%- if label_format is not empty -%}
+                {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                }) %}
+            {%- else -%}
+                {% set label = name|humanize %}
+            {%- endif -%}
+        {%- endif -%}
+        {# 去掉base-data保证html正常输出 #}
+        {% set label_attr = label_attr|merge({'base-data': ''}) %}
+        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label|trans({}, translation_domain) }}</label>
+    {%- endif -%}
+{%- endblock form_label -%}
+
+{# 会造成语法不高亮，先放下面 #}
+{% block ueditor_widget %}
+    {# {{ dump(attr['data-btns']|json_decode()) }} #}
+    <script type="text/javascript">
+
+    seajs.use(['ueditor', 'ueditorPlugin'],function(ueditor, ueditorPlugin){
+        //实例化编辑器
+        var opt = {{ attr["data-ueditor-opt"]|default('{}')|raw }};
+        var defOpt = {};
+
+
+        // 启用编辑器的类型
+        if (typeof opt.type != 'undefined') {
+            defOpt.toolbars = [TOOLBARS_CONFIG[opt.type]];
+            if (opt.type == 'simple') {
+                // 关闭字数统计
+                defOpt.wordCount = false;
+                // html路径
+                defOpt.elementPathEnabled = false;
+                defOpt.initialFrameHeight = 150;
+            };
+        }else{
+            defOpt.toolbars = [TOOLBARS_CONFIG['normal']];
+        }
+
+        var editor = new UE.ui.Editor($.extend( {}, defOpt , opt));
+        editor.render("{{ name }}");
+
+        /*var editor = UE.getEditor("{{ name }}", {
+            {% for k, v in attr if k != 'data-btn' %}
+                {% if loop.index > 1 %},{% endif %}{{k}}: '{{v}}'
+            {% endfor %}
+        });*/
+
+    
+
+        //设置编辑器的内容
+        editor.addListener("ready", function () {
+            {% if value is not empty %}
+            // editor准备好之后才可以使用
+            editor.setContent('{{ value|raw }}');
+            {% endif %}
+            var $ueditor =  $('#{{ name }}');
+            $ueditor.removeData('editor');
+            $ueditor.addClass('class_name').data('editor', editor);
+
+            // 其它按钮
+            {% if attr['data-btns'] is defined %}
+                {% set arr_btns = attr['data-btns']|json_decode() %}
+                {% for item in arr_btns if item.name %}
+                ueditorPlugin.addBtn('{{ item.name|default('') }}', {
+                    ueWrap: '#{{name}}',
+                    editor: editor,
+                    title: '{{ item.title|default('') }}',
+                    icon: '{{ item.icon|default('') }}',
+                    url: '{{ item.url|default('') ? item.url|U(item.data|default({})) : '' }}'
+                });
+                {% endfor %}
+            {% endif %}
+        });
+        // onchange
+        editor.addListener("selectionchange", function () {
+            editor.sync();
+            // 表单验证
+            $('textarea[name="{{name}}"]').valid();
+            // $(this).closest('.form').validate().element('textarea[name="{{name}}"]');
+        });
+        
+    });
+    </script>
+    {# {% set cate = app.request.get("category") %} #}
+    {# {% set parent = ('house.category')|getParents(cate) %} #}
+
+    <textarea {{ block('widget_attributes') }} style="width: 97%;"></textarea>
+
+{% endblock ueditor_widget %}

@@ -1,0 +1,26 @@
+info:
+    tableName: auth_group
+    aliasName: p
+    listGrid:
+        - 'ids:|w30'
+        - 'name[EDITSPAN]:名称|txtleft'
+        - 'uid[GETUSERNAME]:所属用户|txtleft w150'
+        - 'status[GETSTATUS]:是否启用|txtleft w50'
+        - 'id:操作|txtcenter w280:[EDIT]修改|btn,[EDIT]节点权限|btn|authoritygroup/show,[JUMP]成员列表|btn|authority/authorityaccess,[DELETE]删除|btn,[COPY]复制|search-btn'
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    order: ''
+    orderBy: asc
+    dataModel: 0
+    alias: {  }
+    query:
+        uid:
+            eq: '<id>'
+    subTableName: ''
+    listDesc: ''
+    subJoinField: ''
+    groupBy: ''
+    searchFun: EXISTS
+    autoQuery: '0'
+    query1: {  }

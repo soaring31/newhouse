@@ -1,0 +1,27 @@
+{# # 说明
+ #}
+<div id="comp_box">
+    <form action="http://house.08cms.com/info.php?fid=8&amp;chid=4#aids=" method="get" target="_blank">
+        <div id="comp_top">
+            <a class="close ico08" href="javascript:comp.hidden();"></a>
+            <div class="top_l">
+                [ <b id="comp_num"></b>
+                /5]楼盘对比
+            </div>
+        </div>
+        <ul id="comp_items">
+        </ul>
+        <div id="comp_boot">
+            <input type="submit" value="楼盘对比" class="prosubmit">
+            <a href="javascript:comp.remove_all()" class="clear"> <i class="ico08"></i>
+                清空楼盘
+            </a>
+            <input type="hidden" id="subid_obj" name="subcatid" value="4"></div>
+    </form>
+</div>
+
+<script>
+    var comp_boxMXY = [1,0,300],chid = '4',comp_action='http://house.08cms.com/info.php?fid=8&chid='+chid+'#aids=';
+    seajs.use(['contrast'],function(contrast){
+    });
+</script>

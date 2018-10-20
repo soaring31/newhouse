@@ -1,0 +1,58 @@
+{% extends "CoreBundle::base.html.twig" %}
+{% block title %}后台管理{% endblock %}
+{% block css %}
+{{core_global.linkcss('bundles/core/css/manage.css')}}
+{% endblock css %}
+{# {% set menus_data = ('db.menus')|getTree({
+    genre: 'house', 
+    bundle: 'house', 
+    checked: 1, 
+    order: 'sort|asc'
+}, {type: 'array'}) %} #}
+{% block js %}
+{% set sess_area = app.session.get('area')|default(1) %}
+<script>
+var area = {{sess_area}};
+seajs.config({
+    preload: ['ueditor.conf', 'codemirror'], // 预加载项
+});
+seajs.use(["manage"], function(manage) {
+	
+
+    //js入口
+    manage.main();
+    {# manage.main({menuData: {{menus_data.data|json_encode|raw}}});#}
+});
+</script>
+{% endblock js %}
+{% block header %} {% endblock header %}
+{% block body %}
+{{ render(controller(bundlename ~ ':Main:topmenu')) }}
+	{# {% include 'CoreBundle:Main:topmenu.html.twig'  %} #}
+<aside id="leftmenu" data-aside="1" class="aside">
+    <section id="cleft-id" class="left-menu">
+    </section>
+</aside>
+<section id="rleft" class="main" data-content="1" data-size-from=".main-hd, .filter, .oprate, [data-prompt-list]" data-size-target=".list-con"></section>
+<script id="tpl-aside" type="text/html">
+	<div class="btn-tab" data-tab="1" title="操作菜单"><i class="font-ico-31"></i></div>
+	<div data-level="top" data-trigger-next="1" data-size="1" data-target='#rleft' class="level1">
+		<% for (var i = 0; i < $data.length; i++) { %>
+		<% var item = $data[i] %>
+		<% if (item.nodes) { %>
+			<h4 data-level="1"><%=# (item.remark ? '<i class="font-ico-'+ item.remark +' mr5"></i>' : '') %><span class="tit"><%= item.name %></span></h4>
+			<div data-level="next" class="level2">
+			<% for (var j = 0; j < item.nodes.length; j++) { %>
+			<% var item1 = item.nodes[j] %>
+				<a data-role="route" data-route-index="1" data-level="1" href="<%= item1.url %>" data-route="<%= item1.ename %>"><%= item1.name %></a>
+			<% }; %>
+			</div>
+		<% }; %>
+		<% }; %>
+	</div>
+</script>
+
+{% endblock body %}
+{% block footer %}
+	<div class="footer">Copyright ©2018 <a href="http://www.zhuge.com">zhuge.com</a> All rights reserved.</div>
+{% endblock footer %}

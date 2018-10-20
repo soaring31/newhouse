@@ -1,0 +1,25 @@
+$img-form-1:(15px, 16px, 0, 0, img-form-1);
+$img-form-2:(15px, 16px, -25px, 0, img-form-2);
+$img-form-3:(15px, 16px, -50px, 0, img-form-3);
+
+$img-form: ($img-form-1,$img-form-2,$img-form-3);
+
+@mixin img-form($sprites) {
+  %icoform {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/form.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+        @extend %icoform;
+    }
+  }
+}

@@ -1,0 +1,159 @@
+ManageBundle\Entity\Userpay:
+    type: entity
+    table: userpay
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        uid:
+            options:
+                comment: 会员id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        name:
+            options:
+                comment: 会员名称
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        type:
+            options:
+                comment: 支付方式
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        amount:
+            options:
+                comment: 支付数量
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        pay:
+            options:
+                comment: 支付接口
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        orders:
+            options:
+                comment: 订单号
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        ddate:
+            options:
+                comment: 订单时间
+                unsigned: false
+            nullable: false
+            type: time
+            length: 100
+        xingming:
+            options:
+                comment: 姓名
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        tel:
+            options:
+                comment: 联系电话
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        email:
+            options:
+                comment: 邮箱
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        remarks:
+            options:
+                comment: 备注
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        cert:
+            options:
+                comment: 支付凭证
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        arrives:
+            options:
+                comment: 是否到帐
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        checked:
+            options:
+                comment: 是否审核
+                unsigned: false
+            nullable: false
+            type: boolean
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

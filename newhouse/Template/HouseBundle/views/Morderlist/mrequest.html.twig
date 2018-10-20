@@ -1,0 +1,43 @@
+{% extends 'MemberBundle:Main:main.html.twig' %}
+{% set total = app.request.get('total_fee') %}
+{% block body %}
+<script type="text/javascript">
+seajs.use(["core"],function(core){
+	// l.init('ajaxSubmit');
+	//图片上传、图片预览、选择文件
+    core.generalEvent.initViewImg();
+    core.generalEvent.initUploadImg();
+});
+</script>
+	<style type="text/css">
+		.footer {
+			text-align: center;
+			line-height: 1.5;
+			margin: 0 auto;
+		}
+		.qrcode{
+			text-align: center;
+			padding:50px 0;
+			overflow: hidden;
+		}
+		.qrcode p{
+			font-size:22px;
+			color:#333;
+		}
+		.qrcode p em{
+			color:#FF6600;
+		}
+		.qrcode img{
+			margin-top: 15px;
+		}
+	</style>
+<div class="paylogo">
+</div>
+<div class="qrcode" id="qrcode">
+<p>支付金额<em>￥{{ total }}</em>, 请使用微信扫描下方二维码完成支付</p>	
+<img src="{{ qrcode_base64(info['code_url'],10) }}" />
+</div>	
+{# <div class=" tac " id="tip">支付成功</div> #}
+{% endblock %}
+{% block footer %}
+{% endblock %}

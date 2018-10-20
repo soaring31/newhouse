@@ -1,0 +1,128 @@
+
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set cate_pushs = app.request.get('cate_pushs') %}
+{% set block_models = app.request.get('block_models') %}
+{% set aid = app.request.get('aid') %}
+{% set models = app.request.get('models') %}
+{% set _form_id = app.request.get('form_id') %}
+{% set form = app.request.get('form') %}
+
+{% block js %}
+{% endblock %}
+
+{% block tableMain %}
+{# 模型对应的分类 #}
+{% set cate_pushs_data = ('house.cate_pushs')|getRow({ename: cate_pushs}) %}
+    {% set filterOpt = [
+        {
+            method: 'search',
+            field: 'name',
+            title: '请输入关键词/ID'
+        }
+    ] %}
+    {% set arr_models = cate_pushs_data.models|split(',') %}
+    {% set arr_cates = cate_pushs_data.cates|split(',') %}
+    {# 搜索配置 #}
+    {% if arr_models is defined and arr_models|length and cate_pushs_data.cates %}
+        {# category,cata_area|xxx #}
+        {% if arr_models|length > 1 %}
+            {% for m in arr_models if m == models %}
+                {% set cates = arr_cates[loop.index]|split('|') %}
+                {% if cates is defined %}
+                    {% for i in cates %}
+                        {% set filterOpt = [{
+                            method: 'selectCate',
+                            field: i,
+                            service: 'house.' ~ i,
+                            where: {
+                                models: models
+                            }
+                        }]|merge(filterOpt) %}
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% set filterOpt = [{
+                method: 'selectCate',
+                field: cate_pushs_data.cates,
+                service: 'house.' ~ cate_pushs_data.cates,
+                where: {
+                    models: models
+                }
+            }]|merge(filterOpt) %}
+        {% endif %}
+    {% endif %}
+    {{ core_manage.filter(filterOpt|default('')) }}  
+    <div class="list-con"  data-param="{
+            defUrl    : '{{ (action)|U }}',
+            showUrl   : '{{ (controller ~ "/show")|U }}',
+            submitUrl : '{{ (controller ~ '/save')|U({_form_id: _form_id}) }}',
+            deleteUrl : '{{ (controller ~ "/delete")|U }}',
+            fixed     : '.filter',
+            list      : '.list-con',
+            data      : {
+                cate_pushs: '{{ cate_pushs }}',
+                block_models: '{{ block_models }}',
+                aid: '{{ aid }}',
+                models: '{{ models }}'
+            }
+        }">
+        <div class="list">
+            <table title="{{app.request.get('models')}}" class="right-table right-table1 table-hover table-nobtn">
+                <tbody>
+                    <tr data-id>
+                        <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                        <th width="60" data-role="sort" data-sort="id" class="sort">ID</th>
+                        <th>标题</th>
+                        {# <th width="80">分类</th> #}
+                        <th width="100" data-role="sort" data-sort="create_time" class="sort">添加时间</th>
+                    </tr>
+                    {% if ident.info.data is defined and ident.info.pageCount|default('') != 0 %}
+                    {% for k, vo in ident.info.data %}
+                    <tr data-id="{{ vo.id }}" >
+                        <td class="tac">{{core_manage.checkbox()}}</td>
+                        <td>{{ vo.id }}</td>
+                        <td>{{ core_global.substr(vo.name|default(''), 20, 1) }}</td>
+                        {# <td>{{core_global.formData({value: vo.category})}}</td> #}
+                        <td>{{ vo.create_time|default('0')|date('Y-m-d') }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        {{core_manage.page(ident.info)}}
+        <div class="blank10"></div>
+    </div>
+    <div class="tac">
+    {{ core_manage.oprate([
+        {
+            method: 'submit',
+            title: '确定加载',
+            attr: {
+                'data-add': {
+                    fromid: 'id',
+                    name: 'name'
+                }
+            },
+            params: {
+                models       : models, 
+                cate_pushs   : cate_pushs, 
+                checked      : 1, 
+                aid          : aid,
+                _is_appointed: 1,
+                _form_id     : _form_id,
+                form         : form,
+                uid          : app.user.id|default(0)
+            },
+            class: 'fz12'
+        }
+    ]) }}
+    </div>
+{% endblock %}
+
+{% block promptUl %}
+{% endblock %}
+

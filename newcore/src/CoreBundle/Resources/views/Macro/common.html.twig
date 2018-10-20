@@ -1,0 +1,39 @@
+{#
+/**
+* @description cgb公共宏文件
+*/
+#}
+{# 调用说明开始 #}
+{# {% import "CoreBundle:Macro:common.html.twig" as common %} #}
+{# 调用说明结束 #}
+
+{#
+/**
+ * @method showarray(o)
+ * @description 数组转换成array字符串格式
+ * @param {array} option - 待转换的源数据
+ *
+ * #### 调用
+ *
+ * ```twig
+ * {{- common.showarray(option) -}}
+ * ```
+ * #### 生成
+ * ```html
+ * <div class="title">08CMS房产门户系统</div>
+ * ```
+ */
+ #}
+{%- macro showarray(option) -%}
+{% set opt = {
+    default: '',
+    tpl: '%value%',
+    ename: '',
+    name: ''
+}|merge(o) %}
+{% spaceless %}
+    {{- opt.tpl|replace({
+        '%value%': (opt.ename)|getMconfig(opt.name).value|default(opt.default)
+    })|raw -}}
+{% endspaceless %}
+{%- endmacro showarray -%}

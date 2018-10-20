@@ -1,0 +1,13 @@
+{% extends "ManageBundle::poplayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+var isEdit = '{{app.request.get('id')}}';
+seajs.use(["{{ bundlepath }}/js/sms"],function(sms){
+	sms.init('balance');
+});
+</script>
+{% endblock %}
+{% block body %}
+{% import "ManageBundle:Form:popedit.html.twig" as forms %}
+{{ forms.popEdit(form|default(''),'form') }}
+{% endblock %}

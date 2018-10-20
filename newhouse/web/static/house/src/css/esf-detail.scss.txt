@@ -1,0 +1,552 @@
+﻿@import 'static/ats'; // 工具类, 每个文件都要导入
+
+
+@import 'font-lp'; // 楼盘图标
+@import 'lp/sale-list'; //列表
+
+$major-color:#4fb257 !default;
+$text-color:#2c2c2c !default;
+$span-color : #fd6300 !default;
+@import 'sort'; // 重新排序
+@import 'lp/filter'; // 筛选模块
+@import 'lp/filter2'; // 筛选模块
+
+$major-color:#4fb257;
+
+.esf-header {
+	width: 100%;
+	height: 150px;
+	background: $major-color;
+}
+
+.container {
+	@extend %clearfix;
+}
+
+.warp {
+	width: 1200px;
+	min-width: 1200px;
+	margin: 0 auto;
+	height: 100%;
+	background: url(../images/jjgs-head-bg.png) 0 0 no-repeat;
+	@extend %clearfix;
+}
+
+.esf-head-logo {
+	float: left;
+	width: 400px;
+	margin: 26px 0 0 38px;
+
+	img {
+		float: left;
+		border: 5px solid #e6e6e6;
+	}
+
+	h1 {
+		font-size: 30px;
+		color: #fff;
+		margin-left: 200px;
+		line-height: 80px;
+
+	}
+}
+
+// 经纪人
+.head-logo2 {
+	margin-top: 5px;
+}
+
+.esf-head-share {
+	float: right;
+	margin-top: 26px;
+
+	a {
+		color: #fff;
+		margin-right: 18px;
+	}
+	
+}
+
+.h-l-title {
+	margin-left: 120px;
+	margin-top:20px;
+	.name {
+		font-family: Microsoft Yahei;
+	    font-size: 26px;
+	    line-height: 32px;
+	    height: 32px;
+	    color: #fff;
+	}
+
+	.tel {
+		font-size: 24px;
+	    font-weight: 700;
+	    line-height: 27px;
+	    height: 27px;
+	    margin-top: 15px;
+	    
+	    color: #fff;
+	}
+	
+}
+
+// nav
+
+.esf-nav {
+	width: 100%;
+	height: 50px;
+	background: #f9f9f9;
+	overflow: hidden;
+	@extend %clearfix;
+}
+
+.nav-ul {
+	float: left;
+	height: 50px;
+
+	li {
+		float: left;
+		height: 100%;
+		
+	}
+
+	a {
+		display: inline-block;
+		line-height: 32px;
+		font-size: 16px;
+		color: $text-color;
+		padding: 0 14px;
+		height: 32px;
+		margin: 8px 10px;
+	}
+
+	a:hover {
+		background: $major-color;
+		color: #fff;
+		text-decoration: none;
+		border-radius: 3px;
+	}
+
+	.active {
+		background: $major-color;
+		color: #fff;
+		text-decoration: none;
+		border-radius: 3px;
+	}
+}
+// 搜索
+.nav-sort {
+	float: right;
+	line-height: 50px;
+
+	.text {
+		width: 202px;
+		height: 30px;
+		text-indent: 5px;
+		border: 1px solid #ddd;
+		line-height: 30px;
+		color: $text-color;
+		margin-top: -4px;
+	}
+
+	.btn {
+		height: 32px;
+		font-size: 16px;
+		color: #fff;
+		padding: 0 14px;
+		border: none;
+		border-radius: 0;
+	}
+
+	.btn-1 {
+		background: $major-color;
+		margin-left: -5px;
+	}
+
+	.btn-2 {
+		background: $span-color;
+		margin-left: 18px;
+	}
+}
+
+// counter
+.current-location {
+	i {
+		color: $major-color;
+	}
+
+	a:hover {
+		color: $major-color;
+	}
+}
+
+// 左侧公司信息
+.left-side {
+	float: left;
+	width: 200px;
+	color: $text-color;
+}
+
+.side-info,.side-box,.side-jjr {
+	border: 1px solid #d5d5d5;
+	border-radius: 5px;
+	background-color: #f9f9f9;
+	padding: 15px 13px;
+	margin-bottom: 20px;
+}
+
+.side-title {
+	line-height: 30px;
+	font-size: 14px;
+	font-weight: 700;
+	color: $text-color;
+}
+
+.side-info {
+	img {
+		width: 170px;
+		height: 78px;
+	}
+
+	h3 {
+		font-size: 15px;
+		line-height: 34px;
+		font-weight: 700;
+		color: $span-color;
+	}
+
+	p {
+		font-size: 14px;
+		line-height: 26px;
+	}
+
+	.phone {
+		display: block;
+		width: 170px;
+		height: 34px;
+		line-height: 34px;
+		color: #fff;
+		background: #c30;
+		text-align: center;
+		border-radius: 3px;
+		margin-top: 16px;
+	}
+
+	.jjr-name {
+		color: $text-color;
+	}
+
+	.num {
+		color: $span-color;
+	}
+
+	.place {
+		color: $span-color;
+	}
+
+	.phone-num {
+		font-size: 16px;
+		color: #4d95e1;
+		font-weight: 700;
+	}
+}
+
+// 经纪人
+.jjr-box {
+	margin-top: 10px;
+}
+
+.jjr-b-item {
+	width: 170px;
+	text-align: center;
+	margin-bottom: 35px;
+
+	p {
+		color: $text-color;
+		line-height: 22px;
+	}
+	a {
+		font-weight: 700;
+	}
+}
+
+// 右侧主体内容
+.right-main {
+	width: 980px;
+	float: right;
+}
+
+// 排序
+.list-title {
+	height: 40px;
+	margin-top: 20px;
+	border: 1px solid #d5d5d5;
+	border-top: 1px solid $major-color;
+	border-radius: 0 0 5px 5px;
+	background: #f9f9f9;
+	@extend %clearfix;
+}
+
+.l-ttitle-l {
+	float: left;
+	margin-left: 5px;
+	line-height: 40px;
+
+	span {
+		font-weight: 700;
+		color: $span-color;
+	}
+}
+
+.l-title-r {
+	float: right;
+
+	.sort-btn {
+		line-height: 40px;
+		border: none;
+
+		&:hover {
+			color: $span-color;
+		}
+	}
+
+	.act {
+		background: #f9f9f9;
+		color: $span-color;
+	}
+}
+
+.esf-l-box {
+
+
+	// 二手房列表
+	.esf-l-item {
+		
+	}
+
+
+	// 二手房列表左边
+	.sale-item-l {
+		float: left;
+		
+		
+	}
+
+	.esf-item-tu {
+		position: absolute;
+		right: 0 !important;
+		bottom: 0;
+		width: 48px;
+		height: 26px;
+		line-height: 26px;
+		color: #fff;
+		text-align: center;
+		background: #484848;
+	}
+
+	.sale-item-text {
+		
+
+	}
+
+	// 右边
+	.sale-item-r {
+		margin-top: 38px;
+		p {
+			color: $text-color;
+		}
+
+		span {
+			color: $span-color;
+		}
+		i{
+			vertical-align: -1px;
+			margin-right: 3px;
+		}
+	}
+
+}
+
+// 公用标题
+.subT {
+	line-height: 30px;
+    height: 30px;
+    padding: 0 10px;
+    background: #fafafa;
+	margin-bottom: 15px;
+    p {
+    	font-size: 14px;
+	    font-weight: bold;
+	    height: 30px;
+	    padding-left: 10px;
+    }
+}
+
+// 公司及个人介绍
+.jshao-main {
+	padding: 10px;
+    border: 1px solid #d5d5d5;
+    border-radius: 4px;
+    background: #f9f9f9;
+    font-size: 14px;
+    line-height: 26px;
+
+    .jshao-box {
+    	padding:5px 0 5px 15px;
+    	border-bottom: 1px dotted #c8c8c8;
+    }
+
+    p {
+    	
+    	font-weight: 700;
+    }
+
+    span,a {
+    	font-weight: 500;
+    }
+}
+
+// 经纪人
+.gs-j-list {
+	width: 100%;
+	@extend %clearfix;
+
+	ul {
+		margin-left: -15px;
+	}
+
+	li {
+		width: 50%;
+		float: left;	
+	}
+}
+
+.gs-j-item {
+	margin: 15px 0 0 15px;
+	padding: 12px;
+    border: 1px solid #d5d5d5;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    @extend %clearfix;
+
+    img {
+    	float: left;
+    }
+}
+
+.gs-item-text {
+	margin-left: 110px;
+
+	h3 {
+		font-size: 14px;
+	    font-weight: 700;
+	    line-height: 34px;
+	    height: 34px;
+	}
+	p {
+		line-height: 24px;
+	}
+}
+
+// 留言
+.lynr {
+	margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.dzhf {
+    padding: 10px;
+    border: 1px solid #ccc;
+    background: #fafafa;
+}
+
+.liuyanbiao {
+    font-family: simsun;
+    font-size: 13px;
+    padding: 10px;
+    border: 1px solid #ccc;
+
+    .label {
+    	margin-bottom: 10px;
+    }
+
+   input {
+	    line-height: 15px;
+	    width: 409px;
+	    height: 15px;
+	    padding: 0 5px;
+	    border: 1px solid #ccc;
+	} 
+	
+	.txt1 {
+	    line-height: 22px;
+
+	    height: 22px;
+	    padding: 5px;
+
+	    vertical-align: middle;
+	}
+
+	.yzm {
+	    width: 60px;
+	}
+
+	textarea {
+	    width: 419px;
+	    border: 1px solid #ccc;
+	    font-size: 13px;
+	    height: 75px;
+	    outline: none;
+	}
+
+	img {
+	    vertical-align: middle;
+	}
+
+	.button {
+	    line-height: 30px;
+	    width: 143px;
+	    height: 30px;
+	    margin-left: 65px;
+
+	    cursor: pointer;
+	    text-align: center;
+	    vertical-align: middle;
+
+	    border: none;
+	    border: 1px solid #ddd;
+	    border-radius: 3px;
+	    background: #eee;
+	}
+	.tip {
+	    display: inline-block;
+	    color: $span-color;
+	}
+
+	.info {
+		margin-top: 10px;
+		color: #999;
+	}
+
+	.txt-wrap {
+	    display: inline-block;
+	}
+	.vertify {
+	    display: inline-block;
+	    img {
+	        width: 97px;
+	        height: 34px;
+	    }
+	}
+
+}
+
+// 公司动态
+.dtai-list {
+	margin: 20px 20px 0;
+	line-height: 28px; 
+	font-size: 14px;
+}
+
+

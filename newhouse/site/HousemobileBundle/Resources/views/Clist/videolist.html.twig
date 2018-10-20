@@ -1,0 +1,41 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+** ajax调用：视频列表
+#}
+{% block result %}
+    {% if ident.list is defined %}
+        {% set list = ident.list %}
+    {% endif %}
+    {% spaceless %}
+    {% if list.data is defined and list.pageCount|default('') != 0 %}
+        {% for item in list.data %}
+            <li {% if loop.last %}data-page="{
+                                pageIndex: {{list.pageIndex}},
+                                pageCount: {{list.pageCount}}
+                            }"{% endif %} class="card">
+               <div class="demo-card-header-pic p-card">
+                    <div class="card-header">
+                        <a href="{{('video/detail')|UU({id: item.id|default('')})}}" class="p-default">
+                            {{item.name|default('')}}
+                        </a>
+                    </div>
+                    <div valign="bottom" class="card-header color-white no-border no-padding">
+                        <a class='card-cover p-img external' href="{{('video/detail')|UU({id:item.id|default('')})}}">
+                            {{core_global.img({
+                                src: item.thumb|default(''),
+                                title: item.name|default('')
+                            })}}   
+                        </a>
+                    </div>
+                    <div class="card-content pl10 pr10 pb5">
+                        <i class="font-f-118"></i>
+                        {{core_global.keywords({keywords: item.keywords|default(''), tpl: "<a class='button button-sm button-fill ml5' href='" ~ (action)|UU({name: '%keywords%'}) ~ "'>%keywords%</a>"})}}
+                    </div>
+               </div>
+            </li>
+        {% endfor %}
+    {% else %}
+        <li class="mobile-list-none">暂无视频</li>
+    {% endif %}
+    {% endspaceless %}
+{% endblock result %}

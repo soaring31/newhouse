@@ -1,0 +1,8 @@
+{% extends 'HousemobileBundle:Common:header.html.twig' %}
+{%- block result -%}
+{% set tpl_title = core_mobile_global.title({title: app.request.get('htitle')}) %}
+{% set tpl_search = core_mobile_global.header_search({
+    title: app.request.get('htitle') ~ '搜索'
+}) %}
+{{parent()}}
+{% endblock result %}

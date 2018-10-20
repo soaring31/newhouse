@@ -1,0 +1,7 @@
+{% if menus is defined %}
+	<ul>
+	{% for item in menus %}
+	<li data-url="{{ 'leftmenu'|U({'menuId':item.menu.id|default(0)|tripodEncode,'csrf_token':csrf_token('leftmenu')}) }}" >{{ item.menu.name }}</li>
+	{% endfor %}
+	</ul>
+{% endif %}

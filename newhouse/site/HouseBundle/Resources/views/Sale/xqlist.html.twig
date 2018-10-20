@@ -1,0 +1,66 @@
+{% extends 'HouseBundle:Sale:sale_layout.html.twig' %}
+{# 说明
+** filter_hd: 筛选头部
+** sort_data_opt:重新排序变量
+** 以下是筛选区域数据定义
+*      1、filter_rows： 横排显示筛选条件条数
+*      2、filter_opt：筛选条件数据
+#}
+
+{% block title %}{{cur_area_data|default('')}}小区信息，{{cur_area_data|default('')}}房价，{{cur_area_data|default('')}}楼盘信息{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data|default('')}}小区信息，{{cur_area_data|default('')}}房价，{{cur_area_data|default('')}}楼盘信息"/>
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}为您提供海量的{{cur_area_data|default('')}}小区信息，小区房价，小区详情，周边配套，实景图，户型图，专业客观反映{{cur_area_data|default('')}}房价走势，为您选购{{cur_area_data|default('')}}二手房提供全方位参考。"/>
+{% endblock key_des %}
+
+{% block css %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/xqcss.css')}}
+{% endblock css %}
+
+{# 搜索 #}
+{% block top_search %}
+    {% set tpl_topsearch_action = 'sale/xqlist' %}
+    {% set tpl_topsearch_placeholder = '请输入小区名称/地址/拼音' %}
+    {{ parent() }}
+{% endblock top_search %}
+{% block current_container %}
+<span>小区列表</span>
+{% endblock current_container %}
+
+{% block container %}
+    {# 检索数据源 #}
+    {% set cate_data = house_global.cate_data({ 
+                    tag: 'region',
+                }).__toString|json_decode %}
+    {# 筛选条件 #}
+    {{house_global.filter_cfg({
+        action: action
+    }|merge(cate_data))}}
+    <div class="blank30"></div>
+    <div class="container">
+        <div class="main">
+            <div class="tag-head">
+                {{house_global.fy_title({
+                    is_act: 1,
+                    data: [
+                        {
+                            name: '全部小区',
+                            url: 'javascript:;',
+                            act: '1'
+                        }
+                    ]
+                })}}
+            </div>
+            <div class="sale-list vil-con">
+                {{house_global.xiaoqu_list({
+                    list: ident.list
+                })}}
+            </div>
+            <div class="blank20"></div>
+            {{core_global.page(ident.list)}}
+            <div class="blank20"></div>
+        </div>
+        {{house_global.sale_aside()}}
+    </div>
+{% endblock container %}

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title>ju</title>    
+    <style type="text/css">
+
+ 
+    .img-ju-1,
+ 
+    .img-ju-2,
+ 
+    .img-ju-3,
+ 
+    .img-ju-4,
+ 
+    .img-ju-5,
+ 
+    .img-ju-6,
+ 
+    .img-ju-7,
+ 
+    .img-ju-8,
+ 
+    .img-ju-9,
+
+    .a {
+        display: inline-block;
+        *zoom: 1;
+        *display: inline;
+        background-image: url(ju.png);
+    }
+
+    .img-ju-1 {
+        width: 206px;
+        height: 68px;
+        background-position: 0 0;
+    }
+
+    .img-ju-2 {
+        width: 39px;
+        height: 44px;
+        background-position: 0 -78px;
+    }
+
+    .img-ju-3 {
+        width: 39px;
+        height: 44px;
+        background-position: -49px -78px;
+    }
+
+    .img-ju-4 {
+        width: 39px;
+        height: 44px;
+        background-position: -98px -78px;
+    }
+
+    .img-ju-5 {
+        width: 39px;
+        height: 44px;
+        background-position: -147px -78px;
+    }
+
+    .img-ju-6 {
+        width: 39px;
+        height: 44px;
+        background-position: 0 -132px;
+    }
+
+    .img-ju-7 {
+        width: 39px;
+        height: 44px;
+        background-position: -49px -132px;
+    }
+
+    .img-ju-8 {
+        width: 39px;
+        height: 44px;
+        background-position: -98px -132px;
+    }
+
+    .img-ju-9 {
+        width: 21px;
+        height: 21px;
+        background-position: -147px -132px;
+    }
+
+
+    * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    .container {
+        width: 1200px;
+        margin: 20px auto;
+    }
+    li {
+        float: left;
+        padding: 5px;
+        margin: 5px;
+        border: 1px solid #eee;
+        text-align: center;
+        font-family: arial;
+        color: #fff;
+        height: 126px;
+        width: 216px;
+        min-width: 80px;
+        line-height: 1.5;
+        background-color: #272822;
+        position: relative;
+    }
+    .class {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 48px;
+        width: 100%;
+        cursor: pointer;
+    }
+    pre {
+        margin: 15px 0;
+        color: #FD8520;
+        font-family: Consolas;
+        font-size: 14px;
+        padding: 15px;
+        background-color: #272822;
+    }
+    .bg i {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        margin-left: 10px;
+        cursor: pointer;
+        background-color: #22D5BB;
+        float: right;
+    }
+    .bg i:nth-child(2) {
+        background-color: #E1F4D8;
+    }
+    .bg i:nth-child(3) {
+        background-color: #8B9D37;
+    }
+    .bg i:nth-child(4) {
+        background-color: #FE842E;
+    }
+    .bg i:nth-child(5) {
+        background-color: #272822;
+    }
+    
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <h3>
+            <a class="index"> <i class="img-demo-face1"></i> 返回首页 </a> | <a class="font-demo-home" href="../">上一级</a>
+        </h3>
+        <h2>调用方式</h2>
+
+        <h3>css</h3>
+<pre>
+@import 'img-ju'; //导入css 标识-文件名
+@include img-ju($img-ju); //调用全部样式， 标识-文件名($标识-文件名);
+.img-demo-home {
+    width: nth($img-ju, 1);
+    height: nth($img-ju, 2);
+    background-position: nth($img-ju, 3) nth($img-ju, 4);
+}
+</pre>
+        <h3>html</h3>
+<pre>
+&lt;i class="img-demo-home"&gt;&lt;/i&gt; //class 标识+合成后文件名+单个文件名
+</pre>
+
+        <h3><span class="fr bg"><i></i><i></i><i></i><i></i><i></i></span>详细代码</h3>
+        点击下面文字直接复制到剪切板
+    </div>
+</div>
+<ul>
+
+<li>
+    <i class="img-ju-1"></i>
+    <div class="class">img-ju-1</div>
+</li>
+
+<li>
+    <i class="img-ju-2"></i>
+    <div class="class">img-ju-2</div>
+</li>
+
+<li>
+    <i class="img-ju-3"></i>
+    <div class="class">img-ju-3</div>
+</li>
+
+<li>
+    <i class="img-ju-4"></i>
+    <div class="class">img-ju-4</div>
+</li>
+
+<li>
+    <i class="img-ju-5"></i>
+    <div class="class">img-ju-5</div>
+</li>
+
+<li>
+    <i class="img-ju-6"></i>
+    <div class="class">img-ju-6</div>
+</li>
+
+<li>
+    <i class="img-ju-7"></i>
+    <div class="class">img-ju-7</div>
+</li>
+
+<li>
+    <i class="img-ju-8"></i>
+    <div class="class">img-ju-8</div>
+</li>
+
+<li>
+    <i class="img-ju-9"></i>
+    <div class="class">img-ju-9</div>
+</li>
+
+</ul>
+<script type="text/javascript">
+    var BASE_URL = window.location.href.replace('./images/ju.html'.replace('./', ''), '') + '/';
+</script>
+<script type="text/javascript">document.write('<script src="' + BASE_URL + '/js/seajs.js"><\/script>');</script>
+
+<script type="text/javascript">
+if (BASE_URL.indexOf('http') == 0) {
+    seajs.use(['clipboard'], function() {
+        $(function() {
+            $('.index').click(function(event) {
+                location.href = BASE_URL;
+            });
+            var $icons = $('.class, .text');
+            $('body').on('copy', '.class, .text', function(e) {
+                    $icons.removeAttr('style');
+                    e.clipboardData.clearData();
+                    e.clipboardData.setData("text/plain", $(this).css({color:'#f00'}).text());
+                    e.preventDefault();
+                })
+                .on('click', '.bg i', function() {
+                    $('li').css({
+                        backgroundColor: $(this).css('background-color'),
+                    })
+                })
+        });
+    })
+};
+</script>
+</body>
+</html>

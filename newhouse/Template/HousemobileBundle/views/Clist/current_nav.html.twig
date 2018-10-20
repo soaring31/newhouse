@@ -1,0 +1,45 @@
+{# 当前导航
+* current_nav 当前导航变量
+* 变量结构 
+* current_nav = {
+*   title: '当前导航',
+*   data: {
+*       0: {
+*           name: '导航1',
+*           url: ('houses/list')|UU
+*       }
+*       1: {
+*           name: '导航2',
+*           url: ('sale/list')|UU
+*       }
+*   }
+* }
+*
+* 使用页面
+*       1、
+#}
+<div class="current-nav">
+    <div class="list-block list-block-m0 panel-block media-list">
+        <ul>
+            <li class="item-content">
+                <div class="item-inner">
+                    <div class="item-title">
+                        {{current_nav.title|default('当前导航')}}
+                    </div>
+                    <div class="current-nav-btn">
+                        {% for item in current_nav.data %}
+                            {% if item.url|default('') %}
+                                {% set url = item.url|default('') %}
+                            {% else %}
+                                {% set url = current_nav.url_set|default('')|replace({'%id%': item.id|default('')}) %}
+                            {% endif %}
+                            <a href="{{url|default('')}}" class="button button-gray">
+                                {{item.name|default('')}}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+$font-ask-fz: inherit !default;
+
+@font-face {
+	font-family: "ask";
+    font-weight: normal;
+    font-style: normal;
+	src: url('../fonts/ask.eot');
+	src: url('../fonts/ask.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/ask.woff') format('woff');//,
+		//url('../fonts/ask.ttf') format('truetype'),
+		//url('../fonts/ask.svg#ask') format('svg');
+}
+$font-ask-fz: inherit !default;
+$font-ask-fl: none !default;
+$font-ask-m: 0 !default;
+$font-ask-va: -.25em !default;
+[class^="font-ask-"],
+[class*=" font-ask-"] {
+	font-family: "ask";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-size: $font-ask-fz;
+	float: $font-ask-fl;
+	margin: $font-ask-m;
+	vertical-align: $font-ask-va;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; only necessary if not using the private unicode range (firstdata option) 
+	text-decoration: none;
+	text-transform: none;
+}
+.font-ask-1:before {
+	content: "\EA01";
+}.font-ask-10:before {
+	content: "\EA02";
+}.font-ask-11:before {
+	content: "\EA03";
+}.font-ask-12:before {
+	content: "\EA04";
+}.font-ask-13:before {
+	content: "\EA05";
+}.font-ask-15:before {
+	content: "\EA06";
+}.font-ask-16:before {
+	content: "\EA07";
+}.font-ask-2:before {
+	content: "\EA08";
+}.font-ask-3:before {
+	content: "\EA09";
+}.font-ask-4:before {
+	content: "\EA0A";
+}.font-ask-5:before {
+	content: "\EA0B";
+}.font-ask-6:before {
+	content: "\EA0C";
+}.font-ask-7:before {
+	content: "\EA0D";
+}.font-ask-8:before {
+	content: "\EA0E";
+}.font-ask-9:before {
+	content: "\EA0F";
+}

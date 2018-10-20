@@ -1,0 +1,101 @@
+
+{# # 说明
+** navModels: 获取传过来的models参数，用来高亮当前页面位置 #}
+{% set navModels = app.request.get("models")|default('') %}
+<!--/header-->
+<div class="header_ header_b">
+    <div class="header_top">
+        <div class="top_box">
+            <div class="banner_left">
+                <div class="logo" id="logo_roll"></div>
+                {% if ismulticity == true %}
+                <div class="select_ select_city" data-hover="hoverslider" data-obj=".more-area">
+                    <a href="{{'areachange/index'|U}}">
+                        <span class="iconfont icon-dibiao"></span>
+                        <i>{{cur_area_data|default('主站')}}</i>
+                        <div class="trangle"></div>
+                    </a>
+                </div>
+                {% endif %}
+                <ul class="nav speed_open_list" data-tag='zdh'>
+                    {% if majorNav.data is defined %}
+                        {# 当前分站id #}
+                        {% set sess_area = app.session.get('area')|default(0) %}
+                        {# 当前城市的简称 #}
+                        {% set city = ('db.auth_group_area')|getAll({
+                            rulesarea:sess_area,
+                            pageSize: 1,
+                            order   : 'sort',
+                            orderBy : 'asc'
+                        }) %}
+                        {% for item in majorNav.data %}
+                            {% if item.menu.name == "二手房" and item.menu.checked %}
+                                {% set href = "http://"~city.data[0].city|default('bj')~".house.zhuge.com" %}
+                                <li class="j_isOpenHouse">
+                                    <a target="{{item.menu.target|default('_self')}}" href="{{href|default(' ')}}"  class='nava change{% if nav_act|default('a') == item.menu.active|default('') %} act{% endif %}' data-obj=".nav-more" data-direction="bottom" data-offsetx="50%">
+                                        {{item.menu.name|default('')}}
+                                    </a>
+                                </li>
+                            {% elseif item.menu.name == "租房" and item.menu.checked %}
+                                {% set href = "http://"~city.data[0].city|default('bj')~".rent.zhuge.com" %}
+                                <li class="j_isOpenRent">
+                                    <a target="{{item.menu.target|default('_self')}}" href="{{href|default(' ')}}"  class='nava change{% if nav_act|default('a') == item.menu.active|default('') %} act{% endif %}' data-obj=".nav-more" data-direction="bottom" data-offsetx="50%">
+                                        {{item.menu.name|default('')}}
+                                    </a>
+                                </li>
+                            {% else %}
+                                {% if item.menu.checked %}
+                                    <li class="{{item.menu.name}} {% if item.menu.name == '新房' %}j_isOpenNewhouse{% endif %}">
+                                        <a target="{{item.menu.target|default('_self')}}" href="{{item.menu.url|default('')|U(item.menu.urlparams|getQuery)}}"  class='nava change{% if nav_act|default('a') == item.menu.active|default('') %} act{% endif %}' data-obj=".nav-more" data-direction="bottom" data-offsetx="50%">
+                                            {{item.menu.name|default('')}}
+                                        </a>
+                                        {% if item.nodes|length >= 1 and item.nodes|default('') %}
+                                            <div class="nav-more">
+                                                {% for second in item.nodes %}
+                                                    <a target="{{second.menu.target|default('_self')}}" href="{{second.menu.url|default('')|U(second.menu.urlparams|getQuery)}}">{{second.menu.name|default('')}}</a>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </li>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+                
+            </div>
+            <div class="banner_right">
+                <a href="/download" class="download" id="download_roll">客户端</a>
+            </div>
+            <div class="nav-account">
+                {# login-bar #}
+                {% include 'HouseBundle:Common:login.html.twig' %}
+                {# /login-bar #}
+            </div>
+        </div>
+        {#
+        <!-- 下载客户端 开始 -->
+        <div class="client_box">
+            <!--<div class="top_bg"></div>-->
+            <ul class="client_list">
+                <li>
+                    <div class="client_logo"></div>
+                    <h5>诸葛找房</h5>
+                    <div class="client_code"></div>
+                    <p>iphone &amp; Android</p>
+                </li>
+                <li class="line"></li>
+                <li>
+                    <div class="client_logo jjr_logo"></div>
+                    <h5>诸葛找房-经纪人版</h5>
+                    <div class="client_code jjr_code"></div>
+                    <p>iphone &amp; Android</p>
+                </li>
+            </ul>
+        </div>
+        <!-- 下载客户端 结束 -->
+        #}
+    </div>
+</div>
+<input type="hidden" name="" id="cityad" value="{{city.data[0].city|default('bj')}}">
+<input type="hidden" name="" id="cityid" value="{{sess_area}}">

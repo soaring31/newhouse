@@ -1,0 +1,708 @@
+@charset "UTF-8";
+/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+*/
+/**
+ * @method 清除浮动 %clearfix 
+ * @description 清除浮动
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %clearfix;
+ * }
+ * ```
+ * 
+ * ```css
+ * 	div {
+	    *zoom: 1;
+	}
+	div:after {
+	    display: block;
+	    clear: both;
+
+	    height: 0;
+
+	    content: '\20';
+	}
+ * ```
+ */
+/**
+ * @method 去掉虚线框 %outline 
+ * @description 去掉虚线框
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @ extend %outline;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		outline: thin dotted;
+		outline: 5px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
+ * ```
+ */
+/**
+ * @method 文字不换行后面加省略号 %text-overflow 
+ * @description 文字不换行后面加省略号
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %text-overflow;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+ * ```
+ */
+/**
+ * @method 透明层opacity 
+ * @description 透明层 内容也透明
+ * @param {number} $opacity - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include opacity(.5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+	  opacity: .5;
+	  filter: alpha(opacity=50);
+ * }
+ * ```
+ */
+/**
+ * @method 背景透明层transparent 
+ * @description 透明层只处理背景透明
+ * @param {string} $color - 背景透明层的颜色
+ * @param {number} $alpha - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include transparent(#000, .5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+ *    	background-color: transparent;
+		background-color: (0,0,0,.5);
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7fffffff, endColorstr=#7fffffff,);
+		zoom: 1;
+ * }
+ * ```
+ */
+/**
+ * @method triangle 
+ * @description 生成一个三角形图标
+ * @param {string} $size - 三角的大小
+ * @param {string} $color - 三角颜色
+ * @param {string} $direction - 三角的方向 up, down, left, right
+ * @example 调用
+ * 
+ * ```scss
+ * i {
+ *    @include triangle(5px, #bbb, up); 
+ * }
+ * ```
+ * 
+ * ```css
+ * i {
+ *    width: 0;
+      height: 0;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent;
+      border-bottom-color: #bbb;
+ * }
+ * ```
+ */
+/**
+* @method 水平线hr nav-divider 
+* @description 透明层 内容也透明
+* @param {string} $color=#e5e5e5 - 线的颜色
+* @param {string} $line-height-computed - 线的高度，空间
+* @example 调用
+* 
+* ```scss
+* div {
+*    @include nav-divider(#e5e5e5, 24px);
+* }
+* ```
+* 
+* ```css
+* div {
+	  height: 1px;
+	  margin: 11px 0;
+	  overflow: hidden;
+	  background-color: #e5e5e5;
+* }
+* ```
+*/
+@font-face {
+  font-family: "tools";
+  font-weight: normal;
+  font-style: normal;
+  src: url("../fonts/tools.eot");
+  src: url("../fonts/tools.eot?#iefix") format("embedded-opentype"), url("../fonts/tools.woff") format("woff");
+}
+
+[class^="font-tools-"],
+[class*=" font-tools-"] {
+  font-family: "tools"!important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: inherit;
+  float: none;
+  margin: 0;
+  vertical-align: -0.25em;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  text-decoration: none;
+  text-transform: none;
+}
+
+.font-tools-1:before {
+  content: "\EA01";
+}
+
+.font-tools-2:before {
+  content: "\EA02";
+}
+
+.font-tools-3:before {
+  content: "\EA03";
+}
+
+.font-tools-4:before {
+  content: "\EA04";
+}
+
+.font-tools-5:before {
+  content: "\EA05";
+}
+
+.font-tools-6:before {
+  content: "\EA06";
+}
+
+.font-tools-7:before {
+  content: "\EA07";
+}
+
+/* ==========
+快速导航
+========== */
+.menu li {
+  cursor: pointer;
+  float: left;
+  text-align: center;
+  width: 157.14286px;
+}
+
+.menu li i {
+  color: #838181;
+  display: block;
+  font-size: 40px;
+  margin-bottom: 20px;
+}
+
+.menu li a {
+  color: #838181;
+  font-size: 18px;
+}
+
+.menu li.act i, .menu li:hover i {
+  color: #f0851a;
+}
+
+.menu li.act a, .menu li:hover a {
+  color: #f0851a;
+  text-decoration: none;
+}
+
+/* ================
+计算区域默认属性
+================ */
+.tools-wrap {
+  border: 1px solid #e6e6e6;
+  margin-top: 20px;
+}
+
+.tools-wrap .item {
+  display: none;
+}
+
+.tools-wrap .item.cur {
+  display: block;
+}
+
+.tools-wrap select,
+.tools-wrap textarea,
+.tools-wrap input[type="text"] {
+  border: 1px solid #d0d0d0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+  padding: 0 6px;
+  transition: all 0.2s ease-out 0s;
+}
+
+.tools-wrap select:hover,
+.tools-wrap textarea:hover,
+.tools-wrap input[type="text"]:hover {
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  border-color: #a0a0a0 #b9b9b9 #b9b9b9;
+  border-image: none;
+  border-style: solid;
+  border-width: 1px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) inset;
+}
+
+.tools-wrap select:focus,
+.tools-wrap textarea:focus,
+.tools-wrap input[type="text"]:focus {
+  border: 1px solid #4d90fe;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) inset;
+  outline: 0 none;
+}
+
+.enter,
+.export {
+  color: #666;
+  min-height: 632px;
+  padding-top: 38px;
+  padding-left: 60px;
+  width: 539px;
+}
+
+.enter h2,
+.export h2 {
+  font-size: 26px;
+  text-align: left;
+}
+
+/* ==========
+输入版块
+========== */
+.enter {
+  background: #fdfdfd;
+  border-right: 1px solid #e6e6e6;
+  float: left;
+}
+
+.enter ul {
+  margin-top: 25px;
+}
+
+.enter li {
+  margin-bottom: 15px;
+}
+
+.enter li label,
+.enter li input,
+.enter li span {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.enter li label {
+  text-align: right;
+  width: 170px;
+}
+
+.enter li label.load-label {
+  padding: 0 5px;
+  text-align: left;
+  width: auto;
+}
+
+.enter li input[type="text"] {
+  font-size: 14px;
+  height: 30px;
+  line-height: 30px;
+  width: 106px;
+}
+
+.enter li span {
+  color: #9e9e9e;
+}
+
+.enter li select {
+  font-size: 14px;
+  padding: 2px;
+  width: 120px;
+}
+
+.enter li .rate-sel {
+  min-width: 230px;
+  width: auto;
+}
+
+.enter p {
+  margin-top: 30px;
+}
+
+.enter p .btn {
+  background: #f80;
+  border: 0;
+  color: #fff;
+  font-size: 18px;
+  height: 36px;
+  line-height: 36px;
+  vertical-align: middle;
+  text-align: center;
+  width: 326px;
+}
+
+.enter p .reset {
+  color: #f80;
+  cursor: pointer;
+  margin-left: 30px;
+}
+
+/* enter export */
+.gongjijin li label {
+  width: 70px;
+}
+
+.gongjijin li .method p {
+  margin-top: 0;
+  margin-bottom: 15px;
+  padding-left: 70px;
+}
+
+.shuifei li label {
+  width: 45px;
+}
+
+.tiqian li label {
+  width: 130px;
+}
+
+.tiqian li .load-label input {
+  margin: 0 5px;
+  vertical-align: middle;
+  width: 40px;
+}
+
+.zuhe li label {
+  width: 80px;
+}
+
+/* ==========
+输出显示
+========== */
+.export {
+  border-top: 3px solid #f80;
+  margin-top: -1px;
+  min-height: 630px;
+  position: relative;
+  float: right;
+}
+
+.export .arrow {
+  background: url(../images/tools-export-arrow.gif) no-repeat 0 0;
+  height: 37px;
+  width: 20px;
+  z-index: 1;
+  position: absolute;
+  top: 30px;
+  left: -20px;
+}
+
+.export h2 {
+  color: #f80;
+  margin-bottom: 15px;
+}
+
+.export h2 span {
+  font-size: 12px;
+  margin-left: 20px;
+}
+
+.export p {
+  border-bottom: 1px dashed #eee;
+  height: 30px;
+  line-height: 30px;
+  overflow: hidden;
+  width: 350px;
+}
+
+.export p span {
+  color: red;
+  font-weight: 700;
+  padding: 0 5px 0 0;
+}
+
+.export p.txt-i2 {
+  text-indent: 28px;
+}
+
+.export p.txt-i3 {
+  text-indent: 42px;
+}
+
+.export p label {
+  display: inline-block;
+  width: 100px;
+}
+
+.export.shuifei div {
+  margin-top: 10px;
+}
+
+.export.tiqian p label {
+  width: 115px;
+}
+
+.export.zuhe p label {
+  width: auto;
+}
+
+.export.geren p label {
+  width: auto;
+}
+
+.export.gongjijin li {
+  height: 30px;
+  line-height: 30px;
+  margin-bottom: 10px;
+}
+
+.export.gongjijin li span {
+  color: red;
+  font-weight: 700;
+}
+
+.export.gongjijin li input {
+  margin-right: 10px;
+  width: 60px;
+}
+
+.export.gongjijin .gjj-btn {
+  background: #27b446;
+  border: 0;
+  color: #fff;
+  font-size: 18px;
+  height: 40px;
+  line-height: 40px;
+  margin-top: 20px;
+  text-align: center;
+  width: 200px;
+}
+
+.export.gongjijin .result {
+  border-top: 1px dashed #ccc;
+  margin-top: 40px;
+  margin-right: 30px;
+  padding-top: 45px;
+}
+
+.export.gongjijin .result h3 {
+  font-weight: 100;
+}
+
+.export.gongjijin .result div {
+  width: 235px;
+}
+
+.export.gongjijin .result div table {
+  border: 1px solid #efefef;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.export.gongjijin .result div table td,
+.export.gongjijin .result div table th {
+  border: 1px solid #efefef;
+  padding: 10px 0;
+}
+
+.export.gongjijin .result div table th {
+  background: #fbfbfb;
+  font-weight: 100;
+  width: 80px;
+}
+
+.export.gongjijin .result div table td {
+  padding-right: 25px;
+  text-align: right;
+}
+
+.export h3 {
+  font-size: 14px;
+  font-weight: 700;
+  height: 40px;
+  line-height: 40px;
+}
+
+/* 温馨提示 */
+.tips {
+  line-height: 30px;
+}
+
+.tips .tips-container {
+  padding-left: 60px;
+}
+
+.tips .tips-container div {
+  color: #27b446;
+  margin-bottom: 10px;
+}
+
+.tips .tips-container p {
+  color: #666;
+  text-indent: 28px;
+}
+
+/* chart */
+.chart {
+  background: #fdfdfd;
+  border: 1px solid #e6e6e6;
+  margin-bottom: 30px;
+  min-width: 1150px;
+  margin: 0 auto;
+  padding: 20px 50px 20px 0;
+  width: 1150px;
+}
+
+.chart .chart-title {
+  padding: 0 50px 30px 65px;
+}
+
+.chart .chart-title h3 {
+  color: #666;
+  font-size: 16px;
+}
+
+.chart .chart-title h3 span {
+  color: #999;
+  font-size: 14px;
+}
+
+@media screen and (max-width: 500px) {
+  .tools-wrap {
+    margin-top: 0;
+  }
+  .sf-toolbar {
+    display: none !important;
+  }
+  .container {
+    width: auto;
+    min-width: 100%;
+    border-width: 0;
+  }
+  .enter,
+  .export {
+    color: #666;
+    min-height: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 30px;
+  }
+  .enter h2,
+  .export h2 {
+    font-size: 18px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+  }
+  .enter {
+    float: none;
+  }
+  .export {
+    float: none;
+  }
+  .enter p .btn {
+    width: 100%;
+    display: block;
+  }
+  .enter p .reset {
+    margin-left: 0;
+    margin-top: 10px;
+    display: block;
+  }
+  .enter li label {
+    text-align: left;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .enter li label.load-label {
+    display: inline-block;
+    margin-bottom: 0;
+  }
+  .export p {
+    width: auto;
+  }
+  .menu {
+    display: table-row;
+    box-sizing: border-box;
+  }
+  .menu li {
+    border-right: 1px solid #d0d0d0;
+    box-sizing: border-box;
+    float: initial;
+    vertical-align: middle;
+    border-bottom: 1px solid #f80;
+    display: table-cell;
+  }
+  .menu li:last-child() {
+    border-right: none;
+  }
+  .menu li a {
+    font-size: 12px;
+  }
+  .menu li i {
+    display: none;
+  }
+  .tools-wrap .item {
+    width: 100%;
+  }
+  .header-tools {
+    padding-right: .55556rem;
+    padding-left: .55556rem;
+    color: #fff;
+    background-color: #1685e1;
+    height: 55px;
+    line-height: 55px;
+    font-size: 18px;
+    text-align: center;
+    position: relative;
+  }
+  .header-tools .header-back,
+  .header-tools .return-home {
+    position: absolute;
+    top: 0;
+    color: #fff;
+    font-size: 20px;
+  }
+  .header-tools .header-back {
+    left: 10px;
+  }
+  .header-tools .return-home {
+    right: 10px;
+  }
+  .gongjijin li .method p {
+    padding-left: 0;
+  }
+}
+
+/*# sourceMappingURL=tools.css.map */

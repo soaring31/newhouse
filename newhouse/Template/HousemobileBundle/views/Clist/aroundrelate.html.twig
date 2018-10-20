@@ -1,0 +1,41 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+** around_all: 变量，找到与该学校周边关联的小区、楼盘
+** cate: 类型 出租or二手房
+** 周边详情二手房、租房  around/detail
+#}
+{% block result %}
+{% set around_id = app.request.get('data') %}
+
+{% set models = app.request.get('models') %}
+
+{% set houses_cate = ('house.' ~ models)|getAll({aid: 'in|' ~ around_id|join(','), checked: 1}) %}
+{% if houses_cate.data is defined and houses_cate.pageCount|default(0) != 0 %}
+    {% for item in houses_cate.data %}
+        <li>
+            <a href="{{(models ~ '/detail')|UU({id: item.id})}}" class="item-link item-content">
+                <div class="item-inner">
+                    <div class="item-title-row">
+                        <div class="item-title">{{item.name|default('1')}}</div>
+                        <div class="item-after">{{item.update_time|default('')|date('Y-m-d')}}</div>
+                    </div>
+                    <div class="item-subtitle">
+                        {{house_global.if_mj({value: item.mj|default('')})}}
+                        <span class="pull-right">
+                            {% if models|default('') == 'sale' %}
+                                {{house_global.if_dj({value: item.zj|default(''), class: 'c-e43'})}}
+                            {% else %}
+                                {{house_global.if_czj({value: item.czj|default(''), class: 'c-e43'})}}
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </a>
+        </li>
+    {% endfor %}
+{% else %}
+	<li style="text-align: center; padding: 10px;">
+		暂无数据
+	</li>
+{% endif %}
+{% endblock result %}

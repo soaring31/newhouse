@@ -1,0 +1,791 @@
+house_register:
+    path: /register
+    defaults:
+        _controller: 'HouseBundle:Register:index'
+    options:
+        status: true
+        remark: 注册
+house_login:
+    path: /login
+    defaults:
+        _controller: 'HouseBundle:Main:login'
+    options:
+        status: true
+        remark: 登录
+main_login:
+    path: /main/login
+    defaults:
+        _controller: 'HouseBundle:Main:mainLogin'
+    options:
+        status: true
+        remark: 后台登录
+house_main:
+    path: /main
+    defaults:
+        _controller: 'HouseBundle:Main:main'
+    options:
+        status: true
+        remark: 后台首页
+house_manage:
+    path: /manage
+    defaults:
+        _controller: 'HouseBundle:Main:main'
+    options:
+        status: true
+        remark: 开发后台首页
+house_logout:
+    path: /logout
+    defaults:
+        _controller: 'HouseBundle:Main:logout'
+    options:
+        status: true
+        remark: 登出
+house_captcha:
+    path: /register/captcha
+    defaults:
+        _controller: 'HouseBundle:Register:captcha'
+    options:
+        status: true
+        remark: 注册验证码
+house_thlogin:
+    path: /thlogin
+    defaults:
+        _controller: 'HouseBundle:Main:thlogin'
+    options:
+        status: true
+        remark: 第三方登录
+houses_list:
+    path: '/xinfang/{region}-{cate_circle}-{cate_line}-{cate_metro}-{dj}-{cate_type}-{tslp}-{cate_status}-{lcs}-{hxs}/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:Houses:list'
+        region: 'no'
+        cate_circle: 'no'
+        cate_line: 'no'
+        cate_metro: 'no'
+        dj: 'no'
+        cate_type: 'no'
+        tslp: 'no'
+        cate_status: 'no'
+        lcs: 'no'
+        hxs: 'no'
+        pageIndex: '1'
+    options:
+        status: true
+        remark: 新房列表页
+houses_detail:
+    path: '/xinfang/detail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Houses:detail'
+    options:
+        status: true
+        remark: 楼盘详情首页
+houses_ddetail:
+    path: '/xinfang/ddetail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Houses:ddetail'
+    options:
+        status: true
+        remark: 楼盘详情页
+houses_dnews:
+    path: '/xinfang/dnews/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Houses:dnews'
+    options:
+        status: true
+        remark: 楼盘动态页
+houses_dprices:
+    path: '/xinfang/dprices/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Houses:dprices'
+    options:
+        status: true
+        remark: 楼盘历史价格页
+houses_dphotos:
+    path: '/xinfang/dphotos/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Houses:dphotos'
+    options:
+        status: true
+        remark: 楼盘图库页
+houses_dplanintro:
+    path: '/xinfang/dplanintro/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Houses:dplanintro'
+    options:
+        status: true
+        remark: 楼盘户型图页
+houses_dcomment:
+    path: '/xinfang/dcomment/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Houses:dcomment'
+    options:
+        status: true
+        remark: 楼盘点评页
+houses_dspehouse:
+    path: '/xinfang/dspehouse/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Houses:dspehouse'
+    options:
+        status: true
+        remark: 楼盘特价房页
+houses_dask:
+    path: '/xinfang/dask/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Houses:dask'
+    options:
+        status: true
+        remark: 楼盘问答页
+groupbuy_list:
+    path: '/groupbuy/list/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:Groupbuy:list'
+        pageIndex: '1'
+    options:
+        status: true
+        remark: 新房团购列表页
+groupbuy_detail:
+    path: '/groupbuy/detail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Groupbuy:detail'
+    options:
+        status: true
+        remark: 新房团购详情页
+special_list:
+    path: '/special/list/{region}-{zj}-{mj}-{cate_status}/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:Special:list'
+        region: 'no'
+        zj: 'no'
+        mj: 'no'
+        cate_status: 'no'
+        pageIndex: '1'
+    options:
+        status: true
+        remark: 特价房列表页
+special_detail:
+    path: '/special/detail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Special:detail'
+    options:
+        status: true
+        remark: 特价房详情页
+door_list:
+    path: '/door/list/{mj}-{cate_type}-{shi}-{cate_status}/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:Door:list'
+        mj: 'no'
+        cate_type: 'no'
+        shi: 'no'
+        pageIndex: '1'
+        cate_status: 'no'
+    options:
+        status: true
+        remark: 户型列表页
+door_detail:
+    path: '/door/detail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Door:detail'
+    options:
+        status: true
+        remark: 户型详情页
+hongbao_detail:
+    path: '/hongbao/detail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Hongbao:detail'
+    options:
+        status: true
+        remark: 红包详情页
+around_detail:
+    path: '/around/detail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Around:detail'
+    options:
+        status: true
+        remark: 周边配套详情页
+fenxiao_list:
+    path: /fenxiao
+    defaults:
+        _controller: 'HouseBundle:Fenxiao:list'
+    options:
+        status: true
+        remark: 楼盘分销列表页
+fenxiao_detail:
+    path: '/fenxiao/detail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Fenxiao:detail'
+    options:
+        status: true
+        remark: 楼盘分销详情页
+sale_list:
+    path: '/esf/{region}-{cate_circle}-{cate_line}-{cate_metro}-{zj}-{mj}-{fl}/{cook_id}/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:Sale:list'
+        region: 'no'
+        cate_circle: 'no'
+        cate_line: 'no'
+        cate_metro: 'no'
+        zj: 'no'
+        mj: 'no'
+        fl: 'no'
+        cook_id: '0'
+        pageIndex: '1'
+    options:
+        status: true
+        remark: 二手房列表页
+sale_detail:
+    path: '/esf/detail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Sale:detail'
+    options:
+        status: true
+        remark: 二手房详情页
+sale_xlist:
+    path: '/xuexiao/{region}-{school_type}/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:Sale:xlist'
+        region: 'no'
+        school_type: 'no'
+        pageIndex: '1'
+    options:
+        status: true
+        remark: 学校列表页
+sale_xdetail:
+    path: '/xuexiao/xdetail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Sale:xdetail'
+    options:
+        status: true
+        remark: 学校详情页
+sale_xqlist:
+    path: '/xiaoqu/{region}-{cate_circle}-{cate_line}-{cate_metro}/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:Sale:xqlist'
+        region: 'no'
+        cate_circle: 'no'
+        cate_line: 'no'
+        cate_metro: 'no'
+        pageIndex: '1'
+    options:
+        status: true
+        remark: 小区列表页
+sale_qdetail:
+    path: '/xiaoqu/qdetail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Sale:qdetail'
+    options:
+        status: true
+        remark: 小区详情页
+sale_qdmai:
+    path: '/xiaoqu/qdmai/{id}'
+    defaults:
+        _controller: 'HouseBundle:Sale:qdmai'
+    options:
+        status: true
+        remark: 小区出售房源页
+sale_qdzhu:
+    path: '/xiaoqu/qdzhu/{id}'
+    defaults:
+        _controller: 'HouseBundle:Sale:qdzhu'
+    options:
+        status: true
+        remark: 小区出租房源页
+sale_qdphotos:
+    path: '/xiaoqu/qdphotos/{id}'
+    defaults:
+        _controller: 'HouseBundle:Sale:qdphotos'
+    options:
+        status: true
+        remark: 小区图库页
+sale_qdplanintro:
+    path: '/xiaoqu/qdplanintro/{id}'
+    defaults:
+        _controller: 'HouseBundle:Sale:qdplanintro'
+    options:
+        status: true
+        remark: 小区户型图页
+sale_qdcomment:
+    path: '/xiaoqu/qdcomment/{id}'
+    defaults:
+        _controller: 'HouseBundle:Sale:qdcomment'
+    options:
+        status: true
+        remark: 小区点评页
+rent_list:
+    path: '/zu/{region}-{cate_circle}-{cate_line}-{cate_metro}-{mj}-{czj}-{zlfs}-{shi}/{cook_id}/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:Rent:list'
+        region: 'no'
+        cate_circle: 'no'
+        cate_line: 'no'
+        cate_metro: 'no'
+        mj: 'no'
+        czj: 'no'
+        zlfs: 'no'
+        shi: 'no'
+        cook_id: '0'
+        pageIndex: '1'
+    options:
+        status: true
+        remark: 出租列表页
+rent_detail:
+    path: '/zu/detail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Rent:detail'
+    options:
+        status: true
+        remark: 出租详情页
+news_index:
+    path: '/news/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:News:index'
+        pageIndex: '1'
+    options:
+        status: true
+        remark: 资讯首页
+    requirements:
+        pageIndex: \d+
+news_list:
+    path: '/news/list/{category}/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:News:list'
+        pageIndex: '1'
+    options:
+        status: true
+        remark: 资讯列表页
+news_detail:
+    path: '/news/detail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:News:detail'
+    options:
+        status: true
+        remark: 资讯详情页
+topic_index:
+    path: /topic
+    defaults:
+        _controller: 'HouseBundle:Topic:index'
+    options:
+        status: true
+        remark: 专题首页
+topic_list:
+    path: 'topic/list/{category}'
+    defaults:
+        _controller: 'HouseBundle:Topic:list'
+    options:
+        status: true
+        remark: 专题列表页
+topic_live:
+    path: 'topic/live/{category}'
+    defaults:
+        _controller: 'HouseBundle:Topic:live'
+    options:
+        status: true
+        remark: 专题直播列表页
+topic_group:
+    path: 'topic/group/{category}'
+    defaults:
+        _controller: 'HouseBundle:Topic:group'
+    options:
+        status: true
+        remark: 专题看房团列表页
+topic_detail:
+    path: '/topic/detail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Topic:detail'
+    options:
+        status: true
+        remark: 专题详情页
+photos_index:
+    path: /photos
+    defaults:
+        _controller: 'HouseBundle:Photos:index'
+    options:
+        status: true
+        remark: 图库首页
+photos_list:
+    path: '/photos/list/{category}/{type}/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:Photos:list'
+        pageIndex: '1'
+        type: '1'
+    options:
+        status: true
+        remark: 图库列表页
+photos_detail:
+    path: 'photos/detail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Photos:detail'
+    options:
+        status: true
+        remark: 图库详情页
+ask_index:
+    path: /ask
+    defaults:
+        _controller: 'HouseBundle:Ask:index'
+    options:
+        status: true
+        remark: 问答首页
+ask_list:
+    path: '/ask/list/{category}'
+    defaults:
+        _controller: 'HouseBundle:Ask:list'
+    options:
+        status: true
+        remark: 问答列表页
+ask_detail:
+    path: '/ask/detail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Ask:detail'
+    options:
+        status: true
+        remark: 问答详情页
+service_index:
+    path: /service
+    defaults:
+        _controller: 'HouseBundle:Service:index'
+    options:
+        status: true
+        remark: 服务首页
+service_list:
+    path: '/service/list/{category}'
+    defaults:
+        _controller: 'HouseBundle:Service:list'
+    options:
+        status: true
+        remark: 服务列表页
+service_detail:
+    path: '/service/detail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Service:detail'
+    options:
+        status: true
+        remark: 服务详情页
+service_ask:
+    path: '/service/ask/{category}'
+    defaults:
+        _controller: 'HouseBundle:Service:ask'
+    options:
+        remark: 在线提问页
+        status: true
+guide_index:
+    path: '/guide/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:Guide:index'
+        pageIndex: '1'
+    options:
+        status: true
+        remark: 置业指南首页
+    requirements:
+        pageIndex: \d+
+guide_list:
+    path: '/guide/list/{category}/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:Guide:list'
+        pageIndex: '1'
+    options:
+        remark: 置业指南列表页
+        status: true
+guide_detail:
+    path: '/guide/detail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Guide:detail'
+    options:
+        remark: 置业指南详情页
+        status: true
+video_index:
+    path: /video
+    defaults:
+        _controller: 'HouseBundle:Video:index'
+    options:
+        remark: 视频首页
+        status: true
+video_list:
+    path: '/video/list/{category}/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:Video:list'
+        pageIndex: '1'
+    options:
+        remark: 视频列表页
+        status: true
+video_detail:
+    path: '/video/detail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Video:detail'
+    options:
+        remark: 视频详情页
+        status: true
+business_list:
+    path: '/business/list/{region}-{officetype}-{dj}/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:Business:list'
+        pageIndex: '1'
+        region: 'no'
+        officetype: 'no'
+        dj: 'no'
+    options:
+        remark: 写字楼楼盘列表页
+        status: true
+business_slist:
+    path: '/business/slist/{region}-{shoptype}-{dj}/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:Business:slist'
+        region: 'no'
+        shoptype: 'no'
+        dj: 'no'
+        pageIndex: '1'
+    options:
+        remark: 商铺楼盘列表页
+        status: true
+business_detail:
+    path: '/business/detail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Business:detail'
+    options:
+        remark: 写字楼/商铺楼盘详情页
+        status: true
+business_xsalelist:
+    path: '/business/xsalelist/{region}-{syzj}-{mj}-{fl}/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:Business:xsalelist'
+        region: 'no'
+        syzj: 'no'
+        mj: 'no'
+        fl: 'no'
+        pageIndex: '1'
+    options:
+        remark: 写字楼出售列表页
+        status: true
+business_ssalelist:
+    path: '/business/ssalelist/{region}-{syzj}-{mj}-{fl}/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:Business:ssalelist'
+        region: 'no'
+        syzj: 'no'
+        mj: 'no'
+        fl: 'no'
+        pageIndex: '1'
+    options:
+        remark: 商铺出售列表页
+        status: true
+business_sdetail:
+    path: 'business/sdetail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Business:sdetail'
+    options:
+        remark: 写字楼/商铺出售详情页
+        status: true
+business_xrentlist:
+    path: '/business/xrentlist/{region}-{syczj}-{mj}-{fl}/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:Business:xrentlist'
+        region: 'no'
+        syczj: 'no'
+        mj: 'no'
+        fl: 'no'
+        pageIndex: '1'
+    options:
+        remark: 写字楼出租列表页
+        status: true
+business_srentlist:
+    path: '/business/srentlist/{region}-{spczj}-{mj}-{fl}/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:Business:srentlist'
+        region: 'no'
+        spczj: 'no'
+        mj: 'no'
+        fl: 'no'
+        pageIndex: '1'
+    options:
+        remark: 商铺出租列表页
+        status: true
+business_rdetail:
+    path: '/business/rdetail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Business:rdetail'
+    options:
+        remark: 写字楼/商铺出租详情页
+        status: true
+demand_list:
+    path: '/demand/list/{category}/{region}'
+    defaults:
+        _controller: 'HouseBundle:Demand:list'
+        region: 'no'
+        category: '297'
+    options:
+        remark: 求租求购列表页
+        status: true
+demand_detail:
+    path: 'demand/detail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Demand:detail'
+    options:
+        remark: 求租求购详情页
+        status: true
+member_j_list:
+    path: '/member/j_list/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:Member:j_list'
+        pageIndex: '1'
+    options:
+        remark: 经纪人列表页
+        status: true
+member_j_detail:
+    path: '/member/j_detail/{id}'
+    defaults:
+        _controller: 'HouseBundle:Member:j_detail'
+    options:
+        remark: 经纪人详情页
+        status: true
+member_j_d_rent:
+    path: '/member/j_d_rent/{id}'
+    defaults:
+        _controller: 'HouseBundle:Member:j_d_rent'
+    options:
+        remark: 经纪人详情出租页
+        status: true
+member_j_d_ds:
+    path: '/member/j_d_ds/{id}'
+    defaults:
+        _controller: 'HouseBundle:Member:j_d_ds'
+    options:
+        remark: 经纪人详情介绍页
+        status: true
+member_j_d_ly:
+    path: '/member/j_d_ly/{id}'
+    defaults:
+        _controller: 'HouseBundle:Member:j_d_ly'
+    options:
+        remark: 经纪人店铺留言页
+        status: true
+member_list:
+    path: '/member/list/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:Member:list'
+        pageIndex: '1'
+    options:
+        remark: 经纪公司列表页
+        status: true
+member_detail:
+    path: '/member/detail/{id}'
+    defaults:
+        _controller: 'HouseBundle:Member:detail'
+    options:
+        remark: 经纪公司二手房页
+        status: true
+member_d_rent:
+    path: '/member/d_rent/{id}'
+    defaults:
+        _controller: 'HouseBundle:Member:d_rent'
+    options:
+        remark: 经纪公司出租页
+        status: true
+member_d_ds:
+    path: '/member/d_ds/{id}'
+    defaults:
+        _controller: 'HouseBundle:Member:d_ds'
+    options:
+        remark: 经纪公司简介页
+        status: true
+member_d_jjr:
+    path: '/member/d_jjr/{id}'
+    defaults:
+        _controller: 'HouseBundle:Member:d_jjr'
+    options:
+        remark: 经纪公司旗下的经纪人页
+        status: true
+member_d_news:
+    path: '/member/d_news/{id}'
+    defaults:
+        _controller: 'HouseBundle:Member:d_news'
+    options:
+        remark: 经纪公司动态列表页
+        status: true
+member_d_news_detail:
+    path: '/member/d_news_detail/{id}-{newid}'
+    defaults:
+        _controller: 'HouseBundle:Member:d_news_detail'
+    options:
+        remark: 经纪公司动态详情页
+        status: true
+member_k_list:
+    path: '/member/k_list/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:Member:k_list'
+        pageIndex: '1'
+    options:
+        remark: 开发商列表页
+        status: true
+member_k_detail:
+    path: '/member/k_detail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Member:k_detail'
+    options:
+        remark: 开发商详情页
+        status: true
+houses_cfj:
+    path: houses/prices
+    defaults:
+        _controller: 'HouseBundle:Houses:cfj'
+    options:
+        remark: 新房房价
+        status: true
+houses_ddongtai:
+    path: '/xinfang/ddongtai/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Houses:ddongtai'
+    options:
+        remark: 楼盘动态二级页面
+        status: true
+houses_dqwbj:
+    path: '/xinfang/dqwbj/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Houses:dqwbj'
+    options:
+        remark: 全网比价二级页面
+        status: true
+houses_dxfgw:
+    path: '/xinfang/dxfgw/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Houses:dxfgw'
+    options:
+        remark: 新房顾问二级页面
+        status: true
+houses_platform:
+    path: /platform.html
+    defaults:
+        _controller: 'HouseBundle:Houses:platform'
+    options: null
+houses_album:
+    path: '/xinfang/album/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Houses:album'
+    options:
+        remark: 相册二级页面
+        status: true
+houses_dynamic:
+    path: '/xinfang/dynamic/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Houses:dynamic'
+    options:
+        remark: 动态资讯二级列表页
+        status: true
+houses_dynamic_detail:
+    path: '/xinfang/dynamic/detail/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Houses:dynamic_detail'
+    options:
+        remark: 动态资讯二级详情页
+        status: true
+houses_aboutsfd:
+    path: /houses/aboutsfd
+    defaults:
+        _controller: 'HouseBundle:Houses:aboutsfd'
+    options:
+        remark: 产权声明
+        status: true
+houses_infoDeveloper:
+    path: '/xinfang/developer/{id}.html'
+    defaults:
+        _controller: 'HouseBundle:Houses:infodeveloper'
+    options:
+        remark: 详情页二级开发商页面
+        status: true

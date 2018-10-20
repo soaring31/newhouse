@@ -1,0 +1,20 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% block js %}
+
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }} 
+{% endblock %}
+
+{% block tableMain %}
+    {# {{action}} #}
+<section class="list-con table-inline" data-height="580" data-param='{
+        fixed     : ".filter",
+        list      : ".list-con"
+    }'>
+    {{ core_manage.form_cfg(form|default(''), action) }}
+</section>
+{% endblock tableMain %}
+
+{% block promptUl %}{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'HouseBundle:Member:detail.html.twig' %}
+{# 说明 
+** list: 经纪人出租
+#}
+{# 标题 #}
+{% set title_users_act = '出租' %}
+{# 导航高亮 #}
+{% set nav_users_act = 2 %}
+{# 搜索 #}
+{% block search_member %}
+    {% set searchUrl = 'member/d_rent' %}
+    {{parent()}}
+{% endblock search_member %}
+
+{% block right %}
+    {# 检索数据源 #}
+    {% set cate_data = house_global.cate_data({ 
+        tag: 'member_jjgs_rent',
+        url_opt: { 
+            id: url_id
+        } 
+    }).__toString|json_decode %}
+    {# 筛选条件 #}
+    {{house_global.filter_cfg({
+        show_selected: 1,
+        action: action,
+        class: 'filter-member'
+    }|merge(cate_data))}}
+
+    <div class="esf-list czu-list">
+        <div class="list-title">
+            <div class="l-ttitle-l">
+                共找到<span>{{ident.list.pageCount|default(0)}}</span>套符合要求房源信息
+            </div>
+            <!-- 排序 -->
+            <div class="l-title-r">
+                <div class="sort">
+                    {{ core_global.sort({
+                        action: action,
+                        data: {
+                            def: {
+                                title: '默认'
+                            },
+                            mj: {
+                                title: '面积'
+                            },
+                            zj: {
+                                title: '总价'
+                            }
+                        }
+                    }|merge(cate_data)) }}
+               </div>
+            </div>
+        </div>
+        <!-- 二手房列表 -->
+        <div class="sale-list esf-l-box">
+            {# 列表 #}
+            {{house_global.rent_list({
+                list: ident.list,
+                page: 1
+            })}}
+        </div>
+    </div>
+{% endblock right %}

@@ -1,0 +1,30 @@
+{% extends "ManageBundle::poplayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+
+</script>
+{% endblock %}
+{% block body %}
+<form class="form" action="{{ ('save')|U }}" method="post" name="form">
+<table class="right-table" width="100%">
+	<tbody>
+		<tr>
+			<td class="txtright fB">素材：&nbsp;&nbsp;</td>
+			<td class="txtleft">
+				<input name="file_path" id="sitelogo" value="" class="w200" type="text" />
+				<span class="tips1">
+				<!--<a href="javascript:void(0);" class="upimages" upparam="sitelogo,190,60" data-url="{{ 'upload'|U }}" style="color: red">上传</a>-->
+				<input class="upimages" type="file" name="file_name"/> 
+				<input class="submit-btn" value="上传" type="submit">
+				&nbsp;&nbsp;
+				<!--<a href="javascript:void(0);" class="viewimages" viewparam="sitelogo">预览</a>-->&nbsp;&nbsp;图片不超过2M，语音不超过5M
+				</span>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<!--<div class="submit">
+	<input class="submit-btn reload" target-form="form" value="上传" type="submit">
+</div>-->
+</form>
+{% endblock %}

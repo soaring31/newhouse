@@ -1,0 +1,41 @@
+.pager {
+    @extend %clearfix;
+    position: absolute;
+    padding: $spacing;
+    text-align: center;
+    background-color: #fff;
+    border-top: 1px solid #bbb;
+    // min-height: 27px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    font-size: 12px;
+    .page-count {
+        position: absolute;
+        left: 0;
+    }
+    a, span {
+        display: inline-block;
+        margin-left: 5px;
+        line-height: 25px;
+        border: 1px solid $btn-info-border;
+        background-color: $btn-info-bg;
+        border-radius: 2px;
+        display: inline-block;
+        padding: 0 8px;
+        color: $btn-info-color;
+        &.current, &:hover {
+            background-color: $btn-primary-bg;
+            border-color: $btn-primary-border;
+            text-decoration: none;
+        }
+        
+
+    }
+    .prev.current, .next.current {
+        background-color: $btn-default-bg;
+        border: 1px solid $btn-default-border;
+        color: $btn-default-color;
+    }
+
+}

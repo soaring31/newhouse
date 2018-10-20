@@ -1,0 +1,16 @@
+{% extends 'HouseBundle::base.html.twig' %}
+{% set _action = '/' %}
+{% set cur_city =  null|getIpArea %}
+
+{% block title %}城市切换{% endblock title %}
+
+{% block body %}
+<div class="container">
+    <div class="city-head">
+        <p class="city-now">您当前位置所在的城市:<span>{{cur_area_data|default('主站')}}</span></p>
+        <a class="enter-index" href="/">进入{{cur_area_data|default('主站')}}</a>
+    </div>
+    {% include 'HouseBundle:Areachange:mchange.html.twig' %}
+</div>
+<div class="blank30"></div>
+{% endblock body %}

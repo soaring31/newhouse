@@ -1,0 +1,9 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 当前分站id #}
+{% set sess_area = app.session.get('area')|default(0) %}
+{# 当前分站名称 #}
+{% set cur_area_data = sess_area|getAreaName %}
+
+{% block result %}
+	{{cur_area_data|default('')}}
+{% endblock result %}

@@ -1,0 +1,84 @@
+﻿/*!
+ * @name list-hd.css
+ * @author xying
+ * @date 2016-8-24
+ * @dec list header
+ * @ 列表头部
+ */
+
+
+.tag-head {
+	width: 100%;
+	border-bottom: 2px solid $major-color;
+	@extend %clearfix;
+}
+.t-h-l {
+	float: left;
+	border: 1px solid  #ddd;
+	border-bottom: none;
+	border-radius: 5px 5px 0 0;
+	padding-right: -1px;
+
+	a {
+		float: left;
+		height: 35px;
+		padding: 0 25px;
+		border-left: 1px solid #ddd;
+		font-size: 14px;
+		color: #2c2c2c;
+		line-height: 36px;
+		cursor: pointer;
+		margin-left: -1px;
+
+	}
+
+
+	.act {
+		background: $major-color;
+		border-color: $major-color;
+		color: #fff;
+		
+	}
+}
+.t-h-r {
+	float: right;
+	height: 36px;
+	@extend %clearfix;
+
+	p {
+		float: left;
+		line-height: 36px;
+		margin-right: 5px;
+		font-size: 14px;
+		color: $text-color;
+		cursor: pointer;
+	}
+	i {		
+		font-size: 12px;
+		line-height: 20px;
+		text-align: center;
+	}
+	
+
+	a {
+		background: #f4f4f4;
+		border-radius: 3px;
+		color: #888;
+		display: inline-block;
+		height: 20px;
+		width: 18px;
+		border: 1px solid #ddd;
+	    vertical-align: middle;
+	    text-align: center;
+	    margin: 0 5px;
+	    &:hover {
+	    	text-decoration: none;
+	    }
+	}
+
+	.num {
+		color: $major-color;
+	    margin: 0 5px;
+		font-weight: 700;
+	}	
+}

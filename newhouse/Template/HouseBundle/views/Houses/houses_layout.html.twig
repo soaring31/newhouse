@@ -1,0 +1,13 @@
+{% extends 'HouseBundle::base_top_search.html.twig' %}
+{# 所有主导航楼盘高亮的基模板 #}
+
+{% block top_search %}
+    {% set tpl_topsearch_hot = 'houseskeyword' %}
+    {{ parent() }}
+{% endblock top_search %}
+ {% set top_ad = {tag: 'housesads'} %}
+
+
+ {% set nav_act = 2 %}
+
+    {% block top_ad %}{% endblock top_ad %}

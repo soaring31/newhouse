@@ -1,0 +1,370 @@
+{% extends 'HouseBundle:Business:detail.html.twig' %}
+{# 说明 
+ * nav_business_act: 当前导航高亮
+#}
+{% set nav_business_act = 2 %}
+	
+{% block b_title %}
+    基本信息,售楼处电话,物业费,物业电话,开发商
+{% endblock b_title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}售楼处地址,{{detail.name|default('')}}售楼电话,{{detail.name|default('')}}物业费电话,{{detail.name|default('')}}开发商" />
+<meta name="description" content="{{cur_area_data|default('')}}{{detail.name|default('')}}为您提供{{detail.name|default('')}}基本信息，包括售楼处地址，售楼电话，物业费，物业电话，开发商等{{detail.name|default('')}}楼盘相关信息，为您选房、买房提供参考!"/>
+{% endblock key_des %}
+
+{% block bus_detail %}
+	<div class="container">
+		<!--左侧-->
+		<div class="d-body fl">
+			{% block d_body %}
+				<!--基本详情-->
+	            <div class="jbxx1">
+	                <div class="lp-coltit">
+	                    <h3 class="tit1">
+	                        基本信息
+	                    </h3>
+	                </div>
+	                <div class="p10 lp-detail bd-gray">
+	                    <div class="item">
+	                        <dl class="clearfix">
+	                            <dt>楼盘均价：</dt>
+	                            <dd>
+	                            	{{house_global.if_dj({value: detail.dj|default('')})}}
+	                            </dd>
+	                            <dt>区域：</dt>
+	                            <dd>
+	                            	{{core_global.region({id: detail.region|default(''), tpl: '%value%'})}}
+	                            </dd>
+	                        </dl>
+	                        <dl class="clearfix">
+	                            <dt>开盘日期：</dt>
+	                            <dd>{{core_global.time_date({time: detail.kpdate.date|default('')})}}</dd>
+	                            <dt>交房日期：</dt>
+	                            <dd>{{detail.jfrq|default('-')}}</dd>
+	                        </dl>
+	                        <dl class="clearfix">
+	                            <dt>开盘说明：</dt>
+	                            <dd>{{detail.kpsm|default('-')}}</dd>
+	                            <dt>装修程度：</dt>
+	                            <dd>{{- house_global.lptag({value: detail, tpl: '%value%', con: 'zxcd'})|default('-') -}}</dd>
+	                        </dl>
+	                        <dl class="nowrap clearfix">
+	                            <dt>特色楼盘：</dt>
+	                            <dd>{{- house_global.lptag({value: detail, tpl: '%value%&nbsp;', con: 'tslp'})|default('-') -}}</dd>
+	                        </dl>
+	                        <dl class="nowrap clearfix">
+	                            <dt>地铁：</dt>
+	                            <dd>{{ house_global.lptag({value: detail|default(''), con: 'cate_line,cate_metro', tpl: '%value%&nbsp;&nbsp;'}) }}</dd>
+	                        </dl>
+	                        <dl class="nowrap clearfix">
+	                            <dt>项目地址：</dt>
+	                            <dd>
+	                            	{{core_global.address({data: detail|default('-')})}}
+	                            </dd>
+	                        </dl>
+	                    </div>
+	                </div>
+	            </div>
+	            <!--/基本详情-->
+	            <!--物业信息-->
+	            <div class="jbxx1">
+	                <div class="lp-coltit">
+	                    <h3 class="tit1">
+	                        物业信息
+	                    </h3>
+	                </div>
+	                <div class="p10 lp-detail bd-gray">
+	                    <div class="item">
+	                        <dl class="clearfix">
+	                            <dt>销售电话：</dt>
+	                            <dd>
+	                                {{detail.tel|default('-')}}
+	                            </dd>
+	                            <dt>物业费：</dt>
+	                            <dd>{{detail.wyf|default('-')}}</dd>
+	                        </dl>
+	                        <dl class="nowrap clearfix">
+	                            <dt>售楼地址：</dt>
+	                            <dd>{{detail.sldz|default('-')}}</dd>
+	                        </dl>
+	                        <dl class="nowrap clearfix">
+	                            <dt>物业公司：</dt>
+	                            <dd>{{detail.wygs|default('-')}}</dd>
+	                        </dl>
+	                        <dl class="nowrap clearfix">
+	                            <dt>楼盘开发商：</dt>
+	                            <dd>{{detail.house_developer|default('-')}}</dd>
+	                        </dl>
+	                        <dl class="nowrap clearfix">
+	                            <dt>许可证号：</dt>
+	                            <dd>{{detail.xkzh|default('-')}}</dd>
+	                        </dl>
+	                    </div>
+	                </div>
+	            </div>
+	            <!--/物业信息-->
+	            <!--楼盘设备-->
+	            <div class="jbxx1">
+	                <div class="lp-coltit">
+	                    <h3 class="tit1">
+	                    	{% if tpl_officetype %}
+	                        楼盘设备
+		                    {% else %}
+	                    	商铺详情
+		                    {% endif %}
+	                    </h3>
+	                </div>
+	                <div class="p10 lp-detail bd-gray">
+	                    <div class="item">
+	                    	{% if tpl_officetype %}
+	                    	{# 写字楼信息 #}
+	                        <dl class="clearfix">
+	                            <dt>办公面积：</dt>
+	                            <dd>
+	                                {{house_global.if_mj({value: detail.officearea|default('')})}}
+	                            </dd>
+	                            <dt>商业面积：</dt>
+	                            <dd>
+	                            	{{house_global.if_mj({value: detail.businessarea|default('')})}}
+	                            </dd>
+	                        </dl>
+	                        <dl class="clearfix">
+	                            <dt>开间面积：</dt>
+	                            <dd>
+	                            	{{house_global.if_mj({value: detail.bayarea|default('')})}}
+	                            </dd>
+	                            <dt>标准层层高：</dt>
+	                            <dd>
+	                            	{{core_global.if_dw({value: detail.layerheight|default(''), danwei: 'm', default_tips: '-'})}}
+	                            </dd>
+	                        </dl>
+	                        <dl class="clearfix">
+	                            <dt>标准层面积：</dt>
+	                            <dd>
+	                            	{{house_global.if_mj({value: detail.layerarea|default('')})}}
+	                            </dd>
+	                            <dt>大堂层高：</dt>
+	                            <dd>
+	                            	{{core_global.if_dw({value: detail.lobbyheight|default(''), danwei: 'm', default_tips: '-'})}}
+	                            </dd>
+	                        </dl>
+	                        <dl class="clearfix">
+	                            <dt>大堂面积：</dt>
+	                            <dd>
+	                            	{{house_global.if_mj({value: detail.lobbyarea|default('')})}}
+	                            </dd>
+	                        {% else %}
+
+	                        {# 商铺详情 #}
+	                        <dl class="clearfix">
+	                            <dt>商铺总面积：</dt>
+	                            <dd>
+	                                {{house_global.if_mj({value: detail.shopsarea|default('')})|default('-')}}
+	                            </dd>
+	                            <dt>总楼层：</dt>
+	                            <dd>
+	                            	{{core_global.if_dw({value: detail.totalfloor|default(''), danwei: '层', default_tips: '-'})}}
+	                            </dd>
+	                        </dl>
+	                        <dl class="clearfix">
+	                            <dt>面宽：</dt>
+	                            <dd>
+	                            	{{core_global.if_dw({value: detail.wide|default(''), danwei: 'm', default_tips: '-'})}}
+	                            </dd>
+	                            <dt>进深：</dt>
+	                            <dd>
+	                            	{{core_global.if_dw({value: detail.depth|default(''), danwei: 'm', default_tips: '-'})}}
+	                            </dd>
+	                        </dl>
+	                        <dl class="clearfix">
+	                            <dt>统一管理：</dt>
+	                            <dd>
+	                            	{{ core_global.formField({value: detail.administered|default(''), form: 'houses_shops_attr', field:'administered'}) }}
+	                            </dd>
+	                            <dt>外立面：</dt>
+	                            <dd>
+	                            	{{detail.facades|default('-')}}
+	                            </dd>
+	                        </dl>
+	                        <dl class="clearfix">
+	                            <dt>单层层高：</dt>
+	                            <dd>
+	                            	{{core_global.if_dw({value: detail.floorheight|default(''), danwei: 'm', default_tips: '-'})}}
+	                            </dd>
+	                        {% endif %}
+
+	                            <dt>电梯数：</dt>
+	                            <dd>{{detail.liftnum|default('-')}}</dd>
+	                        </dl>
+	                        <dl class="clearfix">
+	                            <dt>电梯分区：</dt>
+	                            <dd>{{detail.liftdivision|default('-')}}</dd>
+	                            <dt>空调开放时间：</dt>
+	                            <dd>{{detail.airopentime|default('-')}}</dd>
+	                        </dl>
+	                        <dl class="clearfix">
+	                            <dt>网络通讯：</dt>
+	                            <dd>
+	                            	{{ core_global.formField({value: detail.Networktx|default(''), form: 'houses_attr_common', field:'Networktx'})|default('-') }}
+	                            </dd>
+	                            <dt>卫生间：</dt>
+	                            <dd>{{detail.toilets|default('-')}}</dd>
+	                        </dl>
+	                        <dl class="clearfix">
+	                            <dt>供水方式：</dt>
+	                            <dd>
+	                            	{{ core_global.formField({value: detail.wateringmodes|default(''), form: 'houses_attr_common', field:'wateringmodes'})|default('-') }}
+	                            </dd>
+	                            <dt>供电系统：</dt>
+	                            <dd>
+	                            	{{ core_global.formField({value: detail.powersystem|default(''), form: 'houses_attr_common', field:'powersystem'})|default('-') }}
+	                            </dd>
+	                        </dl>
+	                        <dl class="clearfix">
+	                            <dt>排风系统：</dt>
+	                            <dd>
+	                            	{{ core_global.formField({value: detail.exhaustsystem|default(''), form: 'houses_attr_common', field:'exhaustsystem'})|default('-') }}
+	                            </dd>
+	                            <dt>排污系统：</dt>
+	                            <dd>
+	                            	{{ core_global.formField({value: detail.sewagesystems|default(''), form: 'houses_attr_common', field:'sewagesystems'})|default('-') }}
+	                            </dd>
+	                        </dl>
+
+                            {% if tpl_officetype %}
+                            {# 写字楼 #}
+	                        <dl class="nowrap clearfix">
+	                            <dt>安防系统：</dt>
+	                            <dd>{{detail.securitysy|default('-')}}</dd>
+	                        </dl>
+                            {% endif %}
+
+	                        <dl class="nowrap clearfix">
+	                            <dt>楼内配套：</dt>
+	                            <dd>
+	                            	{{ core_global.formField({value: detail.buildingfacilities|default(''), form: 'houses_attr_common', field:'buildingfacilities', tpl: '%title%&nbsp;'})|default('-') }}
+	                            </dd>
+	                        </dl>
+	                    </div>
+	                </div>
+	            </div>
+	            <!--/楼盘设备-->
+	            <!--其他方面-->
+	            <div class="jbxx1">
+	                <div class="lp-coltit">
+	                    <h3 class="tit1">
+	                        其他方面
+	                    </h3>
+	                </div>
+	                <div class="p10 lp-detail bd-gray">
+	                    <div class="item">
+	                        <dl class="clearfix">
+	                        	{% if tpl_officetype %}
+		                            <dt>写字楼类型：</dt>
+		                            <dd>
+		                            	{{- house_global.lptag({value: detail|default(''), con: 'officetype'})|default('-') -}}
+		                            </dd>
+		                            <dt>写字楼级别：</dt>
+		                            <dd>
+		                            	{{- house_global.lptag({value: detail|default(''), con: 'officelevel'})|default('-') -}}
+		                            </dd>
+		                        {% else %}
+		                        	<dt>商铺类型：</dt>
+		                            <dd>
+		                            	{{- house_global.lptag({value: detail|default(''), con: 'shoptype'})|default('-') -}}
+		                            </dd>
+		                        	<dt>商铺行业：</dt>
+		                            <dd>
+		                            	{{- house_global.lptag({value: detail|default(''), con: 'shopindustry'})|default('-') -}}
+		                            </dd>
+	                            {% endif %}
+	                        </dl>
+	                        <dl class="clearfix">
+	                            <dt>车位数：</dt>
+	                            <dd>{{detail.carnum|default(detail.parking|default('-'))}}</dd>
+	                            <dt>车位价格：</dt>
+	                            <dd>{{detail.car_price|default('-')}}</dd>
+	                        </dl>
+	                        <dl class="clearfix">
+	                            <dt>占地面积：</dt>
+	                            <dd>
+	                            	{{house_global.if_mj({value: detail.area_covered|default('')})|default('-')}}
+	                            </dd>
+	                            <dt>建筑面积：</dt>
+	                            <dd>
+	                            	{{house_global.if_mj({value: detail.built_area|default('')})|default('-')}}
+	                            </dd>
+	                        </dl>
+	                        <dl class="clearfix">
+	                            <dt>绿化率：</dt>
+	                            <dd>{{detail.lhl|default('-')}}</dd>
+	                            <dt>容积率：</dt>
+	                            <dd>{{detail.rjl|default('-')}}</dd>
+	                        </dl>
+	                        <dl class="clearfix">
+	                            <dt>得房率：</dt>
+	                            <dd>{{detail.dfl|default('-')}}</dd>
+	                            <dt>产权年限：</dt>
+	                            <dd>
+	                            	{{core_global.if_dw({value: detail.cqnx|default(''), danwei: '年', default_tips: '-'})}}
+	                            </dd>
+	                        </dl>
+	                        <dl class="nowrap clearfix">
+	                            <dt>工程进度：</dt>
+	                            <dd>{{detail.pjt_progress|default('-')}}</dd>
+	                        </dl>
+	                    </div>
+	                </div>
+	            </div>
+	            <!--/其他方面-->
+	            <!--历史价格-->
+	            {{house_global.prices_info({
+                    aid: detail.id|default(0),
+                    table: 1
+                })}}
+	            <!--/历史价格-->
+	            <!--项目简介-->
+		        <div class="xmjj">
+		            <div class="lp-coltit">
+		                <h3 class="tit1">
+		                    楼盘简介
+		                </h3>
+		            </div>
+		            <div class="p10 bd-gray">
+		                {{detail.content|default('暂无介绍')|raw}}
+		            </div>
+		        </div>
+			{% endblock d_body %}
+		</div>
+		<!--/左侧-->
+		<!--右侧-->
+		<div class="d-aside fr">
+			<!--周边楼盘-->
+			{{house_global.houses_detail_recommend({
+                title: tpl_title|default('') ~ '推荐',
+                title_url: (tpl_link)|U,
+                models: 'business',
+                list: sort_cate_type_houses,
+                tag: 'lphouses'
+            })}}
+			<!--周边楼盘-->
+			{{house_global.houses_detail_recommend({
+                title: '周边楼盘',
+                models: 'business',
+                list: sort_area_houses,
+                tag: 'lparea'
+            })}}
+			<!--/周边楼盘-->
+			<!--热门楼盘-->
+			{{house_global.houses_detail_recommend({
+                title: '热门楼盘',
+                models: 'business',
+                list: sort_clicks_houses,
+                tag: 'clicks'
+            })}}
+			<!--/热门楼盘-->
+		</div>
+		<!--/右侧-->
+	</div>
+{% endblock bus_detail %}

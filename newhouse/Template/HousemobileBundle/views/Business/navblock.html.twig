@@ -1,0 +1,38 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+
+{% set nav_data = [
+    {
+        name: '楼盘',
+        url: ('business/detail')|UU({id: id|default(app.request.get('id'))})
+    },
+    {
+        name: '详情',
+        url: ('business/ddetail')|UU({id: id|default(app.request.get('id'))})
+    },
+    {
+        name: '动态',
+        url: ('business/dnews')|UU({id: id|default(app.request.get('id'))})
+    },
+    {
+        name: '价格',
+        url: ('business/dprices')|UU({id: id|default(app.request.get('id'))})
+    },
+    {
+        name: '图库',
+        url: ('business/dphotos')|UU({id: id|default(app.request.get('id'))})
+    },
+    {
+        name: '点评',
+        url: ('business/dcomment')|UU({id: id|default(app.request.get('id'))})
+    }
+    
+] %}
+
+{% block result %}
+    {{ core_mobile_global.m_detail_nav({data: nav_data, active: app.request.get('active')|default(0)}) }}
+    <script type="text/javascript">
+        seajs.use(['sm'], function (sm) {
+            $('[data-initial-slide]').swiper();
+        })
+    </script>
+{% endblock result %}

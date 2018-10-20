@@ -1,0 +1,268 @@
+{% extends 'HouseBundle:Topic:extend.html.twig' %}
+{#
+/**
+ * detail : 获取当前ID的详细内容
+ * block_loupan : 获取需要pk的楼盘
+ * category_around : 获取周边的分类
+ * huxingtu ： h获取户型的区位图
+ * huxing ：获取户型图
+ * attr : 获取楼盘的详细属性
+ *traffictu ：获取交通图
+ *peitao ：获取配套图
+ *
+ */
+ #}
+{% block title %}{{detail.name|default('')}}{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{ detail.keywords|default('') }}" />
+<meta name="description" content="{{ detail.abstract|default('') }}" />
+{% endblock key_des%}
+
+{% block css %}
+    {{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/special-1.css')}}
+{% endblock css %}
+
+{% set block_loupan = ('house.topic_arc')|getBlock({ename:'loupan'},{checked: 1, aid: detail.id|default(''), pageSize: 2}) %}
+
+{% set category_around = ('house.category')|getAll({checked: 1, models: 'around', pid: 'neq|0', pageSize: 20}) %}
+
+{% block body %}
+    <div class="w1210" id="body">
+        <div class="banner">
+            <img class="banner_1" src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-1/banner_1.gif'}) -}}" alt="楼盘大pk">
+            <img class="banner_2" src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-1/banner_2.gif'}) -}}" alt="楼盘大pk">
+            <div class="banner_3">
+                <span>{{block_loupan.data[0].name|default('')}}</span> PK <span>{{block_loupan.data[1].name|default('')}}</span>
+            </div>
+        </div>
+        <div class="qianyan">
+            <div class="main">
+                <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-1/qianyan.gif'}) -}}" alt="前言">
+                <div class="text">
+                 {{core_global.substr(detail.abstract|default(''), 150, 1)}}
+                </div>
+            </div>
+        </div>
+        <div class="xuanyan">
+            <div class="main">
+                <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-1/xuanyan.gif'}) -}}" alt="宣言">
+                <div class="text">
+                    <div class="xiangmu">
+                        {% if block_loupan.data is defined %}
+                                {% for item in block_loupan.data  %}
+                                    <div class="{% if loop.index == 1 %}left {% else %}right{% endif %}">
+                                        <h2>{{item.name|default('')}}</h2>
+                                        {# <img class="lazy" data-original="{{assetImg(item.thumb|default('bundles/house/images/nopic.gif'),{type: 2, height: 340, width: 476})}}" alt="{{item.name|default('')}}"> #}
+                                        {{core_global.lazy_img({
+                                            height: 340,
+                                            width : 476,
+                                            src : item.thumb|default(''),
+                                            alt : item.name|default(''),
+                                            type: 2
+                                        })}}
+                                        <p>
+                                            {{core_global.substr(item.content|default(''), 100, 1)}}
+                                        </p>
+                                    </div>
+                                {% endfor %}
+                        {% endif %}
+
+                    </div>
+                    <div class="quwei">
+                        {% if block_loupan.data is defined %}
+                                {% for item in block_loupan.data %}
+                                    {% set huxingtu = ('house.inter_album')|getAll({checked: 1, aid: item.fromid|default(''), cate_album: 4}).data %}
+                                    <div class="{% if loop.index == 1 %}left {% else %}right{% endif %}">
+                                        <h2>区位展示</h2>
+                                        {# <img class="lazy" data-original="{{assetImg(huxingtu1[0].thumb|default('bundles/house/images/nopic.gif'),{type: 2, height: 250, width: 466})}}" alt="{{block_loupan.data[0].name|default('')}}"> #}
+                                        {{core_global.lazy_img({
+                                                height: 250,
+                                                width : 466,
+                                                src : huxingtu[0].thumb|default(''),
+                                                alt :item.name|default(''),
+                                                type: 2
+                                        })}}
+
+                                    </div>
+                                {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="dangan">
+                        {% if block_loupan.data is defined %}
+                                {% for item in block_loupan.data %}
+                                <div class="{% if loop.index == 1 %}left {% else %}right{% endif %}">
+                                    <h2>项目档案</h2>
+                                    <p> <i>{{item.name|default('')}}</i>
+                                        <br>
+                                        参考价格： {{item.dj|default('')}}
+                                        <br>
+                                        在售面积段：{{item.zdmj|default('更新中')}}
+                                        <br>
+                                        项目地址：{{core_global.address({data: item|default(''),  num:30 })}}
+                                        <br>
+                                        交房时间：{{item.jfsj|default('')|date('Y-m-d')}}
+                                        <br>咨询电话：{{item.tel|default('')}}</p>
+                                </div>
+                                {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="huxing">
+                        <img class="title" src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-1/title_1.gif'}) -}}" alt="户型图">
+                        <div class="main">
+                            {% if block_loupan.data is defined %}
+                                    {% for item in block_loupan.data %}
+                                        {% set huxing = ('house.door')|getAll({pageSize: 4, checked: 1, findType: 1, aid: item.fromid|default('')}) %}
+                                        <div class="hx-list {% if loop.index == 1 %}top {% else %}foot{% endif %}">
+                                            {% if huxing.data is defined %}
+                                                    {% for item in huxing.data %}
+                                                        <div class="hx-item">
+                                                            <a href="{{('houses/dplanintro')|U({id: item.fromid|default('')})}}" target="_blank">
+                                                                {{core_global.img({
+                                                                        height: 150,
+                                                                        width : 200,
+                                                                        src : item.thumb|default(''),
+                                                                        alt :item.name|default(''),
+                                                                        type: 2
+                                                                })}}
+                                                                <em>{{item.name|default('')}}</em>
+                                                            </a>
+                                                            <em>
+                                                                {{- house_global.huxing({data: item|default(''), tpl: '%shi%%ting%%wei%%mj%m&sup2;'}) -}}
+                                                            </em>
+                                                        </div>
+
+                                                    {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                            {% endif %}
+                        </div>
+
+                    </div>
+                    <div class="wuye">
+                        <img class="title" src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-1/title_2.gif'}) -}}" alt="物业">
+                        <div class="main">
+                            {% if block_loupan.data is defined %}
+                                    {% for item in block_loupan.data %}
+                                        <div class="top">
+                                            <div class="left">
+                                                {{core_global.lazy_img({
+                                                        width: 385,
+                                                        height: 130,
+                                                        src: item.thumb|default(''),
+                                                        alt: item.name|default(''),
+                                                        type: 2
+                                                })}}
+                                            </div>
+                                            <div class="right">
+                                                <p>物业公司&nbsp;:&nbsp;<span>{{item.wygs|default('')}}</span></p>
+                                                <p>物业费&nbsp;:&nbsp;<span>{{item.wyf|default('')}}</span></p>
+                                                <p>物业地址&nbsp;:&nbsp;<span>{{item.wydz|default('')}}</span></p>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="transport">
+                        <img class="title" src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-1/title_3.gif'}) -}}" alt="交通配套">
+                        <div class="main">
+                            {% if block_loupan.data is defined %}
+                                    {% for item in block_loupan.data %}
+                                        {% set attr = ('house.houses')|getRow({id: item.fromid|default(''), checked: 1, findType: 1}) %}
+                                        {% set traffictu = ('house.inter_album')|getAll({checked: 1, aid: item.fromid|default(''), cate_album: 5}).data %}
+                                        <div class="top">
+                                            <div class="left">
+                                                {{core_global.lazy_img({
+                                                        width: 208,
+                                                        height: 136,
+                                                        src: traffictu[0].thumb|default(''),
+                                                        alt: item.name|default(''),
+                                                        type: 2
+                                                })}}
+                                            </div>
+                                            <div class="right">
+
+                                                <h2>{{item.name|default('')}}交通配套</h2>
+                                                <p>
+                                                    {{core_global.substr(attr.attributes.jtxl.value|default(''), 100, 1)}}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="life">
+                        <img class="title" src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-1/title_4.gif'}) -}}" alt="生活配套">
+                        <div class="main">
+                            {% if block_loupan.data is defined %}
+                                {% for item in block_loupan.data %}
+                                     {% set peitao = ('house.inter_album')|getAll({checked: 1, aid: item.fromid|default(''), cate_album: 7}).data %}
+                                     {% set zhoubian = ('house.houses_arc')|getBlock({ename: 'zhoubian'}, {checked: 1, aid: item.fromid|default('')}) %}
+                                    <div class="top">
+                                        <div class="left">
+                                            {{core_global.lazy_img({
+                                                width: 192,
+                                                height: 260,
+                                                src: peitao[0].thumb|default(''),
+                                                alt: item.name|default(''),
+                                                type: 2
+                                            })}}
+                                        </div>
+                                        <div class="right">
+                                            <h2>{{item.name|default('')}}生活配套</h2>
+
+                                               {% if category_around.data is defined %}
+                                                {% for item1 in category_around.data %}
+                                                    {% if loop.index != 1 %}{% endif %}
+                                                    <p>
+                                                    {% for item2 in zhoubian.data if item2.category|default('') == item1.id|default('') %}
+
+                                                        {% if loop.index == 1 %}
+                                                        {{item1.name|default('')}}
+                                                        ：
+                                                        {% else %}
+                                                        、
+                                                        {% endif %}
+                                                        <a title="{{item2.name|default('')}}" target="_blank" href="{{('around/detail')|U({id: item2.fromid|default('')})}}">{{item2.name|default('')}}</a>
+                                                    {% endfor %}
+                                                    </p>
+                                                {% endfor %}
+                                            {% endif %}
+
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="zonghe">
+            <div class="main">
+                <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-1/zonghe.gif'}) -}}" alt="总结">
+                <div class="text">
+                    {% if block_loupan.data is defined %}
+                        {% for item in block_loupan.data %}
+                            <i>{{item.name|default('')}}</i>
+                            <br>
+                            万锦地产在陆续开发万锦•和平里、万锦•紫园、万锦•红树湾、万锦•香樟树、万锦文创园等众多精品项目，故万锦香樟树楼盘品质略高于锦园项目。户型上更注重于功能性居住设计，舒适度较高。整体区位也略优于锦园，但轨交尚未开通之际，公交线路不如锦园项目丰富。
+                            <br>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <!--查看往期-->
+    </div>
+{% endblock body %}
+
+{% block js %}
+    <script type="text/javascript">
+        seajs.use(['lazyload'],function (lazyload){});
+    </script>
+{% endblock js %}
+

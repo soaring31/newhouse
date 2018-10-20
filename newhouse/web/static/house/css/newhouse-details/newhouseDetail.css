@@ -1,0 +1,1268 @@
+@charset "UTF-8";
+.slogan{
+    width: 100%;
+    /*height: 300px;*/
+    background: #ff8400;
+    position: relative;
+}
+.slogan a{
+    width: 100%;
+    /*height: 100%;*/
+}
+.slogan img{
+    width: 100%;
+    /*height: 100%;*/
+}
+.slogan div{
+    width:120px;
+    height:33px;
+    background:rgba(0,0,0,0.4);
+    border-radius: 5px ;
+    text-align: center;
+    line-height: 33px;
+    position: absolute;
+    top: 30px;
+    right: 126px;
+    color: #fff;
+    font-size:14px;
+    font-family:MicrosoftYaHei;
+    cursor: pointer;
+}
+.header-banner{
+    width: 100%;
+    /*height: 300px;*/
+    overflow: hidden;
+}
+.header-banner-box {
+    width: 100%;
+    /*height: 100%;*/
+    overflow: hidden;
+}
+.close-banner{
+    position: absolute;
+    background: rgba(0,0,0,.4);
+    top: 30px;
+    right: 30px;
+    text-align: center;
+    cursor: pointer;
+    color: #FFF;
+    font-size: 12px;
+    font-family: MicrosoftYaHei;
+    line-height: 19px;
+    padding: 4px 15px;
+    border-radius: 8px;
+}
+html{
+    width: 100%;
+    overflow-x: hidden ;
+}
+.new-Hot-line {
+    cursor: pointer;
+}
+.loupanInfo-tongzhi:hover>i,.loupanInfo-tongzhi:hover>span,.loupanInfo-tongzhi:hover>span>a{
+    color:#FF8400!important;
+}
+
+
+/*主体css 内容容器*/
+.content {
+    width: 1200px;
+    margin: 0 auto;
+    overflow-x: hidden;
+}
+
+.recommend_list li .price {
+    font-size: 10px;
+}
+
+.recommend_list li .price span {
+    font-size: 16px;
+    color: #FF8400;
+}
+
+.house_list li {
+    height: 15px;
+    width: 15px;
+    margin-right: 3px;
+    float: left;
+    margin-bottom: 0;
+}
+
+.house_list li img {
+    height: 100%;
+    width: 100%;
+}
+
+/*本页面公共样式*/
+/*各模块右上角功能样式*/
+.consult {
+    position: absolute;
+    top: 10px;
+    right: 0;
+}
+
+.consult a {
+    color: #333;
+}
+
+.consult div {
+    font-family: MicrosoftYaHei;
+    font-size: 14px;
+    color: #333333;
+    line-height: 30px;
+    display: inline-block;
+}
+
+.consult .consult_input {
+    height: 30px;
+    line-height: 30px;
+    margin-left: 40px;
+    color: #A9A9A9;
+}
+
+.consult .consult_input a {
+    color: #A9A9A9;
+}
+
+.consult_input input {
+    width: 180px;
+    height: 93%;
+    line-height: 30px;
+    padding-left: 10px;
+    border: 1px solid #EFEFEF;
+}
+
+::-webkit-input-placeholder { /* WebKit browsers */
+    color: #A9A9A9;
+}
+
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #A9A9A9;
+}
+
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #A9A9A9;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: #A9A9A9;
+}
+
+.consult_input button {
+    width: 81px;
+    background: #FF8400;
+    border-radius: 0 2px 2px 0;
+    text-align: center;
+    line-height: 30px;
+    border: none;
+    color: #FFF;
+    font-family: MicrosoftYaHei;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+/*查看详情*/
+.view_details {
+    position: absolute;
+    top: 15px;
+    right: 0;
+}
+
+.view_details a {
+    color: #B1B1B1;
+    font-family: MicrosoftYaHei;
+    font-size: 14px;
+}
+
+.view_details a:hover {
+    color: #ff8400;
+}
+
+
+/*基础信息模块*/
+.loupanInfo{
+    padding-top: 20px;
+}
+.loupanInfo-con{
+    width:570px;
+    display: inline-block;
+    margin-right:26px;
+    float: left;
+}
+.loupanInfo-con-info{
+    border-bottom:1px solid #efefef;
+    overflow:hidden;
+}
+.loupanInfo-info-price{
+    height:40px;
+    line-height:40px;
+}
+.loupanInfo-info-price>span{
+    height:40px;
+    font-size:14px;
+    font-family:MicrosoftYaHei-Bold;
+    color:rgba(51,51,51,1);
+    margin-right:14px;
+    vertical-align: bottom;
+}
+.loupanInfo-info-price>span>i{
+    font-size:30px;
+    color:#FF8400;
+    font-style:normal;
+}
+.loupanInfo-info-price>.loupanInfo-tongzhi{
+    line-height:40px;
+    cursor: pointer;
+}
+.loupanInfo-tongzhi{
+    display:inline;
+    cursor:pointer;
+    position:relative;
+}
+/*交房时间*/
+.room_time{position:absolute;
+    width:569px;
+    height:auto;
+    z-index:999;
+    left:20px;
+    display:none;
+}
+.top_sanjiao{background:transparent;text-align:center;}
+.mydiv
+{
+    display:inline-block;
+    height: 0;
+    width: 0;
+    border-left: 10px solid  transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #f7f7f7;
+}
+.room_body{
+    background:#ffffff;
+    /*box-shadow:10px 16px 51px rgba(0,0,0,0.5);*/
+}
+.top_room{height:43px;background:#f7f7f7;line-height:43px;text-indent:20px;font-size:18px;font-weight:bold;
+    color:rgba(51,51,51,1);
+}
+.room_body>p{margin-right:0!important;}
+.room_list{height:40px;line-height:40px;border-top:1px solid #eee;font-size:14px;overflow:hidden;text-indent:20px;}
+.room_list.co{font-weight:bold;
+    color:rgba(255,132,0,1);}
+.room_list.cc{background:#fcfcfc;}
+.room_list>i{display:inline-block;float:left;}
+.room_list>i:first-child{width:175px;border-right:1px solid #eee;}
+.room_list>i:last-child{width:390px;}
+.room_list.a{text-decoration:underline;display:block;color:rgba(255,132,0,1);}
+.tag{
+    display: inline-block;
+    width: 42px;
+    height: 23px;
+    border-radius: 3px;
+    color: #fff;
+    font-size: 14px;
+    margin-left: 0px;
+    text-align: center;
+    line-height: 23px;
+    position: relative;
+    top: -4px;
+    font-weight: normal;
+}
+.tag.on-sale {
+    background: #f60;
+}
+.tag.dis-sale {
+    background: #aaa;
+}
+.tag.on-sale-309 {
+    background-color: #ff8400;
+}
+.tag.on-sale-114 {
+    background-color: #82C925;
+}
+.tag.on-sale-115 {
+    background-color: #1cbaff;
+}
+.tag.on-sale-116 {
+    background-color: #f60;
+}
+.tag.on-sale-117 {
+    background-color: #ce9b86;
+}
+.tag.on-sale-118 {
+    background-color: #878787;
+}
+.tag.on-sale-159 {
+    background-color: #ff8400;
+}
+/*交房时间end*/
+.loupanInfo-info-suojin span.huxing-suojin{
+    display: block;
+    margin-left: -12px;
+}
+.loupanInfo-tongzhi>i{
+    display:inline-block;
+    width:12px;
+    height:20px;
+    color: #CCCCCC;
+    margin-right:8px;
+    font-style:normal;
+}
+.loupanInfo-tongzhi>span{
+    height:16px;
+    font-size:12px;
+    font-family:MicrosoftYaHei;
+    color:rgba(153,153,153,1);
+    line-height:17px;
+    vertical-align: text-top;
+}
+.loupanInfo-info-youhui{
+    margin-top:13px;
+    line-height:19px;
+}
+.loupanInfo-info-youhui>span{
+    font-size:14px;
+    font-family:MicrosoftYaHei-Bold;
+    color:rgba(51,51,51,1);
+    margin-right:14px;
+}
+.loupanInfo-info-youhui>.loupanInfo-tongzhi{
+    line-height:19px;
+    cursor: pointer;
+}
+.loupanInfo-info-phone{
+    width:570px;
+    height:70px;
+    background:rgba(255,255,255,1);
+    box-shadow: 0px 4px 20px 0px rgba(255,132,0,0.2) ;
+    border-radius: 1px ;
+    overflow: hidden;
+    margin-top: 20px;
+}
+.loupanInfo-info-phone>span{
+    display: inline-block;
+    height: 100%;
+    width: 56px;
+    font-size: 30px;
+    line-height: 70px;
+    text-align: center;
+    vertical-align: bottom;
+    color: #ff8400;
+}
+.loupanInfo-info-phone div{
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    background:linear-gradient(135deg,rgba(255,132,0,1),rgba(255,65,0,1));
+    box-shadow: 0px 4px 20px 0px rgba(255,132,0,0.2);
+    text-align:center;
+    color: #fff;
+}
+.loupanInfo-info-phone>div span{
+    display:inline-block;
+    font-size:26px;
+    font-family:MicrosoftYaHei-Bold;
+    line-height:35px;
+    margin-top:10px;
+    font-weight: bold;
+    letter-spacing: 4px;
+}
+.loupanInfo-info-phone>div>p{
+    font-size:12px;
+    font-family:MicrosoftYaHei;
+    line-height:16px;
+    letter-spacing: 4px;
+}
+.loupanInfo-info-tag{
+    margin-top:31px;
+}
+.loupanInfo-info-tag>span{
+    background:rgba(239,239,239,1);
+    border-radius: 2px ;
+    font-size:12px;
+    font-family:PingFangSC-Regular;
+    color:#656565;
+    margin-right:8px;
+    padding: 3px 7px
+}
+.loupanInfo-info{
+    width:528px;
+    height:19px;
+    line-height:19px;
+    font-size:14px;
+    color:#333333;
+    margin-top:14px;
+    overflow: hidden;
+}
+.loupanInfo-info>span{
+    /*font-weight:bold;*/
+    float:left;
+    font-size: 14px;
+}
+.loupanInfo-info>p{
+    float: left;
+    overflow: hidden;
+    max-width: 370px;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+li.loupanInfo-info-suojin{
+
+}
+.loupanInfo-info>a{
+    color:#FF8400;
+    display: block;
+    float:left;
+    margin-left: 4px;
+}
+.loupanInfo-info-dizhi{
+    margin-top:14px;
+}
+.loupanInfo-info-dizhi>p{
+    width:auto;
+}
+.loupanInfo-info-kaipan{
+    overflow:hidden;
+}
+.loupanInfo-info-kaipan>.loupanInfo-tongzhi{
+    line-height:19px;
+}
+.loupanInfo-info-kaipan>.loupanInfo-tongzhi>span{
+    vertical-align: text-top;
+}
+.loupanInfo-info-shijian{
+    margin-right:15px;
+}
+.loupanInfo-info-kaipan>p{
+    width:185px;
+}
+li.loupanInfo-time p{
+    margin-right: 15px;
+}
+.loupanInfo-info-kaipan>p>span{
+    width:55px;
+    float:right;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+.loupanInfo-shijian>i{
+    width:16px;
+    height:16px;
+}
+.loupanInfo-info-more{
+    width:100%;
+    height:19px;
+    position:relative;
+    margin:20px 0;
+}
+.loupanInfo-info-more>a{
+    float:left;
+    height:19px;
+    font-size:14px;
+    font-family:MicrosoftYaHei-Bold;
+    color:rgba(255,132,0,1);
+    line-height:19px;
+}
+.loupanInfo-info-more>div{
+
+    float: right;
+}
+.loupanInfo-info-more>div i{
+    color: #ccc;
+    margin-left: 13px;
+    float: left;
+    display: block;
+    margin-right: 8px;
+}
+.loupanInfo-info-more>div span{
+    font-size:13px;
+    font-family:MicrosoftYaHei;
+    color:rgba(153,153,153,1);
+}
+.loupanInfo-con-people{
+    margin-top:20px;
+}
+.loupanInfo-con-people h5{
+    display:inline-block;
+    height:19px;
+    font-size:14px;
+    font-family:MicrosoftYaHei-Bold;
+    color:rgba(51,51,51,1);
+    line-height:19px;
+    vertical-align: top;
+}
+.loupanInfo-con-people>div{
+    display:inline-block;
+    margin-right:20px;
+}
+.loupanInfo-con-people .pic{
+    width:40px;
+    height:40px;
+    border-radius: 50%;
+}
+.loupanInfo-con-people .name{
+    /*width:40px;*/
+    height:16px;
+    font-size:12px;
+    font-family:MicrosoftYaHei;
+    color:rgba(51,51,51,1);
+    line-height:16px;
+    text-align: center;
+    display: block;
+    margin-top: 4px;
+}
+.loupanInfo-pic{
+    display: inline-block
+}
+.loupanInfo-pic-big{
+    width:600px;
+    height:360px;
+    margin-bottom:20px;
+    overflow: hidden;
+}
+.loupanInfo-pic-big ul{
+    width: calc(600px*6);
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+.loupanInfo-pic-big li{
+    width:600px;
+    height:360px;
+    background: darkcyan;
+    float: left;
+}
+.loupanInfo-pic-small{
+    width:600px;
+    margin-left: -5px;
+}
+.loupanInfo-pic-small .jian{
+    width:27px;
+    height:80px;
+    line-height:80px;
+    text-align:center;
+    display: inline-block;
+    background:rgba(239,239,239,1);
+    float:left;
+    margin-left: 5px;
+    cursor: pointer;
+}
+.loupanInfo-pic-small>div{
+    max-width: calc(107px*5);
+    overflow: hidden;
+    float: left;
+    padding-left: 5px;
+}
+.loupanInfo-pic-small ul{
+    width: calc(108px*6);
+    position: relative;
+}
+.loupanInfo-pic-small li{
+    float:left;
+    width:101px;
+    height:79px;
+    background:blue;
+    position:relative;
+    margin-right:6px;
+}
+.loupanInfo-pic-small li.active{
+    border:1px solid #FF8400;
+}
+.loupanInfo-pic-small li div{
+    width:101px;
+    height:23px;
+    line-height:23px;
+    text-align:center;
+    background:rgba(0,0,0,0.6);
+    font-size:12px;
+    font-family:MicrosoftYaHei;
+    color:rgba(255,255,255,1);
+    position:absolute;
+    left:0;
+    bottom:0;
+}
+
+/*楼栋信息*/
+.loudong{
+    overflow: hidden;
+}
+.loudong-left{
+    float:left;
+}
+.loudong-left ul{
+    margin-top:30px;
+    margin-bottom:20px;
+    overflow:hidden;
+}
+.loudong-left li{
+    float:left;
+    width:80px;
+    height:30px;
+    line-height:30px;
+    border-radius: 2px ;
+    text-align: center;
+    margin-right:10px;
+}
+.loudong-left-ing{
+    background:rgba(255,65,0,1);
+}
+.loudong-left-wait{
+    background:rgba(0,154,255,1);
+}
+.loudong-left-end{
+    background:rgba(204,204,204,1);
+}
+.loudong-left i{
+    display:inline-block;
+    width:14px;
+    height:14px;
+    background:rgba(255,255,255,1);
+    vertical-align: middle;
+}
+.loudong-left span{
+    /*margin-left:10px;*/
+    font-style:normal;
+    width:28px;
+    font-size:14px;
+    font-family:MicrosoftYaHei-Bold;
+    color:rgba(255,255,255,1);
+}
+.loudong-left>div{
+    width:680px;
+    height:370px;
+    background: blue;
+}
+.loudong-right{
+    float:left;
+    margin-left:30px;
+}
+.loudong-right .tab{
+    margin:30px 0;
+    overflow:hidden;
+}
+.loudong-right .tab li{
+    float:left;
+    width:90px;
+    height:50px;
+    line-height:50px;
+    background:rgba(248,248,248,1);
+    text-align: center;
+    color:rgba(51,51,51,1);
+}
+.loudong-right .tab li.active{
+    background:rgba(255,65,0,1);
+    font-size:14px;
+    font-family:MicrosoftYaHei-Bold;
+    color:rgba(255,255,255,1);
+}
+.loudong-right-info{
+    width:490px;
+    word-wrap:break-word;
+    word-break: break-all;
+}
+.loudong-right-info span{
+    display:inline-block;
+    width:240px;
+    height:19px;
+    font-size:14px;
+    font-family:MicrosoftYaHei;
+    color:rgba(51,51,51,1);
+    line-height:19px;
+    margin-bottom:20px;
+}
+.loudong-right h5{
+    height:21px;
+    font-size:16px;
+    font-family:MicrosoftYaHei-Bold;
+    color:rgba(51,51,51,1);
+    line-height:21px;
+    margin-top:10px;
+    margin-bottom: 20px;
+}
+.loudong-right-huxing{
+    overflow:auto;
+    width:92%;
+    height:172px;
+}
+.loudong-right-huxing li{
+    margin-bottom: 20px;
+    overflow:hidden;
+}
+.loudong-right-huxing li>div{
+    float:left;
+    width:120px;
+    height:19px;
+    font-size:14px;
+    font-family:MicrosoftYaHei;
+    color:rgba(51,51,51,1);
+    line-height:19px;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.loudong-right-huxing li>.type {
+    width: 50px;
+}
+
+/*动态咨询*/
+.dtzx ul{
+    overflow: hidden;
+}
+.dtzx li{
+    width: 585px;
+    overflow: hidden;
+    float: left;
+    padding-bottom: 20px;
+    margin-top: 20px;
+}
+.dtzx li.border-bottom{
+    border-bottom: 1px solid #EEE;
+}
+.dtzx li>span{
+    padding: 0 8px;
+    font-size:12px;
+    font-family: MicrosoftYaHei;
+    color: #999999;
+    float: left;
+    border: 1px solid #DDDDDD;
+    position: relative;
+    top: 3px;
+}
+.dtzx li>div{
+    width: 528px;
+    float: right;
+
+}
+.dtzx li a{
+    width: 100%;
+    display: block;
+}
+.dtzx li h3{
+    margin-bottom: 10px;
+    font-size:16px;
+    font-family:MicrosoftYaHei-Bold;
+    color:rgba(51,51,51,1);
+
+}
+.dtzx li p{
+    width: 100%;
+    height: 32px;
+    font-size:12px;
+    font-family:MicrosoftYaHei;
+    color:rgba(153,153,153,1);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+
+
+/*楼盘--户型*/
+
+.huxing {
+    width: 1250px;
+    margin-top: 20px;
+}
+.huxing li {
+    width: 280px;
+    display: inline-block;
+    margin-right: 20px;
+}
+.hx_img {
+    width: 100%;
+    height: 190px;
+    position: relative;
+    border: 1px solid #ddd;
+}
+.hx_img div {
+    height: 30px;
+    line-height: 30px;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.50);
+    font-family: MicrosoftYaHei;
+    font-size: 14px;
+    color: #FFFFFF;
+    position: absolute;
+    bottom: 0;
+    padding-left: 12px;
+}
+.hx_text {
+    text-align: left;
+    padding-top: 17px;
+    position: relative;
+}
+.hx_text h1 {
+    font-family: MicrosoftYaHei-Bold;
+    font-size: 16px;
+    color: #292929;
+    height: 29px;
+}
+.hx_area {
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #333333;
+    margin: 5px 0;
+}
+.hx_price {
+    font-size: 14px;
+    color: #333333;
+}
+.hx_price span {
+    font-family: MicrosoftYaHei;
+    font-size: 10px;
+    color: #FF8400;
+}
+.hx_price b {
+    font-size: 16px;
+}
+.hx_text .tag {
+    font-family: MicrosoftYaHei-Bold;
+    font-size: 12px;
+    position: absolute;
+    right: 0;
+    width: 30px;
+    height: 18px;
+    line-height: 16px;
+    text-align: center;
+}
+.tag_FF8400 {
+    border: 1px solid #FF8400;
+    color: #FF8400;
+}
+.tag_14B218 {
+    border: 1px solid #14B218;
+    color: #14B218;
+}
+
+/*相册*/
+.photo_box {
+    margin-top: 30px;
+    overflow: hidden;
+    width: 1250px;
+}
+.photo_box li {
+    width: 280px;
+    display: inline-block;
+    margin-right: 27px;
+    margin-bottom: 40px;
+}
+.photo_box li .phone_img {
+    width: 100%;
+    height: 190px;
+    margin-bottom: 14px;
+    position: relative;
+    border: 1px solid #ddd;
+}
+.photo_box li p {
+    font-family: MicrosoftYaHei-Bold;
+    font-size: 16px;
+    color: #292929;
+    letter-spacing: 0;
+    text-align: left;
+    line-height: 21px;
+}
+
+/*周边配套 map*/
+
+.map_text {
+    font-family: MicrosoftYaHei;
+    font-size: 14px;
+    color: #333333;
+    line-height: 20px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+.map_text a {
+    color: #FF8400;
+}
+.consult.map_inp {
+    position: inherit;
+    margin-top: 20px;
+}
+.consult a {
+    margin-left: 10px;
+}
+
+/*全网点评*/
+.appraise_tag {
+    margin-top: 31px;
+    overflow: hidden;
+}
+.appraise_tag span {
+    background: #FFF5EB;
+    border-radius: 100px;
+    padding: 11px 20px;
+    font-size: 14px;
+    color: #FF8400;
+    margin-right: 20px;
+    margin-bottom: 10px;
+    float: left;
+}
+.appraise {
+    margin-top: 24px;
+}
+.appraise li {
+    width: 100%;
+    border-bottom: 1px solid #efefef;
+}
+.appraise li > div {
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 10px;
+    margin-top: 15px;
+}
+.appraise li > div .user_name {
+    display: inline-block;
+    float: left;
+    font-family: PingFang-SC-Medium;
+    font-size: 18px;
+    color: #292929;
+}
+.appraise li > div .creat_time {
+    display: inline-block;
+    float: right;
+    opacity: 0.6;
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    color: #A9A9A9;
+}
+.appraise li > p {
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #333333;
+    letter-spacing: 0;
+    line-height: 24px;
+    margin-bottom: 25px;
+}
+.appraise li > p i {
+    color: #FF8400;
+    cursor: pointer;
+}
+.evaluate-type{
+    height: 40px;
+    line-height: 40px;
+    width: 100%;
+    margin-top: 27px;
+}
+.evaluate-type li{
+    padding:0 20px;
+    background:rgba(255,245,235,1);
+    border-radius: 100px;
+    float: left;
+    font-size: 14px;
+    color:#FF8400;
+    margin-right: 20px;
+}
+
+/*浮动导航开始*/
+#fixedNavBox {
+    width: 100%;
+    height: 100px;
+    position: fixed;
+    top: 0;
+    display: none;
+    box-shadow: 0 2px 4px #ccc;
+    z-index: 10;
+    background: #FFFFFF;
+}
+.bg {
+    background: #ff8400;
+    color: #FFFFFF !important;
+    font-weight: bold;
+    border-radius: 3px;
+}
+.fixed_nav_box .nav_center {
+    height: 60px;
+    width: 100%;
+    background: #FF8400;
+}
+.fixed_nav_box .describe, .nav_box {
+    height: 21px;
+    width: 1200px;
+    margin: 0 auto;
+
+}
+.describe .left {
+    height: 60px;
+    float: left;
+    padding: 20px 0 19px 0;
+}
+.fixed_nav_box .describe span, .introduce li {
+    font-size: 16px;
+    color: #FFFFFF;
+    font-weight: bold;
+    float: left;
+}
+.introduce {
+    width: 204px;
+    height: 24px;
+    float: right;
+}
+.introduce li {
+    margin-right: 20px;
+}
+.describe .agent {
+    float: right;
+    padding: 20px 0 19px 0;
+    height: 21px;
+}
+.describe .agent li {
+    float: left;
+    font-size: 14px;
+    color: #FFFFFF;
+    margin-right: 10px;
+    font-weight: bold;
+}
+.describe .agent li p {
+    float: left;
+}
+.nav_box {
+    padding-top: 10px;
+    height: 40px;
+    background: #FFFFFF;
+}
+.nav_box a {
+    height: 26px;
+    padding: 3px 7px 4px 7px;
+    margin-right: 26px;
+    font-size: 14px;
+    color: #333333;
+}
+.nav_center .describe .left .sell_state {
+    color: #FFF;
+    border: 1px solid #fff;
+    position: relative;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+.nav_center .describe .left .loupan_pos {
+    height: 24px;
+    line-height: 24px;
+    color: #FFFFFF;
+    margin-left: 6px;
+}
+.agent li.phone span.pic {
+    height: 31px;
+    width: 31px;
+    /*background: url(../../images/page/detail/phone.png) no-repeat;
+    background-size: 100% 100%;*/
+    display: block;
+    margin-top: -5px;
+    position: relative;
+}
+.iconfont.icon-dianhua {
+    font-size: 31px;
+    position: absolute;
+    top: -7px
+}
+
+/*浮动导航结束*/
+.dynamic-title {
+    width: 100%;
+    overflow: hidden;
+    height: 37px;
+}
+.dynamic-logo {
+    position: relative;
+    width: 37px;
+    height: 37px;
+    margin-left: 45px;
+    float: left;
+}
+.iconfont.icon-dongtai {
+    font-size: 37px;
+    position: absolute;
+    top: -7px;
+    color: #FF8400;
+}
+.loupan-name {
+    float: left;
+    height: 37px;
+    margin-left: 17px;
+    line-height: 37px;
+    font-size: 16px;
+    color: #333333;
+}
+.new-img {
+    width: 38px;
+    height: 16px;
+    float: left;
+    margin-top: 11px;
+    margin-left: 8px;
+    position: relative;
+    top: 8px;
+}
+.iconfont.icon-new {
+    font-size: 38px;
+    position: absolute;
+    top: -30px;
+    color: #FF8400
+}
+.dynamic-box{
+    margin-top: 30px;
+}
+.dynamic-box .line {
+    display: inline-block;
+    width: 1px;
+    height: 26px;
+    background: #ff8400;
+    margin-left: 63px;
+    margin-top: 6px;
+}
+.dynamic_list, .dynamic_list li {
+    width: 100%;
+    overflow: hidden;
+}
+.dynamic_list li {
+    margin-top: 6px;
+}
+.dynamic_list li .time {
+    float: left;
+    font-size: 14px;
+    color: #333333;
+    line-height: 22px;
+    font-weight: bold;
+}
+.dynamic_list li .dynamic {
+    color: #333333;
+    font-size: 14px;
+    box-sizing: content-box;
+    float: left;
+    border-left: 1px solid #ff8400;
+    padding: 0 0 30px 28px;
+    position: relative;
+    text-align: left;
+    margin-left: 22px;
+    width: 90%;
+}
+.dynamic_list li .dynamic:before {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 15px;
+    height: 25px;
+    border-radius: 50%;
+    background: #fff;
+    left: -7.5px;
+}
+.dynamic_list li .dynamic:after {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #ff8400;
+    top: 2px;
+    left: -7.7px;
+}
+.dynamic_list li .dynamic .dynamic_p {
+    line-height: 22px;
+    font-size: 14px;
+    color: #FF8400;
+}
+.dynamic_list li .dynamic .dynamic_dsc {
+    font-size: 14px;
+    line-height: 25px;
+    color: #333333;
+    margin-top: 5px;
+}
+.consult.time {
+    position: inherit;
+    margin-left: 110px;
+}
+.time_btn {
+    text-align: center;
+    background: #F6F6F6;
+    border-radius: 2px;
+    font-family: MicrosoftYaHei;
+    font-size: 14px;
+    width: 100%;
+    height: 46px;
+    line-height: 46px;
+    margin-top: 30px;
+}
+.dianping_btn {
+    text-align: center;
+    background: #F6F6F6;
+    border-radius: 2px;
+    font-family: MicrosoftYaHei;
+    font-size: 14px;
+    width: 100%;
+    height: 46px;
+    line-height: 46px;
+}
+.time_btn a, .dianping_btn a {
+    color: #333333;
+}
+
+
+.fjzs-data{
+    width: 100%;
+    height: 100px;
+    background: rgba(251,251,251,1);
+    border-radius: 2px;
+    margin-top: 30px;
+}
+.fjzs-data li.border{
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+    width: 398px;
+}
+.fjzs-data li{
+    text-align: center;
+    width: 400px;
+    float: left;
+}
+.fjzs-data li p{
+    margin-top: 27px;
+    margin-bottom: 12px;
+    font-size:12px;
+    font-family:MicrosoftYaHei;
+    color:rgba(153,153,153,1);
+}
+.fjzs-data li div{
+    font-size:14px;
+    font-family:MicrosoftYaHei-Bold;
+    color:#333;
+}
+.fjzs-data li div span{
+    color: #ff8400;
+    margin: 0 4px 0 4px;
+}
+
+div.loupan_name {
+    height: 37px;
+    line-height: 37px;
+    font-size: 16px;
+    color: #333333;
+    float: left;
+    margin-left: 9px;
+    font-weight: bold;
+}
+
+.item_title a span ,.view_details a span ,.consult_input a span ,.view_details a span{
+    display: block;
+    float: right;
+    margin-top: -1px;
+}
+.detail-phone{
+    width: 24px;
+    height: 23px;
+    display: inline-block;
+    background: url("../../images/house/detail-phone.png") no-repeat;
+    background-size: 100% 100%;
+    margin-right: 14px;
+    margin-bottom: -2px;
+}
+.loupanInfo-info-phone div.detail-phone-box{
+    margin: 0 auto;
+    height: 47px;
+    width: auto;
+}

@@ -1,0 +1,193 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+{% set aid = app.request.get('_aid') %}
+{% set usertype = app.request.get('usertype') %}
+
+  
+{% block mainMenu %}
+    {# {{ parent() }} #}
+{#     {% if usertype == 15 %}
+    {{ core_manage.jump({ 
+        url: ('mmembers/mcheckextract')|U, 
+        title:  '佣金提取审核',
+        class: action == 'mcheckextract' ? 'on' : '',
+    }) }}
+    {% endif %} #}
+{% endblock %}
+{% block mainleft %}
+{% set cateUser = ('db.mem_types')|getAll({allow:'neq|0',findType:1}) %}
+
+  <section class="main-left" data-part=".main-right" data-target=".main-through">
+        <div data-level="top" class="level1">
+            {% for vo in cateUser.data %}
+              <a data-level="1"  href="{{(action)|U({ _form_id: vo.form_id, usertype: vo.id })}}"  data-role="jump">{{ vo.name }}</a>
+            {% endfor %}
+        </div>
+</section>
+{% endblock mainleft %}
+{% block tableMain %}
+{% set search_opt = usertype ? { aid: usertype }:{} %}
+{% set utypes = ('db.mem_types')|getCol('id', { allow:'neq|0' }) %}   
+{{ core_manage.filter([
+    {
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增会员'
+    },
+    {
+        method: 'selectFormField',
+        title: '审核',
+        form: 'checked',
+        field: 'checked',
+    },
+    {
+        method: 'selectCate',
+        title: '会员组',
+        field: 'groupid',
+        data: ('db.mem_group')|getAll({pageSize: 20, aid: 'in|' ~ utypes|join(',')}|merge(search_opt)).data|default('')
+    },
+    {
+        method: 'search',
+        field: 'name',
+        title: '请搜索ID/用户名/电话/邮箱',
+    }
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ "/show")|U() }}',
+        submitUrl : '{{ (action ~ "/save")|U }}',
+        deleteUrl : '{{ (action ~ "/delete")|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+           usertype: '{{usertype}}',
+           _aid: '{{ aid }}'
+        }
+    }">
+   
+    {#  {% if data1 is defined %}
+        {% for item1 in data1 %}
+           {{ dump(item1) }}
+        {% endfor %}
+     {% endif %} #}
+
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                  <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="50" data-role="sort" data-sort="id" class="sort">ID</th>
+                    <th   data-role="sort" data-sort="username" class="sort">用户名</th>
+                    {% if usertype==3 or usertype == 4 %}
+
+                    <th  width="150">公司名称</th>
+                    {% endif %}
+                    <th width="100">会员组</th>
+                    <th width="100">昵称</th>
+                    <th width="120">手机</th>
+                    {% if usertype == 17  %}
+                    <th width="50" class="tac">经纪人</th>
+                    {% endif %}
+                    <th width="80" data-role="sort" data-sort="create_time" class="sort">注册日期</th>
+                    <th width="80" data-role="sort" data-sort="logintime" class="sort">最后登录</th>
+                    <th width="50">审核</th>
+                    <th width="320" class="tac">操作</th>
+                </tr>
+                {% if ident.info.data is defined and ident.info.pageCount|default('') != 0 %}
+                {% for k, vo in ident.info.data %}
+                {% set vo1 = vo.attributes %}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td>{{ vo.id }}</td>
+                    <td class="tov" title="{{ vo.username|default('') }}">{{ vo.username|default('') }}</td>
+                    {% if usertype == 3 or usertype == 4 %}
+
+                    <td >{{- core_global.attr({ name: "company", id: vo.id|default('') }) -}}</td>
+                    {% endif %}
+                    {% set sid = app.request.get('pageIndex') %}
+                    <td><a data-role="show" href="{{(controller ~ '/msetmemgroup')|U({uid: vo.id})}}">设置</a></td>
+                   
+                    <td>{{ ('db.userinfo')|getOne('nicename', { uid: vo.id })}}</td>
+                    <td><span data-role="itemEdit" data-name="tel" class="edit">{{ vo.tel|default('-') }}</span></td>
+                    {% if usertype == 17 %}
+                    <td width="100"  class="tac"><a title="{{vo1.company.value|default(vo.username)}}的旗下经纪人" data-role="show" href="{{ (controller ~ '/mnexusarc')|U({block_models: 'nexus_arc', aid:  vo.id, models: models,company:vo1.company.value|default('')}) }}">[{{ core_global.count({ models: 'nexus_arc', sql_opt: { aid: vo.id } })|default(0) }}]
+
+                   </a></td>
+                    {% endif %}
+                    <td>{{ vo.create_time|date('Y-m-d') }}</td>
+                    <td>{% if vo.logintime %}{{ vo.logintime|date('Y-m-d') }}{% else %}未登录{% endif %}</td>
+                    <td>{{ core_global.formField({value: vo.checked}) }} </td>
+                    <td class="tar pr10">
+                        {% set userinfoid = ('db.userinfo')|getOne( 'id',{ uid: vo.id }) %}
+                        {% set typesid = ('db.userinfo')|getOne('usertype',{ uid: vo.id }) %}
+                        {% set form_id = ('db.mem_types')|getOne('form_id',{ id:typesid })|default(15) %} 
+                        {{ core_manage.show({
+                            url: ('muserinfo/show')|U({_form_id: form_id, _id: userinfoid}),
+                            ico: 'font-ico-nr mr5',
+                            title: '修改信息',
+                        }) }}
+                        {{ core_manage.submit({
+                            url: ('mmembersmanage/resetpwd')|U({_id: vo.id}),
+                            ico: 'font-ico-set mr5',
+                            title: '重置密码',
+                            'data-confirm': '确定要重置吗？',
+                        }) }}
+                        {{ core_manage.submit({
+                            url: ('mmembersmanage/unlock')|U({_id: vo.id}),
+                            ico: 'font-ico-file mr5',
+                            title: '解锁',
+                            'data-confirm': '确定要解锁吗？',
+                        }) }}
+                        {{ core_manage.delete() }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="12" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'checked',
+        title: '审核',
+    },
+    {
+        method: 'submit',
+        title: '加入黑名单',
+        params: {
+            status: 0, 
+            _form_id: 360
+        },
+        class: 'fz12',
+        attr: {
+            'data-modal-opt': {
+                text: '请输入加入黑名单的原因', 
+                field: 'remark'
+            }
+        }
+    }
+]) }}
+{% endblock %}
+
+{% block promptUl %}
+{# 提示说明 #}
+<p>
+    前台经纪人显示只会显示服务区域在当前分站区域内的经纪人<br>
+    解锁: 用户输错密码到一定次数, 则锁定, 管理员可直接解锁
+</p>
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+

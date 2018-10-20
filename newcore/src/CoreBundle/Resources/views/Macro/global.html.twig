@@ -1,0 +1,2786 @@
+{#
+/**
+* @description cgb核心宏文件
+*/
+#}
+{# 调用说明开始 #}
+{# {% import "CoreBundle:Macro:global.html.twig" as core_global %} #}
+{# 调用说明结束 #}
+
+{#
+/**
+ * @method mconfig(o)
+ * @description 获取配置属性，系统设置里面的部分配置性信息，仅限保存在mconfig模型中的数据
+ * @param {String} o.name - 标识名称
+ * @param {String} o.ename - 所属表单名称
+ * @param {String} o.default - 默认值
+ * @param {String} o.tpl=%value% - 模板
+ *
+ * @其它 #
+ *
+ * #### 调用
+ *
+ * ```twig
+ * {{- core_global.mconfig({name: 'hostname', ename: 'mwebset', tpl: '<div class="title">%value%</div>'}) -}}
+ * ```
+ * #### 生成
+ * ```html
+ * <div class="title">08CMS房产门户系统</div>
+ * ```
+ */
+ #}
+{%- macro mconfig(o) -%}
+{% set opt = {
+    default: '',
+    tpl: '%value%',
+    ename: '',
+    name: ''
+}|merge(o) %}
+{% spaceless %}
+    {{- opt.tpl|replace({
+        '%value%': (opt.ename)|getMconfig(opt.name).value|default(opt.default)
+    })|raw -}}
+{% endspaceless %}
+{%- endmacro mconfig -%}
+{#
+/**
+ * @method mconfigtostring
+ * @description 配置属性判断转化字符串使用 (此方式是为了避免获取过来的数值为空的时候使用),一般是开关形式的数据使用
+ * @param {String} o.name - 必填 标识名称
+ * @param {String} o.ename - 必填 所属表单名称
+ * @param {Number} o.default=0 默认值
+ * @param {String} o.tpl=%value% - 模板
+ *
+ * @example 调用
+ * ```twig
+ * {% if core_global.mconfigtostring('indexnewsmodule').__toString == 1 %}
+ * xxxxxx
+ * {% endif %}
+ * ```
+ */
+ #}
+ {%- macro mconfigtostring(o) -%}
+    {{ _self.mconfig(o)|default(0) }}
+ {%- endmacro mconfigtostring -%}
+
+{#
+/**
+ * @method mconfigtreplace(o)
+ * @description 配置项数据调用，内嵌配置项数据动态调用替换(前提条件是在调用该组数据的地方已经使用了该方法，不认在后台设置中写了替换钩子也不会替换的)
+ * @param {Object} o - 配置
+ * @param {String} o.name - **必填** 标识名称
+ * @param {String} o.tpl=%value% - 模板
+ * @param {String} o.replace - 替换值，仅限获取当前网站配置表里面的信息，需替换的字段标识，多个使用`,`间隔
+ * @示例 调用
+ * @example 调用
+ * ```twig
+ * {{- core_global.mconfigtreplace({name: 'fenxiao2guide', replace: 'sellrate,sellpoeplenum,sellunnum,selltime'}) -}}
+ * ```
+ */
+ #}
+ {%- macro mconfigtreplace(o) -%}
+{% spaceless %}
+    {% set opt = {
+        tpl: '%value%',
+        replace: '',
+    }|merge(o) %}
+
+    {% set replace_value = {} %}
+    {# 字段值替换 #}
+    {% if opt.replace %}
+        {% for item in opt.replace|split(',') %}
+            {% set replace_value = {('%' ~ item ~ '%'): _self.mconfig({name: item, ename: 'msell'}) }|merge(replace_value|default({})) %}
+        {% endfor %}
+    {% endif %}
+    {{
+        opt.tpl|replace({
+            '%value%': _self.mconfig(opt)
+        })|replace(replace_value)|raw
+    }}
+{% endspaceless %}
+ {%- endmacro -%}
+{#
+/**
+ * @method count(o)
+ * @description 获取总数量
+ * @param {Object} o 配置
+ * @param {String} o.models - 数据模型
+ * @param {String} [o.service=house] - 数据模型服务
+ * @param {Object} [o.sql_opt={}] - 筛选条件
+ * @param {String} [o.tpl=%value%] - 模板
+ *
+ * @example 调用 (房产系统已审核的新房数量)
+ *
+ * ```twig
+ * {{- core_global.count({models: 'houses', service: 'house', sql_opt: {checked: 1, type: 0}}) -}}
+ * ```
+ */
+ #}
+ {%- macro count(o) -%}
+{% spaceless %}
+    {% set opt = {
+        tpl: '%value%',
+        service: 'house',
+        sql_opt: {},
+        models: ''
+    }|merge(o) %}
+
+    {{- opt.tpl|replace({
+        '%value%': (opt.service ~ '.' ~ opt.models)|getCount(opt.sql_opt)
+    })|raw -}}
+{% endspaceless %}
+{%- endmacro count -%}
+
+{#
+/**
+ * @method timeformat(o)
+ * @description 时间差格式化
+ * @param {String} o.time 时间
+ * @param {String} o.tpl=%time% 模板
+ *
+ * @example 调用
+ *
+ * ```twig
+ * {{ core_global.timeformat({
+ * 		time: '2010-10-10',
+ * 		tpl: '<span>%time%</span>' （可不填）
+ * }) }}
+ * ```
+ * 生成
+ * ```html
+ * 10分钟前
+ * ```
+ */
+ #}
+{% macro timeformat(o) %}
+	{% set tpl_time = ('now')|date('U') - o.time|default(0)|date('U') %}
+	{# {% if tpl_time < 0 %}
+		{% set info = '时间有误' %}
+	{% elseif tpl_time < 60 %}
+		{% set info = '才刚刚' %}
+	{% elseif tpl_time < 1800 %}
+		{% set info = (tpl_time / 60)|round(0, 'floor') ~ '分钟前' %}
+	{% elseif tpl_time < 3600 %}
+		{% set info =  '半小时前' %}
+	{% elseif tpl_time < 86400 %}
+		{% set info = (tpl_time / 3660)|round(0, 'floor') ~ '小时前' %}
+	{% elseif tpl_time < 86400 * 30 %}
+		{% set info = (tpl_time / 86400)|round(0, 'floor') ~ '天前' %}
+	{% elseif tpl_time < 3600 %}
+		{% set info =  '半小时前' %}
+	{% else %}
+		{% set info = (tpl_time /  86400 / 30)|round(0, 'floor') ~ '个月前' %}
+	{% endif %} #}
+
+    {# 中断循环变量 #}
+    {% set loops = true %}
+    {# 输出值变量 #}
+    {% set info = '' %}
+
+    {% set format_data = {
+        0: {
+            text: '时间有误'
+        },
+        60: {
+            text: '才刚刚'
+        },
+        1800: {
+            text: '分钟前',
+            value: 60
+        },
+        3600: {
+            text: '半小时前'
+        },
+        86400: {
+            text: '小时前',
+            value: 3660
+        },
+        2592000: {
+            text: '天前',
+            value: 86400
+        }
+    } %}
+    {# value值跟format_data的最后一条数据的k值相同 #}
+    {% set default_format_data = {
+        text: '个月前',
+        value: 2592000
+    } %}
+    {% for k, v in format_data %}
+
+        {% if tpl_time < k and loops %}
+            {% set loops = false %}
+            {% if v.value|default('') %}
+                {% set txt = (tpl_time / v.value)|round(0, 'floor') %}
+            {% endif %}
+            {% set info = txt|default('') ~ v.text %}
+        {% endif %}
+
+        {% if loop.last and loops %}
+            {% set info = (tpl_time / default_format_data.value)|round(0, 'floor') ~ default_format_data.text %}
+        {% endif %}
+    {% endfor %}
+
+	{{- o.tpl|default('%time%')|replace({
+		'%time%': info
+	})|raw -}}
+{% endmacro %}
+{#
+/**
+ * @method time_date(o)
+ * @description 调用时间
+ * @param {String} o.time 时间
+ * @param {String} o.format 时间格式
+ * @param {String} o.default=- 默认值
+ * @param {String} o.node=1970-01-01 时间节点，在此时间之前的所有日期返回默认值
+ * @example 调用
+ * ```twig
+ * {{core_global.time_date({time: item.update_time})}}
+ * ```
+ */
+ #}
+ {%- macro time_date(o) -%}
+    {% set opt = {
+        format: 'Y-m-d',
+        time: '',
+        default: '-',
+        node: '1970-01-01'
+    }|merge(o) %}
+    {% spaceless %}
+        {% if opt.time|date('Y-m-d') <= opt.node or opt.time|date('U') <= opt.node|date('U') %}
+            {{opt.default}}
+        {% else %}
+            {{opt.time|date(opt.format)}}
+        {% endif %}
+    {% endspaceless %}
+ {%- endmacro -%}
+{#
+/**
+ * @method 推送位二维码获取(o)
+ * @description 获取推送位二维码
+ * @param {String} o.ename - 推送位标识
+ * @param {String} o.tpl - 渲染模板(默认模板<img src="%url%" alt="%name%")
+ * @example 调用
+ * ```twig
+ * {{core_global.qrcode_pushs({ename: 'wxgzhts'})}}
+ * ```
+ */
+ #}
+{%- macro qrcode_pushs(o) -%}
+    {% set opt = {
+        ename: '',
+        tpl: '<img src="%url%" alt="%name%" />'
+    }|merge(o) %}
+    {% spaceless %}
+        {% if opt.data|default('') %}
+            {% set qrcode_data = opt.data %}
+        {% else %}
+            {% set qrcode_data = (opt.ename)|getPush(1)[0]|default({}) %}
+        {% endif %}
+        {% if qrcode_data|default('') %}
+            {% set qrcode_url = 'http://open.weixin.qq.com/qr/code?username=' ~ qrcode_data.wxaccount|default('') %}
+            {{opt.tpl|replace({
+                "%name%": qrcode_data.name|default(''),
+                "%url%": qrcode_url
+            })|raw}}
+        {% endif %}
+    {% endspaceless %}
+{%- endmacro -%}
+
+{#
+/**
+ * @method get_http(o)
+ * @description 获取当前站点http协议
+ * @example 调用
+ * ```twig
+ * {{core_global.get_http()}}
+ * ```
+ */
+ #}
+ {%- macro get_http(o) -%}
+    {% spaceless %}
+        {{app.request.server.get('REQUEST_SCHEME', 'http')}}
+    {% endspaceless %}
+ {%- endmacro -%}
+
+ {#
+/**
+ * @method get_mode(o)
+ * @description 获取当前站点模式（开发/生产）
+ * @example 调用
+ * ```twig
+ * {{core_global.get_mode()}}
+ * ```
+ */
+ #}
+ {%- macro get_mode(o) -%}
+    {% spaceless %}
+        {# 生产模式 #}
+        {% set pro_mode = app.request.server.get('SCRIPT_NAME') %}
+        {# 开发模式 #}
+        {% set dev_mode = (pro_mode == '/app.php') ? '' : pro_mode %}
+        {{dev_mode|default('')}}
+    {% endspaceless %}
+ {%- endmacro -%}
+ {#
+/**
+ * @method get_port(o)
+ * @description 获取端口号
+ * @example 调用
+ * ```twig
+ * {{core_global.get_port()}}
+ * ```
+ */
+ #}
+ {%- macro get_port(o) -%}
+    {% spaceless %}
+        {% set opt = {
+            server_port: app.request.server.get('SERVER_PORT'),
+            post: 80
+        }|merge(o|default({})) %}
+
+        {% set port_export = opt.server_port == opt.post ? '': ':' ~ opt.server_port %}
+
+        {{port_export|default('')}}
+    {% endspaceless %}
+ {%- endmacro -%}
+{#
+/**
+ * @method switch_area(o)
+ * @description 获取当前站点模式（开发/生产）
+ * @param {Boolean} o.is_manage=0 是否启用自定义域名切换, 默认不启用
+ * @Param {String} o.act_class 当前区域高亮样式
+ * @param {String} o._action 链接拼接
+ * @param {String} o._suffix 链接拼接，后缀
+ * @param {Number} o.pageSize=100 获取多少条分站数据
+ * @param {String} o.area_id=app.session.get('area') 当前分站名称
+ * @param {String} o.listWrap `$(o.listWrap).addClass('more-area-more')`列表的外层加class，有时需要控制外层样式
+ * @param {Object} o.sql_opt={} 分站数据的额外查询条件
+ * @example 调用
+ * ```twig
+ * {{core_global.switch_area({
+ *     act_class: 'btn-main',
+ *     is_manage: is_manage|default(0),
+ *     _action: _action,
+ *     _suffix: _suffix,
+ *     tpl: '<a href="%url%" data-tag="%ename%" class="btn %act_class%">%name%</a>'
+ * })}}
+ * ```
+ */
+ #}
+ {%- macro switch_area(o) -%}
+    {% set opt = {
+        tpl: '',
+        is_manage: 0,
+        act_class: '',
+        _action: '',
+        _suffix: '',
+        pageSize: 1000,
+        listWrap: '',
+        area_id: app.session.get('area', 0),
+        server_port:  _self.get_port(),
+        sql_opt: {}
+    }|merge(o) %}
+    {# 所有分站数据 #}
+    {% set area_type = ('db.auth_group_area')|getAll({
+        checked : 1,
+        pageSize: opt.pageSize,
+        order   : 'sort',
+        orderBy : 'asc'
+    }|merge(opt.sql_opt)) %}
+
+    {% set domains_data = ('house.domains')|getAll({
+        checked : 1,
+        pageSize: opt.pageSize,
+        _multi  : 1,
+    }) %}
+
+    {#
+        已设置二级域名的分站url 数组
+        domains_url => array:2 [▼
+                          "1" => "bjhouse.08cms.com"
+                          "247" => "dghouse.08cms.com"
+                        ]
+    #}
+    {% set domains_url = {} %}
+
+    {% for item in domains_data.data %}
+        {% set domains_url = {(item.areas): item.domains } + domains_url %}
+    {% endfor %}
+
+    {% set http = _self.get_http() %}
+    {% set dev_mode = _self.get_mode() %}
+    {# 循环分站 #}
+    {% if area_type.data is defined %}
+        {% for item in area_type.data %}
+            {# {% set server_port = opt.server_port == 80 ? : ':' ~ opt.server_port %} #}
+            {% if item.rulesarea|default('') in domains_url|keys and opt.is_manage != 1 %}
+                {# 后台切换只用主域名，不用自定义的分站域名 #}
+                {% set domain_url = http ~ '://' ~  domains_url[item.rulesarea|default('')]|default('') ~ opt.server_port ~ opt._suffix  %}
+            {% else %}
+                {% set domain_url = http ~ '://' ~  'maindomain'|C ~ opt.server_port ~ dev_mode ~ opt._action ~ '?_area=' ~ item.rulesarea|default('') %}
+            {% endif %}
+            {# 高亮当前区域 #}
+            {% if opt.area_id == item.rulesarea %}
+                {% set act_class = opt.act_class %}
+            {% else %}
+                {% set act_class = '' %}
+            {% endif %}
+            {{opt.tpl|replace({
+                '%url%': domain_url,
+                '%name%': item.name|default('主站'),
+                '%ename%': item.ename|default(''),
+                '%act_class%': act_class,
+                '%rulesarea%': item.rulesarea
+            })|raw}}
+            {# <a href="{{domain_url}}" data-tag="{{item.ename|default('')}}" class="btn {% if area_id == item.name %}btn-main{% endif %}">{{item.name|default('')}}</a> #}
+        {% endfor %}
+
+        {% if area_type.data|length > 12 and opt.listWrap %}
+        <script type="text/javascript">
+            seajs.use([], function() {
+                $('{{opt.listWrap}}').addClass('more-area-more');
+            })
+        </script>
+        {% endif %}
+    {% endif %}
+ {%- endmacro -%}
+
+{#
+/**
+ * @method linkcss(href)
+ * @description css链接
+ * @param {String} href 链接地址
+ *
+ * @example 调用
+ *
+ * ```twig
+ * {{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/ats.css')}}
+ * ```
+ * 生成
+ * ```html
+ * <link rel="stylesheet" href="aaa.css" />
+ * ```
+ */
+ #}
+{%- macro linkcss(href) -%}
+{%- spaceless -%}
+    {% set url_isApp = app.request.get('_isApp', 0) %}
+    {# 兼容app #}
+    <link rel="stylesheet" href="{{ url_isApp ? '..' ~ asset(href)|replace({ (asset('bundles')): '' }) : asset(href, absolute=true) }}?v=0.0.2" />
+	{# <link rel="stylesheet" href="{{asset(href, absolute=true)}}?v=2017-08-08" /> #}
+{%- endspaceless -%}
+{%- endmacro -%}
+
+{#
+/**
+ * @method page(info)
+ * @description 分页
+ * @param info 数据标识或者数据变量
+ * @example 调用
+ * ```twig
+ * {{ core_global.page(ident.list) }}
+ * ```
+ */
+ #}
+{% macro page(info) %}
+<div class='ptb20'>
+    <div class="p-bar">
+        {{ (info.pageIndex|default(0))|pager(info.pageSize|default(8), info.pageCount|default(0))|raw }}
+    </div>
+</div>
+{% endmacro %}
+{#
+/**
+ * @method page_ajax(info)
+ * @description   ajax分页
+ * @param info 数据
+ * @example 调用
+ * ```twig
+ * {{ core_global.page_ajax(ident.list) }}
+ * ```
+ */
+ #}
+{% macro page_ajax(info) %}
+{% if info is defined %}
+    <div class="p-bar">
+        {% if info.pageCount is defined %}<span class="page-count">共 {{info.pageCount}} 条结果</span>{% endif %}
+        <div style="display:inline-block" data-page="1" data-page-count="{{info.pageCount|default(1)}}" data-page-index="{{info.pageIndex|default(0)}}" data-page-size="{{info.pageSize|default(8)}}"></div>
+    </div>
+{% endif %}
+{% endmacro %}
+
+{#
+/**
+ * @method formData(o)
+ * @description 获取数据库中单条数据信息，或者m某一类型数据,例如资讯分类
+ * @param {string} o.value - 字段值(查询一条数据时必填)
+ * @param {string} o.form=house.category - 服务名
+ * @param {string} o.ename - 标识,查询多条数据时必填,`o.value`不可填（注意：如果表中有该字段，必须填写，不然查不到数据,如果没有则可忽略）
+ * @param {string} o.pagesize=8 - 查询返回的最大条数值(默认是8条)
+ * @param {Object} o.sql_opt={} - 查询多条数据额外参数
+ * @param {string} o.default=- - 默认显示内容
+ * @param {string} o.tpl=%value% - 模板
+ * @example
+ * 多条数据时候
+ * ```twig
+ * {{ core_global.formData({ename: 'news', form: 'house.category', field: 'cate_type', tpl: '<span>%value%</span>'}) }}
+ * ```
+ * @example
+ * 一条数据的时候
+ * ```twig
+ * {{ core_global.formData({value: item.id, form: 'house.category', tpl: '<span>%value%</span>'}) }}
+ * ```
+ */
+ #}
+{%- macro formData(o) -%}
+{% spaceless %}
+    {% set _opt = {
+        value: '',
+        default: '',
+        tpl: '%value%',
+        pagesize: 8,
+        form: 'house.category',
+        sql_opt: {},
+        ename: ''
+    }|merge(o) %}
+
+    {% if _opt.value or _opt.value == 0 %}
+        {% set arr_value = _opt.value|is_array ? _opt.value : _opt.value|split(',') %}
+        {% for item in arr_value %}
+            {%- if 'category' in _opt.form -%}
+                {%- set formdata = item|getCategoryById() -%}
+            {%- else -%}
+                {%- set formdata = _opt.form|getRow({checked: 1, id: item}) -%}
+            {%- endif -%}
+            {{- _opt.tpl|replace({
+                '%value%': formdata.name|default(_opt.default),
+                '%id%': formdata.id|default('')
+            })|raw -}}
+        {% endfor %}
+    {% else %}
+        {% if 'category' in _opt.form %}
+            {% set category_data = _opt.ename|getCategory() %}
+        {% else %}
+            {% set category_data = _opt.form|getAll({checked: 1, ename: _opt.ename|default(''), pageSize: _opt.pagesize}|merge(_opt.sql_opt)).data %}
+        {% endif %}
+
+        {%- for item in category_data if item.pid|default('a') != '0' -%}
+            {{- _opt.tpl|replace({
+                '%value%': item.name|default(_opt.default),
+                '%id%': item.id|default('')
+            })|raw -}}
+        {% else %}
+            {{_opt.default}}
+        {% endfor %}
+    {% endif %}
+{% endspaceless %}
+{%- endmacro -%}
+
+
+{#
+/**
+ * @method region(o)
+ * @description 区域调用
+ * @param {string} o.id - id值
+ * @param {string} o.tpl=[%value%] - 默认模板
+ * @example
+ * ```twig
+ * {{core_global.region({id: item.region|default('')})}}
+ * ```
+ */
+ #}
+{%- macro region(o) -%}
+{% set opt = {
+    default: '--',
+    tpl: '%value%'
+}|merge(o) %}
+{% spaceless %}
+{{- opt.tpl|replace({
+    '%value%': (opt.id|default(0))|getAreaName|default(opt.default)
+})|raw -}}
+{% endspaceless %}
+{%- endmacro region -%}
+
+
+{#
+/**
+ * @method area(o)
+ * @description 地区数据
+ * @param {string} o.id - id值
+ * @param {string} o.tpl=[%name%] - 默认模板
+ * @example
+ * ```twig
+ * {{core_global.area({id: item.area|default('')})}}
+ * ```
+ */
+ #}
+{%- macro area(o) -%}
+{% set opt = {
+    default: '-',
+    tpl: '[ %name% ]'
+}|merge(o) %}
+{{- opt.tpl|replace({
+    '%name%': ('db.area')|getOne('name', {id: opt.id|default('')})|default(opt.default)
+})|raw -}}
+{%- endmacro area -%}
+
+{#
+/**
+ * @method areas(o)
+ * @description 地区数据，显示多级
+ * @param {String} o.id - id值
+ * @param {Number} o.parent=1 显示父级地区条数 ，可选值  0：只有当前地区，与area方式一样， 1：显示一个父级  2：显示两级父级
+ * @example
+ * ```twig
+ * {{core_global.area({id: item.id|default('')})}}
+ * ```
+ */
+ #}
+{%- macro areas(o) -%}
+{% if o.parent|default('1') == 0 %}
+    {{_self.area({id: o.id|default('')})}}
+{% elseif o.parent|default('1') == 1 %}
+    {% set data = ('db.area')|getRow({id: o.id|default(''), checked: 1}) %}
+    {% if data.pid|default('0') == 0 %}
+        {{o.tpl|default('%level1%')|replace({
+            '%level1%': data.name|default('')
+        })|raw}}
+    {% else %}
+        {{o.tpl|default('[ %level2%-%level1% ]')|replace({
+            '%level2%': ('db.area')|getOne('name', {checked: 1, id: data.pid|default('')}),
+            '%level1%': data.name|default('')
+        })|raw}}
+    {% endif %}
+{% elseif o.parent|default('1') == 2 %}
+    {% set par = ('db.area')|getParents(o.id|default('')) %}
+    {% set data = par.data|default('') %}
+    {% if par.pageCount|default('') == 1 %}
+        {{o.tpl|default('%level1%')|replace({
+            '%level1%': data[0].name|default('')
+        })|raw}}
+    {% elseif par.pageCount|default('') == 2 %}
+        {{o.tpl|default('%level2%-%level1%')|replace({
+            '%level1%': data[1].name|default(''),
+            '%level2%': data[0].name|default('')
+        })|raw}}
+    {% elseif par.pageCount|default('') == 3 %}
+        {{o.tpl|default('%level3%-%level2%-%level1%')|replace({
+            '%level1%': data[2].name|default(''),
+            '%level2%': data[1].name|default(''),
+            '%level3%': data[0].name|default('')
+        })|raw}}
+    {% endif %}
+{% endif %}
+{%- endmacro areas -%}
+
+{#
+/**
+ * @method phone(o)
+ * @description 前台手机号显示
+ * @param {string} o.value - 字段值
+ * @param {string} o.default=- - 不存在时显示
+ * @param {string} o.type=1 - 显示类型，可选值：1 123*****形式  2  123***1232
+ * @example
+ * ```twig
+ * {{ core_global.phone({value: item.phone|default('')}) }}
+ * ```
+ */
+ #}
+
+{%- macro phone(o) -%}
+    {% set opt = {
+        default: '-',
+        value: '',
+        type: 1
+    }|merge(o) %}
+    {% if opt.value %}
+        {% if opt.type == 1 %}
+            {{opt.value [:3] ~ '*****'}}
+        {% elseif opt.type == 2 %}
+            {{opt.value [:3] ~ '***' ~ opt.value [7:]}}
+        {% endif %}
+    {% else %}
+        {{opt.default}}
+    {% endif %}
+{%- endmacro -%}
+
+{#
+/**
+ * @method if(o)
+ * @description 判断区块是否显示
+ * @param {string} o.value - 字段值
+ * @param {string} o.default - 不存在时显示
+ * @param {string} o.tpl=%value% - 存在时显示模板
+ * @example
+ * ```twig
+ * {{ core_global.if({value: item.zj|default('')}) }}
+ * ```
+ */
+ #}
+ {%- macro if(o) -%}
+{% spaceless %}
+    {% set opt = {
+        default: '',
+        tpl: '%value%',
+        value: ''
+    }|merge(o) %}
+    {% if opt.value and opt.value != 0 %}
+        {{
+            opt.tpl|replace({
+                '%value%': opt.value
+            })|raw
+        }}
+    {% else %}
+        {{opt.default|raw}}
+    {% endif %}
+{% endspaceless %}
+ {%- endmacro -%}
+{#
+/**
+ * @method if_dw(o)
+ * @description 判断价格、面积等存在值与单位的组合
+ * @param {string} o.value - 字段值
+ * @param {string} o.danwei - 字段存在时显示单位
+ * @param {string} o.default_tips=- - 字段不存在时显示的内容
+ * @example
+ * ```twig
+ * {{ core_global.if_dw({value: item.zj|default(''), danwei: '万元'}) }}
+ * ```
+ */
+ #}
+ {%- macro if_dw(o) -%}
+{% spaceless %}
+    {% if o.value|default('') is not empty and o.value|default('') != 0 %}
+        {# 判断当前数据不为空且不为0时执行 #}
+        {% set danwei = o.danwei|default('') %}
+        {% set value = o.value|default('') %}
+    {% else %}
+        {% set value = o.default_tips|default('-') %}
+    {% endif %}
+    {{o.tpl|default('<span class="%class%">%value%</span>%danwei%')|replace({
+        '%class%': o.class|default(''),
+        '%value%': value|default(''),
+        '%danwei%': danwei|default('')
+    })|raw}}
+{% endspaceless %}
+ {%- endmacro -%}
+
+{#
+/**
+ * @method ad(o)
+ * @description 生成单个广告
+ * @param {String} o.id - 广告的id
+ * @param {String} o.html - 自定义广告区HTML内容
+ * @param {String} o.image - 广告图片的路径
+ * @param {String} o.url - 广告链接地址
+ * @param {String} o.flash - flash广告路径
+ * @param {String} o.img - 广告位小图标
+ * @param {Boolean} o.ad - 是否属于广告位
+ * @param {String} o.name - 标题
+ * @param {Number} o.width=1200 - 图片宽度
+ * @param {Number} o.height=60 - 图片高度
+ * @param {Number} o.type=0 - 图片裁剪方式
+ * @param {Number} o.quality - 图片裁剪质量
+ * @param {String} o.class=mb5 - 父级样式
+ * @param {Boolean} o.lazy=false - 是否启用懒加载模式
+ * @example 调用
+ * ```twig
+ * {{ core_global.ad(item|merge({'type': '1', 'height': '70', 'width':'1200', 'class': 'mb5'})) }}
+ * ```
+ * 生成
+ * ```html
+ *  <div class="house-ad mb5">
+        <a href=""><img src="aaa.jpg" alt=""></a>
+    </div>
+ * ```
+ *
+ */
+ #}
+{%- macro ad(o) -%}
+{% set o = {
+    'type': 0,
+    'height': 60,
+    'width': 1200,
+    'class': 'mb5',
+    'lazy': false
+}|merge(o) %}
+<div class="house-ad {{o.class|default('')}}">
+    {%- if o.html|default('') != '' -%}
+        {{- o.html|default('')|raw -}}
+    {%- elseif o.thumb|default('') != '' -%}
+        <a data-ad="{models: 'pushs',id:{{o.id|default('')}},field: 'clicks' }" href="{{o.url|default('')}}" target="_blank" title="{{o.name|default('')}}">
+            {% set imgMethod = o.lazy ? 'lazy_img' : 'img' %}
+            {{attribute(_self, imgMethod, [o|merge({src: o.thumb, alt: o.name})])}}
+        </a>
+    {%- elseif o.flash|default('') != '' -%}
+        <object width="{{o.width|default('')}}" height="{{o.height|default('')}}" type="application/x-shockwave-flash">
+            {# 设置flash在底层 #}
+            <param name="wmode" value="opaque" />
+            <embed src="{{assetImg(o.flash, {type: 0, absolute: 1})}}" wmode="opaque" type="application/x-shockwave-flash"></embed>
+            <param name="movie" value="{{assetImg(o.flash, {type: 0, absolute: 1})}}">
+        </object>
+        <a data-ad="{models: 'pushs',id:{{o.id|default('')}},field: 'clicks' }" href="{{o.url|default('')}}" style="width: {{o.width|default('')}}px; height: {{o.height|default('')}}px; position: absolute; left: 0; top: 0;display: block;" target="_blank"></a>
+    {% else %}
+        <a data-ad="{models: 'pushs',id:{{o.id|default('')}},field: 'clicks' }" href="{{o.url|default('')}}" title="" target="_blank">{{o.name|default('')}}</a>
+    {%- endif -%}
+    {% if o.ad|default('0') != '0' %}
+        <div class="ad-txt" {%- if o.img|default('') != '' -%}style="background-image: url({{o.img|default('')}})"{%- endif -%}></div>
+    {% endif %}
+</div>
+{%- endmacro ad -%}
+
+{#
+/**
+ * @method ads(o)
+ * @description 生成广告列表, 其余参数参考 `ad(o)`
+ * @param {string} o.class_wrap 外框的`class`
+ * @param {string} o.tag - 推送位标识
+ * @param {string} o.pageSize=10 - 最大显示数量
+ * @param {string} o.data - 推送位的数据, 为空时自动调用pushs
+ *
+ * @example
+ * ```twig
+ * {{ core_global.ads({
+        tag: 'aaa'
+    }) }}
+ * ```
+ * 生成
+ * ```html
+ * <div data-tag="aaa">
+        <div class="house-ad mb5">
+            <a href=""><img src="aaa.jpg" alt=""></a>
+        </div>
+        <div class="house-ad mb5">
+            <a href=""><img src="aaa.jpg" alt=""></a>
+        </div>
+        <div class="house-ad mb5">
+            <a href=""><img src="aaa.jpg" alt=""></a>
+        </div>
+ * </div>
+ * ```
+ */
+ #}
+{% macro ads(o) %}
+    {# 默认配置 #}
+    {% set opt = {
+        attr: '',
+        pageSize: 10
+    }|merge(o) %}
+
+    {% if opt.data is not defined %}
+        {# 保存tag #}
+        {% set tag = opt.tag %}
+        {% set ads = (tag)|getPush(opt.pageSize) %}
+        {# 默认 #}
+        {% if opt.default_tag|default('') and ads|default('') is empty %}
+            {# 保存tag #}
+            {% set tag = opt.default_tag %}
+            {% set data = (opt.default_tag|default(''))|getPush(opt.pageSize) %}
+        {% else %}
+            {% set data = ads|default('') %}
+        {% endif %}
+        {% set opt = opt|merge({data: data})  %}
+    {% endif %}
+    {% if opt.data|default('') %}
+    <div class="{{opt.class_wrap|default('')}}" data-tag="{{tag|default('')}}" {{opt.attr|raw ? : ''}}>
+        {% for item in opt.data %}
+            {{- _self.ad(opt|merge(item)) -}}
+        {% endfor %}
+    </div>
+    {% endif %}
+{% endmacro %}
+
+{#
+/*
+ * @method pop_ads(o)
+ * @description 生成背投广告 其余参数参考 `ad(o)`
+ * @param {string} o.tag - 推送位标识
+ * @param {string} o.pageSize=1 - 数量
+ * @其它配置 见ad()
+ * @example
+ */
+ #}
+{# {% macro pop_ads(o) %}
+    {% if o.data is not defined %}
+        {% set o = o|merge({data: (o.tag)|getPush(o.pageSize|default(1))})  %}
+    {% endif %}
+    {% if o.data|default('') %}
+    <a data-config="{type:'{{o.type|default('1')}}', boxClass: '.{{o.boxClass|default('pop_ads')}}', height: '{{o.height|default('')}}', width: '{{o.width|default('')}}'}" data-popads="1" style="display:none">
+        <span class="triangle" title="广告重播" {% if o.type|default('1') == 2 %} style="background: url({{_self.img_url({src: o.data[0].thumb|default('')})}}) no-repeat" {% endif %}>
+            <em></em>
+        </span>
+    </a>
+    <div class="{{o.boxClass|default('')}} pop_ads" style="display:none">
+        <div class="body"  data-tag="{{o.tag|default('')}}">
+        {% for item in o.data %}
+            {{- _self.ad(o|merge(item)) -}}
+        {% endfor %}
+        </div>
+        <div data-role="ad_close" class="ad_close">
+            <i class="font-ico-28"></i>
+        </div>
+    </div>
+    {% endif %}
+{% endmacro %} #}
+{#
+/**
+ * @method ads_pop(o)
+ * @description 生成背投广告 其余参数参考 `ad(o)`
+ * @param {object} opt - 默认配置
+ * @param {string} o.tag - 推送位标识
+ * @param {Number} o.height=500 - 大图高度
+ * @param {Number} o.width=1200 - 大图宽度
+ * @param {Number} o.heightsm=100 - 小图高度
+ * @param {Number} o.widthsm=100 - 小图宽度
+ * @param {Boolean} o.replays=true - 是否显示重播按钮
+ * @param {Boolean} o.close=true - 是否显示关闭按钮
+ * @param {Boolean} o.remove=true - 是否显示移除按钮
+ * @param {Number} o.showing=5000 - 大图显示时间(自动隐藏大图，显示小图) 单位：毫秒
+ * @param {Number} o.slideTime=500 - 显示、隐藏过渡时间 单位：毫秒
+ * @param {Number} o.style=2 - 背投广告显示方式  目前两种形式：1: 弹窗式  2: 嵌入式
+ * @param {Number} o.pageSize=2 - 获取条数
+ * @其它配置 见ad()
+ * @example
+ * ```twig
+ * {{core_global.ads_pop({tag: 'btgg'})}}
+ * ```
+ * js
+ * ```js
+ * seajs.use(['advertise'], function (advertise) {
+ *      advertise.init();
+ * })
+ * ```
+ */
+ #}
+{%- macro ads_pop(o) -%}
+    {% set opt = {
+        widthsm: 100,
+        heightsm: 100,
+        height: 500,
+        width: 1200,
+        replays: true,
+        close: true,
+        remove: true,
+        showing: 5000,
+        slideTime: 500,
+        style: 2,
+        pageSize: 2
+    }|merge(o) %}
+
+    {% if opt.data is not defined %}
+        {% set opt = opt|merge({data: (opt.tag)|getPush(opt.pageSize)})  %}
+    {% endif %}
+
+    {% if opt.data|default('') %}
+        {% for item in opt.data %}
+            <div data-popads="1" data-config="{opt: '#{{opt.tag|default('') ~ loop.index}}', btn: '#btn{{opt.tag|default('') ~ loop.index}}', style: {{item.style|default(opt.style)}}, height: '{{opt.height|default('')}}', width: '{{opt.width|default('')}}',showing: '{{opt.showing|default('')}}',slideTime: '{{opt.slideTime|default('')}}', sm: {height: '{{opt.heightsm|default('')}}', width: '{{opt.widthsm|default('')}}' } }">
+                {# 大图 #}
+                <div id="{{opt.tag|default('') ~ loop.index }}" style="display:none;" data-tag="{{opt.tag|default('')}}">
+                    <div class="popads-image" style="width: {{opt.width|default('') ~ 'px'}}; height: {{opt.height|default('') ~ 'px'}}">
+                        {{- _self.ad(opt|merge(item)) -}}
+                        {% if opt.close|default('') %}
+                            <div data-close="{{opt.tag|default('')}}" class="operat operat-close operat-white">
+                                <i class="font-icons-28"></i>
+                                关闭
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {# 小图 #}
+                <div id="btn{{opt.tag|default('') ~ loop.index}}" style="display:none;">
+                    <div class="popads-image-sm" style="width: {{opt.widthsm|default('') ~ 'px'}}; height: {{opt.heightsm|default('') ~ 'px'}}">
+                        <a href="{{item.url|default('')}}" target="_blank">
+                            {{_self.img({
+                                src: item.thumbsm|default(''),
+                                alt: item.name|default(''),
+                                type: 2,
+                                width: opt.widthsm,
+                                height: opt.heightsm
+                            })}}
+                        </a>
+                        <div class="operat-btn">
+                            {% if opt.replays|default('') %}
+                                <div data-replays="{{opt.tag|default('')}}" class="operat operat-replays">重播</div>
+                            {% endif %}
+                            {% if opt.remove|default('') %}
+                                <div data-remove="{{opt.tag|default('')}}" class="operat operat-remove">关闭</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+{%- endmacro -%}
+
+{#
+/**
+ * @method push_tit(tag)
+ * @description 获取推送位标题(默认标题)
+ * @param {String} tag 标识 必填
+ * @调用
+ * @example
+ * ```twig
+ * {{core_global.push_tit({tag: 'new1'})}}
+ * ```
+ */
+ #}
+{% macro push_tit(tag) %}
+    {{- ('house.cate_pushs')|getOne('name', {ename: tag}) -}}
+{% endmacro push_tit %}
+
+{#
+/**
+ * @method push_url
+ * @description 获取推送位链接(默认链接)
+ * @param {String} tag 标识，必填
+ * @调用
+ * @example
+ * ```twig
+ * {{core_global.push_url({tag: 'new1'})}}
+ * ```
+ */
+ #}
+{% macro push_url(tag) %}
+    {%- set push = ('house.cate_pushs')|getRow({ename: tag}) -%}
+    {{- (push.controller|default('house') ~ '/' ~ push.action|default('index'))|U -}}
+{% endmacro push_url %}
+
+{#
+/**
+ * @method push_title(o)
+ * @description 生成推送位标题,带自定义链接、标题版
+ * @param {string} o.title 标题
+ * @param {string} o.url url
+ * @param {string} o.more=更多>> 更多
+ * @param {string} o.tag 推送位标识
+ * @param {String} o.tpl 模板
+ * @example
+ * ```twig
+ * {{ core_global.push_title({
+        tag: 'fczx',
+        url: ('news/index')|U,
+        title: '资讯'
+    }) }}
+ * ```
+ * 生成
+ * ```html
+ *  <h3 class="tit">
+ *      <a class="tit-link" href="/house">资讯</a>
+ *  </h3>
+ *  <a class="more" href="/newhouse/web/app_dev.php/news">更多>></a>
+ * ```
+ */
+ #}
+{% macro push_title(o) %}
+{% set opt = {
+    more: '更多>>',
+    tpl: '<h3 class="tit"><a class="tit-link" href="%url%">%title%</a></h3><a class="more" href="%url%">%more%</a>'
+}|merge(o) %}
+{% spaceless %}
+    {{ opt.tpl|replace({
+        '%url%': opt.url|default('') ? : _self.push_url(opt.tag),
+        '%more%': opt.more,
+        '%title%': o.title|default('') ? : _self.push_tit(opt.tag)
+    })|raw }}
+{% endspaceless %}
+{% endmacro push_title %}
+
+{#
+/**
+ * @method img_url(o)
+ * @description 生成图片的`url`
+ * @param {string} o.height - 高
+ * @param {string} o.width - 宽
+ * @param {Number} o.type=0 - 裁剪方式，默认原图
+ * @param {Boolean} o.absolute=1 是否补全链接,默认补全
+ * @param {string} o.src=bundles/house/images/nopic.gif - img的src,默认填充图
+ * @其它配置 [见标识assetImg](标识.html#toc3__anchor)
+ * @example
+ * ```twig
+ * {{ core_global.img_url({
+        height: 450,
+        src: item.thumb
+    }) }}
+ * ```
+ * 生成
+ * ```html
+ * aa.jpg
+ * ```
+ */
+ #}
+{%- macro img_url(o) -%}
+    {{- o.src|default('') ? assetImg(o.src, {type: 0, absolute: 1}|merge(o)) : assetImg('static/house/images/nopic.jpg', o|merge({type: 0, absolute: 1})) -}}
+{%- endmacro img_url -%}
+{#
+/**
+ * @method img(o)
+ * @description 生成图片标签
+ * @param {string} o.height - 高
+ * @param {string} o.width - 宽
+ * @param {string} o.src - img的src
+ * @param {string} o.alt - img的alt
+ * @param {string} o.attr - img的属性
+ * @其它配置 [img_url(o)](#toc23)
+ * @example
+ * ```twig
+ * {{ core_global.img({
+        height: 450,
+        src: item.thumb,
+        alt: item.name
+    }) }}
+ * ```
+ * 生成
+ * ```html
+ * <img src="aaa.jpg" alt="">
+ * ```
+ */
+ #}
+{%- macro img(o) -%}
+    <img
+        {% if o.alt|default('') %}
+            alt="{{o.alt}}"
+        {% endif %}
+        {% if o.attr|default('') %}
+            {{ o.attr|raw }}
+        {% endif %}
+        src="{{_self.img_url(o)}}"
+        {% if o.width|default('') %}
+            width="{{o.width}}"
+        {% endif %}
+        {% if o.height|default('') %}
+            height="{{o.height}}"
+        {% endif %}
+    />
+{%- endmacro img -%}
+
+
+{#
+/**
+ * @method data_src_img(o)
+ * @description 生成带`data-src`属性的图片标签, jqduang懒加载专用
+ * @param {Number} o.firstShow - 第一张是否启用懒加载
+ * @param {Number} o.shownum=1 - 前几张不启用懒加载，默认一张
+ * @其它配置 [img(o)](#toc24)
+ * @example
+ * ```twig
+ * {{ core_global.data_src_img({
+        height: 450,
+        width：200,
+        src: "http://192.168.1.7/newcore/web/bundles/house/images/aa.jpg",
+        alt: "标题",
+        loopindex: loop.index
+    }) }}
+*```
+* 生成
+ * ```html
+ * <img alt="标题" class="lazy" data-src="aa.jpg" src="http://192.168.1.7/newcore/web/bundles/house/images/nopic.gif" width="200" height="450">
+ * ```
+*/ #}
+{%- macro data_src_img(o) -%}
+    {% if o.loopindex|default('') <= o.shownum|default(1) %}
+        {% set attr = {
+            attr: o.attr|default(''),
+            src: o.src
+        } %}
+    {% else %}
+        {% set attr = {
+            attr: o.attr|default('') ~ ' data-src="' ~ _self.img_url(o) ~ '"',
+            src: null
+        } %}
+    {% endif %}
+    {{ _self.img(o|merge(attr)) }}
+{%- endmacro data_src_img -%}
+
+{#
+/**
+ * @method lazy_img(o)
+ * @description 生成带懒加载属性的图片标签
+ * @其它配置 [img(o)](#toc24)
+ * @example
+ * ```twig
+ * {{ core_global.lazy_img({
+        height: 450,
+        width：200,
+        src: "http://192.168.1.7/newcore/web/bundles/house/images/aa.jpg",
+        alt: "标题"
+    }) }}
+ *```
+ * js
+ *```js
+ *  seajs.use('lazyload')
+ *```
+ * 生成
+ * ```html
+ * <img alt="标题" class="lazy" data-original="http://192.168.1.7/newcore/web/bundles/house/images/aa.jpg" src="http://192.168.1.7/newcore/web/bundles/house/images/nopic.gif" width="200" height="450">
+ * ```
+*/ #}
+{%- macro lazy_img(o) -%}
+    {{ _self.img(o|merge({
+        attr: o.attr|default('') ~ ' class="lazy" data-original="' ~ _self.img_url(o) ~ '"',
+        src: null
+    })) }}
+{%- endmacro lazy_img -%}
+
+{%- macro lazyload(o) -%}
+<script type="text/javascript">
+    // 懒加载
+    seajs.use(['lazyload'], function(lazyload){
+        var lazyOpt = {
+            placeholder: jsbase + "/house/images/nopic.gif", //默认占位图
+            effect: "fadeIn", //显示方式
+            threshold: 200, //提前加载
+        };
+        $(document).find('.lazy').lazyload(lazyOpt);
+    });
+</script>
+{%- endmacro -%}
+
+{#
+/**
+ * @method sort(o)
+ * @description 生成列表排序按钮
+ * @param {String} o.action `U`的第一个参数
+ * @param {Object} o.filter_opt={} `url`的其它要搜索的参数，可选
+ * @param {String} o.act=act 高亮`class`
+ * @param {String} o.asc=asc 升序`class`
+ * @param {String} o.desc=desc 降序`class`
+ * @param {String} o.tpl=<a href="%url%" class="sort-btn %cls%">%title%<i class="up font-lp-12"></i><i class="down font-lp-11"></i></a> 按钮模板 %url%-要替换的`url` %title%-要替换的标题 %cls%-要替换的`class`
+ * @param {Object} o.data 按钮数据
+ * @example 调用
+ * ```twig
+ *  {{ core_global.sort({
+        action: action,
+        filter_opt: filter_opt,
+        tpl: '<a href="%url%" class="sort-btn %cls%">%title%<i class="up font-lp-12"></i><i class="down font-lp-11"></i></a>',
+        data: {
+            def: {
+                title: '默认'
+            },
+            dj: {
+                title: '楼盘价格'
+            },
+            kpdate: {
+                title: '开盘时间'
+            },
+            clicks: {
+                title: '人气'
+            }
+        }
+    }) }}
+ * ```
+ */
+#}
+{%- macro sort(o) -%}
+    {# 默认配置 #}
+    {% set o = {
+        act: 'act',
+        asc: 'asc',
+        desc: 'desc',
+        tpl: '<a href ="%url%" data-name="order" data-value="%value%" data-sort="%field%" class="sort-btn %cls%">%title%<i class="up font-lp-12"></i><i class="down font-lp-11"></i></a>',
+        data: {
+            def: {
+                title: '默认'
+            }
+        },
+        url_opt: {}
+    }|merge(o) %}
+
+    {% set order = app.request.get('order')|split('|') %}
+    {% set sort = order[1]|default('') == 'asc' ? 'desc' : 'asc' %}
+    {% set filter_url_opt = o.url_opt %}
+
+    {% for k, v in o.data %}
+
+        {# 默认按钮 #}
+        {% if k == 'def' %}
+            {% set cls = (order[0] ? null : o.act) ~ ' def default' %}
+            {% set order1 = null %}
+            {% set tpl = '<a href="%url%" data-name="order" data-value data-sort="1" class="sort-btn %cls%">%title%</a>' %}
+            {{ tpl|replace({
+                '%url%': (o.action)|U(filter_url_opt|default({})|merge({order: order1})),
+                '%title%': v.title,
+                '%cls%': cls
+            })|raw }}
+        {% else %}
+            {# 有排序 #}
+            {% if order[0] %}
+                {% set order1 = k ~ '|' ~ (order[0] == k ? sort : 'asc') %}
+                {% set sort1 = sort == 'asc' ? 'desc' : 'asc' %}
+                {% set cls = order[0] == k  ? o.act ~ ' ' ~ o[sort1] : null %}
+            {# 无排序 #}
+            {% else %}
+                {% set cls = null %}
+                {% set order1 = k ~ '|asc' %}
+            {% endif %}
+            {{ o.tpl|replace({
+                '%url%': (o.action)|U(filter_url_opt|default({})|merge({order: order1})),
+                '%title%': v.title,
+                '%cls%': cls,
+                '%value%': v.value|default('asc'),
+                '%field%': k
+            })|raw }}
+
+        {% endif %}
+    {% endfor %}
+{%- endmacro -%}
+
+{#
+/**
+ * @method listType(o)
+ * @description 列表显示方式（图文和纯文本）
+ * @param {String} o.action `U`的第一个参数
+ * @param {Object} o.filter_opt={} `url`的其它要搜索的参数，可选
+ * @param {String} o.act=act 高亮`class`
+ * @param {String} o.asc=up 升序`class`
+ * @param {String} o.desc=down 降序`class`
+ * @param {String} o.tpl=<a href="%url%" class="sort-btn %cls%">%title%<i class="up font-lp-12"></i><i class="down font-lp-11"></i></a> 按钮模板 %url%-要替换的`url` %title%-要替换的标题 %cls%-要替换的`class`
+ * @param {Object} o.data 按钮数据
+ * @example 调用
+ * ```twig
+ * {{ core_global.listType({
+        action: action,
+        filter_opt: filter_opt,
+        tpl: '<a href="%url%" class="sort-btn %cls%">%title%<i class="up font-lp-12"></i><i class="down font-lp-11"></i></a>',
+        data: {
+            def: {
+                title: '默认'
+            },
+            dj: {
+                title: '楼盘价格'
+            },
+            kpdate: {
+                title: '开盘时间'
+            },
+            clicks: {
+                title: '人气'
+            }
+        }
+    }) }}
+ * ```
+ */
+#}
+{%- macro listType(o) -%}
+    {# 默认配置 #}
+    {% set o = {
+        act: 'act',
+        tpl: '<a href="%url%" data-name="cook_id" data-value="%type%" class="ico-word mr10 %cls% %default%"><i class="down %icons%"></i><span>%title%</span></a>',
+        url_opt: {}
+    }|merge(o) %}
+
+    {% set type = app.request.get('cook_id', 0) %}
+
+    {% for k, v in o.data %}
+        {% set cls = type == k  ? o.act : null %}
+        {% set default = k == 0 ? 'default' : null %}
+        {{ o.tpl|replace({
+            '%url%': (o.action)|U(o.url_opt|merge({cook_id: k})),
+            '%title%': v.title,
+            '%icons%': v.icon,
+            '%cls%': cls,
+            '%type%': k,
+            '%default%' : default
+        })|raw }}
+    {% endfor %}
+{%- endmacro -%}
+{#
+/**
+ * @method url(o)
+ * @description url判断
+ * @param {Number} o.fromid=-1 数据关联id
+ * @param {Number} o.id 数据id
+ * @param {String} o.url 数据链接
+ * @param {String} o.models 数据模型,也可以是跳转控制器
+ * @param {String} o.action=detail 跳转方法
+ * @param {String} o.controller 跳转控制器/方法
+ * @param {Boolean} o.default_url 是否自定义url链接
+ * @param {Boolean} o.set_models=0 当链接指向不是当前模型的时候设置
+ * @example 调用
+ * ```twig
+ * {{- core_global.url(item) -}}
+ * ```
+ */
+#}
+
+{%- macro url(o) -%}
+{% set opt = {
+    fromid: '-1',
+    default_url: '',
+    set_models: 0,
+    models: '',
+    action: 'detail'
+}|merge(o) %}
+{% spaceless %}
+    {%- if opt.fromid == 0 -%}
+        {# 手动添加 #}
+        {% if opt.url|default('') %}
+            {# 存在手动添加链接的时候使用 #}
+            {{opt.url|default('')}}
+        {% else %}
+            {# 空连接使用 #}
+            javascript:;
+        {% endif %}
+    {%- elseif opt.fromid < 0 -%}
+        {# fromid不存在的时候 #}
+        {% if opt.default_url %}
+            {# 自定义额外链接，目前使用的是经纪公司公司动态的列表 #}
+            {{ ('member/d_news_detail')|UU({id: opt.uid|default(''), newid: opt.id|default('')}) }}
+        {% else %}
+            {# 默认控制器跳转链接 #}
+            {{(opt.controller|default(opt.models ~ '/' ~ opt.action))|UU({id: opt.id|default('')})}}
+        {% endif %}
+    {%- elseif opt.fromid > 0 -%}
+        {# 推送过来的数据 fromid 大于0的时候 #}
+        {% if opt.set_models and 'http://' not in opt.url|default('') and 'https://' not in opt.url|default('') %}
+            {# 如果不想用自动解析的链接，则可手动添加，针对那些模板控制器的名称跟模型名称不一样的链接，或者一些其他特殊情况使用 #}
+            {{(opt.controller|default(opt.models ~ '/' ~ opt.action))|UU({id: opt.fromid|default('')})}}
+        {% else %}
+            {# 调用根据模型自动解析的链接 #}
+            {{opt.url|default('')}}
+        {% endif %}
+    {%- endif -%}
+{% endspaceless %}
+{%- endmacro -%}
+
+{#
+/**
+* @method address(o)
+* @description 地址截取显示
+* @param {Number} o.region 地区id
+* @param {Number} o.num=20 截取数量
+* @param {Array} o.data 当前数据
+* @param {Array} o.cate_circle 商圈
+* @param {String} o.iconClass 图标class
+* @param {String} o.maphref 地图跳转链接
+* @example 调用
+* ```twig
+* {{- core_global.address({data: item}}) -}}
+* ```
+*/
+#}
+{%- macro address(o) -%}
+{% spaceless %}
+{#判断城区商圈是否有值#}
+{% if o.data.region!=0 and o.data.cate_circle!=0 %}
+    {%  set str='[ %region%-%cate_circle% ] %address%' %}
+{% elseif o.data.region==0 and o.data.cate_circle!=0 %}
+    {%  set str='[ %cate_circle% ] %address%' %}
+{% elseif o.data.region!=0 and o.data.cate_circle==0 %}
+    {%  set str='[ %region% ] %address%' %}
+{% elseif o.data.region==0 and o.data.cate_circle==0 %}
+    {%  set str='%address%' %}
+{% endif %}
+
+{% set opt = {
+    maphref: 'javascript:;',
+    iconClass: 'font-lp-4',
+    tpl: str|default(''),
+    num: 20,
+    default: '',
+    region: '',
+    address: '',
+    cate_circle: ''
+}|merge(o|default({})) %}
+    {% set data = opt.data|default({}) %}
+    {% set region = opt.region ? opt.region : data.region|default('') %}
+    {% set address = opt.address ? opt.address : data.address|default('') %}
+    {% if 'cate_circle' in opt.tpl %}
+        {% set cate_circle = opt.cate_circle ? opt.cate_circle : data.cate_circle|default('') %}
+    {% endif %}
+    {% if region|default('') %}
+        {% set region_txt = _self.region({id: region|default('')}) %}
+    {% endif %}
+    {% set map = "<a href='" ~ opt.maphref ~ "' target='_blank'><i class='" ~ opt.iconClass ~ " c-e43'></i>地图查看</a>" %}
+    {{opt.tpl|replace({
+        '%region%': region_txt|default(''),
+        '%address%': _self.substr(address, opt.num|default('20'), 1, opt.default),
+        '%map%': map|default(''),
+        '%cate_circle%': _self.formData({value: cate_circle|default(''), default: '', form: 'house.cate_circle'})
+    })|raw}}
+{% endspaceless %}
+{%- endmacro -%}
+
+{#
+/**
+* @method video(o)
+* @description 视频播放
+* @param {String} o.url 视频地址
+* @param {String} o.type 视频格式
+* @param {String} o.ele=videoPlay 播放视频的ele
+* @param {Number} o.width=100% 宽度
+* @param {Number} o.height=500 高度
+* @param {String} o.swf swf播放器
+* @example 调用
+* ```twig
+* <div id="videoPlay"></div>
+* {{- core_global.video({url: videos_detail.upvideo}}) -}}
+* ```
+*/
+#}
+{%- macro video(o) -%}
+{% set opt = {
+    ele: 'videoPlay',
+    height: '500',
+    width: '100%',
+    swf: ''
+}|merge(o) %}
+<script type="text/javascript">
+    seajs.use(['ckplayer'], function (ckplayer) {
+        var flashvars={
+            f:'{{opt.url|default("")}}'
+            ,c:0
+            ,b:1
+            // ,s:'3'
+            // ,p:1
+        };
+        var params={bgcolor:'#FFF',allowFullScreen:true,wmode:'transparent',allowScriptAccess:'always'};
+        CKobject.embedSWF('{{opt.swf}}','{{opt.ele}}','ckplayer_a1','{{opt.width}}','{{opt.height}}',flashvars,params);
+    });
+</script>
+{%- endmacro video -%}
+
+{#
+/**
+ * @method substr
+ * @description 字符串截取
+ * @param {string} str - 原字符串
+ * @param {number} num - 截取的数量
+ * @param {boolean} els=1 - 最后加`...`
+ * @param {string} default=- - 没数据时显示
+ *
+ * @example 调用
+ * ```twig
+ * {{core_global.substr(item.abstract, 20)}}
+ * ```
+ */
+ #}
+{% macro substr(str, num, els, default) %}
+{% spaceless %}
+{% set opt = {
+    default: ''
+}|merge({default: default}) %}
+{% if str|default('-') %}
+    {{str|striptags [:num]}}{% if str|length > num and els%}...{% endif %}
+{% else %}
+    {{opt.default}}
+{% endif %}
+{% endspaceless %}
+{% endmacro %}
+
+{#
+/**
+* @method key_des(o)
+* @description SEO关键词、描述宏
+* @param {String} o.keywords 关键词
+* @param {String} o.description 描述
+* @param {Object} o.replace 替换值
+* @example 调用
+* ```twig
+* {{- core_global.key_des({keywords: category.keywords, description: category.description}) -}}
+* ```
+*/
+#}
+{%- macro key_des(o) -%}
+    {% set opt = {
+        replace: {'"': '\'', "“": '\'', "”": '\''}
+    } %}
+
+    {% set keywords = o.keywords|default('')|replace(opt.replace) %}
+
+    {% set description = o.description|default('')|replace(opt.replace) %}
+
+    {% if keywords|default('') %}
+        <meta name="keywords" content="{{keywords|raw}}" />
+    {% endif %}
+    {% if description|default('') %}
+        <meta name="description" content="{{description|raw}}" />
+    {% endif %}
+{%- endmacro key_des -%}
+
+{#
+/**
+ * @method input(o)
+ * @description 输入框
+ * @param {string} o.attr 文本框属性值
+ * @param {Boolean} o.autocomplete 是否启用自动完成功能
+ * @param {Boolean} o.placeholderie 是否启用文本框提示（就是还没输入文字之前的提示，兼容不支持placeholder属性的浏览器使用）
+ * @param {String} o.type=text input类型
+ * @param {String} o.name name属性
+ * @param {String} o.value value属性
+ * @param {String} o.size size属性
+ * @param {String} o.len maxlength属性
+ * @param {String} o.class class属性
+ * @param {String} o.id id属性
+ * @param {String} o.placeholder placeholder属性
+ *
+ * @example 调用
+ * ```twig
+ *  {{core_global.input({
+        type: 'text',
+        class: 'aa',
+        placeholder: '请输入楼盘名称/地址/拼音'
+    })}}
+ * ```
+ */
+ #}
+{% macro input(o) %}
+    {% set attr = o.attr|default('') %}
+    {% if o.autocomplete|default('') %}
+        {% set attr = attr ~ ' data-autocomplete="1"' %}
+    {% elseif o.placeholderie|default('') %}
+        {% set attr = attr ~ ' data-placeholder="1"' %}
+    {% endif %}
+    <input
+        {{attr|raw}}
+        type="{{o.type|default('text')}}"
+        name="{{o.name|default('')}}"
+        value="{{o.value|default('')}}"
+        size="{{o.size|default('')}}"
+        maxlength="{{o.len|default('')}}"
+        class="{{o.class|default('')}}"
+        id="{{o.id|default('')}}"
+        placeholder="{{o.placeholder|default('')}}"
+    />
+{% endmacro %}
+
+{#
+/**
+ * @method search_input(o)
+ * @description 搜索输入框 其他参数设置参考 `input(o)`
+ * @example 调用
+ * ```twig
+ * {{core_global.search_input({
+ *     autocomplete: 1
+ * })}}
+ * ```
+ */
+ #}
+{% macro search_input(o) %}
+    {% set opt = {
+        autocomplete: o.autocomplete|default(''),
+        placeholderie:  o.placeholderie|default(''),
+        class       : 'search-input fl',
+        value       : app.request.get(o.name|default('name'))|default(''),
+        name        : 'name'
+    }|merge(o) %}
+
+    {{_self.input(opt)}}
+{% endmacro %}
+
+{#
+/**
+ * @method search(o)
+ * @description 通用搜索控件 其他参数设置参考 `search_input(o)`
+ * @param {String} o.placeholder 文本框的`placeholder`
+ * @param {String} o.action 提交地址
+ * @param {String} o.target=_self form的target
+ * @param {String} o.autocomplete=0 是否启用自动完成
+ * @param {String} o.text 按钮的标题
+ * @param {String} o.class=search-input input的样式
+ * @param {String} o.size input的size
+ * @param {String} o.wrapclass 外层div的class
+ * @param {Object} o.action_opt 提交地址参数(额外参数)
+ *
+ * @example 调用
+ * ```twig
+    {{core_global.search({
+        action: ('house/list')|U,
+        class: 'aa',
+        target: '_self',
+        text: '搜索',
+        placeholder: o.placeholder|default('请输入楼盘名称/地址/拼音')
+    })}}
+ * ```
+ * 生成
+ * ```twig
+ * <form action="house/list" target='_self'>
+ *      <div class="search-bar clearfix aa">
+            <input type="text" name="name" value="name" class="class"  placeholder="请输入楼盘名称/地址/拼音" />
+            <button type="type" class="search-btn fl">搜索</button>
+        </div>
+ * </form>
+ * ```
+ */
+ #}
+{% macro search(o) %}
+    {% set opt = {
+        target: '_self',
+        action: '#',
+        wrapclass: '',
+        text: ''
+    }|merge(o) %}
+    <form action="{{ opt.action|U }}" target="{{ opt.target }}" method="get">
+        {% if opt.action_opt is defined %}
+            {% for k,v in opt.action_opt %}
+                <input type="hidden" name="{{k}}" value="{{v}}"/>
+            {% endfor %}
+        {% endif %}
+
+        <div class="search-bar clearfix {{opt.wrapclass}}">
+            {{_self.search_input(opt)}}
+            <button type="submit" class="search-btn fl"><i class="font-icons-17"></i>{{opt.text}}</button>
+        </div>
+    </form>
+{% endmacro %}
+
+{#
+/**
+ * @method topSearchHot
+ * @description 热门搜索词
+ * @param {string|array} info 搜索词数据或者标识
+ * @example 调用
+ * ```twig
+ * {{core_global.topSearchHot(info)}}
+ * ```
+ */
+ #}
+{% macro topSearchHot(info, num) %}
+    {% if info|is_array %}
+        {% set data = info %}
+    {% else %}
+        {% set data = (info)|getPush(num) %}
+        {% set tag = info %}
+    {% endif %}
+    <ul class="list clearfix fl" data-tag="{{tag|default('')}}">
+        {% if data is defined %}
+            {% set fromids = '' %}
+            {% for item in data %}
+                {% if loop.index != 1 %}
+                    {% set dh = ',' %}
+                {% endif %}
+                {% set fromids = fromids ~ dh|default('') ~ item.fromid %}
+            {% endfor %}
+
+            {% set hotkeywords_data = ('db.hotkeywords')|getAll({checked: 1, id: 'in|' ~ fromids|default(0)}) %}
+
+            {% set hotkeywords_urls = {} %}
+
+            {% if hotkeywords_data.pageCount|default(0) != 0 and hotkeywords_data.data is defined %}
+                {% for item in hotkeywords_data.data %}
+                    {% set hotkeywords_urls = hotkeywords_urls|merge({
+                        ('url' ~ item.id): item.url|default('')
+                    }) %}
+                {% endfor %}
+            {% endif %}
+
+            {% for item in data %}
+                {% if item.fromid|default('') > 0 %}
+                    {% set url = hotkeywords_urls['url' ~ item.fromid]|default('javascript:;') %}
+                {% else %}
+                    {% set url = item.url|default('') %}
+                {% endif %}
+                <li>
+                    {% set name = item.keyword|default(item.name|default('')) %}
+                    <a href="{{url}}" title="{{name}}" target="_blank">
+                        {{name}}
+                    </a>
+                </li>
+            {% endfor %}
+        {% endif %}
+    </ul>
+{% endmacro %}
+
+{#
+/**
+ * @method topSearch(o)
+ * @description 顶部搜索控件 其他参数设置参考 `search(o)`
+ * @example 调用
+ * ```twig
+ * {{core_global.topSearch({})}}
+ * ```
+ */
+ #}
+{% macro topSearch(o) %}
+    <div class="top-bar {{o.class|default('')}}">
+        <div class="container">
+            {{_self.search(o|merge({
+                placeholder: o.placeholder|default('请输入楼盘名称/地址/拼音')
+            }))}}
+            {% if o.other is defined %}
+                {{ attribute(_self, o.other.method, [o.other.opt|default(''), o.other.num|default(5)]) }}
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
+
+
+{% macro topSearch2(o) %}
+    <div class="top-bar {{o.class|default('')}}">
+            {{_self.search(o|merge({
+                placeholder: o.placeholder|default('请输入楼盘名称/地址/拼音')
+            }))}}
+            {% if o.other is defined %}
+                {{ attribute(_self, o.other.method, [o.other.opt|default(''), o.other.num|default(5)]) }}
+            {% endif %}
+        </div>
+{% endmacro %}
+
+
+{#
+/**
+ * @method rangeSearch(o)
+ * @description 范围搜索
+ * @param {string} name name值
+ * @param {string} action form的action值
+ * @example 调用
+ * ```twig
+ * {{core_global.rangeSearch({})}}
+ * ```
+ */
+ #}
+{% macro rangeSearch(name, placeholder, action) %}
+<form style="display: inline-block" action="{{action|U}}">
+    <input type="hidden" name="name" data-name="{{name}}" data-mode="between" value=""/>
+    <input class="text-sm" name="{{name}}from" size="8" type="text" value="{{ app.request.get(name ~ 'from')|default('') }}"> - <input name="{{name}}to" class="text-sm" size="8" value="{{ app.request.get(name ~ 'to')|default('') }}" type="text"> <button class="btn btn-sm search-btn"><i class="font-icons-17"></i></button>
+</form>
+{% endmacro %}
+
+{#
+/**
+ * @method inter(o)
+ * @description 交互表单
+ * @param {string} o.action=grouporder/save, form的action
+ * @param {number} o.aid=null, 交互的文档ID
+ * @param {number} o.topic=null, 看房团ID
+ * @param {number} o.form_id=274, 交互的表单ID
+ * @param {string} o.cate_pushs, 区块标识 如果是区块文档 需要指定
+ * @param {string} o.form, 表单标识 如果是区块文档 需要指定
+ * @param {string} o.class=bm-form, 外层的class
+ * @param {string} o.submit_title=立即报名, 按钮的内容
+ * @param {string} o.submit_cls=null,  按钮的class
+ * @param {string} o.models=null,  所属的模型
+ * @param {string} o.submit_cls=null,  按钮的class
+ *
+ * @example 调用
+ * ```twig
+    {{cfm.inter({
+        form_id: 275,
+        aid: 11,
+        submit_title: '立即订阅',
+        action: 'grouporder/save',
+    })}}
+ * ```
+ * 生成代码
+ * ```html
+    <div class="bm-form view-form">
+        <!-- 表单 -->
+        <form action="/newcore/web/app_dev.php/house/grouporder/save" method="post" class="form-control">
+            <input type="hidden" name="_form_id" value="275"/>
+            <ul class="p10">
+                <li class="item text">
+                    <input type="text" id="name" name="name" class="text" placeholder="您的姓名" rev="姓名" rule="text" min="1" max="200" init="请输1到200字符" data-tpl="" />
+                </li>
+                <li class="item text">
+                    <input type="text" id="tel" name="tel" required="required" class="text" placeholder="您的电话" rev="电话" rule="text" min="1" max="200" init="请输1到200字符" data-tpl="" />
+                </li>
+                <input type="hidden" id="aid" name="aid" data-tpl="" value="11" />
+                <li class="item captcha">
+
+                    <div class="code-wrap">
+                        <div class="code-item code-item-input">
+                            <input type="text" id="codeText" name="codeText" required="required" width="100" height="28" placeholder="验证码" data-title="换一张" class="yzm txt text code-txt" length="5" data-tpl="" />
+                        </div>
+                        <div class="code-item code-item-img">
+                            <img id='codeImg' src="/newcore/web/app_dev.php/manage/captcha?width=100&amp;height=28&amp;placeholder=%E9%AA%8C%E8%AF%81%E7%A0%81&amp;data-title=%E6%8D%A2%E4%B8%80%E5%BC%A0&amp;class=yzm+txt+text+code-txt&amp;length=5&amp;name=codeText&amp;t=20161116092532" data-src="/newcore/web/app_dev.php/manage/captcha?width=100&amp;height=28&amp;placeholder=%E9%AA%8C%E8%AF%81%E7%A0%81&amp;data-title=%E6%8D%A2%E4%B8%80%E5%BC%A0&amp;class=yzm+txt+text+code-txt&amp;length=5&amp;name=codeText&amp;t=20161116092532" class="code-img" align="absbottom" alt="验证码" title="点击更换验证码" />
+                            <a href="javascript:;" class="code-title">换一张</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="item">
+                    <button type="submit" id="submit" disabled="disabled" name="submit" class="btn" data-role="submit"> <i class="font-cmt-4 mr5"></i>
+                        立即订阅
+                    </button>
+                </li>
+            </ul>
+        </form>
+        <!-- /表单 -->
+    </div>
+ * ```
+ */
+ #}
+{% macro inter(o) %}
+    {% set opt = {
+        aid: null,
+        topic:null,
+        formName: null,
+        Form: null,
+        form: null,
+        cate_pushs: null,
+        class: 'bm-form',
+        submit_title: '立即报名',
+        submit_cls: null,
+        attr: null,
+        models: null,
+        modal: null,
+        uconfig:null,
+        showLabel: false
+    }|merge(o) %}
+
+    {% set form = opt.Form %}
+    <div class="{{opt.class}} view-form ">
+        <!-- 表单 -->
+        <form action="{{form.vars.action|default('')}}" method="post" class="form-control form-{{opt.formName|default('')}}" {{ (opt.modal ? ' data-modal=' ~ opt.modal : '')|raw }} {{opt.attr|raw}} {{ ('view-form-lg' in opt.class ? '' : 'errorLabelContainer=".form-' ~ opt.formName|default('') ~ ' .error-wrap"')|raw }} >
+
+            <ul class="">
+                {% for v in form.children|default([]) %}
+                {% if v.vars.id == 'submit' %}
+                {% elseif v.vars.id == 'user_agent' %}
+                    <li class="item {{v.vars.block_prefixes[1]|default('') }}">
+                        {{ form_widget(form.user_agent, {value: app.request.headers.get('user-agent') }) }}
+                    </li>
+                {% elseif v.vars.id in ['form', 'aid', 'cate_pushs', 'topic', 'models'] %}
+                    {{ form_widget(v, {value: opt[(v.vars.id)]}) }}
+                {% elseif opt.showLabel %}
+                 <li class="item {{v.vars.block_prefixes[1]|default('') }}">
+                    <p style="text-indent:0">{{v.vars.label|default('')}}</p>
+                    {{ form_widget(v) }}
+                </li>
+                {% else %}
+                <li class="item {{v.vars.block_prefixes[1]|default('') }}">
+                    {{ form_widget(v) }}
+                </li>
+                {% endif %}
+                {% endfor %}
+                <li class="item item-last">
+                    <button type="submit" id="submit"  name="submit" class="btn" data-role="submit"><i class="{{opt.iconClass|default('font-cmt-4')}} mr5"></i>{{opt.submit_title}}</button>
+                </li>
+            </ul>
+            {# 如果是大表单验证信息不显示在这里 #}
+            {% if 'view-form-lg' not in opt.class %}
+            <div class="error-wrap"></div>
+            {% endif %}
+        </form>
+        <!-- /表单 -->
+    </div>
+    {{ _self.validate({
+        class: '.form-' ~ opt.formName|default('')
+    }) }}
+{% endmacro %}
+
+{#
+/**
+ * @method formField(o)
+ * @description 获取表单字段标题名称
+ * @param {string} o.value - 字段值
+ * @param {string|array} o.form=checked - 表单名时需要从表单里读数据，数组时可以直接用传来的数据
+ * @param {string} o.field=checked - 字段标识
+ * @param {string} o.tpl=%title% - 模板 %title% 将替换成标题 %value% 将替换成对应的值
+ * @example
+ * ```twig
+ * {{ core_global.formField({
+ *     value: vo.tslp,
+ *     form: 'houses',
+ *     field: 'tslp',
+ *     tpl: '<a href="http://www.aaa.com/a.php?id=%value%">%title%</a>'
+ * }) }}
+ * ```
+ */
+ #}
+ {%- macro formField(o) -%}
+{% spaceless %}
+    {# 默认设置 #}
+    {% set opt = {
+        form: 'checked',
+        field: 'checked',
+        tpl: '%title%'
+    }|merge(o) %}
+    {# 需要高亮的字段 #}
+    {% set arr_fields = ['checked', 'solved', 'pay_status', 'status', 'entrust', 'open'] %}
+    {%- for v in opt.value|split(',') -%}
+    {%- for item in (opt.form|is_array ? opt.form : opt.form|getFormField(opt.field)) if item.id == v -%}
+        {% spaceless %}
+        {# 没有审核显示红色 #}
+        {% if opt.field in arr_fields and opt.value == 0 %}
+        {{- opt.tpl|replace({'%title%': '<font color="#f00">' ~ item.name ~ '</font>', '%value%': item.id})|raw -}}
+        {% else %}
+            {{- opt.tpl|replace({'%title%': item.name, '%value%': item.id})|raw -}}
+        {% endif %}
+        {% endspaceless %}
+    {%- endfor -%}
+    {%- endfor -%}
+{% endspaceless %}
+ {%- endmacro -%}
+
+ {#
+/**
+* @method keywords(o)
+* @description 关键词拆分，关键词规则，以逗号隔开每个关键词
+* @param {String} o.keywords - 关键词数据
+* @param {String} o.models - 链接模型（控制器）
+* @param {String} o.action - 链接方法
+* @param {String} o.search_name=name - 搜索传递参数
+* @param {String} o.params - 其他参数
+* @example 调用
+* ```twig
+* {{- core_global.keywords({keywords: item.keywords}}) -}}
+* ```
+*/
+#}
+{%- macro keywords(o) -%}
+    {% set opt = {
+        models: '',
+        action: 'list',
+        search_name: 'name',
+        tpl: '%keywords%',
+        params: {}
+    }|merge(o) %}
+    {% spaceless %}
+        {% if opt.keywords|default('') %}
+            {% for item in opt.keywords|split(',') %}
+                {{opt.tpl|replace({
+                    '%keywords%': item|default(''),
+                    '%url%': (opt.models ~ '/' ~ opt.action)|U({(opt.search_name): item|default('')}|merge(opt.params))
+                })|raw}}
+            {% endfor %}
+        {% endif %}
+    {% endspaceless %}
+{%- endmacro keywords -%}
+
+{#
+/**
+* @method content(o)
+* @description 文本内容处理不良词筛选，热门词筛选
+* @param {String} o.content 内容
+* @param {String} o.default=暂无内容  默认显示内容
+* @param {Boolean} o.isbad=0  启用不良词处理
+* @param {Boolean} o.ishot=0  启用热门词处理
+* @param {Boolean} o.isimg=1  启用图片处理
+* @param {String} o.watermark=giffun  水印方案，默认图片水印
+* @param {Boolean} o.absolute=true  启用图片链接补全
+* @param {Number} o.width  图片处理宽度
+* @param {Number} o.height  图片处理高度
+* @param {Number} o.type  图片裁剪方式
+* @param {Number} o.quality  图片裁剪质量
+* @example 调用
+* ```twig
+* {{- core_global.content({content: news_detail.content|default('')}}) -}}
+* ```
+*/
+#}
+{%- macro content(o) -%}
+    {% set opt = {
+        default: '暂无内容',
+        watermark: 'giffun',
+        isbad: 0,
+        ishot: 0,
+        isimg: 1,
+        absolute: true,
+    }|merge(o) %}
+    {% set content = opt.content %}
+    {% if opt.isbad %}
+        {# 启用不良词过滤 #}
+        {% set content = content|badKeywords('') %}
+    {% endif %}
+    {% if opt.ishot %}
+        {# 启用热门词过滤 #}
+        {% set content = content|hotKeywords('') %}
+    {% endif %}
+    {% if opt.isimg %}
+        {# 图片处理字段 #}
+        {% set params_opt = ['watermark', 'width', 'height', 'type', 'quality', 'absolute'] %}
+
+        {% set params = {} %}
+        {# 筛选图片处理字段 #}
+        {% for item in params_opt %}
+            {% if opt[item]|default('') %}
+                {% set params = params|merge({
+                    (item): opt[item]
+                }) %}
+            {% endif %}
+        {% endfor %}
+        {# 图片处理 #}
+        {% set content = img(content, params) %}
+    {% endif %}
+
+    {{ o.tpl|default('<div class="content-container">%content%</div>')|replace({
+
+        '%content%': content|default(opt.default)
+    })|raw }}
+
+{%- endmacro content -%}
+
+{#
+/**
+* @method detail_nav(o)
+* @description 内页导航(一级)[附加页]
+* @param {String} o.data 内容
+* @param {String} o.class=detail-nav 样式名
+* @param {String} o.nav_detail_act=null 当前高亮
+* @param {String} o.act_class=act 当前高亮样式
+* @param {String} o.controller 当前控制器
+* @param {String} o.first_name 自定义分类导航第一项名称
+* @example
+* 调用自定义导航
+* ```twig
+* {{core_global.detail_nav({
+*       class: 'lp-nav',
+*       nav_detail_act: nav_business_act|default(1),
+*       data: [
+*           {
+*               name: '楼盘首页',
+*               url: ('business/detail')|U({id: detail.id|default('')})
+*           },
+*           {
+*               name: '楼盘详情',
+*               url: ('business/ddetail')|U({id: detail.id|default('')})
+*           },
+*           {
+*               name: '楼盘动态',
+*               url: ('business/dnews')|U({id: detail.id|default('')})
+*           },
+*           {
+*               name: '历史价格',
+*               url: ('business/dprices')|U({id: detail.id|default('')})
+*           },
+*           {
+*               name: '图库',
+*               url: ('business/dphotos')|U({id: detail.id|default('')})
+*           },
+*           {
+*               name: '楼盘点评',
+*               url: ('business/dcomment')|U({id: detail.id|default('')})
+*           }
+*       ]
+*   })}}
+* ```
+* @example
+* 分类导航
+* {{core_global.detail_nav({
+*     class: 'container',
+*     nav_detail_act: nav_video_act|default(16),
+*     controller: 'video',
+*     first_name: '视频首页',
+*     data: category_video.data
+* })}}
+*/
+#}
+{%- macro detail_nav(o) -%}
+{% set opt = {
+    class: 'detail-nav',
+    nav_detail_act: null,
+    controller: null,
+    first_name: null,
+    act_class: 'act'
+}|merge(o) %}
+{% spaceless %}
+<div class="{{opt.class}} clearfix">
+    <ul>
+        {% if opt.data|default('') %}
+            {% if opt.controller|default('') %}
+                {# 分类导航 #}
+                {% for item in opt.data %}
+                    <li>
+                        {# 链接组装 #}
+                        {% set item_url = loop.first ? (opt.controller ~ '/index')|U : (opt.controller ~ '/list')|U({category: item.id|default('')}) %}
+                        {# 名称组装 #}
+                        {% set item_name = loop.first ? opt.first_name|default(item.name) : item.name|default('') %}
+                        <a href="{{item_url|default('')}}" class="{% if opt.nav_detail_act == item.id %}{{opt.act_class}}{% endif %} {{item.class}}">
+                            {{item_name|default('')}}
+                        </a>
+                    </li>
+                {% endfor %}
+            {% else %}
+                {# 自定义导航 #}
+                {% for item in opt.data %}
+                    <li>
+                        <a href="{{item.url|default('')}}" class="{% if opt.nav_detail_act == loop.index or opt.nav_detail_act == null %}{{opt.act_class}}{% endif %} {{item.class}}">
+                            {{item.name|default('')}}
+                        </a>
+                    </li>
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+    </ul>
+</div>
+{% endspaceless %}
+{%- endmacro -%}
+
+{#
+/**
+ * @method attr(o)
+ * @description 获取属性表数据
+ * @param {String} o.name 查询的字段名称
+ * @param {Number} o.id 所属数据的id
+ * @param {Object} o.sql_opt 其他查询条件
+ * @param {String} o.default 数据默认值
+ * @example 调用
+ * ```twig
+ * {{- core_global.attr({name: item.name, id: item.id}) -}}
+ * ```
+ */
+#}
+{%- macro attr(o) -%}
+    {% set opt = {
+        service: 'db',
+        form: 'user_attr',
+        sql_opt: {},
+        tpl: '%value%',
+        default: '-'
+    }|merge(o) %}
+    {% spaceless %}
+        {% set item =  (opt.service ~ '.' ~ opt.form)|getRow({name: opt.name|default(''), checked: 1, mid: opt.id|default('')}|merge(opt.sql_opt)) %}
+        {{- opt.tpl|replace({
+            '%value%': item.value|default(opt.default),
+            '%title%': item.title|default('')
+        })|raw -}}
+    {% endspaceless %}
+{%- endmacro attr -%}
+
+{#
+/**
+ * @method validate(o)
+ * @description 表单验证
+ * @param {String} o.class 需要验证的表单样式/id(注意需要添加./#)
+ * @example 调用
+ * ```twig
+ * {{- core_global.validate({class: '.view-form'}) -}}
+ * ```
+ */
+#}
+{% macro validate(o) %}
+    {% set opt = {
+        class: '.form',
+    }|merge(o|default({})) %}
+    <script type="text/javascript">
+    seajs.use(['validate'], function() {
+        var $form = $('{{ opt.class }}');
+        $form.validate();
+    })
+</script>
+{% endmacro %}
+
+{#
+/**
+ * @method get_user_info(o)
+ * @description 显示评论数据来源
+ * @param {String} o.user_agent 当前数据来源依据
+ * @param {Object} o_user_agent 数据来源类型
+ * @param {String} o_default_agent 默认数据来源
+ * @param {Boolean} loop_default_agent 是否启用默认数据来源
+ * @example 调用
+ * ```twig
+ * {{- core_global.get_user_info(item.user_agent) -}}
+ * ```
+ */
+#}
+{% macro get_user_info(user_agent) %}
+    {# 来源类型 #}
+    {% set o_user_agent = {
+        Android: '安卓客户端',
+        iPhone: '苹果客户端',
+        Windows: '来自PC端',
+        iPad: '平板电脑'
+    } %}
+    {# 默认显示内容 #}
+    {% set o_default_agent = '来自PC端' %}
+
+    {% if user_agent|default('') %}
+    {# 当传进来的值存在时执行 #}
+        {% for k, v in o_user_agent %}
+            {# 当默认数组中定义的类型存在于传进来的值里面时执行 #}
+            {% if k in user_agent %}
+                {% set o_default_agent = v %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {{ o_default_agent }}
+{% endmacro get_user_info %}
+
+{#
+/**
+ * @method get_collect(o)
+ * @description 判断当前数据是否已收藏
+ * @param {Number} o.aid 当前数据id
+ * @param {String} o.models 当前数据模型
+ * @param {Number} user_id 当前登录用户id
+ * @param {Array} collect_data 在收藏表中搜索是否存在当前前数据
+ * @example 调用
+ * ```twig
+ * {{- core_global.get_collect({
+ *      aid: detail.id|default(''),
+ *      models: detail.models|default('')
+ * }) -}}
+ * ```
+ */
+#}
+{%- macro get_collect(o) -%}
+{% spaceless %}
+{% set user_id = app.user.id|default(0) %}
+
+{% set collect_data = ('house.collects')|getRow({checked: 1, aid: o.aid|default(''), models: o.models|default(''), uid: user_id|default('') }) %}
+
+{% set collect_length = collect_data|length %}
+
+{{collect_length|default(0)}}
+{% endspaceless %}
+{%- endmacro get_collect -%}
+{#
+/**
+ * @method collect_btn(o)
+ * @description 收藏按钮
+ * @param {Number} o.aid 当前数据id
+ * @param {String} o.models 当前数据模型
+ * @param {Number} o.uid 当前登录用户id
+ * @param {String} o.icons 图标
+ * @param {String} o.text 未收藏前文字提示
+ * @param {String} o.text_after 已收藏文字提示
+ * @param {String} o.url 收藏保存链接
+ * @param {String} o.class 样式
+ * @param {String} o.collected 是否收藏判断
+ * @param {String} o.collect 收藏信息配置
+ * @param {String} o.attr 其他属性
+ * @example 调用
+ * ```twig
+ * {{- core_global.collect_btn({
+ *      aid: detail.id|default(''),
+ *      models: detail.models|default('')
+ * }) -}}
+ * ```
+ */
+#}
+{%- macro collect_btn(o) -%}
+{% set opt = {
+    icons: 'font-icons-19',
+    text: '收藏',
+    text_after: 'data-after="已收藏"',
+    url: ('collects/save')|U({}, true),
+    uid: app.user.id|default(0),
+    jumpurl: path('house_login')
+}|merge(o) %}
+
+{{o.tpl|default('<a class="%class%" href="javascript:;" %collected% %collect% %url% %jumpurl%><i class="%icons%" %attr%></i><span %text_after%>%text%</span></a>')|replace({
+    '%icons%': opt.icons|default(''),
+    '%text%': opt.text|default(''),
+    '%text_after%': opt.text_after|default(''),
+    '%class%': opt.class|default(''),
+    '%collected%': 'data-collected=' ~ _self.get_collect({aid: opt.aid|default(''), models: opt.models|default('')}),
+    '%collect%': 'data-collect="{aid: ' ~ opt.aid|default('') ~ ', models: \'' ~ opt.models|default('') ~ '\', uid: ' ~ opt.uid|default('') ~ '}"',
+    '%url%': 'data-url=' ~ opt.url|default(''),
+    '%attr%': opt.attr|default(''),
+    '%jumpurl%': 'data-jumpurl=' ~ opt.jumpurl
+})|raw}}
+<script type="text/javascript">
+    seajs.use(['collect'], function(collect) {
+        collect.init()
+    })
+</script>
+{%- endmacro collect_btn -%}
+
+{#
+/**
+ * @method browser(o)
+ * @description 判断浏览器类型
+ * @example 调用
+ * ```twig
+ * {{- core_global.browser() -}}
+ * ```
+ */
+#}
+{%- macro browser() -%}
+{% spaceless %}
+    {% set user_agent = app.request.headers.get('user-agent') %}
+    {% set arr_tag = {
+        ie6: 'MSIE 6.0',
+        ie7: 'MSIE 7.0',
+        ie8: 'MSIE 8.0',
+        ie9: 'MSIE 9.0',
+        ie10: 'MSIE 10',
+        ie11: 'Trident/7.0; rv:11.0',
+        chrome: 'AppleWebKit',
+        Firefox: 'Firefox',
+    } %}
+    {% set tag = '' %}
+    {# {{user_agent}}<br/> #}
+    {% for k, v in arr_tag if v in user_agent %}
+        {% set tag = k %}
+    {% endfor %}
+    {{tag in ['ie6', 'ie7', 'ie8'] ? 'quirks' : tag}}
+{% endspaceless %}
+{%- endmacro -%}
+
+{#
+/**
+ * @method operating_environment(item)
+ * @description 判断网页在什么环境下的浏览器访问
+ * @example 调用
+ * @param {String} item=weixin - 可选值 'windows': 判断是否属于PC浏览器环境，'ios': 判断是否属于ios运行环境，'android': 判断是狗属于安卓运行环境，'weixin': 判断是否在微信浏览器内运行
+ * ```twig
+ *  {% if core_global.operating_environment('android') %}
+        所需浏览器运行结果
+    {% else %}
+        其他浏览器运行结果
+    {% endif %}
+ * ```
+ */
+#}
+{%- macro operating_environment(item) -%}
+    {% spaceless %}
+        {% set user_agent = app.request.headers.get('user-agent')|lower %}
+        {# 判断类型 #}
+        {% set browser = {
+            'windows': 'windows',
+            'ios': 'ipad,iphone',
+            'android': 'android',
+            'weixin': 'micromessenger'
+        } %}
+        {# 返回值 #}
+        {% set return = '' %}
+        {% for k, v in browser %}
+            {% if item|default('weixin') == k %}
+                {% for k1, v1 in v|split(',') %}
+                    {% if v1 in user_agent %}
+                        {% set return = 1 %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        {{- return -}}
+    {% endspaceless %}
+{%- endmacro -%}
+
+{#
+/**
+ * @method switch_languages(o)
+ * @description 切换语言
+ * @param {Boolean} list=0 调用所有语言还是当前语言，默认当前
+ * @param {Boolean} open 是否开启语言切换
+ * @param {String} current_language=zh_CN  当前语言，默认中文
+ * @param {String} tpl=%name% 模板
+ * @example 调用
+ * ```twig
+ * {{- core_global.switch_languages() -}}
+ * ```
+ */
+#}
+{%- macro switch_languages(o) -%}
+{% spaceless %}
+    {% set opt = {
+        open: _self.mconfigtostring({name: 'languageopen', ename: 'mbasecfg'}).__toString,
+        current_language: app.session.get('_locale', 'zh_CN'),
+        list: 0,
+        tpl: '%name%',
+        clickBtn: '[data-switch-language="1"]'
+    }|merge(o|default({})) %}
+    {% if opt.open %}
+        {% set language = ('db.language')|getAll() %}
+        {% if language.data is defined and language.pageCount|default(0) != 0 %}
+            {% if opt.list %}
+                {% for item in language.data %}
+                    {{
+                        opt.tpl|replace({
+                            '%name%': item.name|default('')|trans({}),
+                            '%ename%': item.ename|default('')|trans({})
+                        })|raw
+                    }}
+                {% endfor %}
+                <script type="text/javascript">
+                    seajs.use(['jqmodal'], function (jqmodal) {
+                        $(document).on('click', '{{opt.clickBtn|raw}}', function () {
+                            var $this = $(this);
+                            var language_data = $this.data();
+                            var ename = language_data.ename;
+                            // 发送请求
+                            $.ajax({
+                                url: '{{("common/switch")|U}}',
+                                type: 'POST',
+                                data: {
+                                    _locale: ename
+                                },
+                                dataType: 'json',
+                            })
+                            .done(function(data) {
+                                $.jqModal.tip(data.info || '语言切换成功!');
+                            })
+                            .fail(function() {
+                                // console.log("error");
+                            })
+                            .always(function() {
+                                location.reload();
+                            });
+                        })
+                    })
+                </script>
+            {% else %}
+                {% for item in language.data if item.ename == opt.current_language %}
+                    {{
+                        opt.tpl|replace({
+                            '%name%': item.name|default('')|trans({}),
+                            '%ename%': item.ename|default('')|trans({})
+                        })|raw
+                    }}
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+
+    {% endif %}
+{% endspaceless %}
+{%- endmacro -%}
+
+
+{#
+/**
+ * @method arrToStr(v)
+ * @param {Object} v 对象
+ * @description 将json转成字串，如果是字串不转换
+ * @example
+ * ```json
+    {
+        attr: {
+            d: 1,
+            e: 1
+        }
+    }
+    ```
+ * @example
+    ```
+    attr="{d: 1, e: 1}" // 转换后
+    ```
+ */
+#}
+
+{%- macro arrToStr(v) -%}
+    {{v|is_array ? v|json_encode|replace('\"', '\'')|raw : v|raw}}
+{%- endmacro -%}
+
+{%- macro h5_attr(_attr, pre) -%}
+    {% if _attr is iterable %}
+        {%- for k, v in _attr if v -%}
+            {{ pre ? (pre|trim ~ '-') : '' }}{{ k|trim }}="{{_self.arrToStr(v)}}"
+        {%- endfor -%}
+    {% else %}
+        {{ _attr|raw }}
+    {% endif %}
+{%- endmacro -%}
+
+{#
+/**
+ * @method payment(opt,o)
+ * @description 支付页面, 用于: 置顶支付, 刷新支付, 付费升级支付和支付
+ * @param {String} opt.action 表单提交链接
+ * @param {Number} opt.rmb 当前用户rmb数量
+ * @param {Number} opt.consume 支付类型 1=置顶, 2=刷新, 3=付费升级, 4=充值, 5=提现, 6=转账, 7=积分记录
+ * @param {String} opt.title 按钮文字, 默认为提交
+ * @param {Number} opt.rmb  积分余额, 默认为人民币
+ * @示例 调用
+ * ```twig
+ * {{ core_global.payment({
+ *      consume: 1,
+ *      aid: aid,
+ *      models: models
+ *      })
+ *}}
+ * ```
+ */
+#}
+{% macro payment(opt,o) %}
+     {% set opt = {
+        action: opt.action|default(('mpayment/save')|U),
+        uid: app.user.id|default(''),
+        rmb: app.user.currency.rmb|default(0),
+        title: opt.title|default('提交'),
+        consume: opt.consume|default(0)
+    }|merge(opt) %}
+    {# 支付方式模板 #}
+    {% set weixin = ('platform_weixin_open')|C %}
+    {% set alipay = ('platform_alipay_open')|C %}
+    {% set weixintpl = weixin ? '<li class="weichat on" data-paytype="1"><span></span></li>' : '' %}
+    {% set alipaytpl = alipay ? '<li class="alipay" data-paytype="2"><span></span></li>' : '' %}
+    {# {% set tpl_weixin = value %} #}
+    {%- set paytypetpl = '<ul class="choice-item">' ~ weixintpl ~ alipaytpl ~ '</ul>' -%}
+
+    <section class="list-con con" >
+        <form action="{{ opt.action }}" target="_blank" >
+            <input type="hidden" value="rmb" name="ctype">
+            {% if o %}
+                {% for k,v in o %}
+                    <input type="hidden" name="{{ k }}" value="{{ v }}">
+                {% endfor %}
+            {% endif %}
+
+            {% if weixin %}
+                <input type="hidden" name="paytype"  value="1">{# 支付方式 1为微信 2为支付宝 默认为微信 #}
+            {% else %}
+                <input type="hidden" name="paytype"  value="2">{# 支付方式 1为微信 2为支付宝 默认为微信 #}
+            {% endif %}
+
+            <input type="hidden" name="consume" value="{{ opt.consume }}">{# 1为置顶, 2为刷新 #}
+            <input type="hidden" name="touid" value="{{ opt.uid }}">{# 会员id #}
+
+            {% if opt.consume != 4 %}
+                 <input type="hidden" name="total_fee">{# 总金额 #}
+            {% endif %}
+
+            {# 当用户充值时则不输出这两个字段 #}
+            {% if opt.consume == 1 or opt.consume == 2 %}
+                <input type="hidden" name="models" value="{{ opt.models|default('sale') }}">{# 模型 #}
+                <input type="hidden" name="aid" value="{{ opt.aid|default('') }}">{# 文档id #}
+            {% endif %}
+
+            <div class="content-list">
+                {# 置顶天数 #}
+                {% if opt.consume == 1 %}
+                    {# 置顶专用方案 #}
+                    <dl class="ljzd-top clearfix radios">
+                        {% set number = ('house.rtconfig')|getAll({type: 1, checked: 1}).data %}
+                        <dt class="labs">置顶时长：</dt>
+                        {% if number %}
+                            {% for vo in number %}
+                                <dd data-number="{{ vo.value}}" data-unit="{{ vo.unit }}" data-total_fee="{{ vo.price }}">
+                                    {{ vo.name }}
+                                    <span>
+                                        {{ vo.discount|default() }}
+                                    </span>
+                                </dd>
+                            {% endfor %}
+                        {% endif %}
+                    </dl>
+                    <div class="others">
+                        <span class="labs">
+                            自定义：
+                        </span>
+                        <input type="number" min="1" name="number">
+                        天
+                    </div>
+                {% elseif opt.consume == 2 %}
+                    {# 刷新专用方案 #}
+                    {% if opt.type == 1 %}
+                        <input type="hidden" name="type" value="1">
+                        <input name="times" type="hidden" >
+                        <div class="autoref">
+                            计划天数：
+                            <input type="text" value="1" name="day">天
+                        </div>
+                        <div class="autoref mt10">
+                            <span class="l">计划时间：
+                                <input type="text" name="stimes" value="">
+                            </span>
+                            <span class="l tip">
+                                请填写正确的时间格式: 如,08:00,  如果多个时间, 请用英文逗号隔开 如: 08:00,09:00, 区间为: 00:00到23:59
+                            </span>
+                        </div>
+                    {% else %}
+                        <input type="hidden" name="type" value="2">
+                        <div class="handref" >
+                                                         <span class="l tip">
+                              智能刷新为每6小时刷新一次, 支付成功后, 立即刷新一次
+                        </span>
+                            <div class="blank10"></div>
+                            {% set refconfig = ('house.rtconfig')|getAll({ type: 2, checked: 1}).data %}
+                            {% set price = ('house.rtconfig')|getOne('price',{ type:2, value:1, checked:1}) %}
+                            {% for vo in refconfig %}
+                                {% set cishu = vo.value * 4 %}
+                                {% set danjia = (price/4)|round %}
+                                {% set zongjia = vo.value * 4 * danjia %}
+                                {% set zhekou = (vo.price/zongjia) * 10 %}
+                            <label>
+                                <input type="radio" name="refconfig"  data-price="{{ vo.price }}" value="{{ vo.id }}"><span class="mr20">{{ vo.name }}<i><font color="#888" class="fz12 ml5">( {{ vo.value}}天 )</font></i></span>  <b><font color="#f00">{{ vo.price }}</font></b> 元 {% if price != vo.price %}( <font color="#F00">{{ zhekou|round }}</font>折,仅{{ (vo.price/cishu)|round(1, 'floor')}}元/次 )  省 <font color="#F00">{{ zongjia - vo.price }}</font> 元{% endif %}
+                            </label>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% elseif opt.consume == 3 %}
+                    <div class="handref">
+                        {% set refconfig = ('db.memconfig')|getAll({}).data %}
+                        {% for vo in refconfig %}
+                            <label class="sjjr">
+                                <input type="radio" name="memconfig" value="{{ vo.id }}" data-money="{{ vo.money }}" data-number="{{ vo.duedate }}">
+                                <span class="mr10"> {{ vo.name }} 价格：{{ vo.money }} 元 </span>
+                                <span class="mr5">有效期：{{ vo.duedate }}天</span>
+                                <span class="mr5">赠送 {{ vo.tops }} 天房源置顶</span>
+                                <span class="mr5">每天赠送 {{ vo.refreshs }} 条房源刷新次数</span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                {% elseif opt.consume == 4 %}
+                    <div class="last-p"> <span class="labtext">充值金额：</span>
+                        <input name="total_fee" value="" type="text" class="inputsty">元
+                    </div>
+                {% endif %}
+
+                {% if opt.consume == 4 %}
+                   {{ paytypetpl|raw }}
+                {% else %}
+                    <div class="some-msg-box">
+                        <ul>
+                            <li class="some-msg some-msg-first clearfix">
+                                <div class="total">
+                                    总计金额: <span class="quit-pay-money">0</span>元
+                                </div>
+                                <div class="balance">
+                                    <input type="checkbox" name="balance" value='1'> 余额: <span>{{ opt.rmb }}</span>元
+                                </div>
+                            </li>
+                            <li class="some-msg">
+                                <ul class="detail-pay-bottom" style="display: block;">
+                                    <li>
+                                        <label>还需支付：</label>
+                                        <span class="all-pay" id="quit-all-pay">0</span>
+                                        元
+                                    </li>
+                                    {{ paytypetpl|raw }}
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                {% endif %}
+                <div class="bottom-confirm tac">
+                    <input type="submit" class="mszd-btn" value="{{ opt.title }}">
+                </div>
+            </div>
+        </form>
+    </section>
+{% endmacro %}
+
+
+
+{#
+/**
+ * @method menu_url
+ * @description 根据菜单ID生成后台链接
+ * @param {Number} menuid 菜单的ID
+ * @param {String} base_url=main  url的基本链接，没有U解析之前的链接
+ * @example 调用
+ * ```twig
+ * {{- core_global.menu_url(280) -}}
+ * ```
+ * ```
+ * http://dev.08cms.com/newhouse/web/app_dev.php/main/main#/changguiguanli/ershoufang/msalemanage
+ * ```
+ */
+#}
+{% macro menu_url(menuid, base_url) %}
+    {%- spaceless -%}
+    {% if menuid %}
+    {% set level = 0 %}
+    {% set menus_data = ('db.menus')|getParents(menuid).data|default([]) %}
+    {# 会员中心写死 #}
+    {% if menus_data|length and menus_data[0].id == 328 %}
+        {% set level = 1 %}
+        {% set menus_data = ('db.menus')|getParents(menuid).data[level:] %}
+    {% endif %}
+        {# {{ dump(menus_data) }} #}
+    {% if level == 1 %}
+    {# 会员中心 #}
+        {% if menus_data|length == 3  %}
+            {% set route = '#/' ~ (menus_data[1].ename ? : menus_data[1].action) ~ '/' ~ (menus_data[2].ename ? : menus_data[2].action) %}
+        {% elseif menus_data|length == 2  %}
+            {% set route = '#/' ~ (menus_data[1].ename ? : menus_data[1].action) %}
+        {% endif %}
+    {% else %}
+    {# 后台 #}
+        {% if menus_data|length == 4 %}
+            {% set route = '#/' ~ (menus_data[0].ename ? : menus_data[0].action) ~ '/' ~ (menus_data[2].ename ? : menus_data[2].action) ~ '/' ~ (menus_data[3].ename ? : menus_data[3].action) %}
+        {% elseif menus_data|length == 3  %}
+            {% set route = '#/' ~ (menus_data[0].ename ? : menus_data[0].action) ~ '/' ~ (menus_data[2].ename ? : menus_data[2].action) %}
+        {% elseif menus_data|length == 2  %}
+            {% set route = '#/' ~ (menus_data[0].ename ? : menus_data[0].action) %}
+        {% endif %}
+    {% endif %}
+
+        {{ base_url|default('main/index')|U }}{{ route ?? '' }}
+    {% else %}
+    请指定菜单ID
+    {% endif %}
+    {%- endspaceless -%}
+{% endmacro menu_url %}

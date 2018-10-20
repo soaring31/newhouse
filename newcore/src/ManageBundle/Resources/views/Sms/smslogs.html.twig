@@ -1,0 +1,30 @@
+{% extends 'ManageBundle::mainlayout.html.twig' %}
+{% import 'ManageBundle:Form:lists.html.twig' as lists %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block tableMain %}
+<span class="tableDesc">
+    发送记录列表>> &nbsp; 
+    <input type="text" id="search_name" value="{{ app.request.get('name','') }}" data-source="{{ app.request.get('name','') }}" placeholder="电话号码查询" />
+    <input type="button" id="btnfun_delete_batch1" class="search-btn" data-url="{{ ('smslogs/delbatch')|U('kid=3') }}" value="删除3月前">
+    <input type="button" id="btnfun_delete_batch1" class="search-btn" data-url="{{ ('smslogs/delbatch')|U('kid=1') }}" value="删除1月前">
+</span>
+{# 列表 #}
+
+{{ lists.list(ident.info|default('')) }}
+{% endblock %}
+
+{% block page %}
+{{lists.page(ident.info)}}
+{% endblock %}
+{% block submit %}{% endblock %}
+{% block promptUl %}<li>
+	<b>结果错误代码对照表：</b>
+	{% for key, msg in errInfo %}
+		{{key}} = {{msg}};　 
+	{% endfor %}
+</li>{% endblock %}

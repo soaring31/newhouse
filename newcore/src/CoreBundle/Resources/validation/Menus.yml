@@ -1,0 +1,122 @@
+CoreBundle\Entity\Menus:
+    properties:
+        pid:
+            -
+                NotBlank:
+                    message: 上级菜单ID不能为空
+            -
+                Length:
+                    min: 1
+                    max: 10
+                    minMessage: '上级菜单ID不能少于{{ limit }}字符'
+                    maxMessage: '上级菜单ID不能大于{{ limit }}字符'
+        name:
+            -
+                NotBlank:
+                    message: 菜单名称不能为空
+            -
+                Length:
+                    min: 1
+                    max: 100
+                    minMessage: '菜单名称不能少于{{ limit }}字符'
+                    maxMessage: '菜单名称不能大于{{ limit }}字符'
+        bundle:
+            -
+                NotBlank:
+                    message: 所属bundle不能为空
+            -
+                Length:
+                    min: 1
+                    max: 50
+                    minMessage: '所属bundle不能少于{{ limit }}字符'
+                    maxMessage: '所属bundle不能大于{{ limit }}字符'
+        controller:
+            -
+                NotBlank:
+                    message: 所属控制器不能为空
+            -
+                Length:
+                    min: 1
+                    max: 100
+                    minMessage: '所属控制器不能少于{{ limit }}字符'
+                    maxMessage: '所属控制器不能大于{{ limit }}字符'
+        action:
+            -
+                NotBlank:
+                    message: 所属动作不能为空
+            -
+                Length:
+                    min: 1
+                    max: 50
+                    minMessage: '所属动作不能少于{{ limit }}字符'
+                    maxMessage: '所属动作不能大于{{ limit }}字符'
+        identifier:
+            -
+                NotBlank:
+                    message: Bundle标识不能为空
+            -
+                Length:
+                    min: 1
+                    max: 100
+                    minMessage: 'Bundle标识不能少于{{ limit }}字符'
+                    maxMessage: 'Bundle标识不能大于{{ limit }}字符'
+        sort:
+            -
+                NotBlank:
+                    message: 排序不能为空
+            -
+                Length:
+                    min: 1
+                    max: 3
+                    minMessage: '排序不能少于{{ limit }}字符'
+                    maxMessage: '排序不能大于{{ limit }}字符'
+        level:
+            -
+                NotBlank:
+                    message: 等级不能为空
+            -
+                Length:
+                    min: 1
+                    max: 3
+                    minMessage: '等级不能少于{{ limit }}字符'
+                    maxMessage: '等级不能大于{{ limit }}字符'
+        title:
+            -
+                NotBlank:
+                    message: 备注不能为空
+            -
+                Length:
+                    min: 1
+                    max: 100
+                    minMessage: '备注不能少于{{ limit }}字符'
+                    maxMessage: '备注不能大于{{ limit }}字符'
+        status:
+            -
+                NotBlank:
+                    message: 状态不能为空
+            -
+                Length:
+                    min: 1
+                    max: 100
+                    minMessage: '状态不能少于{{ limit }}字符'
+                    maxMessage: '状态不能大于{{ limit }}字符'
+        is_hide:
+            -
+                NotBlank:
+                    message: 是否隐藏不能为空
+            -
+                Length:
+                    min: 1
+                    max: 1
+                    minMessage: '是否隐藏不能少于{{ limit }}字符'
+                    maxMessage: '是否隐藏不能大于{{ limit }}字符'
+        is_dev:
+            -
+                NotBlank:
+                    message: 仅开发者可见不能为空
+            -
+                Length:
+                    min: 1
+                    max: 1
+                    minMessage: '仅开发者可见不能少于{{ limit }}字符'
+                    maxMessage: '仅开发者可见不能大于{{ limit }}字符'

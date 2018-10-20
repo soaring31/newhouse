@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title>news</title>    
+    <style type="text/css">
+
+    .img-news-10,
+    .img-news-11,
+    .img-news-01,
+    .img-news-02,
+    .img-news-03,
+    .img-news-04,
+    .img-news-05,
+    .img-news-06,
+    .img-news-07,
+    .img-news-08,
+    .img-news-09 {
+        display: inline-block;
+        *zoom: 1;
+        *display: inline;
+        background-image: url(news.png);
+    }
+
+    .img-news-10 {
+        width: 16px;
+        height: 16px;
+        background-position: 0 -80px;
+    }
+
+    .img-news-11 {
+        width: 16px;
+        height: 15px;
+        background-position: -42px -55px;
+    }
+
+    .img-news-01 {
+        width: 23px;
+        height: 45px;
+        background-position: 0 0;
+    }
+
+    .img-news-02 {
+        width: 23px;
+        height: 45px;
+        background-position: -99px 0;
+    }
+
+    .img-news-03 {
+        width: 23px;
+        height: 45px;
+        background-position: -33px 0;
+    }
+
+    .img-news-04 {
+        width: 23px;
+        height: 45px;
+        background-position: -66px 0;
+    }
+
+    .img-news-05 {
+        width: 7px;
+        height: 7px;
+        background-position: -112px -55px;
+    }
+
+    .img-news-06 {
+        width: 7px;
+        height: 7px;
+        background-position: -26px -80px;
+    }
+
+    .img-news-07 {
+        width: 12px;
+        height: 8px;
+        background-position: -90px -55px;
+    }
+
+    .img-news-08 {
+        width: 12px;
+        height: 8px;
+        background-position: -68px -55px;
+    }
+
+    .img-news-09 {
+        width: 32px;
+        height: 15px;
+        background-position: 0 -55px;
+    }
+
+
+    * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    .container {
+        font-family: microsoft yahei;
+        width: 1200px;
+        margin: 20px auto;
+    }
+    li {
+        float: left;
+        padding: 5px;
+        margin: 5px;
+        border: 1px solid #eee;
+        text-align: center;
+        font-family: arial;
+        color: #fff;
+        height: 103px;
+        width: 42px;
+        min-width: 80px;
+        line-height: 1.5;
+        background-color: #272822;
+        position: relative;
+    }
+    .class {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 48px;
+        width: 100%;
+        cursor: pointer;
+    }
+    pre {
+        margin: 15px 0;
+        color: #FD8520;
+        font-family: Consolas;
+        font-size: 14px;
+        padding: 15px;
+        background-color: #272822;
+    }
+    .bg i {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        margin-left: 10px;
+        cursor: pointer;
+        float: right;
+        border: 2px solid #fff;
+    }
+
+    .bg i.act {
+        border-color: #f00;
+    }
+
+    
+    
+    .bg i:nth-child(1) {
+        background-color: #22D5BB;
+    }
+    
+    .bg i:nth-child(2) {
+        background-color: #E1F4D8;
+    }
+    
+    .bg i:nth-child(3) {
+        background-color: #8B9D37;
+    }
+    
+    .bg i:nth-child(4) {
+        background-color: #FE842E;
+    }
+    
+    .bg i:nth-child(5) {
+        background-color: #272822;
+    }
+        
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <h2>调用方式</h2>
+
+        <h3>css</h3>
+<pre class="text">
+@import 'img-news'; //导入css 标识-文件名
+@include img-news($img-news); //调用全部样式， 标识-文件名($标识-文件名);
+</pre>
+        <h3>html</h3>
+<pre>
+&lt;i class=&quot;img-demo-home&quot;&gt;&lt;/i&gt;; //class 标识+合成后文件名+单个文件名
+</pre>
+
+        <h3><span class="fr bg"><i></i><i></i><i></i><i></i><i class="act"></i></span>详细代码</h3>
+        点击下面文字直接复制到剪切板
+    </div>
+</div>
+<ul>
+
+
+    <li>
+        <i class="img-news-10"></i>
+        <div class="class">img-news-10</div>
+    </li>
+
+    <li>
+        <i class="img-news-11"></i>
+        <div class="class">img-news-11</div>
+    </li>
+
+    <li>
+        <i class="img-news-01"></i>
+        <div class="class">img-news-01</div>
+    </li>
+
+    <li>
+        <i class="img-news-02"></i>
+        <div class="class">img-news-02</div>
+    </li>
+
+    <li>
+        <i class="img-news-03"></i>
+        <div class="class">img-news-03</div>
+    </li>
+
+    <li>
+        <i class="img-news-04"></i>
+        <div class="class">img-news-04</div>
+    </li>
+
+    <li>
+        <i class="img-news-05"></i>
+        <div class="class">img-news-05</div>
+    </li>
+
+    <li>
+        <i class="img-news-06"></i>
+        <div class="class">img-news-06</div>
+    </li>
+
+    <li>
+        <i class="img-news-07"></i>
+        <div class="class">img-news-07</div>
+    </li>
+
+    <li>
+        <i class="img-news-08"></i>
+        <div class="class">img-news-08</div>
+    </li>
+
+    <li>
+        <i class="img-news-09"></i>
+        <div class="class">img-news-09</div>
+    </li>
+
+</ul>
+<script type="text/javascript">
+    var BASE_URL = window.location.href.replace('./images/news.html'.replace('./', ''), '') + '/';
+</script>
+<script type="text/javascript">document.write('<script src="' + BASE_URL + '/js/seajs.js"><\/script>');</script>
+
+<script type="text/javascript">
+if (BASE_URL.indexOf('http') == 0) {
+    seajs.use(['clipboard'], function() {
+        $(function() {
+            $('.index').click(function(event) {
+                location.href = BASE_URL;
+            });
+            var $icons = $('.class, .text');
+            $('body').on('copy', '.class, .text', function(e) {
+                    $icons.removeAttr('style');
+                    e.clipboardData.clearData();
+                    e.clipboardData.setData("text/plain", $(this).css({color:'#f00'}).text());
+                    e.preventDefault();
+                })
+                .on('click', '.bg i', function() {
+                    $(this).addClass('act').siblings('i').removeClass('act')
+                    $('li').css({
+                        backgroundColor: $(this).css('background-color'),
+                    })
+                })
+        });
+    })
+};
+</script>
+</body>
+</html>

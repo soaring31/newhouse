@@ -1,0 +1,40 @@
+
+$img-face-1:(24px,24px,0,0,img-face-1);
+
+$img-face-2:(24px,24px,-34px,0,img-face-2);
+
+$img-face-3:(24px,24px,0,-34px,img-face-3);
+
+$img-face-4:(24px,24px,-34px,-34px,img-face-4);
+
+$img-face-5:(24px,24px,-68px,-34px,img-face-5);
+
+$img-face-6:(24px,24px,0,-68px,img-face-6);
+
+$img-face-7:(24px,24px,-34px,-68px,img-face-7);
+
+$img-face-8:(24px,24px,-68px,-68px,img-face-8);
+
+$img-face-444453:(24px,24px,-68px,0,img-face-444453);
+
+$img-face: ($img-face-1,$img-face-2,$img-face-3,$img-face-4,$img-face-5,$img-face-6,$img-face-7,$img-face-8,$img-face-444453,);
+
+@mixin img-face($sprites) {
+  %icoface {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/face.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+      @extend %icoface;
+    }
+  }
+}

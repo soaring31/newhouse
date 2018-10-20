@@ -1,0 +1,72 @@
+{% extends 'HouseBundle:Ask:index.html.twig' %}
+{#
+ * url_category : 获取URL的分类
+ * url_name : 获取URL的name字段
+ * url_solved : 获取解决的状态
+ * category : 获取当前分类的详情
+ * category_parents ：获取当前的所有父级
+ * nav_ask_act ： 导航条判断（通过判断获取到的父级id）
+#}
+{% set url_category = app.request.get("category", 38)  %}
+
+{% set url_name = app.request.get('name') %}
+
+{% set category = (url_category)|getCategoryById() %}
+
+{% set category_parents = ('house.category')|getParents(url_category|default('38')) %}
+
+{% set nav_ask_act = category_parents.data[1].id|default('38') %}
+
+{% block title %}{{cur_area_data}}{{category.name}}问题解答_{{cur_area_data}}{{category.name}}知识-诸葛问答{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data}}{{category.name}}知识解答,{{cur_area_data}}{{category.name}}知识问答" />
+<meta name="description" content="{{cur_area_data}}诸葛问答提供{{ident.list.pageCount}}个{{category.name}}问题,这里有权威的行业人士为您解答{{category.name}}相关问题,同时有无数网友在这里交流." />
+{% endblock key_des %}
+
+{# 屏蔽推送位 #}
+{% block push_ask %}{% endblock push_ask %}
+
+{% block current_ask %}
+
+    {% if url_name|default('') %}
+        <span>
+            {{url_name|default('') ~ '搜索结果'}}
+        </span>
+    {% else %}
+        {% if url_category|default('') == 38 %}
+            <span>问答</span>
+        {% else %}
+            {% for item in category_parents.data|default('') %}
+                {% if url_category|default('') == item.id %}
+                    <a href="{{('ask/list')|U({},true)}}">
+                        问答
+                    </a>
+                    <span>&gt;</span>
+                    <span>{{ item.name|default('') }}</span>
+                {% endif %}
+
+                {#{% if not loop.first %}
+                    {% if loop.last %}
+                        <span>
+                            {{item.name|default('-')}}
+                        </span>
+                    {% else %}
+                        <a href="{{('ask/list')|U({category: item.id|default('')})}}">
+                            {{item.name|default('')}}
+                        </a>
+                        <span>&gt;</span>
+                    {% endif %}
+                {% endif %}#}
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+{% endblock current_ask %}
+
+{# 分页 #}
+{% block page_ask %}
+    <div class="blank20"></div>
+    {{core_global.page(ident.list)}}
+{% endblock page_ask %}
+
+{% block js %}{% endblock js %}

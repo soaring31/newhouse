@@ -1,0 +1,197 @@
+@charset 'UTF-8';
+/*
+ * =========================================================================
+ * APIClud - AUI UI 框架    流浪男  QQ：343757327  http://www.auicss.com
+ * 索引列表样式
+ * Verson 0.0.1
+ * =========================================================================
+ */
+.aui-searchbar-wrap.fixed {
+    position: fixed;
+    z-index: 11;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+}
+
+.aui-indexed-list {
+    position: relative;
+    z-index: 10;
+    top: .44444rem; 
+
+    width: 100%;
+}
+
+.aui-indexed-list::-webkit-scrollbar {
+    visibility: hidden; 
+
+    width: 0;
+    height: 0;
+}
+
+.aui-indexed-list-bar {
+    position: absolute;
+    z-index: 20;
+    top: 0;
+    right: 0;
+
+    width: 30px;
+    height: 100%;
+
+    opacity: .6;
+}
+
+.aui-indexed-list-bar a {
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 14px; 
+
+    display: block;
+
+    height: 14px;
+    margin: 0;
+    padding: 0;
+
+    text-align: center;
+
+    color: #666;
+}
+
+.aui-indexed-list-bar a .aui-iconfont {
+    font-size: .53333rem;
+
+    color: #656565;
+}
+
+.aui-list-view {
+    margin-bottom: 0;
+}
+
+.aui-indexed-list-toast {
+    font-size: 26px;
+    line-height: 40px;
+
+    position: fixed;
+    z-index: 20;
+    right: 0;
+
+    width: 100px;
+    height: 40px;
+    padding-left: 20px;
+
+    -webkit-transition: all .5s;
+            -moz-transition: all .5s;
+            transition: all .5s;
+    -webkit-transform: translateX(100%);
+            -moz-transform: translateX(100%);
+             -ms-transform: translateX(100%);
+         transform: translateX(100%); 
+
+    opacity: 0;
+    color: #fff;
+    -webkit-border-top-left-radius: 20px;
+       -moz-border-radius-topleft: 20px;
+            border-top-left-radius: 20px;
+    -webkit-border-bottom-left-radius: 20px;
+       -moz-border-radius-bottomleft: 20px;
+            border-bottom-left-radius: 20px;
+    background-color: rgba(0, 0, 0, .5);
+}
+
+.aui-indexed-list-toast.active {
+    display: block;
+
+    -webkit-transition: all 0s;
+            -moz-transition: all 0s;
+            transition: all 0s;
+    -webkit-transform: translateX(0%);
+            -moz-transform: translateX(0%);
+             -ms-transform: translateX(0%);
+         transform: translateX(0%); 
+    -webkit-animation: fadeInRight .3s;
+            -moz-animation: fadeInRight .3s;
+         animation: fadeInRight .3s;
+
+    opacity: 1;
+}
+
+.aui-indexed-list-view {
+    position: relative;
+
+    background-color: #fff;
+}
+
+.aui-indexed-list-view-group {
+    font-size: 14px;
+    font-weight: 400;
+
+    position: relative; 
+
+    margin-top: -1px;
+    padding: 5px 15px;
+
+    color: #999;
+    background: #f4f4f4;
+}
+
+.aui-indexed-list-view-group:before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    display: block;
+
+    content: '';
+    -webkit-transform: scale(1);
+    -webkit-transform-origin: 0 0;
+    pointer-events: none; 
+
+    border-top: 1px solid #c8c7cc;
+}
+
+.aui-indexed-list-view.aui-in .aui-indexed-list-view-group:after {
+    left: 0;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5) {
+    .aui-indexed-list-view-group:before {
+        right: -100%;
+        bottom: -100%;
+
+        -webkit-transform: scale(.5);
+    }
+}
+
+@-webkit-keyframes fadeInRight {
+    from {
+        -webkit-transform: translate3d(100%, 0, 0);
+                transform: translate3d(100%, 0, 0); 
+
+        opacity: 0;
+    }
+}
+
+@-moz-keyframes fadeInRight {
+    from {
+        -webkit-transform: translate3d(100%, 0, 0);
+                -moz-transform: translate3d(100%, 0, 0);
+             transform: translate3d(100%, 0, 0); 
+
+        opacity: 0;
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        -webkit-transform: translate3d(100%, 0, 0);
+                -moz-transform: translate3d(100%, 0, 0);
+             transform: translate3d(100%, 0, 0); 
+
+        opacity: 0;
+    }
+}
+
+/*# sourceMappingURL=..\..\..\..\site\HousemobileBundle\Resources\src\css\aui-indexed-list.css.map */

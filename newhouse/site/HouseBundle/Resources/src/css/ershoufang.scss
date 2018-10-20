@@ -1,0 +1,387 @@
+@import 'static/ats'; // 工具类, 每个文件都要导入
+// 导入全部font demo 图标
+$major-color:#ee4433 !default;
+$text-color:#888 !default;
+@import 'sale';
+// 二手公用模块
+@import 'filter'; // 筛选模块
+@import 'sale-filter-hd'; // 分类筛选头部
+@import 'sale-list-com';
+@import 'font-esf'; //导入css 标识-文件名
+@import 'sort'; // 重新排序
+@import 'list-hd'; // 列表顶部
+@import 'lp-compare';
+// 对比弹窗样式
+@import 'jjr-list'; // 经纪人列表
+
+.sort .sort-btn.act {
+	background: transparent;
+}
+
+$major-color:#ee4433;
+
+
+
+.container {
+	@extend %clearfix;
+}
+
+// 外围包裹
+.main {
+	float: left;
+	width: 930px;
+}
+
+.last {
+	margin-right: 0 !important;
+}
+
+// 个人房源的选项卡内容
+
+.tag-middle {
+	height: 38px;
+	line-height: 38px;
+	padding-left: 15px;
+	background: #f8f8f8;
+	border-bottom: 1px solid #ddd;
+	@extend %clearfix;
+}
+
+.t-m-l {
+	float: left;
+	@extend %clearfix;
+	p {
+		float: left;
+		margin-right: 30px;
+	}
+	.act { 
+		color: $major-color;
+	}
+}
+
+.t-m-r {
+	float: right;
+	// width: 350px;
+
+	font-size: 14px;
+	color: $text-color;
+	position: relative;
+	@extend %clearfix;
+
+	i {
+		margin-left: 3px;
+		font-size: 12px;
+	}
+	.font-esf-1 {
+		vertical-align: top;
+	}
+
+	ul {
+		position: absolute;
+		width: 100px;
+		border: 1px solid #ddd;
+		top: 48px;
+		left: -12px;
+		display: none;
+
+		li {
+			font-size: 13px;
+			line-height: 24px;
+			color: #333;
+		}
+		.checked {
+			color: $major-color;
+			line-height: 38px;
+		}
+	}
+
+	.sort {
+		@extend %clearfix;
+	}
+
+	i {
+		margin-left: 1px;
+	}
+
+	.sort-btn {
+		line-height: 32px;
+		border: none;
+		background: #f8f8f8;
+	}
+}
+
+.tag-contr {
+	width: 100%;
+}
+
+.tag-box-t:hover {
+	background: #f9f9f9;
+}
+
+
+// 只有文本的样式
+.tag-box-t {
+	border-bottom: 1px solid #eaeaea;
+	background: #fff;
+	padding-top: 30px;
+	@extend %clearfix;
+}
+
+
+// 只有文字的结构的样式
+.t-b-t-l {
+	float: left;
+	margin-left: 18px;
+	width: 500px;
+	margin-bottom: 18px;
+
+	h3 {
+		line-height: 24px;
+		color: #2c2c2c;
+		font-size: 14px;
+		font-weight: 700;
+	}
+
+	span {
+		font-size: 14px;
+		color: #ccc;
+	}
+
+
+
+	p {
+		font-size: 14px;
+		color: #2c2c2c;
+		line-height: 26px;
+	}
+
+	.place {
+		color: #2c2c2c;
+	}
+}
+
+.t-b-t-m {
+	float: left;
+	width: 120px;
+	p {
+		text-align: center;
+		font-size: 14px;
+		color: #2c2c2c;
+		line-height: 26px;
+	}
+}
+
+.t-b-t-r {
+	float: right;
+	width: 150px;
+
+	p {
+		font-size: 14px;
+		color: #666;
+		margin-bottom: 5px;
+	}
+
+	span {
+		color: #f60;
+
+		font-size: 14px;
+	}
+
+	.big {
+		font-size: 20px;
+	}
+}
+
+// 二手房公用的头部
+
+.sort-head {
+
+	border-bottom: 2px solid $major-color;
+	@extend %clearfix;
+
+	h2 {
+		float: left;
+		padding: 0 20px;
+		height: 44px;
+		line-height: 46px;
+		color: #fff;
+		background: $major-color;
+
+	}
+
+	.sort {
+		margin-top: 8px;
+	}
+}
+
+// .sale-list-item{
+	.sale-item-l{
+		.sale-item-img{
+			width: 180px;
+			height: 135px;
+		}
+		.sale-item-text{
+			width: 400px;
+   			margin-left: 200px;
+		}
+	}
+// }
+.main {
+    .agn-con {
+        .sale-item-text {
+            width: 450px;
+            margin-left: 132px;
+        }
+    }
+}
+
+
+
+// 经纪公司的内容部分
+
+.cmp-con {
+	width: 930px;
+
+}
+
+// 经纪公司的内容框
+.cmp-box {
+	width: 50%;
+	float: left;
+}
+.c-b-l{
+	padding: 20px 0 20px 0;
+	border-bottom: 1px dashed #ccc;
+	img {
+		float: left;
+		margin-top: 6px;
+		width: 160px;
+		border: 5px solid #e6e6e6;
+	}
+}
+.c-b-r{
+	margin-left: 70px;
+}
+
+.cmp-text{
+	p{
+		margin-left: 182px;
+		line-height: 28px;
+		height: 28px;
+		overflow: hidden;
+		font-size: 16px;
+		color: #333;
+	}
+
+	b {
+		color: #6f6d6c;
+	}
+
+	.num {
+		color: #6f6d6c;
+	}
+}
+// 走势图
+.s-trend {
+	margin-top: 40px;
+	width: 248px;
+	border: 1px solid #ccc;
+	padding: 8px 0;
+	line-height: 30px;
+	color: #333;
+
+	h3 {
+		text-indent: 22px;
+		font-size: 14px;
+		font-weight: 700;
+	}
+
+	p {
+		text-indent: 22px;
+		font-size: 14px;
+	}
+
+	span {
+		margin-left: 60px;
+	}
+
+}
+
+// 小区部分
+
+.vil-con {
+
+	border-bottom: 1px solid #ccc;
+
+	&:hover {
+		background: #fafafa;
+	}
+
+	.sale-item-l {
+		img {
+			float: left;
+			width: 160px;
+			height: 110px;
+			margin-top: 4px;
+		}
+	}
+
+	.sale-item-text {
+		margin-left: 190px;
+		font-size: 14px;
+		width: 400px;
+		color: #333;
+		h3 {
+			line-height: 32px;
+			font-weight: 700;
+		}
+		p {
+			line-height: 28px;
+		}
+		.num {
+			color: #f50;
+		}
+		i{
+			vertical-align: -2px;
+		}
+	}
+
+	.sale-item-r {
+
+		// width: auto;
+		width: 330px;
+		@extend %clearfix;
+	}
+
+	.v-b-r-l {
+		float: left;
+		line-height: 34px;
+		font-size: 14px;
+		color: #333;
+		min-width: 114px;
+		span {
+			font-size: 16px;
+			font-family: georgia;
+		}
+
+		.shou {
+			background: #f06d07;
+		}
+
+		.zu {
+			background: #2d99d6;
+		}
+	}
+
+	.margin {
+		margin: 0 28px 0 46px;
+	}
+
+}
+.s-look {
+	li {
+		.left {
+			text-align: left;
+		}
+	}
+}

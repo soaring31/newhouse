@@ -1,0 +1,9 @@
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+
+{% extends (core_global.mconfigtostring({name: 'businessmodule', ename: 'mabled'}) != '0') ? 'HouseBundle::base_top_search.html.twig' : 'HouseBundle:Business:business_close.html.twig' %}
+
+{% set nav_act = 6 %}
+
+{% block css %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/business.css')}}
+{% endblock css %}

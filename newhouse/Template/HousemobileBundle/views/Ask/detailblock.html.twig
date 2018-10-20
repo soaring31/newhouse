@@ -1,0 +1,133 @@
+
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 
+/**
+ * detail : 获取问答的详细内容
+ * detail_answer: 获取当前问题的所有回答
+ * sort_category_ask: 同分类下问答
+ * detail_answer_best:　获取最佳答案
+ * user: 提问者
+ * user_info: 提问者附加属性
+ * user_name: 提问者名字
+ * sort_clicks_ask: 精彩问答
+ */
+ #}
+
+{% set detail = detail|default(cident.detail.data[0]|default('')) %}
+
+{% set detail_answer = ('house.answer')|getAll({checked: 1, ask: detail.id|default(''), findType: 1, pageSize: 10, isanswer: 0}) %}
+
+{% set detail_answer_best = ('house.answer')|getAll({checked: 1, ask: detail.id|default(''), findType: 1, pageSize: 1, isanswer: 1}) %}
+
+{% set sort_clicks_ask = ('house.ask')|getAll({checked: 1, orderBy: 'desc', order: 'clicks', pageSize: 10, findType: 1}) %}
+
+{% set sort_category_ask = ('house.ask')|getAll({category: detail.category|default(''), checked: 1,findType:1,pageSize: 10, id: 'neq|' ~ detail.id|default(0)}) %}
+
+{% set user = ('db.users')|getRow({id:detail.uid|default(''),checked: 1}) %}
+
+{% set user_info = ('db.userinfo')|getRow({uid: detail.uid|default('')}) %}
+
+{% set user_name = user_info.nicename|default(user.username|default('')) %}
+
+{% block result %}
+    <nav class="bar bar-tools">
+        <span class="external open-popup answer" data-popup=".popup-ask">
+            <i class="icon font-f-23"></i>
+            <span class="huida">我要回答</span>
+        </span>
+        {# 收藏按钮 #}
+        {{core_global.collect_btn({
+            aid: detail.id|default(''),
+            models: detail.models|default('ask'),
+            class: 'external collect',
+            icons: 'icon font-f-30 icon-cent'
+        })}}
+        <a class="external open-popup report" data-popup=".popup-report" href="javascript:;">
+            <span class="icon font-f-31 icon-cent"></span><br>
+            <span>举报</span>
+        </a>
+    </nav>
+    <div class="content infinite-scroll">
+     <!-- Slider -->
+        <div class="question">
+            <p>
+                <span class="currency">
+                    <i class="icon font-f-26"></i>
+                    {{detail.currency|default('')}}
+                </span>
+                {{detail.name|default('')}}
+            </p>
+            <div class="info mt20">
+                {{core_global.content({content: detail.content|default(''), default: '暂无详细描述'})}}
+            </div>
+            <p class="info">
+                提问者&nbsp;:
+                <span>{{user_name|default('')}}</span>
+                回答数&nbsp;:
+                <span data-counts="{models: 'ask', field: 'asknum', id: '{{detail.id|default('')}}'}"></span>
+                浏览数&nbsp;:
+                <span data-counts="{models: 'ask', field: 'clicks', id: '{{detail.id|default('')}}'}"></span>
+                时间&nbsp;:
+                <span>{{detail.create_time|default('')|date('Y-m-d')}}</span>
+            </p>
+        </div>
+
+        {% if detail_answer_best.data is defined and detail_answer_best.pageCount|default('') > 0 %}
+        <div id="goodanswers" class="answers">
+            {{housemobile_global.panel_title({title: '最佳答案'})}}
+            {% for item in detail_answer_best.data %}
+                {% set item_user = ('db.users')|getRow({id:item.uid|default(''),checked: 1}) %}
+                {% set item_user_info = ('db.userinfo')|getRow({uid: item.uid|default('')}) %}
+                {% set item_user_name = item_user_info.nicename|default(item_user.username|default('')) %}
+                <div class="answer-item list-block list-block-m0 panel-block">
+                    <div class="item-title">
+                        <div class="item-img">
+                            {{- core_global.img({
+                                src: item_user_info.image|default(''),
+                                alt: item_user_name|default(''),
+                                type: 2,
+                                width: 34,
+                                height: 34,
+                                attr: 'class=image-radius'
+                            }) -}}
+                        </div>
+                        <div class="item-text">
+                            <p>
+                                <span>{{item_user_name|default('')}}</span>
+                                <span class="button button-sm ml10">最佳答案</span>
+                            </p>
+                            <p>{{item.create_time|default('')|date('Y-m-d')}}</p>
+                        </div>
+                    </div>
+                    <div class="answer-con list-con" id="bestAnswer">
+                        <p>{{core_global.content({content: item.content|default('')})}}</p>
+                    </div>
+                    {{- core_mobile_global.more_con({id: 'bestAnswer'})-}}
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {# 相关问题 #}
+        <div class="list-block panel-block media-list">
+            {{housemobile_global.panel_title({title: '相关问题'})}}
+            <div>
+                <ul id="relevantAsk" class="list-con">
+                    {{ render(controller('HouseBundle:Clist:asklist', {_isApp: url_isApp, list: sort_category_ask|default('')})) }}
+                </ul>
+            </div>
+            {{- core_mobile_global.more_con({id: 'relevantAsk'})-}}
+        </div>
+        {# 精彩问答 #}
+        <div class="list-block panel-block media-list">
+            {{housemobile_global.panel_title({title: '精彩问答'})}}
+            <div>
+                <ul id="jingcaiAsk" class="list-con">
+                    {{ render(controller('HouseBundle:Clist:asklist', {_isApp: url_isApp, list: sort_clicks_ask|default('')})) }}
+                </ul>
+            </div>
+            {{- core_mobile_global.more_con({id: 'jingcaiAsk'})-}}
+        </div>
+        {{ render(controller('HouseBundle:Common:footer', {_isApp: url_isApp})) }}
+    </div>
+{% endblock result %}

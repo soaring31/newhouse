@@ -1,0 +1,45 @@
+$font-lo-fz: inherit !default;
+
+@font-face {
+	font-family: "lo";
+    font-weight: normal;
+    font-style: normal;
+	src: url('../fonts/lo.eot');
+	src: url('../fonts/lo.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/lo.woff') format('woff');//,
+		//url('../fonts/lo.ttf') format('truetype'),
+		//url('../fonts/lo.svg#lo') format('svg');
+}
+$font-lo-fz: inherit !default;
+$font-lo-fl: none !default;
+$font-lo-m: 0 !default;
+$font-lo-va: -.25em !default;
+[class^="font-lo-"],
+[class*=" font-lo-"] {
+	font-family: "lo";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-size: $font-lo-fz;
+	float: $font-lo-fl;
+	margin: $font-lo-m;
+	vertical-align: $font-lo-va;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; only necessary if not using the private unicode range (firstdata option) 
+	text-decoration: none;
+	text-transform: none;
+}
+.font-lo-1:before {
+	content: "\EA01";
+}.font-lo-2:before {
+	content: "\EA02";
+}.font-lo-QQ:before {
+	content: "\EA03";
+}.font-lo-baidu:before {
+	content: "\EA04";
+}.font-lo-sina:before {
+	content: "\EA05";
+}.font-lo-weixin:before {
+	content: "\EA06";
+}

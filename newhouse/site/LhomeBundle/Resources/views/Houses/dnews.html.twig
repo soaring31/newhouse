@@ -1,0 +1,178 @@
+{% extends 'LhomeBundle:Houses:index.html.twig' %}
+
+{% set detail = detail|default(cident[tpl_getrow|default('detail')].data[0]|default('')) %}
+{# 销售动态 #}
+{% set page = app.request.get('pageIndex')|default('1') %}
+{% set block_lpdt_zixun = ('house.houses_arc')|getAll({pageSize: 8,pageIndex: page,_multi: 1,checked: 1, aid: detail.id|default(''), findType: 1,_multi: 1}) %}
+{# 热门楼盘 #}
+{% set sort_clicks_houses = ('house.houses')|getAll({checked: 1, orderBy: 'desc', order: 'clicks', pageSize: 10, id: 'neq|' ~ detail.id|default('0'), cate_status: 'neq|118'}) %}
+{% set navs = ('house.navs')|getAll({ cate_pushs: 'zdh', pid: 3,checked:1 }).data %}
+{# 高亮 #}
+{% set menu_act = 2 %}
+
+{% block title_houses %}楼盘动态{% endblock title_houses %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}楼盘动态{{detail.name|default('')}}最新楼盘新闻{{detail.name|default('')}}最新消息" />
+<meta name="description" content="{{detail.name|default('')}}楼盘动态{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}为您提供{{detail.name|default('')}}实时楼盘动态，包括实时楼盘新闻，实时开盘时间信息、户型房源价格信息，为您选房、看房提供参考！"/>
+{% endblock key_des %}
+
+{% block css %}
+{{core_global.linkcss('bundles/LhomeBundle/css/banner.css')}}
+{{core_global.linkcss('bundles/LhomeBundle/css/dongtai.css')}}
+{% endblock css %}
+
+{% block header %}
+    <div class="banners">
+        <div class="container">
+            <ul class="channelList">
+                {% if majorNav.data is defined %}
+                    {% for item in majorNav.data %}
+                        <li>
+                            <a target="{{item.menu.target|default('_self')}}" href="{{item.menu.url|default('')|U(item.menu.urlparams|getQuery)}}" data-obj=".nav-list-ot" data-direction="bottom" data-offsetx="50%">
+                                {{item.menu.name|default('')}}
+                            </a>
+                            {% if item.nodes|length > 1 and item.nodes|default('') %}
+                            <div class="nav-list-ot">
+                                <dd> 
+                                    <i></i>
+                                    {% for second in item.nodes %}
+                                    <dl>
+                                        <a target="{{second.menu.target|default('_self')}}" href="{{second.menu.url|default('')|U(second.menu.urlparams|getQuery)}}">{{second.menu.name|default('')}}</a>
+                                    </dl>
+                                    {% endfor %}
+                                </dd>
+                            </div>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+            <div class="banner-right">
+                {{ render(controller('HouseBundle:Common:login')) }}
+                <div class="phone"> <i></i>
+                    <span>客服电话{{core_global.mconfig({name: 'user_user_tel', ename: 'mvariables_user'})}}</span>
+                </div>
+            </div>
+        </div>
+    </div>  
+    {% block detail_sm %}
+        <div class="xinfang-nav">
+            <div class="wrapper">
+                <div class="fl">
+                    <a href="{{'index/index'|U}}" class="logo"><img width="140" height="40" alt="{{ core_global.mconfig({name: 'hostname', ename: 'mwebset'}) }}" src="{{ core_global.img_url({src: core_global.mconfig({name: 'cmslogo', ename: 'mwebset'}), type: 0}) }}"/></a>
+                    <ul class="nav-list">
+                        {% for item in navs %}
+                            <li>
+                                <a href="{{ item.url }}" target="{{ item.target|default('_self')}}">{{ item.name }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="fr connect">
+                    <form id="search" data-action="/loupan/rs" method="post" action="/loupan/rs">
+                        <span class="bar-search-box">
+                            <input id="search-input" type="text" value="" placeholder="请输入楼盘名或区域" autocomplete="off">
+                            <button type="submit" class="search-btn searchBtn"  data-xftrack="10122_1" data-url="/loupan/rs"> <i></i>
+                            </button>
+                            <ul id="sugBox" data-xftrack="10122_2" class="sug-box" data-cityId="110000"></ul>
+                        </span>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="intro clear" mod-id="lj-common-bread">
+            <div class="container">
+                <div class="fl l-txt"> <i class="icon"></i>
+                    &nbsp;
+                    <a href="{{('index/index')|U}}">首页</a>
+                    <span class="stp">&nbsp;&gt;&nbsp;</span>
+                    <a href="{{('houses/index')|U}}">{{cur_area_data|default('')}}新房</a>
+                    {# 区域 #}
+                    {% if detail.region %}
+                    <span class="stp">&nbsp;&gt;&nbsp;</span>
+                    <a href="{{('houses/list')|U({region: detail.region|default(0)})}}">
+                        {{core_global.region({id: detail.region|default(0), tpl: '%value%'})}}楼盘
+                    </a>
+                    {% endif %}
+                    {# 商圈 #}
+                    {% if detail.cate_circle|default('') %}
+                    <span class="stp">&nbsp;&gt;&nbsp;</span>
+                    <a href="{{('houses/list')|U({cate_circle: detail.cate_circle|default(0)})}}">
+                        {{core_global.formData({value: detail.cate_circle, form: 'house.cate_circle'})}}楼盘
+                    </a>
+                    {% endif %}
+                    <span class="stp">&nbsp;&gt;&nbsp;</span>
+                    <span>{{detail.name|default('')}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="adddetail_banner clickTargetBox" data-proname="ttgjggaaayg">
+            <div class="resb-name">{{detail.name|default('')}}</div>
+            <div class="add-tab">
+                <a href="{{('houses/detail')|U({id:detail.id|default('')})}}" class="{% if menu_act == 1 %}active{% endif %}">楼盘首页</a>
+                <a  href="{{('houses/dnews')|U({id:detail.id|default('')})}}" class="{% if menu_act == 2 %}active{% endif %}">楼盘动态</a>
+                <a  href="{{('houses/dplanintro')|U({id:detail.id|default('')})}}" class="{% if menu_act == 3 %}active{% endif %}">户型图</a>
+                <a  href="{{('houses/dphotos')|U({id:detail.id|default('')})}}" class="{% if menu_act == 4 %}active{% endif %}">楼盘相册</a>
+                <a  href="{{('houses/ddetail')|U({id:detail.id|default('')})}}" class="{% if menu_act == 5 %}active{% endif %}">详细信息</a>
+                <a  href="{{('houses/dcomment')|U({id:detail.id|default('')})}}" class="{% if menu_act == 6 %}active{% endif %}">楼盘点评</a>
+                <a  href="{{('houses/dspehouse')|U({id:detail.id|default('')})}}" class="{% if menu_act == 7 %}active{% endif %}">楼盘推荐</a>
+            
+            </div>
+        </div>
+    {% endblock detail_sm %}   
+{% endblock header %}
+
+{% block body %}
+    <div class="add-panel clear">
+        {% block left_con %}
+            <div class="big-left fl">
+                {% if block_lpdt_zixun.data is defined %}
+                {% for item in block_lpdt_zixun.data %}
+                    <div class="dongtai-one for-dtpic">
+                        <div class="litt">
+                            <span class="a-tag">销售动态</span>
+                            <span class="a-title">{{item.name|default('')}}</span>
+                            <span class="a-time">{{item.create_time|default('')|date('Y-m-d')}}</span>
+                        </div>
+                        <div class="a-word">
+                            <a  href="{{('news/detail')|U({id:item.fromid|default('')})}}">
+                                {{item.abstract|default('')}}
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% endif %}
+                {{core_global.page(block_lpdt_zixun)}}
+                <div class="page-box house-lst-page-box" comp-module='page' page-url="/loupan/p_ttgjggaaayg/dongtai/pg{page}"
+                    page-data='{"totalPage":1,"curPage":1}'></div>
+            </div>       
+        {% endblock left_con %}
+
+        <div class="big-right fr">
+            <div class="news-hot">
+                <h5>热门楼盘</h5>
+                <ul>
+                    <li>
+                        {% if sort_clicks_houses.data is defined%}
+                        {% for item in sort_clicks_houses.data %}
+                            <a href="{{('houses/detail')|U({id:item.id|default('')})}}" target="_blank" title="城建万科城">{{item.name|default('')}}</a>
+                            <span>{{house_global.if_dj({value: item.dj|default(''), tpl: '%value%%danwei%'})}}</span>
+                        {% endfor %}
+                        {% endif %}
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="blank20"></div>
+    <!--page-->
+    {{core_global.page(block_lpdt_zixun)}}
+    <!--page-->
+    <div class="blank10"></div>
+{% endblock body %}
+
+{% block js %}
+
+{% endblock js %}

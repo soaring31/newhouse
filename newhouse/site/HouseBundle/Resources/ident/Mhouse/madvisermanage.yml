@@ -1,0 +1,24 @@
+info:
+    tableName: inter_adviser
+    subTableName: ''
+    aliasName: p
+    listGrid: {  }
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    groupBy: ''
+    order: ''
+    orderBy: asc
+    searchFun: EXISTS
+    dataModel: 0
+    attribute: '0'
+    autoQuery: '1'
+    alias: {  }
+    query:
+        name:
+            orX: 'name,like,[name]|tel,like,[name]|content,like,[name]'
+        aid:
+            eq: '[aid]'
+    query1: {  }

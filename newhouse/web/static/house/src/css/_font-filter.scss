@@ -1,0 +1,55 @@
+$font-filter-fz: inherit !default;
+
+@font-face {
+	font-family: "filter";
+    font-weight: normal;
+    font-style: normal;
+	src: url('../fonts/filter.eot');
+	src: url('../fonts/filter.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/filter.woff') format('woff');//,
+		//url('../fonts/filter.ttf') format('truetype'),
+		//url('../fonts/filter.svg#filter') format('svg');
+}
+$font-filter-fz: inherit !default;
+$font-filter-fl: none !default;
+$font-filter-m: 0 !default;
+$font-filter-va: -.25em !default;
+[class^="font-filter-"],
+[class*=" font-filter-"] {
+	font-family: "filter";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-size: $font-filter-fz;
+	float: $font-filter-fl;
+	margin: $font-filter-m;
+	vertical-align: $font-filter-va;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; only necessary if not using the private unicode range (firstdata option) 
+	text-decoration: none;
+	text-transform: none;
+}
+.font-filter-1:before {
+	content: "\EA01";
+}.font-filter-10:before {
+	content: "\EA02";
+}.font-filter-11:before {
+	content: "\EA03";
+}.font-filter-2:before {
+	content: "\EA04";
+}.font-filter-3:before {
+	content: "\EA05";
+}.font-filter-4:before {
+	content: "\EA06";
+}.font-filter-5:before {
+	content: "\EA07";
+}.font-filter-6:before {
+	content: "\EA08";
+}.font-filter-7:before {
+	content: "\EA09";
+}.font-filter-8:before {
+	content: "\EA0A";
+}.font-filter-9:before {
+	content: "\EA0B";
+}

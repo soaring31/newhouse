@@ -1,0 +1,89 @@
+﻿/*!
+ * @name lp-hxt.css
+ * @author xying
+ * @date 2016-8-10
+ * @dec common lp detail hxt
+ */
+
+@import 'gallery'; // 加载相册样式
+
+/*
+图集
+*/
+.focus{
+    background:#222;
+    position: relative;
+}
+.view-pic{
+    border-radius: 3px;
+    color: #fff;
+    font-weight: bold;
+    opacity: 0.5;
+    padding: 0 10px;
+    position: absolute;
+    right: 10px;
+    top: 20px;
+    z-index: 900;
+    &:hover{
+        color: #fff;
+    }
+}
+.picshowlist_mid{
+    height: 90px;
+}
+.picmidleft,
+.picmidright{
+    background: #444;
+    cursor: pointer;
+    color: #fff;
+    font-size: 30px;
+    line-height: 90px;
+    height: 90px;
+    text-align: center;
+    width: 30px;
+}
+.picmidleft{
+    border-radius: 3px 0 0 3px;
+}
+.picmidright{
+    border-radius: 0 3px 3px 0;
+}
+.picmidmid{
+    height: 90px;
+}
+.picmidmid ul{
+    height: 83px;
+    top: 0;
+    padding-top: 7px;
+}
+.picmidmid ul li{
+    border: 1px solid #ddd;
+    background: #fff;
+    position: relative;
+}
+
+.picmidmid ul li.selectpic{
+    background: #fff;
+    border-color: #c00;
+}
+.selectpic .arrow{
+    @include triangle(12px,#c00,up);
+    left: 50%;
+    margin-left: -6px;
+    overflow: hidden;
+    position: absolute;
+    top: -12px;
+    width: 0;
+}
+.picmidmid .index{
+    background: #000;
+    color: #fff;
+    font-family: arial,"helvetica neue",helvetica,sans-serif;
+    line-height: 16px;
+    opacity: 0.6;
+    padding: 0 5px;
+    z-index: 20;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}

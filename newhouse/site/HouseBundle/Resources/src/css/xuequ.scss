@@ -1,0 +1,418 @@
+﻿/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+*/
+@import 'static/ats';
+// 工具类 每个文件都要导入
+
+@import 'sale';
+// 二手房系列公用模块
+
+@import 'sale-filter-hd'; // 筛选头部
+
+@import 'list-hd'; // 列表头部
+
+@import 'filter';
+// 筛选
+@import 'lp-map';// 地图
+
+
+$xq-body-w: 890px !default;
+$xq-aside-w: 280px !default; /* list */
+.main {
+	float: left;
+	width: $xq-body-w;
+}
+.xq-body {
+	line-height: 2;
+	width: $xq-body-w;
+}
+.tuwen li {
+	border-bottom: 1px solid #eee;
+	height: 138px;
+	padding: 35px 0;
+}
+.tuwen li:hover {
+	background-color: #f8f8f8;
+}
+.tuwen li:hover h3 a {
+	color: #693;
+}
+.tuwen li:hover .chover a {
+	color: #693;
+}
+.tuwen ul {
+	width: 890px;
+}
+.photo {
+	float: left;
+	margin-right: 20px;
+}
+.intro {
+	float: left;
+	font-family: Microsoft YaHei;
+	width: 455px;
+}
+.intro h3 {
+	height: 25px;
+	line-height: 25px;
+	margin-bottom: 23px;
+	overflow: hidden;
+}
+.intro h3 a {
+	font-family: Microsoft YaHei;
+	font-size: 24px;
+}
+.intro h3 i {
+	float: left;
+	margin: 2px 3px 0 0;
+}
+.intro p {
+	color: #666;
+	font-size: 14px;
+	height: 33px;
+	overflow: hidden;
+}
+.intro em i {
+	color: #39f;
+}
+.intro em a:hover {
+	color: #e43;
+}
+.leixing {
+	height: 25px;
+}
+.leixing span {
+	border: 1px solid #9c0;
+	color: #666;
+	display: inline-block;
+	height: 22px;
+	line-height: 22px;
+	margin-right: 2px;
+	overflow: hidden;
+	padding: 0 5px;
+}
+.jiage {
+	float: right;
+	text-align: right;
+	width: 230px;
+}
+.jiage .jg {
+	height: 108px;
+}
+.jiage p {
+	line-height: 26px;
+	height: 26px;
+	overflow: hidden;
+	padding-right: 20px;
+}
+.jiage .dk {
+	background-color: #9c0;
+	color: #fff;
+	font-size: 12px;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+}
+.jiage .dk i {
+	color: #ff0;
+}
+.jiage .dk a {
+	color: #fff;
+}
+.jiage span.chover a:hover {
+	color: #e43;
+}
+
+/* aside */
+.xq-aside {
+	line-height: 2;
+	width: $xq-aside-w;
+}
+.coltit3 {
+	height: 59px;
+	line-height: 58px;
+	margin-bottom: -1px;
+	position: relative;
+}
+.coltit3 h3 {
+	border-bottom: 1px solid #e43;
+	float: left;
+}
+.coltit3 .title {
+	font-size: 18px;
+}
+.gengduo {
+	background: rgba(0, 0, 0, 0) url("../images/sale/gengduo.jpg") no-repeat scroll 0 0;
+	float: right;
+	height: 15px;
+	margin-top: 22px;
+	width: 32px;
+}
+// 热门学校
+.rmxx {
+	.list li {
+		height: 32px;
+		line-height: 32px;
+		overflow: hidden;
+	}
+	.list span {
+		color: #999;
+	}
+	.list a {
+		font-size: 12px;
+	}
+	.list .more {
+		float: right;
+		font-weight: normal;
+		padding: 0 5px;
+	}
+	.list .c2 {
+		color: #c20000;
+		font-size: 12px;
+	}
+}
+.p6-25 {
+	padding: 6px 25px;
+}
+// 学校推荐
+.tjtuw {
+	border-top: 1px solid #ddd;
+	margin-right: -20px;
+}
+.tjtuw li {
+	display: inline;
+	float: left;
+	margin: 16px 20px 8px 0;
+	overflow: hidden;
+	width: 130px;
+}
+.tjtuw .ico {
+	color: #666;
+	cursor: pointer;
+	float: right;
+	line-height: 20px;
+}
+.tjtuw .pri {
+	color: #e43;
+	font-size: 16px;
+}
+.tjtuw em {
+	color: #666;
+	display: block;
+	font-size: 16px;
+	height: 30px;
+	overflow: hidden;
+}
+.tjtuw p {
+	color: #666;
+	font-size: 12px;
+}
+.tjtuw li p {
+	height: 18px;
+	line-height: 18px;
+	overflow: hidden;
+}
+.tjtuw li img {
+	background: #fff none repeat scroll 0 0;
+	height: 93px;
+	width: 130px;
+}
+
+/* detail */
+h2 {
+	font-size: 26px;
+	padding-bottom: 7px;
+}
+//导航
+.xdec {
+	background-color: #f1f1f1;
+	border-top: 1px solid #ddd;
+	height: 50px;
+}
+.xdec ul {
+	margin-left: 1px;
+}
+.xdec ul li {
+	color: #333;
+	float: left;
+	font-size: 16px;
+	line-height: 50px;
+	margin-right: 1px;
+	margin-top: -1px;
+	position: relative;
+	text-align: center;
+	width: 125px;
+}
+.xdec ul li a {
+	display: block;
+}
+.xdec ul li a:hover,
+.xdec ul li a.act {
+	background-color: #fff;
+	border-top: 1px solid #693;
+	color: #693;
+	font-size: 18px;
+	font-weight: bolder;
+	text-decoration: none;
+}
+// section1
+.xxsy {
+	height: 350px;
+	margin-top: 30px;
+}
+.w412 {
+	line-height: 2;
+	width: 412px;
+	li {
+		color: #757575;
+		font-size: 16px;
+		padding-bottom: 14px;
+	}
+	i {
+		color: #a3a3a3;
+		&.font-lp-13 {
+			border: 1px solid #9c0;
+			border-radius: 5px;
+			color: #9c0;
+			font-size: 25px;
+			padding: 0 12px;
+		}
+	}
+	.es {
+		border-bottom: 1px dashed #eee;
+		padding-bottom: 10px;
+		i {
+			color: #47a3ff;
+			padding: 0 4px 0 2px;
+		}
+	}
+	.xz {
+		padding-top: 7px;
+	}
+	.tl {
+		padding-bottom: 0;
+	}
+	em {
+		font-weight: bolder;
+	}
+	span {
+		color: #666;
+		em {
+			color: #e43;
+			font-size: 24px;
+		}
+	}
+	p {
+		padding-left: 10px;
+		&.tel {
+			color: #6ba41e;
+			font-size: 28px;
+			height: 28px;
+			line-height: 28px;
+		}
+		&.lx {
+			font-size: 12px;
+		}
+	}
+}
+// 介绍
+.xxjst,
+.xxmapt,
+.gongyongt {
+	border-bottom: 1px solid #eee;
+	font-size: 24px;
+	padding-left: 15px;
+}
+.xxjsb {
+	line-height: 30px;
+}
+.xxmap .xxmapb {
+	padding-top: 10px;
+}
+// gongyong
+
+.xxjsb {
+	line-height: 30px;
+}
+.xxmap .xxmapb {
+	padding-top: 10px;
+}
+.gongyong {
+	dt,
+	dd {
+		height: 70px;
+		line-height: 71px;
+		padding-left: 23px;
+	}
+	dt {
+		background-color: #fcfcfc;
+		color: #999;
+		overflow: hidden;
+	}
+	dd {
+		border-bottom: 1px dashed #eee;
+		color: #666;
+		float: left;
+		overflow: hidden;
+		.gy1 {
+			font-weight: bolder;
+			a {
+				color: #693;
+			}
+		}
+		.gy3 {
+			i{color: #693;
+				font-size: 24px;
+				font-weight: bolder;
+			}
+		}
+		.gy4 {
+			i{color: #693;
+				font-size: 24px;
+				font-weight: bolder;
+			}
+			em {
+				color: #39f;
+				font-size: 14px;
+				font-weight: bolder;
+			}
+		}
+	}
+	span {
+		float: left;
+	}
+	.gy1,
+	.gy2,
+	.gy3,
+	.gy4,
+	.gy5 {
+		height: 71px;
+	}
+	.gy1 {
+		text-align: left;
+		width: 200px;
+	}
+	.gy2,
+	.gy3,
+	.gy4 {
+		text-align: center;
+		width: 174px;
+	}
+	.gy5 {
+		position: relative;
+		text-align: center;
+		width: 130px;
+	}
+}
+// 地图
+.lp-coltit {
+	border-bottom: 1px solid #eee; 
+	line-height: 2;
+    h3 {
+    	padding-left: 15px;
+        font-size: 24px;
+        margin-top: 6px;
+    }
+}

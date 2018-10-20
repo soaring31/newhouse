@@ -1,0 +1,67 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% block js %}
+
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }} 
+{% endblock %}
+
+{% block tableMain %}
+<script type="text/javascript">
+seajs.use("manage/js/webconfig.js",function(main){
+    main.init('cfthemes');
+});
+</script>
+<section class="list-con table-inline" data-height="580" data-param='{
+        fixed     : ".filter",
+        list      : ".list-con",
+        data      : {
+        }
+    }'>
+    <div class="list">
+        <form class="form" action="{{ (action)|U }}" method="post" name="form">
+            <table class="popup-form-table" style="width:100%;">
+                <tr>
+                    <th colspan="2">主题设置</th>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div id="group_dysjset">
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright" for="enable">选择主题</label>
+                                </div>
+                                <div class="form-errors">
+                                    
+                                </div>
+                                <div class="form-cell">
+                                    <select name="default_themes">
+                                        <option value="HouseBundle">默认主题</option>
+                                        {% set themes_data = ('db.themes')|getAll({mark: 1}).data %}
+                                        {% for item in themes_data %}
+                                        <option {{ ('default_themes')|C == item.ename ? 'selected' : '' }} value="{{ item.ename }}">{{ item.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <div class="popup-submit"></div>
+            <div class="tac p10">
+                <div>
+                    {{ core_manage.submit({
+                         class: 'btn',
+                         title: '提交',
+                    }) }}
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock tableMain %}
+
+{% block promptUl %}{% endblock %}

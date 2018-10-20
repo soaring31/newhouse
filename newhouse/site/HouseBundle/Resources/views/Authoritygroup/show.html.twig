@@ -1,0 +1,119 @@
+{% extends "HouseBundle::base_show.html.twig" %}
+{% set info = ('db.auth_group'|getRow({'id':app.request.get('id',0)})) %}
+{% block js %}
+<script type="text/javascript">
+    seajs.use([], function() {
+        // 切换
+        $('[data-tab]')
+            .off('click')
+            .on('click', function() {
+                var $this = $(this);
+                var id = $this.data('tab');
+
+                $('[data-tab-con="'+ id +'"]').add(this).addClass('act')
+                    .siblings().removeClass('act');
+            })
+        // 全选
+        $('[data-all]')
+            .off('click')
+            .on('click', function() {
+                $('[data-item="'+ $(this).data('all') +'"]').prop('checked', $(this).prop('checked'))
+            })
+            
+        var checkedHandle = function() {
+            var itemId = $(this).data('item') || $(this).data('all');
+            var $items = $('[data-item="'+ itemId +'"]');
+            var bChecked = $items.length == $items.filter(':checked').length;
+            $('[data-all="'+ itemId +'"]').prop('checked', bChecked);
+        }
+        // 初始化
+        $('[data-all]').each(checkedHandle);
+        // 单项
+        $('[data-item]')
+            .off('click')
+            .on('click', checkedHandle)
+    })    
+</script>
+{% endblock %}
+
+{% block tableMain %}
+    {% set filter %}
+    <table class="table-permissions-tab">
+        <tr class="level1">
+        {% for item in permissionsNode if item.nodes %}
+            <td data-tab="{{ item.menu.id }}" class="{% if loop.first %}act{% endif %}"><strong>{{ item.menu.name }}</strong></td>
+        {% endfor %}
+        </tr>
+    </table>
+    {% endset %}
+    {{ core_manage.filter(filter) }}
+    {{ parent() }}
+{% endblock tableMain %}
+
+{% block body %}
+{# {{ dump(permissionsNode) }} #}
+<form action="{{ form.vars.action }}" method="{{ form.vars.method }}" class="form" {{ form_enctype(form) }}>
+<table data-level="top" data-type="singleToggle" class="right-table table-hover table-permissions">
+    <tbody>
+        {# tr不能删 #}
+        <tr></tr>
+    {#第一层#}
+    {% if permissionsNode is defined %}
+            
+    {% for item in permissionsNode if item.nodes %}
+        {# 一级 #}
+        <tr data-tab-con="{{ item.menu.id }}" class="subtr {% if loop.first %}act{% endif %}">
+            <td colspan="10">
+                <table class="subright-table">
+                    {% for item2 in item.nodes %}
+                    {# 二级 #}
+                    <tr data-level="1" class="on">
+                        <td width="40" class="pl20 tac {% if item2.nodes %}plusico{% endif %}">&nbsp;</td>
+                        <td class="">{{ item2.menu.name }}</td>
+                    </tr>
+                    {% if item2.nodes|length %}
+                    <tr data-level="next" class="subtr on">
+                        <td colspan="2">
+                        {% for item3 in item2.nodes %}
+                        {# 三级 #}
+                        {% if item3.nodes|length %}
+                            <table class="subright-table">
+                                {% for item4 in item3.nodes %}
+                                {# 四级 #}
+                                {% set nodes = {'menuid': item4.menu.id}|getRule %}
+                                    {# {{ dump(nodes) }} #}
+                                <tr >
+                                    <td width="40" class="pl20 tac"></td>
+                                    <td width="150" class=""><label title="点击全选"><input data-all="{{ item4.menu.id }}" type="checkbox">{{ item3.menu.name }} / {{ item4.menu.name }}</label></td>
+                                    <td class="ls-items-td">
+                                        {% if nodes.data is defined %}
+                                        <ul class="ls-items">
+                                            {% for node in nodes.data %}
+                                            <li class="ls-item">
+                                            <label><input type="checkbox" data-item="{{ item4.menu.id }}" name="rules[]" {{ node.id|isChecked( info.rules|default('') ) }} value="{{ node.id }}" /><span id="editspan_{{node.id}}_name" {# class="editspan"  #}  title="{{ node.controller ~ '/' ~ node.action }}">{{node.name}}</span></label>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        {% endif %}
+                        {% endfor %}
+                        {# /三级 #}
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </table>
+            </td>
+        </tr>
+    {% endfor %}
+    {% endif %}
+    </tbody>
+</table>
+{{ form.csrf_token is defined?form_widget(form.csrf_token):'' }}
+<div class="popup-submit">{{ form.submit is defined?form_widget(form.submit):'' }}</div>
+</form>
+{% endblock %}

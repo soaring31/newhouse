@@ -1,0 +1,646 @@
+ManageBundle\Entity\HousesArc:
+    type: entity
+    table: houses_arc
+    indexes:
+        aid:
+            columns:
+                - aid
+        models:
+            columns:
+                - models
+        uid:
+            columns:
+                - uid
+        area:
+            columns:
+                - area
+        cate_line:
+            columns:
+                - cate_line
+        cate_metro:
+            columns:
+                - cate_metro
+        cate_circle:
+            columns:
+                - cate_circle
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            options:
+                comment: '-'
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        aid:
+            options:
+                comment: '-'
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        models:
+            options:
+                comment: 模型
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        thumb:
+            options:
+                comment: '-'
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        content:
+            options:
+                comment: 团购，点评
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        tel:
+            options:
+                comment: 团购，意向，特价房
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        ksnum:
+            options:
+                comment: 团购
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        scj:
+            options:
+                comment: 分销，团购
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        tgj:
+            options:
+                comment: 团购
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        hdadr:
+            options:
+                comment: 团购
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        hdnum:
+            options:
+                comment: 团购，印象，红包
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        yhsm:
+            options:
+                comment: 分销，团购
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        keywords:
+            options:
+                comment: 分销，团购
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        abstract:
+            options:
+                comment: 户型
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        enddate:
+            options:
+                comment: 分销，团购
+                unsigned: false
+            nullable: false
+            type: date
+            length: 10
+        mj:
+            options:
+                comment: 户型，特价房
+                unsigned: false
+            nullable: false
+            type: float
+            length: 100
+        dj:
+            options:
+                comment: 户型，特价房
+                unsigned: false
+            nullable: false
+            type: float
+            length: 100
+        shi:
+            options:
+                comment: 户型，特价房
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        ting:
+            options:
+                comment: 户型，特价房
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        chu:
+            options:
+                comment: 户型，特价房
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        wei:
+            options:
+                comment: 户型，特价房
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        yangtai:
+            options:
+                comment: 户型，特价房
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        zlhx:
+            options:
+                comment: 户型
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        tujis:
+            options:
+                comment: 户型
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        zj:
+            options:
+                comment: 特价房
+                unsigned: false
+            nullable: false
+            type: float
+            length: 100
+        zxcd:
+            options:
+                comment: 特价房，楼栋
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        cx:
+            options:
+                comment: 特价房
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        louxing:
+            options:
+                comment: 特价房
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        szlc:
+            options:
+                comment: 特价房
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        zlc:
+            options:
+                comment: 特价房
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        xingming:
+            options:
+                comment: 特价房
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        lh:
+            options:
+                comment: 特价房
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        fh:
+            options:
+                comment: 特价房
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        cate_album:
+            options:
+                comment: 幻灯片，相册
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        sale:
+            options:
+                comment: 二手房id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        price:
+            options:
+                comment: 点评，红包
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        position:
+            options:
+                comment: 点评
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        traffic:
+            options:
+                comment: 点评
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        charms:
+            options:
+                comment: 点评
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        environment:
+            options:
+                comment: 点评
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        overall:
+            options:
+                comment: 点评
+                unsigned: false
+            nullable: false
+            type: float
+            length: 100
+        unit:
+            options:
+                comment: 楼栋
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        floor:
+            options:
+                comment: 楼栋
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        hushu:
+            options:
+                comment: 楼栋
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        cate_status:
+            options:
+                comment: 户型，特价房，楼栋
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        sgjd:
+            options:
+                comment: 楼栋
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        kpsj:
+            options:
+                comment: 分销，楼栋
+                unsigned: false
+            nullable: false
+            type: date
+            length: 100
+        jfsj:
+            options:
+                comment: 楼栋
+                unsigned: false
+            nullable: false
+            type: date
+            length: 100
+        shapan:
+            options:
+                comment: 楼栋
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        xkzh:
+            options:
+                comment: 楼栋
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        dongtai:
+            options:
+                comment: 楼栋
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        cate_pushs:
+            options:
+                comment: 标识
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        form:
+            options:
+                comment: 表单
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        fromid:
+            options:
+                comment: 来源ID
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        limit_time:
+            options:
+                comment: 红包
+                unsigned: false
+            nullable: false
+            type: date
+            length: 10
+        yj:
+            options:
+                comment: 特价房
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        top:
+            options:
+                comment: 特价房
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        yiyuding:
+            options:
+                comment: 分销
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        yituijian:
+            options:
+                comment: 分销
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        lpfx:
+            options:
+                comment: 分销
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        yongjin:
+            options:
+                comment: 分销
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        seat:
+            options:
+                comment: 沙盘
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        shichangjia:
+            options:
+                comment: 分销市场价
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        yichengjiao:
+            options:
+                comment: 分销已成交
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        ss_build:
+            options:
+                comment: 所属楼栋
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        vote:
+            options:
+                comment: 点赞
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        toid:
+            options:
+                comment: 被回复的id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        dyfl:
+            options:
+                comment: 意向分类
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        yinxiang:
+            options:
+                comment: 印象标题
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        clicks:
+            options:
+                comment: 浏览数
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        cate_type:
+            options:
+                comment: 物业类型
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        checked:
+            options:
+                comment: 审核
+                unsigned: false
+                default: '1'
+            nullable: false
+            default: '1'
+            type: smallint
+            length: 2
+        uid:
+            options:
+                comment: 用户id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        area:
+            options:
+                comment: 区域
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        region:
+            options:
+                comment: 区域
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        user_agent:
+            options:
+                comment: 浏览器类型
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        lpmc:
+            options:
+                comment: 楼盘名称
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        cate_line:
+            options:
+                comment: 地铁
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        cate_metro:
+            options:
+                comment: 地铁站
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        cate_circle:
+            options:
+                comment: 商圈
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

@@ -1,0 +1,72 @@
+﻿/*!
+ * @name tjf-list.css
+ * @author xying
+ * @date 2016-9-7
+ * @dec common teijiafang list
+ */
+.list-item {
+    .pic {
+        height: 138px;
+        margin-left: 0;
+        width: 180px;
+        margin-right:10px;
+        img {
+            height: 138px;
+            width: 180px;
+        }
+    }
+    .info {
+        width: 570px;
+        h3 {
+            line-height: 27px;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #666;
+            height: 30px;
+            line-height: 30px;
+        }
+    }
+    .tit {
+        color: $link-color;
+        font-size: 24px;
+    }
+    .tj-tag {
+        span {
+            border: 1px solid #ccc;
+            color: #666;
+            display: inline-block;
+            line-height: 20px;
+            height: 20px;
+            margin-right: 2px;
+            overflow: hidden;
+            padding: 0 5px;
+        }
+    }
+    .other {
+         margin-right: 10px;
+        /*width: 140px;*/
+        .yj {
+            margin-top: 21px;
+            text-decoration: line-through;
+        }
+    }
+}
+.zd {
+    border: 1px solid $major-color;
+    cursor: default;
+    margin-top: 4px;
+    margin-right: 5px;
+    user-select: none;
+    div {
+        font-size: 12px;
+        height: 20px;
+        line-height: 20px;
+        overflow: hidden;
+        text-align: center;
+        width: 28px;
+        &.fr {
+            background: $major-color;
+        }
+    }
+}

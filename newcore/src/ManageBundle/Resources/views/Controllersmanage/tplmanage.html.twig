@@ -1,0 +1,34 @@
+{% extends "ManageBundle::poplayout.html.twig" %}
+{% block js %}
+<script>
+seajs.use("{{bundlepath}}/js/controllers",function(l){
+	//js入口	    
+	l.init('tplmanage');
+});
+</script>
+{% endblock %}
+{% block body %}
+<table class="popup-table" style="width:100%;">
+	<tbody>
+		<tr>
+		    <th class="w30"></th>
+			<th class="txtleft">名称</th>
+			<th class="w120">创建日期</th>
+			<th class="w100">操作</th>
+		</tr>
+		{% if info['data'] is defined %}
+		{% for key, item in info['data'] %}
+		<tr>
+		    <td></td>
+			<td url="{{ 'tplmodify'|U('id='~item.id) }}"><span id='tplmanage_{{item.id}}_name' class='editspan'>{{item.name}}</span></td>
+			<td class="txtcenter">{{item.cTime|date('Y-m-d H:i')}}</td>
+			<td class="txtcenter" url="{{ 'tpldelete'|U('id='~item.id) }}">
+				<input id='popupsub_{{item.id}}_delete' class='search-btn' value='删除' type='button' />
+			</td>
+		</tr>
+		{% endfor %}
+		{% endif %}
+	</tbody>
+</table>
+<div class="popup-submit"><input id="popupsub_tplmanage_add" url="{{ 'tplmodify'|U('id=0') }}" class="search-btn" value="添加模版" type="button"></div>
+{% endblock %}

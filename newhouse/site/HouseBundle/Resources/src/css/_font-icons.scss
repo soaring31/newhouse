@@ -1,0 +1,111 @@
+$font-icons-fz: inherit !default;
+
+@font-face {
+	font-family: "icons";
+    font-weight: normal;
+    font-style: normal;
+	src: url('../fonts/icons.eot');
+	src: url('../fonts/icons.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/icons.woff') format('woff');//,
+		//url('../fonts/icons.ttf') format('truetype'),
+		//url('../fonts/icons.svg#icons') format('svg');
+}
+$font-icons-fz: inherit !default;
+$font-icons-fl: none !default;
+$font-icons-m: 0 !default;
+$font-icons-va: -.25em !default;
+[class^="font-icons-"],
+[class*=" font-icons-"] {
+	font-family: "icons";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-size: $font-icons-fz;
+	float: $font-icons-fl;
+	margin: $font-icons-m;
+	vertical-align: $font-icons-va;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; only necessary if not using the private unicode range (firstdata option) 
+	text-decoration: none;
+	text-transform: none;
+}
+.font-icons-1:before {
+	content: "\EA01";
+}.font-icons-10:before {
+	content: "\EA02";
+}.font-icons-11:before {
+	content: "\EA03";
+}.font-icons-12:before {
+	content: "\EA04";
+}.font-icons-13:before {
+	content: "\EA05";
+}.font-icons-14:before {
+	content: "\EA06";
+}.font-icons-15:before {
+	content: "\EA07";
+}.font-icons-16:before {
+	content: "\EA08";
+}.font-icons-17:before {
+	content: "\EA09";
+}.font-icons-18:before {
+	content: "\EA0A";
+}.font-icons-19:before {
+	content: "\EA0B";
+}.font-icons-2:before {
+	content: "\EA0C";
+}.font-icons-20:before {
+	content: "\EA0D";
+}.font-icons-21:before {
+	content: "\EA0E";
+}.font-icons-22:before {
+	content: "\EA0F";
+}.font-icons-222:before {
+	content: "\EA10";
+}.font-icons-23:before {
+	content: "\EA11";
+}.font-icons-24:before {
+	content: "\EA12";
+}.font-icons-25:before {
+	content: "\EA13";
+}.font-icons-26:before {
+	content: "\EA14";
+}.font-icons-27:before {
+	content: "\EA15";
+}.font-icons-28:before {
+	content: "\EA16";
+}.font-icons-29:before {
+	content: "\EA17";
+}.font-icons-3:before {
+	content: "\EA18";
+}.font-icons-30:before {
+	content: "\EA19";
+}.font-icons-31:before {
+	content: "\EA1A";
+}.font-icons-32:before {
+	content: "\EA1B";
+}.font-icons-33:before {
+	content: "\EA1C";
+}.font-icons-34:before {
+	content: "\EA1D";
+}.font-icons-35:before {
+	content: "\EA1E";
+}.font-icons-36:before {
+	content: "\EA1F";
+}.font-icons-37:before {
+	content: "\EA20";
+}.font-icons-38:before {
+	content: "\EA21";
+}.font-icons-4:before {
+	content: "\EA22";
+}.font-icons-5:before {
+	content: "\EA23";
+}.font-icons-6:before {
+	content: "\EA24";
+}.font-icons-7:before {
+	content: "\EA25";
+}.font-icons-8:before {
+	content: "\EA26";
+}.font-icons-9:before {
+	content: "\EA27";
+}

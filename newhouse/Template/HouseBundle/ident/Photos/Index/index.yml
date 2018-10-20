@@ -1,0 +1,23 @@
+detail:
+    tableName: photos
+    subTableName: ''
+    aliasName: p
+    listGrid: {  }
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 1
+    groupBy: ''
+    order: ''
+    orderBy: asc
+    searchFun: EXISTS
+    dataModel: 0
+    autoQuery: '0'
+    alias: {  }
+    query:
+        id:
+            eq: '[id]'
+        checked:
+            eq: '1'
+    query1: {  }

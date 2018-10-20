@@ -1,0 +1,40 @@
+
+$img-ju-1:(206px,68px,0,0,img-ju-1);
+
+$img-ju-2:(39px,44px,0,-78px,img-ju-2);
+
+$img-ju-3:(39px,44px,-49px,-78px,img-ju-3);
+
+$img-ju-4:(39px,44px,-98px,-78px,img-ju-4);
+
+$img-ju-5:(39px,44px,-147px,-78px,img-ju-5);
+
+$img-ju-6:(39px,44px,0,-132px,img-ju-6);
+
+$img-ju-7:(39px,44px,-49px,-132px,img-ju-7);
+
+$img-ju-8:(39px,44px,-98px,-132px,img-ju-8);
+
+$img-ju-9:(21px,21px,-147px,-132px,img-ju-9);
+
+$img-ju: ($img-ju-1,$img-ju-2,$img-ju-3,$img-ju-4,$img-ju-5,$img-ju-6,$img-ju-7,$img-ju-8,$img-ju-9,);
+
+@mixin img-ju($sprites) {
+  %icoju {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/ju.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+      @extend %icoju;
+    }
+  }
+}

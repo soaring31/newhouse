@@ -1,0 +1,5 @@
+{% extends 'CoreBundle::base_ajax.html.twig' %}
+{% import "HousemobileBundle:Macro:global.html.twig" as housemobile_global %}
+{# 手机框架公用宏 #}
+{% import "CoreBundle:Macro:mobile_global.html.twig" as core_mobile_global %}
+{% set url_isApp = app.request.get('_isApp', 0) %}

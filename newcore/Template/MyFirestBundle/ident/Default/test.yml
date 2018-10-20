@@ -1,0 +1,10 @@
+test:
+    tableName: views
+    aliasName: p
+    storagetype: 1
+    pageIndex: 1
+    pageSize: 8
+    order: ''
+    orderBy: asc
+    alias:
+        test1: caid

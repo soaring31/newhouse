@@ -1,0 +1,146 @@
+{% extends 'HouseBundle:Map:map_layout.html.twig' %}
+
+{% block title %}新房地图{% endblock title %}
+
+{% set sort_data_opt = {
+    mj: {
+        title: '面积'
+    },
+    dj: {
+        title: '单价'
+    }
+} %}
+
+{# 检索配置 #}
+{% set filter_opt = {
+    region: {
+        title: '区域',
+        src: 'db.area',
+        sql_opt: {
+            pid: app.session.get('area')|default(0)
+        }
+    },
+    dj: {
+        title: '价格',
+        extend: 'rangeSearch'
+    },
+    cate_type: {
+        title: '类型',
+    },
+    tslp: {
+        title: '特色',
+        type: 'form',
+        src: 'houses_common',
+    },
+    cate_status: {
+        title: '销售状态',
+    },
+    zxcd: {
+        title: '装修程度',
+    },
+    lcs: {
+        title: '楼层',
+        type: 'form',
+        src: 'houses_common',
+    },
+    hxs: {
+        title: '环线',
+        type: 'form',
+        src: 'houses_common',
+    }
+} %}
+
+{% block datalist %}
+    {% for key in data %}
+        <li id='{{ key.identifier }}' data='{{ key.map }}' >
+            <div class="img fl">
+
+                <img width="120" height="90" alt="" src="/newcore/web{{ asset(key.thumb) }}"/>
+                <div class="img-sm">
+                    <i class="font-map-pic"></i>
+                    <span>6</span>
+                </div>
+            </div>
+            <div class="item-text fr">
+                <h3>{{ key.name }}</h3>
+                <div class="text-l fl">
+                    <p>
+                        {{ key.map }}
+                        <!-- <img
+                src="{{ asset('bundles/'~bundlepath~'/images/map-circle.png') }}"
+                width="57" height="50" align="absbottom" /> -->
+                        <!-- 3室2厅 / 146平米 / 东南 <br>
+                        世纪城国际公馆二期 -->
+                    </p>
+                    <span><a href="#">现房</a> </span>
+                    <span><a href="#">多图</a></span>
+                </div>
+                <div class="text-r fr">
+                    <span>160万</span>
+                </div>
+            </div>
+        </li>
+    {% endfor %}
+        <div class="pager" id="pager">
+            {{ (pageIndex|default(0))|pager(pageSize|default(8), pageCount|default(1))|raw }}
+        </div>
+{% endblock datalist %}
+
+{# {% block js %}
+{{ parent() }}
+<script type="text/javascript">
+
+{% for key in data %}
+var str = '';
+str += "<li id='{{ key.identifier }}' data='{{ key.map }}'>";
+str += "<div class='img fl'>";
+str += "<img width='120' height='90' alt='' src='/newcore/web{{ asset(key.thumb) }}'/>";
+str += "<div class='img-sm'>";
+str += "<i class='font-map-pic'></i>";
+str += "<span>6</span>";
+str += "</div>";
+str += "</div>";
+str += "<div class='item-text fr'>";
+str += "<h3>{{ key.name }}</h3>";
+str += "<div class='text-l fl'>";
+str += "<p>";
+str += "{{ key.map }}";
+str += "<img src=\"{{ asset('bundles/'~bundlepath~'/images/map-circle.png') }}\" width='57' height='50' align='absbottom' />";
+str += "<!-- 3室2厅 / 146平米 / 东南 <br>世纪城国际公馆二期 -->";
+str += "</p>";
+str += "<span><a href='#'>现房</a> </span>";
+str += "<span><a href='#'>多图</a></span>";
+str += "</div>";
+str += "<div class='text-r fr'>";
+str += "<span>160万</span>";
+str += "</div>";
+str += "</div>";
+str += "</li>";
+{% endfor %}
+
+</script>
+{% endblock js %} #}
+
+{# {% block inner_js %}
+
+    {% for key in allData %}
+        //切割坐标，放入数组
+        var location = '{{ key.map }}';
+        var arr = location.split(',');
+
+        //自定义图标
+        var myIcon = new BMap.Icon("{{ asset('bundles/'~bundlepath~'/images/map-circle.png') }}", new BMap.Size(75,75));
+
+        //定义坐标位置
+        var point = new BMap.Point(arr[0], arr[1]);
+
+        var marker_circle = new CircleOverlay(point, 75, '{{ key.name }}', 100);
+        arr_circle[arr_circle.length] = marker_circle;
+        map.addOverlay(marker_circle);
+    {% endfor %}
+
+{% endblock inner_js %} #}
+
+{% block url %}
+    "{{('map/houses')|U}}"
+{% endblock url %}

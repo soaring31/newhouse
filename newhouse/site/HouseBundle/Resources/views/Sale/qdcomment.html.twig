@@ -1,0 +1,32 @@
+{% extends 'HouseBundle:Sale:qdetail.html.twig' %}
+
+{% block title %}{{detail.name|default('')}}二手房出售信息-{{detail.name|default('')}}小区网{% endblock title %}
+
+{% block key_des %}
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<meta name="keywords" content="{{detail.name|default('')}}二手房出售信息、{{detail.name|default('')}}二手房、{{detail.name|default('')}}二手房" />
+<meta name="description" content="{{detail.name|default('')}}小区网是为{{cur_area_data|default('')}}{{detail.name|default('')}}小区居民服务的网站,{{detail.name|default('')}}二手房出售信息主要为您提供最新、最真实的{{detail.name|default('')}}二手房、{{detail.name|default('')}}二手房出售信息、,每天更新大量优质{{detail.name|default('')}}二手房房源，100%审核。" />
+{% endblock key_des %}
+{# 导航高亮 #}
+{% set nav_houses_act = 6 %}
+
+{% block header_xiaoqu %}{% endblock header_xiaoqu %}
+
+{% block body_xiaoqu %}
+<div class="xq-d-body fl">
+    <div class="lp-coltit">
+        <h3 class="tit1">小区点评</h3>
+    </div>
+    <div>
+        {{ render(controller('HouseBundle:Bundlebindforms:comment', {
+            formflag: 'view_houses_comment', 
+            models: 'inter_housescomment',
+            arc_models: 'houses',
+            aid: detail.id|default('')
+        })) }}
+        <div class="blank5"></div>
+    </div>
+</div>
+{% endblock body_xiaoqu %}
+
+{% block map_xiaoqu %}{% endblock map_xiaoqu %}

@@ -1,0 +1,58 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+seajs.use("{{bundlepath}}/js/webconfig.js",function(main){
+	main.init('cfupfile');
+});
+</script>
+{% endblock %}
+{% block tableMain %}
+<form class="form" action="{{ (action)|U }}" method="post" name="form">
+<table class="right-table">
+	<tr>
+		<th colspan="2" class="conlist">附件设置</th>
+	</tr>
+	<tr>
+		<td class="w300 txtright fB pright10">保存方式</td>
+		<td>
+			<div><input type="radio" name="upload_type" {{ 'upload_type'|C|isChecked('local') }} value="local" /><label>本地服务器</label></div>
+			<div><input type="radio" name="upload_type" {{ 'upload_type'|C|isChecked('upyun') }} value="upyun" /><label>云服务器</label></div>
+		</td>
+	</tr>
+	<tr id="upyun_bucket" class="{{ 'upload_type'|C=='local'?'hide':'' }}">
+		<td class="txtright fB pright10">BUCKET</td>
+		<td><input class="w200" type="text" name="up_bucket" value="{{ 'up_bucket'|C  }}" /></td>
+	</tr>
+	<tr id="upyun_domainname" class="{{ 'upload_type'|C=='local'?'hide':'' }}">
+		<td class="txtright fB pright10">云存储域名</td>
+		<td><input class="w200" type="text" name="up_domainname" value="{{ 'up_domainname'|C  }}" /></td>
+	</tr>
+	<tr id="upyun_username" class="{{ 'upload_type'|C=='local'?'hide':'' }}">
+		<td class="txtright fB pright10">用户名</td>
+		<td><input class="w200" type="text" name="up_username" value="{{ 'up_username'|C  }}" /></td>
+	</tr>
+	<tr id="upyun_password" class="{{ 'upload_type'|C=='local'?'hide':'' }}">
+		<td class="txtright fB pright10">密码</td>
+		<td><input class="w200" type="password" name="up_password" value="{{ 'up_password'|C  }}" /></td>
+	</tr>
+	<tr>
+		<td class="txtright fB pright10">上传文件类型</td>
+		<td><input class="w200" type="text" name="up_exts" value="{{ 'up_exts'|C  }}" /></td>
+	</tr>
+	<tr>
+		<td class="txtright fB pright10">上传文件大小限制(MB)</td>
+		<td><input class="w200" type="text" name="up_file_size" value="{{ 'up_file_size'|C }}" /></td>
+	</tr>
+	<tr>
+		<td class="txtright fB pright10">上传图片大小限制(MB)</td>
+		<td><input class="w200" type="text" name="up_image_size" value="{{ 'up_image_size'|C }}" /></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td><input class="submit-btn ajax-post confirm" target-form="form" value="保 存" type="submit"></td>
+	</tr>
+</table>
+</form>
+{% endblock %}
+{% block submit %}{% endblock %}
+{% block promptUl %}<li></li>{% endblock %}

@@ -1,0 +1,96 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+
+{% block js %}
+
+{% endblock %}
+
+{% block mainMenu %}
+{% endblock %}
+
+{% block mainleft %}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ core_manage.filter([
+    {
+        method: 'show',
+        ico: 'font-ico-plus mr5',
+        title: '新增'
+    },
+    {
+        method: 'submit',
+        title: '生成所有',
+        url: ('createappmanage/createall')|U(),
+        attr: {
+            'data-ajax': 1,
+            'data-ajax-title': '生成中...'
+        }
+    },
+    {
+        method: 'search',
+        title: '请输入ID/名称/控制器/方法'
+    }
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="60" data-role="sort" data-sort="id" class="sort">ID</th>
+                    <th>名称</th>
+                    <th width="200">bundle</th>
+                    <th width="200">控制器</th>
+                    <th width="200">方法</th>
+                    <th width="200" class="tac">操作</th>
+                </tr>
+                {% if ident.info.data is defined %}
+                {% for k, vo in ident.info.data %}
+                    {# {{dump(vo)}} #}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td>{{ vo.id }}</td>
+                    <td><span data-role="itemEdit" data-name="name" data-value="{{ vo.name }}">{{core_global.substr( vo.name|default(''), 16, 1)}}</span></td>
+                    <td class="word-wrap">{{ vo.bundle}}</td>
+                    <td>
+                        {{ vo.controller }}
+                    </td>
+                    <td>
+                        {{ vo.action }}
+                    </td>
+                    <td class="tac">
+                        {{ core_manage.show() }}
+                        {{ core_manage.delete() }}
+                        <a href="{{('createappmanage/createone')|U({id: vo.id})}}" class="btn btn-sm" data-role="submit">执行</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="7" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+{{ core_manage.oprate([
+     {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    }
+]) }}
+{% endblock %}
+
+{% block promptUl %}
+    温馨提示: 生成app的时候请使用`主域名`访问后台，并且使用非开发模式下生成，否则会出现数据请求只会是某个分站的数据或者无法访问到相关数据
+{% endblock %}

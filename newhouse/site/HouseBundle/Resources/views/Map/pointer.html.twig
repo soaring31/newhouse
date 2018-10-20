@@ -1,0 +1,25 @@
+{% extends 'HouseBundle::base.html.twig' %}
+{% block header %}{% endblock header %}
+{% block footer %}{% endblock footer %}
+{% block title %}地图{% endblock title %}
+{% block body %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/pointer.css')}}
+{% set house = ('house.houses')|getRow({id: 35}) %}
+{{
+    house_global.map({
+        detail: house,
+        data: house,
+        arr_round : [
+            {ico: 42, name: '学校'},
+            {ico: 43, name: '医院'},
+            {ico: 44, name: '银行'},
+            {ico: 45, name: '餐饮'},
+            {ico: 46, name: '购物'},
+            {ico: 47, name: '公交'},
+            {ico: 49, name: '公园'},
+            {ico: 50, name: '机场'},
+            {ico: 51, name: '加油站'},
+        ]
+    })
+}}
+{% endblock body %}

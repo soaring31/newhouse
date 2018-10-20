@@ -1,0 +1,27 @@
+{% extends 'CoreBundle::base_ajax.html.twig' %}
+{% set ids = app.request.get("id")|default(0) %}
+{% set models = app.request.get("models")|default('houses') %}
+{% set field = app.request.get("field")|default('')|split(',') %}
+
+{% if models == 'houses' %}
+    {% set controller = 'houses/detail' %}
+{% elseif models == 'sale' %}
+    {% set controller = 'sale/detail' %}
+{% elseif models == 'rent' %}
+    {% set controller = 'rent/detail' %}
+{% endif %}
+
+{% set results = ('house.' ~ models)|getAll({checked: 1,  id: 'in|'~ids, pageSize: 100}) %}
+
+{% block result %}
+{
+    {%- for item in results.data -%}
+    {% if loop.index != 1 %},{% endif %}"{{ loop.index }}": {
+        {%- for item1 in field -%}
+            "{{item1}}": "{{attribute(item, item1) is defined ? attribute(item, item1): ''}}",
+        {%- endfor -%}
+         "url": "{{(controller)|U({id: item.id})}}"
+    }
+    {%- endfor -%}
+}
+{% endblock result %}

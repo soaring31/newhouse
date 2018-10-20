@@ -1,0 +1,53 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% import "ManageBundle:Form:lists.html.twig" as lists %}
+{% block mainMenu %}
+<li id="mainmenu_80d1c53a3a0bb59293d05a7fe58b2c16d3aaf686f6004a0634e248dff3bd1571" data-url="{{('models/modelsmanage')|U()}}">
+    <a href="javascript:void(0);">
+        模型管理
+    </a>
+</li>
+<li title='{{ (action)|U('id='~app.request.get('id')) }}' class="on">
+    <a href="javascript:void(0);">
+        模型字段管理
+    </a>
+</li>
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+seajs.use("{{ bundlepath }}/js/models",function(m){
+	//js入口	    
+	m.init('main');
+});
+</script>
+{% endblock %}
+
+{% block tableMain %}
+<span class="tableDesc">
+             字段列表>>
+    {{ lists.EDIT({'id':0},{'field':'id','params':{0:'新增字段',1:'search-btn'}},action) }}
+    <select id="modelsForm" {{ app.request.get('id')?'disabled':'' }}>
+        {% if ident.models.data is defined %}
+        {% for key,item in ident.models.data %}
+        <option value="{{ item.id }}" {{ app.request.get('id')|default('')|isSelected(item.id) }}>{{ item.name }}</option>
+        {% endfor %}
+        {% endif %}
+    </select>
+    {{ lists.EDIT({'id':app.request.get('_id')},{'field':'id','params':{0:'生成元数据',1:'btn confirm', 2:action~'/create'}}, action, 'id') }}&nbsp;&nbsp;
+    <input type="button" id="btnfun_edit" data="{{ ('modelsmanage/cache')|U('_id='~app.request.get('_id')) }}" class="btn" value="重置缓存" />
+</span>
+{# 列表 #}
+{{ lists.list(ident.info|default('')) }}
+{% endblock %}
+
+{#提交按钮#}
+{% block submit %}{% endblock %}
+
+{# 翻页参数 #}
+{% block page %}
+{{ lists.page(ident.info) }}
+{% endblock %}
+
+{# 提示说明 #}
+{% block promptUl %}
+	<li></li>
+{% endblock %}

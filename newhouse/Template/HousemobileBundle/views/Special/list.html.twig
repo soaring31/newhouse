@@ -1,0 +1,33 @@
+{% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:special_list.html.twig' : 'HousemobileBundle::list_layout.html.twig' %}
+
+{% block title %}
+    特价房
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" Content="特价房"/>
+<meta name="description" content="特价房"/>   
+{% endblock key_des %}
+
+{% block header_title %}
+{{core_mobile_global.title({title: '特价房'})}}
+{% endblock header_title %}
+
+{% block container %}
+    {# 检索 #}
+    {% set list_header %}
+    <div class="filter" data-block="{
+        ajax: {
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                tpl: 'Common:filter',
+                tag: 'web_special'
+            }
+        }
+    }"></div>
+    {% endset %}
+
+    {# 列表链接 js调用列表需要 #}
+    {% set list_url = ('special/list')|U({ajax: 1}) %}
+    {{ parent() }}
+{% endblock container %}

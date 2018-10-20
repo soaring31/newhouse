@@ -1,0 +1,47 @@
+{% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:xq_list.html.twig' : 'HousemobileBundle::list_layout.html.twig' %}
+
+{% set search_action = ('sale/xqlist')|UU %}
+
+{% block title %}
+	{{cur_area_data|default('')}}小区信息，{{cur_area_data|default('')}}房价，{{cur_area_data|default('')}}楼盘信息
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data|default('')}}小区信息，{{cur_area_data|default('')}}房价，{{cur_area_data|default('')}}楼盘信息"/>
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}为您提供海量的{{cur_area_data|default('')}}小区信息，小区房价，小区详情，周边配套，实景图，户型图，专业客观反映{{cur_area_data|default('')}}房价走势，为您选购{{cur_area_data|default('')}}二手房提供全方位参考。"/>
+{% endblock key_des %}
+
+
+{% block header_title %}
+{{core_mobile_global.title({title: '小区'})}}
+{% endblock header_title %}
+
+{% block header_right %}
+{{ core_mobile_global.bar_nav_btn({
+    title: '搜索',
+    icon: 'font-f-8',
+    popup: {
+        title: '小区搜索',
+        popup: '.popup-search',
+    }
+}) }}
+{% endblock header_right %}
+
+{% block container %}
+    {# 检索 #}
+    {% set list_header %}
+    <div class="filter" data-block="{
+        ajax: {
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                tpl: 'Common:filter',
+                tag: 'region'
+            }
+        }
+    }"></div>
+    {% endset %}
+
+    {# 列表链接 js调用列表需要 #}
+    {% set list_url = ('sale/xqlist')|U({ajax: 1}) %}
+    {{ parent() }}
+{% endblock container %}

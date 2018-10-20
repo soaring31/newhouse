@@ -1,0 +1,45 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明 
+ * detail: 当前数据
+ * detail_tujis: 当前数据图集
+#}
+
+{% set detail = detail|default(cident.door_detail.data[0]|default('')) %}
+
+{% set detail_tujis = detail.tujis|default('')|sourceImg %}
+
+{% block result %}
+<div class="content">
+    <div class="swiper-container door-swiper" data-pagination=".door-page" data-pagination-element="li">
+        <div class="swiper-wrapper">
+            {% if detail_tujis is defined %}
+                {% for item in detail_tujis %}
+                    <div class="swiper-slide">
+                        <div>
+                            {{core_global.img({
+                                src: item.href|default(''),
+                                alt: item.desc|default('')
+                            })}}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="swiper-pagination door-page"></div>
+    </div>
+</div>
+
+<nav class="bar bar-tab door-nav">
+    <div class="tab-item">
+        <span class="tab-label">
+            {{detail.name|default('')}}-{{house_global.huxing({data: detail|default(''), tpl:'%shi%%ting%%wei%-%mj%m&sup2;'})}}
+        </span>
+    </div>
+</nav>
+
+<script type="text/javascript">
+    seajs.use(['sm'], function (sm) {
+        $('.door-swiper').swiper()
+    })
+</script>
+{% endblock result %}

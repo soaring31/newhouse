@@ -1,0 +1,45 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+{# 说明 
+ * detail: 经纪公司详情数据
+#}
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% set detail_info = cident.detailinfo.data[0]|default('') %}
+
+{% set detail_name = detail_info.company|default(detail_info.nicename|default(detail.username|default('-'))) %}
+
+{% set header_class = 'bar-op' %}
+
+{% block title %}
+    {{detail_info.nicename|default(detail.username|default(''))}}
+{% endblock title %}
+
+{% block container %}
+	<div data-block="{
+	    bParams: true,
+	    ajax:{
+	        url: '{{ ('member/d_ds')|U }}',
+	        data: {
+	            id: '{{ detail.id|default('') }}',
+	            tpl: 'Member:jsblock',
+	            models: 'jjgs'
+	        }
+	    }
+	}"></div>
+{% endblock container %}
+
+{% block nav %}
+	<div class="dn" data-block="{
+	    bParams: true,
+	    ajax:{
+	        url: '{{ (action)|U }}',
+	        data: {
+	            id: '{{ detail.id|default('') }}',
+	            tpl: 'Common:navbottom',
+	            nav_opt_tag: 'member_jjgs',
+	            action: '{{nav_users_act|default(1)}}'
+	        }
+	    }
+	}"></div>
+{% endblock nav %}

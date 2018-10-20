@@ -1,0 +1,89 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+    {% set aid = app.request.get('aid') %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }} 
+  
+{% endblock %}
+
+{% block mainleft %}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ core_manage.filter([
+    
+    {
+        method: 'search',
+        field: 'name',
+    }
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            models: '{{ models }}',
+            category: '{{ category }}'
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th class="pl10">用户名称</th>
+                    <th width="100">会员组</th>
+                    <th width="110">操作IP</th>
+                    <th width="100">操作模型</th>
+                    <th width="130" data-role="sort" data-sort="clicks" class="sort">操作</th>
+                    <th width="100" data-role="sort" data-sort="create_time" class="sort">操作时间</th>
+                </tr>
+                {% if ident.info.data is defined and ident.info.pageCount|default('') != 0 %}
+                {% for k, vo in ident.info.data %}
+                <tr data-id="{{ vo.id }}">
+                   <td class="pl10">{{ vo.operation|default('') }}</td>
+                   <td width="100">
+
+                        {% set uid = ('db.users')|getOne('id', { username: vo.operation }) %} 
+                        {% set mid = ('db.users')|getOne('mid', { username: vo.operation }) %}    
+                        {% set group_id = ('db.userinfo')|getOne('groupid', { uid: uid}) %}
+                        {% set memname = ('db.mem_group')|getOne('name', { id: group_id}) %}
+                        {% if mid %}
+                        创始人    
+                        {% else %}
+                        {{ memname }}
+                        {% endif %}
+                    </td> 
+                   <td width="100">{{ vo.title }}</td>
+                   <td width="100">{{('db.models')|getOne('title',{name:vo.models})}}</td>
+                   <td width="100">{{ vo.name}}</td>
+                   <td>{{ vo.create_time|default('0')|date('Y-m-d') }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="6" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+{% endblock %}
+
+{% block promptUl %}
+{# 提示说明 #}
+{% endblock %}
+
+
+
+

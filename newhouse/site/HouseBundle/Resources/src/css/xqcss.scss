@@ -1,0 +1,84 @@
+/*!
+ * @name <%= name %>
+ * @author <%= author %>
+ * @date <%= date %>
+ */
+
+@import 'static/ats'; // 工具类, 每个文件都要导入
+
+@import 'sale'; // 二手公用模块
+
+.vil-con {
+
+	&:hover {
+		background: #fafafa;
+	}
+
+	.sale-item-l {
+		img {
+			float: left;
+			width: 160px;
+			height: 110px;
+			margin-top: 4px;
+		}
+	}
+
+	.sale-item-text {
+		margin-left: 190px;
+		font-size: 14px;
+		width: 400px;
+		color: #333;
+		h3 {
+			line-height: 32px;
+			font-weight: 700;
+			span {
+				color: #999;
+				margin-left: 5px;
+				font-weight: normal;
+				font-size: 12px;
+			}
+			
+		}
+		p {
+			line-height: 28px;
+		}
+		.num {
+			color: #f50;
+		}
+		i{
+			vertical-align: -2px;
+		}
+	}
+
+	.sale-item-r {
+
+		// width: auto;
+		width: 330px;
+		@extend %clearfix;
+	}
+
+	.v-b-r-l {
+		float: left;
+		line-height: 34px;
+		font-size: 14px;
+		color: #333;
+		min-width: 114px;
+		span {
+			font-size: 16px;
+			font-family: georgia;
+		}
+
+		.shou {
+			background: #f06d07;
+		}
+
+		.zu {
+			background: #2d99d6;
+		}
+	}
+
+	.margin {
+		margin: 0 28px 0 46px;
+	}
+
+}

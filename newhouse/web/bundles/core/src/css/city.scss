@@ -1,0 +1,144 @@
+@import 'static/ats'; // 工具类, 每个文件都要导入
+
+.mcity {
+    background: #f9f9f9;
+    height: 100%;
+   overflow-y: scroll; 
+}
+.city {
+    background: #f9f9f9;
+}
+
+.city-head {
+    margin-top: 20px;
+    border-bottom: 1px dashed #ccc;
+
+    p {
+        font-size: 16px;
+        color: #545454;
+        line-height: 28px;
+        text-align: center;
+    }
+
+    .city-btn {
+        display: block;
+        cursor: pointer;
+        width: 205px;
+        font-size: 18px;
+        line-height: 40px;
+        text-align: center;
+        color: #fff;
+        margin: 10px auto 20px;
+        background-color: #e43;
+        border-radius: 30px;
+        &:hover {
+            text-decoration: none;
+            @include opacity(.8);
+        }
+    }
+}
+
+#clist {
+    clear: both;
+    overflow: hidden;
+    zoom: 1;
+
+    // width: 990px;
+    margin: 0 auto;
+    padding: 20px;
+    .text {
+        border-radius: 3px;
+        width: 180px;
+    }
+}
+#clist dt {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 24px;
+    float: left;
+    clear: both;
+
+    margin: 0;
+    padding: 3px 0 3px 4px;
+
+    color: #545454;
+}
+#clist dd {
+    // float: left;
+
+    // width: 936px;
+    margin-left: 58px;
+    padding: 3px 0;
+    line-height: 24px;
+    min-height: 24px;
+}
+#clist dd a {
+    font-size: 12px;
+
+    display: inline-block;
+
+    margin-right: 12px;
+
+    white-space: nowrap;
+    text-decoration: none
+}
+
+
+#searchspan {
+    padding: 3px 14px 3px 0;
+}
+#popularspan {
+    padding: 3px 14px 3px 34px;
+}
+#clist dd.popular {
+    // width: 681px;
+    margin-bottom: 20px;
+}
+
+#clist dt.quyu {
+    font-size: 16px;
+    line-height: 34px;
+
+    clear: none;
+
+    width: 990px;
+    height: 34px;
+    padding-left: 2px;
+
+    color: #dcdcdc;
+    
+}
+
+
+#clist dt.quyu span {
+    padding-right: 4px;
+
+    background: #f9f9f9;
+}
+
+.city-area {
+    clear: both;
+    padding: 20px 0;
+    @extend %clearfix;
+    a {
+        display: inline-block;
+        margin-bottom: 10px;
+        min-width: 80px;
+        background: none;
+        border: none;
+        color: #666;
+        text-align: center;
+        &:hover {
+            color: #666;
+            border-color: #ddd;
+            background-color: #ddd;
+        }
+        &.btn-main {
+            color: #fff;
+            border-color: #3e85a9;
+            background-color: #4594bb;
+        }
+    }
+}
+

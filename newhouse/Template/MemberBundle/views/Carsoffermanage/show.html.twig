@@ -1,0 +1,13 @@
+{% extends "AutoBundle::poplayout.html.twig" %}
+{% block js %}
+<script>
+seajs.use("{{ bundlepath }}/js/controllers",function(c){
+	//js入口	    
+	c.init('show');
+});
+</script>
+{% endblock %}
+{% block body %}
+{% import "AutoBundle:Macro:popedit.html.twig" as forms %}
+{{ forms.popEdit(form|default(''),'form') }}
+{% endblock %}

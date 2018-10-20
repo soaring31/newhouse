@@ -1,0 +1,29 @@
+{% extends 'HouseBundle:Houses:ddetail.html.twig' %}
+
+{% block title_houses %}{{detail.name|default('')}}周边配套{% endblock title_houses %}
+
+{% block key_des %}
+    <meta name="keywords" content="{{cur_area_data|default('')}}{{detail.name|default('')}}周边配套{{detail.name|default('')}}好不好，{{detail.name|default('')}}好吗" />
+    <meta name="description" content="{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}提供{{detail.name|default('')}}房价、户型、质量、物业、附近交通、环境、配套等方面的点评，详细分析{{cur_area_data|default('')}}{{detail.name|default('')}}楼盘详情优缺点，诸葛找房为您买房置业提供参考信息。 "/>
+{% endblock key_des %}
+
+{# 导航高亮 #}
+{% block top_search %}{% endblock top_search %}
+{% block logo_header %}
+    {% set nav_houses_act = 6 %}
+    {{parent()}}
+{% endblock logo_header %}
+
+{% block body_fl %}
+    {% block d_body %}
+        {% include 'HouseBundle:Houses:map_common.html.twig' %}
+        {% include 'HouseBundle:Houses:t_detail.html.twig' %}
+    {% endblock d_body %}
+{% endblock body_fl %}
+
+
+{% block body_fr %}
+    {% block body_d %}
+
+    {% endblock body_d %}
+{% endblock body_fr %}

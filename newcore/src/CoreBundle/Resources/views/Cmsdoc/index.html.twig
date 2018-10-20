@@ -1,0 +1,29 @@
+{% set catePushs = ('house.cate_pushs')|getAll({pageSize: 1000}) %}
+{
+    {%- for item in catePushs.data -%}
+    "{{ item.ename }}": {
+        "name": "{% if item.pid -%}{% for item1 in catePushs.data if item1.id == item.pid %}{{item1.name}}{% endfor %}{%- endif %} - {{ item.name }}",
+        "models": "{{ item.models }}",
+        "type": "{{ item.type }}",
+        "ptype": "1"
+    },
+    {%- endfor -%}
+    "lparea": {
+        "name": "同区域新盘推荐"
+    },
+    "lprent": {
+        "name": "同楼盘出租"
+    },
+    "lpsale": {
+        "name": "同楼盘二手房"
+    },
+    "clicks": {
+        "name": "点击率排行"
+    },
+    "sameprices": {
+        "name": "同价位楼盘，价格相差+-1000"
+    },
+    "zbclicks": {
+        "name": "热门直播，点击率排行"
+    }
+}

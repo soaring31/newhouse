@@ -1,0 +1,30 @@
+{# {% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:special_list.html.twig' : 'HousemobileBundle:Houses:dnews.html.twig' %} #}
+
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default('Houses:detail') ~ '.html.twig' %}
+
+{% block h_title %}
+特价房
+{% endblock h_title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}特价房, {{detail.name|default('')}}特价新房, {{cur_area_data|default('')}}{{detail.name|default('')}}打折" />
+<meta name="description" content="{{detail.name|default('')}}相关特价房"/>
+{% endblock key_des %}
+
+{# 导航 #}
+{% block secondary %}
+    {% set nav_active = 8 %}
+    {{ parent() }}
+{% endblock secondary %}
+
+{% block container %}
+{% set list_url = ('houses/dspehouse')|U({
+    tpl: 'Clist:special_list',
+    id: detail.id|default(''),
+}) %}
+
+{{core_mobile_global.list_scroll({
+    url: list_url|default('')
+})}}
+{% endblock container %}

@@ -1,0 +1,93 @@
+{% extends 'HouseBundle::base.html.twig' %}
+
+{% block title %}新版系统调查问卷{% endblock title %}
+
+{% block css %}
+{# <link rel="stylesheet" type="text/css" href="{{ asset('bundles/'~bundlepath~'/css/votelist.css', absolute=true) }}"> #}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/votelist.css')}}
+{% endblock css %}
+
+{% set vote = app.request.get("id")|default(191) %}
+{% set vote_detail = ('house.category')|getRow({checked:1, id: vote}) %}
+
+{% block body %}
+<div class="bg">
+    <div class="container">
+        <div class='head'>
+
+            <div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_qzone" data-cmd="qzone"></a><a href="#" class="bds_tsina" data-cmd="tsina"></a><a href="#" class="bds_tqq" data-cmd="tqq"></a><a href="#" class="bds_renren" data-cmd="renren"></a><a href="#" class="bds_weixin" data-cmd="weixin"></a></div>
+
+            <h2>{{vote_detail.name|default()}}</h2>
+             <div class="weixin">
+                <span><img src="http://open.weixin.qq.com/qr/code?username=house08cms" alt="微信公众号二维码" style="height: 100px; width: 100px; display: inline-block;"></span><br>
+                扫一扫，关注微信
+            </div>
+        </div>
+        <div class="con-text">
+             <div class="con">
+                        {# 问题 #}
+                    <ul class="text ">
+                        {% set hexin = ('house.vote')|getAll({checked: 1, models:'vote', category:vote|default('')}) %}
+                        {% if hexin.data is defined %}
+                          {# {{dump(hexin.data)}} #}
+                            {% for item2 in hexin.data %}
+                                <li class="vote-item">
+                                    <p>
+                                        <i>{{loop.index}}、</i>{{item2.name|default('')}}<span style="color:red;">&nbsp;*</span>
+                                    </p>
+                                    <ul class="text-q vote-wrap">
+                                        {% set option = ('house.voteoptions')|getAll({checked: 1, vid: item2.id|default('')}) %}
+                                        {% if option.data is defined %}
+                                            {# {{dump(option.data)}} #}
+                                            {% for itema in option.data %}
+                                             <li data-item="vote-item" data-vote-item="{{itema.id|default('')}}">
+                                                <label>
+                                                    <input class="vote-input" type="{% if item2.ismulti|default('') %}checkbox{% else %}radio{% endif %}" name="radio_{{item2.id|default('')}}" id="radio_{{itema.id|default('')}}"  value="" />
+                                                   {#  <i class="radio" ></i> #}
+                                                    {{itema.name|default('')}}
+                                                </label>
+                                            </li>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </ul>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+
+            </div>
+            <div class="btn1">
+                <input type="button" value="提交" data-cid="vote"  data-vote="{models: 'voteoptions', field: 'votes'}" data-multiple=".vote-wrap" class='in'>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock body %}
+
+{% block js %}
+    <script type="text/javascript">
+        seajs.use(['jqmodal', 'vote', 'icheck', 'share', 'popunder'], function (jqmodal, vote, icheck, share, popunder) {
+
+            $('.vote-input').iCheck({
+              radioClass: 'iradio_square-blue',
+              checkboxClass: 'icheckbox_square-blue',
+              increaseArea: '30%',
+            });
+            vote.init({
+                saveUrl: '{{("viewinter/vote")|U()}}'
+            });
+
+            // popunder.init();
+
+
+
+
+        })
+    </script>
+{% endblock js %}
+
+
+{% block footer %}
+    {% include 'HouseBundle:Common:webinfo.html.twig' %}
+{% endblock %}

@@ -1,0 +1,419 @@
+﻿.bannerCompare .bannerCompareIcon {
+    height: 38px;
+    line-height: 38px;
+    background-position: -38px -516px
+}
+
+.bannerCompare:hover .bannerCompareIcon {
+    background-position: 0 -516px
+}
+
+.bannerCompare.compare1 .bannerCompareIcon {
+    background-position: -38px -556px
+}
+
+.bannerCompare.compare1:hover .bannerCompareIcon {
+    background-position: 0 -556px
+}
+
+.bannerCompare.compare2 .bannerCompareIcon {
+    background-position: -38px -598px
+}
+
+.bannerCompare.compare2:hover .bannerCompareIcon {
+    background-position: 0 -598px
+}
+
+.bannerCompare.compare3 .bannerCompareIcon {
+    background-position: -38px -638px
+}
+
+.bannerCompare.compare3:hover .bannerCompareIcon {
+    background-position: 0 -638px
+}
+
+.bannerCompare.compare4 .bannerCompareIcon {
+    background-position: -38px -674px
+}
+
+.bannerCompare.compare4:hover .bannerCompareIcon {
+    background-position: 0 -674px
+}
+.banner {
+    font-size: 12px;
+    line-height: 38px;
+
+    background-color: #394043;
+}.banner .container {
+    width: 1100px;
+    margin: 0 auto
+}.banner .container .channelList {
+    display: table-cell;
+
+    white-space: nowrap
+}.banner .container .channelList li {
+    position: relative;
+
+    display: inline-block;
+
+    margin-right: 21.5px;
+}.banner .container .channelList li a {
+    text-decoration: none;
+
+    color: #a9abab;
+}.banner .container .channelList li.selected > a,
+.banner .container .channelList li:hover > a {
+    color: #fff
+}.banner .container .channelList li .childList {
+    position: absolute;
+    top: 38px;
+    left: -18px;
+
+    display: none;
+
+    width: 61px;
+    padding: 8px 0;
+
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+    background-color: #394043;
+    box-shadow: 0 0 8px rgba(0,0,0,.7)
+}.banner .container .channelList li .childList a {
+    line-height: 25px;
+
+    display: block;
+
+    text-align: center;
+
+    color: #a9abab
+}.banner .container .channelList li .childList a.selected,
+.banner .container .channelList li .childList a:hover {
+    color: #fff;
+    background-color: #4c5355
+}.banner .container .channelList li .appQRCode {
+    position: absolute;
+    z-index: 1;
+    top: 38px;
+    left: -32px;
+
+    display: none;
+
+    padding: 12px;
+
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+    background-color: #394043;
+    box-shadow: 0 0 8px rgba(0,0,0,.7);
+}.banner .container .channelList li .appQRCode img {
+    width: 90px;
+    height: 90px
+}.banner .container .channelList li:hover .childList,
+.banner .container .channelList li:hover .appQRCode {
+    display: block
+}.banner .container .banner-right {
+    display: table-cell;
+
+    width: 1000px;
+
+    text-align: right;
+
+    color: #fff
+}.banner .container .banner-right a {
+    color: #fff
+}.banner .container .banner-right .login {
+    position: relative;
+
+    display: inline-block;
+
+    margin-right: 20px;
+}.banner .container .banner-right .login i {
+    display: inline-block;
+
+    width: 12px;
+    height: 12px;
+    margin-right: 9px;
+
+    vertical-align: -1px;
+
+    background-image: url(../images/sprite.png);
+    background-position: -554px -173px;
+}@media (-webkit-min-device-pixel-ratio:2),(min-resolution:192dpi) {
+    .banner .container .banner-right .login i {
+        background-image: url(../images/sprite@2x.png);
+        background-size: 606px 356px
+    }
+}.banner .container .banner-right .login .pushNews {
+    display: inline-block;
+
+    width: 5px;
+    height: 5px;
+
+    vertical-align: 7px;
+
+    background-image: url(../images/sprite.png);
+    background-position: -581px -185px;
+}@media (-webkit-min-device-pixel-ratio:2),(min-resolution:192dpi) {
+    .banner .container .banner-right .login .pushNews {
+        background-image: url(../images/sprite@2x.png);
+        background-size: 606px 356px
+    }
+}.banner .container .banner-right .login .pushNewsList {
+    position: absolute;
+    z-index: 20;
+    top: 38px;
+    left: 0;
+
+    display: none;
+
+    padding: 8px 0;
+
+    text-align: left;
+
+    background-color: #394043;
+    box-shadow: 0 0 8px rgba(0,0,0,.7)
+}.banner .container .banner-right .login .pushNewsList a {
+    line-height: 25px;
+
+    display: block;
+
+    padding: 0 17px;
+
+    white-space: nowrap
+}.banner .container .banner-right .login .pushNewsList a:hover,
+.banner .container .banner-right .login .pushNewsList a.selected {
+    text-decoration: none;
+
+    color: #fff;
+    background-color: #4c5355;
+}.banner .container .banner-right .login .unreadNumber {
+    padding: 0 3px
+}.banner .container .banner-right .login:hover .pushNewsList {
+    display: block
+}.banner .container .banner-right .phone {
+    display: inline-block
+}.banner .container .banner-right .phone i {
+    display: inline-block;
+
+    width: 12px;
+    height: 12px;
+    margin-right: 9px;
+
+    vertical-align: -1px;
+
+    background-image: url(../images/sprite.png);
+    background-position: -590px -173px;
+}@media (-webkit-min-device-pixel-ratio:2),(min-resolution:192dpi) {
+    .banner .container .banner-right .phone i {
+        background-image: url(../images/sprite@2x.png);
+        background-size: 606px 356px
+    }
+}
+
+.loginbar {
+    background: rgba(0, 0, 0, 0.5);
+    float: right;
+    height: 36px;
+    width: 180px;
+    color: #fff;
+    text-align: center;
+    line-height: 36px;
+    margin-left: 20px;
+}
+
+.loginbar .login-btn {
+    background: #fff;
+    border: 1px solid #e7e7e7;
+    border-bottom: none;
+    display: none;
+    width: 178px!important;
+    position: absolute;
+    top: 38px !important;
+    left: 0;
+    z-index: 10;
+}
+
+.loginbar .login-btn li {
+    border-bottom: 1px solid #e7e7e7;
+    height: 40px;
+    line-height: 40px;
+}
+
+.loginbar .login-btn li a {
+    display: block;
+    color: #333 !important;
+}
+
+.loginbar .login-btn li a:hover {
+    color: #f00!important;
+    text-decoration: none;
+}
+
+.loginbar .login-btn li i {
+    color: #333;
+    font-size: 18px;
+    margin-right: 13px;
+    vertical-align: -3px;
+}
+
+.loginbar .login-btn li i.qq {
+    color: #43acd9;
+}
+
+.loginbar .login-btn li i.sina {
+    color: #eb7464;
+}
+
+.loginbar .login-btn li i.weixin {
+    color: #3eb135;
+}
+
+.loginbar .open .login-btn {
+    display: block;
+}
+
+.login-out {
+    line-height: 36px;
+    height: 36px;
+    text-align: center;
+}
+
+.login-out .login-out-btn a {
+    color: #fff;
+    margin: 0 5px;
+}
+
+.login-out .login-out-btn a:hover {
+    color: #f00;
+    text-decoration: none;
+}
+
+.login-out .login-out-btn i {
+    color: #fff;
+    font-size: 14px;
+    margin-right: 5px;
+    vertical-align: -2px;
+}
+
+.login-in {
+    position: relative;
+    cursor: pointer;
+}
+
+.login-in .login-info {
+    color: #fff;
+    height: 38px;
+    line-height: 38px;
+    text-align: center;
+}
+
+.login-in .login-info span {
+    display: inline-block;
+    font-size: 12px;
+    max-width: 75px;
+    margin-left: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.login-in .login-info i {
+    font-size: 12px;
+    margin-left: 5px;
+    vertical-align: middle;
+}
+
+.login-in .login-info i.font-icons-1 {
+    font-size: 14px;
+}
+/**/
+
+.banner .container .channelList li:hover .nav-list-ot {
+    opacity: 1;
+    filter: alpha(opacity=100);
+    display: block;
+    pointer-events: auto;
+    -webkit-transform: translateY(0) scale(1);
+    -moz-transform: translateY(0) scale(1);
+    -ms-transform: translateY(0) scale(1);
+    -o-transform: translateY(0) scale(1);
+    transform: translateY(0) scale(1)
+}
+
+.banner .container .channelList li .nav-list-ot {
+    width: 100px;
+    position: absolute;
+    height: 40px;
+    top: 26px;
+    left: 50%;
+    z-index: 99;
+    margin-left: -30px;
+    filter: alpha(opacity=0);
+    display: none;
+    opacity: 0;
+    -webkit-transition: all 500ms cubic-bezier(.34, 1.21, .4, 1);
+    -moz-transition: all 500ms cubic-bezier(.34, 1.21, .4, 1);
+    transition: all 500ms cubic-bezier(.34, 1.21, .4, 1);
+    -webkit-transform-origin: 50% 0;
+    -moz-transform-origin: 50% 0;
+    -ms-transform-origin: 50% 0;
+    -o-transform-origin: 50% 0;
+    transform-origin: 50% 0;
+    -webkit-transform: translateY(0) scale(0);
+    -moz-transform: translateY(0) scale(0);
+    -ms-transform: translateY(0) scale(0);
+    -o-transform: translateY(0) scale(0);
+    transform: translateY(0) scale(0)
+}
+
+.banner .container .channelList li dd {
+    position: absolute;
+    margin-top: 13px;
+    border-radius: 2px;
+    width: 124px;
+    left: -25px;
+    padding: 10px 0;
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+
+    background-color: white;
+    margin-left: 0;
+}
+
+.banner .container .channelList li dd img {
+    width: 100px;
+    height: 100px;
+    float: left;
+    margin: 2px 0 2px 12px
+}
+
+.banner .container .channelList li dd i {
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #fff;
+    width: 0;
+    height: 0;
+    display: block;
+    position: absolute;
+    left: 53px;
+    top: -10px
+}
+
+.banner .container .channelList li dd dl {
+    height: 30px;
+    line-height: 30px
+}
+
+.banner .container .channelList li .nav-list-ot dd dl a {
+    color: #333;
+    float: left;
+    -webkit-text-shadow: none;
+    -moz-text-shadow: none;
+    -ms-text-shadow: none;
+    text-shadow: none;
+    font-size: 14px;
+    margin-left: 20px;
+}
+
+

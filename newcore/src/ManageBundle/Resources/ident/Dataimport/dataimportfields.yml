@@ -1,0 +1,26 @@
+info:
+    tableName: data_impset
+    subTableName: ''
+    aliasName: p
+    listGrid:
+        - 'id:序号|txtcenter w60'
+        - 'fname:导入字段|txtleft w80'
+        - 'forg:来源字段|txtleft w80'
+        - 'ftype:处理类型ID|txtleft w60'
+        - 'id:操作|txtcenter w560:[EDIT]编辑|btn,[DELETE]删除|btn,[COPY]复制|btn'
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 40
+    order: ''
+    orderBy: asc
+    searchFun: EXISTS
+    dataModel: 0
+    autoQuery: '0'
+    alias: {  }
+    query:
+        pid:
+            eq: '[_id]'
+    query1: {  }
+    groupBy: ''

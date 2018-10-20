@@ -1,0 +1,122 @@
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+{% set browser = core_global.browser().__toString %}
+{% set tpl_content = '您现在使用的浏览器版本过低，请使用IE8以上或极速模式的浏览器！' %}
+{% extends browser == 'quirks' ? 'CoreBundle:Dispatch:error.html.twig' : 'HouseBundle::base.html.twig' %}
+
+{% block css %}
+{{core_global.linkcss('static/' ~ bundlepath ~ '/css/mainlogin.css')}}
+{% endblock %}
+
+{% block title %}登录{% endblock title %}
+{% block meta %}
+    {# {{ dump(app.user) }} #}
+    {# <meta http-equiv="refresh"content="1;url=http://bbs.lampbrother.net"> #}
+{% endblock meta %}
+
+{% if url|default('') and url not in [('register/index')|U({},true),('login/index')|U({},true)]  %}
+    {% set login_url = url|default('') %}
+{% endif %}
+
+{% block js %}
+<script type="text/javascript">
+     seajs.use(['login', 'utils'], function (login, utils) {
+        // localstorage读取
+        var read_storage = utils.localStorage.getItem('remember');
+        // 记住密码
+        var $remember = $('input[name="rememberMe"]');
+        // 记住密码所属表单
+        var $form = $remember.closest('form');
+        // 用户名
+        var userName = $.trim($form.find('input[name="userName"]').val());
+        // 加载之后进行赋值
+        if (read_storage) {
+            $form.find('input[name="userName"]').val(read_storage.userName);
+            $form.find('input[name="passWord"]').val(read_storage.passWord);
+        };
+        // 如果第二次输入的账号密码不同，则更换storage
+        if (userName != read_storage.userName) {
+            $(document).on('done', function (result) {
+                var remember_storage = {
+                    userName: $.trim($form.find('input[name="userName"]').val()),
+                    passWord: $.trim($form.find('input[name="passWord"]').val())
+                };
+                if ($remember.prop("checked") == true) {
+                    // 设置缓存，时间30天
+                    utils.localStorage.setItem('remember', remember_storage, 30);
+                };
+            })
+        };
+    })
+</script>
+{% endblock js %}
+{% block body %}
+{% block header %}{% endblock header %}
+    <div class="log">
+        <!-- 右侧登录 -->
+        <div data-login-wrap="1" class="login-box ">
+            <div class="tab-header">
+                <div class="login-head">
+                    <img src="{{asset('static/'~bundlepath~'/images/logo.png')}}" class="logo-img">
+                </div>
+                <div class="logo-cont">
+                    <span class="lf"></span>
+                    <p>管理员登录</p>
+                    <span class="rh"></span>
+                </div>
+                <div class="login-head" style="display:none;">
+                    <ul class="clearfix">
+                        <li class="act" data-type="0"><a href="javascript:;">会员登录</a></li>
+                        {# 未开启手机短信时不能用手机动态登录 #}
+                        {% set smsconfig = ('sms_api')|C|default('') %}
+                        {% if smsconfig is empty %}<li></li>
+                        {% else %}
+                        <li data-type="1"><a href="javascript:;">手机动态登录</a></li>
+                        {% endif %} 
+                    </ul>
+                </div>
+            </div>
+            <!--body-->
+            <div class="input-box">
+                 <div class="tag">
+                    <div data-view-form="1" class="">
+                        {# 需求特殊，参考ajaxform手动渲染 #}
+                        <form data-jumpurl="{{login_url|default('')}}" class="" action="{{ form.vars.action|U({loginflag: 1}, true) }}" method="post">
+                        <ul>
+                            {% for v in form.children %}
+                            {% set vars = v.vars %}
+                            {% set name = v.vars.name|default('') %}
+
+                            {% if name == 'submit' %}
+                                <div class="item">
+                                    {{ form_widget(v) }}
+                                </div>
+                            {% elseif name in ['vcode', 'type'] %}
+                                <div class="item {{name}} input input-{{name}}" style="display: none;">
+                                    <i class="iconfont icon-dianhua2"></i>
+                                     {{ form_widget(v) }}
+                                </div>
+                            {% else %}
+                                <div class="item {{ name }} input input-{{name}}">
+                                    {% if name == 'userName' %}
+                                    <i class="iconfont icon-dianhua2"></i>
+                                    {% elseif name == 'passWord' %}
+                                    <i class="iconfont icon-xuanzhong"></i>
+                                    {% endif %}
+                                     {{ form_widget(v) }}
+                                </div>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{# <!-- end --> #}
+{% endblock body %}
+
+{% block footer %}
+    <div class="footer_bottom"><p>Copyright © 2015-2018 北京诸葛找房信息技术有限公司　｜　All Rights Reserved 沪ICP备18007533号</a></p></div>
+{% endblock %}

@@ -1,0 +1,19 @@
+info:
+    tableName: auth_access
+    aliasName: p
+    listGrid:
+        - 'ids:|w30'
+        - 'uid[GETUSERNAME]:所属用户|txtleft w150'
+        - 'group_id[GETGROUPNAME]:所属角色|txtleft w150'
+        - 'id:操作|txtleft:[DELETE]解除|btn'
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    order: ''
+    orderBy: asc
+    dataModel: 0
+    alias: {  }
+    query:
+        group_id:
+            eq: '[_id]'
+    listDesc: ''

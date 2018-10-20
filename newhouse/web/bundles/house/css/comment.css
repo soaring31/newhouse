@@ -1,0 +1,757 @@
+@charset "UTF-8";
+/**
+ * @name <%= name %>
+ * @author <%= author %>
+ * @date <%= date %>
+ */
+/**
+ * @method 清除浮动 %clearfix 
+ * @description 清除浮动
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %clearfix;
+ * }
+ * ```
+ * 
+ * ```css
+ * 	div {
+	    *zoom: 1;
+	}
+	div:after {
+	    display: block;
+	    clear: both;
+
+	    height: 0;
+
+	    content: '\20';
+	}
+ * ```
+ */
+.comment-form .other-fields, .comment-form .comment-sub, .pingfeng {
+    *zoom: 1;
+}
+
+.comment-form .other-fields:after, .comment-form .comment-sub:after, .pingfeng:after {
+    display: block;
+    clear: both;
+    height: 0;
+    content: '\20';
+}
+
+/**
+ * @method 去掉虚线框 %outline 
+ * @description 去掉虚线框
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @ extend %outline;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		outline: thin dotted;
+		outline: 5px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
+ * ```
+ */
+/**
+ * @method 文字不换行后面加省略号 %text-overflow 
+ * @description 文字不换行后面加省略号
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %text-overflow;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+ * ```
+ */
+/**
+ * @method 透明层opacity 
+ * @description 透明层 内容也透明
+ * @param {number} $opacity - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include opacity(.5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+	  opacity: .5;
+	  filter: alpha(opacity=50);
+ * }
+ * ```
+ */
+/**
+ * @method 背景透明层transparent 
+ * @description 透明层只处理背景透明
+ * @param {string} $color - 背景透明层的颜色
+ * @param {number} $alpha - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include transparent(#000, .5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+ *    	background-color: transparent;
+		background-color: (0,0,0,.5);
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7fffffff, endColorstr=#7fffffff,);
+		zoom: 1;
+ * }
+ * ```
+ */
+/**
+ * @method triangle 
+ * @description 生成一个三角形图标
+ * @param {string} $size - 三角的大小
+ * @param {string} $color - 三角颜色
+ * @param {string} $direction - 三角的方向 up, down, left, right
+ * @example 调用
+ * 
+ * ```scss
+ * i {
+ *    @include triangle(5px, #bbb, up); 
+ * }
+ * ```
+ * 
+ * ```css
+ * i {
+ *    width: 0;
+      height: 0;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent;
+      border-bottom-color: #bbb;
+ * }
+ * ```
+ */
+/**
+* @method 水平线hr nav-divider 
+* @description 透明层 内容也透明
+* @param {string} $color=#e5e5e5 - 线的颜色
+* @param {string} $line-height-computed - 线的高度，空间
+* @example 调用
+* 
+* ```scss
+* div {
+*    @include nav-divider(#e5e5e5, 24px);
+* }
+* ```
+* 
+* ```css
+* div {
+	  height: 1px;
+	  margin: 11px 0;
+	  overflow: hidden;
+	  background-color: #e5e5e5;
+* }
+* ```
+*/
+@font-face {
+    font-family: "cmt";
+    font-weight: normal;
+    font-style: normal;
+    src: url("../fonts/cmt.eot");
+    src: url("../fonts/cmt.eot?#iefix") format("embedded-opentype"), url("../fonts/cmt.woff") format("woff");
+}
+
+[class^="font-cmt-"],
+[class*=" font-cmt-"] {
+    font-family: "cmt"!important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: inherit;
+    float: none;
+    margin: 0;
+    vertical-align: -0.25em;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    text-decoration: none;
+    text-transform: none;
+}
+
+.font-cmt-1:before {
+    content: "\EA01";
+}
+
+.font-cmt-2:before {
+    content: "\EA02";
+}
+
+.font-cmt-3:before {
+    content: "\EA03";
+}
+
+.font-cmt-4:before {
+    content: "\EA04";
+}
+
+.font-cmt-5:before {
+    content: "\EA05";
+}
+
+.font-cmt-6:before {
+    content: "\EA06";
+}
+
+.font-cmt-7:before {
+    content: "\EA07";
+}
+
+.img-f-1, .img-f-2, .img-f-3, .img-f-4, .img-f-5, .img-f-6, .img-f-7, .img-f-8, .img-f-9, .img-f-10, .img-f-11, .img-f-12, .img-f-13, .img-f-14, .img-f-15 {
+    display: inline-block;
+    *zoom: 1;
+    *display: inline;
+    vertical-align: middle;
+    line-height: 300px;
+    overflow: hidden;
+    background-image: url(../images/f.png);
+}
+
+.img-f-1 {
+    width: 24px;
+    height: 24px;
+    background-position: -34px 0;
+}
+
+.img-f-2 {
+    width: 24px;
+    height: 24px;
+    background-position: 0 0;
+}
+
+.img-f-3 {
+    width: 24px;
+    height: 24px;
+    background-position: -68px -68px;
+}
+
+.img-f-4 {
+    width: 24px;
+    height: 24px;
+    background-position: -102px 0;
+}
+
+.img-f-5 {
+    width: 24px;
+    height: 24px;
+    background-position: -102px -34px;
+}
+
+.img-f-6 {
+    width: 24px;
+    height: 24px;
+    background-position: -102px -68px;
+}
+
+.img-f-7 {
+    width: 24px;
+    height: 24px;
+    background-position: 0 -102px;
+}
+
+.img-f-8 {
+    width: 24px;
+    height: 24px;
+    background-position: -34px -102px;
+}
+
+.img-f-9 {
+    width: 24px;
+    height: 24px;
+    background-position: -68px -102px;
+}
+
+.img-f-10 {
+    width: 24px;
+    height: 24px;
+    background-position: -34px -68px;
+}
+
+.img-f-11 {
+    width: 24px;
+    height: 24px;
+    background-position: 0 -34px;
+}
+
+.img-f-12 {
+    width: 24px;
+    height: 24px;
+    background-position: -34px -34px;
+}
+
+.img-f-13 {
+    width: 24px;
+    height: 24px;
+    background-position: -68px 0;
+}
+
+.img-f-14 {
+    width: 24px;
+    height: 24px;
+    background-position: -68px -34px;
+}
+
+.img-f-15 {
+    width: 24px;
+    height: 24px;
+    background-position: 0 -68px;
+}
+
+[class^="font-cmt-"],
+[class*=" font-cmt-"] {
+    vertical-align: -2px;
+}
+
+.comment {
+    margin-top: 10px;
+    /*** 评论列表 
+    --------------------- ***/
+}
+
+.comment .comment-inner {
+    border: 1px solid #d8d8d8;
+}
+
+.comment .tit {
+    line-height: 34px;
+    position: relative;
+    z-index: 9;
+    height: 34px;
+    padding: 0 15px 0 150px;
+}
+
+.comment .tit em {
+    font: 100 14px/34px Microsoft yahei;
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    z-index: 10;
+    height: 34px;
+    padding: 0 15px;
+    color: #fff;
+    border-radius: 0 0 5px 0;
+    background: linear-gradient(to top left, #d63d2e 5%, #e43);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.comment .tit i {
+    font-size: 14px;
+}
+
+.comment .num-info {
+    font-family: Microsoft yahei;
+    font-size: 14px;
+    position: absolute;
+    top: 0;
+    right: 15px;
+    color: #999;
+}
+
+.comment .num-info:hover {
+    text-decoration: none;
+    color: #e43;
+}
+
+.comment .pl-list {
+    position: relative;
+    z-index: 5;
+}
+
+.comment .pl-box {
+    line-height: 22px;
+    padding: 15px;
+    margin: 0 15px;
+    color: #666;
+    border-top: 1px dashed #ddd;
+}
+
+.comment .pl-box:first-child {
+    border-top: none;
+}
+
+.comment .pl-box .plcon-hd {
+    position: relative;
+    font-size: 12px;
+}
+
+.comment .pl-box .plcon-hd .name {
+    float: left;
+}
+
+.comment .pl-box .plcon-hd .time {
+    float: right;
+}
+
+.comment .pl-box .plcon-hd .colorbl {
+    color: #e43;
+}
+
+.comment .pl-box .plcon-hd-tip {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.comment .pl-box .plcon-bd {
+    font-size: 14px;
+    line-height: 24px;
+    text-align: justify;
+    color: #444;
+    word-break: break-all;
+}
+
+.comment .pl-box .zc_btn {
+    position: relative;
+    text-align: right;
+}
+
+.comment .pl-box .zc_btn .icon {
+    font-size: 15px;
+}
+
+.comment .pl-box .zc_btn span {
+    color: #999;
+    font-size: 12px;
+    float: left;
+}
+
+.comment .pl-box .zc_btn a {
+    font-size: 12px;
+    line-height: 21px;
+    position: relative;
+    display: inline-block;
+    height: 21px;
+    margin-top: 4px;
+    margin-left: 10px;
+    cursor: pointer;
+    color: #999;
+}
+
+.comment .pl-box .zc_btn a:hover {
+    text-decoration: none;
+    color: #555;
+}
+
+.comment .pl-box .zc_btn a:hover .ico08 {
+    color: #e43;
+}
+
+.comment .pl-box .zc_btn a em {
+    font-style: normal;
+    padding: 0 2px;
+}
+
+.comment .pl-box .zc_btn .tip {
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    line-height: 16px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30px;
+    height: 16px;
+    text-align: center;
+    color: #f00;
+    border: 1px solid #ddd;
+}
+
+.comment .pl-box .hfcon {
+    padding: 10px;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #eee;
+    background: #fafafa;
+}
+
+.comment-form {
+    font-size: 12px;
+    position: relative;
+    z-index: 10;
+}
+
+.comment-form .code-wrap input,
+.comment-form .code-wrap img {
+    float: left;
+}
+
+.comment-form input:focus {
+    box-shadow: 0 0 1px #1d5fc1 inset;
+}
+
+.comment-form .other-fields {
+    display: table;
+    width: 60%;
+}
+
+.comment-form .other-fields .field {
+    display: table-cell;
+    padding: 15px 15px 0;
+    width: 50%;
+}
+
+.comment-form .other-fields input,
+.comment-form .other-fields select {
+    width: 100%;
+}
+
+.comment-form .textarea {
+    margin: 15px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.comment-form .textarea textarea {
+    line-height: 25px;
+    border: none;
+    width: 100%;
+    min-height: 75px;
+    padding: 0;
+    outline: none;
+}
+
+.comment-form .comment-sub {
+    line-height: 34px;
+    height: 34px;
+    margin: 15px;
+}
+
+.comment-form .txt {
+    height: 22px;
+    line-height: 22px;
+    padding: 5px;
+    box-sizing: content-box;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.comment-form .btn {
+    border-radius: 3px;
+    background: #e43;
+    line-height: 34px;
+    height: 34px;
+    border: none;
+    color: #fff;
+    padding: 0 10px;
+    outline: none;
+}
+
+.comment-form .btn-face {
+    position: relative;
+    float: left;
+    margin-right: 10px;
+}
+
+.comment-form .btn-face .btn-c {
+    float: left;
+    background-color: #fff;
+    color: #e43;
+    border-bottom: none;
+    position: relative;
+    cursor: pointer;
+    z-index: 1010;
+}
+
+.comment-form .btn-face .btn-c i {
+    font-size: 18px;
+    float: left;
+    margin-right: 2px;
+}
+
+.comment-form .btn-face .btn-c.act:before {
+    content: ' ';
+    position: absolute;
+    left: 25px;
+    bottom: 0;
+    height: 0;
+    width: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px;
+    border-bottom-color: #bbb;
+}
+
+.comment-form .btn-face .btn-c.act:after {
+    content: ' ';
+    position: absolute;
+    left: 25px;
+    bottom: -1px;
+    height: 0;
+    width: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px;
+    border-bottom-color: #fff;
+}
+
+.comment-form .code-wrap {
+    float: left;
+    width: 200px !important;
+}
+
+.comment-form #f-list {
+    position: absolute;
+    z-index: 900;
+    top: 30px;
+    left: 0;
+    display: none;
+    border: 1px solid #ddd;
+    padding: 5px;
+    background: #fff;
+}
+
+.comment-form #f-list td {
+    padding: 3px;
+}
+
+.comment-form .tipwrap {
+    line-height: 1.4;
+}
+
+.comment-form .numtip b {
+    color: #f00;
+}
+
+.comment-form .hover .bqface {
+    display: block;
+}
+
+.comment-form .tipkuan {
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 146px;
+    position: absolute;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 146px;
+    text-align: center;
+    color: #bbb;
+    border: 1px solid #dcdcdc;
+    background: #eee;
+}
+
+.comment-form .tipkuan .tipkuan a {
+    font-size: 12px;
+    font-weight: normal;
+    color: #244a99;
+}
+
+/*more*/
+.load-more {
+    line-height: 30px;
+    display: none;
+    height: 30px;
+    cursor: pointer;
+    text-align: center;
+    background: #f5f5f5;
+}
+
+.load-more-ing {
+    line-height: 1000px;
+    overflow: hidden;
+    background: url(../images/page_loading.gif) center no-repeat #f5f5f5;
+}
+
+.start {
+    margin-left: 28px;
+    display: inline-block;
+}
+
+.start img {
+    width: 18px;
+}
+
+.pingfeng {
+    margin: 15px;
+}
+
+.pingfeng .pf-left {
+    width: 500px;
+    float: left;
+}
+
+.pingfeng .item {
+    vertical-align: middle;
+    margin: 10px 0;
+}
+
+.pingfeng .item span {
+    display: inline-block;
+}
+
+.pingfeng .item-name {
+    font-weight: 600;
+}
+
+.pingfeng .item-start {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.pingfeng .item-fen {
+    color: red;
+    margin-right: 20px;
+}
+
+.pingfeng .item-info {
+    font-size: 13px;
+    color: #999;
+}
+
+.pingfeng .pf-right {
+    margin-left: 500px;
+    border-left: 1px solid #ccc;
+    padding: 5px 0 10px 20px;
+}
+
+.pingfeng .pf-right .title {
+    color: #666;
+    font-size: 16px;
+    line-height: 2;
+}
+
+.pingfeng .pf-right .overall {
+    color: red;
+    line-height: 32px;
+}
+
+.pingfeng .pf-right .overall span {
+    font-size: 30px;
+}
+
+.pingfeng .pf-right .info {
+    color: #999;
+}
+
+.pingfeng .inputarea {
+    width: 100%;
+}
+
+.dp-opt {
+    font-size: 13px;
+    color: #999;
+}
+
+/*# sourceMappingURL=comment.css.map */

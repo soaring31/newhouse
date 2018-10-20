@@ -1,0 +1,329 @@
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+{# 当前时间 #}
+{% set now_time = ('now')|date('U') %}
+{# 当天凌晨 #}
+{% set day_time = ('now')|date('Y-m-d')|date('U') %}
+<div class="mindex pb5">
+<div class="m-wrap" data-target="[data-content='1']">
+    <div class="info-head">
+        <div class="in-h-box ">
+            <div class="in-h-box-w cl-1">
+                <div class="in-h-box-title">
+                    <h2>
+                        <a href="{{core_global.menu_url(138)}}">新房</a>
+                    </h2>
+                    <span>{{core_global.count({models: 'houses'})}}条</span>
+                </div>
+                <div class="in-h-box-text">
+                    <p>今天更新<span>{{core_global.count({models: 'houses', sql_opt: {create_time: 'gte|' ~ day_time }})}}条</span></p>
+                    <p>已审<span>{{core_global.count({models: 'houses', sql_opt: {checked: 1}})}}条</span></p>
+                    <p>未审<span>{{core_global.count({models: 'houses', sql_opt: {checked: 0} })}}条</span></p>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="in-h-box ">
+            <div class="in-h-box-w cl-2">
+                <div class="in-h-box-title">
+                    <h2>
+                        <a href="{{core_global.menu_url(280)}}">二手房</a>
+                    </h2>
+                    <span>{{core_global.count({models: 'sale'})}}条</span>
+                </div>
+                <div class="in-h-box-text">
+                    <p>今天更新<span>{{core_global.count({models: 'sale', sql_opt: {create_time: 'gte|' ~ day_time }})}}条</span></p>
+                    <p>上架<span>{{core_global.count({models: 'sale', sql_opt: {valid: 'gt|' ~ now_time|default('')}})}}条</span></p>
+                    <p>已下架<span>{{core_global.count({models: 'sale', sql_opt: {valid: 'between|0,' ~ now_time|default('')}})}}条</span></p>
+                </div>   
+            </div>
+        </div>
+
+         <div class="in-h-box ">
+            <div class="in-h-box-w cl-3">
+                <div class="in-h-box-title">
+                    <h2>
+                        <a href="{{core_global.menu_url(285)}}">出租房</a>
+                    </h2>
+                    <span>{{core_global.count({models: 'rent'})}}条</span>
+                </div>
+                <div class="in-h-box-text">
+                    <p>今天更新<span>{{core_global.count({models: 'rent', sql_opt: {create_time: 'gte|' ~ 'now'|date('Y-m-d')|date('U') }})}}条</span></p>
+                    <p>上架<span>{{core_global.count({models: 'rent', sql_opt: {valid: 'gt|' ~ now_time|default('')}})}}条</span></p>
+                    <p>已下架<span>{{core_global.count({models: 'rent', sql_opt: {valid: 'between|0,' ~ now_time|default('')}})}}条</span></p>
+                </div>   
+            </div>
+            
+        </div>
+
+         <div class="in-h-box ">
+            <div class="in-h-box-w cl-4">
+                <div class="in-h-box-title">
+                    <h2>会员</h2>
+                    <span>{{core_global.count({models: 'users', service: 'db' })}}人</span>
+                </div>
+                <div class="in-h-box-text">
+                    <p>今天新注册<span>{{core_global.count({models: 'users', service: 'db', sql_opt: {create_time: 'gte|' ~ day_time } })}}人</span></p>
+                    <p>今天登陆<span>{{core_global.count({models: 'users', service: 'db', sql_opt: {logintime: 'gte|' ~ day_time } })}}人</span></p>
+                    <p>一个月内登陆<span>{{core_global.count({models: 'users', service: 'db', sql_opt: {logintime: 'gte|' ~ (day_time - 60 * 60 * 24 * 30 ) } })}}人</span></p>
+                </div>   
+            </div>  
+        </div>
+    </div>
+    <div class="info-middle">
+        <div class="in-m-box same-box">
+            <div class="info-same">
+                <div class="same-title">
+                    <h2>基本信息</h2>
+                    {# <a href="#" target="_blank"><i class="font-mindex-1 ico"></i></a> #}
+                </div> 
+                <div class="in-m-box-text">
+                    {% set user = ('db.users')|getRow({ id: app.user.id|default() }) %}
+                    <p>
+                        你的管理级别：{{app.user.rolename|default('')}}
+                    </p>
+                    <p>
+                        {% set mconfig_siteopenreg = core_global.mconfigtostring({name: 'siteopenreg', ename: 'mvisit'}) %}
+                        开启会员注册：{{ core_global.formField({value: mconfig_siteopenreg, form: 'mvisit', field: 'siteopenreg'}) }}
+                    </p>
+                    <p>
+                        主域名：{{'maindomain'|C}}
+                    </p>
+                    <p>
+                        当前访问IP：{{ user.loginip|default('') }}
+                    </p>
+                    <p>
+                        当前版本：{{version|default('')}}
+                    </p>
+                    <p>
+                        服务器当前时间：{{'now'|date('Y-m-d H:m:s')}}
+                    </p>
+                     <p>
+                         当前版本：
+                        {% if ismulticity == true %}
+                            多城市版
+                        {% else %}
+                            单城市版
+                        {% endif %}
+                    </p>
+                    {# 
+                    <p>
+                        系统最近更新：20160329
+                    </p>
+                    <p>
+                        服务器信息：WINNT/PHP 5.2.17
+                    </p>
+                    <p>
+                        PHP安全模式：OFF
+                    </p>
+                    <p>
+                        MySQL版本：5.1.63-community
+                    </p>
+                    <p>
+                        允许打开远程文件：YES (需开启allow_url_fopen扩展;启用fsockopen,gzinflate函数)
+                    </p>
+                    <p>
+                        图像GD库支持：YES
+                    </p>
+                    <p>
+                        最大上传限制：4M
+                    </p>
+                    <p>
+                        当前数据库大小：321.9 MB
+                    </p>
+                    <p>
+                        当前附件总量：1.14 GB
+                    </p>
+                    <p>
+                        邮件支持模式：SMTP ( Server: localhost)
+                    </p> #}
+
+                    {# <div class="img">
+                        <img src="{{- core_global.img_url({src: 'images/table.jpg'}) -}}"  alt="">
+                    </div>
+                    <p>
+                        <span>02-15</span>
+                        <span>02-16</span>
+                        <span>02-17</span>
+                        <span>02-18</span>
+                        <span class="last">02-19</span>
+                    </p> #}
+                </div> 
+            </div>   
+        </div>
+        <div class="in-f-box same-box">
+            <div class="info-same">
+                <div class="same-title">
+                    <h2>交互记录</h2>
+                    {# <a href="javascript:;" target="_blank"><i class="font-mindex-1 ico"></i></a> #}
+                </div> 
+                <ul class="in-f-box-record in-m-box-text">
+                    <li>
+                        <table width="100%">
+                            <tr>
+                                <th>
+                                    统计
+                                </th>
+                                <th>
+                                    已审
+                                </th>
+                                <th>
+                                    未审
+                                </th>
+                            </tr>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        资讯评论
+                                    </td>
+                                    <td>
+                                        {{ core_global.count({ sql_opt: {checked: 1, models: 'news'}, models: 'inter_comment' }) }}
+                                    </td>
+                                    <td>
+                                        {{ core_global.count({ sql_opt: {checked: 0, models: 'news'}, models: 'inter_comment' }) }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        楼盘点评
+                                    </td>
+                                    <td>
+                                        {{ core_global.count({ sql_opt: {checked: 1}, models: 'inter_housescomment' }) }}
+                                    </td>
+                                    <td>
+                                        {{ core_global.count({ sql_opt: {checked: 0}, models: 'inter_housescomment' }) }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        楼盘意向
+                                    </td>
+                                    <td>
+                                        {{ core_global.count({ sql_opt: {checked: 1}, models: 'inter_housesintention' }) }}
+                                    </td>
+                                    <td>
+                                        {{ core_global.count({ sql_opt: {checked: 0}, models: 'inter_housesintention' }) }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        房源举报
+                                    </td>
+                                    <td>
+                                        {{ core_global.count({ sql_opt: {checked: 1}, models: 'inter_report' }) }}
+                                    </td>
+                                    <td>
+                                        {{ core_global.count({ sql_opt: {checked: 0}, models: 'inter_report' }) }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        团购活动报名
+                                    </td>
+                                    <td>
+                                        {{ core_global.count({ sql_opt: {checked: 1}, models: 'group_order' }) }}
+                                    </td>
+                                    <td>
+                                        {{ core_global.count({ sql_opt: {checked: 0}, models: 'group_order' }) }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        问答答案
+                                    </td>
+                                    <td>
+                                        {{ core_global.count({ sql_opt: {checked: 1}, models: 'answer' }) }}
+                                    </td>
+                                    <td>
+                                        {{ core_global.count({ sql_opt: {checked: 0}, models: 'answer' }) }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        问答举报
+                                    </td>
+                                    <td>
+                                        {{ core_global.count({ sql_opt: {checked: 1}, models: 'ask_report' }) }}
+                                    </td>
+                                    <td>
+                                        {{ core_global.count({ sql_opt: {checked: 0}, models: 'ask_report' }) }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        {# <div class="clear">
+                            <span class="tip">修改状态:</span>
+                            <p class="state">
+                               新建 →<span class="su">
+                                   已解决
+                               </span>,
+                            </p>
+                            <p>这里字体太大</p> 
+                        </div>
+                        <span class="time">
+                                今天 11:30
+                            </span> #}
+                    </li>
+                </ul>
+            </div>  
+        </div>
+        
+    </div>
+
+    <div class="info-foot">
+        <div class="in-f-box same-box">
+            <div class="info-same">
+                <div class="same-title">
+                    <h2>版权信息</h2>
+                    {# <a href="javascript:;" target="_blank"><i class="font-mindex-1 ico"></i></a> #}
+                </div>
+                <div class="in-f-box-info in-m-box-text">
+                    <p>
+                        研发团队：北京诸葛找房信息技术有限公司
+                    </p>
+                    <p>
+                        版权信息：Copyright ©2018 zhuge.com All rights reserved.
+                    </p>
+                    <p>
+                        官方网站：<a href="http://www.zhuge.com" target="_blank">www.zhuge.com</a>
+                    </p>
+                </div>  
+            </div>    
+        </div>
+
+        <div class="in-m-box same-box">
+            <div class="info-same">
+                 <div class="same-title">
+                    <h2>操作记录</h2>
+                    <a href="{{- core_global.menu_url(469) -}}"><i class="font-mindex-1 ico"></i></a>
+                </div>
+                <div class="in-m-box-text in-f-box-record">
+                    {% set system_log = ('db.system_log')|getAll({pageSize: 50, order: 'id', orderBy: 'desc', type: 'log'}) %}
+                        {# {{dump(system_log)}} #}
+                    <ul>
+                        {% if system_log.data is defined %}
+                            {% for item in system_log.data %}
+                                <li>
+                                    <div class="clear">
+                                        <span class="tip mr5">修改状态:</span>
+                                        <p class="state">
+                                           {{ item.operation|default('') }} → {{ item.name}} →<span class="su">
+                                               {{('db.models')|getOne('title',{name:item.models})}}
+                                           </span>,
+                                        </p>
+                                        <p>操作ip:{{item.title|default('')}}</p> 
+                                    </div>
+                                    <span class="time">
+                                        {{item.create_time|default('')|date('y-m-d')}}
+                                    </span>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>

@@ -1,0 +1,98 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+
+{% block result %}
+    <div class="content">
+        {{core_mobile_global.mobile_search({
+            value: '楼盘/地名/开发商等',
+            title: '查房价搜索',
+            action: ('houses/list')|UU
+        })}}
+        {# 新房 #}
+        <div class="list-block panel-block list-block-need media-list">
+            {{housemobile_global.panel_title({
+                title: '新房'
+            })}}
+            <ul>
+                <li class="item-content">
+                    <div class="item-inner p-default">
+                        <div class="item-subtitle fz-12">
+                            成交均价
+                        </div>
+                        <div class="item-subtitle">
+                            {{house_global.if_dj({value: month_now.price|default(''), class: 'p-red fz-jg'})}}
+                            <span class="ml10 fz-12">
+                                环比上月<span class="p-red">{{ ((month_now.price|default('') - month_prev.price|default(''))|abs / (month_prev.price|default('') ? month_prev.price|default('') : 1) )|round(2) }}%</span>
+                                {% if month_now.price|default('') > month_prev.price|default('') %}
+                                    &uarr;
+                                {% elseif month_now.price|default('') < month_prev.price|default('') %}
+                                    &darr;
+                                {% elseif month_now.price|default('') == month_prev.price|default('') %}
+                                    &harr;
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <div class="item-inner">
+                <canvas id="cms08"></canvas>
+            </div>
+        </div>
+        {# 二手房 #}
+        {# <div class="list-block panel-block">
+            {{housemobile_global.panel_title({title: '二手房'})}}
+        </div> #}
+        {# 购房工具 #}
+        <div class="list-block panel-block">
+            {{housemobile_global.panel_title({
+                title: '购房工具',
+                target: 'a',
+                class: 'item-link',
+                url: ('tools/index')|UU
+            })}}
+        </div>
+        {# 热门楼盘 #}
+        <div class="list-block panel-block media-list" data-tag="rexiaoloupantuijian">
+            {{housemobile_global.panel_title({title: '热门楼盘'})}}
+            {% set pushs_rexiaoloupantuijian = ('rexiaoloupantuijian')|getPush(8) %}
+            <ul>
+                {{ render(controller('HouseBundle:Clist:houseslist',{list: pushs_rexiaoloupantuijian, _isApp: url_isApp})) }}
+                {# <div data-block="{
+                    ajax: {
+                        url: '{{ ('bundlebindforms/ajax')|U}}',
+                        data: {
+                            tpl: 'Clist:houseslist',
+                            _isApp: '{{url_isApp}}',
+                            push: '' 
+                        }
+                    }
+                }"></div> #}
+            </ul>
+        </div>
+        {{ render(controller('HouseBundle:Common:footer', {_isApp: url_isApp})) }}
+    </div>
+
+    {# 走势图数据 #}
+    {% set xAxis = [] %}
+    {% for item in prices.data[ : 12] %}
+        {% set xAxis = [item.months|default('')|date('m') ~ '月']|merge(xAxis) %}
+    {% endfor %}
+
+    {% set zstData = [] %}
+    {% for item in prices.data[ : 12] %}
+        {% set zstData = [item.price|default('')]|merge(zstData) %}
+    {% endfor %}
+        
+    <script type="text/javascript">
+        // [10000,14000,12000,13000,15000,16000,10700,11800,10900,10000,10010,12000]
+        seajs.use(['mobilezst'], function(mobilezst) {
+            mobilezst(null, {
+                // 横坐标定义 结构 xAxis = []
+                xAxis: {{ xAxis|json_encode|raw }},
+                // 纵坐标数据定义 结构 zstData = [[数据1], [数据2], [数据3]];
+                data: {{ zstData|json_encode|raw }}
+            });
+        });
+    </script>
+
+{% endblock result %}

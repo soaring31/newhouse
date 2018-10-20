@@ -1,0 +1,11 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+
+{% set action = app.request.get('action', 0) %}
+
+{% block result %}
+	{% set user_id = app.user.id|default('') %}
+	<div class="buttons-tab">
+	    <a href="{{('muserbrokerage/muserbrokeragelist')|UU({uid: user_id|default('')})}}" class="{{action ? : 'active'}} button">我的佣金</a>
+	    <a href="{{ ('muserbrokerage/musersubordinate')|UU({uid: user_id|default('')}) }}" class="{{action ? 'active' : ''}} button">下级佣金</a>
+	</div>
+{% endblock result %}

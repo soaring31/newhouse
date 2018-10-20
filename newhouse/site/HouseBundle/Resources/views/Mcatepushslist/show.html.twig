@@ -1,0 +1,45 @@
+{% extends "HouseBundle::base_show.html.twig" %}
+{% block js %}
+<script>
+
+seajs.use([''], function(){
+	$(function(){
+		if($('.select-wrap input[name="models"]:checked').length > 0){
+			var val = $('.select-wrap input[name="models"]:checked').val();
+			ajax(val);
+		}
+		$('.select-wrap input[name="models"]').off('select-wrap').on('click.select-wrap', function(){	
+		var val = $(this).val();	
+		ajax(val);
+			
+		});
+
+		function ajax(val){
+			$.ajax({
+				url: "{{('ajaxdata/selectbind')|U}}",
+				type: 'GET',
+				dataType: 'json',
+				data: {name: val},
+			})
+			.done(function(data) {
+				var str = '<option>请选择</option>';
+				$.each(data, function(index, el) {
+					 str += '<option value="'+el.id+'">'+el.name+'</option>';
+				});
+				$('[data-type="ajaxbind"]').slice(1).hide();
+				$('[data-type="ajaxbind"]').eq(0).html(str);
+			})
+			.fail(function() {
+				console.log("error");
+			})
+			.always(function() {
+			});
+		}
+	});
+});
+</script>
+
+{% endblock %}
+{% block body %}
+{{ core_manage.form_cfg(form|default(''),'form', 'house.cate_pushs') }}
+{% endblock %}

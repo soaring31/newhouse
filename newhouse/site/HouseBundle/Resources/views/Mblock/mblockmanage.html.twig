@@ -1,0 +1,177 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{# 查区块文档的模型 type 2 #}
+{% set models = ('db.models')|getAll({type: 2, pageSize: 50, checked: 1, name: 'neq|pushs'}) %}
+{# 推送里面的分类 #}
+{% set cate_pushs_menu = app.request.get('menu')|default('') %}
+{# 如果菜单不存在 取区块文档的第一个数据 #}
+{% set block_type = app.request.get('type')|default(cate_pushs_menu ? '' : models.data[0].name) %}
+{# {% set _action = action == 'mblockmanage' ? 'mblockmanage' : 'mcatepushslist' %} #}
+{% set _action = action %}
+
+{# 列表排序 #}
+{% set cate_pushs_order = app.request.get('order') %}
+
+{% block js %}
+{% endblock %}
+
+{% block mainMenu %}
+    {# {{ parent() }}  #}
+{% endblock %}
+{% block mainleft %}
+<section class="main-left" data-target=".main-through">
+    <div data-level="top" class="level1" >
+        {# 1级 #}
+        {# <a data-level="1" href="{{ (_action)|U }}" class="on" data-role="jump">所有楼盘</a> #}
+        <div data-level="next" class="level2 on">
+            {# 2级 #}
+            {% for item in models.data %}
+            <a class="{% if loop.index == 1 %}on{% endif %}" data-level="1" href="{{ (_action)|U({type: item.name}) }}" data-role="jump">{{ item.title }}区块</a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock mainleft %}
+
+{% set pageIndex = app.request.get('pageIndex')|default(1) %}
+{#  #}
+
+{% set block_data = ('house.cate_pushs')|getTree({
+    menu: cate_pushs_menu,
+    pageSize: 50, 
+    pageIndex: pageIndex,
+    order: cate_pushs_order ? : 'sort|asc',
+}|merge(block_type ? {type: block_type} : {})) %}
+
+{% block tableMain %}
+{{ core_manage.filter([
+    {
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增分类',
+        url: (_action ~ '/show')|U({ type: block_type }),
+    },
+]) }}
+{# 统一配置 #}
+{%- set param -%}
+    {
+        defUrl    : '{{ (_action)|U }}',
+        showUrl   : '{{ (_action ~ '/show')|U }}',
+        submitUrl : '{{ (_action ~ '/save')|U }}',
+        deleteUrl : '{{ (_action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            menu: '{{ cate_pushs_menu }}',
+            type: '{{ block_type }}'
+        }
+    }
+{%- endset -%}
+{% block list %}
+<section class="list-con" data-param="{{ param }}">
+    <div class="list">
+        <table data-level="top" data-type="singleToggle" class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="50" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="60" class="tac" data-role="sort" data-sort="id" class="sort">ID</th>
+                    <th width="40">&nbsp;</th>
+                    <th>区块名称</th>
+                    <th width="180">模型(models)</th> 
+                    <th width="180">模型标识(form)</th>
+                    <th width="180">区块标识(ename)</th>
+                    <th width="60" >状态</th>
+                    <th width="60" data-role="sort" data-sort="sort" class="sort">排序</th>
+                    <th width="200" class="tac">操作</th>
+                </tr>
+                {% if block_data.data is defined %}
+                {% set colspan = 10 %}
+                {# 一级 #}
+                {% for item in block_data.data %}
+                <tr data-level="1" data-id="{{ item.menu.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td class="tac">{{item.menu.id}}</td>
+                    <td class="tac {% if item.nodes %}plusico{% endif %}"></td>
+                    <td><span data-role="itemEdit" data-name="name" class="edit">{{item.menu.name}}</span></td>
+                    <td>{{ item.menu.models|default('-') }}</td>
+                    <td>{{item.menu.form|default('-')}}</td>
+                    <td>{{ item.menu.ename|default('-') }}</td>
+                    <td>{{core_global.formField({
+                        value: item.menu.checked,
+                        form: 'pushs_img_ad',
+                        field: 'checked'
+                    })}} </td>
+                    <td><span data-role="itemEdit" data-name="sort" class='edit'>{{item.menu.sort}}</span></td>
+                    <td>
+                        {{core_manage.show()}}
+                        {{core_manage.delete()}}
+                        {{core_manage.show({
+                            title: '添加子菜单',
+                            url: (_action~'/show')|U('pid='~item.menu.id)
+                        })}}
+                    </td>
+                </tr>
+                {% if item.nodes is defined %}
+                <tr data-level="next" class="subtr">
+                {# <tr data-level="next" class="subtr" style="display:none;" id='subtr_{{item.id}}' > #}
+                    <td colspan="{{colspan}}">
+                        <table class="subright-table">
+                            {# 二级 #}
+                            {% for item1 in item.nodes %}
+                            <tr data-level="1" data-id="{{ item1.menu.id }}">
+                                <td width="50" class="tac">{{core_manage.checkbox()}}</td>
+                                <td width="60" class="tac">{{item1.menu.id}}</td>
+                                <td width="40" class="tac pl20 {% if item1.nodes %}plusico{% endif %}"></td>
+                                <td><span data-role="itemEdit" data-name="name" class='edit'>{{item1.menu.name}}</span></td>
+                                <td width="180">{{ item1.menu.models|default('-') }}</td>
+                                <td width="180">{{ item1.menu.form|default('-') }}</td>
+                                <td width="180">{{item1.menu.ename|default('-') }}</td>
+                                <td width="60">{{core_global.formField({
+                                    value: item1.menu.checked,
+                                    form: 'pushs_img_ad',
+                                    field: 'checked'
+                                })}} </td>
+                                <td width="60"><span data-role="itemEdit" data-name="sort" class='edit'>{{item1.menu.sort}}</span></td>
+                                <td width="200">
+                                    {{core_manage.show()}}
+                                    {{core_manage.delete()}}
+                                    {{core_manage.show({
+                                        title: '复制',
+                                        url: (_action~'/show')|U({_copy: 1, id: item1.menu.id})
+                                    })}}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(block_data)}}
+</section>
+{% endblock list %}
+
+{% block oprate %}
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'pushs_img_ad',
+        title: '设置状态',
+    }
+]) }}
+{% endblock oprate %}
+{% endblock tableMain %}
+
+{% block promptUl %}
+{% endblock %}
+
+
+
+

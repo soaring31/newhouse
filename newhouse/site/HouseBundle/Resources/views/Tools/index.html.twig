@@ -1,0 +1,949 @@
+{% extends 'HouseBundle::base.html.twig' %}
+{# # 说明
+** urlId: 获取传送回来的id #}
+{% set urlId = app.request.get("id") %}
+
+{% set now_time = 'now'|date('Y') %}
+
+{% set now_time_month = 'now'|date('m') %}
+{# 月份 #}
+{% set month %}
+    {% for item in 1..12 %}
+        <option value="{{item}}" {% if item == now_time_month %}selected="selected"{% endif %}>{{item}}</option>
+    {% endfor %}
+{% endset %}
+{# 贷款年限 #}
+{% set nianxian %}
+    {% for item in 1..20 %}
+        {% set item_month = item * 12 %}
+        <option value="{{ item }}" {% if item == 20 %}selected="selected"{% endif %}>{{item}}年({{item_month}}期)</option>
+    {% endfor %}
+    {% for item in [25,30] %}
+        {% set item_month = item * 12 %}
+        <option value="{{ item }}">{{item}}年({{item_month}}期)</option>
+    {% endfor %}
+{% endset %}
+
+{% set nianxian2 %}
+    {% for item in 1..20 %}
+        {% set item_month = item * 12 %}
+        <option value="{{ item_month }}" {% if item == 20 %}selected="selected"{% endif %}>{{item}}年({{item_month}}期)</option>
+    {% endfor %}
+    {% for item in [25,30] %}
+        {% set item_month = item * 12 %}
+        <option value="{{ item_month }}">{{item}}年({{item_month}}期)</option>
+    {% endfor %}
+{% endset %}
+
+{% block title %}【房贷计算器】_最新{{'now'|date('Y')}}在线贷款计算器{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" Content="房贷计算器，房贷计算器最新，贷款计算器，公积金贷款计算器"/>
+<meta name="description" content="房贷计算器，{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}房贷计算器为购房者提供{{'now'|date('Y')}}最新房贷计算器及各种购房在线计算器。包括购房能力评估，商业贷款，公积金贷款额度，公积金贷款，组合贷款，提前还款计算器，税费计算器等。"/>
+{% endblock key_des %}
+
+{% block css %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/tools.css')}}
+{% endblock css %}
+
+{% block body %}
+<div class="blank30"></div>
+<div class="blank30"></div>
+<!--tab-->
+{% block content %}
+<div class="jqDuang" data-duang="1" data-trigger="click" data-cell=".menu" data-autoplay="0" data-obj=".item">
+    <ul class="menu ma container clearfix">
+        <li id="tools1" class="act"><i class="font-tools-1"></i><a href="">购房能力评估</a></li>
+        <li id="tools2"><i class="font-tools-2"></i><a href="">商业贷款</a></li>
+        {# <li id="tools3"><i class="font-tools-3"></i><a href="">公积金贷款额度</a></li> #}
+        <li id="tools4"><i class="font-tools-4"></i><a href="">公积金贷款</a></li>
+        <li id="tools5"><i class="font-tools-5"></i><a href="">组合贷款</a></li>
+        <li id="tools6"><i class="font-tools-6"></i><a href="">提前还款计算器</a></li>
+        <li id="tools7"><i class="font-tools-7"></i><a href="">税费计算</a></li>
+    </ul>
+    {% block content_a %}
+    <div class="tools-wrap container clearfix">
+        <div class="item cur">
+            <!-- 表单 -->
+            <form action="" name="myform" method="">
+                <div class="enter">
+                    <h2>购房能力评估</h2>
+                    <ul>
+                        <li>
+                            <label for="">现可用于购房的资金：</label>
+                            <input type="text" name="rg01" onblur="chk01()">
+                            <span>万元</span>
+                        </li>
+                        <li>
+                            <label for="">现家庭月收入：</label>
+                            <input type="text" name="rg02">
+                            <span>元</span>
+                        </li>
+                        <li>
+                            <label for="">家庭每月用于购房的支出：</label>
+                            <input type="text" name="rg03" onblur="chk02()">
+                            <span>元/月</span>
+                        </li>
+                        <li>
+                            <label for="">你计划购买房屋的面积：</label>
+                            <input type="text" name="rg06">
+                            <span>平方米</span>
+                        </li>
+                        <li>
+                            <label for="">你期望偿还贷款的年限：</label>
+                            <select  name="rg04" size="1">
+                                {{nianxian2}}
+                                {# <option value="24">2年(24期)</option>
+                                <option value="36">3年(36期)</option>
+                                <option value="48">4年(48期)</option>
+                                <option value="60">5年(60期)</option>
+                                <option value="72">6年(72期)</option>
+                                <option value="84">7年(84期)</option>
+                                <option value="96">8年(96期)</option>
+                                <option value="108">9年(108期)</option>
+                                <option value="120">10年(120期)</option>
+                                <option value="180">15年(180期)</option>
+                                <option selected="selected" value="240">20年(240期)</option>
+                                <option value="300">25年(300期)</option>
+                                <option value="360">30年(360期)</option> #}
+                            </select>
+                            <span></span>
+                        </li>
+                    </ul>
+                    <p>
+                        <input class="btn" type="button" value="计算" id="form1-btn" />
+                        <span  class="reset">清除数据，重新计算</span>
+                    </p>
+                </div>
+                <div class="export nengli">
+                    <div class="arrow"></div>
+                    <h2>
+                        计算结果
+                        <span>（计算结果仅供参考）</span>
+                    </h2>
+                    <p>
+                        你可购买的房屋总价为：
+                        <span id="rg07">0</span>
+                        元
+                    </p>
+                    <p>
+                        你可购买的房屋单价为：
+                        <span id="rg08">0</span>
+                        元/平方
+                    </p>
+                    <h3>购房相关税费</h3>
+                    <p class="txt-i3">
+                        契税：
+                        <span id="rg10">0</span>
+                        元
+                    </p>
+                    <p>
+                        公共维修金：
+                        <span id="rg11">0</span>
+                        元
+                    </p>
+                    <h3>银行贷款需支付的费用</h3>
+                    <p class="txt-i2">
+                        首付款：
+                        <span id="rg12">0</span>
+                        元
+                    </p>
+                    <p class="txt-i2">
+                        保险费：
+                        <span id="rg13">0</span>
+                        元
+                    </p>
+                    <p class="txt-i2">
+                        律师费：
+                        <span id="rg14">0</span>
+                        元
+                    </p>
+                    <p>
+                        抵押登记费：
+                        <span id="rg15">0</span>
+                        元/平方
+                    </p>
+                </div>
+            </form>
+            <!-- /表单 -->
+        </div>
+        <div class="item">
+            <!-- 表单 -->
+            <form action="" name="calc2" method="">
+                <div class="enter gongjijin">
+                    <h2>
+                        商业贷款计算器
+                    </h2>
+                    <ul>
+                        <li>
+                            <label for="">贷款类别：</label>
+                            <select onchange="exc_zuhe(this.form,this.value);" name="type">
+                                <option value="1">商业贷款</option>
+                            </select>
+                        </li>
+                        <li>
+                            <label for="">计算方法：</label>
+                            <input id="calc2_radio1" type="radio"  checked="true" value="1" name="jisuan_radio">
+                            <label class="load-label" for="calc2_radio1">根据面积、单价计算</label>
+                            <div class="blank15"></div>
+                            <div class="method1 method" id="calc2_js_div1">
+                                <p>
+                                    单价：
+                                    <input type="text" name="price">
+                                    <span>元/平方</span>
+                                <p>
+                                <p>
+                                    面积：
+                                    <input type="text" name="sqm">
+                                    <span>平方米</span>
+                                </p>
+                                <p>
+                                    按揭成数：
+                                    <select name="anjie" size="1">
+                                        {% for item in 9..2 %}
+                                            <option value="{{item}}" {% if item == 7 %}selected="selected"{% endif %}>{{item}}成</option>
+                                        {% endfor %}
+                                        {# <option value="9">9成</option>
+                                        <option value="8">8成</option>
+                                        <option value="7" selected="">7成</option>
+                                        <option value="6">6成</option>
+                                        <option value="5">5成</option>
+                                        <option value="4">4成</option>
+                                        <option value="3">3成</option>
+                                        <option value="2">2成</option> #}
+                                    </select>
+                                </p>
+                            </div>
+                            <label></label>
+                            <input  id="calc2_radio2" type="radio" value="2" name="jisuan_radio">
+                            <label class="load-label" for="calc2_radio2">根据贷款总额计算</label>
+                            <div class="blank15"></div>
+                            <div class="method2 method" id="calc2_js_div2" style="display:none">
+                                <p>
+                                    贷款总额：
+                                    <input type="text" name="daikuan_total000">
+                                    <span>万元</span>
+                                <p>
+                            </div>
+                        </li>
+                        <li>
+                            <label for="">按揭年数：</label>
+                            <select name="years" size="1" id="years">
+                                {{nianxian}}
+                            </select>
+                            <span></span>
+                        </li>
+                        <li>
+                            <label for="">银行利率：</label>
+                            <select data-listdata="#lltpl" name="lilv" class="rate-sel">
+                            </select>
+                            <span></span>
+                        </li>
+                        <li>
+                            <label for="">还贷方式：</label>
+                            <input type="radio" checked="" name="htype" id="hdfs1" value="1" >
+                            <label class="load-label" for="hdfs1">等额本息还款法</label>
+                            <input type="radio" name="htype" id="hdfs2" value="2">
+                            <label class="load-label" for="hdfs2">等额本金还款法</label>
+                        </li>
+                    </ul>
+                    <p>
+                        <input class="btn" type="button" value="计算" id="form2-btn" />
+                        <span class="reset" >清除数据，重新计算</span>
+                    </p>
+                </div>
+                <div class="export divr1">
+                    <div class="arrow"></div>
+                    <h2>
+                        计算结果<span>（计算结果仅供参考）</span>
+                    </h2>
+                    <p>
+                        房屋总价：<span class="fangkuan_total1">0</span>元
+                    </p>
+                    <p>
+                        贷款总额：<span class="daikuan_total1">0</span>元
+                    </p>
+                    <p>
+                        还款总额：<span class="all_total1">0</span>元
+                    </p>
+                    <p>
+                        支付利息：<span class="accrual1">0</span>元
+                    </p>
+                    <p>
+                        首期付款：<span class="money_first1">0</span>元
+                    </p>
+                    <p>
+                        贷款月数：<span class="month1">0</span>元
+                    </p>
+                    <p>
+                        月均还款：<span class="month_money1">0</span>元
+                    </p>
+                </div>
+                <div class="export divr2" style="display:none;">
+                    <div class="arrow"></div>
+                    <h2>
+                        计算结果<span>（计算结果仅供参考）</span>
+                    </h2>
+                    <p>
+                        房屋总价：<span class="fangkuan_total2">0</span>元
+                    </p>
+                    <p>
+                        贷款总额：<span class="daikuan_total2">0</span>元
+                    </p>
+                    <p>
+                        还款总额：<span class="all_total2">0</span>元
+                    </p>
+                    <p>
+                        支付利息：<span class="accrual2">0</span>元
+                    </p>
+                    <p>
+                        首期付款：<span class="money_first2">0</span>元
+                    </p>
+                    <p>
+                        贷款月数：<span class="month2">0</span>元
+                    </p>
+                    <div style="padding-top:10px;">
+                        每月还款：<textarea class="month_money2" name="month_money2" style="display:inline; vertical-align:top;height:60px;"></textarea>
+                    </div>
+                </div>
+            </form>
+            <!-- /表单 -->
+        </div>
+        {# <div class="item">
+            <form action="" name="myform2" method="">
+                <div class="enter geren">
+                    <h2>
+                        公积金贷款额度评估
+                    </h2>
+                    <ul>
+                        <li>
+                            <label for="">公积金月缴存额：</label>
+                            <input type="text">
+                            <span>元</span>
+                        </li>
+                        <li>
+                            <label for="">缴存比例：</label>
+                            <input type="text">
+                            <span>%</span>
+                        </li>
+                        <li>
+                            <label for="">配偶公积金缴存额：</label>
+                            <input type="text">
+                            <span>元</span>
+                        </li>
+                        <li>
+                            <label for="">缴存比例：</label>
+                            <input type="text">
+                            <span>%</span>
+                        </li>
+                        <li>
+                            <label for="">房屋估值或实际购房款：</label>
+                            <input type="text">
+                            <span>万元</span>
+                        </li>
+                        <li>
+                            <label for="">房屋性质：</label>
+                            <input type="radio" name="house" id="house1" >
+                            <label class="load-label" for="house1">政策性住宅</label>
+                            <input type="radio" name="house" id="house2">
+                            <label class="load-label" for="house2">其他</label>
+                        </li>
+                        <li>
+                            <label for="">个人信用等级：</label>
+                            <input type="radio" name="credit" id="credit1" >
+                            <label class="load-label" for="credit1">AAA</label>
+                            <input type="radio" name="credit" id="credit2">
+                            <label class="load-label" for="credit2">AA</label>
+                            <input type="radio" name="credit" id="credit3" >
+                            <label class="load-label" for="credit3">其他</label>
+                        </li>
+                        <li>
+                            <label for="">贷款申请年限：</label>
+                            <select name="" id="">
+                                <option value="">选择1</option>
+                                <option value="">选择2</option>
+                                <option value="">选择3</option>
+                                <option value="">选择4</option>
+                                <option value="">选择5</option>
+                            </select>
+                        </li>
+                    </ul>
+                    <p>
+                        <input class="btn" type="button" value="计算" />
+                        <span class="reset">清除数据，重新计算</span>
+                    </p>
+                </div>
+                <div class="export gongjijin">
+                    <div class="arrow"></div>
+                    <h2>
+                        计算结果<span>（计算结果仅供参考）</span>
+                    </h2>
+                    <ul>
+                        <li>
+                            您可申请的最高贷款额度：<span>80</span>万元
+                        </li>
+                        <li>
+                            您需要的贷款额度：<input type="text">万元
+                        </li>
+                    </ul>
+                    <input class="gjj-btn" type="button" value="计算每月还款额" />
+
+                    <div class="result clearfix">
+
+                        <div class="fl">
+                            <h3>
+                                等额本息还款
+                            </h3>
+                            <div class="blank20"></div>
+                            <table cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <th>还款总额</th>
+                                    <td>111万元</td>
+                                </tr>
+                                <tr>
+                                    <th>支付利息</th>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>月均还款</th>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="fr">
+                            <h3>
+                                等额本金还款
+                            </h3>
+                            <div class="blank20"></div>
+                            <table cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <th>还款总额</th>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>支付利息</th>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>首月</th>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div> #}
+        <div class="item">
+            <!-- 表单 -->
+            <form action="" name="formt2" method="get">
+                <div class="enter geren">
+                    <h2>
+                        个人公积金贷款计算器
+                    </h2>
+                    <ul>
+                        <li>
+                            <label for="">银行利率：</label>
+                            <select class="gjj rate-sel" data-listdata="#lltpl" name="lilv">
+                            </select>
+                        </li>
+                        <li>
+                            <label for="">您所需要的贷款额度：</label>
+                            <input type="text" name="need" class="money">
+                            <span>万元</span>
+                        </li>
+                        <li>
+                            <label for="">贷款申请年限：</label>
+                            <input type="text" name="mount10" class="years">
+                            <span>年</span>
+                            <div class="blank5"></div>
+                            <label></label>
+                            <span>（注意：不得超过30年。）</span>
+                        </li>
+                        <li>
+                            <label for="">请选择还款方式：</label>
+                            <select name="select">
+                                <option value="1">等额本息</option>
+                                <option value="2">等额本金</option>
+                                <option value="3">自由还款</option>
+                            </select>
+                        </li>
+                    </ul>
+                    <p>
+                        <input class="btn" type="button" value="计算" id="form4-btn" />
+                        <span class="reset" >清除数据，重新计算</span>
+                    </p>
+                </div>
+                <div class="export geren">
+                    <div class="arrow"></div>
+                    <h2>
+                        计算结果<span>（计算结果仅供参考）</span>
+                    </h2>
+                    <h3>等额本息</h3>
+                    <p>
+                        <label>月均还款</label><span id="ze22">0</span>元
+                    </p>
+                    <p>
+                        <label>本息合计：</label><span id="lx2">0</span>元<input type="hidden" name="yj2">
+                    </p>
+
+                    <h3>等额还款</h3>
+                    <p>
+                        <label>首月还款：</label><span id="sfk2">0</span>元
+                    </p>
+                    <p>
+                        <label>本息合计：</label><span id="lx3">0</span>元
+                    </p>
+
+                    <h3>自由还款</h3>
+                    <p>
+                        <label>最低还款：</label><span id="sfksan">0</span>元
+                    </p>
+                    <p>
+                        <label>最后利息：</label><span id="lx4">0</span>元
+                    </p>
+                    <p>
+                        <label>最后本金：</label><span id="lx5">0</span>元
+                    </p>
+                    <p>
+                        <label>总偿利息：</label><span id="lx6">0</span>元
+                    </p>
+                </div>
+            </form>
+            <!-- /表单 -->
+        </div>
+        <div class="item">
+            <!-- 表单 -->
+            <form action="" name="calc3" method="">
+                <div class="enter zuhe">
+                    <h2>
+                        组合贷款计算器
+                    </h2>
+                    <ul>
+                        <li>
+                            <label for="">贷款类别：</label>
+                            <select onchange="exc_zuhe(this.form,this.value);" name="type">
+                                <option value="3">组合型</option>
+                            </select>
+                            <div class="blank15"></div>
+                            <label></label>
+                            商业性：<input type="text" name="total_sy">
+                            <span>万元</span>
+                            <div class="blank15"></div>
+                            <label></label>
+                            公积金：<input type="text" name="total_gjj">
+                            <span>万元</span>
+                        </li>
+                        <li>
+                            <label for="">按揭年数：</label>
+                            <select name="years" size="1" id="years">
+                                {{ nianxian }}
+                            </select>
+                            <span></span>
+                        </li>
+                        <li>
+                            <label for="">银行利率：</label>
+                            <select data-listdata="#lltpl" name="lilv" class="rate-sel">
+                            </select>
+                        </li>
+                        <li>
+                            <label for="">还贷方式：</label>
+                            <input type="radio" checked="" name="htype2" id="hdfs3" value="1">
+                            <label class="load-label" for="hdfs3">等额本息还款法</label>
+                            <input type="radio" name="htype2" id="hdfs4" value="2">
+                            <label class="load-label" for="hdfs4">等额本金还款法</label>
+                        </li>
+                    </ul>
+                    <p>
+                        <input class="btn" type="button" value="计算" id="form5-btn" />
+                        <span class="reset" >清除数据，重新计算</span>
+                    </p>
+                </div>
+                <div class="export divr1">
+                    <div class="arrow"></div>
+                    <h2>
+                        计算结果<span>（计算结果仅供参考）</span>
+                    </h2>
+                    <p>
+                        房屋总价：<span class="fangkuan_total1">0</span>元
+                    </p>
+                    <p>
+                        贷款总额：<span class="daikuan_total1">0</span>元
+                    </p>
+                    <p>
+                        还款总额：<span class="all_total1">0</span>元
+                    </p>
+                    <p>
+                        支付利息：<span class="accrual1">0</span>元
+                    </p>
+                    <p>
+                        首期付款：<span class="money_first1">0</span>元
+                    </p>
+                    <p>
+                        贷款月数：<span class="month1">0</span>元
+                    </p>
+                    <p>
+                        月均还款：<span class="month_money1">0</span>元
+                    </p>
+                </div>
+                <div class="export divr2" style="display:none">
+                    <div class="arrow"></div>
+                    <h2>
+                        计算结果<span>（计算结果仅供参考）</span>
+                    </h2>
+                    <p>
+                        房屋总价：<span class="fangkuan_total2">0</span>元
+                    </p>
+                    <p>
+                        贷款总额：<span class="daikuan_total2">0</span>元
+                    </p>
+                    <p>
+                        还款总额：<span class="all_total2">0</span>元
+                    </p>
+                    <p>
+                        支付利息：<span class="accrual2">0</span>元
+                    </p>
+                    <p>
+                        首期付款：<span class="money_first2">0</span>元
+                    </p>
+                    <p>
+                        贷款月数：<span class="month2">0</span>元
+                    </p>
+                    <div style="padding-top:10px;">
+                        每月还款：<textarea class="month_money2" name="month_money2" style="display:inline; vertical-align:top;height:60px;"></textarea>
+                    </div>
+                </div>
+            </form>
+            <!-- /表单 -->
+        </div>
+        <div class="item">
+            <!-- 表单 -->
+            <form action="" name="tqhdjsq" method="">
+                <div class="enter tiqian">
+                    <h2>
+                        提前还款计算器
+                    </h2>
+                    <ul>
+                        <li>
+                            <label for="">还款类型：</label>
+                            <input type="radio" id="dklx1" name="dklx" checked="checked" ><label class="load-label" for="dklx1">公积金贷款</label>
+                            <input type="radio" id="dklx2" name="dklx"><label class="load-label" for="dklx2">商业性贷款</label>
+                        </li>
+                        <li>
+                            <label for="">原贷款金额：</label>
+                            <input type="text" name="dkzws">
+                            <span>万元</span>
+                        </li>
+                        <li>
+                            <label for="">原贷款年限：</label>
+                            <select name="yhkqs" size="1">
+                                {{ nianxian2 }}
+                            </select>
+                            <span></span>
+                        </li>
+                        <li>
+                            <label for="">贷款利率：</label>
+                            <select name="dklv_class" data-listdata="#lltpl" id="lilv" class="rate-sel">
+                            </select>
+                            <span></span>
+                        </li>
+                        <li>
+                            <label for="">第一次还款时间：</label>
+                            <select  name="yhksjn">
+                                {% for item in (now_time - 12)..now_time %}
+                                    <option value="{{item}}" {% if loop.last %}selected="selected"{% endif %}>{{item}}</option>
+                                {% endfor %}
+                            </select>
+                            <span>年</span>
+                            <select name="yhksjy">
+                                {{ month }}
+                            </select>
+                            <span>月</span>
+                        </li>
+                        <li>
+                            <label for="">预计提前还款时间：</label>
+                            <select name="tqhksjn">
+                                {% for item in (now_time - 2)..(now_time + 20) %}
+                                    <option value="{{item}}" {% if item == now_time %}selected="selected"{% endif %}>{{item}}</option>
+                                {% endfor %}
+                            </select>
+                            <span>年</span>
+                            <select name="tqhksjy">
+                                {{ month }}
+                            </select>
+                            <span>月</span>
+                        </li>
+                        <li>
+                            <label for="">提前还贷方式：</label>
+                            <input type="radio"  id="tqhkfs" name="tqhkfs" checked="checked">
+                            <label class="load-label" for="tqhkfs">一次性提前还清</label>
+                            <div class="blank15"></div>
+                            <label></label>
+                            <input type="radio"  id="tqhkfs1" name="tqhkfs">
+                            <label class="load-label" for="tqhkfs1">部分提前还款<input type="text" name="tqhkws" />万元</label>
+                            <div class="blank15"></div>
+                            <div id="clfs" style="display:none;">
+                                <label>处理方式：</label>
+                                <input type="radio"  id="chuli1" name="clfs" checked="checked">
+                                <label class="load-label" for="chuli1">缩短还款年限，月还款额基本不变</label>
+                                <div class="blank15"></div>
+                                <label></label>
+                                <input type="radio"  id="chuli" name="clfs">
+                                <label class="load-label" for="chuli">减少月还款额，还款期不变</label>
+                            </div>
+                        </li>
+                    </ul>
+                    <p>
+                        <input class="btn" type="button" value="计算" id="form6-btn" />
+                        <span class="reset" >清除数据，重新计算</span>
+                    </p>
+                </div>
+                <div class="export tiqian">
+                    <div class="arrow"></div>
+                    <h2>
+                        计算结果<span>（计算结果仅供参考）</span>
+                    </h2>
+                    <p>
+                        <label>原月还款：</label><span id="ykhke">1222</span>元
+                    </p>
+                    <p>
+                        <label>该月一次还款额：</label><span id="gyyihke">0</span>元
+                    </p>
+                    <p>
+                        <label>原最后还款期：</label><span id="yzhhkq">0</span>
+                    </p>
+                    <p>
+                        <label>下月起还款额：</label><span id="xyqyhke">0</span>元
+                    </p>
+                    <p>
+                        <label>已还款总额：</label><span id="yhkze">0</span>元
+                    </p>
+                    <p>
+                        <label>节约利息支出：</label><span id="jslxzc">0</span>元
+                    </p>
+                    <p>
+                        <label>已还利息额：</label><span id="yhlxe">0</span>元
+                    </p>
+                    <p>
+                        <label>新的最后还款期：</label><span id="xdzhhkq">0</span>
+                    </p>
+                    <p>
+                        <label>计算结果提示</label><span id="jsjgts">0</span>
+                    </p>
+                </div>
+            </form>
+            <!-- /表单 -->
+        </div>
+        <div class="item">
+            <!-- 表单 -->
+            <form action="" name="formt3" method="">
+                <div class="enter shuifei">
+                    <h2>
+                        税费计算器
+                    </h2>
+                    <ul>
+                        <li>
+                            <label for="">单价：</label>
+                            <input type="text" name="dj3">
+                            <span>元/平</span>
+                        </li>
+                        <li>
+                            <label for="">面积：</label>
+                            <input type="text" name="mj3">
+                            <span>平方米</span>
+                        </li>
+                    </ul>
+                    <p>
+                        <input class="btn" type="button" value="计算" id="form7-btn" />
+                        <span class="reset" >清除数据，重新计算</span>
+                    </p>
+                </div>
+                <div class="export shuifei">
+                    <div class="arrow"></div>
+                    <h2>
+                        计算结果<span>（计算结果仅供参考）</span>
+                    </h2>
+                    <p>
+                        <label>房屋总价：</label><span id="fkz3">0</span>元
+                    </p>
+                    <p>
+                        <label>契税：</label><span id="q">0</span>元
+                    </p>
+                    <p>
+                        <label>印花税：</label><span id="yh">0</span>元
+                    </p>
+                    <p>
+                        <label>公证费：</label><span id="gzh">0</span>元
+                    </p>
+                    <p>
+                        <label>房屋买卖手续：</label><span id="fw">0</span>元
+                    </p>
+                    <p>
+                        <label>委托办理产权：</label><span id="wt">0</span>元
+                    </p>
+                    <div>
+                        手续费
+                    </div>
+                    <div>
+                        购房税费用，银行贷款需要支付的费用
+                    </div>
+                </div>
+            </form>
+            <!-- /表单 -->
+        </div>
+    </div>
+    {% endblock content_a %}
+
+</div>
+{% endblock content %}
+<!--/tab-->
+<div class="blank30"></div>
+<!--温馨提示-->
+<div class="tips container">
+    <div class="tips-container">
+        <div>温馨提示</div>
+        <p>1、公积金贷款最高额度为80万元；</p>
+        <p>
+            2、对以贷款购买一套住房但人均面积低于当地平均水平，再申请购买第二套普通自住房的居民，比照执行首次贷款购买普通自住房的优惠政策。
+        </p>
+    </div>
+</div>
+<div class="blank30"></div>
+<!--/温馨提示-->
+<!--chart-->
+<div class="chart">
+    <div class="chart-title">
+        <h3>
+            公积金贷款利率
+            <span>（单位：%）</span>
+        </h3>
+    </div>
+    <div id="chart1"></div>
+</div>
+<div class="chart">
+    <div class="chart-title">
+        <h3>
+            商业贷款利率
+            <span>（单位：%）</span>
+        </h3>
+    </div>
+    <div id="chart2"></div>
+</div>
+<!--/chart-->
+<input type="hidden" value="{{urlId|default('1')}}" id="urlId">
+        <div class="modal">
+            <div class="body"></div>
+        </div>
+{% endblock body %}
+
+{% block js %}
+{% block tools_js %}
+    <script type="text/javascript">
+        seajs.use(['jqduang', 'charts'], function (jqduang, charts) {
+
+            // 点击跳转
+            var indexTools = $.trim($('#urlId').val());
+            $('[data-duang=1]').jqDuang(indexTools - 1);
+            // 日期
+            var chartDate = ['2015.10.24后', '2015.6.28后', '2015.5.11后', '2015.3.1后', '2014.11.22后', '2012.7.6后']
+            // 3-5年商业贷款利率
+            var syOne = [0.0475, 0.05, 0.0525, 0.0550, 0.0575, 0.0600];
+            // 5-30年商业贷款利率
+            var syFive = [0.049, 0.0515, 0.054, 0.0565, 0.0590, 0.0615];
+            // 1-5年公积金贷款利率
+            var gjjOne = [0.0275, 0.0275, 0.03, 0.03250, 0.0350, 0.0375];
+            // 5-30年公积金贷款利率
+            var gjjFive = [0.0325, 0.0325, 0.035, 0.03750, 0.0400, 0.0425];
+
+                $("#chart1").highcharts({
+                    chart: {
+                        backgroundColor: '#fdfdfd'
+                    },
+                    title: {
+                        text: '',
+                    },
+                    xAxis: {
+                        categories: chartDate.reverse()
+                    },
+                    yAxis: {
+                        title: {
+                            text: '标签',
+                            style: {
+                                color: '#fdfdfd'
+                            }
+                        },
+                        labels: {
+                            formatter: function() {
+                                return this.value + '%';
+                            },
+                        },
+                        lineWidth: 1
+                    },
+                    legend: {
+                        layout: 'vertical',
+                        align: 'right',
+                        verticalAlign: 'top',
+                        borderWidth: 0,
+                        // enabled: false
+                    },
+                    colors: ['#27b446'],
+                    series: [{
+                        name: '1-5年利息率',
+                        data: gjjOne.reverse()
+                    }, {
+                        name: '5-30年利息率',
+                        data: gjjFive.reverse()
+                    }]
+                });
+                $("#chart2").highcharts({
+                    chart: {
+                        backgroundColor: '#fdfdfd'
+                    },
+                    title: {
+                        text: '',
+                    },
+                    xAxis: {
+                        categories: chartDate
+                    },
+                    yAxis: {
+                        title: {
+                            text: '标签',
+                            style: {
+                                color: '#fdfdfd'
+                            }
+                        },
+                        labels: {
+                            formatter: function() {
+                                return this.value + '%';
+                            },
+                        },
+                        lineWidth: 1
+                    },
+                    legend: {
+                        layout: 'vertical',
+                        align: 'right',
+                        verticalAlign: 'top',
+                        borderWidth: 0,
+                        // enabled: false
+                    },
+                    colors: ['#ee4433'],
+                    series: [{
+                        name: '3-5年利率',
+                        data: syOne.reverse()
+                    }, {
+                        name: '5-30年利率',
+                        data: syFive.reverse()
+                    }]
+                });
+        })
+    </script>
+{% endblock tools_js %}
+<script type="text/javascript">
+    seajs.use(['calculator'])
+</script>
+<script id="lltpl" type="text/html">
+  <% for (i = 0; i < title.length; i ++) { %>
+    <option value='<%= value[i] %>' <%=(i == 3 ? 'selected' : '')%> ><%= title[i] %></option>
+  <%}%>
+</script>
+{% endblock js %}

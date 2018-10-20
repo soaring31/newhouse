@@ -1,0 +1,185 @@
+HouseBundle\Entity\Entrust:
+    type: entity
+    table: entrust
+    indexes:
+        entrust:
+            columns:
+                - entrust
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            options:
+                comment: 楼盘名称
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        shi:
+            options:
+                comment: 室
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        ting:
+            options:
+                comment: 厅
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        wei:
+            options:
+                comment: 卫
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        chu:
+            options:
+                comment: 厨
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        yang:
+            options:
+                comment: 阳台
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        mj:
+            options:
+                comment: 面积
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        dj:
+            options:
+                comment: 售价
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        zj:
+            options:
+                comment: 月租
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        xingming:
+            options:
+                comment: 联系人
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        fdtel:
+            options:
+                comment: 手机号
+                unsigned: false
+            nullable: false
+            type: string
+            length: 11
+        models:
+            options:
+                comment: 模型
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        entrust:
+            options:
+                comment: 0=未委托1=已接受委托
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        wid:
+            options:
+                comment: 接受委托会员id
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        fid:
+            options:
+                comment: 发布会员id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        checked:
+            options:
+                comment: 审核
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        area:
+            options:
+                comment: 分站
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

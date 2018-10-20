@@ -1,0 +1,48 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+
+{% block result %}
+<div class="content">
+    <div class="list-block">
+        <ul>
+            <li>
+                <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title label">推广说明</div>
+                        <div class=" item-subtitle-ex">
+                            {{ core_global.mconfigtreplace({name: 'fenxiaoguides', ename: 'mmemberguides', replace: 'sellrate,sellpoeplenum,sellunnum,selltime'}) }}
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title label">推广口号</div>
+                        <div class=" item-subtitle-ex">
+                            {{ core_global.mconfigtreplace({name: 'sellword' ,ename: 'msell', replace: 'sellrate,sellpoeplenum,sellunnum,selltime'}) }}
+                        </div>
+                    </div>
+                </div>
+            </li>
+             <li>
+                <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title label">推广连接</div>
+                        <div class=" item-subtitle-ex">
+                            {{ ('register/index')|U({ fxpid: app.user.id|default('') }) }}
+                            <input type="text" value="{{ core_global.mconfigtreplace({name: 'sellword', ename: 'msell', replace: 'sellrate,sellpoeplenum,sellunnum,selltime'}) ~ ('register/index')|U({ fxpid: app.user.id|default('') }) }}" id="selectCopy" style="opacity: 0; height: 0" readonly="readonly" />
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    {% if url_isApp == 0 %}
+    <div class="content-block">
+        <div class="row">
+            <a href="javascript:;" class="button button-big button-fill col-100" data-copy="selectCopy">复制链接</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock result %}

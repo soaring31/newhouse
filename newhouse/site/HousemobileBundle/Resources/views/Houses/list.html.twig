@@ -1,0 +1,94 @@
+{% set tpl_extends = 'HousemobileBundle::list_layout.html.twig' %}
+
+{% set tpl_extends_data = {
+    'ajax': 'HousemobileBundle:Clist:houseslist.html.twig',
+    'search': 'HousemobileBundle:Houses:search.html.twig'
+} %}
+
+
+{% for k,v in tpl_extends_data %}
+    {% if app.request.get(k) %}
+        {% set tpl_extends = v %}
+    {% endif %}
+{% endfor %}
+
+{% extends tpl_extends|default('') %}
+
+{% block title %}
+【{{cur_area_data|default('')}}楼盘】_{{cur_area_data|default('')}}新楼盘_{{cur_area_data|default('')}}房价-{{cur_area_data|default('')}}手机{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" Content="{{'now'|date('Y')}}{{cur_area_data|default('')}}楼盘信息,{{'now'|date('Y')}}{{cur_area_data|default('')}}新楼盘信息"/>
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}新房网为您提供最真实的{{cur_area_data|default('')}}新房出售信息及最新{{cur_area_data|default('')}}楼盘，新楼盘价格信息。大量优质最新楼盘信息实时更新，为您创造最佳新房购房体验。"/>
+{% endblock key_des %}
+
+{% block header_title %}
+{{core_mobile_global.title({title: '新房'})}}
+{% endblock header_title %}
+
+{% block header_right %}
+{{ core_mobile_global.bar_nav_btn({
+    title: '搜索',
+    icon: 'font-f-8',
+    popup: {
+        placeholder: '楼盘名称/拼音/地址',
+        title: '新房搜索',
+        popup: '.popup-search',
+    }
+}) }}
+{% endblock header_right %}
+
+
+{% block container %}
+    {% set list_header %}
+    <div class="filter" data-block="{
+        ajax: {
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                tpl: 'Common:filter',
+                tag: 'houses',
+                switch_circle: 1,
+                switch_line: 1,
+                switch_hxs: 1
+            }
+        }
+    }"></div>
+    {% endset %}
+    {# 列表链接 js调用列表需要 #}
+    {% set list_url = ('houses/list')|U({ajax: 1}) %}
+    {{ parent() }}
+{% endblock container %}
+{# 导航里面的自定义区块 #}
+{% block popup_nav %}
+    {% set current_nav = {
+            title: '新房',
+            data: [
+                {
+                    name: '所有楼盘',
+                    url: ('houses/list')|UU
+                },
+                {
+                    name: '房价',
+                    url: ('houses/cfj')|UU
+                },
+                {
+                    name: '团购',
+                    url: ('groupbuy/list')|UU
+                },
+                {
+                    name: '特价房',
+                    url: ('special/list')|UU
+                },
+                {
+                    name: '户型',
+                    url: ('door/list')|UU
+                },
+                {
+                    name: '开发商',
+                    url: ('member/k_list')|UU
+                },
+            ]
+    } %}
+    {{ parent() }}
+{% endblock popup_nav %}

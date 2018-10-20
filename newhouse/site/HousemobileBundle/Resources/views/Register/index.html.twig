@@ -1,0 +1,51 @@
+{% extends 'HousemobileBundle::base.html.twig' %}
+
+{% block title %}
+{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}注册
+{% endblock title %}
+
+{% block header_title %}
+	{{core_mobile_global.title({title: '注册'})}}
+{% endblock header_title %}
+
+{% block header_right %}
+	{{ core_mobile_global.bar_nav_btn({
+	    title: '登录',
+	    icon: 'font-f-28',
+	    href: ('house/login')|UU
+	}) }}
+{% endblock header_right %}
+
+{% block container %}
+	<div class="content bg-white">
+		{% if core_global.mconfigtostring({name: 'siteopenreg', ename: 'mvisit'}).__toString == 1 %}
+			{# 判断是否关闭注册功能 #}
+			<div data-block="{
+			    bParams: true,
+			    ajax:{
+			        url: '{{ ('bundlebindforms/ajax')|U }}',
+			        data: {
+			        	formflag: 'register',
+			            tpl: 'Common:forms',
+			            formattr: 'data-jumurl={{('main/mindex')|UU}}'
+			        }
+			    }
+			}"></div>
+			{{housemobile_global.quick_login()}}
+		{% else %}
+			{{core_global.mconfig({name: 'regcloreason', ename: 'mvisit'})|default('系统维护中，关闭注册功能')}}
+		{% endif %}
+	</div>
+{% endblock container %}
+
+{% block popup %}
+	{{ housemobile_global.popup({
+	    name: 'popup-register',
+	    title: '用户协议',
+	    content: block('register_xy')
+	}) }}
+{% endblock popup %}
+
+{% block register_xy %}
+    {{core_global.mconfig({name: 'register_statement', ename: 'mbasecfg'})}}
+{% endblock register_xy %}

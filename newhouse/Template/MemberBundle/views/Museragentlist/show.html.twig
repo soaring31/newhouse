@@ -1,0 +1,12 @@
+{% extends "HouseBundle::poplayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+	seajs.use('', function() {
+		
+	})	
+</script>
+{% endblock %}
+{% block body %}
+{% import "HouseBundle:Macro:popedit.html.twig" as forms %}
+{{ forms.popEdit(form|default(''),'form', 'house.news') }}
+{% endblock %}

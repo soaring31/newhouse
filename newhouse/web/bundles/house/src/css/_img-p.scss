@@ -1,0 +1,34 @@
+$img-p-2:(45px, 45px, 0, -55px, img-p-2);
+$img-p-3:(45px, 45px, -55px, -55px, img-p-3);
+$img-p-4:(45px, 45px, 0, 0, img-p-4);
+$img-p-5:(45px, 45px, -55px, 0, img-p-5);
+$img-p-6:(15px, 14px, -144px, -110px, img-p-6);
+$img-p-7:(38px, 45px, -48px, -110px, img-p-7);
+$img-p-8:(39px, 44px, -159px, 0, img-p-8);
+$img-p-9:(38px, 45px, -96px, -110px, img-p-9);
+$img-p-10:(39px, 45px, -110px, -55px, img-p-10);
+$img-p-11:(38px, 45px, -159px, -54px, img-p-11);
+$img-p-12:(39px, 45px, -110px, 0, img-p-12);
+$img-p-13:(38px, 45px, 0, -110px, img-p-13);
+
+$img-p: ($img-p-2,$img-p-3,$img-p-4,$img-p-5,$img-p-6,$img-p-7,$img-p-8,$img-p-9,$img-p-10,$img-p-11,$img-p-12,$img-p-13);
+
+@mixin img-p($sprites) {
+  %icop {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/p.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+        @extend %icop;
+    }
+  }
+}

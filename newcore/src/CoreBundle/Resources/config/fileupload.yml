@@ -1,0 +1,13 @@
+services:
+#    tripod_upload.example:
+#        class: Tripod\UploadBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+    fileuploader:
+        class: CoreBundle\Services\FileUpload\FileUpload
+        arguments: ['@service_container']
+    fileupload.twig.functions.render_js:
+        class: CoreBundle\Twig\Extension\FileuploadJSExtension
+        public: false
+        arguments: ['@twig']
+        tags:
+            - { name: twig.extension }

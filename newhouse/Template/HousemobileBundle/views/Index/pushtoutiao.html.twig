@@ -1,0 +1,26 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+** ajax调用：二手房列表
+** top_show: 是否显示置顶字段
+** fabu_btn：是否显示发布按钮
+#}
+
+{% set push_toutiao = ('toutiao')|getPush(3) %}
+
+{% block result %}
+{% if push_toutiao is defined %}
+    {% for item in push_toutiao %}
+
+        <li class="item-content">
+            <a href="{{ core_global.url(item|merge({set_models: 1})) }}" class="item-inner p-default">
+                {{item.name|default('')}}
+            </a>
+        </li>
+        {# {{housemobile_global.list_line_one({
+            name: item.name|default(''),
+            url: item.url|default(''),
+            class: 'p-default'
+        })}} #}
+    {% endfor %}
+{% endif %}
+{% endblock result %}

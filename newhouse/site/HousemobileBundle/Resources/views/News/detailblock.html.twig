@@ -1,0 +1,189 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+ * detail: 当前数据
+ * sort_clicks_news: 点击排行资讯
+ * detail_houses_aid: 相关楼盘id
+ * detail_houses: 相关楼盘信息
+ * sort_clicks_houses: 点击排行新房推荐
+ * sort_clicks_sale: 点击排行二手房推荐
+#}
+{% set detail = ident.detail.data[0]|default({}) %}
+
+{% set sort_clicks_news = ('house.news')|getAll({checked: 1, orderBy: 'desc', order: 'clicks', pageSize: 10, findType: 1, id: 'neq|' ~ detail.id|default('')}) %}
+
+{% set detail_houses_aid = ('house.houses_arc')|getOne('aid', {fromid: detail.id|default(''), form: 'houses_news', checked: 1}) %}
+
+{% set detail_houses = ('house.houses')|getAll({id: detail_houses_aid|default(''), checked: 1, findType: 1}) %}
+
+{% block result %}
+{# 点评按钮 #}
+<nav class="bar bar-tools">
+    <span href="javascript:;" class="answer external open-popup " data-popup=".popup-news">
+        <i class="beanswer icon font-f-23"></i>
+        <span class="huida">点评(<b data-counts="{models: 'news', field: 'comnum', id: '{{detail.id|default('')}}'}">0</b>)</span>
+    </span>
+</nav>
+{# 资讯内容 #}
+<div class="content"> 
+    <div class="con">
+      <!-- Slider -->
+        <div class="content-padded" style="margin-top: 0px;">
+            <div class="con-title">
+                <h3>{{detail.name|default('')}}</h3>
+                <p class="mt10">
+                    <span class="mr5">{{detail.create_time|default('')|date('Y-m-d')}}</span>
+                    <span class="mr5">作者&nbsp;:&nbsp;{{detail.author|default('匿名')}}</span>
+                    <span class="mr5">来源&nbsp;:&nbsp;{{detail.source|default('')}}</span>
+                    <span class="mr5">浏览&nbsp;:&nbsp;<span data-counts="{models: 'news', field: 'clicks', id: '{{detail.id|default('')}}'}"></span></span>
+                </p>
+            </div>
+
+            <div class="detail-con" id="con">
+                {{ core_global.content({ content: detail.content|default(''), default: '暂无详细介绍',isbad: 1, ishot: 1 }) }}
+                <div style="clear:both;"></div>
+            </div>
+            <div class="list-block panel-block">
+                {{- core_mobile_global.more_con({id: 'con'})-}}
+            </div>
+            {# 相关楼盘 #}
+            {% if detail_houses.data is defined and detail_houses.pageCount|default(0) != 0 %}
+                <div class="list-block list-block-m0 media-list">
+                    {{housemobile_global.panel_title({title: '相关楼盘'})}}
+                    <ul>
+                        {{ render(controller('HouseBundle:Clist:houseslist',{
+                            _isApp: url_isApp, 
+                            list: detail_houses|default(''),
+                            top: 0
+                        })) }}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <!-- 相关推荐 -->
+    <div class="list-block panel-block media-list" data-tag="same_cate">
+        {{housemobile_global.panel_title({title: '相关推荐'})}}
+        {% set sort_category_news = ('house.news')|getAll({category: detail.category|default(''), pageSize: 10, checked: 1, id: 'neq|' ~ detail.id|default('') ~ ''}) %}
+        <ul class="list-con" id="xgtj">
+            {% if sort_category_news.data is defined and sort_category_news.data|length > 0 %}
+                {% for item in sort_category_news.data %}
+                    {{housemobile_global.list_line_one({
+                        name: item.name|default(''),
+                        url: ('news/detail')|UU({id: item.id|default('')}),
+                        class: 'p-default'
+                    })}}
+                {% endfor %}
+                {% else %}
+                <li class="no-data">暂无数据</li>
+            {% endif %}
+        </ul>
+        {{- core_mobile_global.more_con({id: 'xgtj'})-}}
+    </div>
+
+    <!-- 热门排行 -->
+    <div class="list-block panel-block media-list" data-tag="clicks">
+        {{housemobile_global.panel_title({title: '热门排行'})}}
+        <ul class="list-con" id="rmph">
+            {% if sort_clicks_news.data is defined %}
+                {% for item in sort_clicks_news.data %}
+                    {{housemobile_global.list_line_one({
+                        name: item.name|default(''),
+                        url: ('news/detail')|UU({id: item.id|default('')}),
+                        class: 'p-default',
+                    })}}
+                {% endfor %}
+                {% else %}
+                <li style="text-align:center;">暂无数据</li>
+            {% endif %}
+        </ul>
+        {{- core_mobile_global.more_con({id: 'rmph'})-}}
+    </div>
+        <div class="buttons-tab" data-tag='clicks'>
+            <a href="#news_lp" class="tab-link active button">热门楼盘</a>
+            <a href="#news_esf" class="tab-link button">热门二手房</a>
+        </div>
+    <div class="list-block list-block-m0 bg-white">
+        {% set sort_clicks_houses = ('house.houses')|getAll({checked: 1, orderBy: 'desc', order: 'clicks', pageSize: 10, findType: 1, type: 0}) %}
+        {% set sort_clicks_sale = ('house.sale')|getAll({checked: 1, orderBy: 'desc', order: 'clicks', pageSize: 10, findType: 1, valid: 'gt|' ~ ('now')|date('U') }) %}
+        <div class="tabs list-con" id='newsLp'>
+            <div id="news_lp" class="tab active row tuwen-ts">
+                {% if sort_clicks_houses.data is defined %}
+                    {% for item in sort_clicks_houses.data %}
+                        <div class="card demo-card-header-pic col-50">
+                            <a href="{{('houses/detail')|UU({id: item.id|default('')})}}" class="p-default">
+                                <div valign="bottom" class="card-header color-white no-border no-padding">
+                                    {{core_global.img({
+                                        src: item.thumb|default(''),
+                                        alt: item.name|default(''),
+                                        type: 2,
+                                        height: 103,
+                                        width: 144,
+                                        attr: 'class="card-cover"'
+                                    })}}
+                                </div>
+                                <div class="card-content">
+                                    {{item.name|default('')}}
+                                    <div>
+                                        {{house_global.if_dj({value: item.dj|default(''),class: 'p-red'})}}
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div id="news_esf" class="tab row tuwen-ts">
+                {% if sort_clicks_sale.data is defined %}
+                    {% for item in sort_clicks_sale.data %}
+                        <div class="card demo-card-header-pic col-50">
+                            <a href="{{('sale/detail')|UU({id: item.id|default('')})}}" class="p-default">
+                                <div valign="bottom" class="card-header color-white no-border no-padding">
+                                    {{core_global.img({
+                                        src: item.thumb|default(''),
+                                        alt: item.name|default(''),
+                                        type: 2,
+                                        height: 103,
+                                        width: 144,
+                                        attr: 'class="card-cover"'
+                                    })}}
+                                </div>
+                                <div class="card-content">
+                                    {{item.name|default('')}}
+                                    <div>
+                                        {{house_global.if_wy({value: item.zj|default(''),class: 'p-red'})}}
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="panel-block">
+            {{- core_mobile_global.more_con({id: 'newsLp', class: 'mt0'})-}}
+        </div>
+    </div>
+
+    {{ render(controller('HouseBundle:Common:footer', {_isApp: url_isApp})) }}
+
+</div>
+{# 
+{
+    appId: '', // 必填，公众号的唯一标识
+    timestamp: '', // 必填，生成签名的时间戳
+    nonceStr: '', // 必填，生成签名的随机串
+    signature: '',// 必填，签名，见附录1
+}
+ #}
+{# {% set wxConfig = null|getWxConfig %} #}
+{% set wxConfig = {} %}
+<script type="text/javascript">
+seajs.use(['share', 'common'], function (share, common ){
+    // 调用统计
+    common.getcounts({
+        url: '{{("igetcounts/index")|U({})}}'
+    })
+    
+})
+</script>
+{% endblock result %}

@@ -1,0 +1,152 @@
+HouseBundle\Entity\Spend:
+    type: entity
+    table: spend
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        uid:
+            options:
+                comment: 会员id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        consume:
+            options:
+                comment: 消费类型
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        amount:
+            options:
+                comment: 消费金额
+                unsigned: false
+            nullable: false
+            type: float
+            length: 100
+        value:
+            options:
+                comment: 置顶天数刷新次数
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        cmoney:
+            options:
+                comment: 总金额
+                unsigned: false
+            nullable: false
+            type: float
+            length: 15
+        bmoney:
+            options:
+                comment: 余额
+                unsigned: false
+            nullable: false
+            type: float
+            length: 100
+        touid:
+            options:
+                comment: 指向用户ID
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        services:
+            options:
+                comment: 操作服务
+                unsigned: false
+            nullable: false
+            type: string
+            length: 50
+        aid:
+            options:
+                comment: 操作id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        name:
+            options:
+                comment: 名称
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        balance:
+            options:
+                comment: 余额支付类型
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 3
+        remark:
+            options:
+                comment: 备注
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        checked:
+            options:
+                comment: 是否审核
+                unsigned: false
+            nullable: false
+            type: boolean
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

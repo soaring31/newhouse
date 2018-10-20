@@ -1,0 +1,45 @@
+{% extends bundlename~"::mainlayout.html.twig" %}
+{% block tableMain %}
+<form class="form" action="{{ (action)|U }}" method="post" name="form">
+<table class="right-table" width="100%">
+	<tbody>
+	    <tr>
+			<th colspan="2" class="conlist">[{{app.session.get('wxname')|default('未知')}}] 微信默认配置</th>
+		</tr>
+		<tr>
+			<td class="txtright fB">多客服触发关键字：</td>
+			<td class="txtleft">
+				<input type="text" name="transmit" class="w300" style="margin:10px 0 10px 0;" value="{{ info.transmit|default('') }}">
+				<span class="tips1">中文逗号隔开，多客服功能需事先开启才能使用！</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="txtright fB" width="30%">微信消息默认回复：</td>
+			<td class="txtleft">
+			    <textarea name="reply_default" class="w300" style="height:80px;margin-top:12px" min="1" max="300" init="请输1到300字符">{{ info.reply_default|default('') }}</textarea>
+				<span class="tips1"></span>
+			</td>
+		</tr>
+		<tr>
+			<td class="txtright fB">关注默认回复：</td>
+			<td class="txtleft">
+				<textarea name="subscribe_default" class="w300" style="height:60px;margin-top:12px" min="1" max="300" init="请输1到300字符">{{ info.subscribe_default|default('') }}</textarea>
+				<span class="tips1"></span>
+			</td>
+		</tr>
+		<tr>
+			<td class="txtright fB">取消关注默认回复：</td>
+			<td class="txtleft">
+				<textarea name="unsubscribe_default" class="w300" style="height:60px;margin-top:12px" min="1" max="300" init="请输1到300字符">{{ info.unsubscribe_default|default('') }}</textarea>
+				<span class="tips1"></span>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<div class="submit">
+	<input class="submit-btn ajax-post confirm" target-form="form" value="保存" type="submit" />
+</div>
+</form>
+{% endblock %}
+{% block submit %}{% endblock %}
+{% block promptUl %}<li></li>{% endblock %}

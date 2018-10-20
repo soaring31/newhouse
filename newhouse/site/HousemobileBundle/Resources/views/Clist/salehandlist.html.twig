@@ -1,0 +1,81 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+** ajax调用：需求列表
+** fabu_btn：是否显示发布按钮
+#}
+{% block result %}
+{# {% set models = app.request.get('models') %} #}
+{% set models = 'sale' %}
+{% set uid = app.request.get('uid') %}
+
+{% set handlistAid = ('house.collects')|getCol('aid', {models: models, uid: uid}) %}
+
+{% set handlist = ('house.' ~ models)|getAll({checked: 1, id: 'in|' ~ handlistAid|default(0)|join(','), _multi: 1, pageSize: 15, pageIndex: app.request.get('pageIndex', 1) }) %}
+    {% spaceless %}
+    {% if handlist.data is defined and handlist.pageCount|default(0) != 0 %}
+        {% for item in handlist.data  %}
+            <li {% if loop.last %}data-page="{
+                        pageIndex: {{handlist.pageIndex}},
+                        pageCount: {{handlist.pageCount}},
+                        pageSize: {{handlist.pageSize}}
+                     }"{% endif %} >
+                
+                {% set item_count = item.tujis|default('')|sourceImg|length %}
+
+                <a href=" {{('sale/detail')|UU({id: item.id|default('')})}}" class="item-content p-default">
+                    <div class="item-media por">
+                        {{- core_global.img({
+                            src: item.thumb|default(''),
+                            alt: item.name|default(''),
+                            type: 2,
+                            width: 107,
+                            height: 80
+                        }) -}}
+                        {% if item.zjdate|default('') >= ('now')|date('U') and app.request.get('top_show', 1) == 1 %}
+                            <div class="item-zd">顶</div>
+                        {% endif %}
+                        {% if item_count|default('') > 0 %}
+                            <div class="item-l-b black">{{item_count}}图</div>
+                        {% endif %}
+                    </div>
+                    <div class="item-inner">
+                        <div class="item-title-row">
+                            {{housemobile_global.list_title({title: item.name|default('')})}}
+                            <div class="item-after ml5">
+                                {{house_global.if_wy({value: item.zj|default(''),class: 'l p-red'})}}                            
+                            </div>
+                        </div>
+                        <div class="item-title-row">
+                            <div class="item-title item-title-p0">
+                                {{item.address|default('-')}}
+                            </div>
+                            {{- house_global.huxing({data: item|default(''), tpl: '<div class="after">%shi%%ting%</div>'}) -}}
+                        </div>
+                        <div class="item-subtitle">
+                            {% if item.szlc|default('') and item.zlc|default('') %}
+                            <span class="mr10">
+                                {{item.szlc|default('-')}}/{{item.zlc|default('-')}}层
+                            </span>
+                            {% endif %}
+                            {{core_global.formData({value: item.cx|default(''), tpl: '<span class="mr10">%value%</span>'})}}
+                            <span>
+                                {{ core_global.formData({value: item.fl|default('')}) }}
+                            </span>
+                        </div>
+                        <div class="item-subtitle">
+                            {{core_global.region({id: item.region|default(''), tpl: '<span class="button button-sm btn-1">%value%</span>'})}}
+                            {{core_global.formData({value: item.esflx|default(''), tpl: '<span class="button button-sm btn-2">%value%</span>'})}}
+                            {{ core_global.formData({value: item.zxcd|default(''), tpl: '<span class="button button-sm btn-3">%value%</span>'}) }}
+                            {% if item.jian|default('0') == 1 %}
+                            <span class="button button-sm btn-4">店铺 </span>
+                            {% endif %} 
+                        </div>
+                    </div>
+                </a>
+            </li>
+        {% endfor %}
+    {% else %}
+        <li class="mobile-list-none">暂无二手房收藏</li>
+    {% endif %}
+    {% endspaceless %}
+{% endblock result %}

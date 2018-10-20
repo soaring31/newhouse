@@ -1,0 +1,18 @@
+{% extends 'HousemobileBundle:Bundlebindforms:bundlebase.html.twig' %}
+{% set ask = app.request.get("ask")|default() %}
+{% set models = app.request.get("models", 'news') %}
+{% block result %}
+{{core_mobile_forms.forms({
+    Form: Form,
+    formName: formName,
+    buttons: {
+        0: {
+            name: '提交评论',
+            class: ' button-big button-fill button-success',
+            attr: 'data-role="submit"'
+        }
+    },
+    ask: ask,
+    models: models
+})}}
+{% endblock result %}

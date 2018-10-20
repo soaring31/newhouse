@@ -1,0 +1,157 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 
+ * detail: 当前数据
+ * detail_info: 当前数据拓展
+ * detail_usertype: 当前数据用户类型
+ * detail_name: 当前数据标题
+ #}
+
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% set detail_info = cident.detailinfo.data[0]|default('') %}
+
+{# 经纪人、经纪公司判断   经纪人=15  经纪公司=17 #}
+{% set detail_usertype = detail_info.usertype|default('1') %}
+
+{% set detail_name = detail_info.company|default(detail_info.nicename|default(detail.username|default('-'))) %}
+
+{% block result %}
+{% if detail_usertype|default('') in [15, 17] %}
+<div class="content">
+    <div class="bg-gradient conact conact1" >
+        {% if detail_usertype|default('') == 17 %}
+            {{core_global.img({
+                src: detail_info.image|default(''),
+                alt: detail_name|default(''),
+                type: 2,
+                height: 60,
+                width: 107
+            })}}
+        {% elseif detail_usertype|default('') == 15 %}
+            {{core_global.img({
+                src: detail_info.image|default(''),
+                alt: detail_name|default(''),
+                type: 2,
+                height: 130,
+                width: 100
+            })}}
+        {% endif %}
+        <div class="info2">
+            {{detail_name|default('')}}
+            <br>
+            电话：{{detail.tel|default('')}}
+        </div>
+    </div>
+    {{housemobile_global.content({
+        title: '公告',
+        content: detail_info.dpgg|default(''),
+        default: '暂无公告'
+    })}}
+    <div class="list-block panel-block">
+        {{housemobile_global.panel_title({title: "更多属性"})}}
+        <div class="item-content1 p-gray">
+            <div class="item-inner2">
+                <div class="row attr-con" id="lpxq">
+                    {% if detail_usertype|default('') == 17 %}
+                    <div class="col-100">
+                        公司简称：{{detail_info.cpltd|default('')}}
+                    </div>
+                    {% elseif detail_usertype|default('') == 15 %}
+                    <div class="col-100">
+                        从业年限：{{detail_info.cynx|default('-')}}年
+                    </div>
+                    <div class="col-100">
+                        服务等级：{{ house_global.publisher({
+                                      id: detail.id|default(''),
+                                      jjr_tpl: '<span>
+                                          %fwdj%
+                                      </span>'
+                                  }) }}
+                    </div>
+                    <div class="col-100">
+                        注册时间：{{detail.create_time|default('')|date('Y-m-d')}}
+                    </div>
+                    <div class="col-100">
+                        上次登录：{{detail.logintime|default('')|date('Y-m-d')}}
+                    </div>
+                    <div class="col-100">
+                        积分：{{detail_info.jifen|default(0) ~ '分'}}
+                    </div>
+                    <div class="col-100">
+                        访问量：{# <span data-counts="{models: 'userinfo', service: 'db', field: 'clicks', id: '{{detail_info.id|default('')}}'}"></span> #}{{detail_info.clicks|default(0) ~ '次'}}
+                    </div>
+                    <div class="col-100">
+                        手机：{{detail.tel|default('')}}
+                    </div>
+                    <div class="col-100">
+                        服务区域：{{core_global.region({id: detail_info.region|default(''), tpl: '%value%'})}}
+                    </div>
+                    {% endif %}
+
+                    <div class="col-100">
+                        电子邮箱：{{detail.email|default('')}}
+                    </div>
+                    <div class="col-100">
+                        QQ：{{detail_info.qq|default('')}}
+                    </div>
+                    {% if detail_usertype|default('') == 15 %}
+                        {# 经纪人所属经纪公司 #}
+                        {% if detail_info.cid|default('') %}
+                            {% set detail_jjgs_data = ('db.userinfo')|getRow({uid: detail_info.cid|default('')}) %}
+                            {% set detail_jjgs_data_attr = detail_jjgs_data.attributes|default('') %}
+                            {% set detail_jjgs_data_name = detail_jjgs_data_attr.company.value|default(detail_jjgs_data.nicename|default(detail_jjgs_data.username|default('-'))) %}
+                            <div class="col-100">
+                                所属单位：{{ detail_jjgs_data_name|default('') }}
+                            </div>
+                        {% endif %}
+                        <div class="col-100">
+                            店铺介绍：{{detail_info.dpjj|default('')}}
+                        </div>
+                    {% elseif detail_usertype|default('') == 17 %}
+                        <div class="col-100">
+                            地址：{{detail_info.caddress|default('')}}
+                        </div>
+                    {% endif %}
+                </div>
+                {{- core_mobile_global.more_con({id: 'lpxq', class: 'b-t'})-}}
+            </div>
+        </div>
+    </div>
+    {% if detail_usertype|default('') == 17 %}
+        {{housemobile_global.content({
+            title: '公司介绍',
+            content: detail_info.companyjs|default('')
+        })}}
+    {% endif %}
+    {{ render(controller('HouseBundle:Common:footer', {_isApp: url_isApp})) }}
+</div>
+<script type="text/javascript">
+    // 头部颜色变更
+    seajs.use(['sm'], function (sm) {
+        $(".content").on('scroll', function () {
+            var $content = $('.content');
+            var $header = $content.prev('.bar');
+            var scrollTop = $content.scrollTop();
+            var height = $('.bg-gradient').height();
+            if (scrollTop > (height - $header.height()) ) {
+                $header.css({'background-color': '#1685E1'});
+            } else {
+                $header.css({'background-color': 'transparent'});
+            };
+        });
+    })
+</script>
+{% else %}
+<script type="text/javascript">
+    seajs.use(['sm'], function (sm) {
+        $.alert('此用户无开通店铺权限', function () {
+            {% if url|default('') %}
+                location.href = '{{url|default("")}}';
+            {% else %}
+                location.href = '{{("index/index")|UU({}, true)}}'
+            {% endif %}
+        });
+    })
+</script>
+{% endif %}
+{% endblock result %}

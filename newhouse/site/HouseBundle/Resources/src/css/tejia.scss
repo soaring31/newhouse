@@ -1,0 +1,164 @@
+﻿/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+*/
+
+@import 'static/ats';
+// 工具类 每个文件都要导入
+
+@import 'lp';
+// 楼盘公用样式
+@import 'lp-list';
+// 楼盘公用列表样式
+@import 'tjf-list';
+// 特价房列表样式
+
+/* detial */
+.lpintrot {
+    border-top: 1px solid #eee;
+}
+.lpintrotl {
+    font-size: 26px;
+    height: 52px;
+    line-height: 52px;
+}
+.lpintrotl i {
+    background-color: #3cc;
+    border-radius: 3px;
+    color: #fff;
+    display: block;
+    font-size: 14px;
+    line-height: 26px;
+    margin: 15px 10px 0 0;
+    padding: 0 15px;
+    text-align: center;
+}
+.lpintrotl h2 {
+    font-size: 26px;
+    height: 52px;
+    line-height: 52px;
+    overflow: hidden;
+}
+.lpintrotr {
+    color: #999;
+    margin-top: 15px;
+}
+.h-d-img {
+    float: left;
+    height: 366px;
+    width: 551px;
+}
+.lpintror {
+    width: 615px;
+}
+.lpintror li {
+    color: #999;
+    font-size: 16px;
+    padding-bottom: 6px;
+    vertical-align: top;
+}
+.lpintror span {
+    line-height: 40px;
+}
+.lpintror span .i2 {
+    color: #2c2c2c;
+    font-size: 16px;
+}
+.lpintror span.lh {
+    padding-top: 7px;
+}
+.lpintror span em {
+    color: #e43;
+    font-family: Georgia;
+    font-size: 36px;
+    padding: 0 10px;
+}
+.lpintror em {
+    color: #2c2c2c;
+    font-size: 16px;
+    padding: 0 10px;
+}
+.lpintror span i {
+    color: #e43;
+}
+.lpintror span i.i1 {
+    color: #999;
+    font-size: 14px;
+}
+.tel {
+    padding-bottom: 0;
+    overflow: hidden;
+}
+.tel .font-lp-13 {
+    background-color: #e43;
+    color: #fff;
+    font-size: 30px;
+    padding: 5px 20px;
+}
+.tel p {
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+    color: #999;
+    font-size: 14px;
+    height: 68px;
+    line-height: 68px;
+    width: 544px;
+}
+.tel p i {
+    color: #e43;
+    font-size: 26px;
+    padding: 0 18px;
+}
+.xtt {
+    border-bottom: 1px solid #eee;
+}
+.xtt .xttl {
+    color: #333;
+    font-size: 24px;
+}
+.xtt .xttr {
+    font-size: 14px;
+    padding-top: 10px;
+}
+.xtt .xttr a {
+    color: #999;
+}
+.xtb {
+    overflow: hidden;
+}
+.xtb ul {
+    margin-right: -50px;
+}
+.xtb li {
+    float: left;
+    height: 235px;
+    margin-right: 25px;
+    margin-top: 25px;
+    width: 220px;
+}
+.xtb li h4 {
+    background-color: #474747;
+    height: 35px;
+    line-height: 35px;
+    overflow: hidden;
+    padding: 0 5px;
+}
+.xtb li:hover h4 {
+    background-color: #e43;
+}
+.xtb li:hover h5 {
+    text-decoration: none;
+}
+.xtb li a:hover {
+    text-decoration: none;
+}
+.xtb li h4 span {
+    color: #fff;
+}
+.xtb li h5 i {
+    color: #e43;
+    font-size: 24px;
+    padding: 0 10px;
+}

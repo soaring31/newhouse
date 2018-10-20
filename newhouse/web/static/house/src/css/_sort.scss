@@ -1,0 +1,48 @@
+/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+* @dec sort btn
+*/
+
+/* sort */
+.sort .sort-btn {
+	background: #fafafa;
+	border: 1px solid #ddd;
+	color: #888;
+	float: left;
+	height: 22px;
+	line-height: 22px;
+	margin-left: 10px;
+	padding: 3px 8px;
+	&:hover {
+		color: #888;
+		text-decoration: none;
+	}
+	i {
+		position: relative;
+		top: 3px;
+		&.up {
+			right: -8px;
+			top: -5px;
+		}
+	}
+	&.default i{
+		display: none;
+	}
+}
+.sort .sort-btn.act {
+	background: #fff;
+	border-color: $major-color;
+	color: $major-color;
+	&.desc{
+		.up{
+			color: #888;
+		}
+	}
+	&.asc{
+		.down{
+			color: #888;
+		}
+	}
+}

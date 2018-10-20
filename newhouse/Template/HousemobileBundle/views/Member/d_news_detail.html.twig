@@ -1,0 +1,17 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default('Member:d_news') ~ '.html.twig' %}
+
+{% block container %}
+	<div data-block="{
+        bParams: true,
+        ajax:{
+            url: '{{ ('member/d_news_detail')|U }}',
+            data: {
+                tpl: 'Member:newsblock',
+                newid: '{{app.request.get("newid")}}'
+            }
+        }
+    }"></div>
+{% endblock container %}
+
+{% block js %}{% endblock js %}

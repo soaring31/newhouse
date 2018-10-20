@@ -1,0 +1,12 @@
+{% extends 'HouseBundle:Muserhand:muserhandlist.html.twig' %}
+ {# 求租求购 1: 求购 2 :求租  #}
+{% set models = 'ask' %}
+{% block mainMenu %}
+    {{ core_manage.jump(
+        {
+           title: '<i class="mr5"></i>问答收藏',
+           url: (action)|U({models: models})       
+        }
+        ) }}
+    
+{% endblock %}

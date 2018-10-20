@@ -1,0 +1,50 @@
+{# {% extends 'HousemobileBundle:Member:j_detail.html.twig' %} #}
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default('Member:j_detail') ~ '.html.twig' %}
+
+{# 说明 
+* 经纪公司出租
+#}
+
+{% block header_title %}
+{% set tpl_title = '留言' %}
+{% endblock header_title %}
+
+{% block nav %}
+{% set nav_users_act = 4 %}
+{{parent()}}
+{% endblock nav %}
+{% block container %}
+    {# 检索 #}
+   {% set list_header %}
+    <div data-block="{
+	    bParams: true,
+	    ajax:{
+	        url: '{{ ('member/j_d_ly')|U({id: detail.id|default(0)}) }}',
+	        data: {
+	            aid: {{detail.id|default(0)}},
+	            formflag: 'view_usermsg',
+	            tpl: 'Common:forms'
+	        }
+	    }
+	}"></div>
+	{{housemobile_global.panel_title({title: '留言列表'})}}
+    {% endset %}
+
+    {# 列表链接 js调用列表需要 #}
+    {% set list_url = ('intercomment/list')|U({checked: 1, aid: detail.id|default(0), models: 'usermsg', checkreply: 1}) %}
+    {{core_mobile_global.list_scroll({
+        list_header: list_header|default(''),
+        url: list_url|default('')
+    })}}
+    <script type="text/javascript">
+    	seajs.use(['comment'], function (comment){
+            comment.init({
+                list: '[data-container="list"]',
+                url: '{{ list_url }}',
+                removeItem: '.up',
+                btnload: 1
+            });
+        });
+    </script>
+{% endblock container %}

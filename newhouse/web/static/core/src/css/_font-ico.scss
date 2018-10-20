@@ -1,0 +1,233 @@
+$font-ico-fz: inherit !default;
+
+@font-face {
+	font-family: "ico";
+    font-weight: normal;
+    font-style: normal;
+	src: url('../fonts/ico.eot');
+	src: url('../fonts/ico.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/ico.svg#ico') format('svg'),
+		//url('../fonts/ico.ttf') format('truetype'),
+		url('../fonts/ico.woff') format('woff');
+}
+$font-ico-fz: inherit !default;
+$font-ico-fl: none !default;
+$font-ico-m: 0 !default;
+$font-ico-va: -.25em !default;
+[class^="font-ico-"],
+[class*=" font-ico-"] {
+	font-family: "ico";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-size: $font-ico-fz;
+	float: $font-ico-fl;
+	margin: $font-ico-m;
+	vertical-align: $font-ico-va;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; only necessary if not using the private unicode range (firstdata option) 
+	text-decoration: none;
+	text-transform: none;
+}
+.font-ico-1:before {
+	content: "\EA01";
+}.font-ico-10:before {
+	content: "\EA02";
+}.font-ico-11:before {
+	content: "\EA03";
+}.font-ico-12:before {
+	content: "\EA04";
+}.font-ico-13:before {
+	content: "\EA05";
+}.font-ico-14:before {
+	content: "\EA06";
+}.font-ico-15:before {
+	content: "\EA07";
+}.font-ico-16:before {
+	content: "\EA08";
+}.font-ico-17:before {
+	content: "\EA09";
+}.font-ico-18:before {
+	content: "\EA0A";
+}.font-ico-19:before {
+	content: "\EA0B";
+}.font-ico-2:before {
+	content: "\EA0C";
+}.font-ico-20:before {
+	content: "\EA0D";
+}.font-ico-21:before {
+	content: "\EA0E";
+}.font-ico-22:before {
+	content: "\EA0F";
+}.font-ico-23:before {
+	content: "\EA10";
+}.font-ico-24:before {
+	content: "\EA11";
+}.font-ico-25:before {
+	content: "\EA12";
+}.font-ico-26:before {
+	content: "\EA13";
+}.font-ico-27:before {
+	content: "\EA14";
+}.font-ico-28:before {
+	content: "\EA15";
+}.font-ico-29:before {
+	content: "\EA16";
+}.font-ico-3:before {
+	content: "\EA17";
+}.font-ico-30:before {
+	content: "\EA18";
+}.font-ico-31:before {
+	content: "\EA19";
+}.font-ico-32:before {
+	content: "\EA1A";
+}.font-ico-33:before {
+	content: "\EA1B";
+}.font-ico-34:before {
+	content: "\EA1C";
+}.font-ico-35:before {
+	content: "\EA1D";
+}.font-ico-36:before {
+	content: "\EA1E";
+}.font-ico-37:before {
+	content: "\EA1F";
+}.font-ico-38:before {
+	content: "\EA20";
+}.font-ico-39:before {
+	content: "\EA21";
+}.font-ico-4:before {
+	content: "\EA22";
+}.font-ico-40:before {
+	content: "\EA23";
+}.font-ico-41:before {
+	content: "\EA24";
+}.font-ico-43:before {
+	content: "\EA25";
+}.font-ico-44:before {
+	content: "\EA26";
+}.font-ico-45:before {
+	content: "\EA27";
+}.font-ico-47:before {
+	content: "\EA28";
+}.font-ico-49:before {
+	content: "\EA29";
+}.font-ico-5:before {
+	content: "\EA2A";
+}.font-ico-50:before {
+	content: "\EA2B";
+}.font-ico-51:before {
+	content: "\EA2C";
+}.font-ico-53:before {
+	content: "\EA2D";
+}.font-ico-54:before {
+	content: "\EA2E";
+}.font-ico-55:before {
+	content: "\EA2F";
+}.font-ico-56:before {
+	content: "\EA30";
+}.font-ico-6:before {
+	content: "\EA31";
+}.font-ico-61:before {
+	content: "\EA32";
+}.font-ico-62:before {
+	content: "\EA33";
+}.font-ico-64:before {
+	content: "\EA34";
+}.font-ico-65:before {
+	content: "\EA35";
+}.font-ico-66:before {
+	content: "\EA36";
+}.font-ico-67:before {
+	content: "\EA37";
+}.font-ico-68:before {
+	content: "\EA38";
+}.font-ico-7:before {
+	content: "\EA39";
+}.font-ico-8:before {
+	content: "\EA3A";
+}.font-ico-9:before {
+	content: "\EA3B";
+}.font-ico-ad:before {
+	content: "\EA3C";
+}.font-ico-arrow-down:before {
+	content: "\EA3D";
+}.font-ico-arwl:before {
+	content: "\EA3E";
+}.font-ico-arwr:before {
+	content: "\EA3F";
+}.font-ico-bj:before {
+	content: "\EA40";
+}.font-ico-carlevel:before {
+	content: "\EA41";
+}.font-ico-chk:before {
+	content: "\EA42";
+}.font-ico-chked:before {
+	content: "\EA43";
+}.font-ico-close:before {
+	content: "\EA44";
+}.font-ico-copy:before {
+	content: "\EA45";
+}.font-ico-del:before {
+	content: "\EA46";
+}.font-ico-detail:before {
+	content: "\EA47";
+}.font-ico-down:before {
+	content: "\EA48";
+}.font-ico-edit:before {
+	content: "\EA49";
+}.font-ico-exit:before {
+	content: "\EA4A";
+}.font-ico-file:before {
+	content: "\EA4B";
+}.font-ico-fj:before {
+	content: "\EA4C";
+}.font-ico-ind:before {
+	content: "\EA4D";
+}.font-ico-jg:before {
+	content: "\EA4E";
+}.font-ico-local:before {
+	content: "\EA4F";
+}.font-ico-man:before {
+	content: "\EA50";
+}.font-ico-man1:before {
+	content: "\EA51";
+}.font-ico-man2:before {
+	content: "\EA52";
+}.font-ico-mb:before {
+	content: "\EA53";
+}.font-ico-menu:before {
+	content: "\EA54";
+}.font-ico-menu1:before {
+	content: "\EA55";
+}.font-ico-nr:before {
+	content: "\EA56";
+}.font-ico-pf:before {
+	content: "\EA57";
+}.font-ico-plus:before {
+	content: "\EA58";
+}.font-ico-plus0:before {
+	content: "\EA59";
+}.font-ico-plus1:before {
+	content: "\EA5A";
+}.font-ico-plus11:before {
+	content: "\EA5B";
+}.font-ico-plus12:before {
+	content: "\EA5C";
+}.font-ico-plus1e:before {
+	content: "\EA5D";
+}.font-ico-search:before {
+	content: "\EA5E";
+}.font-ico-set:before {
+	content: "\EA5F";
+}.font-ico-sort:before {
+	content: "\EA60";
+}.font-ico-sortdown:before {
+	content: "\EA61";
+}.font-ico-sortup:before {
+	content: "\EA62";
+}.font-ico-tp:before {
+	content: "\EA63";
+}.font-ico-weixin:before {
+	content: "\EA64";
+}

@@ -1,0 +1,39 @@
+{% extends 'HouseBundle:Video:index.html.twig' %}
+{# *说明
+* url_category:获取当前url中的category参数
+* category:根据url中的category的值获取当前分类的属性 
+* nav_video_act: 导航高亮
+#}
+{% set nav_video_act = app.request.get("category", 16) %}
+
+{% set url_name = app.request.get('name') %}
+
+{% block current %}
+    <!--current-->
+    <div class="current-location pb10">
+        <i class="font-icons-20"></i>
+        <a href="{{('index/index')|U}}">首页</a>
+        <span>&gt;</span>
+        <a href="{{('video/list')|U({category: url_category|default('')})}}">{{category ? category.name|default('') : url_name|default('')}}</a>
+    </div>
+    <div class="blank20"></div>
+    <!--/current-->
+{% endblock current %}
+
+{% block container %}
+    {% if url_name|default('') %}
+        {% set tpl_title = '搜索关键词“ ' ~ url_name|default('') ~ ' ”，共<span class="c-e43">' ~ ident.list.pageCount|default(0) ~ '</span>条结果' %}
+    {% elseif category|default('') %}
+        {% set tpl_title = category.name|default('') %}
+    {% endif %}
+    <div class="pr20">
+        <!--视频列表-->
+        {{house_global.video_list({
+            list: ident.list,
+            category: url_category,
+            title: tpl_title,
+            isList: 1
+        })}}
+        <!--/视频列表-->
+    </div>
+{% endblock container %}

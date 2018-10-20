@@ -1,0 +1,43 @@
+services:
+#    house.example:
+#        class: HouseBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+    house.http.utils:
+        class: HouseBundle\Utils\HttpUtils
+        arguments: ['@service_container']
+
+    house.zhugesso.handler:
+        class: HouseBundle\Handler\ZhugeSsoHandler
+        arguments: ["@router", "@house.http.utils", "@db.users", "@cc",  "%sso%", '@service_container']
+        calls:
+            - [setLogger, ["@monolog.logger.zhuge_sso"]]
+
+    house.zhugepassport.handler:
+            class: HouseBundle\Handler\ZhugePassPortHandler
+            arguments: ["@router", "@house.http.utils", "@db.users", "@cc",  "%sso%", '@service_container']
+            calls:
+                - [setLogger, ["@monolog.logger.zhuge_sso"]]
+
+    house.house.handler:
+        class: HouseBundle\Handler\HouseHandler
+        arguments: ["@house.category","@house.cate_line","@house.cate_metro", "@db.auth_group_area", "@house.prices", "@house.houses","@house.houses_info", "@house.houses_price", "@house.cate_circle", "@house.houses_arc", "@db.news", "@house.houses_attr", "@house.build", "@house.door", "@house.around", "@db.area", "@house.inter_album", "@house.pushs", "@house.collects", "@db.users", "@house.video", "@core.memcache", '@service_container']
+        calls:
+            - [setApiUrl, ["%api_url%"]]
+            - [setHttpUnits, ["@house.http.utils"]]
+            - [setLogger, ["@monolog.logger.zhuge"]]
+            - [setOptions, ["%options%"]]
+
+    # 同步数据
+    house.sync.handler:
+        class: HouseBundle\Handler\SyncHandler
+        arguments: ["@doctrine.dbal.house_connection", '@service_container']
+        calls:
+            - [setHttpUnits, ["@house.http.utils"]]
+            - [setLogger, ["@monolog.logger.sync"]]
+
+    request.handler:
+        class: HouseBundle\Handler\RequestHandler
+        arguments: ['@service_container']
+
+

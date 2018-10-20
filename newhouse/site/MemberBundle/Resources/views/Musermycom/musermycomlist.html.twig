@@ -1,0 +1,114 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set mid = app.user.id|default('') %}   
+
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+{% block mainMenu %}
+    {{ parent() }} 
+   {#  {{ core_manage.jump({
+        title: '<i class="font-ico-10 mr5"></i>资讯评论',
+        url: 'mintercomment/mintercommentmanage'|U
+    }) }} #}
+{% endblock %}
+{% block mainleft %}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ core_manage.filter([
+    {
+        method: 'search',
+        field: 'name',
+        title: '请搜索会员名称'
+    }
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U({}) }}',
+        showUrl   : '{{ (action ~ '/show')|U({}) }}',
+        submitUrl : '{{ (action ~ '/save')|U({}) }}',
+        deleteUrl : '{{ (action ~ '/delete')|U({}) }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+           
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="200" class="pl15">会员名称</th>
+                    <th >公司名称</th>
+                    <th width="120" class="tac">申请</th>
+                </tr>
+                {% set cid = ('db.userinfo')|getOne('cid',{ uid: app.user.id }) %}
+                {% set nmid = ('house.nexus_arc')|getOne('aid',{mid: mid, aid: 'neq|' ~ 0}) %}
+                {% set nid = ('house.nexus_arc')|getOne('id',{mid: mid}) %}
+                {% if ident.info.data is defined %}
+                {% if cid %}
+                    {% set nex = ('db.userinfo')|getAll({ uid: cid }) %}
+                {% else %}
+                    {% set nex = ident.info %}
+                {% endif %} 
+                {% for vo in nex.data %}
+                {% set user_info = ('db.userinfo')|getRow({uid: vo.id|default('')}) %}
+                <tr data-id="{{ vo.id }}">
+                   <td class="pl15">{{ vo.nicename }}</td>
+                    <td class="pl15">
+                        <a href="{{('member/detail')|U({id: vo.id|default('')})}}" target="_blank">
+                            {{ core_global.attr({ name: "company", id: vo.id|default(''), default: '-' }) }}
+                        </a>
+                    </td> 
+                        <td class="tac">
+                        {% if cid  %}
+                            已通过审核
+                        {% else %}
+                            {% if nid %}
+                                 {% if nmid == vo.uid %}
+                                    {{ core_manage.submit({
+                                     class: 'btn btn-sm btn-danger',
+                                     title: '取消申请',
+                                     attr: 'data-add="name"',
+                                     data: '{ cate_pushs: \'' ~ 'nexus' ~ ' \', id: \'' ~ nid ~ ' \', mid: \'' ~ mid ~ ' \',aid: \'' ~ 0 ~ ' \'}'
+                                    }) }}
+                                 {% else %}
+                                    {{ core_manage.submit({
+                                     class: 'btn btn-sm ',
+                                     title: '确定申请',
+                                     attr: 'data-add="name"',
+                                     data: '{ cate_pushs: \'' ~ 'nexus' ~ ' \', id: \'' ~ nid ~ ' \', mid: \'' ~ mid ~ ' \',aid: \'' ~ vo.uid ~ ' \'}'
+                                    }) }}
+                                 {% endif %}   
+                            {% else %}
+                                {{ core_manage.submit({
+                                class: 'btn btn-sm ',
+                                title: '确定申请',
+                                attr: 'data-add="name"',
+                                data: '{ cate_pushs: \'' ~ 'nexus' ~ ' \', mid: \'' ~ mid ~ ' \',aid: \'' ~ vo.uid ~ ' \'}'
+                               }) }}
+                            {% endif %}
+                        {% endif %}
+                        </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page( nex )}}
+</section>
+
+ 
+{% endblock %}
+
+{% block promptUl %}
+申请之后, 等待经纪公司审核通过
+{% endblock %}
+
+
+
+

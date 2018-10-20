@@ -1,0 +1,24 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+
+{% block title %}
+    开发商详情
+{% endblock title %}
+
+{% block header_title %}
+{{core_mobile_global.title({title: '开发商详情'})}}
+{% endblock header_title %}
+
+{% block container %}
+	<div data-block="{
+	    bParams: true,
+	    ajax:{
+	        url: '{{ ('member/k_detail')|U }}',
+	        data: {
+	            id: '{{ app.request.get('id')|default('') }}',
+	            tpl: 'Member:kdetailblock',
+	            d_models: 'sale'
+	        }
+	    }
+	}"></div>
+{% endblock container %}

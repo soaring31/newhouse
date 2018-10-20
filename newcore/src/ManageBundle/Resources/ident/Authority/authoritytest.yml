@@ -1,0 +1,25 @@
+info:
+    tableName: authtest
+    subTableName: ''
+    aliasName: p
+    listGrid:
+        - 'ids:|w10'
+        - 'id:ID|txtcenter w30'
+        - 'name[EDITSPAN]:栏目名称|txtleft  w200'
+        - 'sort[EDITSPAN]:排序|txtleft'
+        - 'id:操作|txtcenter w100:[EDIT]修改|btn,[DELETE]删除|btn'
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 2
+    pageIndex: 1
+    pageSize: 8
+    order: ''
+    orderBy: asc
+    searchFun: EXISTS
+    dataModel: 0
+    autoQuery: '0'
+    alias: {  }
+    query:
+        name:
+            orX: 'name,like,%aa%|name,like,%bb%|name,test'
+    query1: {  }

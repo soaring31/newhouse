@@ -1,0 +1,185 @@
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% extends detail|default('') ? 'HouseBundle:Topic:group.html.twig' : 'CoreBundle:Dispatch:errorcontent.html.twig' %}
+{# 说明
+ * detail: 当前数据
+ * block_loupan: 当前看房列表
+ * detail_showingsnews: 报名列表
+#}
+{% block title %}{{detail.name|default('看房团详情')}}{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{ detail.keywords|default('') }}" />
+<meta name="description" content="{{ detail.abstract|default('') }}" />
+{% endblock key_des%}
+
+{% set block_loupan = ('house.topic_arc')|getBlock({ename: 'loupan'},{checked: 1, aid: cident.detail.data[0].id,  pageSize: 10, order: 'id', orderBy: 'desc'}) %}
+
+{% set detail_showingsnews = ('house.showingsnews')|getAll({topic: detail.id|default(''), checked: 1, findType:1,order: 'create_time',orderBy: 'desc'}) %}
+
+{% set tpl_now = 'now'|date('U') %}
+
+{# 当前位置 #}
+{% block current_topic %}
+    {% set category = detail.category|default('')|getCategoryById() %}
+    <a href="{{('topic/group')|U({id: detail.category|default('')})}}">
+        {{category.name|default('')}}
+    </a>
+    <span>&gt;</span>
+    <span>{{detail.name|default('')}}</span>
+{% endblock current_topic %}
+
+{# 广告 #}
+{% block top_ad %}
+    {#{{parent()}}
+    {{ core_global.ads({
+        data : {
+            0: {
+                name: '' ~ detail.name|default('') ~ '',
+                thumb: '' ~ detail.banner|default('') ~ '',
+                ad: true
+            }
+        },
+        height: 'auto',
+        class_wrap: 'container mt20'
+    }) }}#}
+{% endblock top_ad %}
+
+{% block group_left %}
+    {{house_global.topic_group({
+        list: cident.detail
+    })}}
+    <h2 class="t-title">线路简介</h2>
+    <div class="p10 bd-gray bdr5">
+        {{detail.content|default('暂无介绍')|raw}}
+    </div>
+    <!-- 行程 -->
+    {% if block_loupan.data is defined and block_loupan.pageCount|default(0) != 0 %}
+        <h2 class="t-title">当日看房行程</h2>
+        <div class="topic-group-list">
+            <ul>
+                {% for item in block_loupan.data %}
+                    <li class="list-item clearfix">
+                        <div class="list-item-circle"></div>
+                        <div class="pic fl mleft0">
+                            <a href="{{('houses/detail')|U({id:item.fromid|default('')})}}" target="_blank">
+                                {{- core_global.lazy_img({
+                                    src: item.thumb|default(''),
+                                    alt: item.name|default(''),
+                                    type: 2,
+                                    width:180 ,
+                                    height: 135
+                                }) -}}
+                                {% if item.top|default('') == 159 %}
+                                    {# 置顶 #}
+                                    {{core_global.formData({value: item.top|default(''), tpl: '<i>%value%</i>'})}}
+                                {% endif %}
+                            </a>
+                        </div>
+                        <div class="info fl">
+                            <h3>
+                                <a href="{{('houses/detail')|U({id:item.fromid|default('')})}}" target="_blank" class="tit">{{item.name|default('')}}
+                                {% if item.cate_status != '' %}
+                                    {# 销售状态 #}
+                                    <span class="tag on-sale-{{item.cate_status}}">
+                                        {{ core_global.formData({value: item.cate_status|default('')}) }}
+                                    </span>
+                                {% endif %}
+                                {{house_global.if_dj({value: item.dj|default(''), tpl: '<em class="arial">%value%</em>%danwei%'})}}
+                               </a>
+                            </h3>
+                            <p class="add">
+                                {{core_global.address({data: item|default(''), address: item.address|default('') })}}
+                            </p>
+                            <p class="type"> <em>主力户型:</em>
+                                {{- house_global.huxing({aid: item.fromid|default(''),zlhx: 0, tpl: "<a class='mr10' href='%url%' target='_blank'>%shi%%ting%%mj%m&sup2;</a>"}) -}}
+                            </p>
+                            <p class="tags pt5">
+                                {{house_global.lptag({value: item, tpl: '<span>%value%</span>', con: 'cate_type,zxcd,tslp'})}}
+                            </p>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+{% endblock group_left %}
+
+{% block group_right %}
+    {% if detail.show_time.date|date('U') > tpl_now|default('') %}
+        {# 报名 #}
+        {{house_global.modal_layout({
+            type: 'load',
+            ajax: "
+                ajax: {
+                    data : {
+                        formflag: 'view_showingsnews',
+                        formvalidstyle: 'single',
+                        topic: '" ~ detail.id|default("") ~ "',
+                        type: 'kft',
+                        formcls: 'common-form-control',
+                        models: 'topic',
+                        fields: true
+                    }
+                }"
+        })}}
+        <div class="blank10"></div>
+    {% endif %}
+    {{parent()}}
+    {# 报名 #}
+    {# 报名列表 #}
+    <div class="r-table">
+        <h2>看房团报名表</h2>
+        <table class="bd-gray bdr5">
+            <tbody>
+                <tr>
+                    <th>报名时间</th>
+                    <th>联系方式</th>
+                    <th>姓名称呼</th>
+                </tr>
+                {% if detail_showingsnews.data is defined %}
+                    {% for item in detail_showingsnews.data %}
+                         <tr class="list">
+                            <td>{{item.create_time|default('')|date('m-d')}}</td>
+                            <td>{{core_global.phone({value: item.phone|default('')})}}</td>
+                            <td class="red">{{item.username|default('')}}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {# 报名列表 #}
+{% endblock group_right %}
+
+{% block group_extend %}
+    <div class="blank1"></div>
+    {# 地图 #}
+    {% if block_loupan.data[0]|default('') %}
+        <div class="trip">
+            {{
+                house_global.map({
+                    detail: block_loupan.data[0],
+                    data: block_loupan,
+                    round: 0,
+                    panorama: 0
+                })
+            }}
+        </div>
+    {% endif %}
+    {# 地图 #}
+    {# 声明 #}
+    <div class="foot-text">
+        <div class="f-text bd-gray bdr5">
+            <h3>看房团须知</h3>
+            <p>{{core_global.mconfig({name: 'kftnotice', ename: 'mvariables_user'})}}</p>
+        </div>
+       {# <div class="f-t-2 bd-gray bdr5">
+            <p>
+                <i class="img-kft-sm"></i>
+                <span>免费声明 :</span>{{core_global.mconfig({name: 'housesmianze', ename: 'mvariables_user'})}}
+            </p>
+        </div>#}
+    </div>
+    {# 声明 #}
+{% endblock group_extend %}

@@ -1,0 +1,61 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+ * ajax调用：我的提取佣金列表
+#}
+{% set user_info_yongjin = user_data.userinfo.yongjin|default('') %}
+ {% if ident.info is defined %}
+    {% set list = ident.info %}
+    {% set tpl_now = 'now'|date('U') %}
+{% endif %}   
+{% block result %}
+    {% spaceless %}        
+        {% if list.data is defined and list.pageCount|default(0) != 0 %}
+            {% for item in list.data %}
+                <li  {% if loop.last %}data-page="{
+                    pageIndex: {{list.pageIndex}},
+                    pageCount: {{list.pageCount}},
+                    pageSize: {{list.pageSize}}
+                 }"{% endif %}>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title p-gray">
+                                    提取人姓名：{{item.name|default('')}}
+                                </div>
+                                <div class="item-after">
+                                 金额：{{core_global.if_dw({value: item.amount, danwei: '元', class: "p-red"})}}
+                                </div>
+                            </div>
+                            <div class="item-subtitle item-subtitle-ex">
+                               状态：
+                                {% if item.pay_status == 3 %}
+                                    失效
+                                {% else %}
+                                    {{ core_global.formField({value: item.pay_status, form: 'view_wages', field: 'pay_status'}) }}
+                                {% endif %}
+                            </div>
+                            <div class="item-subtitle item-subtitle-ex">
+                                申请时间：{{item.create_time|default('')|date('Y-m-d')}}
+                            </div>
+                            <div class="item-subtitle item-subtitle-ex">
+                                联系电话：{{item.tel|default('')}}
+                            </div>
+                            <div class="item-subtitle item-subtitle-ex" >
+                                <span class="ckeck-talk">审核说明：</span>
+                                <p class="check-more" id='{{ 'chmore' ~ loop.index }}'>{{item.remarks|default('-')|raw}}</p>
+                               {{- core_mobile_global.more_con({id: 'chmore' ~ loop.index, class: 'chmore'})-}}
+                            </div>
+                            <div class="row mt5">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        {% else %}
+            <li class="mobile-list-none">暂无更多数据</li>
+        {% endif %}
+    {% endspaceless %}
+    <script type="text/javascript">
+        seajs.use(['formattime'])
+    </script>
+{% endblock result %}

@@ -1,0 +1,24 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+
+{% set _action = '/' %}
+
+{% block title %}
+    城市切换
+{% endblock title %}
+
+{% block header_title %}
+	{{core_mobile_global.title({title: '切换城市'})}}
+{% endblock header_title %}
+
+{% block container %}
+	<div data-block="{
+        bParams: true,
+        ajax:{
+            url: '{{ ('areachange/index')|U }}',
+            data: {
+                tpl: 'Areachange:indexblock'
+            }
+        }
+    }"></div>
+{% endblock container %}

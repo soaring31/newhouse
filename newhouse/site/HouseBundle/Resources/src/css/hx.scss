@@ -1,0 +1,112 @@
+﻿/*!
+* @name lp.css
+* @author xy
+* @date 2016-8-5
+*/
+
+@import 'static/ats';
+// 工具类 每个文件都要导入
+@import 'mixins/button'; // 按钮
+@import 'mixins/triangle'; // 三角形样式
+
+@import 'lp';
+// 楼盘公用样式
+@import 'lp-list';
+// 楼盘公用列表样式
+
+@import 'font-share';
+// 分享图标
+
+@import 'lp-hxt';
+// 户型图详情页
+
+.picmidmid {
+	ul {
+		li {
+			width: 112px;
+		}
+	}
+}
+
+/* compared */
+.compared {
+	background: #fdfdfd;
+	display: none;
+	.c-item {
+		border-top: 1px dashed #ddd;
+		font-size: 12px;
+		line-height: 32px;
+		height: 32px;
+		padding-right: 13px;
+		overflow: hidden;
+		&:last-child {
+			border-bottom: none;
+		}
+		div {
+			display: inline-block;
+			float: left;
+		}
+		.c-tit {
+			text-indent: 7px;
+			width: 200px;
+			i {
+				color: #bbb;
+			}
+		}
+		.c-mj,
+		.c-cx {
+			width: 93px;
+		}
+		.c-more {
+			a{font-size: 14px;
+				margin-left: 5px;
+				&:hover {
+					text-decoration: none;
+				}
+			}
+		}
+		.c-price {
+			float: right !important;
+			text-align: right;
+			width: 120px;
+			span {
+				color: $major-color;
+				font-size: 16px;
+				margin-right: 2px;
+			}
+		}
+	}
+}
+
+.list-item {
+	.info {
+		width: 510px;
+	}
+	.other {
+		width: 200px;
+		margin-right: 10px;
+	}
+	.mleft0{
+		margin-left: 0;
+	}
+}
+
+/* share */
+.share {
+	.bdsharebuttonbox .ico-word {
+		background: none;
+		color: #999;
+		i {
+			font-size: 16px;
+		}
+	}
+}
+// 图集
+.focus {
+	height: 600px;
+	width: 850px;
+}
+/*添加样式*/
+.lp-tj-item .tag a {
+	margin-right: 2px;
+}

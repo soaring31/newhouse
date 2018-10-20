@@ -1,0 +1,28 @@
+info:
+    tableName: entrust
+    subTableName: ''
+    aliasName: p
+    listGrid: {  }
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 15
+    groupBy: ''
+    order: id
+    orderBy: desc
+    searchFun: EXISTS
+    dataModel: 0
+    autoQuery: '1'
+    alias: {  }
+    query:
+        name:
+            orX: 'name,like,%[name]%|xingming,like,%[name]%|fdtel,like,%[name]%'
+        models:
+            eq: '[models]'
+        entrust:
+            eq: '[entrust]'
+        fid:
+            eq: '<@getuid>'
+    query1: {  }
+    attribute: '0'

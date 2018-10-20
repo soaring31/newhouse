@@ -1,0 +1,32 @@
+<script id="compBox" type="text/html">
+<div id="comp_box">
+    <form action="" method="get" target="_blank">
+        <div id="comp_top">
+            <a class="close font-icons-28" href="javascript:;" data-role="hidden"></a>
+            <div class="top_l">[<b id="comp_num">0</b>/5]<%= data.otit%>对比</div>
+        </div>
+        <ul id="comp_items"></ul>
+        <div id="comp_boot">
+            <input type="submit" class="prosubmit" value="{{tpl_contrast_title|default('楼盘对比')}}">
+            <a class="clear" data-role="clear-all" href="javascript:;">
+                <i class="font-icons-29 fz16 mr5"></i>清空
+            </a>
+            <input id="subid_obj" name="subcatid" type="hidden" value="4">
+        </div>
+    </form>
+</div>
+</script>
+
+<script id="compItem" type="text/html">
+<li id="<%= data.id%>">
+    <a class="icon font-icons-28" data-role="clear-one" data-id="<%= data.pro_id%>" href="javascript:;"></a>
+    <p class="title">
+        <a href="<%= data.pro_link%>" title="<%= data.pro_title %>" target="_blank"><%= data.pro_title %></a>
+    </p>
+      <input type="hidden" name="pro_id[]" value="<%= data.pro_id%>">
+</li>
+</script>
+
+<script id="btnShow" type="text/html">
+    <a class="btnshow" data-role="show"><i class="font-icons-35"></i></a>
+</script>

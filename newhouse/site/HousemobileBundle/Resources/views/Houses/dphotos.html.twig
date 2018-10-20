@@ -1,0 +1,80 @@
+{# {% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:xiangce_list.html.twig' : 'HousemobileBundle:Houses:dnews.html.twig' %} #}
+
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default('Houses:detail') ~ '.html.twig' %}
+
+{% block h_title %}
+图片相册,户型图,样板间图,装修效果图,实景图
+{% endblock h_title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}图片相册,{{detail.name|default('')}}户型图,{{detail.name|default('')}}样板间图,{{detail.name|default('')}}装修效果图" />
+<meta name="description" content="{{detail.name|default('')}}图片相册,{{detail.name|default('')}}小区网为您提供{{detail.name|default('')}}图片，包含户型图、样板间图、装修效果图、交通图、实景图等{{detail.name|default('')}}图片相册，为您买房、挑选户型、装修提供参考。"/>
+{% endblock key_des %}
+{# 大图还是小图 #}
+{% set url_big = app.request.get('big', 0) %}
+
+{% set header_class = url_big ? 'bar-op' : '' %}
+
+{% block d_header %}
+    {% if not url_big %}
+        {{parent()}}
+    {% endif %}
+{% endblock d_header %}
+
+{# 头部 #}
+{% block header_right %}
+    {% if url_big %}
+        {{ core_mobile_global.bar_nav_btn({
+            title: '缩略图',
+            icon: 'font-f-79',
+            class: 'back'
+        }) }}
+    {% else %}
+        {{parent()}}
+    {% endif %}
+{% endblock header_right %}
+
+{# 导航 #}
+{% block secondary %}
+    {% if not url_big %}
+        {% set nav_active = 4 %}
+        {{ parent() }}
+    {% endif %}
+{% endblock secondary %}
+
+{% block container %}
+    {% if url_big %}
+        <div data-block="{
+            bParams: true,
+            ajax:{
+                url: '{{ ('houses/dphotos')|U }}',
+                data: {
+                    id: '{{ detail.id|default('') }}',
+                    tpl: 'Common:photos',
+                    big: '{{url_big}}'
+                }
+            }
+        }"></div>
+    {% else %}
+        {{core_mobile_global.list_scroll({
+            content_cls: 'lp-fixed-content',
+            url: ('houses/dphotos')|U({
+                tpl: 'Clist:xiangce_list',
+                id: detail.id|default(''),
+            }),
+            footer: 0
+        })}}
+        {# 左侧分类 #}
+        <div data-block="{
+            bParams: true,
+            ajax:{
+                url: '{{ ('houses/dphotos')|U }}',
+                data: {
+                    id: '{{ detail.id|default('') }}',
+                    tpl: 'Clist:photo_con'
+                }
+            }
+        }"></div>
+    {% endif %}
+{% endblock container %}

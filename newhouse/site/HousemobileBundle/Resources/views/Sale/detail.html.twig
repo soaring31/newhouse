@@ -1,0 +1,119 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+
+{# 说明 
+ * tpl_tj: 调用推荐区块
+ * detail: 当前数据
+#}
+{% set detail = ident.detail.data[0]|default({}) %}
+
+{% block title %}
+{{detail.name|default('')}}，{{detail.address|default('')}}二手房{{house_global.huxing({data: detail|default(''), tpl: '%shi%%ting%%wei%%chu%'})}}
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" Content="{{cur_area_data|default('')}}二手房出售,{{detail.lpmc|default('')}}二手房,{{- house_global.huxing({data: detail|default(''), tpl: '%shi%%ting%%wei%%chu%'}) -}} 二手房"/>
+<meta name="description" content="{{cur_area_data|default('')}}二手房-{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}提供{{cur_area_data|default('')}}{{detail.lpmc|default('')}}二手房出售信息，{{detail.address|default('')}}，{{detail.lpmc|default('')}}二手房出售，{{- house_global.huxing({data: detail|default(''), tpl: '%shi%%ting%%wei%%chu%'}) -}}。找更多{{cur_area_data|default('')}}{{detail.lpmc|default('')}}二手房信息就到{{cur_area_data|default('')}}二手房-{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}。"/>
+{% endblock key_des %}
+
+{% block header_right %}
+{{ core_mobile_global.bar_nav_btn({
+    title: '分享',
+    icon: 'font-f-29',
+    class: 'share-actions',
+    attr: {
+        'data-text': detail.name|default(''),
+        'data-abstract': detail.abstract|default(''),
+        'data-url': ('sale/detail')|U({id: detail.id|default('')}),
+        'data-pic': core_global.img_url({src: detail.thumb|default('')}),
+    }
+}) }}
+{% endblock header_right %}
+
+{% block popup %}
+{# {% include 'HousemobileBundle:Sale:mapblock.html.twig' ignore missing %}
+{% include 'HousemobileBundle:Sale:yixiangblock.html.twig' ignore missing with {tpl_id: detail.id|default('')} %} #}
+{# 预约 #}
+
+{{ housemobile_global.popup({
+    name: 'popup-yy',
+    title: '预约',
+    content: {
+        bParams: true,
+        ajax:{
+            url: ('sale/detail')|U,
+            data: {
+                id: detail.id|default(''),
+                formflag: 'view_sale_intent',
+                tpl: 'Common:forms',
+                submit_id: 'yuyue',
+                models: 'sale',
+                cate_pushs: 'syixiang'
+            }
+        }
+    }
+}) }} 
+
+{# 举报 #}
+{{ housemobile_global.popup({
+    name: 'popup-jbao',
+    title: '举报',
+    content: {
+        bParams: true,
+        ajax:{
+            url: ('sale/detail')|U,
+            data: {
+                id: detail.id|default(''),
+                formflag: 'view_sale_report',
+                tpl: 'Common:forms',
+                submit_id: 'jubao',
+                models: 'sale',
+                cate_pushs: 'sreport'
+            }
+        }
+    }
+}) }} 
+
+{# 地图弹窗 #}
+
+{{ housemobile_global.popup({
+    name: 'popup-map',
+    title: '二手地图',
+    content: {
+        bParams: true,
+        ajax: {
+            url: ('sale/detail')|U,
+            data: {
+                id: detail.id|default(''),
+                tpl: 'Common:mapblock'
+            }
+        }
+    }
+}) }} 
+{% endblock popup %}
+
+{% block header_title %}
+{{core_mobile_global.title({title: '二手房'})}}
+{% endblock header_title %}
+
+{% block container %}
+    {# 主体内容 #}
+    <div data-block="{
+        bParams: true,
+        ajax:{
+            url: '{{ ('sale/detail')|U }}',
+            data: {
+                id: '{{ detail.id|default('') }}',
+                tpl: 'Sale:detailblock',
+                d_models: 'sale'
+            }
+        }
+    }"></div>
+    {# 微信分享只能放当前页 #}
+    {{ housemobile_global.weixin_share({
+        text    : detail.name|default,
+        abstract: detail.abstract|default,
+        url     : ('sale/detail')|U({id: detail.id|default}, true),
+        thumb   : detail.thumb|default,
+    }) }}
+{% endblock container %}

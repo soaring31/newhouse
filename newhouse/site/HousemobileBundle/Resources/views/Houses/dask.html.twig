@@ -1,0 +1,34 @@
+{# {% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:asklist.html.twig' : 'HousemobileBundle:Houses:dnews.html.twig' %} #}
+
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default('Houses:detail') ~ '.html.twig' %}
+
+{% block title %}
+{{detail.name|default('')}}-
+{% block h_title %}
+楼盘问答
+{% endblock h_title %}
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}问答, {{detail.name|default('')}}问题, {{cur_area_data|default('')}}{{detail.name|default('')}}家居问题, {{cur_area_data|default('')}}{{detail.name|default('')}}装修问题,{{detail.name|default('')}}问答" />
+<meta name="description" content="{{detail.name|default('')}}相关问答，{{detail.name|default('')}}装修，{{cur_area_data|default('')}}{{detail.name|default('')}}专业问题解答。这里有专业的房产经纪人设计人员为您解答{{detail.name|default('')}}相关的房产,家居,装修的问题。无数网友在这里交流{{cur_area_data|default('')}}{{detail.name|default('')}}的问题，互帮互助。"/>
+{% endblock key_des %}
+
+{# 导航 #}
+{% block secondary %}
+    {% set nav_active = 7 %}
+    {{ parent() }}
+{% endblock secondary %}
+
+{% block container %}
+{% set list_url = ('houses/dask')|U({
+    tpl: 'Clist:asklist',
+    id: detail.id|default(''),
+}) %}
+
+{{core_mobile_global.list_scroll({
+    url: list_url|default('')
+})}}
+{% endblock container %}
+

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title>xf</title>    
+    <style type="text/css">
+
+    .img-xf-1,
+    .img-xf-2,
+    .img-xf-3,
+    .img-xf-4,
+    .img-xf-5,
+    .img-xf-6,
+    .img-xf-7,
+    .img-xf-8,
+    .img-xf-9,
+    .img-xf-10,
+    .img-xf-11,
+    .img-xf-12,
+    .img-xf-13,
+    .img-xf-14,
+    .img-xf-15,
+    .img-xf-16 {
+        display: inline-block;
+        *zoom: 1;
+        *display: inline;
+        background-image: url(xf.png);
+    }
+
+    .img-xf-1 {
+        width: 300px;
+        height: 63px;
+        background-position: 0 -73px;
+    }
+
+    .img-xf-2 {
+        width: 300px;
+        height: 63px;
+        background-position: -310px 0;
+    }
+
+    .img-xf-3 {
+        width: 300px;
+        height: 63px;
+        background-position: 0 0;
+    }
+
+    .img-xf-4 {
+        width: 300px;
+        height: 63px;
+        background-position: 0 -219px;
+    }
+
+    .img-xf-5 {
+        width: 300px;
+        height: 63px;
+        background-position: 0 -146px;
+    }
+
+    .img-xf-6 {
+        width: 58px;
+        height: 58px;
+        background-position: -310px -73px;
+    }
+
+    .img-xf-7 {
+        width: 58px;
+        height: 58px;
+        background-position: -378px -73px;
+    }
+
+    .img-xf-8 {
+        width: 53px;
+        height: 53px;
+        background-position: -310px -204px;
+    }
+
+    .img-xf-9 {
+        width: 53px;
+        height: 53px;
+        background-position: -373px -204px;
+    }
+
+    .img-xf-10 {
+        width: 53px;
+        height: 53px;
+        background-position: -509px -73px;
+    }
+
+    .img-xf-11 {
+        width: 53px;
+        height: 53px;
+        background-position: -446px -73px;
+    }
+
+    .img-xf-12 {
+        width: 53px;
+        height: 53px;
+        background-position: -310px -141px;
+    }
+
+    .img-xf-13 {
+        width: 53px;
+        height: 53px;
+        background-position: -499px -141px;
+    }
+
+    .img-xf-14 {
+        width: 53px;
+        height: 53px;
+        background-position: -436px -141px;
+    }
+
+    .img-xf-15 {
+        width: 53px;
+        height: 53px;
+        background-position: -373px -141px;
+    }
+
+    .img-xf-16 {
+        width: 41px;
+        height: 42px;
+        background-position: -562px -141px;
+    }
+
+
+    * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    .container {
+        font-family: microsoft yahei;
+        width: 1200px;
+        margin: 20px auto;
+    }
+    li {
+        float: left;
+        padding: 5px;
+        margin: 5px;
+        border: 1px solid #eee;
+        text-align: center;
+        font-family: arial;
+        color: #fff;
+        height: 121px;
+        width: 310px;
+        min-width: 80px;
+        line-height: 1.5;
+        background-color: #272822;
+        position: relative;
+    }
+    .class {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 48px;
+        width: 100%;
+        cursor: pointer;
+    }
+    pre {
+        margin: 15px 0;
+        color: #FD8520;
+        font-family: Consolas;
+        font-size: 14px;
+        padding: 15px;
+        background-color: #272822;
+    }
+    .bg i {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        margin-left: 10px;
+        cursor: pointer;
+        float: right;
+        border: 2px solid #fff;
+    }
+
+    .bg i.act {
+        border-color: #f00;
+    }
+
+    
+    
+    .bg i:nth-child(1) {
+        background-color: #22D5BB;
+    }
+    
+    .bg i:nth-child(2) {
+        background-color: #E1F4D8;
+    }
+    
+    .bg i:nth-child(3) {
+        background-color: #8B9D37;
+    }
+    
+    .bg i:nth-child(4) {
+        background-color: #FE842E;
+    }
+    
+    .bg i:nth-child(5) {
+        background-color: #272822;
+    }
+        
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <h2>调用方式</h2>
+
+        <h3>css</h3>
+<pre class="text">
+@import 'img-xf'; //导入css 标识-文件名
+@include img-xf($img-xf); //调用全部样式， 标识-文件名($标识-文件名);
+</pre>
+        <h3>html</h3>
+<pre>
+&lt;i class=&quot;img-demo-home&quot;&gt;&lt;/i&gt;; //class 标识+合成后文件名+单个文件名
+</pre>
+
+        <h3><span class="fr bg"><i></i><i></i><i></i><i></i><i class="act"></i></span>详细代码</h3>
+        点击下面文字直接复制到剪切板
+    </div>
+</div>
+<ul>
+
+
+    <li>
+        <i class="img-xf-1"></i>
+        <div class="class">img-xf-1</div>
+    </li>
+
+    <li>
+        <i class="img-xf-2"></i>
+        <div class="class">img-xf-2</div>
+    </li>
+
+    <li>
+        <i class="img-xf-3"></i>
+        <div class="class">img-xf-3</div>
+    </li>
+
+    <li>
+        <i class="img-xf-4"></i>
+        <div class="class">img-xf-4</div>
+    </li>
+
+    <li>
+        <i class="img-xf-5"></i>
+        <div class="class">img-xf-5</div>
+    </li>
+
+    <li>
+        <i class="img-xf-6"></i>
+        <div class="class">img-xf-6</div>
+    </li>
+
+    <li>
+        <i class="img-xf-7"></i>
+        <div class="class">img-xf-7</div>
+    </li>
+
+    <li>
+        <i class="img-xf-8"></i>
+        <div class="class">img-xf-8</div>
+    </li>
+
+    <li>
+        <i class="img-xf-9"></i>
+        <div class="class">img-xf-9</div>
+    </li>
+
+    <li>
+        <i class="img-xf-10"></i>
+        <div class="class">img-xf-10</div>
+    </li>
+
+    <li>
+        <i class="img-xf-11"></i>
+        <div class="class">img-xf-11</div>
+    </li>
+
+    <li>
+        <i class="img-xf-12"></i>
+        <div class="class">img-xf-12</div>
+    </li>
+
+    <li>
+        <i class="img-xf-13"></i>
+        <div class="class">img-xf-13</div>
+    </li>
+
+    <li>
+        <i class="img-xf-14"></i>
+        <div class="class">img-xf-14</div>
+    </li>
+
+    <li>
+        <i class="img-xf-15"></i>
+        <div class="class">img-xf-15</div>
+    </li>
+
+    <li>
+        <i class="img-xf-16"></i>
+        <div class="class">img-xf-16</div>
+    </li>
+
+</ul>
+<script type="text/javascript">
+    var BASE_URL = window.location.href.replace('./images/xf.html'.replace('./', ''), '') + '/';
+</script>
+<script type="text/javascript">document.write('<script src="' + BASE_URL + '/js/seajs.js"><\/script>');</script>
+
+<script type="text/javascript">
+if (BASE_URL.indexOf('http') == 0) {
+    seajs.use(['clipboard'], function() {
+        $(function() {
+            $('.index').click(function(event) {
+                location.href = BASE_URL;
+            });
+            var $icons = $('.class, .text');
+            $('body').on('copy', '.class, .text', function(e) {
+                    $icons.removeAttr('style');
+                    e.clipboardData.clearData();
+                    e.clipboardData.setData("text/plain", $(this).css({color:'#f00'}).text());
+                    e.preventDefault();
+                })
+                .on('click', '.bg i', function() {
+                    $(this).addClass('act').siblings('i').removeClass('act')
+                    $('li').css({
+                        backgroundColor: $(this).css('background-color'),
+                    })
+                })
+        });
+    })
+};
+</script>
+</body>
+</html>

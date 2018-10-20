@@ -1,0 +1,637 @@
+{% extends 'HouseBundle::base.html.twig' %}
+
+{% block top_search %}{% endblock top_search %}
+{% block title %}开放平台{% endblock title %}
+{# 样式 #}
+{% block css %}
+    {{ core_global.linkcss('static/' ~ bundlepath ~ '/css/lp-detail.css') }}
+    {{ core_global.linkcss('static/' ~ bundlepath ~ '/css/newhouse-details/public.css') }}
+    {{ core_global.linkcss('static/' ~ bundlepath ~ '/css/newhouse-details/newhouse-common.css') }}
+    {{ core_global.linkcss('static/' ~ bundlepath ~ '/css/newhouse-details/newhouseDetail.css') }}
+{% endblock css %}
+{% block header %}
+{% endblock header %}
+
+
+{% block body %}
+    {#详情页公共头部#}
+    {% block logo_header %}{% endblock logo_header %}
+    {% block container %}
+        <div class="introduces">
+            {% include default_themes ~ '::header.html.twig' %}
+            <div class="introduce_box">
+                <p class="box_title">诸葛找房开放平台</p>
+                <p class="box_engine">房地产首个智能搜索引擎，向企业、机构、网站开放全网房源、房价数据</p>
+                <span class="box_use select_register">开始使用</span>
+            </div>
+        </div>
+        <div class="container">
+            {% block container_houses %}
+
+                <!--我们的优势-->
+                <div class="contents substance">
+                    <span class="blank"></span>
+                    <div class="content_advantage">
+                        <div class="advantage_box" style="margin: 0 auto 0">
+                            <p class="top">我们的优势</p>
+                            <p class="our">OUR ADVANTAGES</p>
+                            <span class="line"></span>
+                        </div>
+                        <div class="triangle"></div>
+                        <ul class="resources">
+                            <li class="left">
+                                <span class="left_pic"></span>
+                                <p class="left_title">房源搜索</p>
+                                <p class="left_content">每日搜索800家网站，提供24城<br>8,931,237套房源数据</p>
+                            </li>
+                            <li class="middle">
+                                <span class="middle_pic"></span>
+                                <p class="middle_title">房源清洗</p>
+                                <p class="middle_content">分钟级别过滤重复房源和虚假房源，<br>每天超过28亿次数据处理</p>
+                            </li>
+                            <li class="right">
+                                <span class="right_pic"></span>
+                                <p class="right_title">房源重组</p>
+                                <p class="right_content">聚合每一套房子的不同渠<br>道信息及报价</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!--开放能力-->
+                <div class="content_ability">
+                    <div class="advantage_box">
+                        <p class="top">开放能力</p>
+                        <p class="our">ABILITY</p>
+                        <span class="line"></span>
+                    </div>
+                    <div class="triangle"></div>
+                    <div class="ability_box">
+                        <div class="ability_data">
+                            <div class="data_house">
+                                <div class="resource_bac">
+                                    <span class="resource_pic"></span>
+                                    <p class="price_title">房源数据</p>
+                                    <span class="line"></span>
+                                    <p class="resource_content">挂牌房源、新上房源、房价变动<br>通过API及多种方式提供</p>
+                                    <span class="experience select_register">立即体验</span>
+                                </div>
+                            </div>
+                            <div class="data_price">
+                                <div class="resource_bac">
+                                    <span class="resource_pic"></span>
+                                    <p class="price_title">房价数据</p>
+                                    <span class="line"></span>
+                                    <p class="resource_content">小区、商圈、城区房价及走势<br>通过API及多种方式提供</p>
+                                    <span class="experience select_register">立即体验</span>
+                                </div>
+                            </div>
+                            <div class="data_buy">
+                                <div class="resource_bac">
+                                    <span class="resource_pic"></span>
+                                    <p class="price_title">购房者行为数据</p>
+                                    <span class="line"></span>
+                                    <p class="resource_content">最受关注楼盘、商圈、区县；用户<br>浏览特性</p>
+                                    <span class="experience select_register">立即体验</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--客户可以干什么-->
+                <div class="content_do">
+                    <div class="advantage_box">
+                        <p class="top">客户可以干什么</p>
+                        <p class="our">WHAT GOOD</p>
+                        <span class="line"></span>
+                    </div>
+                    <div class="triangle"></div>
+                    <div class="do_bac">
+                        <div class="bac_one">
+                            <span class="one_pic"></span>
+                            <span class="one_title">网站平台</span>
+                            <span class="one_content">快速创建房产频道、实现<br>流量变现</span>
+                            <span class="experience select_register">立即体验</span>
+                        </div>
+                        <div class="bac_two">
+                            <span class="one_pic"></span>
+                            <span class="one_title">企业、机构</span>
+                            <span class="one_content">快速获取数据，用于研究<br>分析及发布报告</span>
+                            <span class="experience select_register">立即体验</span>
+                        </div>
+                        <div class="bac_thr">
+                            <span class="one_pic"></span>
+                            <span class="one_title">房产中介</span>
+                            <span class="one_content">各公司在区域、楼盘的在<br>售房源比例以及趋势</span>
+                            <span class="experience select_register">立即体验</span>
+                        </div>
+                    </div>
+                </div>
+                <!--数据样式合作案例-->
+                <div style="display: none" id="map"></div>
+                <div class="content_type">
+                    <div class="advantage_box">
+                        <p class="top">数据样式合作案例</p>
+                        <p class="our">COOPERATION CASE</p>
+                        <span class="line"></span>
+                    </div>
+                    <div class="triangle"></div>
+                    <div class="advantage_content">
+                        <ul class="navigation">
+                            <li class="tabBg">企业学术研究类</li>
+                            <li>经纪公司</li>
+                            <li>网站类型</li>
+                        </ul>
+                        <div class="box_change research">
+                            <ul class="research_box">
+                                <li class="one">
+                                    <div class="one_img"></div>
+                                    <span class="content_t">涨降价房源数据参数</span>
+                                    <span class="content_b">监测城市涨降价房源量、监测挂牌房源价格变化、分析挂牌价变化趋势</span>
+                                </li>
+                                <li class="two">
+                                    <div class="two_img"></div>
+                                    <span class="content_t">挂牌房源数据参数</span>
+                                    <span class="content_b">监测城市挂牌房源量、监测城市挂牌房源价格、分析挂牌房源变化趋势</span>
+                                </li>
+                                <li class="three">
+                                    <div class="three_img"></div>
+                                    <span class="content_t">网站用户浏览数据参数</span>
+                                    <span class="content_b">浏览房源用户特征、用户浏览习惯分析、用户浏览时长统计</span>
+                                </li>
+                                <li class="four">
+                                    <div class="four_img"></div>
+                                    <span class="content_t">数据专题报告</span>
+                                    <span class="content_b">盘点数据变化、总结数据特征、梳理热门商圈价格数据</span>
+                                </li>
+                                <li class="five">
+                                    <div class="five_img"></div>
+                                    <span class="content_t">地块分析报告</span>
+                                    <span class="content_b">监测地块拍卖信息、地块发展分析、地块周边楼价分析</span>
+                                </li>
+                                <li class="six">
+                                    <div class="six_img"></div>
+                                    <span class="content_t">人群行为分析报告</span>
+                                    <span class="content_b">分析购房人群特征、分析搜索行为特征、总结购房者浏览房源特征</span>
+                                </li>
+                                <li class="seven">
+                                    <div class="seven_img"></div>
+                                    <span class="content_t">数据周报</span>
+                                    <span class="content_b">每周监测城市挂牌房源变化、监测涨降价房源变化、监测市场信心系数</span>
+                                </li>
+                                <li class="eight">
+                                    <div class="eight_img"></div>
+                                    <span class="content_t">数据月报</span>
+                                    <span class="content_b">每月监测城市挂牌及成交详情、监测涨降价房源变化</span>
+                                </li>
+                                <li class="nine">
+                                    <div class="nine_img"></div>
+                                    <span class="content_t">租房数据报告</span>
+                                    <span class="content_b">监测租金变化、监测租售比浮动、指导投资</span>
+                                </li>
+                            </ul>
+                            <div class="btn_box">
+                                <span class="btnL btn_left"></span>
+                                <ul class="click_page">
+                                    <li class="clickBg"></li>
+                                    <li></li>
+                                    <li class="last"></li>
+                                </ul>
+                                <span class="btnR btn_right"></span>
+                            </div>
+                        </div>
+                        <div style="display: none" class="box_change economics">
+                            <div class="economics_pic"></div>
+                            <span class="content_t">经纪公司挂牌数据</span>
+                            <span class="content_b">经纪公司挂牌房源数量、经纪公司挂牌房源特征、各经纪公司挂牌房源变化趋势</span>
+                        </div>
+                        <div style="display: none" class="box_change website">
+                            <ul>
+                                <li class="web_one">
+                                    <div></div>
+                                    <span class="content_t">嵌套模式</span>
+                                    <span class="content_b">网站下属子频道【房产楼市】的内容为诸葛找房数据内容，点击即会跳转到诸葛找房网站</span>
+                                </li>
+                                <li class="web_two">
+                                    <div></div>
+                                    <span class="content_t">API模式</span>
+                                    <span class="content_b">通过调用接口形式，实现对我们网站的数据获取，网站自身不变，数据变成我们的数据</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="content_process">
+                    <!--合作流程-->
+                    <div class="advantage_box">
+                        <p class="top">合作流程</p>
+                        <p class="our">COOPERATION</p>
+                        <span class="line"></span>
+                    </div>
+                    <div class="triangle"></div>
+                    <div class="process_data">
+                        <span class="across_line"></span>
+                        <ul class="process_box">
+                            <li class="one">
+                                <span></span>
+                                <p>有使用需求</p>
+                            </li>
+                            <li class="two">
+                                <div class="two_top">
+                                    <p>联系我们</p>
+                                    <span class="triangle_right"></span>
+                                </div>
+                                <div class="two_bottom">
+                                    <span class="triangle_left"></span>
+                                    <p>资质审核</p>
+                                </div>
+                            </li>
+                            <li class="three">
+                                <span></span>
+                                <p>房源/房价数据</p>
+                            </li>
+                            <li class="four">
+                                <div class="four_top">
+                                    <p>提供数据</p>
+                                    <span  class="triangle_right"></span>
+                                </div>
+                            </li>
+                            <li class="five">
+                                <span></span>
+                                <p>数据使用</p>
+                            </li>
+                            <li class="two">
+                                <div class="two_top">
+                                    <p>用户访问</p>
+                                    <span class="triangle_right"></span>
+                                </div>
+                                <div class="two_bottom">
+                                    <span class="triangle_left"></span>
+                                    <p>统计分成</p>
+                                </div>
+                            </li>
+                            <li class="seven three">
+                                <div class="three_top">
+                                    <span></span>
+                                    <p>系统自动结算</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="chunk"></div>
+                    <!--合作内容和收益-->
+                    <div class="content_profit">
+                        <div class="advantage_box">
+                            <p class="top">合作内容和收益</p>
+                            <p class="our">CONTENT AND REVENUE</p>
+                            <span class="line"></span>
+                        </div>
+                        <div class="triangle"></div>
+                        <div class="profit_content">
+                            <div class="profit_one">
+                                <div class="one_left">
+                                    <span class="profit_line"></span>
+                                    <span class="left_t">企业和研究单位等</span>
+                                    <span class="left_c">保证在引用数据时标注来自诸葛找房，保证诸葛找房的品牌曝光</span>
+                                </div>
+                                <div class="one_right"></div>
+                            </div>
+                            <div class="profit_two">
+                                <div class="two_left"></div>
+                                <div class="two_right">
+                                    <div class="r_box">
+                                        <span class="profit_line"></span>
+                                        <span class="left_t">网站、APP等平台</span>
+                                        <span class="left_c">通过api接口等获取我们数据的同时，享受分成合作的待遇</span>
+                                        <ul>
+                                            <li class="sjx"></li>
+                                            <li class="def">
+                                                <span>CPA模式：</span>
+                                                <p>按照产生的电话量，按月结算。</p>
+                                            </li>
+                                            <li class="def">
+                                                <span>CPC模式：</span>
+                                                <p>按到诸葛找房页面点击付费，按月结算。</p>
+                                            </li>
+                                            <li class="def">
+                                                <span>CPT模式：</span>
+                                                <p>按照固定时间进行合作，按月结算。</p>
+                                            </li>
+                                            <li class="def">
+                                                <span>PR模式：</span>
+                                                <p>KOL文章发布实现诸葛找房品牌曝光，包括但不仅限数据标注来自诸葛找房等形式,按照每篇结算。</p>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--数据开放城市-->
+                    <div class="content_city">
+                        <div class="advantage_box">
+                            <p class="top">数据开放城市</p>
+                            <p class="our">DATA OPEN CITY</p>
+                            <span class="line"></span>
+                        </div>
+                        {% set area_type = ('db.auth_group_area')|getAll({checked : 1, pageSize: 1000}) %}
+                        <div class="triangle"></div>
+                        <div id="data_open" class="data_open">
+                            <div class="city_box">
+                                <span class="city"></span>
+                                <div class="city_bj">
+                                    <span class="city_title">已开通城市</span>
+                                    <span class="city_line"></span>
+                                    <ul class="cityT"></ul>
+                                    <p class="opencity-num">目前已开通城市 <i>{{area_type.pageCount|default(100)[:2]}}
+                                    {% if area_type.pageCount > 100 %}
+                                    0
+                                    {% endif %}
+                                    +</i> 城市，更多城市还在开通中......</p>
+                                    <a href="/areachange" class="opencity-page">查看更多</a>
+                                    <span class="city_title city_b">城市分公司</span>
+                                    <span class="city_line"></span>
+                                    <ul class="cityF"></ul>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <!--数据开放城市-->
+                    {#
+                    <div class="content_city">
+                        <div class="advantage_box">
+                            <p class="top">数据开放城市</p>
+                            <p class="our">DATA OPEN CITY</p>
+                            <span class="line"></span>
+                        </div>
+                        <div class="triangle"></div>
+                        <div id="open_type" class="open_type">
+
+                        </div>
+                    </div>
+                    #}
+                    <!--合作案例-->
+                    <div class="case">
+                        <div class="case_box">
+                            <div class="advantage_box">
+                                <p class="top">合作案例</p>
+                                <p class="our">COOPERATION CASE</p>
+                                <span class="line"></span>
+                            </div>
+                            <div class="triangle"></div>
+                            <ul class="box">
+                                <li class="box_one"></li>
+                                <li class="box_two"></li>
+                                <li class="box_three"></li>
+                                <li class="box_five"></li>
+                                <li class="box_four"></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+                <!--立即体验弹窗-->
+                <div id="source" class="broker-mask-layer">
+                    <div class="feedback-main-mask">
+                        <div class="header_">
+                            <span class="logo">申请合作信息</span>
+                            <span class="close" id="close_input"></span>
+                        </div>
+                        <div class="content">
+                            <div class="content_name">
+                                <div class="name_left">
+                                    <span></span>
+                                </div>
+                                <input class="clear_data name" type="text" placeholder="(必填)请输入您的称呼">
+                            </div>
+                            <div class="content_number">
+                                <div class="number_left">
+                                    <span></span>
+                                </div>
+                                <input class="clear_data number" type="text" maxlength="11" placeholder="(必填)请输入手机号码">
+                            </div>
+                            <div class="content_company">
+                                <div class="company_left">
+                                    <span></span>
+                                </div>
+                                <input class="clear_data company" type="text" placeholder="请输入公司全称">
+                            </div>
+                            <span class="submit" id="submit_input">提交申请</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 提交成功提示 start -->
+                <div class="broker-mask-layer" id="succeed_box">
+                    <div class="feedback-main-mask">
+                        <div class="header_">
+                            <span class="logo"></span>
+                            <span class="close close_succeed" ></span>
+                        </div>
+                        <div class="content">
+                            <div class="succeed_img"></div>
+                            <p class="succeed_p">申请提交成功！</p>
+                            <span class="submit close_succeed" >我知道了</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 提交成功提示 end -->
+            {% endblock container_houses %}
+        </div>
+    {% endblock container %}
+
+{% endblock %}
+{% block js %}
+    <script>
+        seajs.use([],function () {
+            $(".banner_right a").css("color","#FFFFFF");
+            $("#download_roll").addClass("download_ff");
+            $(".header_cityname a").css("color",'#FFFFFF');
+            $(".speed_open_list li a.nava").css("color","#FFFFFF");
+            $(".speed_open_list li a").removeClass("act");
+            $(".speed_open_list li").each(function () {
+                if($(this).hasClass("开放平台")){
+                    $(this).find('a').addClass("act");
+                }
+            });
+
+            //获取所有开始使用和立即体验点击出现弹窗
+            $(".select_register").each(function (index,value) {
+                $(value).on('click',function () {
+                    $.ajax({
+                        type:"POST",
+                        url:"http://api.zhugefang.com/API/Sendmail/getSendMailPlatformToken",
+                        data:{
+                            appName:"zgzf",
+                            platformType:"2",
+                            token:"O-AdDpTCV_K9yFqSt0eZmzOF3z841Fb1ibLpWuJE0S0-An9W2RvVK65gc_M6jaBdRgFzXsl4n23RX42uOSzUvg=="
+                        },
+                        success:function (xhr) {
+                            if(xhr&&xhr.data){
+                                platformToken = xhr.data;
+                            }
+                        }
+                    });
+                    $("#source").show();
+                    $("body").addClass("fix");
+                });
+            });
+            //点击关闭弹窗清除input框中数据
+            $("#close_input").on("click",function () {
+                $(".clear_data").val("");
+                $("#source").hide();
+                $("body").removeClass("fix");
+            });
+            // 关闭提交成功的提示
+            $('.close_succeed').on('click',function(){
+                $('#succeed_box').hide();
+                $("body").removeClass("fix");
+            });
+            //提交申请
+            $('#submit_input').each(function (i) {
+                $(this).on("click", function () {
+                    var self = $(this);
+                    var name = self.parent().find('.name').val();
+                    var phone = self.parent().find('.number').val();
+                    var company = self.parent().find('.company').val();
+                    var reg = /^1(3|4|5|6|7|8|9)\d{9}$/;
+
+                    if (!phone || !name) {
+                        alert('请完善信息！');
+                        return;
+                    }
+                    if (!reg.test(phone)) {
+                        alert('手机格式有误，请重新输入！');
+                        return;
+                    }
+
+                    var data = {
+                        "phone": phone,
+                        "name": name,
+                        "company": company,
+                        "platformToken":platformToken
+                    };
+                    $.ajax({
+                        type:"POST",
+                        url:"http://api.zhugefang.com/API/Sendmail/sendMailPlatform",
+                        data:data,
+                        success:function (xhr) {
+                            console.log(xhr,'000')
+                            if(xhr&&xhr.message){
+                                $('#source').hide();
+                                $(".clear_data").val("");
+                                $('#succeed_box').show();
+                            }else{
+                                alert('网络有延迟，请稍后再试。');
+                            }
+                        }
+                    });
+
+                });
+            });
+
+            //数据样式合作案例
+            var tab_click = $(".navigation li");
+            var box_change = $(".box_change");
+            tabChange(tab_click,box_change);
+            //选项卡切换
+            function tabChange(tab_click,box_change) {
+                tab_click.click(function () {
+                    tab_click.eq($(this).index()).addClass('tabBg').siblings().removeClass('tabBg');
+                    box_change.hide().eq($(this).index()).show()
+                })
+            }
+            var banner_box = $(".research_box");
+            var banner_li = $(".research_box li");
+            var tab_left = $(".btnL");
+            var tab_right = $(".btnR");
+            var click_bg = $(".click_page li");
+            slidePage(banner_box,banner_li,tab_left,tab_right,click_bg);
+            function slidePage(banner_box,banner_li,tab_left,tab_right,click_bg) {
+                var $banner_li = banner_li;
+                var $banner_box = banner_box;
+                if($banner_li.length < 3){
+                    return false;
+                }
+                var i = 0,
+                    width;
+                width = $banner_li.width() + 30;
+                function move_right() {
+                    if(i == 2){
+                        return false;
+                    }
+                    i++;
+                    $banner_box.animate({"left" : -(width*3 - 30) * i},500);
+                }
+                function move_left() {
+                    if(i == 0){
+                        return false;
+                    }
+                    i--;
+                    $banner_box.animate({"left" : -(width*3 - 30) * i},500);
+                }
+                tab_right.click(function () {
+                    move_right();
+                    clickBg(i);
+                });
+                tab_left.click(function () {
+                    move_left();
+                    clickBg(i);
+
+                });
+                function clickBg(i) {
+                    click_bg.eq(i).addClass('clickBg').siblings().removeClass('clickBg');
+                    if(i == 0){
+                        tab_left.removeClass("btn_left_l").addClass("btn_left")
+                    }else if(i == 2){
+                        tab_right.removeClass("btn_right").addClass("btn_right_a")
+                    }else{
+                        tab_left.removeClass("btn_left").addClass("btn_left_l")
+                        tab_right.removeClass("btn_right_a").addClass("btn_right")
+                    }
+                }
+            };
+            //客户可以干什么效果
+            $(".do_bac div").each(function () {
+                $(this).mouseenter(function () {
+                    $(this).animate({"margin-top":"-15px"});
+                    $(this).children(".select_register").css("display","block");
+                });
+                $(this).mouseleave(function () {
+                    $(this).animate({"margin-top":"0"});
+                    $(this).children(".select_register").css("display","none");
+                });
+            });
+
+            //数据开放城市UI提供
+            var cityT = ["保定","东莞","广州","桂林","贵阳","金华","江门","兰州","洛阳","青岛","泉州","天津","泰州","太原","唐山","徐州","厦门","烟台","珠海","中山","宜昌","长春","长沙","常州","福州","杭州","合肥","淮坊","海南","惠州","昆明","昆山","扬州","南宁","南昌","宁波","深圳","沈阳","苏州","绍兴","武汉",'... ...'];
+            var cityF = ["北京","哈尔滨","苏州","郑州","西安","南京","无锡","石家庄","重庆","成都","上海","大连","济南"]
+            for(var i =0;i<cityT.length;i++){
+                $(".cityT").append('<li> '+ cityT[i] + '</li>')
+            }
+
+            {# 当前分站id #}
+            {% set sess_area = app.session.get('area')|default(0) %}
+            {% set city = ('db.auth_group_area')|getAll({
+                rulesarea:sess_area,
+                pageSize: 1,
+                order   : 'sort',
+                orderBy : 'asc'
+            }) %}
+            {% set cityName = city.data[0].name%}
+            var city = "{{ cityName }}"
+            for(var i =0;i<cityF.length;i++){
+                $(".cityF").append('<li>'+ cityF[i] + '</li>');
+                if(city == cityF[i]){
+                    $(".cityF li").eq(i).css("color","#FF8400");
+                }
+            }
+        })
+
+    </script>
+{% endblock js %}
+
+

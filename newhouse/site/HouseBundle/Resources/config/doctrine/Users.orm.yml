@@ -1,0 +1,231 @@
+HouseBundle\Entity\Users:
+    type: entity
+    table: users
+    indexes:
+        username:
+            columns:
+                - username
+        email:
+            columns:
+                - email
+        tel:
+            columns:
+                - tel
+        city:
+            columns:
+                - city
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        mid:
+            options:
+                comment: 模型ID
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        username:
+            options:
+                comment: 用户名
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        password:
+            options:
+                comment: 密码
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        salt:
+            options:
+                comment: 密码混淆串
+                unsigned: false
+            nullable: false
+            type: string
+            length: 10
+        status:
+            options:
+                comment: '状态 1:启用 0:禁止'
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+        email:
+            options:
+                comment: 邮箱
+                unsigned: false
+            nullable: false
+            type: string
+            length: 50
+        tel:
+            options:
+                comment: 手机
+                unsigned: false
+            nullable: false
+            type: string
+            length: 15
+        remark:
+            options:
+                comment: 备注
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        onlinetime:
+            options:
+                comment: 在线时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        login_flag:
+            options:
+                comment: 登入标识
+                unsigned: false
+            nullable: false
+            type: string
+            length: 10
+        uptotal:
+            options:
+                comment: 已上传大小
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        downtotal:
+            options:
+                comment: 已下载大小
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        logintime:
+            options:
+                comment: 最后登录时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        loginip:
+            options:
+                comment: 登录IP
+                unsigned: false
+            nullable: false
+            type: string
+            length: 20
+        location:
+            options:
+                comment: 登录位置
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        token:
+            options:
+                comment: 手机用户token认证串
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        locale:
+            options:
+                comment: 语言
+                unsigned: false
+            nullable: false
+            type: string
+            length: 20
+        checked:
+            options:
+                comment: 审核
+                unsigned: false
+                default: '1'
+            nullable: false
+            default: '1'
+            type: smallint
+            length: 2
+        userdb:
+            options:
+                comment: 操作库
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        oid:
+            options:
+                comment: c端用户id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        city:
+            options:
+                comment: C端城市简称
+                unsigned: false
+            nullable: false
+            type: string
+            length: 10
+        city_id:
+            options:
+                comment: c端城市id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

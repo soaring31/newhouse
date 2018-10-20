@@ -1,0 +1,22 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+
+{% block title %}
+    计算工具
+{% endblock title %}
+
+ {% block header_title %}
+     {{ core_mobile_global.title({title: '购房工具'}) }}
+ {% endblock header_title %}
+
+{% block container %}
+	<div data-block="{
+	    bParams: true,
+	    ajax:{
+	        url: '{{ ('tools/index')|U }}',
+	        data: {
+	            tpl: 'Tools:indexblock'
+	        }
+	    }
+	}"></div>
+{% endblock container %}

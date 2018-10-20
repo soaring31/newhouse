@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title>filter</title>    
+    <style type="text/css">
+        @font-face {
+        font-family: "filter";
+        font-weight: normal;
+        font-style: normal;
+        src: url('filter.eot');
+        src: url('filter.eot?#iefix') format('embedded-opentype'),
+            url('filter.woff') format('woff');/*,
+            url('filter.ttf') format('truetype'),
+            url('filter.svg#filter') format('svg');*/
+    }
+
+    [class^="font-filter-"], [class*=" font-filter-"]:before {
+        font-family: "filter";
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        font-style: normal;
+        font-variant: normal;
+        font-weight: normal;
+        font-size: 32px;
+        /* speak: none; only necessary if not using the private unicode range (firstdata option) */
+        text-decoration: none;
+        text-transform: none;
+    }
+    
+    .font-filter-1:before {
+        content: "\EA01";
+    }
+    
+    .font-filter-10:before {
+        content: "\EA02";
+    }
+    
+    .font-filter-11:before {
+        content: "\EA03";
+    }
+    
+    .font-filter-2:before {
+        content: "\EA04";
+    }
+    
+    .font-filter-3:before {
+        content: "\EA05";
+    }
+    
+    .font-filter-4:before {
+        content: "\EA06";
+    }
+    
+    .font-filter-5:before {
+        content: "\EA07";
+    }
+    
+    .font-filter-6:before {
+        content: "\EA08";
+    }
+    
+    .font-filter-7:before {
+        content: "\EA09";
+    }
+    
+    .font-filter-8:before {
+        content: "\EA0A";
+    }
+    
+    .font-filter-9:before {
+        content: "\EA0B";
+    }
+    
+
+    * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    .container {
+        font-family: microsoft yahei;
+        width: 1200px;
+        margin: 20px auto;
+    }
+    li {
+        float: left;
+        padding: 5px;
+        margin: 5px;
+        border: 1px solid #eee;
+        text-align: center;
+        font-family: arial;
+        color: #555;
+        line-height: 1.5;
+    }
+    pre {
+        margin: 15px 0;
+        color: #FD8520;
+        font-family: Consolas;
+        font-size: 14px;
+        padding: 15px;
+        background-color: #272822;
+    }
+    </style>
+</head>
+<body>
+<div class="container">
+<div class="row">
+    <h2>
+        调用方式
+    </h2>
+    <h3>css</h3>
+<pre class="text">
+ @import 'font-filter'; //导入css 标识-文件名
+</pre> 
+    <h3>html</h3>
+<pre>
+ &lt;i class=&quot;font-demo-xxx&quot;&gt;&lt;/i&gt; // class 标识-合成后文件名-单独文件名 不兼容ie6,7(推荐)
+</pre> 
+<pre>
+ &lt;i class=&quot;font-demo&quot;&gt;&amp;#xEA01;&lt;/i&gt; // class 标识-合成后文件名 内容为单个文件名 兼容ie6,7
+</pre> 
+    <h3>详细代码</h3>点击下面文字直接复制到剪切板
+</div>
+    <ul>
+        
+        <li>
+            <i class="font-filter-1"></i>
+            <div class="class">font-filter-1</div>
+            <div class="text"><span>&</span>#xEA01;</div>
+        </li>
+        
+        <li>
+            <i class="font-filter-10"></i>
+            <div class="class">font-filter-10</div>
+            <div class="text"><span>&</span>#xEA02;</div>
+        </li>
+        
+        <li>
+            <i class="font-filter-11"></i>
+            <div class="class">font-filter-11</div>
+            <div class="text"><span>&</span>#xEA03;</div>
+        </li>
+        
+        <li>
+            <i class="font-filter-2"></i>
+            <div class="class">font-filter-2</div>
+            <div class="text"><span>&</span>#xEA04;</div>
+        </li>
+        
+        <li>
+            <i class="font-filter-3"></i>
+            <div class="class">font-filter-3</div>
+            <div class="text"><span>&</span>#xEA05;</div>
+        </li>
+        
+        <li>
+            <i class="font-filter-4"></i>
+            <div class="class">font-filter-4</div>
+            <div class="text"><span>&</span>#xEA06;</div>
+        </li>
+        
+        <li>
+            <i class="font-filter-5"></i>
+            <div class="class">font-filter-5</div>
+            <div class="text"><span>&</span>#xEA07;</div>
+        </li>
+        
+        <li>
+            <i class="font-filter-6"></i>
+            <div class="class">font-filter-6</div>
+            <div class="text"><span>&</span>#xEA08;</div>
+        </li>
+        
+        <li>
+            <i class="font-filter-7"></i>
+            <div class="class">font-filter-7</div>
+            <div class="text"><span>&</span>#xEA09;</div>
+        </li>
+        
+        <li>
+            <i class="font-filter-8"></i>
+            <div class="class">font-filter-8</div>
+            <div class="text"><span>&</span>#xEA0A;</div>
+        </li>
+        
+        <li>
+            <i class="font-filter-9"></i>
+            <div class="class">font-filter-9</div>
+            <div class="text"><span>&</span>#xEA0B;</div>
+        </li>
+        
+    </ul>
+</div>
+<script type="text/javascript">
+    var BASE_URL = window.location.href.replace('/fonts/filter.html'.replace('./', ''), '') + '/';
+</script>
+<script type="text/javascript">document.write('<script src="' + BASE_URL + '/js/seajs.js"><\/script>');</script>
+<script type="text/javascript">
+if (BASE_URL.indexOf('http') == 0) {
+    seajs.use(['clipboard'], function() {
+        $('.index').click(function(event) {
+            location.href = BASE_URL;
+        });
+        var $icons = $('.class, .text');
+        $('body').on('copy', '.class, .text', function(e) {
+                $icons.removeAttr('style');
+                e.clipboardData.clearData();
+                e.clipboardData.setData("text/plain", $(this).css({color:'#f00'}).text());
+                e.preventDefault();
+            })
+    })
+};
+</script>
+</body>
+</html>

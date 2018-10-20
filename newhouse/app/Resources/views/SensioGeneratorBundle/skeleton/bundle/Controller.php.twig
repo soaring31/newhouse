@@ -1,0 +1,23 @@
+<?php
+/**
+* @copyright Copyright (c) 2008 – {{ ''|date('Y') }} www.08cms.com
+* @author 08cms项目开发团队
+* @package 08cms
+* create date {{ ''|date('Y-m-d') }}
+*/
+namespace {{ namespace }}\Controller;
+
+{% block use_statements %}
+use CoreBundle\Controller\Controller as BaseController;
+{% if 'annotation' == format -%}
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+{% endif %}
+{% endblock use_statements %}
+
+{% block class_definition %}
+class Controller extends BaseController
+{% endblock class_definition %}
+{
+
+}

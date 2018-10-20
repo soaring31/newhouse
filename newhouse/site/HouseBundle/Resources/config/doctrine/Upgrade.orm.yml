@@ -1,0 +1,180 @@
+HouseBundle\Entity\Upgrade:
+    type: entity
+    table: upgrade
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        addinfo:
+            options:
+                comment: 附加说明
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        usertype:
+            options:
+                comment: 会员类型
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        dpjj:
+            options:
+                comment: 店铺简介
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        dpgg:
+            options:
+                comment: 店铺公告
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        qq:
+            options:
+                comment: QQ
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        image:
+            options:
+                comment: 会员头像
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        cpltd:
+            options:
+                comment: 公司简介
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        company:
+            options:
+                comment: 公司名称
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        logo:
+            options:
+                comment: 公司logo
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        caddress:
+            options:
+                comment: 公司地址
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        companyjs:
+            options:
+                comment: 公司介绍
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        nicename:
+            options:
+                comment: 姓名
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        cynx:
+            options:
+                comment: 从业年限
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        tel:
+            options:
+                comment: 手机号码
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        uid:
+            options:
+                comment: 会员id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        region:
+            options:
+                comment: 区域
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        checked:
+            options:
+                comment: 是否审核
+                unsigned: false
+            nullable: false
+            type: boolean
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

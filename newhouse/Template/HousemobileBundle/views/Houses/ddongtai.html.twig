@@ -1,0 +1,52 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default('Houses:detail') ~ '.html.twig' %}
+
+{#楼盘动态数据#}
+{% set detail = cident.detail.data[0]|default('') %}
+{% set lpdt_data = ('house.loupandongtai')|getAll({aid:detail.id,pageSize:100,pageIndex:1,order:'create_time|desc'}) %}
+{% set phone = detail.web_tel?detail.web_tel:detail.tel %}
+{% block h_title %}
+怎么样_{{detail.name|default('')}}评价
+{% endblock h_title %}
+
+{% block d_header %}
+    <h1 class="title">楼盘动态</h1>
+{% endblock %}
+
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data|default('')}}{{detail.name|default('')}}怎么样，{{detail.name|default('')}}好不好，{{detail.name|default('')}}好吗" />
+<meta name="description" content="{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}提供{{detail.name|default('')}}房价、户型、质量、物业、附近交通、环境、配套等方面的点评，详细分析{{cur_area_data|default('')}}{{detail.name|default('')}}楼盘详情优缺点，为您买房置业提供参考信息。 "/>
+{% endblock key_des %}
+
+{# 导航 #}
+{% block secondary %}
+    {#{% set nav_active = 6 %}#}
+    {#{{ parent() }}#}
+{% endblock secondary %}
+{% block header_right %}
+{% endblock header_right %}
+{% block container %}
+    {# 底部电话咨询 #}
+    {% include 'HousemobileBundle:Clist:phone_call.html.twig' %}
+    <div class="ddongtai-lpdt">
+        {#楼盘动态#}
+        {% if lpdt_data and lpdt_data.data|length>0 %}
+            <div class="all_content" style="padding-bottom:0.4rem;">
+                <div class="details-min-box p-t-33 clearfix h-no m-0">
+                    {% for item in lpdt_data.data %}
+                            <div class="details-time-item-box">
+                                <span class="details-time-left-box">
+                                {{ item.update_time|date('m/d') }}
+                                </span>
+                                <span class="details-time-right-box">
+                                <p class="first-p line2">{{ item.name }}</p>
+                                <p class="first_content line2">&emsp;&emsp;{{ item.content }}</p>
+                                </span>
+                            </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock container %}

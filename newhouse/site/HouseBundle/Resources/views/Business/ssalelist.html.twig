@@ -1,0 +1,68 @@
+{% extends 'HouseBundle:Business:business_list_layout.html.twig' %}
+{# 说明
+ * tpl_list_title: 列表标题模板变量
+ * list_ident: 列表内容变量
+#}
+
+{% block title %}【{{cur_area_data|default('')}}商铺,门面出售】-{{cur_area_data|default('')}}商铺网{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data|default('')}}商铺出售,{{cur_area_data|default('')}}商铺网" />
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}商铺出售频道,为您提供丰富准确的{{cur_area_data|default('')}}商铺,门面,门脸房出售转让信息,上万条真实有效商铺房源，帮助您快速找到理想的商铺。找商铺，上{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}商铺网！"/>
+{% endblock key_des %}
+
+{% set list_ident = ident.list|default('') %}
+
+{# 搜索 #}
+{% block top_search %}
+    {% set tpl_topsearch_action = 'business/ssalelist' %}
+    {% set tpl_topsearch_placeholder = '请输入商铺名称/拼音' %}
+    {{ parent() }}
+{% endblock top_search %}
+
+{% set tpl_title = '商铺出售' %}
+
+{# 当前位置 #}
+{% block current_container %}
+    <span>商铺出售</span>
+{% endblock current_container %}
+
+{% block container %}
+    {# 检索数据源 #}
+    {% set cate_data = house_global.cate_data({ 
+                    tag: 'sp_sale',
+                }).__toString|json_decode %}
+    {{ parent() }}
+{% endblock container %}
+
+{# 排序 #}
+{% block list_sort %}
+    {% set sort_data = {
+        def: {
+            title: '默认'
+        },
+        zj: {
+            title: '总价'
+        },
+        dj: {
+            title: '单价'
+        },
+        mj: {
+            title: '面积'
+        }
+    } %}
+    {{ parent() }}
+{% endblock list_sort %}
+
+{% block business_list %}
+<div class="xzu-list">
+    {{house_global.business_sale({
+        list: list_ident,
+        tips: '商铺'
+    })}}
+</div>
+{% endblock business_list %}
+
+{% block business_aside %}
+    {{house_global.sale_aside({models: 'sale'})}}
+{% endblock business_aside %}

@@ -1,0 +1,355 @@
+/*!
+ * @name <%= name %>
+ * @author <%= author %>
+ * @date <%= date %>
+ */
+
+@import 'static/ats';
+
+@import 'img-gd'; //导入css 标识-文件名
+@include img-gd($img-gd); //调用全部样式， 标识-文件名($标识-文件名);
+
+@import 'font-gd'; //导入css 标识-文件名
+@import 'top-search';
+
+$screen: 1200px;
+
+$major-color: #27b346 ;
+
+body {
+	
+	background: #f4f4f4;
+}
+
+.top-bar {
+	padding-top: 0;
+	background: #fff;
+}
+
+.current-location i {
+	color: $major-color;
+}
+
+
+input {
+	outline: none;
+}
+
+.container {
+	margin: 0 auto;
+}
+
+a:hover {
+	text-decoration: none;
+	color: $major-color;
+}
+
+.s-head {
+	width: 100%;
+	min-width: $screen;
+	height: 68px;
+	background: #fff;
+	line-height: 68px;
+	
+	.list {
+		display: inline-block;
+		margin-left: 70px;
+		vertical-align: top;
+
+		li {
+			height: 58px;
+			margin-top: 0;
+			
+
+		a {	
+			line-height: 58px;
+			word-spacing: 1px;
+			font-size: 14px;
+			color: #525252;
+			margin-right: 15px;
+		}
+
+		a:hover {
+			color: $major-color;
+		}	
+			
+		}
+		
+
+	}
+
+	
+
+	
+}
+
+.search-bar {
+	width: 502px;
+	height: 44px;
+	border: 1px solid $major-color;
+	display: inline-block;
+	font-size: 0;
+
+	margin-top: 12px;
+	margin-left: 10px;
+
+	.search-input {
+		padding: 0;
+		width: 432px;
+		height: 44px;
+		display: inline-block;
+		line-height: 46px;
+		font-size: 13px;
+		color: #a9a9a9;
+		text-indent: 10px;
+		border: none;
+		vertical-align: top;
+	}
+
+	.search-btn {
+		margin-right: 0;
+		width: 70px;
+		height: 44px;
+		display: inline-block;
+		border: none;
+		background-color: $major-color;
+		vertical-align: top;
+	}
+}
+
+.path {
+	word-spacing: 0.5px;
+	line-height: 16px;
+	padding-left: 10px;
+	color: #a89999;
+	margin-top: 19px;
+
+	i {
+		height: 16px;
+		width: 18px;
+		display: inline-block;
+		vertical-align: bottom;
+	}
+
+	a {
+		color: #2c2c2c;
+		font-size: 13px;
+	}
+
+	a:hover {
+		color: $major-color;
+	}	
+}
+
+
+.g-article {
+
+
+.main {
+	width: 100%;
+}
+
+.article {
+	float: left;
+	width: 900px;
+	background: #fff;
+	border: 1px solid #eaeaea;
+
+}
+
+.title {
+	height: 78px;
+	width: 100%;
+	position: relative;
+	border-bottom: 1px solid #e4e4e4;
+
+	h2 {
+		line-height: 78px;
+		font-size: 20px;
+		color: #333;
+		text-align: center;
+	}
+
+	.info {
+		position: absolute;
+		bottom: 2px;
+		right: 20px;
+		height: 19px;
+		width: 162px;
+		font-size: 12px;
+		color: #999;
+
+		p {
+			float: right;
+		}
+
+	}
+
+	.data {
+		float: left;
+	}
+}
+
+.text {
+	padding: 0 15px;
+	font-size: 16px;
+	line-height: 28px;
+}
+
+.in-foot {
+	position: relative;
+	width: 100%;
+	padding-top: 1px;
+}
+
+.point1,.point2 {
+	cursor: pointer;
+	height: 65px;
+	width: 38px;
+	position: absolute;
+	top: 22px;
+	text-align: center;
+	color: #ccc;
+
+	a {
+		font-size: 24px;
+		color: #ccc;
+	}
+
+	a:hover {
+		color: #ff8533;
+	}
+
+	p {
+		
+		margin-top: 10px;
+		font-size: 14px;
+		line-height: 1;
+	}
+}
+
+.point1 {
+	left: 420px;
+}
+
+.point2 {
+	left: 486px;
+}
+
+.link {
+	width: 100%;
+	margin-top: 118px;
+	margin-bottom: 16px;
+
+	h3 {
+		font-size: 14px;
+		line-height: 38px;
+		color: #999;
+		text-indent: 50px;
+	}
+
+	a {
+		color: #999;
+	}
+
+	a:hover {
+		color: $major-color;
+	}
+}
+
+.more {
+	width: 100%;
+	height: 45px;
+	line-height: 45px;
+	font-size: 13px;
+	background: #f9f9f9;
+	text-align: center;
+
+	a {
+		color: #b0b0b0;
+	}
+}
+
+.side {
+	float: left;
+	margin-left: 28px;
+	width: 270px;
+
+}
+
+.s-box {
+	background: #fff;
+	padding: 0 8px 0 10px;
+	margin-bottom: 30px;
+
+}
+
+.s-title {
+	height: 41px;
+	width: 100%;
+	border-bottom: 1px solid #e7e7e7;
+
+	h3 {
+		text-indent: 12px;
+		font-size: 16px;
+		color: #333;
+		line-height: 45px;
+	}
+}
+
+.box-b {
+	border-bottom: 1px solid #f7f7f7;
+
+	h4 {
+		word-spacing: 0px;
+		font-size: 16px;
+		line-height: 28px;
+		margin-top: 16px;
+		text-indent: 8px;
+		 a {
+		 	color: #666;
+		 	&:hover {
+		 		color: $major-color;
+		 	}
+		 }
+	}
+}
+
+.b-btns {
+	margin-top: 5px;
+	margin-bottom: 20px;
+	padding-left: 6px;
+	font-size: 0;
+
+	a {
+		display: inline-block;
+		padding: 5px 4px;
+		border-radius: 2px;
+		font-size: 12px;
+		line-height: 1;
+		color: #666;
+		background: #e7e7e7;
+		margin-right: 4px;
+	}
+
+	a:hover {
+		color: #fff;
+		background: $major-color;
+	}
+
+	.active {
+		color: #fff;
+		background: $major-color;
+	}
+}
+
+
+}
+/*添加的样式*/
+.p-bar .current, .p-bar a:hover {
+    text-decoration: none;
+    color: #fff;
+    border: 1px solid #27b346;
+    background: #27b346;
+}
+

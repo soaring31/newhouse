@@ -1,0 +1,21 @@
+{% extends 'CoreBundle::base_ajax.html.twig' %}
+
+{% set users = app.user|default('') %}
+
+
+
+
+{% block result %}
+    {% if users.id is defined %}
+        {
+            "loginstate" : 1,
+            "name" : "{{users.username}}",
+            "type" : "{{users.usertplid}}"
+        }
+    {% else %}
+        {
+            "loginstate" : 0
+        }
+    {% endif %}
+    
+{% endblock result %}

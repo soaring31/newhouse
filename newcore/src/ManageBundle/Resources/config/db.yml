@@ -1,0 +1,433 @@
+services:
+    db.users:
+        class: ManageBundle\Services\DB\Users
+        arguments:
+            - '@service_container'
+    db.menus:
+        class: ManageBundle\Services\DB\Menus
+        arguments:
+            - '@service_container'
+    db.views:
+        class: ManageBundle\Services\DB\Views
+        arguments:
+            - '@service_container'
+    db.auth_rule:
+        class: ManageBundle\Services\DB\AuthRule
+        arguments:
+            - '@service_container'
+    db.auth_group:
+        class: ManageBundle\Services\DB\AuthGroup
+        arguments:
+            - '@service_container'
+    db.models:
+        class: ManageBundle\Services\DB\Models
+        arguments:
+            - '@service_container'
+    db.model_form:
+        class: ManageBundle\Services\DB\ModelForm
+        arguments:
+            - '@service_container'
+    db.model_form_attr:
+        class: ManageBundle\Services\DB\ModelFormAttr
+        arguments:
+            - '@service_container'
+    db.model_attribute:
+        class: ManageBundle\Services\DB\ModelAttribute
+        arguments:
+            - '@service_container'
+    db.files:
+        class: ManageBundle\Services\DB\Files
+        arguments:
+            - '@service_container'
+    db.sessions:
+        class: ManageBundle\Services\DB\Sessions
+        arguments:
+            - '@service_container'
+    db.auth_firewall:
+        class: ManageBundle\Services\DB\AuthFirewall
+        arguments:
+            - '@service_container'
+    db.auth_access:
+        class: ManageBundle\Services\DB\AuthAccess
+        arguments:
+            - '@service_container'
+    db.themes:
+        class: ManageBundle\Services\DB\Themes
+        arguments:
+            - '@service_container'
+    db.user_attr:
+        class: ManageBundle\Services\DB\UserAttr
+        arguments:
+            - '@service_container'
+    db.user_group:
+        class: ManageBundle\Services\DB\UserGroup
+        arguments:
+            - '@service_container'
+    db.watermark:
+        class: ManageBundle\Services\DB\WaterMark
+        arguments:
+            - '@service_container'
+    db.badkeywords:
+        class: ManageBundle\Services\DB\Badkeywords
+        arguments:
+            - '@service_container'
+    db.hotkeywords:
+        class: ManageBundle\Services\DB\Hotkeywords
+        arguments:
+            - '@service_container'
+    db.news:
+        class: ManageBundle\Services\DB\News
+        arguments:
+            - '@service_container'
+    db.wxusers:
+        class: ManageBundle\Services\DB\Wxusers
+        arguments:
+            - '@service_container'
+    db.wxmenus:
+        class: ManageBundle\Services\DB\Wxmenus
+        arguments:
+            - '@service_container'
+    db.user_oauth:
+        class: ManageBundle\Services\DB\UserOauth
+        arguments:
+            - '@service_container'
+    db.sitemap:
+        class: ManageBundle\Services\DB\Sitemap
+        arguments:
+            - '@service_container'
+    db.sitemapbind:
+        class: ManageBundle\Services\DB\Sitemapbind
+        arguments:
+            - '@service_container'
+    db.payment:
+        class: ManageBundle\Services\DB\Payment
+        arguments:
+            - '@service_container'
+    db.smslogs:
+        class: ManageBundle\Services\DB\Smslogs
+        arguments:
+            - '@service_container'
+    db.user_quota:
+        class: ManageBundle\Services\DB\UserQuota
+        arguments:
+            - '@service_container'
+    db.smstpls:
+        class: ManageBundle\Services\DB\Smstpls
+        arguments:
+            - '@service_container'
+    file.smslogs:
+        class: ManageBundle\Services\DB\Smslogs
+        arguments:
+            - '@service_container'
+    file.smstpls:
+        class: ManageBundle\Services\DB\Smstpls
+        arguments:
+            - '@service_container'
+    db.event_listen:
+        class: ManageBundle\Services\DB\EventListen
+        arguments:
+            - '@service_container'
+    db.eventcoupon:
+        class: ManageBundle\Services\DB\Eventcoupon
+        arguments:
+            - '@service_container'
+    db.hardware:
+        class: ManageBundle\Services\DB\Hardware
+        arguments:
+            - '@service_container'
+    db.wxhardware:
+        class: ManageBundle\Services\DB\Wxhardware
+        arguments:
+            - '@service_container'
+    db.wxpipeline:
+        class: ManageBundle\Services\DB\Wxpipeline
+        arguments:
+            - '@service_container'
+    db.wxshakearound:
+        class: ManageBundle\Services\DB\Wxshakearound
+        arguments:
+            - '@service_container'
+    db.associated:
+        class: ManageBundle\Services\DB\Associated
+        arguments:
+            - '@service_container'
+    db.area:
+        class: ManageBundle\Services\DB\Area
+        arguments:
+            - '@service_container'
+    db.orderlist:
+        class: ManageBundle\Services\DB\Orderlist
+        arguments:
+            - '@service_container'
+    db.refundlist:
+        class: ManageBundle\Services\DB\Refundlist
+        arguments:
+            - '@service_container'
+    db.data_import:
+        class: ManageBundle\Services\DB\DataImport
+        arguments:
+            - '@service_container'
+    db.data_impset:
+        class: ManageBundle\Services\DB\DataImpset
+        arguments:
+            - '@service_container'
+    db.authtest_attr:
+        class: ManageBundle\Services\DB\AuthtestAttr
+        arguments:
+            - '@service_container'
+    db_relation:
+        class: ManageBundle\Services\DB\CateRelation
+        arguments:
+            - '@service_container'
+    db.system_log:
+        class: ManageBundle\Services\DB\SystemLog
+        arguments:
+            - '@service_container'
+    db.mappoi:
+        class: ManageBundle\Services\DB\Mappoi
+        arguments:
+            - '@service_container'
+    db.data_implog:
+        class: ManageBundle\Services\DB\DataImplog
+        arguments:
+            - '@service_container'
+    db.auth_theme:
+        class: ManageBundle\Services\DB\AuthTheme
+        arguments:
+            - '@service_container'
+    db.areaconfig:
+        class: ManageBundle\Services\DB\Areaconfig
+        arguments:
+            - '@service_container'
+    db.wxpushs:
+        class: ManageBundle\Services\DB\Wxpushs
+        arguments:
+            - '@service_container'
+    db.model_plan:
+        class: ManageBundle\Services\DB\ModelPlan
+        arguments:
+            - '@service_container'
+    db.model_fields:
+        class: ManageBundle\Services\DB\ModelFields
+        arguments:
+            - '@service_container'
+    db.task:
+        class: ManageBundle\Services\DB\Task
+        arguments:
+            - '@service_container'
+    db.auth_group_area:
+        class: ManageBundle\Services\DB\AuthGroupArea
+        arguments:
+            - '@service_container'
+    db.auth_access_area:
+        class: ManageBundle\Services\DB\AuthAccessArea
+        arguments:
+            - '@service_container'
+    db.domains:
+        class: ManageBundle\Services\DB\Domains
+        arguments:
+            - '@service_container'
+    db.wxplanlist:
+        class: ManageBundle\Services\DB\Wxplanlist
+        arguments:
+            - '@service_container'
+    db.wxplanmenus:
+        class: ManageBundle\Services\DB\Wxplanmenus
+        arguments:
+            - '@service_container'
+    db.wxplan:
+        class: ManageBundle\Services\DB\Wxplan
+        arguments:
+            - '@service_container'
+    db.orderlist_attr:
+        class: ManageBundle\Services\DB\OrderlistAttr
+        arguments:
+            - '@service_container'
+    db.spend:
+        class: ManageBundle\Services\DB\Spend
+        arguments:
+            - '@service_container'
+    db.cache:
+        class: ManageBundle\Services\DB\Cache
+        arguments:
+            - '@service_container'
+    db.ordersn:
+        class: ManageBundle\Services\DB\Ordersn
+        arguments:
+            - '@service_container'
+    db.category_models:
+        class: ManageBundle\Services\DB\CategoryModels
+        arguments:
+            - '@service_container'
+    db.mem_group:
+        class: ManageBundle\Services\DB\MemGroup
+        arguments:
+            - '@service_container'
+    db.mem_types:
+        class: ManageBundle\Services\DB\MemTypes
+        arguments:
+            - '@service_container'
+    db.event_controller:
+        class: ManageBundle\Services\DB\EventController
+        arguments:
+            - '@service_container'
+    db.mconfig:
+        class: ManageBundle\Services\DB\Mconfig
+        arguments:
+            - '@service_container'
+    db.userinfo:
+        class: ManageBundle\Services\DB\Userinfo
+        arguments:
+            - '@service_container'
+    db.emslogs:
+        class: ManageBundle\Services\DB\Emslogs
+        arguments:
+            - '@service_container'
+    db.emailtpls:
+        class: ManageBundle\Services\DB\Emailtpls
+        arguments:
+            - '@service_container'
+    db.mblack:
+        class: ManageBundle\Services\DB\Mblack
+        arguments:
+            - '@service_container'
+    db.workflow:
+        class: ManageBundle\Services\DB\Workflow
+        arguments:
+            - '@service_container'
+    db.workflow_attr:
+        class: ManageBundle\Services\DB\WorkflowAttr
+        arguments:
+            - '@service_container'
+    db.integralcash:
+        class: ManageBundle\Services\DB\Integralcash
+        arguments:
+            - '@service_container'
+    db.integral:
+        class: ManageBundle\Services\DB\Integral
+        arguments:
+            - '@service_container'
+    db.integral_attr:
+        class: ManageBundle\Services\DB\IntegralAttr
+        arguments:
+            - '@service_container'
+    db.category:
+        class: ManageBundle\Services\DB\Category
+        arguments:
+            - '@service_container'
+    db.cate_pushs:
+        class: ManageBundle\Services\DB\CatePushs
+        arguments:
+            - '@service_container'
+    db.cron:
+        class: ManageBundle\Services\DB\Cron
+        arguments:
+            - '@service_container'
+    db.fragments:
+        class: ManageBundle\Services\DB\Fragments
+        arguments:
+            - '@service_container'
+    db.inter_comment:
+        class: ManageBundle\Services\DB\InterComment
+        arguments:
+            - '@service_container'
+    db.photos:
+        class: ManageBundle\Services\DB\Photos
+        arguments:
+            - '@service_container'
+    db.pushs:
+        class: ManageBundle\Services\DB\Pushs
+        arguments:
+            - '@service_container'
+    db.pushs_view:
+        class: ManageBundle\Services\DB\PushView
+        arguments:
+            - '@service_container'
+    db.pushs_attr:
+        class: ManageBundle\Services\DB\PushsAttr
+        arguments:
+            - '@service_container'
+    db.topic:
+        class: ManageBundle\Services\DB\Topic
+        arguments:
+            - '@service_container'
+    db.topic_arc:
+        class: ManageBundle\Services\DB\TopicArc
+        arguments:
+            - '@service_container'
+    db.topic_attr:
+        class: ManageBundle\Services\DB\TopicAttr
+        arguments:
+            - '@service_container'
+    db.upgrade:
+        class: ManageBundle\Services\DB\Upgrade
+        arguments:
+            - '@service_container'
+    db.userconfig:
+        class: ManageBundle\Services\DB\Userconfig
+        arguments:
+            - '@service_container'
+    db.userpay:
+        class: ManageBundle\Services\DB\Userpay
+        arguments:
+            - '@service_container'
+    db.usermsg:
+        class: ManageBundle\Services\DB\Usermsg
+        arguments:
+            - '@service_container'
+    db.usersms:
+        class: ManageBundle\Services\DB\Usersms
+        arguments:
+            - '@service_container'
+    db.user_auth:
+        class: ManageBundle\Services\DB\UserAuth
+        arguments:
+            - '@service_container'
+    db.user_cert:
+        class: ManageBundle\Services\DB\UserCert
+        arguments:
+            - '@service_container'
+    db.vote:
+        class: ManageBundle\Services\DB\Vote
+        arguments:
+            - '@service_container'
+    db.voteoptions:
+        class: ManageBundle\Services\DB\Voteoptions
+        arguments:
+            - '@service_container'
+    db.webtw:
+        class: ManageBundle\Services\DB\Webtw
+        arguments:
+            - '@service_container'
+    db.msglog:
+        class: ManageBundle\Services\DB\Msglog
+        arguments:
+            - '@service_container'
+    db.memconfig:
+        class: ManageBundle\Services\DB\Memconfig
+        arguments:
+            - '@service_container'
+    db.cleardata:
+        class: ManageBundle\Services\DB\Cleardata
+        arguments:
+            - '@service_container'
+    db.createapp:
+        class: ManageBundle\Services\DB\Createapp
+        arguments:
+            - '@service_container'
+    db.language:
+        class: ManageBundle\Services\DB\Language
+        arguments:
+            - '@service_container'
+    db.version:
+        class: ManageBundle\Services\DB\Version
+        arguments:
+            - '@service_container'
+    house.inter_trends:
+        class: ManageBundle\Services\DB\InterTrends
+        arguments:
+            - '@service_container'
+    db.mconfig_seo:
+        class: ManageBundle\Services\DB\MconfigSeo
+        arguments:
+            - '@service_container'

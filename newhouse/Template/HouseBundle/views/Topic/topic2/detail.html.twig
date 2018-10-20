@@ -1,0 +1,119 @@
+{% extends 'HouseBundle:Topic:extend.html.twig' %}
+
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% set block_loupan = ('house.topic_arc')|getBlock({ename:'loupan'},{checked: 1, aid: detail.id|default(''), pageSize: 20}) %}
+
+{% block key_des %}
+<meta name="keywords" content="{{ detail.keywords|default('') }}" />
+<meta name="description" content="{{ detail.abstract|default('') }}" />
+{% endblock key_des%}
+
+{% block title %}专题模板2{% endblock title %}
+
+{% block css %}
+    {{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/special-2.css')}}
+{% endblock css %}
+
+{% block body %}
+
+<body class="w1210">
+
+<div class="banner">
+    <p>zzzzzzzzzz</p>
+</div>
+<div class="nav_event">
+   <div class="nav_inner">
+    <p>
+       {{detail.content|default('')|raw}}
+    </p>
+   </div>
+    <div class="nav_event_b"><img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-2/nav_b.jpg'}) -}}"></div>
+</div>
+<div class="title"><img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-2/title_1.jpg'}) -}}"></div>
+<div class="liyou">
+    <ul>
+        <li class="n1"><i></i><s></s><p>精装房户型设计更符合业主居住习惯和注重功能性开发</p>
+            开发商对精装项目的规划要比毛坯项目更细致，针对目标客户群的居住需求、习惯进行更为系统调查，然后以此结果确定项目整体规划，包括建筑风格、户型面积、装修风格、装修标准等。所以，户型设计不仅仅只考虑多出面积，更注重是否符合目标客户群的居住需求以及空间功能的开发，保证居住者使用功能全面和生活便利，并全方位考虑了住户的收纳、生活动线、家具布局等元素。</li>
+        <li class="n2"><i></i><s></s><p>建筑、装修一体化施工，无拆改居住更安全</p>
+            避免邻里装修纠纷，有利于社区和谐。由于精装住宅采用的是统一施工，不会产生二次垃圾，物业比较好管理，也没有噪音污染。能避免在毛坯房单独装修时发生的扰民现象和装修过程中所带来的邻里纠纷，有利于社区的和谐。</li>
+        <li class="n3"><i></i><s></s><p>精装房风格百搭 以软装饰彰显个性品味</p>
+            精装房可以由软装饰方面体现个人品味。业主可以用中式、欧式的主打家具配上琳琅满目的布艺图案、形态各异的照明灯具、风格迥异的绘画和雕塑摆件等等，打造不同风格的家，同样能够展现个人品味。</li>
+        <li class="n4"><i></i><s></s><p>避免家装陷阱精装房经相关部门验收品质有保证</p>
+            精装房可以让业主避免一些家装陷阱。在交房前，已经有项目工程监理公司、开发商相关部门进行了抽检，这在很大程度上保证了家装品质。而且，精装房是有保修的。每套精装房都有自己的使用说明书，房间内的建材、家电在质保期内出现问题，直接联系物业维修。如果是比较大的家装问题，还可以找开发商维权赔偿。</li>
+    </ul>
+</div>
+<div class="cl"></div>
+<div class="title"><img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-2/title_2.jpg'}) -}}"></div>
+<div class="haochu">
+    <ul>
+        <li class="n1"><img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-2/hc_1.gif'}) -}}"><p>购买精装房可以把装修成本算入总房价按揭，这样减轻了一次性装修投入成本的压力。装修费对于年轻人来说，压力还真不小，这也是选择精装房的一个很大的因素。</p></li>
+        <li class="n2"><img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-2/hc_2.gif'}) -}}"><p>精装房在设计方面，开发商会全面考虑到热水器、净水器、微波炉、洗衣机的安装问题，所以整体性会比自己装修的好。</p></li>
+        <li class="n3"><img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-2/hc_3.gif'}) -}}"><p>购买精装修住宅时，消费者所购买的是完整的住宅产品，有明确的投诉对象，售后服务更加有保障。但是如果是自己装修的，将会涉及到多个品牌商家，保障也不集中。</p></li>
+        <li class="n4"><img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-2/hc_4.gif'}) -}}"><p>毛坯房整幢楼装修时间跨度长，等你已经住一段时间了，还有邻居在装修，这样就会很吵。况且，装修房子的时候，一家人还容易产生意见。</p></li>
+        <li class="n5"><img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-2/hc_5.gif'}) -}}"><p>现在的精装修，一般都会配齐厨、卫洁具和电器，而开发商将会巧妙的完成硬装部分，而一些软装修则是由我们自己来完成，这样我们就可以配置自己喜欢的家居。</p></li>
+        <li class="n6"><img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-2/hc_6.gif'}) -}}"><p>买房后，有不少人会为了自己的习惯，增大使用面积，有些人会掏墙、挖洞，甚至是拆梁毁柱，这样会破坏建筑结构，也会给房子造成很大的安全隐患，后果真是不敢想象。</p></li>
+        <li class="n7"><img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-2/hc_7.gif'}) -}}"><p>敢于推出精装修的房子，想必开发的实力都不会弱，大牌房企质量有保证。我们买下精装房后，只要再配置一些简单的家具就可入住。</p></li>
+        <li class="n8"><img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-2/hc_8.gif'}) -}}"><p>装修与设计同步，可节省不少开支，同样的材料，开发商采购起来肯定比我们去采购是要便宜得多的，所以更经济，也更划算一些。</p></li>
+        <li class="n9"><img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-2/hc_9.gif'}) -}}"><p>开发商聘请了专家对装修材料、风格等进行设计，相对市民自己装修，装修不容易过时。</p></li>
+        <li class="n10"><img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-2/hc_10.gif'}) -}}"><p>如今大多数人生活节奏快，没有时间和精力进行装修。精装房提供了这一方便，拎包入住，省去了不少麻烦。</p></li>
+    </ul>
+</div>
+<div class="cl"></div>
+<div class="title"><img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-2/title_3.jpg'}) -}}"></div>
+<div class="xianjing_txt">通过2016年房地产市场的销售表现看，刚需产品仍然是的房地产市场的绝对主力，精装房产品仍然没有成为市场的主流。质量问题是阻碍精装房发展的首要问题。由于精装房缺少有效的标准，缺乏质量监管，精装房遇到质量问题维权难，这也是很多购房者担心的问题。下面小编为大家揭露四种陷阱，教你如何挑选精装房。</div>
+<div class="xiangjing">
+    <ul>
+        <li class="n1">
+            <p class="top_xj"><span>虚报精装价格</span>市面上，开发商对外声称的装修标准几乎都不下于2000元/平方米，有的豪宅项目甚至上万元。售楼员还会不断给洗脑推销：“软装、设备都是名牌，绝对物超所值”但事实是否真的如此呢？</p>
+            <p class="bottom_xj">开发商在给精装房用到的材料家具都是货源不清的，购房者也很难发现其中的价格水分有多少，因此精装房是否虚报价格的水分还是很大的，连材料是否符合卫生标准都不一定能查证。</p><i>小编点评</i>
+        </li>
+        <li class="n2">
+            <p class="top_xj"><span>被花哨的样板间蒙蔽</span>目前很多精装修楼盘都有一个普遍现象，就是把样板间里的装修项目做得很花哨、很夸张，使消费者很快便“陶醉”在样板间里，选择时也很容易就被这些设计所打动，掉进陷阱里。</p>
+            <p class="bottom_xj">外行看热闹，内行看门道。精装房的装修项目在细节上做“手脚”，其目的无非是希望消费者快些动心买房，所以在面对这些诱人的装修细节时，您一定要多问几个为什么。&nbsp;</p><i>小编点评</i>
+        </li>
+        <li class="n3">
+            <p class="top_xj"><span>设计新奇 忽视住户体验</span>有些项目希望通过一些新奇的设计、卖点来招揽客户，但这些看着不错的设计，往往只有到真正购买入住使用后，才会发现它的华而不实。选购精装房时一定要考虑将来入住的实际问题。</p>
+            <p class="bottom_xj">很多精装修住宅就是从新鲜的设计里埋下“陷阱”的，消费者应该依据自己的生活习惯来选择精装项目，考察其是否实用、是否可行。</p><i>小编点评</i>
+        </li>
+        <li class="n4">
+            <p class="top_xj"><span>家电与样板间并不相符</span>样板间的品牌设施和厨卫通常也是诱惑客户购买精装房的原因之一，但到收房的时候才 发现不是品牌产品或者不品牌一致，产品型号不同，总体算下来，价值是远低于样板房的。</p>
+            <p class="bottom_xj">合同应注明住宅装修所有项目所使用的主要材料以及设备的品牌、型号、生产厂商，关键项目的工艺做法、标准，重要的装修项目甚至应该在合同附件中备有必要的图纸。</p><i>小编点评</i>
+        </li>
+    </ul>
+</div>
+<div class="cl"></div>
+<div class="title title_list" style="margin:35px auto 0;height:52px;"><img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-2/title_4.jpg'}) -}}">
+    <p>2016年楼盘大盘点</p>
+</div>
+<div class="house">
+    <div class="title_1">列&nbsp;表</div>
+    <ul>
+        {% if block_loupan.data is defined %}
+            {% for item in block_loupan.data %}
+                <li><a href="{{('houses/detail')|U({id: item.fromid|default('')})}}" target="_blank">
+                    {{core_global.img({
+                        width: 283,
+                        height: 200,
+                        src: item.thumb|default(),
+                        alt: item.name|default(),
+                        type: 2
+                    })}}
+                </a>
+                <p><a href="{{('houses/detail')|U({id: item.fromid|default('')})}}" target="_blank">{{item.name|default('')}}（{{core_global.region({id: item.region|default(''), tpl: '%value%'})}}）</a><span>
+                    {{ core_global.formField({value: item.lcs|default(''), form: 'lcs', field: 'lcs', tpl: '%title%&nbsp;'}) }}
+                    {{house_global.if_dj({value: item.dj|default(''), tpl: '<b>%value%</b>%danwei%'})}}
+                    </span>
+                </p>
+            </li>
+            {% endfor %}
+        {% endif %}
+
+    </ul>
+    <div class="blank20"></div>
+</div>
+
+
+
+</body>
+{% endblock body %}

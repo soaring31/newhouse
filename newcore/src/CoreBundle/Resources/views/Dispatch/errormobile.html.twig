@@ -1,0 +1,15 @@
+{% extends 'CoreBundle::base_ajax.html.twig' %}
+
+{% block result %}
+<script type="text/javascript">
+	seajs.use(['sm'], function (sm) {
+		$.alert('{{tpl_content|default('')}}', function () {
+			{% if url|default('') %}
+                location.href = '{{url|default("")}}';
+            {% else %}
+                location.href = '{{("index/index")|U({}, true)}}'
+            {% endif %}
+		})
+	})
+</script>
+{% endblock result %}

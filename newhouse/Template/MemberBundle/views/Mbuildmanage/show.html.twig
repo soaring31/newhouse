@@ -1,0 +1,10 @@
+{% extends "HouseBundle::base_show.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+	seajs.use('', function() {
+	})	
+</script>
+{% endblock %}
+{% block body %}
+{{ core_manage.form(form|default(''),'form', 'house.houses_arc') }}
+{% endblock %}

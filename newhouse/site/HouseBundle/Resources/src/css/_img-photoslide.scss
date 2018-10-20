@@ -1,0 +1,35 @@
+$img-photoslide-1:(32px, 32px, -184px, -42px, img-photoslide-1);
+$img-photoslide-2:(32px, 32px, -184px, 0, img-photoslide-2);
+$img-photoslide-3:(26px, 41px, -36px, -107px, img-photoslide-3);
+$img-photoslide-4:(26px, 41px, -72px, -107px, img-photoslide-4);
+$img-photoslide-5:(26px, 41px, -108px, -107px, img-photoslide-5);
+$img-photoslide-6:(26px, 41px, 0, -107px, img-photoslide-6);
+$img-photoslide-7:(36px, 58px, -92px, 0, img-photoslide-7);
+$img-photoslide-8:(36px, 58px, -46px, -39px, img-photoslide-8);
+$img-photoslide-9:(36px, 58px, 0, -39px, img-photoslide-9);
+$img-photoslide-10:(36px, 58px, -138px, 0, img-photoslide-10);
+$img-photoslide-11:(82px, 29px, 0, 0, img-photoslide-11);
+$img-photoslide-12:(31px, 31px, 0, -158px, img-photoslide-12);
+$img-photoslide-13:(31px, 31px, -184px, -84px, img-photoslide-13);
+
+$img-photoslide: ($img-photoslide-1,$img-photoslide-2,$img-photoslide-3,$img-photoslide-4,$img-photoslide-5,$img-photoslide-6,$img-photoslide-7,$img-photoslide-8,$img-photoslide-9,$img-photoslide-10,$img-photoslide-11,$img-photoslide-12,$img-photoslide-13);
+
+@mixin img-photoslide($sprites) {
+  %icophotoslide {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/photoslide.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+        @extend %icophotoslide;
+    }
+  }
+}

@@ -1,0 +1,133 @@
+/*!
+ * @name <%= name %>
+ * @author <%= author %>
+ * @date <%= date %>
+ */
+
+@import 'static/ats'; // 工具类, 每个文件都要导入
+
+$deep-color : #333333;
+
+$easy-color : #777;
+
+@import 'sale'; // 二手公用模块
+
+$lp-aside-w: 250px;
+@import 'lp-aside'; // 侧栏
+
+.tags {
+    span{
+        border: 1px solid #ccc;
+        border-color: #ccc;
+        color: $easy-color;
+        margin-right: 5px;
+        padding: 2px 10px;
+	    display: inline-block;
+	    margin-bottom: 5px;
+	    line-height: 20px;
+	    border-radius: 3px;
+    }
+}
+
+//侧栏推荐
+.lp-tj {
+	border: 1px solid #ccc;
+}
+
+
+.bs-content {
+	float: left;
+	width: 930px;
+}
+
+
+// -----------------<< 写字楼出租和出售列表 >>-----------------------------------
+
+.xzu-list {
+	.sale-item-l {
+		width: 740px;
+
+		.ps {
+			color: #f47d3c;
+		}
+
+		.new {
+			color: $easy-color;
+		}
+	}
+	.sale-item-text {
+		p {
+			line-height: 24px;
+		}
+	}
+	.sale-item-r {
+		padding-right: 20px;
+		p {
+			text-align: right;
+		}
+	}
+	.build {
+		color: $easy-color;
+		span {
+			color: $deep-color;
+		}
+	}
+	.buy {
+		margin-top: 20px;
+		a:hover {
+			text-decoration: none;
+			color: #333;
+		}
+		.buy-1 {
+			background: #f47d3c;
+			&:hover {
+				background: #f47d3c;
+			}
+		}
+		.buy-2 {
+			background: #e43;
+			&:hover {
+				background: #e43;
+			}
+		}
+	}
+
+}
+
+// -------------------<< 写字楼新盘列表 >>-------------------
+.xpan-list {
+	.sale-item-l {
+		width: 740px;
+	}
+
+	.sale-item-text {
+		padding-right: 20px;
+		p {
+			line-height: 26px;
+			height: 26px;
+		}
+	}
+
+	.fan {
+		color: $easy-color;
+
+		span {
+			color: $deep-color;
+		}
+	}
+
+	.build {
+		color: $easy-color;
+
+		span {
+			color: $deep-color;
+		}
+	}
+
+	.sale-item-r {
+		p {
+			text-align: right;
+			margin-right: 18px;
+		}
+	}
+}

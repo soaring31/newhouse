@@ -1,0 +1,28 @@
+$img-gd-1:(70px, 44px, 0, 0, img-gd-1);
+$img-gd-2:(18px, 16px, 0, -54px, img-gd-2);
+$img-gd-3:(11px, 6px, -28px, -54px, img-gd-3);
+$img-gd-4:(4px, 7px, -80px, 0, img-gd-4);
+$img-gd-5:(3px, 2px, -80px, -17px, img-gd-5);
+$img-gd-6:(7px, 4px, -49px, -54px, img-gd-6);
+
+$img-gd: ($img-gd-1,$img-gd-2,$img-gd-3,$img-gd-4,$img-gd-5,$img-gd-6);
+
+@mixin img-gd($sprites) {
+  %icogd {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/gd.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+        @extend %icogd;
+    }
+  }
+}

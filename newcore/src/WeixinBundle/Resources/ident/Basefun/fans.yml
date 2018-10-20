@@ -1,0 +1,33 @@
+info:
+    tableName: wxfans
+    subTableName: ''
+    aliasName: p
+    listGrid:
+        - 'id:序号|txtcenter w30'
+        - 'headimgurl[HEADIMGURL]:头像|txtcenter w150'
+        - 'nickname:粉丝昵称|txtcenter w80'
+        - 'province:所在省份|txtcenter w80'
+        - 'city:所在城市|txtcenter w80'
+        - 'sex:性别|txtcenter w50'
+        - 'remark[EDITSPAN]:备注名称|txtcenter w80'
+        - 'tagname:标签|txtcenter w150'
+        - 'id:操作|txtcenter w150:[EDIT]管理标签|btn|fans/edittag'
+    listDesc: 粉丝管理
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    order: ''
+    orderBy: asc
+    searchFun: EXISTS
+    dataModel: 0
+    autoQuery: '0'
+    alias: {  }
+    query:
+        token:
+            eq: '{wxtoken}'
+        tagname:
+            like: '%[tagname]%'
+        nickname:
+            like: '%[nickname]%'
+    query1: {  }

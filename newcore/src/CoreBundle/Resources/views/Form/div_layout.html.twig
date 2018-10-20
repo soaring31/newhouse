@@ -1,0 +1,41 @@
+{% block widget_attributes %}
+    {% if id is defined %} id="{{ id }}"{% endif %}
+    {% if name is defined and name %} name="{{ name }}"{% endif %}
+    {% if read_only is defined and read_only %} readonly="readonly"{% endif %}
+    {% if disabled is defined and disabled %} disabled="disabled"{% endif %}
+    {% if required is defined and required %} required="required"{% endif %}
+    {% for attrname, attrvalue in attr %}
+        {{ " " }}
+        {% if attrname in ['placeholder', 'title'] %}
+            {{ attrname }}="{{ attrvalue|trans({}, translation_domain|default('')) }}"
+        {% elseif attrvalue is same as(true) %}
+            {{ attrname }}="{{ attrname }}"
+        {% elseif attrvalue is not same as(false) %}
+            {{ attrname }}="{{ attrvalue }}"
+        {% endif %}
+    {% endfor %}
+{% endblock widget_attributes %}
+
+{% block widget_simple %}
+    {% set type = type|default('text') %}
+    {% set attr = attr|default({}) %}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{% endblock widget_simple %}
+
+{% block widget_simple_button %}
+    {% set type = type|default('button') %}
+    {% set attr = attr|default({}) %}
+    {{ block('widget_simple') }}
+{% endblock widget_simple_button %}
+
+{% block checkbox_widget %}
+    {% set attr = attr|default({}) %}
+    {% set checked = checked|default(false) %}
+    <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+{% endblock checkbox_widget %}
+
+{% block radio_widget %}
+    {% set attr = attr|default({}) %}
+    {% set checked = checked|default(false) %}
+    <input type="radio" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+{% endblock radio_widget %}

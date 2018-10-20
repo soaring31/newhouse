@@ -1,0 +1,5 @@
+services:
+    core.command.updatetable:
+        class: CoreBundle\Command\UpdateTableCommand
+        tags:
+            - { name: console.command }

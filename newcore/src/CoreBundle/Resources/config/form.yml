@@ -1,0 +1,141 @@
+services:
+    core.image_types:
+        class: CoreBundle\Form\Type\ImageType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: image }
+    core.file_types:
+        class: CoreBundle\Form\Type\FileType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: file }
+    core.password_types:
+        class: CoreBundle\Form\Type\PasswordType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: password }
+    core.clonetpl_types:
+        class: CoreBundle\Form\Type\ClonetplType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: clonetpl }
+    core.ajaxbind_types:
+        class: CoreBundle\Form\Type\AjaxbindType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: ajaxbind }
+    core.entity_types:
+        class: CoreBundle\Form\Type\EntityType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: entity }
+    core.push_types:
+        class: CoreBundle\Form\Type\PushType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: push }
+    core.radio_types:
+        class: CoreBundle\Form\Type\RadioType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: radio }
+    core.checkbox_types:
+        class: CoreBundle\Form\Type\CheckboxType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: checkbox }
+    core.bundle_types:
+        class: CoreBundle\Form\Type\BundleType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: bundle }
+    core.ueditor_types:
+        class: CoreBundle\Form\Type\UeditorType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: ueditor }
+    core.usermodel_types:
+        class: CoreBundle\Form\Type\UserModelType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: usermodel }
+    core.ormlist_types:
+        class: CoreBundle\Form\Type\OrmlistType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: ormlist }
+    core.position_types:
+        class: CoreBundle\Form\Type\PositionType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: position }
+    core.textcolor_types:
+        class: CoreBundle\Form\Type\TextcolorType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: textcolor }
+    core.ymlfile_types:
+        class: CoreBundle\Form\Type\YmlfileType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: ymlfile }
+    core.abstracttext_types:
+        class: CoreBundle\Form\Type\AbstracttextType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: abstracttext }
+    core.baidumap_types:
+        class: CoreBundle\Form\Type\BaidumapType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: baidumap }
+    core.captcha_types:
+        class: CoreBundle\Form\Type\CaptchaType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: captcha }
+    core.telcode_types:
+        class: CoreBundle\Form\Type\TelcodeType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: telcode }
+    core.mailcode_types:
+        class: CoreBundle\Form\Type\MailcodeType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: mailcode }
+    core.switch_types:
+        class: CoreBundle\Form\Type\SwitchType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: switch }
+    core.geetestlib:
+        class: CoreBundle\Form\Type\GeetestLibType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: geetestlib }
+    core.mailtpl_types:
+        class: CoreBundle\Form\Type\MailtplType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: mailtpl }
+    core.mobiletpl_types:
+        class: CoreBundle\Form\Type\MobiletplType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: mobiletpl }
+    core.fragmentstpl_types:
+        class: CoreBundle\Form\Type\FragmentstplType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fragmentstpl }
+    core.idate_types:
+        class: CoreBundle\Form\Type\IdateType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: idate }
+    core.date_types:
+        class: CoreBundle\Form\Type\DateType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: date }

@@ -1,0 +1,178 @@
+{% extends 'HouseBundle:Map:index.html.twig' %}
+{% block sea_url %}
+    {{- 'sale/list' -}}
+{% endblock %}
+{# 请求地址 #}
+{% block map_body %}
+<script type="text/javascript">
+    seajs.use(['mapLibs'], function(map) {
+        map.$map.on('map-zoomend', function() {
+            // 显示区域时不显示排序
+            if (map.zoom <= 13) {
+                $('[data-con-nav]').hide();
+            } else {
+                $('[data-con-nav]').show();
+            }
+        });
+    })    
+</script>
+
+{# {{ dump(sea_url) }} #}
+{# 地图 #}
+<div id="container"
+    data-map="{
+        point: {
+            lng: {{arr_map[0]|default(113.760128)}},
+            lat: {{arr_map[1]|default(23.023205)}}
+        },
+        url: '{{- (block('sea_url'))|U -}}',
+        zoom: {{arr_map[2]|default(13)}}
+    }"
+    data-marker-lists="[
+        {# 区域 5km, 12 #}
+        {# 区域 2km, 13 #}
+        {   
+            listOpt: {
+                wrap: '.con-list .list',
+                tplListTop: '#tpl-list-top',
+                tpl: '#tpl-list1'
+            },
+            tpl:  '#tpl-12',
+            urlOpt: {
+                search: 12,
+                map: 'neq|_null',
+                type: 1
+            },
+            zoom: [12,13]
+        },
+        {# 商圈 1km, 14 #}
+        {# 小区 .2km, 16 #}
+        {
+            listOpt: {
+                wrap: '.con-list .list',
+                tplListTop: '#tpl-list-top',
+                tpl: '#tpl-list'
+            },
+            tpl:  '#tpl-14',
+            urlOpt: {
+                search: 14,
+                map: 'neq|_null',
+                pageSize: 20, 
+                type: 1
+            },
+            zoom: [14,15,16]
+        }
+    ]"></div> 
+
+{# template items #}
+{# 地图区域模板 #}
+<script id="tpl-12" type="text/html">
+    <div class="area-item" data-point="<%= point.lng %>,<%= point.lat %>,14" data-name="region" data-value="<%= id %>" data-map-item="<%= id %>" data-polyline="<%= polyline %>">
+        <div class="area-item-inner">
+            <span class="name"><%= name %></span>
+            <span class="name-sub"><%= num %>套</span>
+        </div>
+    </div>
+</script>
+{# 地图小区模板 #}
+<script id="tpl-14" type="text/html">
+    {% block marker_item_14 %} 
+    <div class="marker-item" data-opt="{refresh: 0}" data-title="<%= name %>" data-map-item="<%= id %>" data-name="aid" data-value="<%= id %>"  data-polyline="<%= polyline %>">
+        <a href="<%= url %>" target="_blank">
+            <span class="name"><%= dj * 1 ? dj + '万元/m&sup2;' : '' %> <%= num %>套</span>
+            <span class="name-sub"><%= name %></span>
+            <span class="arrow"></span>
+        </a>
+    </div>
+    {% endblock marker_item_14 %}
+</script>
+{# 列表小区模板 #}
+<script id="tpl-list" type="text/html">
+    {% block sider_item %}
+    <li data-map-item="<%= aid || id %>">
+        <a href="<%= url %>" target="_blank">
+        <div class="img">
+                <img width="120" height="90" src="<%= thumb %>">
+        </div>
+        <div class="item-text">
+            <h3>
+                <span class="text-2">
+                    <%= zj * 1 ? zj + '万' : '面议' %>
+                </span>
+                <%= name %>
+            </h3>
+            <div class="text-1">
+                <div class="text-1-ls">
+                    <%=# zlhx %>
+                </div>
+                <div class="text-1-ls">
+                    <%= address %>
+                </div>
+                <div class="text-1-ls text-1-ls-1">
+                    <%=# tags %>
+                </div>
+            </div>
+        </div>
+        </a>
+    </li>
+    {% endblock sider_item %}
+</script>
+{# 列表区域模板 #}
+<script id="tpl-list1" type="text/html">
+    <li class="area-lp" data-map-item="<%= id %>" data-name="region" data-value="<%= id %>" data-point="<%= point.lng %>,<%= point.lat %>,14">
+        <a href="###">
+        <div class="item-text">
+            <h3>
+                <span class="text-2">
+                    <%= num %>套
+                </span>
+                <%= name %>
+            </h3>
+        </div>
+        </a>
+    </li>
+</script>
+{# 列表头 #}
+<script type="text/html" id="tpl-list-top">
+    <div class="con-top ">
+        <h2><%= title ? title : '{{ sess_area|getAreaName|default('区域') }}' %></h2>
+        <p>当前共有<%= num %>个结果</p>
+    </div>
+</script>
+{% endblock map_body %}
+
+{% block map_filter %}
+{% set cate_data = house_global.cate_data({ 
+                tag: 'sale',
+            }).__toString|json_decode %}
+
+{{ house_global.filter_item({
+                    action: 'sale/list',
+                    rows: 4,
+                    reserve: 1
+                }|merge(cate_data)) }}
+{% endblock map_filter %}
+
+{% block map_sort %}
+    {# 排序配置 #}
+    {% set sort_data = {
+        def: {
+            title: '默认'
+        },
+        zj: {
+            title: '总价'
+        },
+        mj: {
+            title: '面积'
+        },
+        dj: {
+            title: '单价'
+        }
+    } %}
+
+    {{ core_global.sort({
+        action: action,
+        data: sort_data|default('')
+    }) }}
+
+{% endblock map_sort %}

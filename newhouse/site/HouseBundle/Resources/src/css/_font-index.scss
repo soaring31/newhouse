@@ -1,0 +1,45 @@
+$font-index-fz: inherit !default;
+
+@font-face {
+	font-family: "index";
+    font-weight: normal;
+    font-style: normal;
+	src: url('../fonts/index.eot');
+	src: url('../fonts/index.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/index.woff') format('woff');//,
+		//url('../fonts/index.ttf') format('truetype'),
+		//url('../fonts/index.svg#index') format('svg');
+}
+$font-index-fz: inherit !default;
+$font-index-fl: none !default;
+$font-index-m: 0 !default;
+$font-index-va: -.25em !default;
+[class^="font-index-"],
+[class*=" font-index-"] {
+	font-family: "index";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-size: $font-index-fz;
+	float: $font-index-fl;
+	margin: $font-index-m;
+	vertical-align: $font-index-va;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; only necessary if not using the private unicode range (firstdata option) 
+	text-decoration: none;
+	text-transform: none;
+}
+.font-index-1:before {
+	content: "\EA01";
+}.font-index-2:before {
+	content: "\EA02";
+}.font-index-3:before {
+	content: "\EA03";
+}.font-index-4:before {
+	content: "\EA04";
+}.font-index-5:before {
+	content: "\EA05";
+}.font-index-6:before {
+	content: "\EA06";
+}

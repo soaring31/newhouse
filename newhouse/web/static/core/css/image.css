@@ -1,0 +1,180 @@
+@CHARSET "UTF-8";
+.progressContainer {
+	margin-bottom: 10px;
+	position: relative;
+}
+
+a.progressCancel {
+	background: url('../images/image_upload.png') no-repeat;
+}
+
+a.progressCancel {
+	position: absolute;
+	display: block;
+	width: 14px;
+	height: 14px;
+	background-position: -100px -182px;
+	right: -6px;
+	top: -6px;
+	text-indent: -9999px;
+	overflow: hidden;
+}
+
+a.progressCancel:hover {
+	text-decoration: none;
+	background-position: -100px -200px;
+}
+
+.item_box {
+	display: block;
+	width: 80px;
+	height: 60px;
+	padding: 6px;
+	border: 1px solid rgb(211, 211, 211);
+	background-color: rgb(246, 246, 246);
+}
+
+.item_box img {
+	display: block;
+}
+
+.item_input {
+	width: 94px;
+}
+
+.item_input textarea, .item_link textarea {
+	width: 88px;
+	min-height: auto;
+	height: 20px !important;
+	border: 1px solid #D3D3D3 !important;
+	border-top: none !important;
+	display: block;
+	font: 12px/20px Arial, simsun;
+	overflow: hidden;
+	padding: 0 2px;
+	background-color: #fff;
+	border-radius: 0;
+}
+
+.item_input textarea {
+	margin-top: 0 !important;
+}
+
+.item_link textarea {
+	margin-top: 2px !important;
+}
+
+.item_input:hover textarea, .item_link:hover textarea {
+	border: 1px solid #E3E3E3 !important;
+	height: 80px !important;
+	width: 152px !important;
+	position: absolute;
+	z-index: 1;
+}
+
+.item_input .shadow {
+	display: none;
+}
+
+.isfenmian {
+	width: 16px;
+	height: 19px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 2;
+	background: url('../images/icons/fenmian.png') repeat;
+}
+
+.item_link {
+	display: none;
+}
+
+.fm_bg {
+	background: rgb(51, 51, 51);
+	opacity: 0.7;
+	z-index: 1;
+}
+
+.fm_bg, .fengmian {
+	width: 94px;
+	overflow: hidden;
+	position: absolute;
+	top: 12px;
+	height: 50px;
+}
+
+.scroll_l, .scroll_r {
+	width: 17px;
+	height: 25px;
+	display: inline-block;
+	float: left;
+}
+
+.set_fm {
+	width: 58px;
+	height: 25px;
+	display: inline-block;
+	float: left;
+	margin: 0 1px;
+	overflow: hidden;
+}
+
+.fengmian .set, a.cut_fm, a.cut_fm2, a.scroll_l:hover, a.scroll_r:hover, a.set_fm:hover {
+	background: url('../images/fengmian.png') no-repeat;
+}
+
+a.cut_fm {
+	background-position: 0px -51px;
+}
+
+a.cut_fm2 {
+	background-position: -48px -51px;
+}
+
+a.cut_fm:hover{
+	background-position: 0px -77px;
+}
+a.cut_fm2:hover{
+	background-position: -48px -77px;
+}
+
+a.set_fm:hover{
+	background-position: -18px -26px;
+}
+
+a.scroll_l:hover{
+	background-position: 0px -26px;
+}
+
+a.scroll_r:hover{
+	background-position: -77px -26px;
+}
+
+.fengmian {
+	z-index: 2;
+}
+
+.fengmian .set {
+	background-position: 0 0;
+	height: 25px;
+}
+
+.fengmian .cut {
+	height: 25px;
+	text-align: center;
+	border-top: 1px solid #ddd;
+}
+
+.fengmian .cut a {
+	display: inline-block;
+	height: 100%;
+	width: 50%;
+}
+.imgs-wrap li {
+	float: left;
+	margin-right: 5px;
+}
+.imgs-wrap-1 li {
+	height: 105px;
+}

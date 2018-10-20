@@ -1,0 +1,24 @@
+info:
+    tableName: cate_metro
+    subTableName: ''
+    aliasName: c
+    listGrid: {  }
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    order: id
+    orderBy: asc
+    searchFun: EXISTS
+    dataModel: 0
+    alias: {  }
+    query:
+        name:
+            orX: 'name,like,%[name]%'
+        pid:
+            find: '[pid]'
+    query1: {  }
+    autoQuery: '1'
+    groupBy: ''
+    attribute: '0'

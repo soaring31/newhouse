@@ -1,0 +1,113 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+ * detail: 当前数据
+ * category_around: 分类标识--周边
+ * block_zhoubian: 周边数据
+#}
+{% set detail = detail|default(cident.detail.data[0]|default('')) %}
+    
+{% set category_around = ('house.category')|getAll({checked: 1, models: 'around', pid: 'neq|0', pageSize: 40}) %}
+
+{% set block_zhoubian = ('house.houses_arc')|getBlock({form: 'houses_around'}, {checked: 1, aid: detail.id|default(''), pageSize: 150}) %}
+
+{% block result %}
+<div class="content">
+    {# 详情 #}
+    <div class="list-block panel-block">
+        {{- housemobile_global.panel_title({title: '楼盘详情'})-}}
+        <div class="item-content1 p-gray">
+            <div class="item-inner2">
+                <div class="row attr-con" id='lpxq'>
+                    <div class="col-100">
+                        物业类型：{{core_global.formData({value: detail.cate_type|default('')})}}
+                    </div>
+                    <div class="col-100">
+                        区域所属：{{core_global.region({id: detail.region|default('1'), tpl: '%value%'})}}
+                    </div>
+                    <div class="col-100">
+                        许可证号：{{detail.xkzh|default('-')}}
+                    </div>
+                    <div class="col-100">
+                        开盘日期：{{core_global.time_date({time: detail.kpdate.date|default('')})}}
+                    </div>
+                    <div class="col-100">
+                        交房日期：{{detail.jfrq|default('-')}}
+                    </div>
+                    <div class="col-100">
+                        得房率：{{detail.dfl|default('-')}}
+                    </div>
+                    <div class="col-100">
+                        建筑面积：{{detail.jzmj|default('-')}}
+                    </div>
+                    <div class="col-100">
+                        绿化率：{{detail.lhl|default('-')}}
+                    </div>
+                    <div class="col-100">
+                        占地面积：{{detail.zdmj|default('-')}}
+                    </div>
+                    <div class="col-100">
+                        容积率：{{detail.rjl|default('-')}}
+                    </div>
+                    <div class="col-100">
+                        装修状况：{{- core_global.formData({value: detail.zxcd|default('')}) -}}
+                    </div>
+                    <div class="col-100">
+                        开发商：{{detail.house_developer|default('-')}}
+                    </div>
+                    <div class="col-100">
+                        楼　　层：{{ core_global.formField({value: detail.lcs|default('-'), form: 'lcs', field:'lcs', tpl: '%title%&nbsp;'}) }}
+                    </div>
+                    <div class="col-100">
+                        车位状况：{{detail.cksm|default('-')}}
+                    </div>
+                    <div class="col-100">
+                        销售电话：{{detail.tel|default('-')}}
+                    </div>
+                    <div class="col-100">
+                        特色楼盘：{{ core_global.formField({value: detail.tslp|default('-'), form: 'houses_common', field:'tslp', tpl: '<span>%title%</span>&nbsp;&nbsp;'}) }}
+                    </div>
+                    <div class="col-100">
+                        楼盘地址：{{detail.address|default('-') }}
+                    </div>
+                    <div class="col-100">
+                        售楼地址：{{detail.sldz|default('-')}}
+                    </div>
+                    <div class="col-100">
+                        交通线路：{{detail.jtxl|default('-')}}
+                    </div>
+                </div>
+                {{- core_mobile_global.more_con({id: 'lpxq', class: 'b-t'})-}}
+            </div>
+        </div>
+    </div>
+
+    {# 周边配套 #}
+    {% if block_zhoubian.pageCount > 0 %}
+    <div class="list-block panel-block">
+        {{- housemobile_global.panel_title({title: '周边配套'})-}}
+        <div class="item-content1 p-gray">
+            <div class="item-inner2">
+                {% if category_around.data is defined %}
+                    {% for item in category_around.data %}
+                        <p>
+                        {% for item2 in block_zhoubian.data if item2.category|default('') == item.id|default('') %}
+                            {% if loop.index == 1 %}
+                                {{item.name|default('')}}：
+                            {% else %}
+                                、
+                            {% endif %}
+                            <a title="{{item2.name|default('')}}" href="{% if item2.category == 55 %}{{core_global.url(item2|merge({controller: 'sale/xdetail', set_models: 1}))}}{% else %}{{core_global.url(item2|merge({models: 'around', set_models: 1}))}}{% endif %}">{{item2.name|default('')}}</a>
+                        {% endfor %}
+                        </p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {# 项目说明 #}
+    {{housemobile_global.content({title: '项目简介', content: detail.content|default('')})}}
+
+    {{ render(controller('HouseBundle:Common:footer', {_isApp: url_isApp})) }}
+</div>
+{% endblock result %}

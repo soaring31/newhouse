@@ -1,0 +1,9 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+
+{% set formName = app.request.get("formName") %}
+
+{% set Form = form[formName]|default('') ? form[formName] : form|default('') %}
+
+{% block result %}
+
+{% endblock result %}

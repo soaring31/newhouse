@@ -1,0 +1,19 @@
+info:
+    tableName: inter_comment
+    subTableName: ''
+    aliasName: int_c
+    listGrid: {  }
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    groupBy: ''
+    order: id
+    orderBy: desc
+    searchFun: EXISTS
+    dataModel: 0
+    autoQuery: '1'
+    alias: {  }
+    query: {  }
+    query1: {  }

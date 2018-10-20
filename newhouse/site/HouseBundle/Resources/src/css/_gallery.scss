@@ -1,0 +1,389 @@
+﻿/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+*/
+/* 宽度调节
+.piccontext {
+}
+//总宽度
+.source {
+}
+//标题信息的宽度
+.picshow {
+}
+//大图显示的宽度
+#pic1 {
+}
+//图片最大的宽度
+.picshowtxt {
+}
+//图片解说文字区域
+.picshowlist_mid {
+}
+//小图区域宽度
+.picmidmid {
+}
+//小图显示宽度
+.picmidmid ul {
+}
+//小图显示宽度
+.piclistshow {
+}
+//列表形式 */
+.piccontext {
+	margin: 0 auto;
+}
+.source {
+	height: 20px;
+	line-height: 20px;
+	overflow: hidden;
+	font-family: "宋体";
+}
+.source_left {
+	float: left;
+	height: 20px;
+	color: #666666;
+}
+.source_left a {
+	color: #666666;
+}
+.source_left a:hover {
+	color: #ff5d11;
+	text-decoration: underline;
+}
+.source_left span {
+	color: #ababab;
+	padding-left: 15px;
+	font-family: arial, helvetica, sans-serif;
+}
+.source_right {
+	float: right;
+	height: 20px;
+	color: #666666;
+}
+.source_right a {
+	color: #666666;
+}
+.source_right span {
+	padding: 0px 10px;
+}
+.support {
+	float: left;
+	height: 20px;
+	overflow: hidden;
+}
+.support img {
+	padding: 0px 5px;
+}
+
+/* 大图展示 */
+.picshow {
+	overflow: hidden;
+	margin: 20px auto 0;
+}
+.picshowtop {
+	text-align: center;
+	position: relative;
+	z-index: 1;
+	overflow: hidden;
+	margin: 0 auto;
+}
+#pic1 {
+	height: auto;
+	max-height: 100%;
+	max-width: 100%;
+	width: auto !important;
+	img {
+		max-height: 100%;
+		max-width: 100%;
+	}
+}
+.pic1-middle {
+	height: 100%;
+	display: inline-block;
+	vertical-align: middle;
+}
+#preArrow {
+	left: 0px;
+}
+#nextArrow {
+	right: 0px;
+}
+.contextDiv {
+	cursor: pointer;
+	height: 100%;
+	width: 50%;
+	position: absolute;
+	top: 0px;
+	z-index: 5;
+}
+.contextDiv span {
+	position: absolute;
+	top: 50%;
+	margin-top: -10%;
+	width: 46px;
+	height: 80px;
+}
+#preArrow_A {
+	left: 0px;
+	background: url('../images/images/left.png') 0px 0px no-repeat;
+	display: none;
+}
+#nextArrow_A {
+	right: 0px;
+	background: url('../images/images/right.png') 0px 0px no-repeat;
+	display: none;
+}
+.picshowtxt {
+	width: 100%;
+	min-height: 40px;
+	_height: 40px;
+	margin-top: 20px;
+	max-width: $min-screen;
+}
+.picshowtxt_left {
+	float: left;
+	width: 70px;
+	height: 50px;
+	line-height: 30px;
+	font-family: georgia, "times new roman", times, serif;
+}
+.picshowtxt_left span {
+	color: #e55656;
+	font-size: 30px;
+}
+.picshowtxt_left i {
+	color: #666666;
+	font-size: 20px;
+}
+.picshowtxt_right {
+	float: left;
+	margin-left: 10px;
+	display: inline;
+	line-height: 23px;
+	color: #666666;
+	font-size: 14px;
+	width: 880px;
+	font-family: "宋体";
+}
+.picshowlist {
+	margin-top: 20px;
+	overflow: hidden;
+}
+.picshowlist_left {
+	float: left;
+	width: 120px;
+	overflow: hidden;
+	overflow: hidden;
+}
+.picleftimg {
+	width: 120px;
+	height: 80px;
+	background: url('../images/images/photo.jpg') no-repeat;
+	padding-top: 9px;
+	padding-left: 5px;
+	overflow: hidden;
+}
+.picleftimg img {
+	width: 106px;
+	height: 66px;
+}
+.piclefttxt {
+	width: 120px;
+	line-height: 20px;
+	font-family: "宋体";
+}
+.piclefttxt a {
+	color: #444444;
+}
+.piclefttxt a:hover {
+	color: #ff5d11;
+	text-decoration: underline;
+}
+
+/* 小图 */
+.picshowlist_mid {
+	float: left;
+	display: inline;
+	overflow: hidden;
+	height: 76px;
+}
+.picmidleft {
+	float: left;
+	width: 24px;
+	height: 76px;
+	overflow: hidden;
+}
+.picmidleft a {
+	display: block;
+	width: 24px;
+	height: 76px;
+}
+.picmidmid {
+	float: left;
+	overflow: hidden;
+	height: 76px;
+	position: relative;
+}
+.picmidmid ul {
+	overflow: hidden;
+	position: absolute;
+	height: 76px;
+	left: 0;
+	top: 15px;
+}
+.picmidmid ul li {
+	float: left;
+	margin-left: 8px;
+	display: inline;
+	width: 116px;
+	text-align: center;
+	position: relative;
+	height: 66px;
+	padding: 5px 0;
+}
+.selectpic {
+	background: #aaa;
+}
+.picmidmid ul li img {
+	max-width: 106px;
+	height: 66px;
+}
+.picmidright {
+	float: left;
+	width: 24px;
+	height: 76px;
+	overflow: hidden;
+}
+.picmidright a {
+	display: block;
+	width: 24px;
+	height: 76px;
+}
+.picshowlist_right {
+	float: left;
+	width: 120px;
+	float: right;
+	overflow: hidden;
+}
+
+/* 弹出层 */
+.bodymodal {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	background: #000;
+	filter: alpha(opacity=50);
+	-moz-opacity: 0.5;
+	-khtml-opacity: 0.5;
+	opacity: 0.5;
+	z-index: 1100;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	display: none;
+}
+.closebtn {
+	color: #fff;
+	width: 15px;
+	height: 15px;
+	display: block;
+}
+.replay {
+	height: 24px;
+	margin-top: 20px;
+	overflow: hidden;
+}
+.replay h2 {
+	float: left;
+	font-size: 16px;
+}
+.replay p {
+	float: left;
+	margin-left: 15px;
+	display: inline;
+	line-height: 24px;
+	padding-right: 25px;
+	background: url('../images/images/replay.png') right no-repeat;
+}
+.replay p a {
+	color: white;
+	font-size: 14px;
+}
+.replay p a:hover {
+	color: $major-color;
+	text-decoration: underline;
+}
+.pictwo {
+	width: 270px;
+	height: 88px;
+	overflow: hidden;
+	margin-top: 20px;
+}
+.pictwo ul li {
+	width: 120px;
+	height: 88px;
+	float: left;
+	margin-right: 15px;
+	position: relative;
+	overflow: hidden;
+}
+.pictwo ul li img {
+	width: 120px;
+	height: 88px;
+}
+.imgdivtext {
+	position: absolute;
+	bottom: 0px;
+	height: 25px;
+	width: 120px;
+	background: rgba(0, 0, 0, 0.6);
+	line-height: 25px;
+	text-align: center;
+	left: 0px;
+	z-index: 4;
+	*background: #000;
+	*filter: alpha(opacity=50);
+}
+.imgdivtext a {
+	color: white;
+	font-size: 14px;
+	font-weight: bold;
+}
+.imgdivtext a:hover {
+	color: $major-color;
+	text-decoration: underline;
+}
+.returnbtn {
+	margin-top: 35px;
+	margin-left: 50px;
+}
+.returnbtn a {
+	width: 115px;
+	height: 22px;
+	border: 1px solid #ccc;
+	padding: 5px 15px;
+	line-height: 22px;
+	text-align: center;
+	color: white;
+	font-size: 16px;
+	display: block;
+}
+.returnbtn a:hover {
+	color: $major-color;
+	border: 1px solid $major-color;
+}
+.endtop {
+	width: 600px;
+	padding: 20px;
+	background: #1c1c1c;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	z-index: 1200;
+	color: white;
+	display: none;
+	margin-left: -300px;
+	margin-top: -145px;
+}

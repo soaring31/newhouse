@@ -1,0 +1,78 @@
+{#帮你找房#}
+{{core_global.linkcss('static/house/css/newhouse-details/public.css?time=201804201145')}}
+{{core_global.linkcss('static/house/css/newhouse-details/newhouse-common.css?time=201804201145')}}
+{{core_global.linkcss('static/house/css/newhouse-details/newhouseDetail.css?time=201804201145')}}
+<style>
+    .help-zf{width:310px;!important;}
+</style>
+<div class="help-zf">
+    <span class="zf-bt">帮你找房</span>
+    <span class="zf-line"></span>
+    <ul class="clearfix">
+        <li>
+            <span>意向区域</span>
+            <div class="area-select common-select j_areaSelect">
+                <i></i>
+                <span class="j_area">上海</span>
+                <ul class="j_areaList" style="display: none;">
+                    <li class="j_list">北京</li>
+                    <li class="j_list">上海</li>
+                    <li class="j_list">广州</li>
+                    <li class="j_list">衡水</li>
+                    <li class="j_list">深圳</li>
+                    <li class="j_list">杭州</li>
+                    <li class="j_list">河北</li>
+                    <li class="j_list">山东</li>
+                    <li class="j_list">安徽</li>
+                    <li class="j_list">齐齐哈尔</li>
+                </ul>
+            </div>
+        </li>
+        <li>
+            <span>意向楼盘</span>
+            <input type="text">
+        </li>
+        <li>
+            <span>预算总价</span>
+            <div class="price-select common-select j_priceSelect">
+                <i></i>
+                <span class="j_price">请选择总价</span>
+                <ul class="j_priceList" style="display: none;">
+                    <li class="j_list">50</li>
+                    <li class="j_list">100</li>
+                    <li class="j_list">200</li>
+                    <li class="j_list">300</li>
+                    <li class="j_list">500</li>
+                    <li class="j_list">800</li>
+                    <li class="j_list">1000</li>
+                    <li class="j_list">2000</li>
+                </ul>
+            </div>
+        </li>
+        <li>
+            <span>手机号码</span>
+            <input type="text">
+        </li>
+        <li>
+            <span>验证码</span>
+            <input class="zf-code" type="text">
+            <span class="zf-sendCode">发送验证码</span>
+        </li>
+    </ul>
+    <div class="zf-submit">提交</div>
+</div>
+
+
+<script>
+    seajs.use([],function () {
+        $('.j_area,.j_price').click(function () {
+            $(this).next('ul').toggle();
+        });
+
+        $('.j_priceList>li,.j_areaList>li').click(function () {
+            var text=$(this).text();
+            $(this).parent('ul').prev('span').text(text);
+            $(this).parent('ul').hide();
+        })
+    });
+</script>

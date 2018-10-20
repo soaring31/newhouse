@@ -1,0 +1,87 @@
+{% extends "AutoBundle::mainlayout.html.twig" %}
+{% import "AutoBundle:Macro:lists.html.twig" as lists %}
+
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainleft %}
+    {% if(app.request.method=='GET') %}
+    {{ render(controller('AutoBundle:Carsoffer:mainleft')) }}
+    {% endif %}
+{% endblock %}
+{% block mainMenu %}
+    {{ parent() }}
+{% endblock %}
+
+{% block tableMain %}
+<section>
+    <section class="main-oprate">
+        <div class="mb10">
+            {{ lists.oprate([
+                    'selectCate|cate_years',
+                    'selectLevel',
+                    'selectField|mfr_status|cars',
+                    'selectField|checked|cars',
+                    'search|name|车款名称',
+                ]) }}
+        </div>        
+    </section>
+    <div class="list-con">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="60" class="pl10" data-role="sort" data-sort="id">ID</th>
+                    <th>新车名称</th>
+                    <th width="80">指导价(万)</th>
+                    <th width="130">品牌/车型</th>
+                    <th width="60" data-role="sort" data-sort="clicks">点击</th>
+                    <th width="60">审核</th>
+                    <th width="100" data-role="sort" data-sort="create_time">添加时间</th>
+                    <th width="110" class="tac">操作</th>
+                </tr>
+                {# {{dump(ident.info)}} #}
+                {% if ident.info.data is defined %}
+                {% for key,vo in ident.info.data %}
+                {% set cateCars1=('db.cate_cars')|getRow({'id':vo.cateCars|default(0)}) %}
+                {% set cateCars2=('db.cate_cars')|getRow({'id':cateCars1.pid|default(0)}) %}
+                {% set cateCars3=('db.cate_cars')|getRow({'id':cateCars2.pid|default(0)}) %}
+                {% set photos=('db.cars_photos')|getCol('id', {'cars': vo.id }) %}
+                <tr data-id="{{ vo.id }}">
+                    <td class="pl10">{{ vo.id }}</td>
+                    <td>{{ vo.name|default('') }}</td>
+                    <td>{{ vo.guidePrice|default('') }}</td>
+                    <td>
+                        {% if cateCars3 %}
+                            {{ cateCars3.name|default('')}} {% if cateCars3.name and cateCars1.name %}/{% endif %} {{cateCars1.name|default('')}}
+                        {% endif %}
+                    </td>
+                    <td>{{ vo.clicks|default('0') }}</td>
+                    <td>{{lists.field(vo.checked, 'checked', 'cars')}}</td>
+                    <td>{{ vo.createTime | date('Y-m-d') }}</td>
+                    <td class="tac">
+                        {{ forms.btn({
+                            type: 'show',
+                            url: ('carsoffermanage/show')|U({pid: vo.id, oprice: vo.guidePrice}), 
+                            title: '报价'|default('修改'),
+                        }) }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="20" class="tac p10">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+        {{lists.page(ident.info)}}
+    </div>
+</section>
+{% endblock %}
+
+{% block submit %}{% endblock %}
+
+{% block promptUl %}
+    <li></li>
+{% endblock %}

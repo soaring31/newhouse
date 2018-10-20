@@ -1,0 +1,18 @@
+{% extends "ManageBundle::poplayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+
+</script>
+{% endblock %}
+{% block body %}
+{% import "ManageBundle:Form:popedit.html.twig" as forms %}
+{{ forms.popEdit(form|default(''),'form') }}
+<table>
+	{% for key,value in info %}
+	<tr>
+		<td style="margin-left:20px;margin-right:20px;float:left;">{{ key }}</td>
+		<td>{{ value|default('-') }}</td>
+	</tr>
+	{% endfor %}
+</table>
+{% endblock %}

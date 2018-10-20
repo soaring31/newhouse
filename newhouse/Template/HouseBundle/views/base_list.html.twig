@@ -1,0 +1,61 @@
+{# 列表形式继承
+ * list: 列表数据
+ * 		查找顺序:传递过来的list变量 ->URL方式传递的list变量 ->当前模板list标识 ->当前控制器list标识
+ *
+ * tpl_page: 是否显示分页   默认值：1 >显示
+ * 			查找顺序:传递过来的tpl_page变量 -> URL方式传递的tpl_page变量 -> 默认值 1
+ * tpl_category: 是否启用分类提示，默认启用
+ *
+ * url_name: 搜索内容
+ * url_category: 当前分类
+ *
+ * tpl_content_default: 自定义提示文字
+ * tpl_noinfo: 无数据是提示信息调用
+ * tpl_lazy: 启用懒加载
+#}
+{% import "HouseBundle:Macro:global.html.twig" as house_global %}
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+{% import "HouseBundle:Macro:listMacro.html.twig" as listMacro %}
+
+{% set list = list|default(app.request.get('list', ident.list|default(cident.list|default('')))) %}
+
+{% set tpl_page = tpl_page|default(app.request.get('tpl_page', 1)) %}
+
+{# 搜索判断 #}
+{% set url_name = url_name|default(app.request.get('name')) %}
+{# 分类判断 #}
+{% set url_category = url_category|default(app.request.get('category')) %}
+
+{% set category = url_category|getCategoryById() %}
+
+{% set category_name = category.name|default('') %}
+
+{# 普通列表使用 #}
+{% if url_name|default('') %}
+	{# 搜索 #}
+	{% set tpl_noinfo_content = url_name %}
+{% elseif url_category|default('') and tpl_category|default(1) %}
+	{# 分类 #}
+	{% set tpl_noinfo_content = category_name %}
+{% else %}
+	{# 自定义 #}
+	{% set tpl_noinfo_content = tpl_content_default|default('') %}
+{% endif %}
+{# 分类列表使用 #}
+{% set tpl_noinfo = '暂无' ~ tpl_noinfo_content ~ '数据' %}
+
+{% block list %}{% endblock list %}
+
+{% if tpl_lazy|default(1) %}
+<script type="text/javascript">
+	// 懒加载
+	seajs.use(['lazyload'], function(lazyload){
+		var lazyOpt = {
+			placeholder: jsbase + "/house/images/nopic.gif", //默认占位图
+			effect: "fadeIn", //显示方式
+			threshold: 200, //提前加载
+		};
+		$(document).find('.lazy').lazyload(lazyOpt);
+	});
+</script>
+{% endif %}

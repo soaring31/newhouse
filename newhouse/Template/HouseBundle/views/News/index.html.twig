@@ -1,0 +1,229 @@
+{% extends 'HouseBundle:News:news_layout.html.twig' %}
+{# #说明
+** category  当前栏目数据
+** navModels:导航当前位置
+** push_new1： 资讯首页顶部第一版推送
+** hdp：资讯首页顶部幻灯片推送
+** sort_click_houses: 热门楼盘推送
+** sort_clicks_sale：热门二手房推送
+** category_news：资讯分类数据#}
+{# {% set navModels = "news" %} #}
+{% block title %}{{category.name|default('资讯中心')}}{% endblock title %}
+
+{% block key_des %}
+{{- core_global.key_des(category) -}}
+{% endblock key_des %}
+
+{% block css %}
+{{core_global.linkcss('static/' ~ bundlepath ~ '/css/news.css')}}
+{% endblock css %}
+
+{% set url_category = app.request.get('category', 1) %}
+
+{% set category = (url_category)|getCategoryById() %}
+
+{% set sort_click_houses = ('house.houses')|getAll({checked: 1, orderBy: 'desc', order: 'clicks', pageSize: 10, findType: 1, type: 0}) %}
+
+{% set sort_clicks_sale = ('house.sale')|getAll({checked: 1, orderBy: 'desc', order: 'clicks', pageSize: 10, findType: 1, valid: 'gt|' ~ ('now')|date('U') }) %}
+
+{% set sort_clicks_news = ('house.news')|getAll({checked: 1, orderBy: 'desc', order: 'clicks', pageSize: 10, findType: 1}|merge(other_spl|default({}))) %}
+
+{# 资讯分类 #}
+{% set category_news = ('house.category')|getTree({models: "news", pid: 1, checked: 1}) %}
+{% set category_id = category.id|default %}
+
+{% block body %}
+    <div class="top-bar">
+        {% set newhotkey = ('newhotkey')|getPush(5) %}
+        <div class="container">
+            {% block top_search %}
+            {{ core_global.topSearch({
+                action: 'news/list',
+                placeholder: '请输入标题',
+                other: {
+                    method: 'topSearchHot',
+                    opt: newhotkey
+                }
+            }) }}
+            {% endblock top_search %}
+        </div>
+    </div>
+    <div class="container">
+        {#<div class="blank20"></div>#}
+        {#{{ core_global.ads({tag: 'newszxlbs', default_tag: 'dbtsbs'}) }}#}
+        {#<div class="blank15"></div>#}
+        <div class="news-nav">
+            <a class="item {{ category_id == 1 ? 'active' : '' }}" href="{{('news/list')|U({category: 1})}}">
+                 资讯首页</a>
+             {% for item in category_news.data[0 : 12] %}
+            <a class="item {{ (item.menu.id == category_id) ? 'active' : '' }}" href="{{('news/list')|U({category: item.menu.id|default('')})}}">
+                 {{item.menu.name}}</a>
+             {% endfor %}
+             {#<a href="http://news.zhugefang.com/html/esfbk/"  target="_blank" class="item">百科</a>
+             <a href="http://news.zhugefang.com/html/esfzb/"  target="_blank" class="item">周报</a>
+             <a href="http://news.zhugefang.com/html/esftt/"  target="_blank" class="item">头条</a>#}
+        </div>
+    </div>
+    <div class="blank10"></div>
+    <div class="container clearfix">
+        {# 推送区 #}
+        {#{% block news_push %}#}
+            <div class="blank10 bdt-gray"></div>
+            <div class="blank20"></div>
+            <div class="wordbanner">
+                <!-- 新闻 -->
+                <!-- <div class="word" data-tag="new1">
+                    <ul class="clearfix">
+                        {#{% set push_new1 = ('new1')|getPush(14) %}
+                        {% if push_new1 is defined %}
+                            {% for item in push_new1 %}
+                                {% if loop.index == 1 or loop.index % 8 == 0 %}
+                                    {% if loop.index % 8 == 0 %}
+                                        </ul>
+                                            <div class="blank25"></div>
+                                            <div class="line blank0"></div>
+                                            <div class="blank25"></div>
+                                        <ul class="clearfix">
+                                    {% endif %}
+                                    <li class="dt">
+                                    {% else %}
+                                    <li>
+                                {% endif %}
+                                    <a href="{{item.url|default('#')}}" target="_blank">{{item.name|default('')}}</a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}#}
+                </div> -->
+                <!-- /新闻 -->
+                <!-- banner切换 -->
+                <div id="focus2" class="focus" data-duang="1" data-autoplay="0" data-obj="li" data-prevbtn=".focusBtnL" data-nextbtn=".focusBtnR" data-effect="left" data-lazyload="src" data-cell=".foucsTit" data-actclass="on">
+                    <div class="focus2-box" data-tag="hdp" style="width: 100%">
+                        <ul style="width: 300%; margin-left: 0;" class="focusImgs">
+                            <!-- AdSame ShowCode: PC / 资讯首页 / 全景视窗1 Begin -->
+                            <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~'13104101' }}" charset="gbk" ></script>
+                            <!-- AdSame ShowCode: PC / 资讯首页 / 全景视窗1 End -->
+                            <!-- AdSame ShowCode: PC / 资讯首页 / 全景视窗2 Begin -->
+                            <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~'13104102' }}" charset="gbk" ></script>
+                            <!-- AdSame ShowCode: PC / 资讯首页 / 全景视窗2 End -->
+                            <!-- AdSame ShowCode: PC / 资讯首页 / 全景视窗3 Begin -->
+                            <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~'13104103' }}" charset="gbk" ></script>
+                            <!-- AdSame ShowCode: PC / 资讯首页 / 全景视窗3 End -->
+                        </ul>
+                    </div>
+                    <span class="focusBtnL">〈</span>
+                    <span class="focusBtnR">〉</span>
+                    <div class="foucsTit"></div>
+                </div>
+                <!-- /banner切换 -->
+            </div>
+            {#<div class="blank20"></div>#}
+            <!-- body -->
+            <!-- banner图 -->
+            <div class="blank20"></div>
+            <!-- /banner图 -->
+        {#{% endblock news_push %}#}
+        <div id="area2_body" class="clearfix">
+            <div class="news-content">
+                {% block container %}
+                    <!-- 新闻中心 -->
+                    <div class="xwzx">
+                        <div class="xwzxl">
+                            <h3>资讯列表</h3>
+                        </div>
+                        {% block category %}
+                        <div class="xwzxr" onmouseover="this.className='xwzxr xwzxr-hover'" onmouseout="this.className='xwzxr'">
+                            <span class="xwzxrnav">
+                                新闻中心 <i class="img-news-07"></i>
+                            </span>
+                            <div class="ac_menu">
+                                <div class="ac_menu_pop">
+                                    {% if category_news.data is defined %}
+                                    {% for levelone in category_news.data %}
+                                        <ul>
+                                            <li class="clearfix {% if loop.index % 2 != 0 %}even2{% endif %} li-style-hack">
+                                                <a href="{{('news/list')|U({category: levelone.menu.id|default('')})}}">{{levelone.menu.name|default('')}}</a>
+                                            </li>
+                                        </ul>
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endblock category %}
+                    </div>
+                    <!--加载列表-->
+                    {{house_global.news_list({
+                        list: ident.list
+                    })}}
+                    <!--/加载列表-->
+                    <div class="blank30"></div>
+                    <!--  page -->
+                    {{core_global.page(ident.list)}}
+                    <!--  page -->
+                    <!-- /新闻中心 -->
+                {% endblock container %}
+            </div>
+            <!--区块标识：资讯右侧栏-->
+            <div id="area2-2">
+                <!-- hot news -->
+                {% if sort_clicks_news.data is defined %}
+                    <div id="rank-news" class="borgray clearfix" data-tag="clicks">
+                        <div class="area2-3">
+                            <h3 class="rmlp">热文排行</h3>
+                        </div>
+                        <div class="area2-4">
+                            <ul class="phicon">
+                                {% for item in sort_clicks_news.data %}
+                                    <li>
+                                        <em class="{% if loop.index < 4 %}ccc{% endif %}">
+                                            {{ loop.index }}
+                                        </em>
+                                        <a href="{{('news/detail')|U({id: item.id|default('')})}}" target="_blank">
+                                            {{item.name|default('')}}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+                <!-- /hot news -->
+                <!-- 热门楼盘 -->
+                {{house_global.aside_houses_recommend({
+                    title: '热门楼盘',
+                    models: 'houses',
+                    list: sort_click_houses
+                })}}
+                <!-- /热门楼盘 -->
+                <!-- 二手楼盘 -->
+                {{house_global.aside_houses_recommend({
+                    title: '热门二手房',
+                    models: 'sale',
+                    list: sort_clicks_sale
+                })}}
+                <!-- /二手楼盘 -->
+            </div>
+            <!--/区块标识：资讯右侧栏-->
+        </div>
+    </div>
+    <div class="blank30"></div>
+    <div class="blank30"></div>
+{% endblock body %}
+
+{% block js %}
+<script type="text/javascript">
+    seajs.use(['jqduang'], function (jqduang) {
+        var $duang = $('[data-duang=1]');
+        $duang.on('after.jd', function() {
+                $('.focusBtnL img').attr('src', $duang.jqDuang('get', 'prev').find('img').attr('src'))
+                $('.focusBtnR img').attr('src', $duang.jqDuang('get', 'next').find('img').attr('src'))
+            })
+            .on('mouseenter mouseleave', '.focusBtnL', function() {
+                // $(this).toggleClass('focusBtnLHover')
+            })
+            .on('mouseenter mouseleave', '.focusBtnR', function() {
+                // $(this).toggleClass('focusBtnRHover')
+            }).find('.focus2-box').css('width','100%');
+    });
+</script>
+{% endblock js %}

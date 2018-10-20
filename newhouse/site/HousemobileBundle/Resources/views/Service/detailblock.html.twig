@@ -1,0 +1,65 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+ * url_id: url传递的id值
+ * detail: 当前数据
+ * sort_category_service: 当前分类数据推荐
+#}
+{% set detail = detail|default(cident.detail.data[0]|default('')) %}
+
+{% set sort_category_service = ('house.service')|getAll({checked: 1, category: detail.category|default(''), id: 'neq|' ~ detail.id|default(0)}) %}
+
+{% set sort_clicks_service = ('house.service')|getAll({checked: 1, id: 'neq|' ~ detail.id|default(0), order: 'clicks', orderBy: 'desc'}) %}
+
+{% block result %}
+<div class="content">
+    <div class="con">
+        <div class="content-padded" style="margin-top: 0px;">
+            <div class="con-title">
+                <h3>{{detail.name|default('')}}</h3>
+                <p>
+                    <span>{{detail.update_time|default('')|date('Y-m-d')}}</span>
+                </p>
+            </div>
+
+            <div class="con-text detail-con" id="con">
+                {{ core_global.content({content: detail.content|default(''), default: '暂无详细内容'}) }}
+            </div>
+            <div class="list-block panel-block">
+                {{- core_mobile_global.more_con({id: 'con'})-}}
+            </div>
+        </div>
+    </div>
+    <!-- 常见问题 -->
+    {% if sort_category_service.data is defined %}
+    <div class="list-block panel-block media-list">
+        {{housemobile_global.panel_title({title: '相关推荐'})}}
+        <ul class="list-con" id="xgtj">
+            {% for item in sort_category_service.data %}
+                {{housemobile_global.list_line_one({
+                    name: item.name|default(''),
+                    url: ('service/detail')|UU({id: item.id|default('')}),
+                    class: 'p-default'
+                })}}
+            {% endfor %}
+        </ul>
+        {{- core_mobile_global.more_con({id: 'xgtj'})-}}
+    </div>
+    {% endif %}
+    {% if sort_clicks_service.data is defined %}
+    <div class="list-block panel-block media-list">
+        {{housemobile_global.panel_title({title: '热点问题'})}}
+        <ul class="list-con" id="rmwt">
+            {% for item in sort_clicks_service.data %}
+                {{housemobile_global.list_line_one({
+                    name: item.name|default(''),
+                    url: ('service/detail')|UU({id: item.id|default('')}),
+                    class: 'p-default'
+                })}}
+            {% endfor %}
+        </ul>
+        {{- core_mobile_global.more_con({id: 'rmwt'})-}}
+    </div>
+    {% endif %}
+ {{ render(controller('HouseBundle:Common:footer', {_isApp: url_isApp})) }}
+</div>
+{% endblock result %}

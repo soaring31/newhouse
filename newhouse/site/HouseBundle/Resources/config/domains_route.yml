@@ -1,0 +1,40 @@
+houses_list_domains_bj:
+    path: '/{region}-{cate_circle}-{cate_line}-{cate_metro}-{dj}-{cate_type}-{tslp}-{cate_status}-{lcs}-{hxs}/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:Houses:list'
+        region: 'no'
+        cate_circle: 'no'
+        cate_line: 'no'
+        cate_metro: 'no'
+        dj: 'no'
+        cate_type: 'no'
+        tslp: 'no'
+        cate_status: 'no'
+        lcs: 'no'
+        hxs: 'no'
+        pageIndex: '1'
+    options:
+        status: true
+        remark: 新房列表页
+    host: "bj.newhouse.zhuge.com"
+
+
+houses_list_domains_sh:
+    path: '/{region}-{cate_circle}-{cate_line}-{cate_metro}-{dj}-{cate_type}-{tslp}-{cate_status}-{lcs}-{hxs}/{pageIndex}'
+    defaults:
+        _controller: 'HouseBundle:Houses:list'
+        region: 'no'
+        cate_circle: 'no'
+        cate_line: 'no'
+        cate_metro: 'no'
+        dj: 'no'
+        cate_type: 'no'
+        tslp: 'no'
+        cate_status: 'no'
+        lcs: 'no'
+        hxs: 'no'
+        pageIndex: '1'
+    options:
+        status: true
+        remark: 新房列表页
+    host: "sh.newhouse.zhuge.com"

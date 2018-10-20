@@ -1,0 +1,59 @@
+{% extends "CoreBundle::layout.html.twig" %}
+{% block title %}后台管理{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{{ asset('./bundles/manage/css/main.css') }}" />
+{% endblock %}
+{% block js %}
+<script>
+seajs.use(["manage/js/main.js", "dialog"],function(main,dialog){
+	window.dialog = dialog;
+	//js入口	    
+	main.init('main');
+
+	//公众号切换脚本
+	$("#changewxuser").off().on("change",function(){
+		var url = $(this).attr("data-url");
+		location.href = url+"?_wxid="+$(this).val();
+	});
+});
+</script>
+{% endblock %}
+{% block body %}
+<div class="bezel" id="bezel-id">
+	<div class="head">
+		<div class="hleft"><span class="head-icon">{{product}}微信平台</span></div>
+		<div class="htop">
+        	<span> 
+        		<ul>
+	        		{% if channel is defined %}				
+					{% for item in channel%}
+					<li id="mainchannel_{{item.id}}"><a href="javascript:void(0);">{{item.name}}</a></li>
+					{% endfor %}				
+					{% endif %}
+					<li class="outLogin"><a href="javascript:void(0);">修改密码</a></li>
+					<li class="outLogin"><a href="{{ path('manage_logout') }}">退出</a></li>
+				</ul>
+				微信公众号：
+				{% if ident.wxuser.data is defined %}
+				<select id="changewxuser" data-url="{{ action|U }}">				    
+				    {% for item in ident.wxuser.data %}
+				    <option value="{{ item.id|encode }}" {{ app.request.get('_wxid')|decode|isSelected(item.id) }}>{{ item.name }}</option>
+				    {% endfor %}				    
+				</select>
+				{% endif %}
+				 您好，欢迎使用{{product|default('')}}！
+        	</span>
+        </div>
+		<div class="hbottom" id="topmenu">{{ render(controller(bundlename~':Default:topmenu')) }}</div>        
+    </div>
+    <div class="center">
+        <div class="cleft" id="cleft-id">	
+            {{ render(controller(bundlename~':Default:leftmenu', {'menuId':0})) }}
+        </div>
+		<!-- <div id="showHideMenu"><div></div></div> -->
+		<div class="rleft" id="rleft">
+			<div class="pagenav" id="page"></div>	
+		</div>		
+	</div>
+</div>
+{% endblock %}

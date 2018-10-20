@@ -1,0 +1,129 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% block js %}
+<script type="text/javascript">
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }}
+{% endblock %}
+
+{% block tableMain %}
+<script type="text/javascript">
+seajs.use(["manage/js/webconfig.js"],function(main){
+    main.init('cfplatform');
+});
+</script>
+{{core_global.linkcss('bundles/manage/css/cfplatform.css')}}
+<section class="list-con table-inline" data-param='{
+        fixed     : ".filter",
+        list      : ".list-con",
+        data      : {
+        }
+    }'>
+    <div class="list">
+        <form class="form" action="{{ (action)|U }}" method="post" name="form">
+            <table class="popup-form-table" style="width:100%;">
+                <tr>
+                    <th colspan="2">平台支付设置</th>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div id="group_dysjset">
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright" for="enable">平台支付</label>
+                                </div>
+                                <div class="form-errors">
+
+                                </div>
+                                <div class="form-cell">
+                                    <input type="radio" name="platform_open" {{ 'platform_open'|C|isChecked(1) }} value="1" /><label>开启</label>
+                                    <input type="radio" name="platform_open" {{ 'platform_open'|C|isChecked(0) }} value="0" /><label>关闭</label>
+                                    <span class="tips1">开启后，若公众号没有开通支付方式。用户将可以使用此方法进行支付。</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright" for="enable">
+                                        <img src="{{ asset('bundles/manage/images/pay_icon/alipay.png') }}" />支付宝支付
+                                    </label>
+                                </div>
+                                <div class="form-errors"></div>
+                                <div class="form-cell">
+                                    <input type="radio" name="platform_alipay_open" {{ 'platform_alipay_open'|C|isChecked(1) }} value="1" /><label>开启</label>
+                                    <input type="radio" name="platform_alipay_open" {{ 'platform_alipay_open'|C|isChecked(0) }} value="0" /><label>关闭</label>
+                                    <span class="tips1"><a href="javascript:void(0);" data="alipay,支付宝" class="a_choose">配置信息</a></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hide" id="alipay_setting">
+                            <div class="setting_rows">
+                                <p>
+                                    <span>帐号：</span>
+                                    <input type="text" name="platform_alipay_name" value="{{ ('platform_alipay_name')|C }}" class="px w250" />
+                                </p>
+                                <p>
+                                    <span>APPID：</span>
+                                    <input type="text" name="platform_alipay_pid" value="{{ ('platform_alipay_pid')|C }}" class="px w250" />
+                                </p>
+                                <p>
+                                    <span>MD5密钥：</span>
+                                    <input type="password" name="platform_alipay_key" value="{{ ('platform_alipay_key')|C }}" class="px w250" />
+                                </p>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            <div class="form-row">
+                                <div class="form-cell-label">
+                                    <label class="w150 rtd txtright" for="enable">
+                                        <img src="{{ asset('bundles/manage/images/pay_icon/weixin.png') }}" />微信支付
+                                    </label>
+                                </div>
+                                <div class="form-errors"></div>
+                                <div class="form-cell">
+                                    <input type="radio" name="platform_weixin_open" {{ 'platform_weixin_open'|C|isChecked(1) }} value="1" /><label>开启</label>
+                                    <input type="radio" name="platform_weixin_open" {{ 'platform_weixin_open'|C|isChecked(0) }} value="0" /><label>关闭</label>
+                                    <span class="tips1"><a href="javascript:void(0);" data="weixin,微信" class="a_choose">配置信息</a></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hide" id="weixin_setting">
+                            <div class="setting_rows">
+                                <p>
+                                    <span>微支付商户号：</span>
+                                    <input type="text" name="platform_weixin_mchid" value="{{ ('platform_weixin_mchid')|C }}" class="px w250" />
+                                </p>
+                                <p>
+                                    <span>API密钥：</span>
+                                    <input type="password" name="platform_weixin_key" value="{{ ('platform_weixin_key')|C }}" class="px w250" />
+                                </p>
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <div class="popup-submit"></div>
+            <div class="tac p10">
+                <div>
+                    <button type="submit" id="submit" name="submit" data-role="submit" class="btn font-ico-22 fz12">提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock tableMain %}
+
+{% block promptUl %}{% endblock %}

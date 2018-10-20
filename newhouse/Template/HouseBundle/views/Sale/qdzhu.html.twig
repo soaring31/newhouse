@@ -1,0 +1,76 @@
+{% extends 'HouseBundle:Sale:qdetail.html.twig' %}
+{# 说明
+** nav_houses_act: 当前页面
+#}
+
+{% block title %}{{detail.name|default('')}}租房,房屋出租信息,整租,合租-{{detail.name|default('')}}小区网{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}租房,{{detail.name|default('')}}整租,{{detail.name|default('')}}合租" />
+<meta name="description" content="{{detail.name|default('')}}小区网是为{{cur_area_data|default('')}}{{detail.name|default('')}}小区居民服务的网站,{{detail.name|default('')}}租房主要为您提供最新、最真实的{{detail.name|default('')}}租房出租房源信息，每天更新大量优质{{detail.name|default('')}}整租、合租等租房信息，100%审核。" />
+{% endblock key_des %}
+
+{# 导航高亮 #}
+{% set nav_houses_act = 3 %}
+
+{% block header_xiaoqu %}
+{% endblock header_xiaoqu %}
+
+{% block body_xiaoqu %}
+    {% set sort_data = {
+        def: {
+            title: '默认'
+        },
+        mj: {
+            title: '面积'
+        },
+        czj: {
+            title: '租价'
+        },
+    } %}
+    <div class="blank15"></div>
+    {# 检索数据源 #}
+    {% set cate_data = house_global.cate_data({ 
+        tag: 'xq_rent',
+        url_opt: { 
+            id: detail.id
+        } 
+    }).__toString|json_decode %}
+    {# 筛选条件 #}
+    {{house_global.filter_cfg({
+        show_selected: 1,
+        action: action
+    }|merge(cate_data))}}
+    <div class="blank15"></div>
+    <div class="xq-d-body fl">
+        <div class="lp-coltit">
+            <a href="{{('rent/list')|U}}" class="more" target="_blank">更多&gt;&gt;</a>
+            <h3 class="tit1">出租房源</h3>
+        </div>
+        <div>
+            <!--标题-->
+            <div class="fy-js p10 clearfix bd-gray">
+                <span class="fl" id="mpacount">共有<b class="c-f00">{{houses_rent.pageCount|default('0')}}</b>套房子符合要求</span>
+                <div class="sort fr">
+                    {% block sort %}
+                        {{parent()}}
+                    {% endblock sort %}
+                </div>
+                <div class="blank5"></div>
+            </div>
+            <!--/标题-->
+            <!--列表-->
+            {% block houses_rent %}
+                {{parent()}}
+            {% endblock houses_rent %}
+            <!--/列表-->
+            <!--分页-->
+            <div class="blank10"></div>
+            <!--page-->
+            {{core_global.page(houses_rent)}}
+            <!--page-->
+            <div class="blank10"></div>
+            <!--/分页-->
+        </div>
+    </div>
+{% endblock body_xiaoqu %}

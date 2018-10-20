@@ -1,0 +1,41 @@
+{#{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}#}
+{% extends 'HousemobileBundle::base.html.twig' %}
+{# 说明
+ * detail: 新房详情数据
+#}
+{#{% set detail = cident.detail.data[0]|default('') %}#}
+
+{% block title %}
+    {#{{detail.name|default('')}}-#}
+    {% block h_title %}法律与免责声明{% endblock h_title %}
+{% endblock title %}
+
+{% block key_des %}
+    <meta name="keywords" content="" />
+    <meta name="description" content=""/>
+{% endblock key_des %}
+
+{% block moblie_header %}
+    {{core_mobile_global.go_back()}}
+    {% block d_header %}{{core_mobile_global.title({title: '法律与免责声明'})}}{% endblock d_header %}
+{% endblock moblie_header %}
+
+{% block header_right %}{% endblock header_right %}
+
+{% block popup %}{% endblock popup %}
+
+{% block container %}
+    <p class="statement">
+        1. 本页面所含信息、搜索结果系源于互联网公开信息，未经人工筛选、校对、核实，信息真实性、完整性请浏览者慎重查阅原始信息来源或链接；</br>
+        2. 本页面所含部分图片系注册用户上传 <a class="yonghu-statement">(点击查阅《用户声明》)</a></br>
+        3. 如认为存在任何侵犯贵方知识产权或其他任何权利者，请浏览者及时告知；</br>
+        4. 为保护个人数据隐私（除非经用户授权），对于个人电话信息本页面采取技术处理，如浏览者发现任何未完善问题，欢迎提出意见或建议。
+    </p>
+{% endblock container %}
+
+{# 导航 #}
+{% block secondary %}
+
+{% endblock secondary %}
+

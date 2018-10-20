@@ -1,0 +1,23 @@
+{% extends 'HouseBundle:Topic:index.html.twig' %}
+{# 说明
+ * nav_topic_act: 导航高亮
+ * url_name: url传递的name
+#}
+
+{% set nav_topic_act = app.request.get('category') %}
+	
+{% set url_name = app.request.get('name') %}
+
+{# 屏蔽推送位 #}
+{% block push_topic %}{% endblock push_topic %}
+
+{# 当前位置 #}
+{% block current_topic %}
+    {% if url_name|default('') %}
+        <span>
+            {{url_name|default('') ~ '的搜索结果'}}
+        </span>
+    {% else %}
+        {{parent()}}
+    {% endif %}
+{% endblock current_topic %}

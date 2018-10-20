@@ -1,0 +1,275 @@
+{#
+* tpl_extends: 模板变量
+* d_models：当前模型
+* detail：当前数据
+* detail_tujis： 当前数据图集
+* detail_same_houses: 同楼盘出租、出售
+* detail_same_prices: 同价格出租、出售
+* detail_same_area: 同区域出租、出售
+#}
+{% set detail = cident.detail.data[0]|default('') %}
+
+{# 获取当前时间戳 #}
+{% set now_time = ('now')|date('U') %}
+
+{# 幻灯片 #}
+{% set detail_tujis = detail.tujis|default('')|sourceImg %}
+
+{% extends detail ? 'HouseBundle:Rent:list.html.twig' : 'CoreBundle:Dispatch:errorcontent.html.twig' %}
+
+{% block title %}{{detail.lpmc|default('')}}小区租房,{{- house_global.huxing({data: detail|default(''), tpl: '%shi%%ting%%wei%'}) -}},{{detail.name|default('')}}, {{detail.address|default('')}}租房{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" Content="{{core_global.region({id: detail.region|default(''), tpl: '%value%'})}}租房网,{{core_global.region({id: detail.region|default(''), tpl: '%value%'})}}租房,{{detail.lpmc|default('')}}租房"/>
+<meta name="description" content="{{core_global.region({id: detail.region|default(''), tpl: '%value%'})}}{{detail.lpmc|default('')}}小区{{- house_global.huxing({data: detail|default(''), tpl: '%shi%%ting%%wei%'}) -}}出租,{{ core_global.formField({value: detail.zlfs|default(''), form: 'rent', field:'zlfs'}) }},租金{{detail.czj|default('')}}元/月,{{house_global.lptag({value: detail|default(''), tpl: '%value%', con: 'zxcd'})}},{{detail.mj|default('')}}㎡,小区地址：{{detail.address|default('')}}。房子{{house_global.lptag({value: detail|default(''), tpl: '%value%', con: 'zxcd'})}}"/>
+{% endblock key_des %}
+
+{% block css %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/sale-detail.css')}}
+{% endblock css %}
+
+{% block current_rent %}
+    <span>&gt;</span>
+    <span>{{detail.name|default('')}}</span>
+{% endblock current_rent %}
+
+{% block container %}
+    <div class="container">
+        {# 头部 #}
+        {{house_global.sale_rent_header(detail|default({})|merge({models: 'rent'}))}}
+
+        <div class="blank20"></div>
+
+        {# 幻灯片 #}
+        {{house_global.sale_rent_hdp({data: detail_tujis|default({})})}}
+
+        {# 信息 #}
+        <div class="detail-info fr">
+
+            <div class="info1 clearfix">
+                <div class="i-label mt5">
+                    月<span class="t-index2"></span>租:
+                </div>
+                <div class="i-txt">
+                    <span class="c-f50 fz28 mr20">
+                        {{house_global.if_czj({value: detail.czj|default('')})}}
+                    </span>
+                </div>
+            </div>
+
+            <div class="info1 clearfix">
+                <div class="i-label">
+                    租赁方式:
+                </div>
+                <div class="i-txt">
+                    {{core_global.formField({value: detail.zlfs|default(''), field: 'zlfs', form: 'rent'})}}
+                </div>
+                <div class="i-label">
+                    付款方式:
+                </div>
+                <div class="i-txt">
+                    {{core_global.formField({value: detail.fkfs|default(''), field: 'fkfs', form: 'rent'})}}
+                </div>
+            </div>
+
+            <div class="info1 clearfix">
+                <div class="i-label">
+                    面<span class="t-index2"></span>积:
+                </div>
+                <div class="i-txt">{{house_global.if_mj({value: detail.mj|default(''), tpl: '%value%%danwei%',default_tips: '-'})}}</div>
+                <div class="i-label">
+                    户<span class="t-index2"></span>型:
+                </div>
+                <div class="i-txt">
+                    {{- house_global.huxing({data: detail|default(''), tpl: '%shi%%ting%%wei%'}) -}}
+                </div>
+            </div>
+
+            <div class="info1 clearfix">
+                <div class="i-label">
+                    楼<span class="t-index2"></span>层:
+                </div>
+                <div class="i-txt">{{detail.szlc|default('-')}}/{{detail.zlc|default('-')}}层</div>
+                <div class="i-label">
+                    朝<span class="t-index2"></span>向:
+                </div>
+                <div class="i-txt">{{ core_global.formData({value: detail.cx|default('')}) }}</div>
+            </div>
+
+            <div class="info1 clearfix">
+                <div class="i-label">建筑年代:</div>
+                {# 这里的字段是房龄 #}
+                <div class="i-txt">{{ core_global.formData({value: detail.fl|default(''), default: '-'}) }}</div>
+                <div class="i-label">
+                    区<span class="t-index2"></span>域:
+                </div>
+                <div class="i-txt">
+                    {{core_global.region({id: detail.region|default(''), tpl: '%value%'})}}
+                </div>
+            </div>
+
+            <div class="info1 clearfix">
+                <div class="i-label">房屋装修:</div>
+                <div class="i-txt">{{ core_global.formData({value: detail.zxcd|default('')}) }}</div>
+                <div class="i-label">房屋类型:</div>
+                <div class="i-txt">{{ core_global.formData({value: detail.czlx|default('')}) }}</div>
+            </div>
+
+            <div class="info1 clearfix">
+                <div class="i-label">
+                    地<span class="t-index2"></span>址:
+                </div>
+                <div class="i-txt czpt">
+                    {{detail.address|default('-')}}
+                </div>
+            </div>
+
+            <div class="info2">
+                <div class="icon-tel fl">
+                    <i class="font-lp-13"></i>
+                </div>
+                <p class="fz28">
+                    {{detail.tel|default('更新中')}}<span class="ml5 fz16">{{detail.xingming|default('游客')}}</span></p>
+                <p class="source_info">信息来源：{{- core_global.mconfig({name: 'hostname', ename: 'mwebset'}) -}}</p>
+                <em>电话联系TA</em>
+            </div>
+
+            {# 按钮区域 #}
+            {{house_global.sale_rent_btn_info({
+                id: detail.id|default(0),
+                models: 'rent',
+                name: detail.name|default(''),
+                thumb: detail.thumb|default(''),
+            })}}
+        </div>
+
+        <div class="blank20"></div>
+
+        <div class="d-left fl">
+            <!--房源描述-->
+            <div class="panel">
+                <!--title-->
+                <div class="panel-hd" id="fy">
+                    {% set fixed_fy = [] %}
+                    {% set fixed_dt = [] %}
+                    {% if detail.aid|default('') %}
+                        {% set fixed_fy = {
+                            'ssxq': '小区简介'
+                        } %}
+                    {% endif %}
+                    {% if detail.map|default('') %}
+                        {% set fixed_dt = {
+                            'dt': '地图'
+                        } %}
+                    {% endif %}
+                    {% set fixed_fy = {
+                        'fy': '房源描述',
+                        'fwpt': '房屋配套'
+                    }|merge(fixed_dt)|merge(fixed_fy) %}
+                    {{house_global.sale_rent_daohang({
+                        name: detail.xingming|default(''),
+                        tel: detail.tel|default(''),
+                        data: fixed_fy
+                    })}}
+                </div>
+                <!--/title-->
+                <!--body-->
+                <div class="panel-bd bd-gray p10">
+                    {{core_global.content({content: detail.content|default('')})}}
+                </div>
+                <!--/body-->
+            </div>
+
+            <!--房屋配套-->
+            <div class="panel" id="fwpt">
+                <!--title-->
+                <div class="panel-hd">
+                    <h2>
+                        房屋配套
+                    </h2>
+                </div>
+                <!--/title-->
+                <!--body-->
+                <div class="panel-bd bd-gray p10">
+                    {% if detail.fwpt|default('') %}
+                    <ul class="fwpt-li clearfix">
+                        {{- core_global.formField({value: detail.fwpt|default(''), form: 'srv_common', field:'fwpt', tpl: '<li><i class="font-fwpt-%value%"></i>%title%</li>'}) -}}
+                    </ul>
+                    {% else %}
+                    <div class="noinfo">暂无相关配套</div>
+                    {% endif %}
+                </div>
+                <!--/body-->
+            </div>
+            <!--/房屋配套-->
+            <div id="dt">
+                {{
+                    house_global.map({
+                        detail: detail,
+                        data: detail,
+                        arr_round : [
+                            {ico: 42, name: '学校'},
+                            {ico: 43, name: '医院'},
+                            {ico: 44, name: '银行'},
+                            {ico: 45, name: '餐饮'},
+                            {ico: 46, name: '购物'},
+                            {ico: 47, name: '公交'},
+                            {ico: 49, name: '公园'},
+                            {ico: 50, name: '机场'},
+                            {ico: 51, name: '加油站'},
+                        ]
+
+                    })
+                }}
+            </div>
+            
+            {{house_global.sale_rent_xiaoqu({
+                aid: detail.aid|default(0)
+            })}}
+
+            {# 同区域房源 #}
+            {% set detail_same_area = ('house.rent')|getAll({checked: 1, region: detail.region|default(''), type: detail.type|default(''), orderBy: 'desc', order: 'id', id: 'neq|' ~ detail.id|default(0), valid: 'gt|' ~ now_time|default('')}) %}
+            {{house_global.sale_rent_recommend({
+                list: detail_same_area,
+                action: action,
+                title: '同区域出租推荐',
+                tag: 'lparea'
+            })}}
+            {# 同价格房源
+                出租  +-1000
+             #}
+            {% set detail_same_prices = ('house.rent')|getAll({checked: 1, orderBy: 'desc', order: 'id', id: 'neq|' ~ detail.id|default(0), valid: 'gt|' ~ now_time|default(''), czj: 'between|' ~ (detail.czj|default('') - 1000) ~ '|' ~ (detail.czj|default('') + 1000) ~ ''}) %}
+            {{house_global.sale_rent_recommend({
+                list: detail_same_prices,
+                action: action,
+                title: '同价格出租推荐',
+                tag: 'lpprice'
+            })}}
+        </div>
+        {# 右侧 #}
+        {# 同小区房源 #}
+        {% set detail_same_houses = ('house.rent')|getAll({checked: 1, aid: detail.aid|default(''), id: 'neq|' ~ detail.id|default(0), valid: 'gt|' ~ now_time|default('') }) %}
+        {{house_global.sale_aside({
+            models: 'rent',
+            btn: 0,
+            tpl_tjj: detail.usertype|default(''),
+            tpl_sale: detail_same_houses|default({}),
+            rectitle: '出租'
+        })}}
+    </div>
+    <div class="blank20"></div>
+{% endblock container %}
+{% block js %}
+<script type="text/javascript">
+    seajs.use(['gftools', 'browserRecord'], function (gftools, browserRecord) {
+        $.yg_func();
+        browserRecord.save({
+            id : '{{detail.id|default('')}}',
+            models: '{{detail.models|default("sale")}}'
+        });
+        $('.info2,.hideTel').on('click',function(){
+            $(this).addClass('move');
+        });
+    })
+</script>
+{% endblock js %}

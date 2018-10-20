@@ -1,0 +1,38 @@
+info:
+    tableName: inter_comment
+    subTableName: ''
+    aliasName: p
+    listGrid: {  }
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    order: id
+    orderBy: desc
+    searchFun: EXISTS
+    dataModel: 0
+    alias: {  }
+    query:
+        aid:
+            eq: '[aid]'
+        models:
+            eq: '[models]'
+        content:
+            orX: 'content,like,%[content]%'
+        create_time:
+            lt: '[create_time]'
+        toid:
+            eq: '[toid]?0'
+    query1: {  }
+    autoQuery: '1'
+    join:
+        '[models]?news':
+            aliasName: 'n'
+            joinType: join
+            alias: {  }
+            query:
+                id:
+                    eq: p.aid
+    groupBy: ''
+    attribute: '0'

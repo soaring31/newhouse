@@ -1,0 +1,174 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+    {% set aid = app.request.get('aid') %}
+{% block js %}
+{% endblock %}
+
+{% block mainMenu %}
+     {{ parent() }} 
+{% endblock %}
+
+{% block mainleft %}
+   {#  {{ render(controller('HouseBundle:Mnews:category', {category: category, action: 'mnews/mnewsmanage'})) }} #}
+{% endblock mainleft %}
+
+{% block tableMain %}
+    {# {{ core_manage.show({
+         url: ('mcaches/clear')|U ,
+         title: '<i class="font-ico-41 mr5"></i>更新缓存',
+         id: 'clear-cache',
+         'data-ajax-title': '更新中...',
+         'data-ajax': 1
+    }) }} #}
+    
+{{ core_manage.filter([
+    {
+        method           : 'submit',
+        url              : ('mcaches/clear')|U ,
+        ico              : 'font-ico-68 mr5',
+        title            : '快速更新',
+        id               : 'clear-cache',
+        class            : 'btn btn-update btn-lg btn-success',
+        'data-ajax'      : 1,
+        'data-ajax-title': '更新中...',
+    },
+    {
+        method           : 'btn',
+        title            : '<i class="font-ico-41 mr5"></i>常规更新',
+        class            : 'btn btn-update btn-lg btn-primary',
+        'data-ajax-title': '更新中...',
+    },
+    {
+        method: 'btn',
+        class : 'btn btn-update btn-lg btn-danger',
+        title : '<i class="font-ico-14 mr5"></i>高级更新',
+        id    : 'btn-update-more'
+    },
+], {
+    class: 'filter1',
+}) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            models: '{{ models }}',
+            category: '{{ category }}'
+        }
+    }">
+    <div data-updateform="1" class="list updateform">
+        <form action="###" method="POST" class="form" novalidate="novalidate">
+            <table class="popup-form-table" style="width:100%;" text="">
+                <tbody>
+                    <tr></tr>
+                    <tr>
+                        <td>
+
+                            <div id="group_set">
+                                <div class="form-row">
+                                    <div class="form-cell-label">
+                                        <label class="w150 rtd txtright" base-data="Array" for="autoetime">缓存说明</label>
+                                    </div>
+                                    <div class="form-cell">                
+                                        <ul class="select-wrap">
+                                            <li class="select-item select-item-act"><label><input required="" type="checkbox" id="cate_type" name="cate_type[]" value="99" checked="" aria-required="true" class="valid">菜单结构<i class="arraw"></i></label></li>
+                                            <li class="select-item"><label><input required="" type="checkbox" id="cate_type" name="cate_type[]" value="100" aria-required="true" aria-invalid="false">数据库缓存<i class="arraw"></i></label></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-cell-label">
+                                        <label class="w150 rtd txtright" base-data="Array" for="autoetime">缓存说明</label>
+                                    </div>
+                                    <div class="form-cell">                
+                                        <ul class="select-wrap">
+                                            <li class="select-item select-item-act"><label><input required="" type="checkbox" id="cate_type" name="cate_type[]" value="99" checked="" aria-required="true" class="valid">菜单结构<i class="arraw"></i></label></li>
+                                            <li class="select-item"><label><input required="" type="checkbox" id="cate_type" name="cate_type[]" value="100" aria-required="true" aria-invalid="false">数据库缓存<i class="arraw"></i></label></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-cell-label">
+                                        <label class="w150 rtd txtright" base-data="Array" for="autoetime">缓存说明</label>
+                                    </div>
+                                    <div class="form-cell">                
+                                        <ul class="select-wrap">
+                                            <li class="select-item select-item-act"><label><input required="" type="checkbox" id="cate_type" name="cate_type[]" value="99" checked="" aria-required="true" class="valid">菜单结构<i class="arraw"></i></label></li>
+                                            <li class="select-item"><label><input required="" type="checkbox" id="cate_type" name="cate_type[]" value="100" aria-required="true" aria-invalid="false">数据库缓存<i class="arraw"></i></label></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="error-wrap"></div>
+                            </div>
+                        </td>
+
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <div class="popup-submit"></div>
+            <div class="tac p10">
+                <div class="wrap-submit">
+                    <button type="submit" id="submit" name="submit" data-role="submit" class="btn font-ico-22 fz12">确定并更新</button>
+                </div>
+        </form>
+    </div>
+</section>
+<script type="text/javascript">
+   seajs.use([], function() {
+       $('.btn-update')
+            // .off('click')
+            .on('click', function(e) {
+                if ($(this).is('#btn-update-more')) {
+                        $('[data-updateform]').show();
+                } else {
+                        $('[data-updateform]').hide();
+                }
+                // 只需要阻止默认行为就行，js点击还要保留
+                e.preventDefault();
+                // return false;    
+            })
+   })
+</script>
+<style type="text/css">
+    .main-through .filter1 {
+        padding: 20px 20px 5px;
+        border-bottom: 2px solid #EDF2F6;
+    }
+    .btn-update {
+        margin-right: 12px;
+    }
+    .wrap-submit {
+        /*padding-top: 100px;*/
+    }
+    .updateform {
+        padding-top: 20px;
+        display: none;
+        /*border: 1px solid #ddd;*/
+    }
+    .updateform .form-cell {
+        border: none !important;
+    }
+    .form .select-wrap .select-item {
+        margin-right: 12px;
+    }
+</style>
+{% endblock %}
+
+{% block promptUl %}
+// require('markdown')
+1. 设置启用则生效
+1. 规则可以使用正则表达式
+1. 优先匹配前面的，当匹配后不在匹配
+{% endblock %}
+
+
+
+

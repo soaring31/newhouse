@@ -1,0 +1,184 @@
+{% set tpl_extends = 'HouseBundle:Sale:sale_layout.html.twig' %}
+
+{% set tpl_extends_data = {
+    'search': 'HouseBundle:Sale:search.html.twig',
+    'ajax': 'HouseBundle:Clist:salelist.html.twig'
+} %}
+
+{% for k,v in tpl_extends_data %}
+    {% if app.request.get(k) or app.request.headers.get(k) %}
+        {% set tpl_extends = v %}
+    {% endif %}
+{% endfor %}
+
+{% extends tpl_extends|default('') %}
+
+{# # 说明
+* list : 二手房列表标识
+* tpl_models: 当前所属
+* list_ident: 楼盘列表
+* cook_id: 图文列表分类
+* sort_data_opt:重新排序变量
+* 以下是筛选区域数据定义
+*      1、filter_rows： 横排显示筛选条件条数
+*      2、filter_opt：筛选条件数据
+*#}
+{% block title %}【{{cur_area_data|default('')}}二手房|{{cur_area_data|default('')}}二手房出售】_{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}买房交易平台{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data|default('')}}二手房,{{cur_area_data|default('')}}二手房出售,{{cur_area_data|default('')}}二手房买卖" />
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}二手房网为您提供快速全面的{{cur_area_data|default('')}}二手房信息及新发布{{cur_area_data|default('')}}二手房价格。大量优质二手房实时更新，为您创造舒适二手房购房体验。" />
+{% endblock key_des %}
+
+{% block css %}
+    {{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/salecss.css')}}
+{% endblock css %}
+
+
+{% set cook_id = app.request.get("cook_id")|default(0) %}
+
+{% set sort_data = {
+    def: {
+        title: '默认'
+    },
+    mj: {
+        title: '面积'
+    },
+    zj: {
+        title: '总价'
+    },
+    dj: {
+        title: '单价'
+    }
+} %}
+
+{% set list_ident = ident.list|default('') %}
+
+{# 搜索 #}
+{% block top_search %}
+    {% set tpl_topsearch_action = 'sale/list' %}
+    {% set tpl_topsearch_placeholder = '请输入二手房名称/拼音' %}
+    {{ parent() }}
+{% endblock top_search %}
+{# 当前位置 #}
+{% block current_container %}
+<a href="{{('sale/list')|U}}">二手</a>
+{% block current_sale %}{% endblock current_sale %}
+{% endblock current_container %}
+
+{% block container %}
+    {# 检索数据源 #}
+    {% set cate_data = house_global.cate_data({ 
+                    tag: 'sale',
+                    switch: {
+                        cate_circle: 1,
+                        cate_line: 1,
+                        hxs: 1
+                    },
+                    url_opt: { 
+                        usertype: app.request.get('usertype'), 
+                        cook_id: cook_id|default('')
+                    } 
+                }).__toString|json_decode %}
+    {# 筛选条件 #}
+    {{house_global.filter_cfg({
+        show_selected: 1,
+        head_data: head_data,
+        action: action
+    }|merge(cate_data))}}
+    <div class="blank30"></div>
+    <div class="container">
+        <div class="main">
+            <div class="tag">
+                <div class="tag-head">
+                    {{house_global.fy_title({
+                        is_act: app.request.get('usertype'),
+                        attr: 'data-name="usertype"',
+                        data: [
+                            {
+                                name: '二手房源',
+                                url: (action)|U,
+                                class: 'default',
+                                attr: 'data-clear="all" data-value'
+                            },
+                            {
+                                name: '个人房源',
+                                url: (action)|U({usertype: 11}),
+                                attr: {
+                                    'data-value': 11,
+                                },
+                                act: 11
+                            }
+                        ]
+                    })}}
+                </div>
+                <div class="tag-middle">
+                    <div class="t-m-l">
+                        {{ core_global.listType({
+                            action: action,
+                            data: [
+                                {
+                                    title: '图文',
+                                    icon: 'font-lp-56'
+                                },
+                                {
+                                    title: '文本',
+                                    icon: 'font-lp-35'
+                                }
+                            ]
+                        }|merge(cate_data)) }}
+                    </div>
+                    <div class="t-m-r">
+                       <div class="sort fr">
+                            {# {{ core_global.sort({
+                                action: action,
+                                filter_opt: filter_opt|default([])|merge({usertype: {title: '用户分类'}, cook_id: {title: '图文列表'}}),
+                                data: sort_data
+                            }) }} #}
+
+                            {% block list_sort %}
+                                {{ core_global.sort({
+                                action: action,
+                                data: sort_data|default('')
+                            }|merge(cate_data)) }}
+                            {% endblock list_sort %}
+                       </div>
+                    </div>
+                </div>
+            </div>
+            <div data-list='1'>
+                {# 列表 #}
+                {{house_global.sale_list({
+                    list: list_ident,
+                    page: 1
+                })}}
+            </div>
+        </div>
+        {{house_global.sale_aside({models: 'sale'})}}
+    </div>
+{% endblock container %}
+
+
+{% block js %}
+<script type="text/javascript">
+ seajs.use(['listPjax','utils'],function(listPjax, utils){
+    // 如果是路由不启用pjax
+    {% if '/sale/list' in (action)|U %}
+        listPjax.init({
+            url: "{{('sale/list')|U()}}",
+            list: '[data-list]',
+            page: '.p-bar a',
+            filterShow: '[data-filter-show]',
+            next: {
+                url: '{{ ("bundlebindforms/ajax")|U({tpl: "Common:filter_next"}) }}',
+                tpl: '#level-tpl'
+            }
+        });
+    {% else %}
+        listPjax.page();
+    {% endif %}
+
+ })
+
+</script>
+{% endblock js %}

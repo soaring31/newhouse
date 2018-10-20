@@ -1,0 +1,62 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+seajs.use(["{{ bundlepath }}/js/sms"],function(sms){
+	sms.init('main');
+});
+</script>
+{% endblock %}
+{% block tableMain %}
+
+<form class="form" action="{{ (action)|U }}" method="post" name="form">
+<table class="right-table" width="100%">
+	<tbody>
+
+	    <tr>
+			<th colspan="5" class="conlist">短信发送</th>
+		</tr>
+
+		<tr>
+			<td class="txtright fB" width="20%">接口信息：</td>
+			<td class="txtleft" colspan="4">
+			    余额:({{blstr}})；接口名称:《{{api}}-{{name}}》{{site|raw}}
+			</td>
+		</tr>
+		<tr>
+			<td class="txtright fB" width="20%">手机号码：</td>
+			<td class="txtleft" colspan="4">
+			    <label>
+			    <textarea class="js-resize" name="tel" id="tel" style="width:360px;height:80px"  rule="text" must="1" min="11" max="24000" rev="手机号码" ></textarea>
+				</label><br><span class="tips1">手机号码不能为空
+一行一个或用,号分开；自动过滤如下符号【(-)】
+一次最多100发送个手机号码。</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="txtright fB" width="20%">短信内容：</td>
+			<td class="txtleft" colspan="4">
+			    <label>
+			    <textarea class="js-resize" name="msg" id="msg" style="width:360px;height:80px"  rule="text" must="1" min="3" max="255" rev="短信内容" ></textarea>
+				</label><br><span class="tips1">一次发送,最多255个字符以内，<a href="#" id="idTestmsg">[测试短信]</a>，多于[70]个字，按[65]个字每条扣费。[当前已输入<span id='idMsglen'>0</span>个字]</span>
+				<!--<br />有些接口要求短信内容要<a href='#' onClick='setMsgSign()'>加上类似“【某公司】”或”“【姓名】”等签名,或按其提供的[短信模版]</a>，否则可能发不出去，具体请与短信提供商联络！-->
+			</td>
+		</tr>
+
+	</tbody>
+</table>
+<div class="submit">
+	<input class="submit-btn ajax-post confirm reload" target-form="form" value="发送" type="submit">
+</div>
+</form>
+<script type='text/javascript'>
+var defTel = '{{sms_admtel}}';
+var defMsg = '{{def_msg}}';
+</script>
+{% endblock %}
+{% block submit %}{% endblock %}
+{% block promptUl %}<li><!--ErrorCodeLists-->
+	<b>错误代码对照表：</b>
+	{% for key, msg in errInfo %}
+		{{key}} = {{msg}};　 
+	{% endfor %}
+</li>{% endblock %}

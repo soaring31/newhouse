@@ -1,0 +1,194 @@
+{# 楼盘、户型、特价房 #}
+{% extends 'HouseBundle:Houses:houses_layout.html.twig' %}
+
+{# 说明
+** sort_data: 默认重新排序定义
+** sort_data_opt: 自定义重新排序
+** filter_hd: 筛选头部 #}
+
+{# 筛选头部 #}
+{# set head_data = {
+    quyu: {
+        title: '区域找房',
+        icons: 'font-filter-9',
+        url: ('houses/list')|U
+    },
+    door: {
+        title: '户型找房',
+        icons: 'font-filter-2',
+        url: ('door/list')|U
+    },
+    price: {
+        title: '房价找房',
+        icons: 'font-filter-3',
+        url: ('houses/cfj')|U
+    },
+    special: {
+        title: '特价房',
+        icons: 'font-filter-4',
+        url: ('special/list')|U
+    },
+    map: {
+        title: '地图找房',
+        icons: 'font-filter-11',
+        target: '_blank',
+        url: ('map/index')|U
+    },
+} #}
+{#{% set head_data = {
+    quyu: {
+        title: '区域找房',
+        icons: 'font-filter-9',
+        url: ('houses/list')|U
+    },    price: {
+        title: '房价找房',
+        icons: 'font-filter-3',
+        url: ('houses/cfj')|U
+    },
+    special: {
+        title: '特价房',
+        icons: 'font-filter-4',
+        url: ('special/list')|U
+    },
+} %}
+#}
+{% set head_data = {} %}
+
+{# 当前分站id #}
+{% set sess_area = app.session.get('area')|default(0) %}
+{% set City_id = ('db.auth_group_area')|getOne('id',{rulesarea:sess_area}) %}
+{% set cYCity_id = 100+City_id %}
+{% set cy_id = cy_array|default %}
+
+
+
+{# 当前位置 #}
+ {% block current_container %}
+    <a href="{{('houses/list')|U}}">{{cur_area_data|default('主')[:2]}}新房</a>
+    <span>&gt;</span>
+    {% block current_houses %}{% endblock current_houses %}
+{% endblock current_container %}
+
+{# 内容 #}
+{% block container %}
+    {#头部导航栏#}
+    <div class="header-nav">
+        <ul class="nav-li">
+            <li class="hover">
+                <a href="/xinfang" class="newhouse_qblp">全部楼盘</a>
+            </li>
+            <li>
+                <a href="/houses/prices" class="newhouse_fjzs">房价走势</a>
+            </li>
+            <li>
+                <a href="/news/list" class="newhouse_lx">楼讯</a>
+            </li>
+            {#
+            <li>
+                <a href="/topic/group">看房团</a>
+            </li>
+            #}
+        </ul>
+    </div>
+
+    {%  set name = app.request.get("name") %}
+    <div class="">
+        {# 筛选 #}
+        {% block filters %}
+            {# 筛选条件 #}
+            {{listMacro.filter_cfg({
+                show_selected: show_selected|default(0),
+                head_data: head_data,
+                action: action,
+                name: name
+            }|merge(cate_data))}}
+        {% endblock filters %}
+        {#筛选器下面的广告位#}
+        {% set listads = ('detail_ad_lbytl_1200_70')|getPushMuti(1,{area:cityid,checked:1}) %}
+        <!-- 新房底部广告位 开始 -->
+        <div class="ads-img-div container ad_xxxf_1200_88">
+            <ul class="ads-ul">
+            <!-- AdSame ShowCode: PC / 新房列表页 / 搜索区通栏 Begin -->
+            <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13102104" }}" charset="gbk" ></script>
+            <!-- AdSame ShowCode: PC / 新房列表页 / 搜索区通栏 End -->
+                {#
+                {% for item in listads['detail_ad_lbytl_1200_70'] %}
+                {% if item.checked == 1 %}
+                    <li><a href="{{item.url}}" target="_blank"><img src="{{asset(item.thumb)}}"></a></li>
+                {% endif %}
+                {% endfor %}
+                #}
+            </ul>
+        </div>
+        <!-- 新房底部广告位 结束 -->
+        <div class="clearfix container list-content">
+            {#左侧区域#}
+            {% block lp_body %}
+                <div class="lp-body fl">
+                    {% block container_houses_list_tit %}
+                        <!--title-->
+                        <div class="body-tit clearfix">
+                            {% if ident.list and ident.list.pageCount %}
+                                <p class="left-p">全部楼盘 <span>{{ident.list.pageCount}}</span> 个楼盘</p>
+                            {% endif %}
+
+                            <div class="sort fr">
+                                {% block list_sort %}
+                                    {{ listMacro.sort({
+                                        action: action,
+                                        data: sort_data|default('')
+                                    }|merge(cate_data)) }}
+                                {% endblock list_sort %}
+                            </div>
+                        </div>
+                    {% endblock container_houses_list_tit %}
+                    {#传漾置顶广告#}
+                    {% block CY_house_list %}
+                    {% endblock CY_house_list %}
+
+                    {% block container_houses_list %}
+                        列表
+                    {% endblock container_houses_list %}
+                </div>
+            {% endblock lp_body %}
+            {#右侧区域#}
+            {% block loupan_right  %}
+                {#{% set rqlp = ('rqlp')|getPush(4) %}#}
+                {% set push_xptj = ('xptj')|getPush(4) %}
+                <div class="lp-aside  fl">
+                    {#{% include 'HouseBundle:house_list:recommend.html.twig' %}#}
+                    {% if push_xptj and push_xptj|length > 0 %}
+                    {{house_global.newList_right({
+                        list: push_xptj,
+                        type: "热门楼盘"
+                    })}}
+                    {% endif %}
+                    <div class='zhanwei'></div>
+                    {% include 'HouseBundle:Houses/includeTemp:xinkailoupan.html.twig' %}
+                    <div class="list-right-pic j_listRightImg">
+                        <!-- AdSame ShowCode: PC / 新房列表页 / 立式 Begin -->
+                        <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~"13102105" }}" charset="gbk" ></script>
+                        <!-- AdSame ShowCode: PC / 新房列表页 / 立式 End -->
+                    </div>
+                    {#
+                    {% set right_ad = ("housesads03"|default(''))|getPush(1) %}
+                    {% if right_ad and right_ad[0] %}
+                    <div class="list-right-pic">
+                        <a href="{{ right_ad[0].url }}">
+                            {{ core_global.img({
+                                src: right_ad[0].thumb,
+                                alt: right_ad[0].name
+                            }) }}
+                        </a>
+                    </div>
+                    {% endif %}
+                    #}
+                </div>
+            {% endblock loupan_right  %}
+        </div>
+        {#猜你喜欢#}
+        <div class="container">
+            {% include 'HouseBundle:Houses/includeTemp:guesslikeloupan.html.twig' %}
+        </div>
+    </div>
+{% endblock container %}

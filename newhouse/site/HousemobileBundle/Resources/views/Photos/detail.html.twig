@@ -1,0 +1,59 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% block key_des %}
+    <meta name="keywords" content="{{detail.keywords|default('')}}" />
+    <meta name="description" content="{{detail.abstract|default('')}}" />
+{% endblock key_des%}
+
+{% block title %}
+    {{detail.name|default('图库')}}
+{% endblock title %}
+
+{% block header_title %}
+    {{core_mobile_global.title({title: '图库详情'})}}
+{% endblock header_title %}
+
+{% block popup %}
+
+{{ housemobile_global.popup({
+    name: 'popup-photos',
+    title: '图库评论',
+    content: {
+        bParams: true,
+        ajax: {
+            url: ('bundlebindforms/comment')|U,
+            data: {
+                aid: detail.id|default(''),
+                formflag: 'view_comment',
+                models: 'inter_comment',
+                arc_models: 'photos'
+            }
+        }
+    }
+}) }} 
+
+
+
+{# {% include 'HousemobileBundle:Photos:comments.html.twig' ignore missing with {tpl_js: 1} %} #}
+{% endblock popup %}
+
+
+{% block container %}
+<div data-block="{
+    bParams: true,
+    ajax:{
+        url: '{{ ('photos/detail')|U }}',
+        data: {
+            id: '{{ detail.id|default('') }}',
+            tpl: 'Photos:detailblock'
+        }
+    }
+}"></div>
+{% endblock container %}
+
+{# 
+{% block container %}
+{% include 'HousemobileBundle:Photos:detailblock.html.twig' ignore missing with {detail: detail} %}
+{% endblock container %} #}

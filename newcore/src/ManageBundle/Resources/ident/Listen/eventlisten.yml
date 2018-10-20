@@ -1,0 +1,26 @@
+info:
+    tableName: event_listen
+    subTableName: ''
+    aliasName: p
+    listGrid:
+        - 'id:序号|txtcenter w60'
+        - 'name:监听名称|txtleft w180'
+        - 'model_name:监听模型|txtleft w120'
+        - 'bind_name:绑定模型|txtleft w120'
+        - 'op[EVENTOP]:监听操作|txtleft w80'
+        - 'op_order[EVENTYPE]:监听类型|txtleft w80'
+        - 'id:操作|txtcenter w560:[EDIT]编辑|btn,[DELETE]删除|btn,[COPY]复制|btn'
+    listDesc: 监听
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    order: 'name and model_name'
+    orderBy: desc
+    searchFun: EXISTS
+    dataModel: 0
+    autoQuery: '0'
+    alias: {  }
+    query: {  }
+    query1: {  }
+    groupBy: ''

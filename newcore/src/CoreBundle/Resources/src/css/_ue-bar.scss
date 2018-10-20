@@ -1,0 +1,21 @@
+.ue-bar {
+}
+.btn-custom {
+    cursor: pointer;
+    font-size: 12px !important;
+    color: #666;
+    $p: 4px;
+    padding: $p;
+    i {
+        @extend [class^="font-ico-"];
+        font-size: 16px !important;
+        margin-right: 3px !important;
+        vertical-align: -3px !important;
+        color: #3271A9;
+    }
+    &:hover {
+        padding: $p - 1;
+        border: 1px solid #DCAC6C;
+        background-color: #FFF5D4;
+    }
+}

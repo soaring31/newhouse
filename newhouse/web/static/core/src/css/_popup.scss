@@ -1,0 +1,209 @@
+$p-w: 490px;
+$sel-h: 30px;
+
+.popup-table {
+    font-size: 12px;
+    color: #444;
+    a {
+        color: #fff;
+    }
+    .maintr {
+        height: 45px;
+        th{
+            i{
+                cursor: pointer;
+                color: #fff;
+            }
+        },
+        td {
+            line-height: 35px;
+        }
+    }
+    th,
+    td {
+        line-height: $tb-lh;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+        padding: 5px 10px;
+        min-height: 30px;
+        text-align: left;
+    }
+    th {
+       background: rgba(0, 0, 0, 0.4);
+       padding: 5px 10px;
+       
+       font-weight: normal;
+    }
+    .ltd {
+        border-left: 1px solid $tb-bdc;
+    }
+    .rtd {
+        border-right: 1px solid rgba(0, 0, 0, 0.4);
+    }
+    ul {
+        line-height: 1.8;
+        @extend %clearfix;
+        // overflow: hidden;
+    }
+    li {
+        float: left;
+        margin-right: 5px;
+    }
+    .popup-table-1 {
+        width: 100%;
+        th,
+        td {
+            border: 0px !important;
+        }
+        tr:hover {
+            // border-bottom: 1px solid #5F4A4A;
+        }
+        .dl {
+            width: 80px;
+            text-align: right;
+        }
+    }
+    .w150 {
+        width: 150px;
+    }
+}
+
+.popup-form-table {
+    font-size: 12px;
+    th {
+        text-align: left;
+        background: $tb-bgc;
+        line-height: $tb-lh;
+        padding: 5px 10px;
+        min-height: 30px;
+    }
+    td > div > .form-row > .form-cell {
+        padding: 10px 5px;
+        border-left: 1px solid #EEE;
+        border-bottom: 1px solid #EEE;
+    }
+    td > div {
+        display: table;
+        width: 100%;
+        border-collapse: collapse;
+    }
+    td > div >.form-row {
+        display: table-row;
+        >div {
+            display: table-cell;
+            vertical-align: middle;
+        }
+    }
+    td {
+        padding: 0;
+        border: none;
+        > div > .form-row > .form-cell-label {
+            padding: 10px;
+            width: 25%;
+            font-weight: bold;
+            text-align: right;
+            background: #F7F5F5;
+            border-bottom: 1px solid #eee;
+        }
+    }
+    .rtd {
+        border: none;
+    }
+}
+.jqModal {
+    .main-oprate {
+        margin-top: - $spacing * 2;
+        padding-top: $spacing;
+    }
+    .popup {
+        &-submit {
+            margin: 10px auto;
+            text-align: center;
+        }
+    }
+    .main-through {
+        .main-hd,
+        .main-bd,
+        .filter,
+        .list-con,
+        .oprate,
+        .prompt {
+            margin: 0;
+        }
+    }
+
+    .main-left {
+        width: 100px;
+    }
+    .resize {
+        position:absolute;
+        width:4px;
+        height:4px;
+        // border: 1px solid #555;
+        // background-color:#CCC;
+        font-size:0;
+        z-index: 5;
+
+        &.north-west-resize {
+            top: 0;
+            left: 0;
+
+            cursor: nw-resize;
+            z-index: 10;
+        }
+        &.north-resize {
+            top: 0;
+
+            width: 100%;
+
+            cursor: n-resize;
+        }
+        &.north-east-resize {
+            top: 0;
+            right: 0;
+
+            cursor: ne-resize;
+            z-index: 10;
+        }
+
+        &.west-resize {
+            top: 0;
+            left: 0;
+
+            height: 100%;
+            cursor: w-resize;
+        }
+        &.east-resize {
+            top: 0;
+            right: 0;
+
+            height: 100%;
+            cursor: e-resize;
+        }
+
+        &.south-west-resize {
+            bottom: 0;
+            left: 0;
+
+            cursor: sw-resize;
+            z-index: 10;
+        }
+        &.south-resize {
+            bottom: 0;
+
+            width: 100%;
+            cursor: s-resize;
+        }
+        &.south-east-resize {
+            width: 0;
+            height: 0;
+            border-bottom: 12px solid #aaa;
+            border-left: 12px solid transparent;
+            right: 2px;
+            bottom: 2px;
+            cursor: se-resize;
+            z-index: 10;
+        }
+
+    }
+}
+

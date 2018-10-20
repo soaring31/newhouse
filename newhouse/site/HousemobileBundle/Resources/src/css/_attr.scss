@@ -1,0 +1,58 @@
+/*!
+ * @name attr.css
+ * @author xying
+ * @date 2016-1-15
+ * @示例 html结构
+ * ```twig
+ * <ul class="more-attr">
+ *     <li class="row">
+ *     	   <div class="col-50">
+ *         开盘：2017-1-1
+ *         </div>
+ *         <div class="col-50">
+ *         </div>
+ *     </li>
+ * </ul>
+ * ```
+ * @示例 展开关闭操作
+ * html
+ * ```twig
+ * <ul class='more-attr lp-attr'></ul>
+ * <div data-more-attr=".lp-attr" data-open="收起" data-close="更多详细信息" class="more-attr-open more-attr-lp"></div>
+ * ```
+ * 
+ */
+.more-attr {
+	background: #fff;
+	font-size: 12px;
+	padding: 0 .55556rem;
+	line-height: 26px;
+	li {
+		list-style: none;
+	}
+}
+
+// 楼盘属性
+.lp-attr {
+	display: none;
+}
+
+// 更多打开按钮样式
+.more-attr-open {
+	// 楼盘更多属性
+	&.more-attr-lp {
+		padding-left: .55556rem;
+		line-height: 26px;
+		padding-bottom: 10px;
+	}
+}
+
+// 更多关闭按钮样式
+.more-attr-close {
+	// 楼盘更多属性
+	&.more-attr-lp {
+		padding-left: .55556rem;
+		line-height: 26px;
+		padding-bottom: 10px;
+	}
+}

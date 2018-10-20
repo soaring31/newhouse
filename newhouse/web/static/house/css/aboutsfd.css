@@ -1,0 +1,341 @@
+@charset "UTF-8";
+
+
+
+
+/*顶部banner结束*/
+a{
+    color: #333;
+}
+.fd-box{
+    width: 100%;
+    height: 100%;
+    background: #FFFFFF;
+}
+.fd-banner{
+    width: 100%;
+    height: 519px;
+    background:url("../images/house/aboutsfd/fd-banner.png") no-repeat;
+    background-size: 100% 100%;
+    position: relative;
+}
+
+.fd-banner .fd-wa{
+    width: 1200px;
+    margin: 0 auto;
+    height: 100%;
+    position: relative;
+}
+.fd-banner .fd-wa .fd-line{
+    width: 80px;
+    height: 8px;
+    display: block;
+    position: absolute;
+    top: 150px;
+    left: 120px;
+    background: #FFFFFF;
+}
+.fd-banner .fd-wa .fd-sm{
+    width: 800px;
+    height: 120px;
+    line-height: 50px;
+    position: absolute;
+    top: 170px;
+    left: 120px;
+    color: #FFFFFF;
+    font-size: 38px;
+    font-weight: bolder;
+}
+.fd-banner .banner-title{
+    width: 1200px;
+    height: 72px;
+    margin: 0 auto;
+    z-index: 100;
+    position: relative;
+}
+.fd-banner .banner-title>span{
+    width: 252px;
+    height: 72px;
+    display: block;
+    background: url("../images/house/aboutsfd/fd-logo.png") no-repeat;
+    background-size: 100% 100%;
+    float: left;
+}
+.fd-banner .banner-title>span a{
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.fd-banner .banner_right{
+    height: 20px;
+    float: right;
+}
+
+.fd-banner .banner_right .download {
+    float: right;
+    font-size: 12px;
+    text-align: right;
+    line-height: 60px;
+    width: 53px;
+    height: 60px;
+    cursor: pointer;
+    background: url("../images/house/aboutsfd/download.png") no-repeat;
+    background-position: left 22px;
+    background-size: 20%;
+    color: #FFFFFF;
+}
+.fd-banner .banner_right .download.don_change{
+    float: right;
+    color: #ff8400;
+    font-size: 12px;
+    text-align: right;
+    line-height: 60px;
+    width: 53px;
+    height: 60px;
+    cursor: pointer;
+    background: url("../images/house/aboutsfd/downloading.png") no-repeat;
+    background-position: left 22px;
+    background-size: 20%;
+}
+/*客户端样式*/
+.client_box {
+    display: none;
+    position: absolute;
+    top: 50px;
+    right: 0;
+    width: 481px;
+    height: 290px;
+    z-index: 1000;
+}
+.client_box .top_bg {
+    width: 481px;
+    height: 30px;
+}
+.client_box .client_list {
+    width: 481px;
+    height: 260px;
+    background: #fff;
+    overflow: hidden;
+}
+.client_box .client_list li {
+    width: 240px;
+    height: 260px;
+    float: left;
+    text-align: center;
+}
+.client_box .client_list li .client_logo {
+    width: 56px;
+    height: 56px;
+    margin: 30px auto 0;
+    background: url("../images/house/aboutsfd/c_logo.png") no-repeat;
+    background-size: cover;
+    box-shadow: 0 1px 6px 0 rgba(0,0,0,0.1);
+    border-radius: 13px;
+}
+.client_box .client_list li h5 {
+    font-size: 14px;
+    color: #333333;
+    letter-spacing: 1px;
+    margin-top: 10px;
+}
+.client_box .client_list li .client_code {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    margin-top: 13px;
+    background: url("../images/house/aboutsfd/c_code.png") no-repeat;
+    background-size: cover;
+}
+.client_box .client_list li p {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #999999;
+}
+.client_box .client_list .line {
+    width: 1px;
+    height: 120px;
+    background: #eee;
+    margin-top: 80px;
+}
+
+.client_box .client_list li {
+    width: 240px;
+    height: 260px;
+    float: left;
+    text-align: center;
+}
+.client_box .client_list li .jjr_logo {
+    background: url("../images/house/aboutsfd/ymd_logo.png") no-repeat;
+    background-size: cover;
+}
+.client_box .client_list li h5 {
+    font-size: 14px;
+    color: #333333;
+    letter-spacing: 1px;
+    margin-top: 10px;
+}
+.client_box .client_list li .jjr_code {
+    background: url("../images/house/aboutsfd/jjr_code.png") no-repeat;
+    background-size: cover;
+}
+.client_box .client_list li p {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #999999;
+}
+
+
+.fd-content{
+    width: 1020px;
+    margin: 0 auto;
+    padding: 60px 90px 50px;
+    position: relative;
+    top: -60px;
+    background: #ffffff;
+    box-shadow:0px 10px 10px rgba(0,0,0,0.1);
+}
+.fd-statement p ,.fd-identification>p{
+    font-size: 14px;
+    line-height: 26px;
+    color: #333;
+    margin-bottom: 20px;
+}
+.fd-statement>:first-child{
+    text-indent: 28px;
+}
+.fd-statement p span{
+    color: #FF8400;
+}
+.fd-identification{
+    width: 100%;
+    background: #FFFFFF;
+}
+.fd-identification div{
+    margin-bottom: 30px;
+}
+.fd-identification div p ,.fd-identification div h5{
+    font-size: 14px;
+    line-height: 26px;
+    color: #333;
+}
+.fd-identification div h5{
+    font-weight: 600;
+}
+.fd-identification div.identification-gfwz span{
+    width: 100%;
+    height: 557px;
+    display: block;
+    background: url("../images/house/aboutsfd/fd-gwjt.png") no-repeat;
+    background-size: 100% 100%;
+    margin-top: 30px;
+}
+.fd-identification div.identification-gfwb span{
+    width: 100%;
+    height: 332px;
+    display: block;
+    background: url("../images/house/aboutsfd/fd-gfwb.png") no-repeat;
+    background-size: 100% 100%;
+    margin-top: 30px;
+}
+.fd-identification div.identification-wxgzh span{
+    width: 273px;
+    height: 373px;
+    display: block;
+    background: url("../images/house/aboutsfd/fd-wxgzh.png") no-repeat;
+    background-size: 100% 100%;
+    position: relative;
+    margin: 0 auto;
+    top: -30px;
+}
+.fd-identification div.identification-gfapp span{
+    width: 748px;
+    height: 180px;
+    display: block;
+    background: url("../images/house/aboutsfd/fd-gfapp.png") no-repeat;
+    background-size: 100% 100%;
+    margin:30px auto 0;
+}
+.identification-gsxx ul li.gslg span{
+    width: 835px;
+    height: 349px;
+    display: block;
+    background: url("../images/house/aboutsfd/fd-gslg.png") no-repeat;
+    background-size: 100% 100%;
+    margin: 30px auto 0;
+    margin-bottom: 50px;
+}
+.identification-gsxx ul li.gsmp span{
+    width: 1020px;
+    height: 446px;
+    display: block;
+    background: url("../images/house/aboutsfd/fd-gsmp.png") no-repeat;
+    background-size: 100% 100%;
+    margin: 5px auto 0;
+    margin-bottom: 50px;
+}
+.identification-gsxx ul li.gsfz div.fz-one span{
+    width: 1006px;
+    height: 228px;
+    display: block;
+    background: url("../images/house/aboutsfd/fd-fzone.png") no-repeat;
+    background-size: 100% 100%;
+    margin: 30px auto;
+}
+.identification-gsxx ul li.gsfz div.fz-two span{
+    width: 1006px;
+    height: 228px;
+    display: block;
+    background: url("../images/house/aboutsfd/fd-fztwo.png") no-repeat;
+    background-size: 100% 100%;
+    margin: 30px auto;
+}
+.identification-gsxx ul li.gsfz div.fz-three span{
+    width: 1006px;
+    height: 281px;
+    display: block;
+    background: url("../images/house/aboutsfd/fd-fzthree.png") no-repeat;
+    background-size: 100% 100%;
+    margin: 30px auto;
+}
+.identification-gsxx ul li.gsfz div.fz-five span{
+    width: 1006px;
+    height: 480px;
+    display: block;
+    background: url("../images/house/aboutsfd/fd-fzfive.png") no-repeat;
+    background-size: 100% 100%;
+    margin: 30px auto;
+}
+.identification-gsxx ul li.gsfz div.fz-six span{
+    width: 1006px;
+    height: 336px;
+    display: block;
+    background: url("../images/house/aboutsfd/fd-fzsix.png") no-repeat;
+    background-size: 100% 100%;
+    margin: 30px auto;
+}
+.identification-gsxx ul li.ppxcy span{
+    width: 642px;
+    height: 119px;
+    display: block;
+    background: url("../images/house/aboutsfd/fd-ppxcy.png") no-repeat;
+    background-size: 100% 100%;
+    margin: 25px auto 0;
+}
+.fd-content .fd-lk{
+    width: 1018px;
+    height: 142px;
+    margin: 85px auto 0;
+}
+.fd-content .fd-lk p{
+    font-size: 14px;
+    color: #333;
+    line-height: 26px;
+}
+.fd-content .fd-lk p.lk-one{
+    text-indent: 28px;
+}
+.fd-content .fd-lk p.lk-two{
+    text-align: right;
+}
+/*logo结束*/

@@ -1,0 +1,55 @@
+{% extends 'IlvBundle::view_layout.html.twig' %}
+
+{% block title %}
+	楼盘公用模块（顶部搜索以及当前位置）
+{% endblock title %}
+
+{% block body %}
+
+{% block top_search %}
+<!--搜索-->
+{{render(controller('IlvBundle:Common:topsearch',{class:'lp-top-bar'}))}}
+{% endblock top_search %}
+
+{% block top_ad %}
+<div class="container">
+<!--house-ad-->
+<div class="blank10"></div>
+<div class="house-ad">
+	<!--item-->
+	<a href="" target="_blank" title="">
+		<img src="http://house.08cms.com/userfiles/adv/3011342689dada5e4d0289.jpg" alt="" style="width:1200px;"/>
+	</a>
+	<!--/item-->
+</div>
+<!--/house-ad-->
+<div class="blank10"></div> 
+</div>
+{% endblock top_ad %}
+
+{% block current %}	
+<div class="container">
+	<!--current-->
+	<div class="current-location">
+		{% block bread %}{% endblock bread %}
+		<i class="font-icons-20"></i>
+	    <a href="#" title="">首页</a>
+	    <span>&gt;</span>
+	    <span>dd</span>
+	</div>
+	<!--/current-->
+	<div class="blank10"></div>
+</div>
+{% endblock current %}
+
+{% block lp_container %}
+	楼盘内容区块
+{% endblock lp_container %}
+
+{% endblock body %}
+
+{# 1、所有房源详情  
+2、个人房源详情
+共同点，aside底下部分，上面的一块切换显示
+底下有一块猜你喜欢
+左侧图库、小区信息、地图等的显示隐藏 #}

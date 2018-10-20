@@ -1,0 +1,25 @@
+{% extends 'CoreBundle::base_ajax.html.twig' %}
+{# ajax调用
+ * 楼盘详情-楼盘印象 houses/detail
+#}
+{% block result %}
+{% if ident.info.data is defined and ident.info.pageCount|default(0) != 0 %}
+    {% for item in ident.info.data %}
+        <a class=" yx-btn btn btn-sm yx-{{(loop.index) % 6}}" data-vote="{models: 'inter_impress', id: {{item.id}}, field: 'hdnum' }">
+            {{item.yinxiang|default('')}}
+            <span data-vote-num="{{item.hdnum|default('0')}}">{{item.hdnum|default(' ')}}</span>
+        </a>
+    {% endfor %}
+{% else %}
+	<div class="noinfo" style="height: 152px; line-height: 152px;">{{'暂无数据'|trans({})}}</div>
+{% endif %}
+
+<script type="text/javascript">
+    seajs.use(['vote'], function(vote) {
+        // 顶
+        vote.init({
+            saveUrl: '{{("viewinter/vote")|U}}'
+        });
+    })  
+</script>
+{% endblock result %}

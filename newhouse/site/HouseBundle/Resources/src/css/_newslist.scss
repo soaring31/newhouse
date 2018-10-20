@@ -1,0 +1,39 @@
+/*!
+ * @name newslist.css
+ * @author xying
+ * @date 2016-9-8
+ * @dec common news list
+ */
+.xwzxlist {
+    padding: 35px 105px 35px 0;
+    border-bottom: 1px dashed #eee;
+    .listl {
+        float: left;
+        margin-right: 30px;
+        width: 180px;
+        height: 120px;
+        img {
+            transition: transform .5s ease-in;
+        }
+        &:hover img {
+            transform: scale(1.1);
+        }
+    }
+    h3 {
+        font-size: 24px;
+        line-height: 24px;
+        height: 26px;
+        color: #333;
+        overflow: hidden;
+    }
+    p {
+        line-height: 24px;
+        font-size: 14px;
+        color: #666;
+        padding-top: 10px;
+        a {
+            font-size: 12px;
+            color: $major-color;
+        }
+    }
+}

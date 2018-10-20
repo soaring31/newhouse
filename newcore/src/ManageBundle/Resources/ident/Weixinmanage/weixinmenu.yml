@@ -1,0 +1,22 @@
+info:
+    tableName: wxmenus
+    subTableName: ''
+    aliasName: p
+    listGrid:
+        - 'id:序号|txtcenter w60'
+        - 'appid:模型|txtleft w120'
+        - 'kno:序号|txtleft w60'
+        - 'title:标题|txtleft w120'
+        - 'id:操作|txtcenter w200:[EDIT]编辑|btn,[DELETE]删除|btn'
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    order: ''
+    orderBy: asc
+    searchFun: EXISTS
+    dataModel: 0
+    alias: {  }
+    query: {  }
+    query1: {  }

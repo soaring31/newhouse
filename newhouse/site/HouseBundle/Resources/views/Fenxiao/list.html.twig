@@ -1,0 +1,36 @@
+{% extends 'HouseBundle:Fenxiao:sell_layout.html.twig' %}
+
+{% block title %}{{cur_area_data|default('')}}楼盘分销{% endblock title %}
+
+{% block css %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/list.css')}}
+{% endblock css %}
+
+{# 当前位置 #}
+{% block current_container %}
+    <a href="{{('houses/list')|U}}">新房</a>
+    <span>&gt;</span>
+    <span>楼盘分销</span>
+{% endblock current_container %}
+
+{% block container %}
+    <div class="container">
+        <!-- 标题 -->
+        <h3 class="con-head">楼盘分销<em>[共有{{ident.list.pageCount|default('0')}}个房源促销中]</em></h3>
+        <!-- 内容 -->
+        {{house_global.sell_list({
+        	list: ident.list
+    	})}}
+        <!--page-->
+        {{core_global.page(ident.list|default(''))}}
+        <div class="blank30"></div>
+        <!--page-->
+    </div>
+{% endblock container %}
+
+{% block js %}
+    <script type="text/javascript">
+        seajs.use(['formattime'], function (formattime) {})
+    </script>
+{% endblock js %}
+

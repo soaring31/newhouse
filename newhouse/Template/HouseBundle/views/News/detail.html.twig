@@ -1,0 +1,334 @@
+{# #说明
+ * url_id: 获取url传回来的id
+ * news_detail: 根据id查询相应的一条数据
+ * sort_category_news: 获取同分类下的相关资讯
+ * other_spl: 资讯热门排行条件过滤
+ * detail_houses_aid: 相关楼盘id
+ * detail_houses: 相关楼盘信息
+ * block_groupbuy: 相关楼盘团购
+ * block_xiangce_photos: 相关楼盘相册
+ * subject：资讯标题(兼容分页标题)
+ * caid_form_arc  资讯文档所在的栏目
+#}
+{% set url_id = app.request.get('id') %}
+
+{% set url_pageIndex = app.request.get('pageIndex', 1) %}
+
+{% set news_info = ('house.news')|getRow({id: url_id,checked:1,findType: 1},{'field':'content','pageIndex': url_pageIndex})  %}
+
+{% set news_detail = news_info['data']|default('') %}
+
+{% set other_spl = {id: 'neq|' ~ news_detail.id|default('')} %}
+
+
+{% extends news_detail ? 'HouseBundle:News:index.html.twig' : 'CoreBundle:Dispatch:errorcontent.html.twig' %}
+{% set sort_category_news = ('house.news')|getAll({category: news_detail.category|default(''), pageSize: 10, checked: 1, id: 'neq|' ~ news_detail.id|default(0) ~ ''}) %}
+
+{% set detail_houses_aid = ('house.houses_arc')|getOne('aid', {fromid: news_detail.id|default(''), form: 'houses_news', checked: 1}) %}
+
+{% set detail_houses = ('house.houses')|getRow({id: detail_houses_aid|default(''), checked: 1, findType: 1}) %}
+
+{% set block_groupbuy = ('house.groupbuy')|getOne('id', {checked: 1, aid: detail_houses.id|default('')}) %}
+
+{% set subject = url_pageIndex > 1 ? news_info.pageNav[url_pageIndex-2]|default(news_detail.name): news_detail.name|default('资讯详情') -%}
+
+
+{# {% set block_xiangce_photos = ('house.inter_album')|getAll({checked: 1, aid: detail_houses.id|default(''), pageSize: 50, findType: 1}) %} #}
+
+{% block title %}{{subject}}{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" Content="{{news_detail.keywords|default('')}}"/>
+<meta name="description" content="{{news_detail.abstract|default('')}}"/>
+{% endblock key_des %}
+
+{% block news_push %}{% endblock news_push %}
+{% block body %}
+    {% set category_id = news_info.data.category|default('') %}
+    {{ parent() }}
+{% endblock body %}
+{% block container %}
+    {% if news_detail|length %}
+        <div class="borh clearfix por">
+            <h1 id="title">
+               {{subject}}
+            </h1>
+            <div id="riqi">
+                <div class="tar">
+                    <span>
+                        <i class="font-news-18"></i>
+                        {{news_detail.create_time|date('Y-m-d')}}
+                    </span>
+
+                     {% if news_detail.source|default('') %}
+                    <span href="javascript:;" title="{{news_detail.source|default('')}}">
+                        <i class="font-news-17"></i>
+                        来源：{{news_detail.source|default('')}}
+                    </span>
+                    {% endif %}
+
+                    <span>
+                        <i class="dianji font-icons-18"></i>
+                        <em data-counts="{models: 'news', field: 'clicks', id: {{news_detail.id|default('')}}}"></em><em class="c6">点击</em>
+                    </span>
+                    <span>
+                        <i class="pinglun font-news-19"></i>
+                        <i data-counts="{models: 'news', field: 'comnum', id: '{{news_detail.id|default('')}}'}"></i><em class="c6">评论</em>
+                    </span>
+                </div>
+            </div>
+            {% if detail_houses|default('') and url_pageIndex == 1 %}
+            <div class="ma" >
+                <!-- 相关楼盘 -->
+                <div class="lpwrap">
+                    <div class="xglp">
+                        <a class="pic" target="_blank" href="{{('houses/detail')|U({id: detail_houses.id|default('')})}}">
+                            {{- core_global.img({
+                                src: detail_houses.thumb|default(''),
+                                alt: detail_houses.name|default(''),
+                                type: 2,
+                                width: 180,
+                                height: 134
+                            }) -}}
+                        </a>
+                        <p>
+                            <strong >
+                                <a class="fz20" target="_blank" href="{{('houses/detail')|U({id: detail_houses.id|default('')})}}">
+                                    {{detail_houses.name|default('-')}}
+                                </a>
+                            </strong>
+                            <span class="pri arial">
+                                {{house_global.if_dj({value: detail_houses.dj|default('')})}}
+                            </span>
+                        </p>
+                        <p>
+                            地<i class="space">&nbsp;&nbsp;&nbsp;&nbsp;</i>址：{{detail_houses.address|default('-')}}
+                        </p>
+                        <p>
+                            销售电话：<span class="tel">{{detail_houses.tel|default('-')}}</span>
+                        </p>
+                        <p>
+                            开<i class="space">&nbsp;</i>发<i class="space">&nbsp;</i>商：{{detail_houses.house_developer|default('-')}}
+                        </p>
+                        <div class="lpitems">
+                            {% spaceless %}
+                            其<i class="space">&nbsp;&nbsp;&nbsp;&nbsp;</i>它：
+                            <a target="_blank" href="{{('houses/dnews')|U({id: detail_houses.id|default('')})}}">动态</a>
+                             <i class="pipe">|</i>
+                             <a target="_blank" href="{{('houses/dprices')|U({id: detail_houses.id|default('')})}}">价格</a>
+                             <i class="pipe">|</i>
+                             <a target="_blank" href="{{('houses/dphotos')|U({id: detail_houses.id|default('')})}}">图库</a>
+                             <i class="pipe">|</i>
+                             <a target="_blank" href="{{('houses/dplanintro')|U({id: detail_houses.id|default('')})}}">户型</a>
+                             <i class="pipe">|</i>
+                             <a target="_blank" href="{{('houses/dcomment')|U({id: detail_houses.id|default('')})}}">点评</a>
+                             <i class="pipe">|</i>
+                             <a target="_blank" href="{{('houses/dask')|U({id: detail_houses.id|default('')})}}">问答</a>
+                             <i class="pipe">|</i>
+                             <a target="_blank" href="{{('houses/dspehouse')|U({id: detail_houses.id|default('')})}}">特价房</a>
+                             {% if block_groupbuy|default('') %}
+                             <i class="pipe">|</i>
+                             <a target="_blank" href="{{('groupbuy/detail')|U({id: block_groupbuy|default('')})}}">团购</a>
+                             {% endif %}
+                            {# |  <a href="http://bbs.08cms.com" target="_blank">论坛</a> #}
+                            {% endspaceless %}
+                        </div>
+                    </div>
+                </div>
+                <!-- /相关楼盘 -->
+               {#  {% if block_xiangce_photos.data is defined and block_xiangce_photos.pageCount|default(0) != 0 %}
+                <div class="blank20"></div>
+                <div class="piccontext">
+                    <!--大图展示-->
+                    <div class="picshow">
+                        <div class="picshowtop">
+                            <div style="height:100%;" id="pic1">
+                                <span class="pic1-middle"></span>
+                            </div>
+                            <a id="preArrow" href="javascript:void(0)" class="contextDiv" title="上一张">
+                                <span id="preArrow_A"></span>
+                            </a>
+                            <a id="nextArrow" href="javascript:void(0)" class="contextDiv" title="下一张">
+                                <span id="nextArrow_A"></span>
+                            </a>
+                        </div>
+                        <div class="picshowlist">
+                            <div class="picshowlist_mid">
+                                <div class="picmidleft" id="preArrow_B">
+                                    <i class="font-icons-11"></i>
+                                </div>
+                                <div class="picmidmid">
+                                  <ul id="lightgallery">
+                                    {% for item in block_xiangce_photos.data %}
+                                        <li data-src="{{assetImg(item.thumb|default('bundles/house/images/nopic.gif'), {type: 1, height: 440, width: 800})}}">
+                                          <a href="javascript:void(0);" class="img-responsive">
+                                            {{- core_global.img({
+                                                src: item.thumb|default(''),
+                                                alt: item.name|default(''),
+                                                type: 2,
+                                                width: 106,
+                                                height: 66
+                                            }) -}}
+                                            <i class="arrow"></i>
+                                            <span class="index">
+                                                {{loop.index}}/{{block_xiangce_photos.pageCount|default('')|length}}
+                                            </span>
+                                          </a>
+                                        </li>
+                                    {% endfor %}
+                                  </ul>
+                                </div>
+                                <div class="picmidright fr" id="nextArrow_B">
+                                    <i class="font-icons-12"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %} #}
+            </div>
+            {% endif %}
+            <div class="zoom news-content-detail">
+                {{ core_global.content({ 
+                    content: news_detail.content|default(''),
+                    isbad: 1,
+                    ishot: 1
+                }) }}
+
+                {% if news_info['pageCount']|default('') > 1 %}
+                    <div class="ptb20">
+                        <div class="p-bar">
+                            {{ news_info['pageIndex']|pager(news_info['pageSize'],news_info['pageCount'])|raw }}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <div id="pnav" class='pnav' style="overflow:hidden;width:100%;"></div>
+            <div class="blank10"></div>
+
+            <div id="pl" class="clearfix">
+                <div class="red_right">
+                    <i class="font-news-1"></i>
+                    <a href="javascript:;" data-zoom="18">大</a>
+                    <a href="javascript:;" data-zoom="16">中</a>
+                    <a href="javascript:;" data-zoom="14">小</a>
+                    <i class="font-news-2"></i>
+                    <a href="javascript:window.print();">打印</a>
+                    <i class="font-news-3"></i>
+                    {#<a href="#comment">我要评论</a>#}
+                    <i class="font-news-4"></i>
+                    <a href="javascript:window.close();">关闭</a>
+                </div>
+                 <div class="bdsharebuttonbox share">
+                    分享到&nbsp;:&nbsp;
+                    <a href="#" class="font-news-16 wx" data-cmd="weixin"></a>
+                    <a href="#" class="font-news-13 sina" data-cmd="tsina"></a>
+                    <a href="#" class="font-news-12 zone" data-cmd="qzone"></a>
+                    <a href="#" class="font-news-14 qq" data-cmd="tqq"></a>
+                    <a href="#" class="font-news-15 rr" data-cmd="renren"></a>
+                    <a href="#" class="font-news-11 gd bds_more" data-cmd="more"></a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <div class="blank10"></div>
+    <div class="xgrdtj clearfix">
+        <div class="xgrdtj-inner">
+            <div class="tjtit"><i class="font-news-20"></i>相关阅读</div>
+            <ul class="tjlist clearfix">
+                {% if sort_category_news.data is defined %}
+                    {% for item in sort_category_news.data %}
+                        <li>
+                            <a title="{{item.name}}" href="{{('news/detail')|U({id:item.id})}}">{{item.name}}</a>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+    <div class="blank10"></div>
+    {# 载入评论 #}
+    {# {{ render_esi(controller('HouseBundle:Bundlebindforms:comment', {
+        title: '评论',
+        formflag: 'view_comment',
+        aid: news_detail.id|default(''),
+        arc_models: news_detail.models|default('news'),
+        models: 'inter_comment'
+    })) }} #}
+
+    {#{{house_global.modal_layout({
+        type: 'load',
+        ajax: "
+            ajax: {
+                url: '" ~ ('bundlebindforms/comment')|U() ~ "',
+                data : {
+                    formflag: 'view_comment',
+                    aid: '" ~ news_detail.id|default(0) ~ "',
+                    models: 'inter_comment',
+                    arc_models: '" ~ news_detail.models|default('news') ~ "',
+                    title: '评论',
+                    ajax_count: 1
+                }
+            }"
+    })}}#}
+{% endblock container %}
+
+{% block js %}
+    <script type="text/javascript">
+        seajs.use([
+            'share',
+            'jqhoverS',
+            'fixed'
+            ], function (share, jqhoverS, fixed) {
+            var $pbar = $('.p-bar');
+            if ($pbar.length) {
+                var $pageAction = $('.page-container');
+                var $pageFixed = $('.page-fixed');
+                var _length = $pageFixed.outerHeight() / 2;
+                var _winH = $(window).height() / 2;
+                var _top = Math.floor(_winH - _length);
+                var _commentTop = $pbar.offset().top;
+
+                $pageFixed.scrollToFixed({
+                    marginTop: _top,
+                    limit: function () {
+                        return _commentTop;
+                    },
+                    fixed: function () {
+                        $pageAction.show();
+                    },
+                    preUnfixed: function () {
+                        $pageAction.hide();
+                    },
+                    preAbsolute: function () {
+                        $pageAction.hide();
+                    }
+                })
+            };
+            //加载分享
+            share.init();
+            //文章字体大小调整
+            $('[data-zoom]').click(function() {
+                $('.zoom').css('font-size', $(this).data('zoom'));
+            });
+
+            {#
+            {% if block_xiangce_photos.pageCount|default(0) != 0 and detail_houses|default('') %}
+                 $('.piccontext').gallery({
+                     maxW: 800,
+                     maxH: 400,
+                     viewPic:'.view-pic',
+                 });
+             {% endif %}
+            #}
+            
+            $('.wx').click(function () {
+                var top=$(document).scrollTop();
+                $('body').css({'position':'relative'});
+                $('html,body').animate({
+                    scrollTop:$('.red_right').offset().top-200
+                },1000);
+            })
+        });
+    </script>
+{% endblock js %}

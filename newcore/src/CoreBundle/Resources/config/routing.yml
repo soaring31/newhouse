@@ -1,0 +1,4 @@
+core_uc:
+    path: /api/uc
+    defaults:
+        _controller: 'CoreBundle:Uc:check'

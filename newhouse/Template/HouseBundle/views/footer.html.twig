@@ -1,0 +1,97 @@
+{# # 说明
+** index_dblp: 底部楼盘推送列表
+** dbes: 底部二手楼盘推送列表
+** dbsy: 底部商业动态推送列表
+** dbzx: 底部资讯推送列表
+** dbgj: 底部工具推送列表
+#}
+{# 链接 #}
+{% set _action = _action|default('/') %}
+{% set _suffix = _action == '/' ? _action :  _action %}
+{# 判断是否主控台 0 为否, 1 为是 #}
+<script type="text/javascript" src="{{ asset('static/' ~ bundlepath ~ '/js/public.js', absolute=true) }}{{version}}"></script>
+<script type="text/javascript" src="{{ asset('static/house/js/getSemTel.js', absolute=true) }}{{version}}"></script>
+<!--footer-->
+<div class="footer">
+    <div class="footer_top">
+        <div class="logo_footer"><span class="iconfont icon-zhugezhaofanglogo"></span></div>
+        <ul class="tel_mail">
+            <li>客服电话： 400-810-5188</li>
+            <li>客服邮箱： kefu@zhugefang.com</li>
+            <li>商务合作：shangwu@zhugefang.com</li>
+            <li>联系地址：北京市朝阳区松榆东里37号楼</li>
+        </ul>
+    </div>
+    <div class="line"></div>
+    <div class="container">
+        <!-- 快捷入口 -->
+        <div class="footer-list">
+            <div class="title">快捷入口</div>
+            <div class="link-ul">
+                {{core_global.switch_area({
+                    act_class: 'btn-main',
+                    is_manage: is_manage|default(0),
+                    _action: _action,
+                    _suffix: _suffix,
+                    tpl: '<a href="%url%" data-tag="%ename%" class="footer-a">%name%地产网</a>'
+                })}}
+            </div>
+        </div>
+        <!-- /快捷入口 -->
+
+        <!--热门楼盘-->
+        <!-- <div class="footer-list">
+            <div class="title">热门楼盘</div>
+            <ul class="link-ul">
+                <li><a href="/item."></a></li>
+                 {{core_global.switch_area({
+                    act_class: 'btn-main',
+                    is_manage: is_manage|default(0),
+                    _action: _action,
+                    _suffix: _suffix,
+                    tpl: '<a href="%url%" data-tag="%ename%" class="btn %act_class%">%name%楼盘</a>'
+                })}}
+            </ul>
+        </div> -->
+        <!--/热门楼盘-->
+
+        <!--友情链接-->
+        {% set yqlj = dqArr['yqlj']|default('') %}
+        {% if yqlj|length > 0%}
+        <div class="footer-list">
+            <div class="title">友情链接</div>
+            <ul class="link-ul">
+                {% for item in yqlj|default('') %}
+                <li>
+                    <a href="{{item.url|default('#')}}" target="_blank">{{item.name|default('')|trans}}</a>
+                </li>
+                {% endfor %}
+            </ul>
+
+        </div>
+        {% endif %}
+        <!--/友情链接-->
+
+        <!-- 下载客户端 -->
+        <div class="footer-list">
+            <div class="title">下载客户端</div>
+            <ul class="footer_code">
+                <li>
+                    <div class="code_img"></div>
+                    <p>扫描下载经纪人版</p>
+                </li>
+                <li>
+                    <div class="code_img"></div>
+                    <p>扫描下载客户端</p>
+                </li>
+            </ul>
+        </div>
+        <!-- /下载客户端 -->
+    </div>
+</div>
+<div class="footer_bottom"><p>Copyright © 2015-2018 北京诸葛找房信息技术有限公司 ｜　All Rights Reserved 沪ICP备18007533号　｜　<a href="/houses/agreement?type=1" target="_blank"> 隐私声明</a> &nbsp;&nbsp;
+        {#| &nbsp;&nbsp;#}
+        {#<a href="http://zhangzhou.zhuge.com/sitemap"> 网站地图</a>#}
+    </p>
+</div>
+<!--/footer-->

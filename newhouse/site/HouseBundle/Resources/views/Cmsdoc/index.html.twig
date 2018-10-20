@@ -1,0 +1,98 @@
+{% extends "CoreBundle::base_ajax.html.twig" %}
+{# 查区块文档的模型 type 2 #}
+{% set models_data = ('db.models')|getAll({type: 2, pageSize: 20, checked: 1, name: 'neq|pushs'}).data %}
+{# 组装查询字串 #}
+{%- set tags = app.request.get('tags') -%}
+{%- set search_str = 'orX' -%}
+{%- for tag in tags|split(',') -%}
+    {%- set search_str = search_str ~ '|ename,eq,' ~ tag -%}
+{%- endfor -%}
+{# 查询数据 #}
+{% set cate_pushs_data = ('house.cate_pushs')|getAll({pageSize: 100, ename: search_str}).data %}
+{% set cate_pushs_data = cate_pushs_data|merge([
+    {
+        "ename": "lplist",
+        "name": "第一排序置顶，第二排序ID的降序"
+    },
+    {
+        "ename": "lparea",
+        "name": "同区域房源推荐"
+    },
+    {
+        "ename": "lpprice",
+        "name": "同价格房源推荐"
+    },
+    {
+        "ename": "lprent",
+        "name": "同楼盘出租"
+    },
+    {
+        "ename": "lpsale",
+        "name": "同楼盘二手房"
+    },
+    {
+        "ename": "lphouses",
+        "name": "同楼盘新房"
+    },
+    {
+        "ename": "clicks",
+        "name": "点击率排行"
+    },
+    {
+        "ename": "sameprices",
+        "name": "同价位楼盘，价格相差+-1000"
+    },
+    {
+        "ename": "zbclicks",
+        "name": "热门直播，点击率排行"
+    },
+    {
+        "ename": "same_cate",
+        "name": "相关内容"
+    },
+    {
+        "ename": "same_lp_door",
+        "name": "相同楼盘户型"
+    },
+    {
+        "ename": "same_lp_cata_type",
+        "name": "相同类型楼盘"
+    },
+    {
+        "ename": "lpyxfm",
+        "name": "楼盘意向"
+    },
+    {
+        "ename": "lphf",
+        "name": "楼盘横幅"
+    }, 
+    {
+        "ename": "kfthf",
+        "name": "看房团横幅"
+    }
+]) %}
+
+
+{% block result %}
+{
+     {%- for item in cate_pushs_data -%}
+        {# 重置，不然会把上一个循环值输出 #}
+        {% set parent_name = null %}
+        {% if item.pid|default('') -%} 
+            {#  推送位信息 #}
+            {% set parent_name = ('house.cate_pushs')|getOne('name', {id: item.pid}) ~ ' - ' %}
+        {% else %}
+            {#  区块文档信息 #}
+            {% for item1 in models_data if item1.name == item.type|default('') %}
+            {% set parent_name = item1.title ~ ' - ' %}
+            {% endfor %}
+        {%- endif %}
+    {% if loop.index > 1 %},{%- endif -%}"{{ item.ename }}": {
+        "name": "{{ parent_name|default('') }}{{ item.name|default('') }}",
+        "models": "{{ item.models|default('') }}",
+        "type": "{{ item.type|default('') }}",
+        "menu": "{{ item.menu|default('') }}"
+    }
+    {%- endfor -%}
+}
+{% endblock result %}

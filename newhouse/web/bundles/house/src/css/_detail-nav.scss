@@ -1,0 +1,130 @@
+﻿/*!
+ * @name detail-common.css
+ * @author xying
+ * @date 2016-8-10
+ * @dec common for houses detail nav , sale detail nav
+ */
+
+$lp-nav-hover: #ca4437 !default;
+
+/*
+lp-nav
+*/
+
+.lp-nav {
+    background: $major-color;
+    border-radius: 3px;
+    li {
+        float: left;
+        a {
+            color: #fff;
+            float: left;
+            font-size: 16px;
+            line-height: 40px;
+            padding: 0 20px;
+            text-decoration: none;
+            &:hover,
+            &.act {
+                background: $lp-nav-hover;
+            }
+            &:first-child,
+            &:last-child {
+                border-radius: 3px 0 0 3px;
+            }
+        }
+    }
+}
+
+
+/*
+lp-hx-nav
+*/
+
+.lp-hx-nav {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    color: #ccc;
+    li {
+        float: left;
+        a {
+            line-height: 35px;
+            padding: 0 20px;
+            text-decoration: none;
+            &.act {
+                color: $hover-color;
+            }
+        }
+    }
+}
+
+
+/*
+lp-hx-menu
+*/
+
+.lp-hx-menu {
+    position: relative;
+    ul {
+        height: 60px;
+        overflow: hidden;
+    }
+    li {
+        float: left;
+        font-size: 12px;
+        height: 50px;
+        margin-right: 10px;
+        padding-bottom: 10px;
+        text-align: center;
+        width: 110px;
+        a {
+            border: 1px solid #ccc;
+            display: block;
+            line-height: 20px;
+            height: 40px;
+            padding: 4px 0;
+            text-decoration: none;
+            position: relative;
+            &.act,
+            &:hover {
+                border-color: $major-color;
+                color: #fff;
+                background: $major-color;
+            }
+            &.act {
+                i {
+                    display: block;
+                }
+            }
+            i {
+                display: none;
+                @include triangle(10px, $major-color, up-left);
+                position: absolute;
+                top: 48px;
+                left: -1px;
+            }
+        }
+    }
+    &:hover{
+        .hx-menu-btn {
+            display: block;
+        }
+    }
+    .hx-menu-btn {
+        @include transparent(#000, .5);
+        color: #fff;
+        display: none;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        text-decoration: none;
+        width: 20px;
+        position: absolute;
+        top: 0;
+    }
+    .hx-left {
+        left: 0
+    }
+    .hx-right {
+        right: 0;
+    }
+}

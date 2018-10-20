@@ -1,0 +1,30 @@
+list:
+    tableName: sale
+    subTableName: ''
+    aliasName: p
+    listGrid: {  }
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 12
+    groupBy: ''
+    order: 'CASE WHEN p.zjdate>=<@gettoday> THEN p.zjdate ELSE p.refreshdate END'
+    orderBy: desc
+    searchFun: EXISTS
+    dataModel: 0
+    autoQuery: '1'
+    alias: {  }
+    query:
+        checked:
+            eq: '1'
+        esflx:
+            eq: '122'
+        zj:
+            between: '[syzj]'
+        name:
+            orX: 'name,like,%[name]%'
+        valid:
+            gt: '<@gettoday>'
+    query1: {  }
+    attribute: '0'

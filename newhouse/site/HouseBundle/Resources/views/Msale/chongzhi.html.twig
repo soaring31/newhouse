@@ -1,0 +1,39 @@
+{% extends 'HouseBundle:Msale:mpay.html.twig' %}
+{% block js %}
+
+{% endblock %}
+{% block mainMenu %}
+{% endblock %}   
+{% block body %}
+    <div class="mainBody-topDiv">
+    <p class="mainBody-topDiv-fiP">
+        【特别提示】用于刷新信息、信息置顶和购买会员组。您现在有 {{ app.user.currency.rmb|default('') }} 元
+    </p>
+</div>
+  {% set ctype = ('db.integral')|getOne('ename',{ paying: 1})|default('rmb') %}
+  {{ core_global.payment({ consume: 4 },{ ctype: ctype }) }}
+<script type="text/javascript">
+    seajs.use(['manage'], function (manage) {
+         $('.mszd-btn').on('click',function(){
+             var $this = $(this);
+                if($('input[name=total_fee]').val() == 0){
+                    $.jqModal.tip('请填写一个数值','error');
+                    return false;
+                }
+                $.jqModal.confirm({
+                    text: '已支付成功请按确定, 重新支付请按取消',
+                    accept: function(){
+                        window.location.reload();
+                    }
+                });
+        })
+        $('.choice-item').on('click','li',function(){
+            $('.choice-item li').removeClass('on');
+            $(this).addClass('on')
+            $('input[name=paytype]').val($(this).attr('data-paytype'))
+        })
+        
+    })  
+</script>
+{% endblock body %}   
+

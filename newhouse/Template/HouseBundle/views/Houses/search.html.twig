@@ -1,0 +1,113 @@
+{% extends 'CoreBundle::base_ajax.html.twig' %}
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+{% import "HouseBundle:Macro:global.html.twig" as house_global %}
+{# house/list?search=1 #}
+{% set search = app.request.get('search') %}
+{# 自动完成 #}
+{% if search == 1 %}
+    {%- set result -%}
+    {
+        "query": "Unit",
+        "suggestions": [
+        {% if ident.list.data is defined %}
+        {% for item in ident.list.data %}
+        {% if loop.index > 1 %},{% endif %}{
+            {% set area = (item.region)|getAreaName|default('') %}
+            "value": "{{item.name}}",
+            "data": {
+                "name" : "[{{area}}]{{item.name}} - {{item.address}}",
+                "counts": "10",
+                "url": "{{ ('houses/detail')|U({id: item.id}) }}" ,
+                "id" : "{{item.id}}"
+            }
+        }
+        {% else %}
+        {
+            "value": "1",
+            "data": {
+                "name" : "没有内容！",
+                "counts": "10",
+                "url": "" 
+            }
+        }
+        {% endfor %}
+        {% endif %}
+        ]
+    }
+    {%- endset -%}
+{# 搜索区域 #}
+{% elseif search == 2 %}
+    {% set needarea = app.request.get('needarea')|default('') %}
+    {%- set result -%}
+    {
+        "status": true,
+        "data": {
+            {# 搜索楼盘 #}
+            "page": {
+                "pageCount": "{{ident.list.pageCount}}",
+                "pageSize": "{{ident.list.pageSize}}",
+                "pageIndex": "{{ident.list.pageIndex}}"
+            },
+            "list": [
+                {% if ident.list.data is defined and ident.list.pageCount|default(0) != 0 %}
+                {% for item in ident.list.data %}
+                    {% if loop.index > 1 %},{% endif %}
+                    {
+                        "name"    : "{{item.name}}",
+                        "id"      : "{{item.id}}",
+                        "thumb"   : "{{core_global.img_url({width: 120, height: 90, src: item.thumb, type: 2})}}",
+                        "address" : "{{item.address}}",
+                        "dj"      : "{{item.dj|default('')}}",
+                        "url"     : "{{('houses/detail')|U({id: item.id})}}",
+                        "point"   : {
+                            "lng"     : "{{item.lng}}", 
+                            "lat"     : "{{item.lat}}"
+                        },
+                        "zlhx": "{% spaceless %}{{- house_global.huxing({aid: item.id|default(''),zlhx: 0, tpl: "<span>%shi%</span>"}) -}}{% endspaceless %}",
+                        "tags": "{% spaceless %}{{- house_global.lptag({value: item, tpl: '<span>%value%</span>', con: 'cate_type'}) -}}{% endspaceless %}",
+                        "polyline": "{{item.polyline}}"
+                    }
+                {% endfor %}
+                {% else %}
+                    {
+                        "name"    : "暂无数据"
+                    }
+                {% endif %}
+            ]
+            {# 搜索区域 #}
+            {% if needarea %}
+            {% set params = app.request.query.all %}
+            {% set sess_area = app.session.get('area')|default(0) %}
+            {% set area_data = ('db.area')|getAll({pid: sess_area, pageSize: 50}).data %}
+            ,
+            "mklist": [
+                {% for item in area_data %}
+                    {% set arr_map = item.map|split(',') %}
+                    {% set num = ('house.houses') | getCount({
+                            region: item.id,
+                            map: 'neq|_null',
+                            checked: 1
+                        } | merge(params)) %}
+                    {% if loop.index > 1 %},{% endif %}
+                    {
+                        "name": "{{item.name}}",
+                        "id": "{{item.id}}",
+                        "num": "{{num}}",
+                        {# "map": "{{item.map}}", #}
+                        "point": {
+                                "lng": "{{arr_map[0]|default(0)}}", 
+                                "lat": "{{arr_map[1]|default(0)}}"
+                            },
+                        "polyline": "{{item.polyline}}"
+                    }
+                {% endfor %}
+            ]
+            {% endif %}
+        }
+    }
+    {%- endset -%}
+{% endif %}
+
+{%- block result -%}
+    {{ result }}
+{%- endblock result -%}

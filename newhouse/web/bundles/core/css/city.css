@@ -1,0 +1,175 @@
+.city-area {
+    *zoom: 1;
+}
+.city-area:after {
+    display: block;
+    clear: both;
+
+    height: 0;
+
+    content: '\20';
+}
+
+.mcity {
+    overflow-y: scroll; 
+
+    height: 100%;
+
+    background: #f9f9f9;
+}
+
+.city {
+    background: #f9f9f9;
+}
+
+.city-head {
+    margin-top: 20px;
+
+    border-bottom: 1px dashed #ccc;
+}
+.city-head p {
+    font-size: 16px;
+    line-height: 28px;
+
+    text-align: center; 
+
+    color: #545454;
+}
+.city-head .city-btn {
+    font-size: 18px;
+    line-height: 40px;
+
+    display: block;
+
+    width: 205px;
+    margin: 10px auto 20px;
+
+    cursor: pointer;
+    text-align: center;
+
+    color: #fff;
+    -webkit-border-radius: 30px;
+       -moz-border-radius: 30px;
+            border-radius: 30px; 
+    background-color: #e43;
+}
+.city-head .city-btn:hover {
+    text-decoration: none;
+
+    opacity: .8;
+
+    filter: alpha(opacity=80);
+}
+
+#clist {
+    clear: both;
+    overflow: hidden;
+    zoom: 1;
+
+    margin: 0 auto;
+    padding: 20px;
+}
+#clist .text {
+    width: 180px; 
+
+    -webkit-border-radius: 3px; 
+
+       -moz-border-radius: 3px; 
+
+            border-radius: 3px;
+}
+
+#clist dt {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 24px;
+
+    float: left;
+    clear: both;
+
+    margin: 0;
+    padding: 3px 0 3px 4px;
+
+    color: #545454;
+}
+
+#clist dd {
+    line-height: 24px;
+
+    min-height: 24px; 
+    margin-left: 58px;
+    padding: 3px 0;
+}
+
+#clist dd a {
+    font-size: 12px;
+
+    display: inline-block;
+
+    margin-right: 12px;
+
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+#searchspan {
+    padding: 3px 14px 3px 0;
+}
+
+#popularspan {
+    padding: 3px 14px 3px 34px;
+}
+
+#clist dd.popular {
+    margin-bottom: 20px;
+}
+
+#clist dt.quyu {
+    font-size: 16px;
+    line-height: 34px;
+
+    clear: none;
+
+    width: 990px;
+    height: 34px;
+    padding-left: 2px;
+
+    color: #dcdcdc;
+}
+
+#clist dt.quyu span {
+    padding-right: 4px;
+
+    background: #f9f9f9;
+}
+
+.city-area {
+    clear: both;
+
+    padding: 20px 0;
+}
+.city-area a {
+    display: inline-block;
+
+    min-width: 80px;
+    margin-bottom: 10px;
+
+    text-align: center; 
+
+    color: #666;
+    border: none;
+    background: none;
+}
+.city-area a:hover {
+    color: #666;
+    border-color: #ddd;
+    background-color: #ddd;
+}
+.city-area a.btn-main {
+    color: #fff;
+    border-color: #3e85a9;
+    background-color: #4594bb;
+}
+
+/*# sourceMappingURL=..\..\src\css\city.css.map */

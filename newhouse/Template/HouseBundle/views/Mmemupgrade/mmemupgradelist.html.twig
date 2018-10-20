@@ -1,0 +1,125 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+{% set aid = app.request.get('aid') %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {# {{ parent() }}  #}
+   
+{% endblock %}
+
+{% block mainleft %}
+ 
+
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ core_manage.filter([
+    
+    {
+        title: '申请时间',
+        attr: {
+            'data-selectdate': {
+                unix: 1
+            }
+        },
+        data: [
+            {
+                id: '1M',
+                name: '一个月前'
+            },
+            {
+                id: '3M',
+                name: '三个月前'
+            }
+        ],
+        field: 'create_time',
+        method: 'selectFilter'
+    },
+    {
+        method: 'selectFormField',
+        title: '审核',
+        form: 'checked',
+        field: 'checked',
+    },
+    {
+        method: 'search',
+        field: 'name',
+    }
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U}}',
+        submitUrl : '{{ (action ~ '/show')|U }}',
+        deleteUrl : '{{ (action ~ "/delete")|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="60"  >ID</th>
+                    <th >会员账号</th>
+                    <th width="100">姓名</th>
+                    <th width="100">申请类型</th>
+                    <th width="100">申请时间</th>
+                    <th width="80">审核</th>
+                    <th width="80" class="tac">操作</th>
+                </tr>
+                {% if ident.info.data is defined and ident.info.pageCount|default('') != 0 %}
+                {% for k, vo in ident.info.data %}
+                <tr data-id='{{vo.id}}'>
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                   <td>{{ vo.id }}</td>
+                   <td>{{ ('db.users')|getOne('username',{'id':vo.uid})}}</td>
+                   <td>{{ ('db.userinfo')|getOne('nicename',{'uid':vo.uid})}}</td>
+                   <td>{{ ('db.mem_group')|getOne('name',{'id':vo.group_id})}}</td>
+                   <td>{{ vo.create_time|default('0')|date('Y-m-d') }}</td>
+                   <td>{{ core_global.formField({value: vo.checked}) }}</td>
+                    <td class="tac">
+                    {% if vo.group_id == 24 %}
+                        {% set form_id = 363 %} 
+                    {% else %}
+                        {% set form_id = 362 %}    
+                    {% endif %}    
+                        {{ core_manage.show({
+                            url: ('mmemupgradelist/show')|U({_id: vo.id, _form_id: form_id})
+                    }) }}
+                      {#   {{ core_manage.delete() }} #}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="8" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    
+    
+]) }}
+{% endblock %}
+
+{% block promptUl %}
+点击审核, 查看资料, 如无问题,点击提交则审核完毕
+{% endblock %}
+
+
+

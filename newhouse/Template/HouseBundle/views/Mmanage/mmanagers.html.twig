@@ -1,0 +1,98 @@
+
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+{% set aid = app.request.get('aid') %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }} 
+{% endblock %}
+
+{% block mainleft %}
+    {# {{ render(controller('HouseBundle:Mnews:category', {category: category, action: 'mnews/mnewsmanage'})) }} #}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ core_manage.filter([
+     {
+        method: 'selectCate',
+        title: '会员组',
+        field: 'groupid',
+        service: 'db.mem_group',
+        where: {
+            aid: 12
+        }
+    },
+     {
+        method: 'search',
+        field: 'name',
+        title: '请搜索用户名',
+    }
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            models: '{{ models }}',
+            category: '{{ category }}'
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class=" pl10 ">ID</th>
+                    <th>会员账号</th>
+                    <th width="100">会员组</th>
+                    <th width="100">工作统计</th>
+                </tr>
+                {% if ident.info.data is defined %}
+                {% for k, vo in ident.info.data %}
+                    {# {{dump(vo)}} #}
+                {% if vo.username|default('') %}
+                    <tr data-id="{{ vo.id }}">
+                        <td class="pl10">{{ vo.id }}</td>
+                        <td>{{ vo.username }}</td>
+                        <td>
+                            {% set uid = ('db.userinfo')|getOne('groupid',{ uid: vo.id}) %}
+                            {% set typename = ('db.mem_group')|getOne('name',{ id: uid}) %}
+                            {{ typename }}    
+                        </td>
+                        <td>
+                            {{ core_manage.show({
+                                url: ( controller ~ '/mworklist')|U({ aid: vo.id }),
+                                title: '查看'
+                            })}}
+                    </tr>
+                {% endif %}
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="3" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+{{ core_manage.oprate([
+    
+]) }}
+{% endblock %}
+
+{% block promptUl %}
+{# 提示说明 #}
+{% endblock %}
+
+
+
+

@@ -1,0 +1,167 @@
+HouseBundle\Entity\UserBehavior:
+    type: entity
+    table: user_behavior
+    indexes:
+        uid:
+            columns:
+                - uid
+        aid:
+            columns:
+                - aid
+        borough_id:
+            columns:
+                - borough_id
+        type:
+            columns:
+                - type
+        user_type:
+            columns:
+                - user_type
+        status:
+            columns:
+                - status
+        token:
+            columns:
+                - token
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        uid:
+            options:
+                comment: 用户唯一ID
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 11
+        ip:
+            options:
+                comment: IP地址
+                unsigned: false
+            nullable: false
+            type: string
+            length: 20
+        aid:
+            options:
+                comment: 楼盘ID
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 11
+        borough_id:
+            options:
+                comment: 小区ID
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 11
+        city:
+            options:
+                comment: 城市简称
+                unsigned: false
+            nullable: false
+            type: string
+            length: 20
+        type:
+            options:
+                comment: '用户行为 1是登录2是搜索3 查看详情页'
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 1
+        user_type:
+            options:
+                comment: '用户设备 1是标示ios 2Android 3 wap'
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 1
+        remark:
+            options:
+                comment: 评论
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        status:
+            options:
+                comment: '1 是强用户2是弱用户'
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 1
+        tel:
+            options:
+                comment: 手机号
+                unsigned: false
+            nullable: false
+            type: string
+            length: 50
+        token:
+            options:
+                comment: APP设备唯一标识
+                unsigned: false
+            nullable: false
+            type: string
+            length: 255
+        checked:
+            options:
+                comment: 是否审核
+                unsigned: false
+            nullable: false
+            type: boolean
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

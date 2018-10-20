@@ -1,0 +1,65 @@
+{% extends 'HouseBundle:Msale:msalearc.html.twig' %}
+    {% block tableMain %}
+    {# {{dump(block_active_data)}} #}
+    {% if ename is defined %}
+    {% set filterOpt = [
+        {
+            method: 'selectFormField',
+            title: '审核',
+            form: 'checked',
+            field: 'checked',
+        },
+        {
+            method: 'search',
+            field: 'name',
+        }
+    ] %}
+    {% endif %}
+    {{ lists.filter(filterOpt|default('')) }}
+
+    <div class="list-con" data-param="{{ params }}">
+        <div class="list list-thumb">
+        <ul>
+           {% if block_arc_data.data|length %}
+           {% for k, vo in block_arc_data.data %} 
+                     
+            <li data-id="{{ vo.id }}">
+                <div data-role="checkbox" class="img">
+                    {# {{- v_lists.img({
+                        src: vo.thumb|default(''),
+                        alt: item.name|default(''),
+                        type: 2,
+                        width: 100,
+                        height: 100
+                    }) -}} #}
+                    <i class="font-ico-1"></i>
+                </div>
+                <div class="bar">
+                    <span class="text">{{ vo.id|default('') }}</span>
+                    <a title="编辑" data-role="show" href="{{ (action ~ "/show")|U({id: vo.id}) }}" class="font-ico-2"></a>
+                    <a title="删除" data-role="delete" href="#" class="font-ico-3"></a>                    
+                </div>
+                <div class="t">[{{ lists.formField({value: vo.checked}) }}] {{ vo.name|default('') }}  </div>                     
+            </li>
+            {% endfor %}
+            {% else %}
+            <li class="tac">没有数据！</li>
+            {% endif %}
+        </ul>
+    </div>
+        {{lists.page(block_arc_data)}}
+    </div>
+        
+    {{ lists.oprate([
+        {
+            method: 'delete',
+            title: ' <i class="font-ico-del mr5"></i>批量删除',
+        },
+        {
+            method: 'dropdownFormField',
+            field: 'checked',
+            form: 'checked',
+            title: '审核',
+        }
+    ]) }}
+    {% endblock %}

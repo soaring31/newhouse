@@ -1,0 +1,53 @@
+$font-number-fz: inherit !default;
+
+@font-face {
+	font-family: "number";
+    font-weight: normal;
+    font-style: normal;
+	src: url('../fonts/number.eot');
+	src: url('../fonts/number.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/number.woff') format('woff');//,
+		//url('../fonts/number.ttf') format('truetype'),
+		//url('../fonts/number.svg#number') format('svg');
+}
+$font-number-fz: inherit !default;
+$font-number-fl: none !default;
+$font-number-m: 0 !default;
+$font-number-va: -.25em !default;
+[class^="font-number-"],
+[class*=" font-number-"] {
+	font-family: "number";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-size: $font-number-fz;
+	float: $font-number-fl;
+	margin: $font-number-m;
+	vertical-align: $font-number-va;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; only necessary if not using the private unicode range (firstdata option) 
+	text-decoration: none;
+	text-transform: none;
+}
+.font-number-1:before {
+	content: "\EA01";
+}.font-number-10:before {
+	content: "\EA02";
+}.font-number-2:before {
+	content: "\EA03";
+}.font-number-3:before {
+	content: "\EA04";
+}.font-number-4:before {
+	content: "\EA05";
+}.font-number-5:before {
+	content: "\EA06";
+}.font-number-6:before {
+	content: "\EA07";
+}.font-number-7:before {
+	content: "\EA08";
+}.font-number-8:before {
+	content: "\EA09";
+}.font-number-9:before {
+	content: "\EA0A";
+}

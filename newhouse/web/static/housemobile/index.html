@@ -1,0 +1,207 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>首页</title>
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="stylesheet" href="./css/sm.css">
+</head>
+<body>
+<!-- 程序注意: a链接默认是路由的,不想要路由的话a上加'class=external' 路由的所有页面的js需要一次性加载,不然js没效果 -->
+    <div class="page-group">
+        <!-- 你的html代码 -->
+        <div class="page">
+            <header class="bar bar-nav">
+                <a class="button button-link button-area pull-left external" href="定位.html">
+                    西安
+                    <span class="icon font-f-7"></span>
+                </a>
+                <h1 class="title"><a href="搜索.html" class="button button-search"><span class="icon font-f-8"></span>找仓库</a></h1>
+                <!-- <div class="searchbar">
+                    <a class="searchbar-cancel">取消</a>
+                    <div class="search-input">
+                        <label class="icon font-f-8" for="search"></label>
+                        <input type="search" id='search' placeholder='输入关键字...'/>                
+                    </div>
+                </div> -->
+                <a class="button button-link button-nav button-ver pull-right" href="消息.html">
+                    <span class="badge badge-sm"></span>
+                    <span class="icon font-f-1"></span>
+                    消息
+                </a>
+            </header>
+            <nav class="bar bar-tab">
+                <a class="tab-item external" href="index.html">
+                    <span class="icon font-f-2"></span>
+                    <span class="tab-label">首页</span>
+                </a>
+                <a class="tab-item external active" href="出租.html">
+                    <span class="icon font-f-3"></span>
+                    <span class="tab-label">出租</span>
+                </a>
+                <a class="tab-item external open-popup" data-popup=".popup-about" href="#">
+                    <span class="icon font-f-6"></span>
+                    <span class="add">
+                        <span class="icon font-f-6 icon-add"></span>
+                        <span class="tab-label">发布</span>
+                    </span>
+                </a>
+                <a class="tab-item external" href="求租.html">
+                    <span class="icon font-f-4"></span>
+                    <span class="tab-label">求租</span>
+                </a>
+                <a class="tab-item external" href="我的.html">
+                    <span class="icon font-f-5"></span>
+                    <span class="tab-label">我的</span>
+                </a>
+            </nav>
+
+
+
+
+            <div class="content">
+                <!-- Slider height: 1061pxX365px 384pxX132px -->
+                <div class="swiper-container" data-pagination=".swiper-pagination" data-loop="true">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <a href=""><img src="pic/pic1061X365.jpg" width="100%" alt=""></a></div>
+                        <div class="swiper-slide">
+                            <a href=""><img src="pic/pic1061X365.jpg" width="100%" alt=""></a></div>
+                        <div class="swiper-slide">
+                            <a href=""><img src="pic/pic1061X365.jpg" width="100%" alt=""></a></div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <!-- list -->
+                <div class="content-block-title"><a href="出租.html" class="pull-right external">更多>></a>热门推荐</div>
+                <div class="list-block media-list">
+                    <ul>
+                        <li>
+                            <a href="出租详情.html" class="item-content external">
+                                <div class="item-media">
+                                    <img src="pic/pic250x250.jpg" style='width: 4.67rem;'></div>
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div class="item-title item-title-ex">高新区业园区汇金路高平台仓库招租台仓库招租</div>
+                                    </div>
+                                    <div class="item-subtitle">
+                                        <span class="button button-sm"> 平台库 </span>
+                                        <span class="button button-sm"> 冷冻库 </span>
+                                        <span class="button button-sm button-success"> 10000㎡ </span>
+                                    </div>
+                                    <div class="item-subtitle item-subtitle-ex">西安市-高新区-科技一路</div>
+                                    <div class="item-subtitle item-subtitle-ex"><span class="pull-right">10天前</span><span class="p p-red"><span class="l">¥15.00元</span>/㎡/月</span> 起</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="出租详情.html" class="item-content external">
+                                <div class="item-media">
+                                    <img src="pic/pic250x250.jpg" style='width: 4.67rem;'></div>
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div class="item-title item-title-ex">高新区业园区汇金路高平台仓库招租台仓库招租</div>
+                                    </div>
+                                    <div class="item-subtitle">
+                                        <span class="button button-sm"> 平台库 </span>
+                                        <span class="button button-sm"> 冷冻库 </span>
+                                        <span class="button button-sm button-success"> 10000㎡ </span>
+                                    </div>
+                                    <div class="item-subtitle item-subtitle-ex">西安市-高新区-科技一路</div>
+                                    <div class="item-subtitle item-subtitle-ex"><span class="pull-right">10天前</span><span class="p p-red"><span class="l">¥15.00元</span>/㎡/月</span> 起</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="出租详情.html" class="item-content external">
+                                <div class="item-media">
+                                    <img src="pic/pic250x250.jpg" style='width: 4.67rem;'></div>
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div class="item-title item-title-ex">高新区业园区汇金路高平台仓库招租台仓库招租</div>
+                                    </div>
+                                    <div class="item-subtitle">
+                                        <span class="button button-sm"> 平台库 </span>
+                                        <span class="button button-sm"> 冷冻库 </span>
+                                        <span class="button button-sm button-success"> 10000㎡ </span>
+                                    </div>
+                                    <div class="item-subtitle item-subtitle-ex">西安市-高新区-科技一路</div>
+                                    <div class="item-subtitle item-subtitle-ex"><span class="pull-right">10天前</span><span class="p p-red"><span class="l">¥15.00元</span>/㎡/月</span> 起</div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- 发布 -->
+<div class="popup popup-about">
+            <div class="content-block">
+                <header class="bar bar-nav">
+                    <a href="#" class="icon font-f-21 pull-left back close-popup"></a>
+                    <h1 class="title">发布</h1>
+                </header>
+
+                <div class="content">
+                    <div class="content-add">
+                        <div class="row">
+                            <div class="col-33">
+                                <a href="发布-出租信息-基础信息.html" class="external">
+                                    <span class="icon font-f-22"></span>
+                                    出租仓库
+                                </a>
+                            </div>
+                            <div class="col-33">
+                                <a href="发布-求租信息.html" class="external">
+                                    <span class="icon font-f-23"></span>
+                                    求租仓库
+                                </a>
+                            </div>
+                            <!-- <div class="col-33">
+                            <a href="" >
+                                <span class="icon font-f-20"></span>
+                                出租仓库
+                            </a>
+                        </div>
+                        <div class="col-33">
+                            <a href="" >
+                                <span class="icon font-f-20"></span>
+                                求租仓库
+                            </a>
+                        </div>
+                        -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- /发布 -->
+
+    </div>
+    <!-- <script type='text/javascript' src='./js/static/jquery-3.0.0.min.js' charset='utf-8'></script> -->
+<script type='text/javascript' src='./js/static/zepto.min.js' charset='utf-8'></script>
+	<script type="text/javascript">
+	    // window.Zepto = jQuery;
+	    $.config = {router: false};
+	</script>  
+	<script type='text/javascript' src='./js/sm.js' charset='utf-8'></script>    
+    
+    
+    <script type="text/javascript">
+        !function(window, document, $, undefined) {
+            // var content = '<div class="con">您还未绑定手机号，请绑定手机号之后进行操作</div>\
+            //             <a class="button button-big button-fill button-round" href="绑定手机号.html">立即绑定</a>'
+            // $.modal({
+            //     title: '提 示',
+            //     text: content,
+            //     modalCloseByOutside: 1,
+            //     extraClass: 'modal-ex2'
+            // })  
+        }(window, document, $);  
+    </script>
+</body>
+</html>

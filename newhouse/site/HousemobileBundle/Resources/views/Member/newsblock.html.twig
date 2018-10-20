@@ -1,0 +1,30 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+
+{% set url_newid = app.request.get("newid") %}
+{% set jjgs_news_detail = ('house.news')|getRow({id: url_newid|default(''), checked: 1}) %}
+
+{% block result %}
+<div class="content">
+    <div class="con">
+        <div class="content-padded" style="margin-top: 0;">
+            <div class="con-title">
+                <h3>{{jjgs_news_detail.name|default('')}}</h3>
+                <p class="mt10">
+                    <span>{{jjgs_news_detail.update_time|default('')|date('Y-m-d')}}</span>
+                    <span>作者&nbsp;:&nbsp;{{jjgs_news_detail.author|default('匿名')}}</span>
+                    <span>来源&nbsp;:&nbsp;{{jjgs_news_detail.source|default('')}}</span>
+                    <span>点击&nbsp;:&nbsp;<span data-counts="{models: 'news', field: 'clicks', id: '{{jjgs_news_detail.id|default('')}}'}"></span></span>
+                </p>
+            </div>
+
+            <div class="detail-con" id="con">
+                {{ core_global.content({ content: jjgs_news_detail.content|default(''), default: '暂无详细介绍' }) }}
+            </div>
+            <div class="list-block panel-block">
+                {{- core_mobile_global.more_con({id: 'con'})-}}
+            </div>
+        </div>
+    </div>
+    {{ render(controller('HouseBundle:Common:footer', {_isApp: url_isApp})) }}
+</div>
+{% endblock result %}

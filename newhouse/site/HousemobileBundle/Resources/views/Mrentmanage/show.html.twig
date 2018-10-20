@@ -1,0 +1,31 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+
+{% if app.request.get('_id') %}
+    {% set tpl_title = '修改' %}
+{% else %}
+    {% set tpl_title = '发布' %}
+{% endif %}
+
+{% block header_title %}
+    {{core_mobile_global.title({title: '出租' ~ tpl_title})}}
+{% endblock header_title %}
+
+{% block title %}
+    {{'出租' ~ tpl_title}}
+{% endblock title %}
+
+{% block container %}
+    <div data-block="{
+        bParams: true,
+        ajax:{
+            url: '{{ ('mrentmanage/show')|U }}',
+            data: {
+                tpl: 'Release:detailblock',
+                models: '{{app.request.get("models")}}',
+                formflag: '{{app.request.get("formflag")}}',
+                _id: '{{app.request.get("_id")}}'
+            }
+        }
+    }"></div>
+{% endblock container %}    

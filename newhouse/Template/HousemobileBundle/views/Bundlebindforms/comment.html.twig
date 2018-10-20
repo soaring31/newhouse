@@ -1,0 +1,145 @@
+{# 通用评论页面 #}
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{% set formflag = app.request.get("formflag")|default('') %}
+{% set title = app.request.get("title")|default('评论') %}
+{# 当前交互本身的模型 #}
+{% set models = app.request.get("models")|default('') %}
+{# 当前交互的服务 #}
+{% set service = app.request.get("service")|default('house') %}
+{# 与交互关联的文档ID #}
+{% set aid = app.request.get("aid")|default('') %}
+{# 问答与交互关联文档ID #}
+{% set ask = app.request.get("ask")|default('') %}
+{# 调用统计时需要的文档服务 #}
+{% set arc_service = app.request.get("arc_service")|default('house') %}
+{# 调用统计时需要的文档模型 #}
+{% set arc_models = app.request.get("arc_models")|default('') %}
+
+{% block result %}
+{# 评论列表的头（表单） #}
+
+{% set list_header %}
+    {#{{housemobile_global.panel_title({title: title ~ '内容'})}}
+
+    #}{# 目前只有楼盘时用 #}{#
+    {% if models == 'inter_housescomment' %}
+    #}{# 自定义内容 #}{#
+    {% set form_block %}
+
+        <div class="up">
+            <div class="clearfix">
+                <div class="left">
+                    <div class="raty-item">
+                        <div class="raty-name clearfix">价格&nbsp;:&nbsp;</div>
+                        <div class="raty-start" data-start="5" data-start-init="3"> 
+                            <input type="hidden" class="val" name="price" value="3"/>
+                        </div>
+                    </div>
+                    <div class="raty-item">
+                        <div class="raty-name clearfix">地段&nbsp;:&nbsp;</div>
+                        <div class="raty-start" data-start="5" data-start-init="3">
+                            
+                            <input type="hidden" class="val" name="position" value="3"/>
+                        </div>
+                    </div>
+                    <div class="raty-item">
+                        <div class="raty-name clearfix">交通&nbsp;:&nbsp;</div>
+                        <div class="raty-start" data-start="5" data-start-init="3">
+                            
+                            <input type="hidden" class="val" name="traffic" value="3"/> 
+                        </div>
+                    </div>
+                    <div class="raty-item">
+                        <div class="raty-name clearfix">配套&nbsp;:&nbsp;</div>
+                        <div class="raty-start" data-start="5" data-start-init="3">
+                            
+                            <input type="hidden" class="val" name="charms" value="3"/>  
+                        </div>
+                    </div>
+                    <div class="raty-item">
+                        <div class="raty-name clearfix">环境&nbsp;:&nbsp;</div>
+                        <div class="raty-start" data-start="5" data-start-init="3">
+                            <input type="hidden" class="val" name="environment" value="3"/> 
+                        </div>
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="raty-all">
+                        <p>综合评分</p>
+                        <p class="mark">
+                            <span>3</span>
+                            分
+                        </p>
+                        <input type="hidden" class="val" name="overall" value="3"/>
+                    </div>
+                </div>
+            </div>
+            #}{# js必须放up里面 #}{#
+            <script type="text/javascript">
+                seajs.use(['comment'], function (comment){
+                    comment.ratyInit();
+                });    
+            </script>
+        </div>
+    {% endset %}
+    #}{# 排除掉表单默认的，自己自定义form_block #}{#
+    {% set exclude = ['environment', 'charms', 'traffic', 'position', 'price', 'overall'] %}
+    {% endif %}
+
+    {{core_mobile_forms.forms({
+        form: form,
+        formflag: formflag,
+        buttons: [
+            {
+                name: '提交' ~ title,
+                class: ' button-big button-fill button-success',
+                attr: 'data-role="submit"'
+            }
+        ],
+        exclude: exclude|default([]),
+        form_block: form_block|default(''),
+        aid: aid,
+        ask: ask,
+        models: arc_models
+    })}}#}
+    {{housemobile_global.panel_title({title: title ~ '列表'})}}
+{% endset %}
+
+{# 评论列表url #}
+{% set comment_url = ('intercomment/list')|U({
+                            title: title,
+                            aid: aid,
+                            ask: ask, 
+                            arc_models: arc_models,
+                            models: models,
+                            service: service,
+                            reply: app.request.get('reply')|default(1),
+                            checkreply: app.request.get('checkreply')|default(1)
+                        }) %}
+
+{# 列表内容 #}
+{{core_mobile_global.list_scroll({
+    url: comment_url,
+    list_header: list_header,
+    content_attr: {
+        'data-comment-list': 1
+    },
+    class: 'comment-list'
+})}}
+
+<script type="text/javascript">
+    seajs.use(['comment', 'common'], function (comment, common){
+        comment.init({
+            list: '[data-comment-list="1"]',
+            url: '{{ comment_url }}',
+            removeItem: '.up',
+            btnload: 1
+        });
+
+        // 调用统计
+        // common.getcounts({
+        //     url: '{{("igetcounts/index")|U({})}}'
+        // })
+    });
+</script>
+{% endblock result %}

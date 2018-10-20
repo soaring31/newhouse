@@ -1,0 +1,688 @@
+@charset "UTF-8";
+/**
+ * @method 清除浮动 %clearfix 
+ * @description 清除浮动
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @ extend %clearfix;
+ * }
+ * ```
+ * 
+ * ```css
+ * 	div {
+	    *zoom: 1;
+	}
+	div:after {
+	    display: block;
+	    clear: both;
+
+	    height: 0;
+
+	    content: '\20';
+	}
+ * ```
+ */
+#uploader .uploader-list {
+    *zoom: 1;
+}
+
+#uploader .uploader-list:after {
+    display: block;
+    clear: both;
+    height: 0;
+    content: ' ';
+}
+
+/**
+ * @method 去掉虚线框 %outline 
+ * @description 去掉虚线框
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @ extend %outline;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		outline: thin dotted;
+		outline: 5px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
+ * ```
+ */
+/**
+ * @method 文字不换行后面加省略号 %text-overflow 
+ * @description 文字不换行后面加省略号
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @ extend %text-overflow;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+ * ```
+ */
+/**
+ * @method 内容换行 %word-wrap 
+ * @description 内容换行
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %word-wrap;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+	    word-wrap: break-word;
+	    word-break: break-all;
+	}
+ * ```
+ */
+/**
+ * @method 透明层opacity 
+ * @description 透明层 内容也透明
+ * @param {number} $opacity - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @ include opacity(.5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+	  opacity: .5;
+	  filter: alpha(opacity=50);
+ * }
+ * ```
+ */
+/**
+ * @method 背景透明层transparent 
+ * @description 透明层只处理背景透明
+ * @param {string} $color - 背景透明层的颜色
+ * @param {number} $alpha - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @ include transparent(#000, .5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+ *    	background-color: transparent;
+		background-color: (0,0,0,.5);
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7fffffff, endColorstr=#7fffffff,);
+		zoom: 1;
+ * }
+ * ```
+ */
+/**
+ * @method triangle 
+ * @description 生成一个三角形图标
+ * @param {string} $size - 三角的大小
+ * @param {string} $color - 三角颜色
+ * @param {string} $direction - 三角的方向 up, down, left, right
+ * @example 调用
+ * 
+ * ```scss
+ * i {
+ *    @ include triangle(5px, #bbb, up); 
+ * }
+ * ```
+ * 
+ * ```css
+ * i {
+ *    width: 0;
+      height: 0;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent;
+      border-bottom-color: #bbb;
+ * }
+ * ```
+ */
+/**
+ * @method 水平线hr nav-divider 
+ * @description 透明层 内容也透明
+ * @param {string} $color=#e5e5e5 - 线的颜色
+ * @param {string} $line-height-computed - 线的高度，空间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @ include nav-divider(#e5e5e5, 24px);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+	  height: 1px;
+	  margin: 11px 0;
+	  overflow: hidden;
+	  background-color: #e5e5e5;
+ * }
+ * ```
+ */
+#uploader .queueList {
+    margin: 20px;
+    border: 3px dashed #e6e6e6;
+}
+
+#uploader .queueList.filled {
+    padding: 17px;
+    margin: 0;
+    border: 3px dashed transparent;
+}
+
+#uploader .queueList.webuploader-dnd-over {
+    border: 3px dashed #999999;
+}
+
+#uploader p {
+    margin: 0;
+}
+
+.element-invisible {
+    position: absolute !important;
+    clip: rect(1px 1px 1px 1px);
+    /* IE6, IE7 */
+    clip: rect(1px, 1px, 1px, 1px);
+}
+
+#uploader .placeholder {
+    min-height: 100px;
+    padding-top: 50px;
+    text-align: center;
+    background: url(../images/image1.png) center 93px no-repeat;
+    color: #cccccc;
+    font-size: 18px;
+    position: relative;
+}
+
+#uploader .placeholder .webuploader-pick {
+    font-size: 18px;
+    background: #00b7ee;
+    border-radius: 3px;
+    line-height: 44px;
+    padding: 0 30px;
+    *width: 120px;
+    color: #fff;
+    display: inline-block;
+    margin: 0 auto 20px auto;
+    cursor: pointer;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+#uploader .placeholder .webuploader-pick-hover {
+    background: #00a2d4;
+}
+
+#uploader .placeholder .flashTip {
+    color: #666666;
+    font-size: 12px;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    bottom: 20px;
+}
+
+#uploader .placeholder .flashTip a {
+    color: #0785d1;
+    text-decoration: none;
+}
+
+#uploader .placeholder .flashTip a:hover {
+    text-decoration: underline;
+}
+
+#uploader .filelist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#uploader .filelist:after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    clear: both;
+}
+
+#uploader .filelist li {
+    width: 110px;
+    height: 110px;
+    background: url(../images/bg.png) no-repeat;
+    text-align: center;
+    margin: 0 8px 20px 0;
+    position: relative;
+    display: inline;
+    float: left;
+    overflow: hidden;
+    font-size: 12px;
+}
+
+#uploader .filelist li p.log {
+    position: relative;
+    top: -45px;
+}
+
+#uploader .filelist li p.title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    top: 5px;
+    text-indent: 5px;
+    text-align: left;
+}
+
+#uploader p.progressfile {
+    width: 257px;
+    bottom: 0;
+    left: 0;
+    padding: 0;
+    height: 8px;
+    overflow: hidden;
+    z-index: 50;
+    margin: 0;
+    border-radius: 0;
+    background: none;
+}
+
+#uploader p.progressfile span {
+    display: block;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    background: #1483d8 url(../images/progress.png) repeat-x;
+}
+
+@-webkit-keyframes progressmove {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 17px 0;
+    }
+}
+
+@-moz-keyframes progressmove {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 17px 0;
+    }
+}
+
+@keyframes progressmove {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 17px 0;
+    }
+}
+
+#uploader .filelist li img {
+    width: 100%;
+}
+
+#uploader .filelist li p.error {
+    background: #f43838;
+    color: #fff;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 28px;
+    line-height: 28px;
+    width: 100%;
+    z-index: 100;
+}
+
+#uploader .filelist li .success {
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 40px;
+    width: 100%;
+    z-index: 200;
+    background: url(../images/success.png) no-repeat right bottom;
+}
+
+#uploader .filelist div.file-panel {
+    position: absolute;
+    height: 0;
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#80000000', endColorstr='#80000000') \0;
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    z-index: 300;
+}
+
+#uploader .filelist div.file-panel span {
+    width: 24px;
+    height: 24px;
+    display: inline;
+    float: right;
+    text-indent: -9999px;
+    overflow: hidden;
+    background: url(../images/icons1.png) no-repeat;
+    margin: 5px 1px 1px;
+    cursor: pointer;
+}
+
+#uploader .filelist div.file-panel span.rotateLeft {
+    background-position: 0 -24px;
+}
+
+#uploader .filelist div.file-panel span.rotateLeft:hover {
+    background-position: 0 0;
+}
+
+#uploader .filelist div.file-panel span.rotateRight {
+    background-position: -24px -24px;
+}
+
+#uploader .filelist div.file-panel span.rotateRight:hover {
+    background-position: -24px 0;
+}
+
+#uploader .filelist div.file-panel span.cancel {
+    background-position: -48px -24px;
+}
+
+#uploader .filelist div.file-panel span.cancel:hover {
+    background-position: -48px 0;
+}
+
+#uploader .statusBar {
+    border-top: 1px solid #dadada;
+    padding: 0 20px;
+    line-height: 40px;
+    vertical-align: middle;
+    position: relative;
+}
+
+#uploader .statusBar .progress {
+    border: 1px solid #1483d8;
+    width: 198px;
+    background: #fff;
+    height: 18px;
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    line-height: 20px;
+    color: #6dbfff;
+    position: relative;
+    margin: 0 10px 0 0;
+}
+
+#uploader .statusBar .progress span.percentage {
+    width: 0;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background: #1483d8;
+    position: absolute;
+}
+
+#uploader .statusBar .progress span.text {
+    position: relative;
+    z-index: 10;
+}
+
+#uploader .statusBar .info {
+    display: inline-block;
+    font-size: 14px;
+    color: #666666;
+}
+
+#uploader .filePicker {
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+}
+
+#uploader .btns {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    line-height: 40px;
+}
+
+#uploader .btns button, #uploader .btns .continue {
+    display: inline-block;
+    vertical-align: top;
+}
+
+#uploader .webuploader-container {
+    position: relative;
+}
+
+#uploader .webuploader-element-invisible {
+    position: absolute !important;
+    clip: rect(1px 1px 1px 1px);
+    /* IE6, IE7 */
+    clip: rect(1px, 1px, 1px, 1px);
+}
+
+#uploader .uploader-list {
+    position: relative;
+    z-index: 10;
+}
+
+#uploader .uploader-list p.progress {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    padding: 0;
+    height: 8px;
+    overflow: hidden;
+    z-index: 50;
+    margin: 0;
+    border-radius: 0;
+    background: none;
+    -webkit-box-shadow: 0 0 0;
+}
+
+#uploader .uploader-list p.progress span {
+    display: block;
+    overflow: hidden;
+    width: 0;
+    height: 100%;
+    background: #1483d8 url(../images/progress.png) repeat-x;
+    -webit-transition: width 200ms linear;
+    -moz-transition: width 200ms linear;
+    -o-transition: width 200ms linear;
+    -ms-transition: width 200ms linear;
+    transition: width 200ms linear;
+    -webkit-animation: progressmove 2s linear infinite;
+    -moz-animation: progressmove 2s linear infinite;
+    -o-animation: progressmove 2s linear infinite;
+    -ms-animation: progressmove 2s linear infinite;
+    animation: progressmove 2s linear infinite;
+    -webkit-transform: translateZ(0);
+}
+
+#uploader .uploader-list p.imgWrap {
+    position: relative;
+    z-index: 2;
+    line-height: 110px;
+    vertical-align: middle;
+    overflow: hidden;
+    width: 110px;
+    height: 110px;
+    -webkit-transform-origin: 50% 50%;
+    -moz-transform-origin: 50% 50%;
+    -o-transform-origin: 50% 50%;
+    -ms-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    -webit-transition: 200ms ease-out;
+    -moz-transition: 200ms ease-out;
+    -o-transition: 200ms ease-out;
+    -ms-transition: 200ms ease-out;
+    transition: 200ms ease-out;
+}
+
+#uploader .uploader-list.multiple .file-item {
+    cursor: move;
+}
+
+#uploader .fengmian {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 27px;
+    height: 27px;
+    background: url(../images/icons_edit.png) 0 0 no-repeat;
+    z-index: 30;
+}
+
+#uploader .file-item {
+    float: left;
+    width: 130px;
+    margin: 0 10px 5px 0;
+    position: relative;
+    background-color: #f5f5f5;
+    z-index: 10;
+}
+
+#uploader .file-item-hover {
+    z-index: 20;
+}
+
+#uploader .file-item-hover .textarea textarea {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100px;
+    width: 200px;
+    overflow: auto;
+}
+
+#uploader .file-item-hover .toolbar {
+    display: block;
+}
+
+#uploader .sortable-placeholder {
+    background: #fff;
+    width: 124px;
+    height: 94px;
+    margin: 0 10px 5px 0;
+    border: 3px dashed red;
+    z-index: 8;
+    float: left;
+    position: relative;
+}
+
+#uploader .toolbar {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    text-align: right;
+    line-height: 24px;
+    display: none;
+    background-color: transparent;
+    background-color: rgba(0, 0, 0, 0.5);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#80000000, endColorstr=#80000000);
+    zoom: 1;
+}
+
+#uploader .toolbar i {
+    font-size: 18px;
+    color: #eee;
+    margin-right: 5px;
+}
+
+#uploader .toolbar .text {
+    font-family: arial;
+    font-size: 12px;
+    float: left;
+    color: #eee;
+}
+
+#uploader .toolbar i {
+    cursor: pointer;
+}
+
+#uploader .toolbar.error {
+    display: block !important;
+    background-color: #f00;
+    color: #fff;
+}
+
+#uploader .textarea {
+    position: relative;
+    height: 24px;
+}
+
+#uploader .textarea textarea {
+    padding: 0 3px;
+    background-color: #fff;
+    outline: none;
+    margin-right: 0;
+    min-height: 0;
+    border-radius: 0;
+    width: 122px;
+    height: 22px;
+    overflow: hidden;
+    color: #888;
+    font-family: simsun;
+}
+
+.imgs-lay {
+    display: table-cell;
+    position: relative;
+    min-width: 150px;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #f5f5f5;
+}
+
+.imgs-lay .imgs-prev, .imgs-lay .imgs-next {
+    display: none;
+    color: #fefefe;
+    font-size: 50px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    text-align: left;
+}
+
+.imgs-lay .imgs-next {
+    left: auto;
+    text-align: right;
+    right: 0;
+}
+
+/*# sourceMappingURL=webupload.css.map */

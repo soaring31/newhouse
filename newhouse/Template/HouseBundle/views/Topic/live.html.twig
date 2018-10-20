@@ -1,0 +1,42 @@
+{% extends 'HouseBundle:Topic:index.html.twig' %}
+{# 
+ #}
+{% set nav_topic_act = app.request.get("category", 80) %}
+
+{% block css %}
+    {{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/zb.css')}}
+{% endblock css %}
+
+{% block container %}
+    <!--内容-->
+    <div class="container clearfix">
+        <!--楼盘视频列表-->
+        <div class="w860 fl clearfix">
+            <div class="zb-list clearfix">
+                <ul>
+                    {{house_global.topic_live({
+                        list: ident.list
+                    })}}
+                </ul>
+            </div>
+            {# 分页 #}
+            <div class="blank30"></div>
+            {{core_global.page(ident.list)}}
+            <div class="blank30"></div>
+        </div>
+        <!--视频直播-->
+        <div class="w300 fr clearfix" data-tag="">
+            {{house_global.live_recommend({
+                list: ident.hot.data,
+                title: '热门直播',
+                tag: 'zbclicks'
+            })}}
+            {% set push_zbsptj = ('zbsptj')|getPush(3) %}
+            {{house_global.live_recommend({
+                list: push_zbsptj,
+                title: '视频推荐',
+                tag: 'zbsptj'
+            })}}
+        </div>
+    </div>
+{% endblock container %}

@@ -1,0 +1,111 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+{% set aid = app.request.get('aid') %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {# {{ parent() }} #}
+    {{ core_manage.jump({
+        title: '<i class="mr5"></i>委托经纪人',
+        url: 'msale/mentrustarc'|U({ aid: aid }),
+        target: '.main-bd'
+    }) }} 
+    {{ core_manage.jump({
+        title: '<i class="mr5"></i>加载经纪人',
+        url: 'mentrustarc/mentrustarcloading'|U({ aid:aid }),
+        target: '.main-bd'
+    }) }} 
+{% endblock %}
+
+{% block mainleft %}
+    {# {{ render(controller('HouseBundle:Mnews:category', {category: category, action: 'mnews/mnewsmanage'})) }} #}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ core_manage.filter([
+   
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ ('mentrustarc/save')|U }}',
+        deleteUrl : '{{ ('mentrustarc/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            models: '{{ models }}',
+            category: '{{ category }}',
+            aid: '{{ aid }}'
+
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th>委托经纪人</th>
+                    <th width="100">委托状态</th>
+                    <th width="100" >委托时间</th>
+                   
+                </tr>
+                {% if ident.info.data is defined %}
+                {% for k, vo in ident.info.data %}
+                    {# {{dump(vo)}} #}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td>
+                        {% set unicename = ('db.userinfo')|getOne('nicename',{ uid: vo.mid }) %}
+                        {% set uusername = ('db.users')|getOne('username',{ id: vo.mid }) %}
+                        {% if unicename %}
+                            {{ unicename}}
+                        {% else %}
+                            {{ uusername}}    
+                        {% endif %}  
+                        {{ vo.mid }}
+                    </td>
+                    <td>
+                        {% set esale = ('house.sale')|getOne('uid', { eid: vo.aid}) %}
+                        {% set ewid = ('house.entrust')|getOne('wid', { id: vo.aid}) %}
+                        {% if ewid == vo.uid %}
+                            {% if esale %}
+                                已发布
+                            {% else %}
+                            已接受委托
+                            {% endif %}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>{{ vo.create_time|default('0')|date('Y-m-d') }}-{{ vo.id }}</td>
+                    
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    }
+]) }}
+{% endblock %}
+
+{% block promptUl %}
+{# 提示说明 #}
+{% endblock %}
+
+
+
+

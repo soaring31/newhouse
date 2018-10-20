@@ -1,0 +1,8 @@
+services:
+#    manage_authentication_handler:
+#        class: ManageBundle\Services\Security\AuthenticationHandler
+#        arguments: ["@service_container", "@router", "@security.token_storage"]
+#        tags:
+#            - { name: 'monolog.logger', channel: 'security' }
+#    manage.user_checker:
+#        class: ManageBundle\Services\Security\UserChecker

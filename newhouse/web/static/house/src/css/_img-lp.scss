@@ -1,0 +1,33 @@
+$img-lp-1:(48px, 48px, -58px, 0, img-lp-1);
+$img-lp-2:(48px, 48px, -58px, -58px, img-lp-2);
+$img-lp-3:(48px, 48px, -116px, 0, img-lp-3);
+$img-lp-4:(48px, 48px, 0, 0, img-lp-4);
+$img-lp-5:(48px, 48px, -116px, -58px, img-lp-5);
+$img-lp-6:(48px, 48px, 0, -58px, img-lp-6);
+$img-lp-7:(20px, 19px, -90px, -116px, img-lp-7);
+$img-lp-8:(20px, 19px, -120px, -116px, img-lp-8);
+$img-lp-9:(20px, 20px, -60px, -116px, img-lp-9);
+$img-lp-10:(20px, 20px, 0, -116px, img-lp-10);
+$img-lp-11:(20px, 20px, -30px, -116px, img-lp-11);
+
+$img-lp: ($img-lp-1,$img-lp-2,$img-lp-3,$img-lp-4,$img-lp-5,$img-lp-6,$img-lp-7,$img-lp-8,$img-lp-9,$img-lp-10,$img-lp-11);
+
+@mixin img-lp($sprites) {
+  %icolp {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/lp.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+        @extend %icolp;
+    }
+  }
+}

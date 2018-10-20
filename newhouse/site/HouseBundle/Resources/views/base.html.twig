@@ -1,0 +1,51 @@
+{% extends 'CoreBundle::base.html.twig' %}
+{% import "HouseBundle:Macro:global.html.twig" as house_global %}
+{# JS #}
+{% block js_base %}
+<script type="text/javascript" src="{{ asset('bundles/' ~ bundlepath ~ '/js/seajs.cfg.js', absolute=true) }}"></script>
+<script type="text/javascript">
+var web = "frontEnd"; //前台
+seajs.use([
+    'jqhoverS', 
+    'fixed', 
+    'common'  
+], function(jqHoverS, fixed, common) {
+    $(function() {
+        // console.log('执行。。。');
+        // 调用统计
+        common.getcounts({
+            url: '{{("igetcounts/index")|U({} ,true)}}'
+        });
+        // 广告统计
+        common.adcount({
+            saveUrl : '{{("viewinter/vote")|U}}'
+        });
+        // 表单处理
+        common.form({
+            ajax: {
+                // 获取表单的默认地址
+                url: '{{('bundlebindforms/ajaxform')|U}}',
+            }
+        })
+    })
+});
+</script>
+{% endblock js_base %}
+
+{% block js %} {% endblock js %}
+{# css #}
+{% block css_base -%}
+    {{ parent() }}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/global.css')}}
+{% endblock css_base %}
+{% block css %} {% endblock css %}
+
+
+{% set majorNav = ('house.navs')|getTree({cate_pushs: 'zdh', checked: 1, pageSize: 100, order: "sort", orderBy: 'asc'}) %}
+{% set default_themes = 'default_themes'|C %}
+{% block header %}
+    {% include default_themes ~ '::header.html.twig' %}
+{% endblock header %}
+{% block footer %}
+    {% include default_themes ~ '::footer.html.twig' %}
+{% endblock footer %}

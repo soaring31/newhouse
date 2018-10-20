@@ -1,0 +1,54 @@
+usergroup:
+    tableName: user_group
+    subTableName: ''
+    aliasName: g
+    listGrid: {  }
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    order: ''
+    orderBy: desc
+    searchFun: EXISTS
+    dataModel: 0
+    autoQuery: '1'
+    alias: {  }
+    query: {  }
+    query1: {  }
+    groupBy: ''
+    attribute: '0'
+info:
+    tableName: users
+    subTableName: userinfo
+    aliasName: u
+    listGrid: {  }
+    listDesc: ''
+    subJoinField: uid
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    groupBy: ''
+    order: id
+    orderBy: desc
+    searchFun: EXISTS
+    dataModel: 2
+    attribute: '0'
+    autoQuery: '0'
+    alias: {  }
+    query:
+        status:
+            eq: '1'
+        id:
+            eq: 'null'
+        username:
+            orX: 'tel,like,%[name]%|id,eq,[name]|username,like,%[name]%|email,like,%[name]%'
+        mid:
+            neq: '1'
+        checked:
+            eq: '[checked]'
+    query1:
+        usertype:
+            eq: '[usertype]'
+        groupid:
+            eq: '[groupid]'

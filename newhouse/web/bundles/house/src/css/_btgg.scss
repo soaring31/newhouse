@@ -1,0 +1,57 @@
+﻿/*!
+* @name btgg.css
+* @author xying
+* @date 2016-8-5
+* @dec 背投广告
+*/
+$operat-btn-h: 20px;
+$operat-color: #333 !default;
+$operat-b-color: #666 !default;
+[data-popads="1"] {
+	.popads-image {
+		position: relative;
+		.operat-close {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			// display: none;
+		}
+	}
+	.popads-image-sm {
+		position: relative;
+		.operat-btn {
+			// display: none;
+			background: rgba(255, 255, 255, .5);
+			// background: red;
+			position: absolute;
+			left: 0;
+			width: 100%;
+			height: $operat-btn-h;
+			text-align: center;
+			bottom: 0;
+			padding: 10px 0;
+		}
+	}
+	.operat {
+		border: 1px solid $operat-b-color;
+		border-radius: 5px;
+		color: $operat-color;
+		display: inline-block;
+		vertical-align: middle;
+		font-size: 12px;
+		height: $operat-btn-h;
+		line-height: $operat-btn-h;
+		padding: 0 7px;
+		cursor: pointer;
+		i {
+			float: left;
+			font-size: 14px;
+		    margin-top: 1px;
+		    margin-right: 4px;
+		}
+		&-white {
+			border-color: #fff;
+			color: #fff;
+		}
+	}
+}

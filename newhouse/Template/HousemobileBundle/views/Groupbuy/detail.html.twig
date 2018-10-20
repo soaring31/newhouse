@@ -1,0 +1,54 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+{# 说明 
+ * detail: 当前数据
+#}
+
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% block title %}
+    {{cur_area_data|default('')}}{{detail.name|default('')}}团购
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data|default('')}}{{detail.name|default('')}}团购,{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}提供{{detail.name|default('')}}团购,{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}提供{{houses.name|default('')}}楼盘团购">
+<meta name="description" content="{{cur_area_data|default('')}}{{detail.name|default('')}}团购,{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}提供{{detail.name|default('')}}团购,{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}提供{{houses.name|default('')}}楼盘团购">
+{% endblock key_des %}
+
+
+{% block header_title %}
+    {{core_mobile_global.title({title: '团购'})}}
+{% endblock header_title %}
+
+{% block container %}
+	<div data-block="{
+	    bParams: true,
+	    ajax:{
+	        url: '{{ ('groupbuy/detail')|U }}',
+	        data: {
+	            id: '{{ detail.id|default('') }}',
+	            tpl: 'Groupbuy:detailblock'
+	        }
+	    }
+	}"></div>
+{% endblock container %}
+
+{% block popup %}
+{# {% include 'HousemobileBundle:Groupbuy:baomingblock.html.twig' ignore missing with {tpl_aid: detail.id|default('')} %} #}
+
+{{ housemobile_global.popup({
+    name: 'popup-apply',
+    title: '团购报名',
+    content: {
+        bParams: true,
+        ajax:{
+            url: ('groupbuy/detail')|U,
+            data: {
+                id: detail.id|default(''),
+                formflag: 'view_group_order',
+                tpl: 'Common:forms'
+            }
+        }
+    }
+}) }} 
+{% endblock popup %}

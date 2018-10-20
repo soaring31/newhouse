@@ -1,0 +1,28 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+
+
+{% block result %}
+    {% set forms = ('db.mem_types')|getOne( 'form_id', { id: app.user.usertype|default('')}) %}
+    {% set formname = ('db.model_form')|getOne('name', { id: forms}) %}
+    {% set Form = form[formname]|default({}) %}
+    {% set user_name = app.user.userinfo.nicename|default(app.user.username|default('-')) %}
+    <div class="content bg-white">
+        {{core_mobile_forms.forms({
+            form: Form,
+            buttons: {
+                0: {
+                    name: '保存',
+                    class: ' button-big button-fill button-success',
+                    attr: 'data-role="submit"'
+                }
+            }
+        })}}
+    </div>
+    <script type="text/javascript">
+        seajs.use([''], function () {
+            $('.button-success').click(function () {
+                location.reload();
+            })
+        })
+    </script>
+{% endblock result%}

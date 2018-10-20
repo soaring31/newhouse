@@ -1,0 +1,152 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set cate_pushs = app.request.get('cate_pushs', 'sell') %}
+{% set form = app.request.get('form', 'houses_sell') %}
+
+{% set ctime = ('now')|date('Y-m-d') %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+{% block mainMenu %}
+{{parent()}}
+{{ core_manage.jump({ 
+    url: ('mmembers/mcheckextract')|U, 
+    title:  '<i class="font-ico-bj mr5"></i>佣金提取审核',
+    class: action == 'mcheckextract' ? 'on' : '',
+}) }}
+{% endblock %}
+{% block tableMain %}
+{{ core_manage.filter([
+	{
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增分销',
+    },
+	{
+        title: '开盘时间',
+        attr: {
+            'data-selectdate': {
+            	format: 'Y-M-D'
+            }
+        },
+        data: [
+                {
+                    id: '1M',
+                    name: '一个月前'
+                },
+                {
+                    id: '3M',
+                    name: '三个月前'
+                }
+            ],
+        field: 'kpsj',
+        method: 'selectFilter'
+    },
+    {
+        method: 'selectFilter',
+        title: '结束时间',
+        field: 'enddate',
+        data: [
+                {
+                    id: 'gt|' ~ ctime|default(''),
+                    name: '未结束'
+                },
+                {
+                    id: 'between|0,' ~ ctime|default(''),
+                    name: '已结束'
+                }
+            ]
+    },
+    {
+        method: 'selectFormField',
+        title: '审核',
+        form: 'checked',
+        field: 'checked',
+    },
+    {
+        method: 'search',
+        field: 'name',
+        title: '请搜索名称/ID/楼盘',
+    }
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            cate_pushs: '{{ cate_pushs }}',
+            form: '{{form}}'
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+                <tbody>
+                    <tr data-id>
+                        <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                        <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                        <th>标题</th>
+                        <th width="200">所属楼盘</th>
+                        <th width="120"data-role="sort" data-sort="kpsj" class="sort">开盘日期</th>
+                        <th width="120"data-role="sort" data-sort="enddate" class="sort">分销结束时间</th>
+                        {# <th width="60"data-role="sort" data-sort="yiyuding" class="sort">已预订</th> #}
+                        <th width="60">已推荐</th>
+                        <th width="60"data-role="sort" data-sort="yongjin" class="sort">佣金</th>
+                        <th width="60">审核</th>
+                        <th width="120" class="tac">操作</th>
+                    </tr>
+
+                    {% if ident.info.data is defined  and ident.info.pageCount|default('') != 0 %}
+                    {% for k, vo in ident.info.data %}
+                    <tr data-id="{{ vo.id }}">
+                        <td class="tac">{{core_manage.checkbox()}}</td>
+                        <td>{{vo.id}}</td>
+                        <td class="tov" title="{{ vo.name|default('') }}">
+                            <a href="{{('fenxiao/detail')|U({id: vo.id})}}" target="_blank">
+                                {% if vo.thumb %}<i class="font-ico-tp mr5 fcr"></i>{% endif %}
+                                {{vo.name|default('')}}
+                            </a>
+                        </td>
+                       <td> <a href="{{('houses/detail')|U({id: vo.aid})}}">
+                           {{vo.lpmc|default('-')}}
+                       </a> </td>
+                       <td> {{vo.kpsj|default('')|date('Y-m-d')}} </td>
+                       <td>{{vo.enddate|default('')|date('Y-m-d')}}</td>
+                        {# <td>{{vo.yiyuding}}</td> #}
+                        <td><a title="{{ vo.name }}的推荐" data-role="show" href="{{ ('msell/mrecommend')|U({type: 'houses_arc', aid:  vo.id}) }}">[{{vo.yituijian}}]</a></td>
+                        <td>{{vo.yongjin}}</td>
+                        <td>{{ core_global.formField({ value: vo.checked }) }}</td>
+                        <td class="tac">
+                            {{ core_manage.show() }}
+                            {{ core_manage.delete() }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr><td colspan="12" class="tac">没有数据！</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'checked',
+        title: '审核',
+    },
+]) }}
+{% endblock %}
+
+{% block promptUl %}
+提示：新增分销的时候必须从所属楼盘中关联到搜索的楼盘，否则会提示楼盘id必须填写
+{% endblock %}

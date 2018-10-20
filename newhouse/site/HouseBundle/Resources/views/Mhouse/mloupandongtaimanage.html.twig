@@ -1,0 +1,91 @@
+{% extends 'HouseBundle:Mhouse:mhousesarc.html.twig' %}
+
+
+{% macro getCategory(id) %}
+    {% if id == 1 %}
+        楼盘动态
+    {% elseif id == 2 %}
+        预售证
+    {% elseif id == 3 %}
+        开盘信息
+    {% elseif id == 4 %}
+        交易信息
+    {% else %}
+        暂无
+    {% endif %}
+{% endmacro %}
+
+{% block tableMain %}
+
+    {% import _self as func %}
+
+    {{ core_manage.filter([
+        {
+            method: 'search',
+            field: 'name',
+            title: '动态标题'
+        }
+    ]) }}
+    <div class="list-con" data-param="{{ params }}">
+        <div class="list">
+            <table class="right-table table-hover">
+                <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{ core_manage.checkbox() }}</th>
+                    <th width="40">ID</th>
+                    <th>标题</th>
+                    <th>所属分类</th>
+                    <th>日期</th>
+                    <th width="200">内容</th>
+                    <th width="120" class="tac">操作</th>
+                </tr>
+                {% if ident.info.data|length %}
+                    {% for k, vo in ident.info.data %}
+                        <tr data-id="{{ vo.id }}">
+                            <td class="tac">
+                                {{ core_manage.checkbox() }}
+                            </td>
+                            <td>
+                                {{ vo.id }}
+                            </td>
+                            <td>
+                                {{ vo.name|default('') }}
+                            </td>
+                            <td> {{ func.getCategory(vo.category_id) }}</td>
+                            <td>
+
+                                {% if vo.day_date %}
+                                    {{ vo.day_date|date('Y-m-d') }}
+                                {% else %}
+                                    暂无日期
+                                {% endif %}
+
+                            </td>
+                            <td>
+                                {{ vo.content }}
+                            </td>
+                            <td class="tar pr10">
+                                {{ core_manage.show() }}
+                                {{ core_manage.delete() }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="9" class="tac">没有数据！</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+        {{ core_manage.page(block_arc_data) }}
+    </div>
+    {% if (action ~ '/show')|P %}
+        {{ core_manage.oprate([
+            {
+                method: 'delete',
+                title: '<i class="font-ico-del mr5"></i>批量删除',
+            }
+        ]) }}
+    {% endif %}
+{% endblock tableMain %}

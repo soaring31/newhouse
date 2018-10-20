@@ -1,0 +1,32 @@
+{# Core/Resources/views/layout.html.twig #}
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+{% block html_tag %}
+<html lang="{{ app.request.locale }}">
+{% endblock html_tag %}
+	<head>
+        <meta charset="{{ _charset }}" />
+        <meta name="robots" content="noindex,nofollow" />
+        <title>{{product}}{% block title %}{% endblock %}</title>
+        <meta name="keywords" content="{{ keyword }}" />
+        <meta name="descripton" content="{{ content }}" />
+        {% block corecss %}
+        <link rel="stylesheet" href="{{ asset(corepath~'/css/core.css') }}" />
+        {% endblock %}
+        <link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}" />
+		<script>
+			var csrf_token	= "{{csrf_token}}";
+        	var jsbase  = "{{ asset('bundles') }}";
+        	var BASE_URL = "{{ app.request.getBaseUrl() }}";
+        	var jumpParam = {};
+        	window.UEDITOR_HOME_URL = "{{ asset('bundles') }}/core/js/vendor/ueditor/";
+        </script>
+        <script type="text/javascript" src="{{ asset(corepath~'/js/vendor/sea.main.js') }}"></script>
+        <script type="text/javascript" src="{{ asset(corepath~'/js/vendor/sea.map.js') }}"></script>
+        {% block css %}{% endblock %}
+        {% block js %}{% endblock %}
+    </head>
+	<body style="margin:0px auto;">
+	{% block body %}{% endblock %}
+	{% block footer %}<div class="footer">Copyright @{{copyright}} All rights reserved.</div>{% endblock %}
+	</body>
+</html>

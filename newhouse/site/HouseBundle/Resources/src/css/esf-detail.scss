@@ -1,0 +1,624 @@
+@import 'static/ats'; // 工具类, 每个文件都要导入
+
+$major-color:#4fb257;
+$fliter-more-bg: #4fb257;
+$text-color:#2c2c2c !default;
+$span-color : #fd6300 !default;
+
+@import 'font-lp'; // 楼盘图标
+
+@import 'sale-list-com'; //二手房列表
+
+@import 'filter'; // 筛选模块
+
+@import 'sort'; // 重新排序
+
+@import 'jjr-list'; // 经纪人列表
+
+@import 'lp-compare'; // 对比
+
+@import 'img-userfiles';
+//导入css 标识-文件名
+@include img-userfiles($img-userfiles);
+//调用全部样式， 标识-文件名($标识-文件名); 
+
+// 二手房列表模块
+.sale-list-ex {
+    .sale-item-text {
+        h3 {
+            line-height: 34px;
+            height: 34px;
+        }
+        p {
+            height: auto;
+            line-height: 34px;
+            max-height: 34px;
+        }
+    }
+    .sale-item-r {
+        .buy {
+            margin-top: 15px;
+        }
+    }
+}
+
+// 出租房列表模块
+.rent-list-ex {
+    .sale-item-text {
+        h3 {
+            line-height: 34px;
+            height: 34px;
+        }
+        p {
+            height: auto;
+            line-height: 34px;
+            max-height: 34px;
+        }
+    }
+    .sale-item-r {
+        .buy {
+            margin-top: 15px;
+        }
+    }
+}
+
+
+.esf-header {
+    width: 100%;
+    height: 150px;
+    background: $major-color;
+    min-width: $min-screen;
+}
+
+.container {
+    @extend %clearfix;
+}
+
+.warp {
+    width: 1200px;
+    min-width: 1200px;
+    margin: 0 auto;
+    height: 100%;
+    background: url(../images/jjgs-head-bg.png) 0 0 no-repeat;
+    @extend %clearfix;
+}
+
+.esf-head-logo {
+    float: left;
+    width: 400px;
+    margin: 26px 0 0 38px;
+
+    img {
+        float: left;
+        border: 5px solid #e6e6e6;
+    }
+
+    h1 {
+        font-size: 26px;
+        color: #fff;
+        margin-left: 200px;
+        width:230px;
+    }
+}
+
+// ¾­¼ÍÈË
+.head-logo2 {
+    margin-top: 5px;
+}
+
+.esf-head-share {
+    float: right;
+    margin-top: 26px;
+    margin-right: 72px;
+
+    a {
+        color: #fff;
+        height: 16px;
+        line-height: 16px;
+        display: inline-block;
+        vertical-align: middle;
+        &:hover {
+            text-decoration: none;
+        }
+
+        i {
+            vertical-align: middle;
+        }
+    }
+
+    .collect {
+        // margin-top: -3px;
+        margin-right: 15px;
+        i {
+            margin-right: 5px;
+        }
+    }
+
+    .share {
+        float: right;
+        a {
+             color: #fff !important;
+             margin: 0 !important;
+             padding-left: 0 !important;
+             background: none;
+             font-size: 14px;
+            
+             &:hover {
+                opacity: 1 !important;
+                // text-decoration: none;
+             }
+        }
+    }
+    
+}
+
+.h-l-title {
+    margin-left: 120px;
+    margin-top:20px;
+    .name {
+        font-family: Microsoft Yahei;
+        font-size: 26px;
+        line-height: 32px;
+        height: 32px;
+        color: #fff;
+    }
+
+    .tel {
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 27px;
+        height: 27px;
+        margin-top: 15px;
+        
+        color: #fff;
+    }
+    
+}
+
+// nav
+
+.esf-nav {
+    margin-top: 20px;
+    width: 100%;
+    height: 50px;
+    background: #f9f9f9;
+    overflow: hidden;
+    @extend %clearfix;
+}
+
+.nav-ul {
+    float: left;
+    height: 50px;
+
+    li {
+        float: left;
+        height: 100%;
+        
+    }
+
+    a {
+        display: inline-block;
+        line-height: 32px;
+        font-size: 16px;
+        color: $text-color;
+        padding: 0 14px;
+        height: 32px;
+        margin: 8px 10px;
+    }
+
+    a:hover {
+        background: $major-color;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 3px;
+    }
+
+    .active {
+        background: $major-color;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 3px;
+    }
+}
+
+.search-bar {
+    .search-input {
+        border: 1px solid $major-color;
+    }
+    .search-btn {
+        background: $major-color;
+    }
+}
+// ËÑË÷
+.nav-sort {
+    float: right;
+    line-height: 50px;
+
+    .text {
+        width: 202px;
+        height: 30px;
+        text-indent: 5px;
+        border: 1px solid #ddd;
+        line-height: 30px;
+        color: $text-color;
+        margin-top: -4px;
+    }
+
+    .btn {
+        height: 32px;
+        font-size: 16px;
+        color: #fff;
+        padding: 0 14px;
+        border: none;
+        border-radius: 0;
+    }
+
+    .btn-1 {
+        background: $major-color;
+        margin-left: -5px;
+    }
+
+    .btn-2 {
+        background: $span-color;
+        margin-left: 18px;
+    }
+    .container {
+        width: auto;
+        min-width: auto;
+    }
+}
+
+// counter
+.current-location {
+    i {
+        color: $major-color;
+    }
+
+    a:hover {
+        color: $major-color;
+    }
+}
+
+// ×ó²à¹«Ë¾ÐÅÏ¢
+.left-side {
+    float: left;
+    width: 200px;
+    color: $text-color;
+}
+
+.side-info,.side-box,.side-jjr {
+    border: 1px solid #d5d5d5;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    padding: 15px 13px;
+    margin-bottom: 20px;
+}
+
+.side-title {
+    line-height: 30px;
+    font-size: 14px;
+    font-weight: 700;
+    color: $text-color;
+}
+
+.side-info {
+    .user-image {
+        width: 170px;
+        height: 78px;
+    }
+
+    h3 {
+        font-size: 15px;
+        line-height: 34px;
+        font-weight: 700;
+        color: $span-color;
+    }
+
+    p {
+        font-size: 14px;
+        line-height: 26px;
+    }
+
+    .phone {
+        display: block;
+        width: 170px;
+        height: 34px;
+        line-height: 34px;
+        color: #fff;
+        background: #c30;
+        text-align: center;
+        border-radius: 3px;
+        margin-top: 16px;
+    }
+
+    .jjr-name {
+        color: $text-color;
+    }
+
+    .num {
+        color: $span-color;
+    }
+
+    .place {
+        color: $span-color;
+    }
+
+    .phone-num {
+        font-size: 16px;
+        color: #4d95e1;
+        font-weight: 700;
+    }
+}
+
+// ¾­¼ÍÈË
+.jjr-box {
+    margin-top: 10px;
+}
+
+.jjr-b-item {
+    width: 170px;
+    text-align: center;
+    margin-bottom: 35px;
+
+    p {
+        color: $text-color;
+        line-height: 22px;
+    }
+    a {
+        font-weight: 700;
+    }
+}
+
+// ÓÒ²àÖ÷ÌåÄÚÈÝ
+.right-main {
+    width: 980px;
+    float: right;
+}
+
+// ÅÅÐò
+.list-title {
+    height: 40px;
+    margin-top: 20px;
+    border: 1px solid #d5d5d5;
+    border-top: 1px solid $major-color;
+    border-radius: 0 0 5px 5px;
+    background: #f9f9f9;
+    @extend %clearfix;
+}
+
+.l-ttitle-l {
+    float: left;
+    margin-left: 5px;
+    line-height: 40px;
+
+    span {
+        font-weight: 700;
+        color: $span-color;
+    }
+}
+
+.l-title-r {
+    float: right;
+
+    .sort-btn {
+        line-height: 40px;
+        border: none;
+        &.act {
+            background: transparent;
+        }
+        &:hover {
+            color: $span-color;
+        }
+    }
+
+    .act {
+        background: #f9f9f9;
+        color: $span-color;
+    }
+}
+
+// ¹«ÓÃ±êÌâ
+.subT {
+    line-height: 30px;
+    height: 30px;
+    padding: 5px 10px;
+    background: #fafafa;
+    margin-bottom: 15px;
+    border-left: 5px solid $major-color;
+    p {
+        font-size: 18px;
+        font-weight: bold;
+        height: 30px;
+    }
+}
+
+// ¹«Ë¾¼°¸öÈË½éÉÜ
+.jshao-main {
+    padding: 10px;
+    border: 1px solid #d5d5d5;
+    border-radius: 4px;
+    background: #f9f9f9;
+    font-size: 14px;
+    line-height: 26px;
+
+    .jshao-box {
+        padding:5px 0 5px 15px;
+        border-bottom: 1px dotted #c8c8c8;
+    }
+
+    p {
+        
+        font-weight: 700;
+    }
+
+    span,a {
+        font-weight: 500;
+    }
+}
+
+// ¾­¼ÍÈË
+.gs-j-list {
+    width: 100%;
+    @extend %clearfix;
+
+    ul {
+        margin-left: -15px;
+    }
+
+    li {
+        width: 50%;
+        float: left;    
+    }
+}
+
+.gs-j-item {
+    margin: 15px 0 0 15px;
+    padding: 12px;
+    border: 1px solid #d5d5d5;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    @extend %clearfix;
+
+    img {
+        float: left;
+    }
+}
+
+.gs-item-text {
+    margin-left: 110px;
+
+    h3 {
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 34px;
+        height: 34px;
+    }
+    p {
+        line-height: 24px;
+    }
+}
+
+// ÁôÑÔ
+.lynr {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.dzhf {
+    padding: 10px;
+    border: 1px solid #ccc;
+    background: #fafafa;
+}
+
+.liuyanbiao {
+    font-family: simsun;
+    font-size: 13px;
+
+    padding: 20px;
+
+    border: 1px solid #ccc;
+    .textarea {
+        height: 90px;
+    }
+    textarea {
+        font-size: 13px;
+
+        height: 75px;
+        outline: none;
+    }
+    .tip {
+        display: inline-block;
+
+        color: $span-color;
+    }
+    .info {
+        margin-top: 10px;
+
+        color: #999;
+    }
+    .wenzi {
+        width: 89px;
+        display: inline-block;
+        text-align: right;
+    }
+   
+}
+
+
+// ¹«Ë¾¶¯Ì¬
+.dtai-list {
+    margin: 20px 20px 0;
+    line-height: 28px; 
+    font-size: 14px;
+    .line5 {
+        border-bottom: 1px dotted #cbc9c9;
+        margin-bottom: 5px;
+        padding-bottom: 5px;
+    }
+}
+
+// 动态详情
+.zuti {
+    font-size: 18px;
+    font-weight: bolder;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+}
+.Date_info {
+    color: #c3c2c2;
+    font-size: 12px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+}
+
+    
+.remind {
+    .kuang,
+    p,
+    .button {
+        position: absolute;
+        top: 50%;
+        left: 50%;      
+    }
+    .kuang { 
+        width: 578px;
+        height: 280px;
+        margin-top: -140px;
+        margin-left: -289px;
+        border: 1px solid #ccc;
+
+    }
+    p {
+        padding: 20px;              
+        margin-left: -260px;
+        margin-top: -86px;
+        text-align: center;
+        font-size: 24px;
+
+    }
+    .button {
+        width: 240px;
+        margin-left: -120px;
+        margin-top: 27px;
+        a {     
+            float: left;            
+            padding: 5px;
+            background: #f86;
+            border-radius: 2px;
+            text-decoration: none;
+            font-size: 18px;
+            border-radius: 4px;
+            background: #e43;
+            color: #fff;
+            &:last-child {
+                float: right;
+                background: #fe5200;
+            }
+    
+        }    
+    }
+    
+}

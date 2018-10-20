@@ -1,0 +1,138 @@
+<?php
+/**
+* @copyright Copyright (c) 2008 – 2016 www.08cms.com
+* @author 08cms项目开发团队
+* @package 08cms
+* create date 2015-6-9
+*/
+namespace CoreBundle\EventListener;
+
+use Doctrine\Common\EventSubscriber;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
+use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
+
+
+/**
+ * 表前缀处理服务
+ */
+class DbPrefixListener implements EventSubscriber
+{
+	protected $prefix = 'cms_';
+
+	/**
+	 * Constructor
+	 *
+	 * @param string $prefix
+	 */
+	public function __construct($prefix)
+	{
+		$this->prefix = (string) $prefix;
+	}
+
+	/**
+	 * Get subscribed events
+	 *
+	 * @return array
+	 */
+	public function getSubscribedEvents()
+	{
+		return array('loadClassMetadata');
+	}
+
+	/**
+	 * Load class meta data event
+	 *
+	 * @param LoadClassMetadataEventArgs $args
+	 *
+	 * @return void
+	 */
+	public function loadClassMetadata(LoadClassMetadataEventArgs $args)
+	{
+		$classMetadata = $args->getClassMetadata();
+		//$classMetadata->setIdGeneratorType(1);
+
+		//描述错位修正
+		foreach($classMetadata->fieldMappings as &$v)
+		{
+
+			if (isset($v['comment'])) {
+				if(!isset($v['options'])) $v['options'] = array();
+				$v['options']['comment'] = $v['comment'];
+				unset($v['comment']);
+			}
+			if (isset($v['unsigned'])) {
+				if(!isset($v['options'])) $v['options'] = array();
+				$v['options']['unsigned'] = $v['unsigned'];
+				unset($v['unsigned']);
+			}
+		}
+
+		if ($this->prefix === '') {
+		    return;
+		}		
+		// 不要再使用前缀继承层次结构中的
+		if ($classMetadata->isInheritanceTypeSingleTable() && !$classMetadata->isRootEntity()) {
+			return;
+		}
+		
+		//从YML访问数据库,需要加上前缀
+		if($classMetadata->namespace)
+		{
+			if (0 !== strpos($classMetadata->getTableName(), $this->prefix)) {
+				$tableName = $this->prefix . $classMetadata->getTableName();
+				$classMetadata->setPrimaryTable(array('name' => $tableName));
+			}
+			
+			foreach ($classMetadata->getAssociationMappings() as $fieldName => $mapping) {
+				if ($mapping['type'] == ClassMetadataInfo::MANY_TO_MANY && $mapping['isOwningSide'] == true) {
+					$mappedTableName = $classMetadata->associationMappings[$fieldName]['joinTable']['name'];
+			
+					// Do not re-apply the prefix when the association is already prefixed
+					if (0 === strpos($mappedTableName, $this->prefix)) {
+						continue;
+					}
+			
+					$classMetadata->associationMappings[$fieldName]['joinTable']['name'] = $this->prefix . $mappedTableName;
+				}
+			}
+			
+		//从数据库生成YML文件，需要去掉表前缀
+		}else{
+		    // 只替换前缀字串打头的表名
+			if (0 === strpos($classMetadata->getTableName(), $this->prefix)) {
+			    $tableName = substr($classMetadata->getTableName(),strlen($this->prefix));
+				$classMetadata->setTableName($tableName);
+/*
+				
+				$classMetadata->name = $this->ucWords($tableName);
+				if($classMetadata->name=='MembersSub')
+				{
+				    $ClassMetadataBuilder = new ClassMetadataBuilder($classMetadata);
+				    $association = $ClassMetadataBuilder->createOneToOne('Members', 'Members');
+				    $association->addJoinColumn('mid', 'mid');
+				    $association->build();
+				}
+                if($classMetadata->name!='Members'&&$classMetadata->name!='MembersSub'&&strpos($classMetadata->name,'Members')===0){
+                     $ClassMetadataBuilder = new ClassMetadataBuilder($classMetadata);
+                     $association = $ClassMetadataBuilder->createOneToOne('MembersSub', 'MembersSub');
+                     $association->addJoinColumn('mid', 'mid');
+                     $association->build();
+                }
+ * */				
+			}			
+		}
+	}
+	
+	/**
+	 * psr-0标准
+	 * @param string $str
+	 * @return string
+	 */
+	private function ucWords($str)
+	{
+		$str = ucwords(str_replace('_', ' ', $str));
+		$str = str_replace(' ', '', $str);
+		return $str;
+	}
+}

@@ -1,0 +1,25 @@
+<?php
+/**
+* @copyright Copyright (c) 2008 – {{ ''|date('Y') }} www.08cms.com
+* @author 08cms项目开发团队
+* @package 08cms
+* create date {{ ''|date('Y-m-d') }}
+*/
+{% block use_statements %}
+use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\Route;
+{% endblock use_statements %}
+
+{% block definition %}
+$collection = new RouteCollection();
+{% endblock definition %}
+
+{% block body %}
+$collection->add('{{ extension_alias }}_homepage', new Route('/hello/{name}', array(
+    '_controller' => '{{ bundle }}:Default:index',
+)));
+{% endblock body %}
+
+{% block return %}
+return $collection;
+{% endblock return %}

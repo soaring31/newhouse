@@ -1,0 +1,97 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+{% set aid = app.request.get('aid') %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {# {{ parent() }} 
+    {{ core_manage.jump({
+        title: '<i class="font-ico-10 mr5"></i>资讯评论',
+        url: 'mintercomment/mintercommentmanage'|U
+    }) }} #}
+{% endblock %}
+
+{% block mainleft %}
+    {# {{ render(controller('HouseBundle:Mnews:category', {category: category, action: 'mnews/mnewsmanage'})) }} #}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ core_manage.filter([
+    
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ ('mentrustarc/show')|U }}',
+        submitUrl : '{{ ('mentrustarc/save')|U }}',
+        deleteUrl : '{{ ('mentrustarc/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            uid: '{{ app.user.id }}',
+            models: '{{ models }}'
+                    }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th>昵称</th>
+                    <th width="100" data-role="sort" data-sort="clicks" class="sort">联系电话</th>
+                </tr>
+                {% if ident.info.data is defined and ident.info.pageCount|default('') != 0 %}
+                {% for k, vo in ident.info.data %}
+                {% set vo1 = vo.attributes %}
+                <tr data-id="{{ vo.uid }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td>
+                        {% set username = ('db.users')|getOne('username', { id: vo.uid }) %}
+                        {% if vo.nicename %}
+                            {{ vo.nicename }}
+                        {% else %}
+                             {{ username }}   
+                        {% endif %}  
+                        {{ vo.uid }}  
+                    </td>
+                    <td>{{ ('db.users')|getOne('tel', { id: vo.uid })|default('-') }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+{{ core_manage.oprate([
+    {
+        method: 'submit',
+        url: ('mentrustarc/save')|U(),
+        title: '确定加载',
+        attr: {
+                'data-add': {
+                    mid: 'id'
+                }
+            },
+        params: {
+                aid: aid
+            },
+        class: 'fz12'
+    }
+]) }}
+{% endblock %}
+
+{% block promptUl %}
+{# 提示说明 #}
+{% endblock %}
+
+
+
+

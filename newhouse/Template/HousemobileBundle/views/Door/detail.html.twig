@@ -1,0 +1,33 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+{# 说明 
+* detail: 特价房详情数据
+#}
+
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% block title %}
+    {{detail.name|default('')}}户型图
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}户型,{{detail.name|default('')}}户型图,{{detail.name|default('')}}户型大全" />
+<meta name="description" content="{{detail.name|default('')}}户型图,{{cur_area_data|default('')}}{{detail.name|default('')}}小区网为您提供最新、最全的{{detail.name|default('')}}户型图，包含一居室户型、二居室户型、三居室户型等所有大小户型图，查找{{detail.name|default('')}}户型图就上{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}。 "/>
+{% endblock key_des %}
+
+{% block header_title %}
+    {{core_mobile_global.title({title: '户型'})}}
+{% endblock header_title %}
+
+{% block container %}
+	<div data-block="{
+	    bParams: true,
+	    ajax:{
+	        url: '{{ ('door/detail')|U }}',
+	        data: {
+	            id: '{{ detail.id|default('') }}',
+	            tpl: 'Door:detailblock'
+	        }
+	    }
+	}"></div>
+{% endblock container %}

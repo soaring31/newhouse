@@ -1,0 +1,6 @@
+{% extends "HouseBundle::base_show.html.twig" %}
+{% block js %}
+{% endblock %}
+{% block body %}
+{{ core_manage.form_level(form|default(''),'form', 'house.topic_block') }}
+{% endblock %}

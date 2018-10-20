@@ -1,0 +1,128 @@
+{% extends 'HouseBundle:Msale:msalemanage.html.twig' %}
+{% set userid = app.user.id %}
+{% set models = app.request.get('models') %}
+
+{% block tableMain %}
+
+    {# {{dump(ident.info.data)}} #}
+    {{ core_manage.filter([
+        {
+            method: 'show',
+            title: '<i class="font-ico-plus mr5"></i>新增委托出租'
+        },
+        {
+            method: 'selectFormField',
+            title: '审核',
+            form: 'checked',
+            field: 'checked',
+        },
+        {
+            method: 'search',
+            field: 'name',
+            title: '请搜索名称/联系人/电话',
+        }
+    ]) }}
+
+    <section class="list-con" data-param="{
+            defUrl    : '{{ ('mrent/mrentcon')|U }}',
+            showUrl   : '{{ (action ~ '/show')|U}}',
+            submitUrl : '{{ (action ~ "/save")|U }}',
+            deleteUrl : '{{ (action ~ "/delete")|U }}',
+            fixed     : '.filter',
+            list      : '.list-con',
+            data      : {
+                models: '{{ models }}',
+
+            }
+        }">
+        <div class="list">
+            <table class="right-table table-hover">
+                <tbody>
+                    <tr data-id>
+                        <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                        <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                        <th>楼盘名称</th>
+                        <th width="100">联系人</th>
+                        <th width="100">联系电话</th>
+                        <th width="100">户型</th>
+                        <th width="100" data-role="sort" data-sort="mj" class="sort">面积</th>
+                        <th width="80" data-role="sort" data-sort="dj" class="sort">价格</th>
+                        <th width="100">委托状态</th>
+                        <th width="100" data-role="sort" data-sort="create_time" class="sort">委托时间</th>
+                        <th  width="100" class="tac">操作</th>
+                    </tr>
+                    {% if ident.info.data is defined and ident.info.pageCount|default('') != 0 %}
+                    {% for k, vo in ident.info.data %}
+                    <tr data-id="{{vo.id}}">
+                        <td class="tac">{{core_manage.checkbox()}}</td>
+                        <td>{{vo.id}}</td>
+                        <td>{{vo.name}}</td>
+                        <td>{{vo.xingming}}</td>
+                        <td>{{ vo.fdtel }}</td>
+                        <td>
+                            {{ core_global.formData({
+                                value: [vo.shi, vo.ting, vo.wei],
+                                default: ''
+                            }) }}
+                        </td>
+                        <td>{{ vo.mj }}㎡</td>
+                        <td>{{ vo.dj }}</td>
+                        <td>
+                           {{ core_global.formField({
+                            field: 'entrust',
+                            value: vo.entrust,
+                            form: [
+                                    {
+                                        id: 1,
+                                        name: '已委托',
+                                    },
+                                    {
+                                        id: 0,
+                                        name: '待委托',
+                                    }
+                                ]
+                            }) }}
+                        </td>
+                        <td>{{ vo.createTime|default('0')|date('Y-m-d') }}</td>
+                        <td>
+                            {% if vo.entrust < 1 %}
+                                {{ core_manage.submit({
+                                    class: 'btn btn-sm ',
+                                    title: '接受委托',
+                                    attr: vo.id,
+                                    data: {uid: userid, id: vo.id, entrust: 1}
+                                }) }}
+                            {% else %}
+                            {% set data = ('house.rent')|getOne('id', {eid:vo.id}) %}
+                            {% if data %}
+                            <a href="{{('rent/detail')|U({id:data})}}" target="_blank" class="btn btn-sm btn">查看信息</a>
+                            {% else %}
+                                 {{ core_manage.show({
+                                    url: ("mrentmanage/show")|U({ initid: vo.id, eid: vo.id }),
+                                    title: '发布出租',
+                                    class: 'btn'
+                                }) }}
+                            {% endif %}
+
+                              
+
+                            {% endif %}
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr><td colspan="14" class="tac">没有数据！</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        {{core_manage.page(ident.info)}}
+    </section>
+    {{ core_manage.oprate([
+        {
+            method: 'delete',
+            title: '<i class="font-ico-del mr5"></i>批量删除',
+        }
+    ]) }}
+{% endblock %}

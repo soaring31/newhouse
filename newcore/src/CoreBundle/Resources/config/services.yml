@@ -1,0 +1,175 @@
+parameters:
+    user_manager.class: 'ManageBundle\Entity\Users'
+    router_listener.class: 'CoreBundle\EventListener\RouteListener'
+services:
+    core.uc:
+        class: 'CoreBundle\Uc\Uc'
+        arguments: ['@service_container']
+    core.user_checker:
+        class: CoreBundle\Security\UserChecker
+    core.authenticator:
+        class: CoreBundle\Security\Authenticator
+        arguments: ['@service_container']
+    core.authentication_handler:
+        class: 'CoreBundle\Handler\AuthenticationHandler'
+        arguments: ['@router', '@doctrine']
+        tags:
+            - { name: 'monolog.logger', channel: 'security' }
+    core.logout_success_handler:
+        class: CoreBundle\Handler\LogoutSuccessHandler
+        arguments: ['@service_container', '@router']
+        tags:
+            - { name: 'monolog.logger', channel: 'security' }
+    core.profiler.matcher.anonymously:
+        class: CoreBundle\Profiler\AnonymouslyMatcher
+        arguments: ["@security.authorization_checker", "@service_container"]
+    core.rbac:
+        class: CoreBundle\Services\Rbac\Rbac
+        arguments: ['@service_container', '@security.user_checker']
+    core.rsa:
+        class: CoreBundle\Services\Security\RSA
+        arguments: ['@service_container']
+    core.map:
+        class: CoreBundle\Services\Map\Map
+        arguments: ['@service_container']
+    core.qrcode:
+        class: CoreBundle\QrCode\QrCode
+        arguments: ['@service_container']
+    core.page:
+        class: 'CoreBundle\Functions\Page'
+        arguments: ['@service_container']
+    core.area:
+        class: 'CoreBundle\Functions\Area'
+        arguments: ['@service_container']
+    core.common:
+        class: 'CoreBundle\Functions\Common'
+        arguments: ['@service_container']
+    cc:
+        alias: core.common
+    core.array:
+        class: 'CoreBundle\Functions\Arrays'
+        arguments: ['@service_container']
+    core.binarytree:
+        class: 'CoreBundle\Util\BinaryTree'
+    core.materiallibrary:
+        class: 'CoreBundle\Functions\Materiallibrary'
+        arguments: ['@service_container']
+    core.captcha:
+        class: 'CoreBundle\Services\Captcha\CaptchaImg'
+        arguments: ['@service_container']
+    core.geetest:
+        class: 'CoreBundle\Services\Captcha\GeetestLib'
+        arguments: ['@service_container']
+    core.ymlParser:
+        class: 'CoreBundle\Services\YmlParser\YmlParser'
+        arguments: ["%kernel.root_dir%"]
+    core.form_submit:
+        class: 'CoreBundle\Form\FormSubmit'
+        arguments: ['@service_container']
+    core.form_bind:
+        class: 'CoreBundle\Form\FormBind'
+        arguments: ['@service_container']
+    memcacheInstance:
+        class: Memcache
+        calls:
+            - ['addServer', ['%memcache_host%', '%memcache_port%', '%memcache_expiretime%']]
+    core.memcache:
+        class: 'Doctrine\Common\Cache\MemcacheCache'
+        calls:
+            - ['setMemcache', ["@memcacheInstance"]]
+    core.ident:
+        class: CoreBundle\Services\TwigIdent\TwigIdent
+        arguments: ["@service_container", "%_defaulttwigpath%"]
+    core.table_manage:
+        class: 'CoreBundle\Services\TableManage\TableManage'
+        arguments: ['@service_container']
+    core.filesystem:
+        class: 'Doctrine\Common\Cache\FilesystemCache'
+        arguments: ['%_defaultcachepath%']
+    core.login_manager:
+        class: 'CoreBundle\Security\Login\LoginManager'
+        arguments: ['@service_container']
+    core.user_manager:
+        class: 'CoreBundle\Services\UserBase\UserManager'
+        arguments: ['@service_container', '@core.canonicalizer']
+    core.importdoctrine.command:
+        class: 'CoreBundle\Functions\ImportMappingDoctrineCommand'
+        arguments: ['@service_container']
+    core.controller.command:
+        class: 'CoreBundle\Functions\ControllerCommand'
+        arguments: ['@service_container']
+    core.dochtml:
+        class: 'CoreBundle\Services\Documents\Html'
+        arguments: ['@service_container']
+    core.sitemap:
+        class: 'CoreBundle\Services\SiteMap\SiteMap'
+        arguments: ['@service_container']
+    core.sms:
+        class: 'CoreBundle\Services\Sms\Sms'
+        arguments: ['@service_container']
+    core.mail:
+        class: 'CoreBundle\Services\Mail\Mail'
+        arguments: ['@service_container']
+    core.apitester:
+        class: 'CoreBundle\Services\Sms\ApiTester'
+        arguments: ['@service_container']
+    core.apicr6868:
+        class: 'CoreBundle\Services\Sms\ApiCr6868'
+        arguments: ['@service_container']
+    core.apialiyun:
+        class: 'CoreBundle\Services\Sms\Apialiyun'
+        arguments: ['@service_container']
+    core.apiwinic:
+        class: 'CoreBundle\Services\Sms\ApiWinic'
+        arguments: ['@service_container']
+    core.mcrypt:
+        class: 'CoreBundle\Security\Mcrypt\Mcrypt'
+        arguments: ['@service_container']
+    core.datatrans: # 数据转化基础类
+        class: 'CoreBundle\Services\DataTrans\DataTrans'
+        arguments: ['@service_container']
+    core.datasynguid: # 专门用于同步核心的identifier字段
+        class: 'CoreBundle\Services\DataTrans\DataSynguid'
+        arguments: ['@service_container']
+    core.dataexp: # 导出数据类
+        class: 'CoreBundle\Services\DataTrans\DataExport'
+        arguments: ['@service_container']
+    core.datasyncore: # 同步(core)类
+        class: 'CoreBundle\Services\DataTrans\DataSyncore'
+        arguments: ['@service_container']
+    core.dataupd: # 更新升级类
+        class: 'CoreBundle\Services\DataTrans\DataUpdate'
+        arguments: ['@service_container']
+    core.dataimp: # 导入外部数据类
+        class: 'CoreBundle\Services\DataTrans\DataImport'
+        arguments: ['@service_container']
+    core.eximpbase: # 导入数据扩展
+        class: 'CoreBundle\Services\DataTrans\EximpBase'
+        arguments: ['@service_container']
+    core.eximphouse: # 导入数据扩展
+        class: 'CoreBundle\Services\DataTrans\EximpHouse'
+        arguments: ['@service_container']
+    core.changyan:
+        class: 'CoreBundle\Services\ChangYan\ChangYan'
+        arguments: ['@service_container']
+    core.imageverification:
+        class: 'CoreBundle\Services\Image\ImageVerification'
+        arguments: ['@service_container']
+    core.square:
+        class: 'CoreBundle\Services\Square\Square'
+        arguments: ['@service_container']
+    core.ossupload:
+        class: 'CoreBundle\Services\Ossfiles\MultipartUpload'
+        arguments: ['@service_container']
+    core.timers:
+        class: 'CoreBundle\Services\Timers\Timers'
+        arguments: ['@service_container']
+    core.task:
+        class: 'CoreBundle\Services\Timers\Task'
+        arguments: ['@service_container']
+    core.common.base:
+        class: 'CoreBundle\Functions\CommonBase'
+        arguments: ['@service_container']
+    core.wxshare:
+        class: 'CoreBundle\Services\Share\WxShare'
+        arguments: ['@service_container']

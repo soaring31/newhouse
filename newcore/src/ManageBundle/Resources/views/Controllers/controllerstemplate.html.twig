@@ -1,0 +1,55 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% block mainMenu %}
+{{ parent() }}
+<li title='{{ (action)|U('name='~app.request.get('name')~'&searchName='~app.request.get('searchName')) }}' class="on"><a href="javascript:void(0);">模版管理</a></li>
+{% endblock %}
+{% block js %}
+<script>
+seajs.use("{{ bundlepath }}/js/controllers",function(c){
+	//js入口	    
+	c.init('main');
+});
+</script>
+{% endblock %}
+{% block tableMain %}
+<span class="tableDesc">
+       模版列表>><input type="button" id="btnfun_edit" data-url="{{ (action~"/show")|U("name="~app.request.get('name')~"&bundle="~app.request.get('searchName')) }}" class="search-btn" value="新增模版" />&nbsp;&nbsp;
+  {{ app.request.get('name') }}
+</span>
+<table class="right-table">
+	<tbody>
+		<tr>
+			<th class="w30"></th>
+            <th class="txtleft">模版路径</th>
+            <th class="w200 txtleft">所属Bundle</th>
+            <th class="w250 txtleft">所属控制器</th>
+            <th class="w80 txtleft">使用表单</th>
+			<th class="w60 txtleft">状态</th>
+			<th class="w200">操作</th>
+		</tr>
+		{% if info.data is defined %}
+		{% for key,vo in info.data %}
+		<tr>
+		    <td></td>
+			<td>{{ vo.name }}</td>
+			<td>{{ vo.bundle|default('')  }}</td>
+			<td>{{ vo.controller|default('') }}</td>
+			<td>{{ vo.useform|default(0)>=1?"是":"否" }}</td>
+			<td>{{ vo.status!=1?"<span style='color:red;'>禁用</span>":"启用" }}</td>
+			<td class="txtcenter">
+			    <input type="button" id="btnfun_edit_{{key}}" data="{{ (action~'/show')|U('_id='~vo.id) }}" class="search-btn" value="修改" />&nbsp;&nbsp;
+			    <input type="button" id="btnfun_jump_{{key}}" data="{{ ('controllers/actionident')|U('id='~vo.id) }}" class="search-btn" value="标识管理" />&nbsp;&nbsp;
+				<input type="button" id="btnfun_delete_{{key}}" data="{{ (action~'/delete')|U('id='~vo.id) }}" class="search-btn" value="删除" />
+			</td>
+		</tr>
+		{% endfor %}
+		{% endif %}
+	</tbody>
+</table>
+{% endblock %}
+{% block submit %}{% endblock %}
+{% if info is defined %}
+{% block pageIndex %}{{ info.pageIndex|default(1) }}{% endblock %}
+{% block pageCount %}{{ info.pageCount|default(1) }}{% endblock %}
+{% endif %}
+{% block promptUl %}{% endblock %}

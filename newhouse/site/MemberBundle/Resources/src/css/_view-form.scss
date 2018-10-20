@@ -1,0 +1,246 @@
+﻿%input-lg {
+    font-size: 14px;
+    line-height: 1.3333333;
+
+    height: 46px;
+    text-indent: 15px;
+    border-radius: 6px;
+}
+%input-sm {
+    font-size: 12px;
+    line-height: 1.5;
+
+    height: 30px;
+    text-indent: 10px;
+    border-radius: 3px;
+}
+.view-form {
+    .hidden, .csrf_token, .fxpid { 
+        display: none;
+    }
+    .text {
+        text-indent: 10px;
+    }
+    .btn {
+        background: #e43;
+        &:focus {
+            outline: none;
+        }
+        &:hover {
+            opacity: .8;
+        }
+    }
+    .select-wrap {
+        @extend %clearfix;
+    }
+    .select-item {
+        display: inline-block;
+        vertical-align: top;
+        margin-right: 10px;
+        input {
+            margin-right: 5px;
+            vertical-align: -1px;
+        }
+    }
+    .label-group {
+        line-height: 2;
+        label {
+            display: inline-block;
+
+            margin-right: 15px;
+        }
+        input {
+            font-family: simsun;
+
+            width: 13px;
+            height: 13px;
+            margin-right: 5px;
+
+            vertical-align: -2px;
+        }
+    }
+    .form-inline {
+        .form-control {
+            display: inline-block;
+
+            width: auto;
+
+            vertical-align: middle;
+        }
+    }
+    .form-control {
+        display: block;
+
+        width: 100%;
+        .btn,
+        .text {
+            display: block;
+            width: 100%;
+        }
+
+        //短信
+        .telcode {
+            @extend %clearfix; 
+            input {
+                text-indent: 10px;
+                float: left;
+                width: 100%;
+            }
+
+            button {
+                font-size: 12px;
+                font-family: simsun;
+                padding: 0 8px;
+                margin: 0;
+                height: 34px;
+                line-height: 34px;
+                vertical-align: top;
+            }
+        } 
+    }
+
+    .input-lg {
+        @extend %input-lg;
+    }
+
+    .input-sm {
+        @extend %input-sm;
+    }
+    
+    // 验证码
+    .code-wrap {
+        display: table;
+        width: 100%;
+        .input {
+            margin-right: -50px;
+        }
+        
+    }
+    .code-item {
+        display: table-cell;
+        white-space: nowrap;
+        width: 100%;
+        vertical-align: top;
+    }
+    .code-item-img {
+        // float: right;
+        padding-left: 15px;
+        cursor: pointer;
+    }
+    .code-item-input {
+        .txt, .text {
+            width: 100%;
+        }
+    }
+    .code-img {
+        width: 90px;
+        height: 32px;
+
+        vertical-align: middle;
+
+        border: 1px solid #e3e3e3;
+    }
+    .code-title {
+        padding-left: 5px;
+
+        text-decoration: none;
+
+        color: #999;
+    }
+    .code-btn {
+        font-size: 12px;
+        line-height: 43px;
+
+        width: auto;
+        height: 45px;
+        padding: 0 15px;
+
+        vertical-align: middle;
+        &.disabled {
+            cursor: no-drop;
+        }
+    }
+    
+    .item {
+        min-height: 38px;
+        margin-bottom: 10px;
+        &-last {
+            min-height: auto !important;
+            margin-bottom: 5px;
+        }
+    }
+    &-lg {
+        .code-img {
+            width: 123px;
+            height: 43px;
+        }
+        .btn,
+        .text {
+            @extend %input-lg;
+        }
+        .item {
+            min-height: 70px;
+        }
+        .embed-captcha {
+            padding-top: 10px;
+        }
+    }
+    &-sm {
+        .code-img {
+            width: 80px;
+            height: 28px;
+        }
+        .btn,
+        .text {
+            @extend %input-sm;
+        }
+        .item {
+            min-height: 40px;
+        }
+    }
+    
+    label.error {
+        color: #f00;
+        font-family: simsun;
+        font-size: 12px;
+        padding-right: 5px;
+        line-height: 1.4;
+        &:before {
+            font-size: 16px !important;
+            margin-left: 3px !important;
+            margin-right: 3px !important;
+            vertical-align: -3px !important;
+            @extend .font-ico-33:before;
+            @extend [class^="font-ico-"];
+        }
+    }
+    .error-wrap {
+        height: 14px;
+        line-height: 14px;
+    }
+
+    .required:before {
+        content: "* ";
+        color: #f00;
+        vertical-align: middle;
+    }
+}
+
+// 单选框
+.radio {
+    li {
+        float: left;
+        margin-right: 5px;
+        line-height: 2;
+    }
+}
+
+
+
+
+// 文本框
+textarea {
+    resize: none;
+}
+
+

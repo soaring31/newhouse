@@ -1,0 +1,120 @@
+{% extends 'HouseBundle::base_list.html.twig' %}
+{# 说明
+ * 调用: door/list
+ * item_houses: 所属楼盘
+ * item_tpl_count: 相似户型数量
+#}
+{% block list %}
+
+{% if list.data is defined and list.pageCount|default(0) != 0 %}
+    {% set houses_id = '' %}
+    {# 查找当前列表所有数据相关楼盘id #}
+    {% for item in list.data %}
+        {% if loop.index != 1 %}
+            {% set dh = ',' %}
+        {% endif %}
+        {% set houses_id = houses_id ~ dh|default('') ~ item.aid %}
+    {% endfor %}
+
+    {# 查找当前列表所有数据相关楼盘数据 #}
+    {% set list_houses_data = ('house.houses')|getAll({pageSize: 20, checked: 1, id: 'in|' ~ houses_id}) %}
+
+    {% set houses_data = {} %}
+
+    {% for item in list_houses_data.data %}
+        {% set houses_data = {
+            ('houses' ~ item.id): item.name
+        }|merge(houses_data) %}
+    {% endfor %}
+
+    {% for item in list.data %}
+
+        {% set item_tpl_count = core_global.count({
+            models: 'door',
+            sql_opt: {
+                ting: item.ting|default(''),
+                shi: item.shi|default(''),
+                aid: item.aid|default(''),
+                checked: 1,
+                id: 'neq|' ~ item.id|default(''),
+            }
+        }).__toString %}
+
+        <li class="list-item clearfix">
+            <div class="pic fl mleft0">
+                <a href="{{('door/detail')|U({id: item.id|default('')})}}" target="_blank">
+                    {% if count_btn|default(0) == 1 %}
+                        {{- core_global.lazy_img({
+                            src: item.thumb|default(''),
+                            alt: item.name|default(''),
+                            type: 1,
+                            width:180 ,
+                            height: 135
+                        }) -}}
+                    {% else %}
+                        {{- core_global.img({
+                            src: item.thumb|default(''),
+                            alt: item.name|default(''),
+                            type: 1,
+                            width:180 ,
+                            height: 135
+                        }) -}}
+                    {% endif %}
+                </a>
+            </div>
+            <div class="info fl">
+                <h3>
+                    <a href="javascript:void(0);" target="_blank" class="fr fx">
+                        {{- house_global.huxing({data: item|default(''), tpl: '%shi%%ting%%wei%'}) -}}
+                    </a>
+                    <a href="{{('door/detail')|U({id: item.id|default('')})}}" target="_blank" class="tit">
+                        {{item.name|default('')}}
+                    </a>
+                    {% if item.cate_status != '' %}
+                        {# 销售状态 #}
+                        <span class="tag on-sale-{{item.cate_status}}">
+                            {{ core_global.formData({value: item.cate_status|default('')}) }}
+                        </span>
+                    {% endif %}
+                </h3>
+                {% if houses_data['houses' ~ item.aid]|default('') %}
+                <p class="aid">
+                    <a href="{{('houses/detail')|U({id: item.aid|default('')})}}" target="_blank">
+                        所属楼盘：{{houses_data['houses' ~ item.aid]|default('-')}}
+                    </a>
+                </p>
+                {% endif %}
+                <p class="des" title="{{item.abstract|default('摘要')}}">
+                    {{core_global.substr(item.abstract|default('摘要'), 35, 1)}}
+                </p>
+                <p class="type">
+                    {{ core_global.formData({value: item.cate_type|default('')}) }}
+                </p>
+            </div>
+            <div class="other fr">
+                <p>
+                    {{ house_global.if_dj({value: item.dj|default(''), class: 'total-price'}) }}
+                </p>
+                <p class="dj">
+                    {{house_global.if_mj({value: item.mj|default(''), tpl: '面积：%value%%danwei%'})}}
+                </p>
+                {% if item_tpl_count|default('') > 0 and count_btn|default(0) == 1 %}
+                    <div class="btn compared-btn" data-compare="1" data-id="{{item.id|default('')}}" data-shi="{{item.shi|default('')}}" data-ting="{{item.ting|default('')}}" data-aid='{{item.aid|default('')}}'>
+                        相似户型展开对比<i class="font-icons-16"></i>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="blank19"></div>
+
+            <!--对比房源-->
+            <div class="compared">
+            </div>
+            <!--/对比房源-->
+        </li>
+    {% endfor %}
+{% else %}
+    <li class="noinfo">
+         暂无户型
+    </li>
+{% endif %}
+{% endblock list %}

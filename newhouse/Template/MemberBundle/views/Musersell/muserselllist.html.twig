@@ -1,0 +1,122 @@
+{% extends 'MemberBundle::base_manage_block.html.twig' %}
+{% set mid = app.user.id|default('') %} 
+{% set tpl_now = 'now'|date('U') %}  
+
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }}
+{% endblock %}
+{% block mainleft %}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ core_manage.filter([
+    {
+        title: '结算时间',
+        attr: {
+            'data-selectdate': {
+                unix: 1
+            }
+        },
+        data: [
+                {
+                    id: '1M',
+                    name: '一个月前'
+                },
+                {
+                    id: '3M',
+                    name: '三个月前'
+                }
+            ],
+        field: 'create_time',
+        method: 'selectFilter'
+    },
+    {
+        method: 'selectFormField',
+        title: '状态',
+        form: 'recommend',
+        field: 'status',
+    },
+    {
+        method: 'search',
+        field: 'name',
+        title: '请搜索名称/电话',
+    }
+]) }}
+
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+           
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+	                <th width="50" class="tac">{{core_manage.checkbox()}}</th>     
+                    <th>被推荐人姓名</th>
+                    <th width="150">联系电话</th>
+                    <th width="150" data-role="sort" data-sort="create_time">推荐时间</th>
+                    <th width="100" data-role="sort" data-sort="status">推荐状态</th>
+                    <th width="150">推荐楼盘</th>
+                    <th width="150">预估佣金(元)</th>
+                    <th width="100">佣金(元)</th>
+                    <th width="120" class="tac">编辑</th>
+                </tr>
+
+                {% if ident.info.data is defined and ident.info.pageCount|default(0) != 0 %}
+                {% for k, vo in ident.info.data %}
+                {# 楼盘id #}
+                {% set vo_houses = ('house.sell')|getOne('aid', {id: vo.aid|default('')}) %}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td >{{vo.name}}</td>
+                    <td >{{vo.tel}}</td>
+                    <td >{{ vo.create_time|date('Y-m-d') }}</td>
+                    <td ><font color="{{ {5: 'red', 4: 'green'}[(vo.status)]|default('blue') }}">{{ core_global.formField({ value: vo.status, form: 'recommend', field: 'status' }) }}</font></td>
+                    <td >
+                        {{ ('house.houses')|getOne('name', {id: vo_houses}) }}
+                    </td>
+                    <td >
+                            {{ vo.yongjin }}
+                    </td>
+                    <td >
+                        {% if vo.status == 4 %}
+                            {{ vo.yongjin }}
+                        {% else %}
+                            {# 无效 #}
+                            0
+                        {% endif %}
+                    </td>
+                    <td class="tac">
+                        {{ core_manage.show({title: '详情'}) }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+ 
+{% endblock %}
+
+{% block promptUl %}
+{# 提示说明 #}
+{{core_global.mconfigtreplace({name: 'fenxiao3guides', ename: 'mmemberguides', replace: 'sellrate,sellpoeplenum,sellunnum,selltime'})}}
+{% endblock %}

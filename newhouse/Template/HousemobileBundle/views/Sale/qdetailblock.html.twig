@@ -1,0 +1,148 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明 
+ * detail: 当前数据
+ * detaila_prices: 当前数据价格
+#}
+
+{% set detail = cident.xq_detail.data[0]|default('') %}
+
+{# 价格走势 #}
+{% set detaila_prices = ('house.houses_price')|getAll({type: detail.type|default(''), aid: detail.id|default(''), checked: 1, orderBy: 'desc', order: 'jtime',  pageSize: 10}) %}
+
+{% block result %}
+<div class="content">
+    {{- core_mobile_global.swiper_one(detail) -}}
+    <div class="list-block list-block-rent list-block-rent-mt0">
+        <ul>
+            <li class="item-content">
+                <div class="item-inner">
+                    <div class="m">
+                        <div class="t">
+                            {{detail.name|default('')}}<span class="tag tag-green ml10">现房</span>
+                        </div>
+                        <div class="p">
+                            <dl class="group-detail-p clearfix">
+                                <dd>
+                                    最高价<br>
+                                    {{house_global.if_wy({value: detail.jgjj|default('')})}}
+                                </dd>
+                                <dd>
+                                    均价<br>
+                                    {{house_global.if_dj({value: detail.dj|default('')})}}
+                                </dd>
+                                <dd>
+                                    最低价<br>
+                                    {{house_global.if_wy({value: detail.jdjj|default('')})}}
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="p p-gray">
+                            <span class="pull-right ml10">浏览：<span data-counts="{models: 'houses', field: 'clicks', id: '{{detail.id|default('')}}'}"></span>人</span>
+                            发布日期：{{detail.update_time|default('')|date('Y-m-d')}}
+                        </div>
+                    </div>
+                    <div class="s">
+                        {# 收藏按钮 #}
+                        {{core_global.collect_btn({
+                            aid: detail.id|default(''),
+                            models: detail.models|default('houses'),
+                            class: 'button-ver external',
+                            icons: 'icon font-f-30 icon-cent'
+                        })}}
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="list-block panel-block">
+        {{- housemobile_global.panel_title({title: '小区概况'})-}}
+        <div class="item-content1 p-gray">
+            <div class="item-inner2">
+                <div class="row">
+                    <div class="col-100">
+                        物业类型：{{- core_global.formData({value: detail.cate_type|default('-')}) -}}
+                    </div>
+                    <div class="col-100">
+                        竣工日期：{{detail.jgdate|default('')|date('Y-m-d')}}
+                    </div>
+                    <div class="col-100">
+                        占地面积：{{house_global.if_mj({value: detail.zdmj|default('')})}}
+                    </div>
+                    <div class="col-100">
+                        建筑面积：{{house_global.if_mj({value: detail.jzmj|default('')})}}
+                    </div>
+                    <div class="col-100">
+                        建筑年代：2012
+                    </div>
+                    <div class="col-100">
+                        绿化率：{{detail.lhl|default('-')}}
+                    </div>
+                    <div class="col-100">
+                        容积率：{{detail.rjl|default('-')}}
+                    </div>
+                    <div class="col-100">
+                        物业费：{{detail.wyf|default('-')}}
+                    </div>
+                    <div class="col-100">
+                        区域：{{core_global.region({id: detail.region|default(''), tpl: '%value%'})}}
+                    </div>
+                    <div class="col-100">
+                        小区地址：{{detail.address|default('')}}
+                    </div>
+                    <div class="col-100">
+                        物业公司：{{detail.wygs|default('-')}}
+                    </div>
+                    <div class="col-100">
+                         交通线路：{{detail.jtxl|default('-')}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="list-block panel-block">
+        {{- housemobile_global.panel_title({title:'价格趋势'})-}}
+        <div class="item-inner zst">
+            <canvas id="cms08"></canvas>
+        </div>
+    </div>
+    <div class="list-block panel-block">
+        {{- housemobile_global.panel_title({title:'地图'})-}}
+        <div class="item-inner">
+            {{housemobile_global.map({
+                title: detail.name|default(''),
+                map: detail.map|default(''),
+                popup : '.popup-map'
+            })}}
+        </div>
+    </div>
+    {{ render(controller('HouseBundle:Common:footer', {_isApp: url_isApp})) }}
+</div>
+
+{# 走势图数据 #}
+{% set xAxis = [] %}
+{% for item in detaila_prices.data[ : 12] %}
+    {% set xAxis = [item.jtime|default('')|date('m/d')]|merge(xAxis) %}
+{% endfor %}
+
+{% set zstData = [] %}
+{% for item in detaila_prices.data[ : 12] %}
+    {% set zstData = [item.dj|default('')]|merge(zstData) %}
+{% endfor %}
+
+<script type="text/javascript">
+    seajs.use(['mobilezst'], function (mobilezst){
+        mobilezst(null, {
+            // 横坐标定义 结构 xAxis = []
+            xAxis: {{ xAxis|json_encode|raw }},
+            // 纵坐标数据定义 结构 zstData = [[数据1], [数据2], [数据3]];
+            data: {{ zstData|json_encode|raw }}
+        });
+    });
+
+    seajs.use(['sm', 'common'], function (sm, common) {
+        common.getcounts({
+            url: '{{("igetcounts/index")|U({})}}'
+        });
+    });
+</script>
+{% endblock result %}

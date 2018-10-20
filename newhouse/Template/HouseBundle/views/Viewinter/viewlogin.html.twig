@@ -1,0 +1,21 @@
+{# {% extends "HouseBundle::base.html.twig" %} #}
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+
+{% set bundle = bundlepath %}
+    {{core_global.inter({
+	    form_id: 296,
+	    action: bundle ~ '/manage/login',
+	    noJump: '1',
+	    uconfig: 'loginflag=1',
+	    modal: '.winlogin',
+	    class: 'view-form-lg',
+	    submit_title: '登录'
+	})}} 
+
+	{# {{dump(bundle)}} #}
+
+	{# {{ ('manage/login')|U({}) }} #}
+
+{# /newcore/web/house/manage/login?loginflag=1 #}
+
+    

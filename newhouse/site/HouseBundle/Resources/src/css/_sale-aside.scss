@@ -1,0 +1,194 @@
+﻿/*!
+ * @name sale-aside.css
+ * @author xying
+ * @date 2016-8-11
+ * @dec common aside for sale rent
+ */
+$sale-aside-w: 250px !default;
+
+/*
+左侧栏
+*/
+.side {
+	float: right;
+	width: $sale-aside-w;
+}
+// 按钮
+.s-info {
+	a {
+		display: block;
+		width: 248px;
+		height: 30px;
+		border: 1px solid $major-color;
+		color: $major-color;
+		text-align: center;
+		line-height: 32px;
+		font-size: 16px;
+		text-decoration: none;
+		&:hover{
+			background: $major-color;
+			color: #fff;
+		}
+	}
+}
+// 标题
+.s-title {
+	height: 36px;
+	border: 1px solid #ccc; 
+	background: #f6f6f6;
+	margin-top: 20px;
+	margin-bottom: -1px;
+	line-height: 38px;
+	text-indent: 18px;
+	font-size: 16px;
+	color: #333;
+	font-weight: 500;
+}
+// 最近浏览过的房子
+.s-look {
+	padding: 10px;
+	width: 228px;
+	border: 1px solid #ccc;
+
+	li {
+		line-height: 28px;
+		i {
+			display: inline-block;
+		}
+
+		b {
+			font-weight: 500;
+		}
+
+		span {
+			display: inline-block;
+		}
+
+		a:hover {
+			color: $major-color;
+		}
+		.left {
+		    vertical-align: middle;
+		    font-size: 16px;
+		    width: 100px;
+		    overflow: hidden;
+		    display: inline-block;
+		    color: #333;
+		    height: 28px;
+		    margin-right: 5px;
+		    text-align: left;
+		}
+		.middle {
+			font-size: 14px;
+			color: #666;
+			width: 50px;
+			margin-right: 10px;
+			text-align: right;
+		}
+
+		.right {
+			color: #f60;
+			font-size: 14px;
+			width: 50px;
+			text-align: right;
+		}
+	}
+}
+// 推荐经纪人
+.s-agent {
+	padding: 10px;
+	width: 228px;
+	border: 1px solid #ccc;
+
+	li {
+		padding: 8px 0;
+		border-bottom: 1px dashed #ccc;
+	}
+	img {
+		float: left;
+		width: 80px;
+		height: 100px;
+	}
+
+	.no-border {
+		border-bottom: none;
+	}
+}
+.s-a-info {
+	margin-left: 95px;
+	h3 {
+		line-height: 30px;
+		color: #333;
+		font-size: 14px;
+	}
+	i {
+		display: inline-block;
+		width: 16px;
+		height: 16px;
+		border-radius: 2px;
+		font-size: 12px;
+		color: #fff;
+		line-height: 15px;
+		text-align: center;
+		margin-left: 0;
+	}
+
+	p {
+		line-height: 23px;
+	}
+
+	.shou {
+		background: #f06d07;
+	}
+
+	.zu {
+		margin-left: 28px;
+		background: #2d99d6;
+	}
+
+	span {
+		font-size: 14px;
+		color: #333;
+	}
+}
+// 最新二手房
+.s-new {
+	padding: 20px 20px 0 20px;
+	width: 208px;
+	border: 1px solid #ccc;
+
+	li {
+		margin-bottom: 14px;
+		img {
+			display: block;
+		}
+		
+		p {
+			line-height: 30px;
+			font-size: 14px;
+			@extend %clearfix;
+		}
+
+		a:hover {
+			color: $major-color;
+		}
+		
+		.name {
+			float: left;
+			width: 128px;
+		}
+
+		.money {
+			float: right;
+			color: $major-color;
+		}
+
+		.left {
+			float: left;
+		}
+
+		.right {
+			float: right;
+		}
+	}
+}

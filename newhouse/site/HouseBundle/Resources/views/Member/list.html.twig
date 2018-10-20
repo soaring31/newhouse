@@ -1,0 +1,101 @@
+{% extends 'HouseBundle:Sale:sale_layout.html.twig' %}
+{# 说明
+** models: 当前页面
+** sort_data_opt:重新排序变量
+** 以下是筛选区域数据定义
+*      1、filter_rows： 横排显示筛选条件条数
+*      2、filter_opt：筛选条件数据
+#}
+
+{% block title %}经纪公司列表{% endblock title %}
+
+{% block css %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/member.css')}}
+{% endblock css %}
+
+{# 搜索 #}
+{% block top_search %}
+    {% set tpl_topsearch_action = 'sale/xqlist' %}
+    {% set tpl_topsearch_placeholder = '请输小区名称/拼音' %}
+    {{ parent() }}
+{% endblock top_search %}
+{% set list_ident = ident.list|default('') %}
+
+
+{# 当前位置 #}
+{% block current_container %}
+    <a href="{{('sale/list')|U}}">二手</a>
+    <span>&gt;</span>
+    {% block current_member %}
+        <span>经纪公司列表</span>
+    {% endblock current_member %}
+{% endblock current_container %}
+
+{% block container %}
+    {# 头部 #}
+    {% set head_data = {
+        jjr: {
+            title: '经纪人',
+            icons: 'font-lp-40',
+            url: ('member/j_list')|U
+        },
+        jjgs: {
+            title: '经纪公司',
+            icons: 'font-lp-41',
+            url: ('member/list')|U
+        }
+    } %}
+    {# 检索数据源 #}
+    {% set cate_data = house_global.cate_data({ 
+                    tag: 'region',
+                }).__toString|json_decode %}
+    {# 筛选条件 #}
+    {{house_global.filter_cfg({
+        head_data: head_data,
+        action: action
+    }|merge(cate_data))}}
+    <div class="blank30"></div>
+    <div class="container">
+        <div class="main">
+            <div class="tag">
+                <div class="tag-head">
+                    {{house_global.fy_title({
+                        data: [
+                            {
+                                name: tpl_title|default('经纪公司'),
+                                url: (action)|U,
+                            }
+                        ]
+                    })}}
+                </div>
+            </div>
+            {% block list_member %}
+                <div class="cmp-con">
+                    {# 列表 #}
+                    {{house_global.member_list({
+                        list: list_ident,
+                    })}}
+                    <!--page-->
+                    <div class="blank20"></div>
+                    {{core_global.page(list_ident)}}
+                    <!--page-->
+                </div>
+            {% endblock list_member %}
+        </div>
+        {# tpl_tjj 不显示经纪人 #}
+        {{house_global.sale_aside({models: 'sale', tpl_tjj: 12})}}
+    </div>
+    <div class="blank20"></div>
+{% endblock container %}
+
+{% block container_houses_list %}
+<div class="cmp-con">
+    {{house_global.member_j_list({
+        list: ident.list
+    })}}
+    <!--page-->
+    <div class="blank20"></div>
+    {{core_global.page(ident.list)}}
+    <!--page-->
+</div>
+{% endblock container_houses_list %}

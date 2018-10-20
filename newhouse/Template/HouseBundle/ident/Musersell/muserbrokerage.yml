@@ -1,0 +1,25 @@
+info:
+    tableName: recommend
+    subTableName: ''
+    aliasName: w
+    listGrid: {  }
+    listDesc: ''
+    subJoinField: ''
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 12
+    groupBy: ''
+    order: id
+    orderBy: desc
+    searchFun: EXISTS
+    dataModel: 0
+    autoQuery: '0'
+    alias: {  }
+    query:
+        uid:
+            eq: '<id>'
+        status:
+            in: '4,5'
+        checked:
+            eq: '1'
+    query1: {  }

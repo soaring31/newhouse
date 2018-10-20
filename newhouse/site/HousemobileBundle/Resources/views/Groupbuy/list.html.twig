@@ -1,0 +1,35 @@
+{% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:groupbuy_list.html.twig' : 'HousemobileBundle::list_layout.html.twig' %}
+{# 说明 
+ * search_action: 搜索配置
+#}
+{% set search_action = ('groupbuy/list')|UU({}, true) %}
+	
+{% block title %}
+    {{cur_area_data|default('')}}购房团购_{{cur_area_data|default('')}}楼盘团购_{{cur_area_data|default('')}}买房团购
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}购房团购,{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}买房团购,{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}楼盘团购">
+<meta name="description" content="{{cur_area_data|default('')}}购房团购,{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}提供热门{{cur_area_data|default('')}}楼盘团购活动，为您提供优惠房产团购，尽享抄底折扣，报名参与{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}买房团购可享免费看房！ ">
+{% endblock key_des %}
+
+{% block header_right %}
+{{ core_mobile_global.bar_nav_btn({
+    title: '搜索',
+    icon: 'font-f-8',
+    popup: {
+        title: '团购搜索',
+        popup: '.popup-search',
+    }
+}) }}
+{% endblock header_right %}
+
+{% block header_title %}
+{{core_mobile_global.title({title: '团购'})}}
+{% endblock header_title %}
+
+{% block container %}
+    {# 列表链接 js调用列表需要 #}
+    {% set list_url = ('groupbuy/list')|U({ajax: 1}) %}
+    {{ parent() }}
+{% endblock container %}

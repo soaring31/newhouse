@@ -1,0 +1,25 @@
+{% extends "HouseBundle::base_show.html.twig" %}
+{% block js %}
+{% endblock %}
+
+{% block mainMenu %}{% endblock mainMenu %}
+
+{% block body %}
+<table class=" popup-form-table form " style="width: 100%">
+	<tr>
+		<td>
+			<div>
+                <div class="form-row">
+                    <div class="form-cell-label">js调用代码</div>
+                    <div class="form-errors"></div>
+                    <div class="form-cell">
+                    	<textarea><script type="text/javascript" src="{{('fragments/fragmentstpl')|U({tpl: app.request.get('tpl')}, true)}}"></script></textarea>
+                    	<div class="tip">适用于任何核心的系统进行跨站数据的js调用，只需拷贝此段js到相应的地方即可调用到对应的数据</div>
+                    </div>
+                </div>
+            </div>
+		</td>
+	</tr>
+</table>
+
+{% endblock %}

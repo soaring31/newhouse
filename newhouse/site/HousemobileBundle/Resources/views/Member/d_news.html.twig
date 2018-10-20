@@ -1,0 +1,27 @@
+{% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:newslist.html.twig' : 'HousemobileBundle:Member:detail.html.twig' %}
+
+{% block header_title %}
+    {{core_mobile_global.title({title: '公司动态'})}}
+{% endblock header_title %}
+
+{% set tpl_data_none = '公司动态' %}
+
+{% block container %}
+    {# 列表链接 js调用列表需要 #}
+    {% set list_url = ('member/d_news')|U({ajax: 1, id: detail.id|default(0)}) %}
+
+    {{core_mobile_global.list_scroll({
+	    url: list_url|default('')
+	})}}
+{% endblock container %}
+
+{% block result %}
+{# 定义额外链接 目前只有经纪公司中的公司动态使用 #}
+{% set models = {models: 'news'}|merge({default_url: 1}) %}
+{{parent()}}
+{% endblock result %}
+
+{% block nav %}
+	{% set nav_users_act = 5 %}
+	{{parent()}}
+{% endblock nav %}

@@ -1,0 +1,19 @@
+{% extends "CoreBundle:Dispatch:jump.html.twig" %}
+{% set tpl_title = tpl_title|default("提示信息") %}
+{% set tpl_img = 3 %}
+{% set tpl_content = tpl_content|default("出错啦！请点击刷新或返回按钮") %}
+{% set tpl_abstract = info|default('') %}
+{% set tpl_btn_data = {
+	0: {
+        name: '返回上一页',
+        url: url|default('javascript:;')
+    },
+    1: {
+        name: '返回首页',
+        url: ('index/index')|U
+    },
+    2: {
+        name: '刷新本页',
+        url: 'javascript:location.reload();'
+    }
+} %}

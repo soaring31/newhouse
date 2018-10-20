@@ -1,0 +1,13 @@
+/newhouse/Config/
+/newhouse/app/cache/
+/newhouse/app/logs/
+/newhouse/web/webpic/
+/newhouse/web/uploads/
+.idea/
+/newhouse/web/attachment/
+*.DS_Store
+.buildpath
+.project
+.settings/
+/workshop/
+/newhouse/app/config/

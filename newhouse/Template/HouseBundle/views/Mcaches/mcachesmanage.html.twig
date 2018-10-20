@@ -1,0 +1,122 @@
+
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+    {% set aid = app.request.get('aid') %}
+{% block js %}
+<script type="text/javascript">
+    seajs.use(['utils'], function(utils) {
+        $('#clear-cache').off().on('click', function() {
+            // 清除本地缓存
+            utils.localStorage.removeItem(/manage_/);
+        })
+    })
+</script>
+<style type="text/css">
+    /*临时处理*/
+    [data-route="gengxinhuancun"] {
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }} 
+    {{ core_manage.submit({
+         url: ('mcaches/clear')|U ,
+         title: '更新缓存',
+         ico: 'font-ico-41 mr5',
+         id: 'clear-cache',
+         'data-ajax-title': '更新中...',
+         'data-ajax': 1
+    }) }}
+{% endblock %}
+
+{% block mainleft %}
+   {#  {{ render(controller('HouseBundle:Mnews:category', {category: category, action: 'mnews/mnewsmanage'})) }} #}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ core_manage.filter([
+    {
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增缓存方案'
+    },
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            models: '{{ models }}',
+            category: '{{ category }}'
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="60" data-role="sort" data-sort="id" class="sort">ID</th>
+                    <th width="220">名称</th>
+                    <th>规则</th>
+                    <th width="120" class="tac">缓存时间</th>
+                    <th width="80">状态</th>
+                    <th width="120" class="tac">操作</th>
+                </tr>
+                {% if ident.info.data is defined %}
+                {% for k, vo in ident.info.data %}
+                    {# {{dump(vo)}} #}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td>{{ vo.id }}</td>
+                    <td><span data-role="itemEdit" data-name="name" data-value="{{ vo.name }}">{{core_global.substr( vo.name|default(''), 16, 1)}}</span></td>
+                    <td class="word-wrap">{{ vo.path}}</td>
+                    <td class="tac">
+                        {{ core_global.formField({value: vo.date, form: 'cache', field: 'date'}) }}
+                    </td>
+                    <td>
+                        {{ core_global.formField({value: vo.status, form: 'cache', field: 'status'}) }}
+                    </td>
+                    <td class="tac">
+                        {{ core_manage.show() }}
+                        {{ core_manage.delete() }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="7" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+{{ core_manage.oprate([
+     {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'status',
+        form: 'cache',
+        title: '状态',
+    }
+]) }}
+{% endblock %}
+
+{% block promptUl %}
+// require('markdown')
+1. 设置启用则生效
+1. 规则可以使用正则表达式
+1. 优先匹配前面的，当匹配后不在匹配
+{% endblock %}
+
+
+
+

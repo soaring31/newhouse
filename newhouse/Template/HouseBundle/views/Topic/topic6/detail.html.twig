@@ -1,0 +1,756 @@
+{% extends 'HouseBundle:Topic:extend.html.twig' %}
+{% set filter_rows = 4 %}
+{# 检索配置 #}
+{% set filter_opt = {
+    region: {
+        title: '区域',
+        src: 'db.area',
+        sql_opt: {
+            pid: app.session.get('area')|default(0)
+        }
+    },
+    dj: {
+        title: '价格',
+    },
+    cate_type: {
+        title: '类型',
+    },
+    tslp: {
+        title: '特色',
+        type: 'form',
+        src: 'houses_common',
+    }
+} %}
+
+{% block title %}专题模板6{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{ detail.keywords|default('') }}" />
+<meta name="description" content="{{ detail.abstract|default('') }}" />
+{% endblock key_des%}
+
+{% block css %}
+    {{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/special-6.css')}}
+{% endblock css %}
+
+{% block body %}
+
+<body>
+
+    <div class="bKbanner">
+        <div class="container">
+            <div class="row">
+
+                <div class="c-fl information">
+                  <ul class="ap_form">
+                    <li>
+                      <span>出发时间</span>
+                      <input name="time" id="txttime" class="bzTb11 bzTb11_5 hasDatepicker" type="text" placeholder="预约时间 早7:00-晚18:00">
+                      <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-7/icon_clock.png'}) -}}" class="icon_clock" alt=""></li>
+                    <li>
+                      <span>上车地点</span>
+                      <input name="beizhu" id="lookaddress" class="bzTb11 bzTb11_6" type="text" placeholder="请输入上车地点"></li>
+                    <li>
+                      <span>手机号</span>
+                      <input name="mobile" id="txtsmsphone" class="bzTb11 bzTb11_2" type="text" placeholder="请输入手机号">
+                      <button type="button" id="btnsend" class="submit">发送验证码</button>
+                    </li>
+                    <li style="display:none" id="li_chkcode">
+                      <span>验证码</span>
+                      <input name="txt_chkcode" id="txt_chkcode" class="bzTb11 bzTb11_6" type="text" placeholder="请输入验证码"></li>
+                    <li style="margin-bottom:35px; padding-left:95px">
+                      <button class="btn" id="btnsave" type="button">叫看房车</button>
+                    </li>
+                  </ul>
+                  <div class="refer-ok right-ok" style="display: none;">
+                    <p> <i class="glyphicon"><img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-7/ok.png'}) -}}"></i>
+                      <span>恭喜您预约成功</span>
+                    </p>
+                    <p class="mb10">
+                      <a href= "#" target="_blank" class="see_yy">查看我的预约</a>
+                    </p>
+                    <p class="f-gray01">请保持手机畅通，稍后我们将联系您，确定具体看房时间</p>
+                  </div>
+                  <div class="refer-ok erro-no" style="display: none;">
+                    <p> <i class="glyphicon"><img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-7/action.png'}) -}}"></i>
+                      <span>二十四小时之内不能重复提交相同的预约</span>
+                    </p>
+                  </div>
+                  <div class="right-box" id="div_area" style="visibility: hidden;">
+                    <div class="txt-tip">
+                      <p>稍后我们将与您确定具体意向楼盘</p>
+                    </div>
+                    <div class="area-list">
+                      <div class="list-item divExpand">
+                        <div class="top  clearfix" style="height: 66px;">
+                          <div class="middle-txt">
+                            <span>
+                              <span class="f_bold">中山区</span>
+                              （共129个楼盘任意看）
+                            </span>
+                          </div>
+                        </div>
+                        <div class="top  clearfix" style="height: 66px;">
+                          <div class="middle-txt">
+                            <span>
+                              <span class="f_bold">西岗区</span>
+                              （共38个楼盘任意看）
+                            </span>
+                          </div>
+                        </div>
+                        <div class="top  clearfix" style="height: 66px;">
+                          <div class="middle-txt">
+                            <span>
+                              <span class="f_bold">沙河口区</span>
+                              （共100个楼盘任意看）
+                            </span>
+                          </div>
+                        </div>
+                        <div class="top  clearfix" style="height: 66px;">
+                          <div class="middle-txt">
+                            <span>
+                              <span class="f_bold">甘井子区</span>
+                              （共252个楼盘任意看）
+                            </span>
+                          </div>
+                        </div>
+                        <div class="top  clearfix" style="height: 66px;">
+                          <div class="middle-txt">
+                            <span>
+                              <span class="f_bold">开发区</span>
+                              （共178个楼盘任意看）
+                            </span>
+                          </div>
+                        </div>
+                        <div class="top  clearfix" style="height: 66px;">
+                          <div class="middle-txt">
+                            <span>
+                              <span class="f_bold">高新园区</span>
+                              （共51个楼盘任意看）
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bkNavFloat">
+            <ul class="unstyled">
+                <li class="on" index="0">
+                    <a href= "#h0">购房能力评估</a>
+                </li>
+                <li index="1">
+                    <a href= "#h1">找房</a>
+                </li>
+                <li index="2">
+                    <a href= "#h2">看房</a>
+                </li>
+                <li index="3">
+                    <a href= "#h3">合同</a>
+                </li>
+                <li index="4">
+                    <a href= "#h4">贷款</a>
+                </li>
+                <li index="5">
+                    <a href= "#h5">交房</a>
+                </li>
+                <li index="6">
+                    <a href= "#h6">房产证</a>
+                </li>
+                <li index="7">
+                    <a href= "#h7">落户</a>
+                </li>
+            </ul>
+    </div>
+    <div class="container">
+        <div class="bkInfo">
+            <!--能力评估-->
+            <div class="gogal pingGu" id="h0">
+                <h2>
+                    <i>1</i>
+                    购房能力评估
+                </h2>
+                <div class="divInfo">
+                    <div class="pull-right bkWidth">
+                        <h3>帮您测算总价多少的房子最适合您?</h3>
+                        <div class="bkBtna">
+                            <a href= "#" target="_blank">购房能力评估</a>
+                        </div>
+                    </div>
+                    <div class="pull-left">
+                        <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-6/bk01.png'}) -}}" alt=""></div>
+                </div>
+            </div>
+            <!--找房-->
+            <div class="gogal gouFang" id="h1">
+                <h2>
+                    <i>2</i>
+                    找房
+                </h2>
+                <div class="divInfo clearfix">
+                    <div class="gogal clearfix">
+                        <ul class="unstyled">
+                            <li class="icon0">
+                                <a href= "#" target="_blank">
+                                    <i>网上选房</i>
+                                </a>
+                                <a href= "#" target="_blank">
+                                    <p>网上选房</p>
+                                </a>
+                            </li>
+                            <li class="icon1">
+                                <i>手机找房</i>
+                                <p>手机找房</p>
+                            </li>
+                            <li class="icon2">
+                                <i>线下看房</i>
+                                <p>线下看房</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="gogal readText clearfix">
+                        <h3>找房首要要素：价位、地段</h3>
+                        {{house_global.filter_cfg({
+                            filter_opt: filter_opt|default({}),
+                            action: action
+                        })}}
+                        <h4>也可以考虑下：环境、配套、学区、开发商实力... 有钱就可以任性</h4>
+                    </div>
+                </div>
+            </div>
+            <!--看房-->
+            <div class="gogal kanFang" id="h2">
+                <h2>
+                    <i>3</i>
+                    看房
+                </h2>
+                <div class="divInfo">
+                    <div class="gogal greenRect clearfix">
+                        <ul class="unstyled text-center">
+                            <li>
+                                <h3>
+                                    <i>01</i>
+                                    在线报名
+                                </h3>
+                                <p>填写您的购房需求</p>
+                                <p>或点击小二管家线上报名</p>
+                            </li>
+                            <li>
+                                <h3>
+                                    <i>02</i>
+                                    电话报名
+                                </h3>
+                                <p>拨打400-632-2002转12345</p>
+                                <p>报名看房so easy</p>
+                            </li>
+                            <li>
+                                <h3>
+                                    <i>03</i>
+                                    参团看房
+                                </h3>
+                                <p>每期不同看房线路</p>
+                                <p>短期速成看房专家</p>
+                            </li>
+                        </ul>
+                        <ul class="unstyled text-center">
+                            <li>
+                                <h3>
+                                    <i>04</i>
+                                    自主组团
+                                </h3>
+                                <p>免费看房全程专业咨询</p>
+                                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            </li>
+                            <li>
+                                <h3>
+                                    <i>05</i>
+                                    独家优惠
+                                </h3>
+                                <p>小二管家帮您杀价</p>
+                                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="gogal bigImg">
+                        <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-6/kanfangBigImg.png'}) -}}" alt=""></div>
+
+                </div>
+            </div>
+            <!--合同-->
+            <div class="gogal heTong" id="h3">
+                <h2>
+                    <i>4</i>
+                    合同
+                </h2>
+                <div class="divInfo" style="margin-left: 55px">
+                    <div class="row threeRect clearfix">
+                        <ul>
+                            <li class="rect01">
+                                <span>1</span>
+                                <h4>社保局办社保证明</h4>
+                                <p>社保证明：外地人在个别限定严格的楼盘购房，可能需要近三个月或半年的社保或纳税证明；</p>
+                                <p>办理地点：当地社保局;</p>
+                                <p>携带证件：1、身份证或社保卡 2、暂住证</p>
+                            </li>
+                            <li class="rect02">
+                                <span>2</span>
+                                <h4>民政局办单身证明</h4>
+                                <p>单身证明：未婚人士购房前需开具单身证明</p>
+                                <p>办理地点：常住户口所在城区的民政局</p>
+                                <p>携带证件：1.当事人的户口簿或户籍证明 2.身份证 3.二寸近期彩照2张</p>
+                            </li>
+                            <li class="rect03" style="margin-right: 0">
+                                <span>3</span>
+
+                                <h4>房产档案馆办理无房产证明</h4>
+                                <p style="line-height:16px;">一、申请人本人带有效身份证、户口簿原件到场办理业务</p>
+                                <p style="line-height:16px;">
+                                    二、申请人不能到场办理业务
+                                    <br>
+                                    1、申请人配偶可持有效身份证明原件、结婚证原件、申请人户口簿原件。
+                                    <br>
+                                    2、申请人父母或子女持有效身份证明原件、申请人户口簿原件。
+                                    <br>3、申请人可到公证处办理委托公证，委托人持有效身份证明原件、委托书原件办理。</p>
+
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="gogal liuc">
+                        <div class="tit clear">
+                            <h3 class="fl">认购流程</h3>
+                        </div>
+                        <div class="liucList clearfix">
+                            <ul class="unstyled">
+                                <li class="i01">
+                                    <i>01</i>
+                                    <p>认筹/排号</p>
+                                </li>
+                                <li class="i02">
+                                    <i>02</i>
+                                    <p>交定金</p>
+                                </li>
+                                <li class="i03">
+                                    <i>03</i>
+                                    <p>签订认购书</p>
+                                </li>
+                                <li class="i04">
+                                    <i>04</i>
+                                    <p>交首付</p>
+                                </li>
+                                <li class="i05">
+                                    <i>05</i>
+                                    <p>办贷款</p>
+                                </li>
+                                <li class="i06">
+                                    <i>06</i>
+                                    <p>签合同</p>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- 这里有一个js效果 -->
+                        <div class="liucList_txt">
+                            <ul>
+                                <li>
+                                    <p>1、认筹/排号</p>
+                                    认筹金缴纳于楼盘开盘前，是购房者买房诚意的体现。当购房者交纳认筹金后，就获得了此房屋的优先购买权，同时享受购买此房屋的一定优惠。真正售房时，“认筹者”可获优先顺序进行选房。
+                                </li>
+                                <li class="hid">
+                                    <p>2、交定金</p>
+                                    定金又称保证金；指在合同订立或履行前支付的一定数额的金钱，是作为担保的方式。
+                                </li>
+                                <li class="hid">
+                                    <p>3、签订认购书</p>
+                                    商品房认购书是商品房买卖双方在签订商品房预售合同或商品房现房买卖合同之前所签订的文书，是对双方交易房屋有关事宜的初步确认。
+                                </li>
+                                <li class="hid">
+                                    <p>4、交首付</p>
+                                    首付就是买房时按国家比例第一次支付的最低比例款项，当然支付也可以高于这个额度，但是不能低于它，余下的从银行贷款。从2006年6月1日起，个人住房按揭贷款首付款比例不得低于30%。考虑到中低收入群众的住房需求，对购买自住住房且套型建筑面积90平方米以下的仍执行首付款比例20%的规定。
+                                </li>
+                                <li class="hid">
+                                    <p>5、办贷款</p>
+                                    所谓按揭是指购房者向开发商购买房屋时，先预付购房款的一部分，其余房价款向银行贷款，而以购房合同项下的房地产及其相关权益抵押给银行做为还贷的保证，并由开发商为购房者作担保的行为。
+                                </li>
+                                <li class="hid">
+                                    <p>6、签合同</p>
+                                    购房合同是根据《中华人民共和国合同法》、《中华人民共和国城市房地产管理法》及其他有关法律、法规之规定，买受人和房地产开发企业，在平等、自愿、协商一致的基础上就买卖商品房达成的协议。
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!--货款-->
+            <div class="gogal daikuan" id="h4">
+                <h2>
+                    <i>5</i>
+                    贷款
+                </h2>
+                <h3 class="calcBtnA">
+                    <a href= "#">
+                        <s></s>
+                        贷款计算器
+                    </a>
+                </h3>
+                <div class="divInfo " >
+                    <div class="gogal detailText">
+                        <div class="detaulBox jqDuang" data-cell=".unstyled" data-obj=".gogal" data-autoplay="0">
+
+                            <div class="hd pull-left ">
+                                <ul class="unstyled">
+                                    <li class="green">商业贷款</li>
+                                    <li class="purple" style="padding:18px 15px;">公积金贷款</li>
+                                    <li class="red">组合贷款</li>
+                                </ul>
+                            </div>
+                            <div class="bd pull-left">
+                                <div class="gogal green" style="height: 408px; display: block;">
+                                    <h3>办理流程</h3>
+                                    <h4 class="lc">递交申请及材料 → 银行受理调查 → 银行核实审批 → 双方办理相关手续 → 银行发放贷款</h4>
+                                    <h3>
+                                        所需材料 <em>（复印件请用A4纸型）</em>
+                                    </h3>
+                                    <p> <strong>贷款预批材料：</strong>
+                                        1、合法的购买住房合同、协议及相关批准文件；2、贷款申请人身份证，户口簿，婚姻证明（验原件收复印件）
+                                    ；3、买方及配偶的收入证明原件；4、卖方的房屋所有权证和国有土地使用权证（验原件收复印件）；5、经办银行认可的有关部门
+                                    出具的借款人稳定经济收入证明或其他偿债能力证明资料6、其他资料（根据各贷款银行的要求提供）。
+                                    </p>
+                                    <p> <strong>抵押登记材料：</strong>
+                                        1、买方的房屋所有权证；2、买方的国有土地使用权证；3、抵押物或质押权利清单及权属证明文件，有处分权人出具的同意抵押或质押的证明；4、保证人出具的同意提供担保的书面承诺及保证人的资信证明。
+                                    </p>
+                                    <p>
+                                        <strong>卖方取款材料：</strong>
+                                        1、资金监管协议；2、房产开发商营业执照、资质证书、法人代表身份证；3、房产开发商或代理商的收款帐号。
+                                    </p>
+                                </div>
+                                <div class="gogal purple" style="height: 408px; display: none;">
+                                    <h3>办理流程</h3>
+                                    <h4 class="lc">递交申请到住房公积金部  → 按照贷款政策受理调查 → 办理担保抵押 → 办理相关手续 → 银行发放贷款</h4>
+                                    <h3>
+                                        所需材料 <em>（复印件请用A4纸型）</em>
+                                    </h3>
+                                    <p>
+                                        <strong>贷款预批材料：</strong>
+                                        1、商品房买卖备案合同、协议及相关批准文件；2、贷款申请人身份证，户口簿，婚姻证明（验原件收复印件） ；3、买方及配偶的收入证明原件；4、卖方的房屋所有权证和国有土地使用权证（验原件收复印件）（注：所购楼盘五证必须齐全）；5、经办银行认可的有关部门 出具的借款人稳定经济收入证明或其他偿债能力证明资料6、其他资料（根据各贷款银行的要求提供）。
+                                    </p>
+                                    <p>
+                                        <strong>抵押登记材料：</strong>
+                                        1、买方的房屋所有权证；2、买方的国有土地使用权证；3、抵押物或质押权利清单及权属证明文件，有处分权人出具的同意抵押或质押的证明；4、保证人出具的同意提供担保的书面承诺及保证人的资信证明。
+                                    </p>
+                                    <p>
+                                        <strong>卖方取款材料：</strong>
+                                        1、资金监管协议；2、房产开发商营业执照、资质证书、法人代表身份证；3、房产开发商或代理商的收款帐号。
+                                    </p>
+                                </div>
+                                <div class="gogal red" style="height: 408px; display: none;">
+                                    <h3>办理流程</h3>
+                                    <p>
+                                        如果市民在购房时，公积金的贷款额度不足，市民还可以选择组合贷款。组合贷款是住房公积金管理部门运用政策性住房资金、商业银行利用信贷资金向同一借款人发放的贷款，是政策性贷款和商业性贷款组合的总称。一般是在个人贷款超过当地规定的公积金贷款的最高上限时使用。例如，市民在购房时，需要贷款35万元，而自己的公积金最高贷款额为25万元，这时，剩余的10万元可以使用商业贷款。
+                                    </p>
+                                    <p>组合贷款办理流程为商业贷款和组合贷款的双线流程。</p>
+                                    <p>注：结合贷款要看所购楼盘是否允许。</p>
+                                </div>
+                            </div>
+                            <div class="cl"></div>
+                        </div>
+                    </div>
+                    <div class="gogal jrLc">
+                        <div class="subTit">
+                            <em>贷款流程：</em>
+                        </div>
+                        <div class="lcList clearfix">
+                            <ul class="unstyled">
+                                <li class="textIcon">
+                                    <i class="i01"></i>
+                                    <p>征信查询</p>
+                                </li>
+                                <li class="arrow"></li>
+                                <li class="textIcon">
+                                    <i class="i02"></i>
+                                    <p>申请贷款</p>
+                                </li>
+                                <li class="arrow"></li>
+                                <li class="textIcon">
+                                    <i class="i03"></i>
+                                    <p>信贷专员联络</p>
+                                </li>
+                                <li class="arrow"></li>
+                                <li class="textIcon">
+                                    <i class="i04"></i>
+                                    <p>准备材料</p>
+                                </li>
+                                <li class="arrow"></li>
+                                <li class="textIcon">
+                                    <i class="i05"></i>
+                                    <p>等待审核</p>
+                                </li>
+                                <li class="arrow"></li>
+                                <li class="textIcon">
+                                    <i class="i06"></i>
+                                    <p>成功放贷</p>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="tel" style="margin-top:20px;">
+                            <div class="telNo" title="400-632-2002转12345"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--交房-->
+            <div class="gogal jiaoFang" id="h5">
+                <h2>
+                    <i>6</i>
+                    交房
+                </h2>
+                <div class="divInfo">
+                    <div class="gogal yanfang">
+                        <h3 class="jfTitle">01）验房&gt;&gt;</h3>
+                        <div class="textBox">
+                            <div class="gogal r01">
+                                <h4>
+                                    <i></i>
+                                    验房程序
+                                </h4>
+                                <p>一、查看两书一表：《住宅质量保证书》、《住宅使用说明书》、《竣工验收备案表》；面积实测数据对照购房合同上的面积。</p>
+                                <p>
+                                    二、不交费、不签字、先验房：发现问题后更不能交费、签字。应先修房，同时取证、为日后举证奠定基础，特别保存好验房问题备案单。核查房屋总面积超出或减少百分之三以内的情况很普遍；套内面积减少、公摊面积增加的情况更多。
+                                </p>
+                                <p>三、房屋完好：签业主公约、前期物业管理合同时，看好条款，不能放弃自己的权利。</p>
+                                <p>四、交合理费用：（包括：物业管理费(部分含电梯费)、采暖费、垃圾清运费、预存部分水电煤气费）</p>
+                            </div>
+                            <div class="gogal r02">
+                                <h4>
+                                    <i></i>
+                                    验房流程及工具
+                                </h4>
+                                <p>一、先看外部：外立面、外墙瓷砖和涂料、单元门、楼道。</p>
+                                <p>
+                                    二、再查内部：入户门、门、窗、天棚、墙面、地面、墙阴阳角、墙砖、地砖、上下水、防水存水、暖气、煤气、通风、采光、排烟 、强弱电配电箱、强电: 排气插座、开关、照明灯；弱电:可视对讲、呼叫报警、电话、宽带、有线电视。
+                                </p>
+                                <p>三、后测相邻：闭存水试验、水表空转等问题必须和楼上楼下邻居配合。</p>
+                                <p>
+                                    四、验房工具：量具： 盒尺、 直角尺、 丁字尺、直尺；电钳工具：插排、万用表、摇表、多用螺丝刀、测电笔、手锤、灯；辅助工具：镜子、手电、纸笔；验房专用工具：JZC-2 型垂直检测尺、多功能内外直角检测尺、对角检测尺、水电检测锤、活动响鼓锤、钢针小锤等。
+                                </p>
+                            </div>
+                            <div class="gogal r03">
+                                <h4>
+                                    <i></i>
+                                    验房细节
+                                </h4>
+                                <p>
+                                    一、空气检测：首先，业主必须确定开发商购买的材料符合国家标准，有害物质不超标；其次，根据国家标准，工程竣工以后，开发商要请权威机构进行室内环境检测，并且必须向购房者出具检测报告。
+                                </p>
+                                <p>
+                                    二、电路：购房者可以向所在小区的物业管理公司或开发商索要基本的水、电等隐蔽工程布局的竣工图纸。还要注意观察配电箱的漏电保护开关是否有照明；普通插座、大功率插座等有明确的分路。
+                                </p>
+                                <p>
+                                    三、 吊顶 ： 普通业主从吊顶的观察口可以肉眼判断，按照相关规定，隐蔽工程吊顶必须使用轻钢龙骨，其性能非常稳定，使用寿命也相对较长。
+                                </p>
+                                <p>四、 防水 ： 在卫生间倒清水试验一下，查验下水是否通畅。如最低点的地漏不能有积水，各下水处应该流水通畅。</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gogal shuifei">
+                        <h3 class="jfTitle">02）缴纳税费&gt;&gt;</h3>
+                        <div class="listBox clearfix">
+                            <ul class="unstyled">
+                                <li>
+                                    <h4>&nbsp;&nbsp;&nbsp;&nbsp;契税</h4>
+                                    <div class="listInfo">
+                                        <span></span>
+                                        <p>
+                                            <strong>试用范围：</strong>
+                                            商品住房以房地产主管部门契约签证时间为准，存量住房以房地产主管部门契约登记受理时间为准。
+                                        </p>
+                                        <p>
+                                            <strong>证明开具：</strong>
+                                            家庭唯一住房证明到行政服务中心契税窗口开具；外地非农户口的还应该持有户口所在地房管部门出具的无房证明。
+                                        </p>
+                                        <p>
+                                            <strong>征收标准：</strong>
+                                            <br>
+                                            首套房90平以下普通住宅缴纳总房款1%；
+                                            <br>
+                                            首套房90平以上普通住宅缴纳总房款1.5%
+                                            <br>
+                                            二套90平以下普通住宅缴纳总房款1%；
+                                            <br>二套90平以上普通住宅缴纳总房款2%</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <h4>维修基金</h4>
+                                    <div class="listInfo">
+                                        <span></span>
+                                        <p>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;指住宅物业的业主为了本物业区域内公共部位和共用设施、设备的维修养护事项而缴纳一定标准的钱款至专项账户，并授权业主委员会统一管理和使用基金。只有购买新建住宅物业才需要缴纳，二手房不需要交。
+                                        </p>
+                                        <p>
+                                            <strong>征收标准：</strong>
+                                            <br>
+                                            电梯房：92元/平*房屋面积
+                                            <br>非电梯房：63元/平*房屋面积</p>
+                                    </div>
+                                </li>
+                                <li style="margin-right: 0">
+                                    <h4>其他税费</h4>
+                                    <div class="listInfo">
+                                        <span></span>
+                                        <p>
+                                            <strong>印花税：</strong>
+                                            住宅免征，只对商业性质房源收取，税率为万分之五。
+                                        </p>
+                                        <p>
+                                            <strong>交易过户手续费和登记工本费：</strong>
+                                            对二手房交易征收。
+                                        </p>
+                                        <div class="listTable">
+                                            <table width="100%" border="0">
+                                                <tbody>
+                                                    <tr>
+                                                        <th align="center" scope="col">税种</th>
+                                                        <th scope="col">征收方法</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="center">营业税</td>
+                                                        <td>
+                                                            ２年内：成交价×5%
+                                                            <br>
+                                                            ２年以上普通住宅不
+                                                            <br>征收。</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="center">城建税</td>
+                                                        <td>营业税的7%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="center">教育费附加税</td>
+                                                        <td>营业税的3%</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="listTip">
+                            <p>
+                                <strong>注：</strong>
+                                以房子交付为准，交付完就可缴契税，拿着契税单子即可去办房产证；如果手头没钱也可以先缓一缓，但是，拖延缴纳契税存在2大风险。
+                                <br>
+                                1、如果再买房，名下两套房都会按照二套房的标准来征收契税
+                                <br>2、未来卖房时，营业税及个税２年期限以契税完税时间开始计算</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--房产证-->
+            <div class="gogal fangzheng" id="h6">
+                <h2>
+                    <i>7</i>
+                    房产证
+                </h2>
+                <div class="divInfo clearfix">
+                    <div class="gogal">
+                        <ul class="unstyled">
+                            <li class="li01" style="margin-right: 88px;">
+                                <i class="pull-left"></i>
+                                <div class="TextInfo">
+                                    <h3>房产局办理房产证</h3>
+                                    <p>
+                                        <strong>房产证：</strong>
+                                        房源交付后到当地房管局房产交易
+                                    办证大厅办理
+                                    </p>
+                                    <p>
+                                        <strong>办理地点：</strong>
+                                    </p>
+                                    <p>
+                                        <strong>携带证件：</strong>
+                                        购房合同、购房发票、房屋共有人
+                                    身份证原件、结婚证（或单身证明）、房屋交
+                                    接书
+                                    </p>
+                                    <p></p>
+                                </div>
+                            </li>
+                            <li class="li02">
+                                <i class="pull-left"></i>
+                                <div class="TextInfo">
+                                    <h3>国土局办理土地证</h3>
+                                    <p>
+                                        <strong>土地证：</strong>
+                                        是土地所有者或者土地使用者享有土地所有权或者使用权的法律依据。
+                                    </p>
+                                    <p>
+                                        <strong>办理地点：</strong>
+                                        市规划和国土资源局
+                                    </p>
+                                    <p>
+                                        <strong>携带证件：</strong>
+                                        房产证，契税证、购房发票、房屋共有人身份证原件、结婚证（或单身证明）
+                                    </p>
+                                    <p></p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!--落户-->
+            <div class="gogal luohu" id="h7">
+                <h2>
+                    <i>8</i>
+                    落户
+                </h2>
+                <div class="divInfo">
+                    <div class="gogal">
+                        <h3 class="lhTitle">落户前期准备材料</h3>
+                        <div class="textInfo">
+                            <p>1 → 申请人常住户口所在地户籍证明或户口簿、身份证(原件和复印件)</p>
+                            <p>
+                                2 → 随迁配偶、未成年子女的，应当提供《结婚证》(原件和复印件)，配偶、未成年子女常住户口所在地户籍证明或户口簿、身份证(原件和复印件)，
+                            当地计划生育部门出具的符合计划生育政策证明(或处罚证明)，《出生证》（原件和复印件）
+                            </p>
+                            <p>3 → 落户申请报告以及《房屋所有权证》(原件和复印件)</p>
+                            <p>4 → 购房合同原件原件及复印件（未办房产证者提供）和商品房备案证明（附在购房合同内）</p>
+                            <p>5 → 房管部门审核批准的《外地人购买住宅确认表》(第一联申请人收执联)</p>
+                            <p>6 → 申请人高中以上文化程度学历证书(原件和复印件)</p>
+                            <p>7 → 市级以上医院出具的无传染疾病证明</p>
+                            <p>8 → 常住户口所在地公安机关出具的无违法犯罪证明</p>
+                            <p>9 → 填写《入户申请表》</p>
+
+                        </div>
+                        <h3 class="lhTitle">落户前期准备材料</h3>
+                        <div class="textInfo">
+                            <img src="{{- core_global.img_url({src: 'bundles/'~bundlepath~'/images/zt-6/luohuLc.png'}) -}}" alt="落户前期准备材料" style="width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="cl"></div>
+
+</body>
+
+{% endblock body %}
+
+{% block js %}
+<script>
+seajs.use(['jqduang'],function (jqduang){
+    $('.unstyled li').click(function() {
+        $('.unstyled li').removeClass('on');
+        $(this).addClass('on');
+
+    });
+});
+</script>
+
+{% endblock js %}

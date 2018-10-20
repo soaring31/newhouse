@@ -1,0 +1,25 @@
+services:
+    twig_vars_extension:
+        class: CoreBundle\Twig\Extension\VarsExtension
+        arguments: [ "@?service_container" ]
+        public: false
+        tags:
+            - { name: twig.extension }
+    twig_function_extension:
+        class: CoreBundle\Twig\Extension\FunctionExtension
+        arguments: [ "@?service_container" ]
+        public: false
+        tags:
+            - { name: twig.extension }
+    twig_security_extension:
+        class: CoreBundle\Twig\Extension\SecurityExtension
+        arguments: [ "@?service_container"]
+        public: false
+        tags:
+            - { name: twig.extension }
+    twig_qrcode_extension:
+        class: CoreBundle\Twig\Extension\QRCodeUrlExtension
+        arguments: [ "@?service_container"]
+        public: false
+        tags:
+            - { name: twig.extension }

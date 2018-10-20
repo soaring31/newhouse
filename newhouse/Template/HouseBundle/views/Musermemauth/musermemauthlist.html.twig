@@ -1,0 +1,123 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+ {% set uid = app.user.id %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {# {{ parent() }}  #}
+{% endblock %}
+
+{% block mainleft %}
+   {#  {{ render(controller('HouseBundle:Mnews:category', {category: category, action: 'mnews/mnewsmanage'})) }} #}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ core_manage.filter([
+]) }}
+
+<section class="list-con" data-param="{
+        defUrl    : '{{ ('musermemauth/musermemauthlist')|U }}',
+        showUrl   : '{{ ( 'musercertmanage/show')|U }}',
+        submitUrl : '{{ ( 'musercertmanage/save')|U }}',
+        deleteUrl : '{{ ( 'musercertmanage/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th class="pl10">认证类型</th>
+                    <th>认证图标</th>
+                    <th>认证状态</th>
+                    <th width="160" class="tac">操作</th>
+                </tr>
+                {% if ident.info.data is defined and ident.info.pageCount|default('') != 0 %}
+                {% for k, vo in ident.info.data %}
+                    {# {{dump(vo)}} #}
+                {% set userform = ('db.model_form')|getOne('name',{ id: vo.form}) %}
+                {% set user_cert_data = ('house.user_cert')|getRow({ userauth:vo.id, uid:uid }) %}
+
+                {% if user_cert_data %}
+                    {% set userauth = user_cert_data.id %}
+                    {% set checked = user_cert_data.checked %}  
+                    {% set type = user_cert_data.type %} 
+                    {# data-id="{{userauth}}" #}
+                 <tr data-id="{{userauth}}" >
+                    <td class="pl15">{{ vo.name }}</td>
+                    <td class="renzheng-img"><img src="{{assetImg(vo.thumb, {height:30} )}}"  ></td>
+                    <td>{{ checked ? '<font color="green">已认证</font>' : '<font color="blue">申请中</font>' }}</td>
+                    <td class="tac pr10">
+                        {% if userform == 'auth_tel' or userform == 'auth_email ' %}
+                        {{ core_manage.show(
+                           {
+                             url: ('musercertmanage/remove')|U({ _form_id: vo.form, aid: userauth }),
+                             title: '取消认证',
+                             class: 'btn',
+                             attr: ' '
+                            }    
+                        ) }}
+                    {% else %}
+                        {{ core_manage.show(
+                           {
+                             url: ('musercertmanage/remove')|U({ _form_id: vo.form, aid: userauth }),
+                             title: '查看申请',
+                             class: 'btn',
+                             attr: ' '
+                            }    
+                        ) }}
+                        {{ core_manage.delete({
+                            url: ('musercertmanage/delete')|U({ _form_id: vo.form, _id: userauth}),
+                            title: '取消申请',
+                            'data-confirm': '你确定要取消吗？'
+                        }) }} 
+                        {% endif %}
+                       
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td class="pl15">{{ vo.name }}</td>
+                    <td class="renzheng-img"><img src="{{assetImg(vo.thumb,{height:30})}}"  ></td>
+                    <td><font color="red">待认证</font></td>
+                    <td class="tac">
+                        {{ core_manage.show(
+                           {
+                             url: ('musercertmanage/show')|U({ _form_id: vo.form, userauth:vo.id }),
+                             title: '我要认证',
+                             class: 'btn',
+                             attr: ' '
+                       }     
+                        ) }}
+                    </td>
+                </tr>
+                {% endif %}
+               
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+{{ core_manage.oprate([
+    
+   
+]) }}
+{% endblock %}
+
+{% block promptUl %}
+{# 提示说明 #}
+{% endblock %}
+
+
+
+

@@ -1,0 +1,46 @@
+{% extends "CoreBundle::base_ajax.html.twig" %}
+{% set name = app.request.get("name") %}
+{% if name != '' %}
+    {% set kw = ('house.hotkeywords')|getAll({checked: 1, keyword: 'orX|keyword,like,%'~name~'%'}) %}
+{% endif %}
+
+{% block result %}
+{% if kw.data is defined and kw.pageCount|default('') != 0 %}
+{
+    "query": "Unit",
+    "suggestions" :[
+    {% for item in kw.data %}
+        {% if loop.index != 1 %},{% endif %}{
+            "value" : "{{item.keyword|default('')}}",
+            "data" : {
+                "name" : "{{item.keyword|default('')}}"
+            }
+        }    
+    {% endfor %}]
+}
+{% else %}
+{
+    "query": "Unit",
+    "suggestions" :[
+        {
+            "value" : "0",
+            "data" : {
+                "name" : "没有数据",
+                "noChoose" : "1"
+            }
+        } ]  
+}
+{% endif %}
+
+{% endblock %}
+
+   {#  {% set kwlist = null %}
+    {% if kw.data is defined and kw.pageCount|default('') != 0 %}
+    {% for item in kw.data %}
+            {% if loop.index != 1 %}
+                {% set dhao = ',' %}
+            {% endif %}
+            {% set kwlist = kwlist|default('') ~ dhao|default('') ~ item.keyword|default('') %}
+    {% endfor %}
+    {"kwlist":"{{kwlist}}"}
+    {% endif %} #}

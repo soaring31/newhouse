@@ -1,0 +1,49 @@
+$font-re-fz: inherit !default;
+
+@font-face {
+	font-family: "re";
+    font-weight: normal;
+    font-style: normal;
+	src: url('../fonts/re.eot');
+	src: url('../fonts/re.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/re.woff') format('woff');//,
+		//url('../fonts/re.ttf') format('truetype'),
+		//url('../fonts/re.svg#re') format('svg');
+}
+$font-re-fz: inherit !default;
+$font-re-fl: none !default;
+$font-re-m: 0 !default;
+$font-re-va: -.25em !default;
+[class^="font-re-"],
+[class*=" font-re-"] {
+	font-family: "re";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-size: $font-re-fz;
+	float: $font-re-fl;
+	margin: $font-re-m;
+	vertical-align: $font-re-va;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; only necessary if not using the private unicode range (firstdata option) 
+	text-decoration: none;
+	text-transform: none;
+}
+.font-re-1:before {
+	content: "\EA01";
+}.font-re-2:before {
+	content: "\EA02";
+}.font-re-3:before {
+	content: "\EA03";
+}.font-re-4:before {
+	content: "\EA04";
+}.font-re-QQ:before {
+	content: "\EA05";
+}.font-re-baidu:before {
+	content: "\EA06";
+}.font-re-sina:before {
+	content: "\EA07";
+}.font-re-weix:before {
+	content: "\EA08";
+}

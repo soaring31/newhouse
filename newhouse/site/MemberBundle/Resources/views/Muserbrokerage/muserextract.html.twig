@@ -1,0 +1,143 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+
+{% set user_data = app.user %}
+
+{% set user_info_yongjin = user_data.userinfo.yongjin|default('') %}
+
+{% set info_money = 0 %}
+
+
+{% block js %}
+<script type="text/javascript"></script>
+{% endblock %}
+
+{% block mainMenu %}
+    {{ core_manage.jump(
+        {
+            title: '<i class="font-ico-45 mr5"></i>佣金提取列表',
+            url: ('muserbrokerage/muserextract')|U,    
+            class: 'on'
+        }
+    ) }}
+    {{ core_manage.jump(
+        {
+            title: '<i class="font-ico-44 mr5"></i>我的佣金',
+            url: ('muserbrokerage/muserbrokeragelist')|U,    
+            class: ''
+        }
+    ) }}
+    {{ core_manage.jump(
+        {
+            title: '<i class="font-ico-47 mr5"></i>下级分销列表',
+            url: ('muserbrokerage/musersubordinate')|U,    
+            class: ''
+        }
+    ) }}
+{% endblock %}
+
+{% block mainleft %}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ core_manage.filter([{
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>提取佣金'
+    },{
+        title: '结算时间',
+        attr: {
+            'data-selectdate': {
+                unix: 1
+            }
+        },
+        data: [
+                {
+                    id: '1M',
+                    name: '一个月前'
+                },
+                {
+                    id: '3M',
+                    name: '三个月前'
+                }
+            ],
+        field: 'create_time',
+        method: 'selectFilter'
+    },
+    {
+        method: 'selectFormField',
+        title: '状态',
+        form: 'view_wages',
+        field: 'pay_status',
+    },
+    {
+        method: 'search',
+        field: 'name',
+    }
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+           
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="50" class="tac">{{core_manage.checkbox()}}</th> 
+                    <th width="120">提取人</th>
+                    <th width="120">联系电话</th>
+                    <th width="120">金额</th>
+                    <th width="120">状态</th>
+                    <th width="120">申请时间</th>
+                    <th width="120">审核说明</th>
+                </tr>
+                {% if ident.info.data is defined and ident.info.pageCount|default('0') != 0 %}
+                    {% for k, vo in ident.info.data %}
+                        <tr data-id="{{ vo.id }}">
+                            <td class="tac">{{core_manage.checkbox()}}</td>
+                            <td >{{vo.name}}</td>
+                            <td >{{vo.tel}}</td>
+                            <td >
+                                {{vo.amount|default('0')}}
+                            </td>
+                            <td >
+                                {% if vo.pay_status == 3 %}
+                                    失效
+                                {% else %}
+                                    {{ core_global.formField({value: vo.pay_status, form: 'view_wages', field: 'pay_status'}) }}
+                                {% endif %}
+                            </td>
+                            <td >{{vo.create_time|date('Y-m-d')}}</td>
+                            <td>
+                                {{vo.remarks|default('')|raw}}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr><td colspan="7" class="tac">没有数据！</td></tr>
+                {% endif %}
+                <tr class="fz14">
+                    <td colspan="2" class="pl32">
+                        <i class="font-ico-44 mr5 cole"></i>剩余可提取佣金额
+                    </td>
+                    <td colspan="5">
+                        <span class="c-e43 red">{{user_info_yongjin|default(0)}}</span>元
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+ 
+{% endblock %}
+
+{% block promptUl %}
+{# 提示说明 #}
+{% endblock %}

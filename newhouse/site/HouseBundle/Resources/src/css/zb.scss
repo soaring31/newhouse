@@ -1,0 +1,379 @@
+﻿/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+*/
+
+@import 'static/ats';
+// 工具类 每个文件都要导入
+
+@import 'top-search'; // 搜索代码
+
+/*** splist ***/
+.w860 {
+	width: 860px;
+}
+.w900 {
+	width: 900px;
+}
+.w300 {
+	width: 300px;
+}
+
+// nav
+.photo-nav{
+	margin-top: 7px;
+	a{
+		border-radius: 3px;
+	    font-size: 16px;
+	    margin-left: 10px;
+	    padding: 5px 10px;
+	    &.act,
+	    &:hover{
+	    	background: #e43 none repeat scroll 0 0;
+		    color: #fff;
+		    text-decoration: none;
+	    }
+	}
+}
+
+
+// list
+.zb-list {
+	li {
+		float: left;
+		width: 100%;
+		margin-bottom: 20px;
+		p {
+			border-bottom: 1px dotted #ccc;
+			height: 24px;
+			line-height: 24px;
+			overflow: hidden;
+			&.ny {
+				height: auto;
+			}
+			.c {
+				color: #999;
+				white-space: nowrap;
+			}
+		}
+		em {
+			color: #0056a9;
+			font-weight: bold;
+		}
+	}
+	.pic {
+		border: 1px solid #ccc;
+		display: inline;
+		float: left;
+		height: 124px;
+		margin-right: 15px;
+		padding: 2px;
+		width: 182px;
+	}
+	a:hover,
+	a.act {
+		color: #046bd4;
+	}
+}
+// aside
+.coltit {
+	line-height: 32px;
+	height: 32px;
+	border-bottom: 1px solid #ddd;
+	.more {
+		float: right;
+		margin-right: 10px;
+		color: #666;
+	}
+	.tit {
+		position: relative;
+		margin-bottom: -1px;
+		border-bottom: 2px solid $major-color;
+	}
+	h3 {
+		// font-family: simsun;
+		font-size: 16px;
+		line-height: 31px;
+		display: inline;
+		float: left;
+		padding: 0 10px;
+	}
+	.tit a:hover,
+	h3 span {
+		color: #333;
+		font-weight: 700;
+	}
+}
+// tit
+.tlist {
+	width: 100%;
+	li {
+		overflow: hidden;
+		padding-left: 10px;
+	}
+	.pic {
+		height: auto;
+		margin-bottom: 4px;
+		padding: 6px 0;
+		img {
+			float: left;
+			margin-right: 8px;
+		}
+		h4 {
+			font-size: 14px;
+			line-height: 26px;
+			overflow: hidden;
+			height: 75px;
+			padding-top: 2px;
+			a:hover {
+				text-decoration: none;
+				color: #2e9ee8;
+			}
+		}
+	}
+}
+// tab
+.tabbar2 {
+	position: absolute;
+	top: 2px;
+	left: 8px;
+	.act {
+		padding: 0 14px;
+		color: #327acf;
+		border: 1px solid #eaeaea;
+		border-top: 1px solid #327acf;
+		border-bottom: none;
+		background: #fff;
+	}
+	span {
+		font-family: simsun;
+		font-size: 14px;
+		line-height: 28px;
+		display: inline;
+		float: left;
+		height: 30px;
+		padding: 1px 15px;
+		cursor: pointer;
+	}
+}
+
+/* detail */
+select{
+	padding: 0;
+}
+.all {
+	background: url(../images/zb/zhibo-bg.jpg) no-repeat #70bce1 center 34px;
+	color: #333;
+}
+.wrap-detail {
+	width: 1000px;
+	min-width: 1000px;
+}
+// 视频直播
+.view-warp {
+	margin-top: 210px;
+	padding: 20px 20px 25px;
+}
+.vieo-title {
+	font-size: 30px;
+	font-weight: 800;
+	margin-bottom: 20px;
+	text-align: center;
+	color: #fff;
+}
+.vieo-title span {
+	font-size: 36px;
+	text-decoration: underline;
+	color: #fafc32;
+}
+.video {
+	float: left;
+	width: 565px;
+	margin-right: 30px;
+	border: 7px solid #fff;
+}
+.video-txt {
+	font-size: 14px;
+	line-height: 26px;
+	float: left;
+	overflow-x: hidden;
+	overflow-y: auto;
+	width: 350px;
+	height: 442px;
+	color: #fff;
+}
+.video-txt h2 {
+	font-size: 18px;
+	font-weight: 800;
+	margin: 15px 0 15px 0;
+	text-align: center;
+}
+.warps {
+	position: relative;
+	margin-top: 25px;
+}
+.warps .hd {
+	position: relative;
+	height: 65px;
+	background: url(../images/zb/zhibo-t-b.png) no-repeat;
+}
+.warps .bd {
+	margin-top: -20px;
+	background: #ecf8ff;
+}
+#text-live .bd {
+	padding: 30px 10px 20px 20px;
+}
+.text-txt {
+	font-size: 14px;
+	position: relative;
+	overflow-y: auto;
+	height: 690px;
+	background-color: #fff;
+}
+.text-txt .loading {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 32px;
+	height: 32px;
+	margin: -16px 0 0 -16px;
+	padding: 10px;
+	border-radius: 5px;
+	background: #fafafa url(../images/zb/loading1.gif) no-repeat center center;
+}
+.text-btn {
+	line-height: 30px;
+	height: 30px;
+	cursor: pointer;
+	text-align: center;
+	background: #ddd;
+}
+#text-live  dl {
+	font-size: 14px;
+	line-height: 26px;
+	padding: 15px 10px;
+	border-bottom: 1px dotted #bebebe;
+}
+#text-live  dl span {
+	margin-right: 5px;
+}
+#text-live  dl em {
+	font-weight: 800;
+}
+#text-live  dl em.u-s {
+	color: #364877;
+}
+.r-t {
+	font-size: 12px;
+	position: relative;
+	top: 17px;
+	right: 20px;
+	color: #fff;
+}
+.r-t a {
+	color: #fff;
+}
+.refresh-btn {
+	visibility: hidden;
+	padding: 4px 6px 3px;
+	vertical-align: top;
+	border: 1px solid #128ace;
+	background: #44bbea;
+}
+.refresh-btn:hover {
+	text-decoration: none;
+}
+
+/* 图片直播 */
+#pic-live .hd {
+	background-position: 0 -67px;
+}
+#pic-live .bd {
+	padding: 50px 15px 25px 15px;
+}
+#pic-live .bd .pages {
+	line-height: 20px;
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	height: 20px;
+	text-align: right;
+}
+#pic-live .bd .pages i {
+	line-height: 100;
+	display: inline-block;
+	overflow: hidden;
+	width: 15px;
+	height: 15px;
+	margin-left: 10px;
+	cursor: pointer;
+	border-radius: 50%;
+	background: #fff;
+	box-shadow: 0 1px 1px 2px #22a7e8;
+}
+#pic-live .bd .pages i.act {
+	background: #666;
+}
+#pic-live dl {
+	display: inline;
+	float: left;
+	width: 260px;
+	margin-right: 35px;
+	text-align: center;
+}
+#pic-live dl dt img {
+	padding: 3px;
+	border: 1px solid #bebfbf;
+	background: #fff;
+}
+#pic-live dl dd {
+	padding-top: 10px;
+}
+.scrollWarp {
+	display: inline;
+	float: left;
+	overflow: hidden;
+	width: 850px;
+	margin-left: 30px;
+}
+.moveBox {
+	width: 9999px;
+}
+.prevBtn,
+.nextBtn {
+	display: block;
+	width: 28px;
+	height: 41px;
+	margin-top: 80px;
+	background: url(../images/zb/zhibo-btns.gif) no-repeat;
+}
+.prevBtn {
+	float: left;
+	background-position: 0 0;
+}
+.nextBtn {
+	float: right;
+	background-position: -30px 0;
+}
+
+/* 往期回顾 */
+#over-live .hd {
+	background-position: 0 -134px;
+}
+#over-live .bd {
+	padding: 50px 10px 20px 20px;
+}
+#over-live li {
+	display: inline;
+	float: left;
+	width: 200px;
+	margin-left: 33px;
+}
+#over-live li p {
+	line-height: 26px;
+	overflow: hidden;
+	height: 26px;
+	text-align: center;
+}

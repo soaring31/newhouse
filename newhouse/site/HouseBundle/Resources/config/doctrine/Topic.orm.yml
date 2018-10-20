@@ -1,0 +1,237 @@
+HouseBundle\Entity\Topic:
+    type: entity
+    table: topic
+    indexes:
+        category:
+            columns:
+                - category
+        area:
+            columns:
+                - area
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        category:
+            options:
+                comment: 标题栏目id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        pid:
+            options:
+                comment: 父级
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        name:
+            options:
+                comment: 标题
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        thumb:
+            options:
+                comment: 缩略图
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        content:
+            options:
+                comment: 内容
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        abstract:
+            options:
+                comment: 摘要
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        keywords:
+            options:
+                comment: 关键字
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        time:
+            options:
+                comment: 日期
+                unsigned: false
+            nullable: false
+            type: date
+            length: 20
+        address:
+            options:
+                comment: 地址
+                unsigned: false
+            nullable: false
+            type: string
+            length: 50
+        enroll:
+            options:
+                comment: 报名人数
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        tplcfg:
+            options:
+                comment: 内容模板
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        imagelist:
+            options:
+                comment: 直播图
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        author:
+            options:
+                comment: 作者
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        source:
+            options:
+                comment: 来源
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        subtime:
+            options:
+                comment: 主题时间
+                unsigned: false
+            nullable: false
+            type: date
+            length: 100
+        atlas:
+            options:
+                comment: 图集
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        stime:
+            options:
+                comment: 开始时间
+                unsigned: false
+            nullable: false
+            type: date
+            length: 10
+        discount:
+            options:
+                comment: 优惠说明
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        show_time:
+            options:
+                comment: 看房时间
+                unsigned: false
+            nullable: false
+            type: date
+            length: 100
+        venue:
+            options:
+                comment: 集合地点
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        hotline:
+            options:
+                comment: 报名热线
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        banner:
+            options:
+                comment: 横幅
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        checked:
+            options:
+                comment: 审核
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        area:
+            options:
+                comment: 区域
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

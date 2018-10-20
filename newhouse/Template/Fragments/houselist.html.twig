@@ -1,0 +1,6 @@
+{% spaceless %}
+{# 示例 #}
+{# 获取数据 #}
+{% set houses_data = ('house.houses')|getAll({checked: 1, type: 0, findType: 1, pageSize: 10}) %}
+document.write('<ul class="08cmsFrame">{% for item in houses_data.data %} <li><a href="{{('houses/detail')|U({id: item.id|default('')}, true)}}">{{item.name}}</a></li> {% endfor %}</ul>')
+{% endspaceless %}

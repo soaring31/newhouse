@@ -1,0 +1,45 @@
+$img-sale-detail-1:(14px, 14px, -248px, -194px, img-sale-detail-1);
+$img-sale-detail-2:(14px, 14px, -205px, -140px, img-sale-detail-2);
+$img-sale-detail-3:(12px, 18px, -204px, -194px, img-sale-detail-3);
+$img-sale-detail-4:(12px, 18px, -226px, -194px, img-sale-detail-4);
+$img-sale-detail-5:(22px, 12px, -154px, -165px, img-sale-detail-5);
+$img-sale-detail-7:(40px, 20px, -233px, -153px, img-sale-detail-7);
+$img-sale-detail-8:(39px, 20px, -73px, -80px, img-sale-detail-8);
+$img-sale-detail-9:(70px, 70px, 0, -114px, img-sale-detail-9);
+$img-sale-detail-10:(70px, 70px, -73px, 0, img-sale-detail-10);
+$img-sale-detail-11:(70px, 70px, -153px, 0, img-sale-detail-11);
+$img-sale-detail-12:(41px, 41px, -233px, -102px, img-sale-detail-12);
+$img-sale-detail-13:(41px, 41px, -102px, -194px, img-sale-detail-13);
+$img-sale-detail-14:(41px, 41px, -51px, -194px, img-sale-detail-14);
+$img-sale-detail-15:(41px, 41px, -154px, -114px, img-sale-detail-15);
+$img-sale-detail-16:(41px, 41px, -233px, 0, img-sale-detail-16);
+$img-sale-detail-17:(41px, 41px, -233px, -51px, img-sale-detail-17);
+$img-sale-detail-18:(41px, 41px, -153px, -194px, img-sale-detail-18);
+$img-sale-detail-19:(41px, 41px, 0, -194px, img-sale-detail-19);
+$img-sale-detail-20:(16px, 16px, -122px, -80px, img-sale-detail-20);
+$img-sale-detail-21:(16px, 16px, -205px, -114px, img-sale-detail-21);
+$img-sale-detail-22:(63px, 104px, 0, 0, img-sale-detail-22);
+$img-sale-detail-23:(52px, 18px, -153px, -80px, img-sale-detail-23);
+$img-sale-detail-24:(64px, 64px, -80px, -114px, img-sale-detail-24);
+
+$img-sale-detail: ($img-sale-detail-1,$img-sale-detail-2,$img-sale-detail-3,$img-sale-detail-4,$img-sale-detail-5,$img-sale-detail-7,$img-sale-detail-8,$img-sale-detail-9,$img-sale-detail-10,$img-sale-detail-11,$img-sale-detail-12,$img-sale-detail-13,$img-sale-detail-14,$img-sale-detail-15,$img-sale-detail-16,$img-sale-detail-17,$img-sale-detail-18,$img-sale-detail-19,$img-sale-detail-20,$img-sale-detail-21,$img-sale-detail-22,$img-sale-detail-23,$img-sale-detail-24);
+
+@mixin img-sale-detail($sprites) {
+  %icosale-detail {
+      display: inline-block;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: middle;
+      line-height: 300px;
+      overflow: hidden;
+      background-image: url(../images/sale-detail.png);
+  }
+  @each $sprite in $sprites {
+    .#{nth($sprite, 5)} {
+        width: nth($sprite, 1);
+        height: nth($sprite, 2);
+        background-position: nth($sprite, 3) nth($sprite, 4);
+        @extend %icosale-detail;
+    }
+  }
+}

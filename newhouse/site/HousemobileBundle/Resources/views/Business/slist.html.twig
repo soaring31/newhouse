@@ -1,0 +1,42 @@
+{% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:business_list.html.twig' : 'HousemobileBundle:Business:list.html.twig' %}
+
+{% block title %}
+【{{cur_area_data|default('')}}楼盘】_{{cur_area_data|default('')}}新楼盘_{{cur_area_data|default('')}}房价_{{cur_area_data|default('')}}新商铺
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" Content="{{'now'|date('Y')}}{{cur_area_data|default('')}}楼盘信息,{{'now'|date('Y')}}{{cur_area_data|default('')}}新楼盘信息,{{cur_area_data|default('')}}新商铺信息"/>
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}新房网为您提供最真实的{{cur_area_data|default('')}}新房出售信息及最新{{cur_area_data|default('')}}楼盘,新楼盘价格信息。大量优质最新楼盘信息实时更新,为您创造最佳新房购房体验。"/>
+{% endblock key_des %}
+
+{% block header_title %}
+{{core_mobile_global.title({title: '商铺楼盘'})}}
+{% endblock header_title %}
+
+{% block header_search %}
+{{ core_mobile_global.bar_nav_btn({
+    title: '搜索',
+    icon: 'font-f-8',
+    popup: {
+        title: '商铺搜索',
+        popup: '.popup-search',
+    }
+}) }}
+{% endblock header_search %}
+
+{% block container %}
+    {% set list_header %}
+    <div class="filter" data-block="{
+        ajax: {
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                tpl: 'Common:filter',
+                tag: 'sp_lp'
+            }
+        }
+    }"></div>
+    {% endset %}
+    {# 列表链接 js调用列表需要 #}
+    {% set list_url = ('business/slist')|U({ajax: 1, b_models: 'houses'}) %}
+    {{ parent() }}
+{% endblock container %}

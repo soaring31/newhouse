@@ -1,0 +1,189 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+** ajax调用：新房列表
+#}
+{% set push = app.request.get('push', '') %}
+{% set url_list = app.request.get('list') %}
+{# 直接传递数据 #}
+{% if url_list|default('') %}
+    {% set list = url_list %}
+{% elseif ident.list is defined %}
+    {# 当前模板list标识 #}
+    {% set list = ident.list %}
+{% elseif push %}
+    {# 推送位 #}
+    {% set push_data = (push)|getPush(5) %}
+    {% set list = {
+        data     : push_data,
+        pageIndex: 1,
+        pageCount: 0,
+        pageSize : 8
+    } %}
+{% else %}
+    {# 首页推送位 #}
+    {% set index_dazheyouhui = ('index_dazheyouhui')|getPush(6) %}
+    {% set list = {
+        data     : index_dazheyouhui,
+        pageIndex: 1,
+        pageCount: 0,
+        pageSize : 8
+    } %}
+{% endif %}
+
+{% block result %}
+{% spaceless %}
+{% set cy_id = cy_h5_array|default %}
+{% set cy_list = ('house.houses')|getAll({id: 'in|'~cy_id|join(',')}) %}
+{% set tpl_top = tpl_top|default(app.request.get('top', 1)) %}
+{% if list.data is defined and list.data|length %}
+    {% for key,item in list.data %}
+        {% if list.pageIndex==1  %}
+        {% if cy_list and cy_list.data|length>0 %}
+            {% if key == 4 %}
+                <div class="cy-info" id="cy-8">
+
+                </div>
+            {% endif%}
+        {% else %}
+            {% if key == 4 %}
+                <div class="cy-info" id="cy-4">
+
+                </div>
+            {% endif%}
+
+            {% if key == 8 %}
+                <div class="cy-info" id="cy-8">
+
+                </div>
+            {% endif%}
+        {% endif%}
+        {% endif%}
+    {#  最后一个带上分页 #}
+    {% set fromid = item.fromid|default('') ? {
+        fromid: item.fromid|default('')
+    } : {} %}
+
+    {% set item_url = {
+        url: item.url|default(''),
+        id: item.id|default(''),
+        models: item.models|default('houses')
+    }|merge(fromid) %}
+    <li {% if loop.last %}data-page="{
+                        pageIndex: {{list.pageIndex}},
+                        pageCount: {{list.pageCount}},
+                        pageSize: {{list.pageSize}}
+                     }"{% endif %} >
+
+        <a href="{{core_global.url(item|merge({set_models:1}))}}" class="item-content p-default">
+            {#{{ dump(list) }}#}
+            <div class="item-media por">
+                {{- core_global.img({
+                    src: item.thumb|default(''),
+                    alt: item.name|default(''),
+                    type: 2,
+                    width: 214,
+                    height: 160
+                }) -}}
+                {% if tpl_top|default('1') %}
+                    {% if item.top|default('') == 159 %}
+                        <div class="item-zd">精选楼盘</div>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="item-inner">
+                <div class="item-title-row">
+                    {{housemobile_global.list_title({title: item.name|default('')})}}
+                    {% if item.cate_status != '' %}
+                        {# 销售状态 #}
+                        {% set sale_status = ('house.category')|getOne('name', {id:item.cate_status}) %}
+                        <span class="tag-sale-status on-sale-{{item.cate_status}}">
+                            {{ sale_status }}
+                        </span>
+                    {% endif %}
+                </div>
+
+                {# 地址 #}
+                {% if item.address %}
+                <div class="item-subtitle item-subtitle-ex">
+                    {% set catyarea_name = ('db.area')|getRow({id: item.region,checked:1}) %}
+                    {% set catyarea2_name = ('house.cate_circle')|getRow({id: item.cate_circle,checked:1}) %}
+                    {% if catyarea_name.name|default('') or catyarea2_name.name|default('') %}
+                        [ {{catyarea_name.name|default('')}} {% if catyarea_name.name|default('') and catyarea2_name.name|default('')  %} - {% endif %} {{catyarea2_name.name|default('')}} ]
+                    {% endif %}
+                    {{item.address|default('地址')}}
+                </div>
+                {% endif %}
+                {# 价格 #}
+                <div class="item-after">
+                    {#{{house_global.if_dj({value: item.dj|default(''),class: 'l p-red'})}}#}
+                    {% if item.dj|default('') %}
+                        <span class="l p-red">{{ item.dj|default('') }}</span> 元/平
+                    {% elseif item.tdj|default('') %}
+                        <span class="l p-red">{{item.tdj|default('')}}</span> 万元/套起
+                    {% else %}
+                        <span class="arial">待定</span>
+                    {% endif %}
+                </div>
+                {#
+                    {% if kft|default('1') %}
+                        {% if item.bdsm|default('') %}
+                        <div class="item-subtitle item-subtitle-ex">
+                            <span class="p-red">{{item.bdsm|default('-')}}</span>
+                        </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="item-subtitle item-subtitle-ex">
+                            主力户型：{{- house_global.huxing({aid: item.fromid|default(''),zlhx: 0, tpl: "
+                                <span class='mr10'>%shi%%ting%%mj%m&sup2;</span>
+                                "}) -}}
+                        </div>
+                    {% endif %}
+                #}
+                <div class="item-subtitle item-subtitle-ex">
+                        {{ housemobile_global.lptag({value: item, tpl: '<span>%value%</span>', con: 'cate_type,zxcd,tslp'})}}
+                </div>
+            </div>
+        </a>
+    </li>
+
+    {% endfor %}
+    <script>
+        seajs.use([], function() {
+            $('.button-sm').each(function () {
+                if ($(this).text() == '') {
+                    $(this).hide();
+                }
+            });
+
+            var cy4=document.getElementById('cy-4');
+            var cy8=document.getElementById('cy-8');
+            if(cy4){
+                cy4.innerHTML=document.getElementsByClassName('cy-4')[0].innerHTML;
+            }
+            if(cy8){
+                cy8.innerHTML=document.getElementsByClassName('cy-8')[0].innerHTML;
+            }
+            //筛选时会有id = cy-4 广告位为空的情况
+            var content = $("#cy-4").html();
+            if(content == ""){
+                $("#cy-4").hide();
+            }
+            // 兼容传漾的广告位
+            if($('.cy-swiper img').length <= 0){
+                $('.cy-swiper').hide();
+            }
+            if($('#cy-4 img').length <= 0){
+                $('#cy-4').hide();
+            }
+            if($('#cy-8 img').length <= 0){
+                $('#cy-8').hide();
+            }
+            
+        });
+    </script>
+
+{% else %}
+    <li class="mobile-list-none">暂无楼盘信息</li>
+{% endif %}
+{% endspaceless %}
+{% endblock result %}

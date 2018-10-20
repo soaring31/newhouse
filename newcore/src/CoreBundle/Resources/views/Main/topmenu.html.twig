@@ -1,0 +1,113 @@
+{% import "CoreBundle:Macro:global.html.twig" as core_global %}
+{% import "CoreBundle:Macro:manage.html.twig" as core_manage %}
+<header class="header" data-header="1">
+   {#  {% set logo_thumb = assetImg(core_global.mconfig({name: 'mebcenlogo', ename: 'mmemberparams'}),{width:128,height:64, absolute: 1, type: 2}) %} #}
+    <a class="logo" href="{{('main')|U}}" {# {% if logo_thumb|default('') %}style="background: url('{{logo_thumb}}')"{% endif %} #}>logo</a>
+
+    {% set area_name = app.session.get('area')|getAreaName %}
+    <a class="area-title" href="">{{area_name|default('主站')}}</a>
+    {% set autharea = ('db.auth_group_area')|getCol( 'id', { checked: 1 })|length %}
+    {% set _action = _action|default('/main') %}
+
+    <menu id="topmenu">
+        <section data-menu="1" class="menu-1" data-target='#cleft-id' >
+             {% if ('main/mchange')|P %}
+            <div class="item dropdown" data-hover="dropdown">
+                <a class="dropdown-title" data-target="#rleft" data-role="route" data-route="mchange" href="{{('main/mchange')|U}}">
+                    <i class="font-ico-29"></i>
+                    切换分站
+                </a>
+                <ul class="dropdown-menu">
+                   
+                    {{core_global.switch_area({
+                        act_class: 'active',
+                        pageSize: 10,
+                        is_manage: 1,
+                        _action: '/main',
+                        tpl: '<li class="%act_class%"><a href="%url%">%name%</a></li>'
+                    })}}
+                     <li><a href="{{ core_global.get_http() ~ '://' ~  'maindomain'|C ~ core_global.get_port() ~ core_global.get_mode() ~ _action ~ '?_area=' ~ 0 }}">主站</a></li>
+                </ul>
+            </div>
+            {% endif %}
+            
+            {% if menus is defined %}
+           {# 只调当前bundle的菜单 排除了会员中心id #}
+              {% for item in menus if item.menu.bundle == bundlepath and item.menu.checked|default('') == 1 and item.menu.id != 328 %}
+            {{ core_manage.btn({
+                role: 'route',
+                class: 'item btn-link',
+                title: item.menu.name,
+                tpl: '#tpl-aside',
+                url: ('main/leftmenu')|U('menuId=' ~ item.menu.id|default(0)|tripodEncode),
+                ico: 'font-ico-' ~ item.menu.remark,
+                attr: {
+                    'data-route-type': 'noRoute',
+                    'data-route': item.menu.ename,
+                }
+            }) }}
+            {% endfor %}
+        {% endif %}
+        </section>
+        <section class="menu-middle"></section>
+        <section class="menu-2">
+            {% if app.user.mid|default(0) == 1 %}
+            {{ core_manage.btn({
+                ico: 'ico font-ico-7',
+                title: '开发后台',
+                class: 'btn-link item',
+                url: path('manage_main'),
+                attr: {
+                    target: '_blank'
+                }
+            }) }}
+            {% endif %}
+            {% if ('main/msearch')|P %}
+            {{ core_manage.show({
+                ico: 'ico font-ico-search',
+                title: '菜单地图',
+                class: 'btn-link item',
+                url: ('main/msearch')|U,
+                attr: {
+                    title: '菜单地图 - 快捷键：Ctrl+Shift+F',
+                    'data-bindkey': 'ctrl+shift+70'
+                }
+            }) }}
+            {% endif %}
+            <div class="item dropdown" data-hover="dropdown">
+                {% if ('main/mindex')|P %}
+                    <a class="dropdown-title" data-target="#rleft" data-role="route" data-route="mindex" href="{{('main/mindex')|U}}">
+                        <i class="font-ico-ind"></i>
+                        管理首页
+                    </a>
+                {% endif %}
+                <ul class="dropdown-menu">
+                    <li><a target="_blank" href="{{'index/index'|U}}"> <i class="ico font-ico-5"></i> 整站首页 </a></li>
+                </ul>
+            </div>
+            <div class="item item-horizontal dropdown" data-hover="dropdown">
+                <span class="dropdown-title">
+                    <i class="ico font-ico-man2"></i>
+                    {{app.user.username|default('')}}<br/>
+                    {{rolename|default('游客')}}
+                    <span class="caret"></span>
+                </span>
+
+                <ul class="dropdown-menu">
+                    <li class="disabled">
+                        <a href="###"><i class="font-ico-13"></i>我的积分</a>
+                    </li>
+                    {% if ('main/password')|P %}
+                    <li>
+                        <a href="{{ ('main/password'|U) }}" data-target="#rleft" data-role="route" data-route="password"><i class="font-ico-edit"></i>修改密码</a>
+                    </li>
+                    {% endif %}
+                    <li class="divider"></li>
+                    <li>
+                        <a href="{{ path(bundlepath ~ '_logout') }}"><i class="font-ico-exit"></i>退出管理</a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </menu>
+</header>

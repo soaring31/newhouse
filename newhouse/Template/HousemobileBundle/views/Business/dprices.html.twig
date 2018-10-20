@@ -1,0 +1,44 @@
+{# {% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:lsjgtable.html.twig' : 'HousemobileBundle:Business:dnews.html.twig' %} #}
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default('Business:detail') ~ '.html.twig' %}
+
+{% block b_header %}
+    {{core_mobile_global.title({title: '历史价格'})}}
+{% endblock b_header %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}房价,{{detail.name|default('')}}价格,{{detail.name|default('')}}均价, {{detail.name|default('')}}房价走势" />
+<meta name="description" content="{{detail.name|default('')}}房价,{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}为您提供{{detail.name|default('')}}价格、均价，实时{{detail.name|default('')}}房价走势，帮您分析房价走势、记录成交价格，查找{{detail.name|default('')}}均价价格就上搜房网！"/>
+{% endblock key_des %}
+
+{# 导航 #}
+{% block secondary %}
+    {% set nav_active = 3 %}
+    {{ parent() }}
+{% endblock secondary %}
+
+{% block container %}
+	
+	{% set list_header %}
+	<div data-block="{
+	    bParams: true,
+	    ajax:{
+	        url: '{{ ('business/dprices')|U }}',
+	        data: {
+	            id: '{{ detail.id|default('') }}',
+	            tpl: 'Houses:dpricesblock'
+	        }
+	    }
+	}"></div>
+	{% endset %}
+	{% set list_url = ('business/dprices')|U({
+        tpl: 'Clist:lsjgtable',
+        id: detail.id|default(''),
+    }) %}
+
+	{{core_mobile_global.list_scroll({
+	    list_header: list_header|default(''),
+	    url: list_url|default('')
+	})}}
+
+{% endblock container %}

@@ -1,0 +1,53 @@
+{% extends 'HouseBundle::base.html.twig' %}
+{# 说明
+ * 当前模板是使用通用搜索头部模板继承
+#}
+
+{% block body %}
+    {# 头部搜索 #}
+    {% block top_search %}
+        {{ core_global.topSearch({
+            action: tpl_topsearch_action|default('houses/list'),
+            autocomplete: tpl_topsearch_autocomplete|default(1),
+            placeholder: tpl_topsearch_placeholder|default(''),
+            other: {
+                method: 'topSearchHot',
+                opt: tpl_topsearch_hot|default(''),
+                num: tpl_topsearch_hot_num|default(5)
+            }
+        }) }}
+    {% endblock top_search %}
+
+    {# 搜索栏底下广告位 #}
+    {% block top_ad %}
+        <div class="container">
+            <div class="blank10"></div>
+            {# dbtsbs: 默认顶部广告推送标识 #}
+            {{- core_global.ads( {tag: 'dbtsbs', default_tag: 'dbtsbs'}|merge(top_ad|default({})) ) -}}
+        </div>
+    {% endblock top_ad %}
+
+    {# 当前位置 #}
+    {% block current %}
+        <div class="container">
+            <div class="current-location">
+                {% block current_default_block %}
+                    {{block('current_default')}}
+                {% endblock current_default_block %}
+                {% block current_container %}
+                {% endblock current_container %}
+            </div>
+        </div>
+    {% endblock current %}
+
+    {# 内容 #}
+    {% block container %}{% endblock container %}
+{% endblock body %}
+
+
+{# 当前位置默认值 #}
+{% block current_default %}
+<i class="font-icons-20"></i>
+<a href="{{('index/index')|U}}">首页</a>
+<span>&gt;</span>
+{% endblock current_default %}

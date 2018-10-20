@@ -1,0 +1,605 @@
+@charset "UTF-8";
+/*!
+ * @name <%= name %>
+ * @author <%= author %>
+ * @date <%= date %>
+ */
+/**
+ * @method 清除浮动 %clearfix 
+ * @description 清除浮动
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %clearfix;
+ * }
+ * ```
+ * 
+ * ```css
+ * 	div {
+	    *zoom: 1;
+	}
+	div:after {
+	    display: block;
+	    clear: both;
+
+	    height: 0;
+
+	    content: '\20';
+	}
+ * ```
+ */
+/**
+ * @method 去掉虚线框 %outline 
+ * @description 去掉虚线框
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @ extend %outline;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		outline: thin dotted;
+		outline: 5px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
+ * ```
+ */
+/**
+ * @method 文字不换行后面加省略号 %text-overflow 
+ * @description 文字不换行后面加省略号
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %text-overflow;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+ * ```
+ */
+/**
+ * @method 透明层opacity 
+ * @description 透明层 内容也透明
+ * @param {number} $opacity - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include opacity(.5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+	  opacity: .5;
+	  filter: alpha(opacity=50);
+ * }
+ * ```
+ */
+/**
+ * @method 背景透明层transparent 
+ * @description 透明层只处理背景透明
+ * @param {string} $color - 背景透明层的颜色
+ * @param {number} $alpha - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include transparent(#000, .5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+ *    	background-color: transparent;
+		background-color: (0,0,0,.5);
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7fffffff, endColorstr=#7fffffff,);
+		zoom: 1;
+ * }
+ * ```
+ */
+/**
+ * @method triangle 
+ * @description 生成一个三角形图标
+ * @param {string} $size - 三角的大小
+ * @param {string} $color - 三角颜色
+ * @param {string} $direction - 三角的方向 up, down, left, right
+ * @example 调用
+ * 
+ * ```scss
+ * i {
+ *    @include triangle(5px, #bbb, up); 
+ * }
+ * ```
+ * 
+ * ```css
+ * i {
+ *    width: 0;
+      height: 0;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent;
+      border-bottom-color: #bbb;
+ * }
+ * ```
+ */
+/**
+* @method 水平线hr nav-divider 
+* @description 透明层 内容也透明
+* @param {string} $color=#e5e5e5 - 线的颜色
+* @param {string} $line-height-computed - 线的高度，空间
+* @example 调用
+* 
+* ```scss
+* div {
+*    @include nav-divider(#e5e5e5, 24px);
+* }
+* ```
+* 
+* ```css
+* div {
+	  height: 1px;
+	  margin: 11px 0;
+	  overflow: hidden;
+	  background-color: #e5e5e5;
+* }
+* ```
+*/
+.img-gd-1, .img-gd-2, .img-gd-3, .img-gd-4, .img-gd-5, .img-gd-6 {
+    display: inline-block;
+    *zoom: 1;
+    *display: inline;
+    vertical-align: middle;
+    line-height: 300px;
+    overflow: hidden;
+    background-image: url(../images/gd.png);
+}
+
+.img-gd-1 {
+    width: 70px;
+    height: 44px;
+    background-position: 0 0;
+}
+
+.img-gd-2 {
+    width: 18px;
+    height: 16px;
+    background-position: 0 -54px;
+}
+
+.img-gd-3 {
+    width: 11px;
+    height: 6px;
+    background-position: -28px -54px;
+}
+
+.img-gd-4 {
+    width: 4px;
+    height: 7px;
+    background-position: -80px 0;
+}
+
+.img-gd-5 {
+    width: 3px;
+    height: 2px;
+    background-position: -80px -17px;
+}
+
+.img-gd-6 {
+    width: 7px;
+    height: 4px;
+    background-position: -49px -54px;
+}
+
+@font-face {
+    font-family: "gd";
+    font-weight: normal;
+    font-style: normal;
+    src: url("../fonts/gd.eot");
+    src: url("../fonts/gd.eot?#iefix") format("embedded-opentype"), url("../fonts/gd.woff") format("woff");
+}
+
+[class^="font-gd-"],
+[class*=" font-gd-"] {
+    font-family: "gd"!important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: inherit;
+    float: none;
+    margin: 0;
+    vertical-align: -0.25em;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    text-decoration: none;
+    text-transform: none;
+}
+
+.font-gd-p:before {
+    content: "\EA01";
+}
+
+.font-gd-s:before {
+    content: "\EA02";
+}
+
+/*!
+ * @name guide-article
+ * @author ahuing
+ * @date 2016-1-15
+ * @dec top toolbar popular search terms containing the search and
+ */
+/*
+top-bar
+*/
+.top-bar {
+    background: #f3f3f3;
+    min-width: 1200px;
+    padding: 15px 0 10px 0;
+}
+
+.top-bar .search-bar {
+    float: left;
+}
+
+.top-bar .list {
+    margin-left: 68px;
+}
+
+.top-bar .list li {
+    float: left;
+    margin-right: 22px;
+    font-size: 14px;
+    margin-top: 9px;
+    margin-top: 12px;
+    display: inline;
+    overflow: hidden;
+}
+
+.top-bar .list li a {
+    height: 20px;
+    line-height: 20px;
+    text-decoration: none;
+    color: #686465;
+    overflow: hidden;
+}
+
+.top-bar .list li a:hover {
+    color: #f00;
+}
+
+.top-bar .list li a i {
+    font-size: 20px;
+    float: left;
+    margin-right: 4px;
+    margin-top: 2px;
+}
+
+body {
+    background: #f4f4f4;
+}
+
+.top-bar {
+    padding-top: 0;
+    background: #fff;
+}
+
+.current-location i {
+    color: #27b346;
+}
+
+input {
+    outline: none;
+}
+
+.container {
+    margin: 0 auto;
+}
+
+a:hover {
+    text-decoration: none;
+    color: #27b346;
+}
+
+.s-head {
+    width: 100%;
+    min-width: 1200px;
+    height: 68px;
+    background: #fff;
+    line-height: 68px;
+}
+
+.s-head .list {
+    display: inline-block;
+    margin-left: 70px;
+    vertical-align: top;
+}
+
+.s-head .list li {
+    height: 58px;
+    margin-top: 0;
+}
+
+.s-head .list li a {
+    line-height: 58px;
+    word-spacing: 1px;
+    font-size: 14px;
+    color: #525252;
+    margin-right: 15px;
+}
+
+.s-head .list li a:hover {
+    color: #27b346;
+}
+
+.search-bar {
+    width: 502px;
+    height: 44px;
+    border: 1px solid #27b346;
+    display: inline-block;
+    font-size: 0;
+    margin-top: 12px;
+    margin-left: 10px;
+}
+
+.search-bar .search-input {
+    padding: 0;
+    width: 432px;
+    height: 44px;
+    display: inline-block;
+    line-height: 46px;
+    font-size: 13px;
+    color: #a9a9a9;
+    text-indent: 10px;
+    border: none;
+    vertical-align: top;
+}
+
+.search-bar .search-btn {
+    margin-right: 0;
+    width: 70px;
+    height: 44px;
+    display: inline-block;
+    border: none;
+    background-color: #27b346;
+    vertical-align: top;
+}
+
+.path {
+    word-spacing: 0.5px;
+    line-height: 16px;
+    padding-left: 10px;
+    color: #a89999;
+    margin-top: 19px;
+}
+
+.path i {
+    height: 16px;
+    width: 18px;
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+.path a {
+    color: #2c2c2c;
+    font-size: 13px;
+}
+
+.path a:hover {
+    color: #27b346;
+}
+
+.g-article .main {
+    width: 100%;
+}
+
+.g-article .article {
+    float: left;
+    width: 900px;
+    background: #fff;
+    border: 1px solid #eaeaea;
+}
+
+.g-article .title {
+    height: 78px;
+    width: 100%;
+    position: relative;
+    border-bottom: 1px solid #e4e4e4;
+}
+
+.g-article .title h2 {
+    line-height: 78px;
+    font-size: 20px;
+    color: #333;
+    text-align: center;
+}
+
+.g-article .title .info {
+    position: absolute;
+    bottom: 2px;
+    right: 20px;
+    height: 19px;
+    width: 162px;
+    font-size: 12px;
+    color: #999;
+}
+
+.g-article .title .info p {
+    float: right;
+}
+
+.g-article .title .data {
+    float: left;
+}
+
+.g-article .text {
+    padding: 0 15px;
+    font-size: 16px;
+    line-height: 28px;
+}
+
+.g-article .in-foot {
+    position: relative;
+    width: 100%;
+    padding-top: 1px;
+}
+
+.g-article .point1, .g-article .point2 {
+    cursor: pointer;
+    height: 65px;
+    width: 38px;
+    position: absolute;
+    top: 22px;
+    text-align: center;
+    color: #ccc;
+}
+
+.g-article .point1 a, .g-article .point2 a {
+    font-size: 24px;
+    color: #ccc;
+}
+
+.g-article .point1 a:hover, .g-article .point2 a:hover {
+    color: #ff8533;
+}
+
+.g-article .point1 p, .g-article .point2 p {
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1;
+}
+
+.g-article .point1 {
+    left: 420px;
+}
+
+.g-article .point2 {
+    left: 486px;
+}
+
+.g-article .link {
+    width: 100%;
+    margin-top: 118px;
+    margin-bottom: 16px;
+}
+
+.g-article .link h3 {
+    font-size: 14px;
+    line-height: 38px;
+    color: #999;
+    text-indent: 50px;
+}
+
+.g-article .link a {
+    color: #999;
+}
+
+.g-article .link a:hover {
+    color: #27b346;
+}
+
+.g-article .more {
+    width: 100%;
+    height: 45px;
+    line-height: 45px;
+    font-size: 13px;
+    background: #f9f9f9;
+    text-align: center;
+}
+
+.g-article .more a {
+    color: #b0b0b0;
+}
+
+.g-article .side {
+    float: left;
+    margin-left: 28px;
+    width: 270px;
+}
+
+.g-article .s-box {
+    background: #fff;
+    padding: 0 8px 0 10px;
+    margin-bottom: 30px;
+}
+
+.g-article .s-title {
+    height: 41px;
+    width: 100%;
+    border-bottom: 1px solid #e7e7e7;
+}
+
+.g-article .s-title h3 {
+    text-indent: 12px;
+    font-size: 16px;
+    color: #333;
+    line-height: 45px;
+}
+
+.g-article .box-b {
+    border-bottom: 1px solid #f7f7f7;
+}
+
+.g-article .box-b h4 {
+    word-spacing: 0px;
+    font-size: 16px;
+    line-height: 28px;
+    margin-top: 16px;
+    text-indent: 8px;
+}
+
+.g-article .box-b h4 a {
+    color: #666;
+}
+
+.g-article .box-b h4 a:hover {
+    color: #27b346;
+}
+
+.g-article .b-btns {
+    margin-top: 5px;
+    margin-bottom: 20px;
+    padding-left: 6px;
+    font-size: 0;
+}
+
+.g-article .b-btns a {
+    display: inline-block;
+    padding: 5px 4px;
+    border-radius: 2px;
+    font-size: 12px;
+    line-height: 1;
+    color: #666;
+    background: #e7e7e7;
+    margin-right: 4px;
+}
+
+.g-article .b-btns a:hover {
+    color: #fff;
+    background: #27b346;
+}
+
+.g-article .b-btns .active {
+    color: #fff;
+    background: #27b346;
+}
+
+/*添加的样式*/
+.p-bar .current, .p-bar a:hover {
+    text-decoration: none;
+    color: #fff;
+    border: 1px solid #27b346;
+    background: #27b346;
+}
+
+/*# sourceMappingURL=guide-article.css.map */

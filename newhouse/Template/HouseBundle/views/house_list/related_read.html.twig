@@ -1,0 +1,20 @@
+{#相关阅读#}
+{{core_global.linkcss('static/house/css/newhouse-details/public.css?time=201804201145')}}
+{{core_global.linkcss('static/house/css/newhouse-details/newhouse-common.css?time=201804201145')}}
+{{core_global.linkcss('static/house/css/newhouse-details/newhouseDetail.css?time=201804201145')}}
+<style>
+    .right-list{width:290px;}
+    .vhg-recommend{width:auto;}
+    .read_block>a{display:block;font-size:14px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;
+        margin:18px 0 0 0;position:relative;text-indent:11px;}
+    .read_block>a:after{content:"";width:3px;height:3px;background:#d8d8d8;border-radius:50%;position:absolute;top:9px;left:0;}
+</style>
+
+<div class="vhg-recommend">
+    <p class="vhg-recommend-title col-333 fb fz22">相关阅读</p>
+    <div class="read_block">
+        {% for item in 1..4 %}
+        <a>回归居住本质不可不说的房屋持证哈哈哈哈</a>
+        {% endfor %}
+    </div>
+</div>

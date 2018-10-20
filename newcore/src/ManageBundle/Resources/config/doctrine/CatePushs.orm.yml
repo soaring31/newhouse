@@ -1,0 +1,192 @@
+ManageBundle\Entity\CatePushs:
+    type: entity
+    table: cate_pushs
+    indexes:
+        ename:
+            columns:
+                - ename
+        pid:
+            columns:
+                - pid
+        aid:
+            columns:
+                - aid
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        ename:
+            options:
+                comment: 标识
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        pid:
+            options:
+                comment: 父级
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        status:
+            options:
+                comment: 启用
+                unsigned: false
+                default: '1'
+            nullable: false
+            default: '1'
+            type: smallint
+            length: 2
+        name:
+            options:
+                comment: 名称
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        models:
+            options:
+                comment: 允许模型
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        cates:
+            options:
+                comment: 模型分类
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        form:
+            options:
+                comment: 对应表单
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        from_data:
+            options:
+                comment: 数据来源
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        category:
+            options:
+                comment: 栏目分类id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        type:
+            options:
+                comment: 类型
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        aid:
+            options:
+                comment: 文档ID
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        controller:
+            options:
+                comment: 控制器
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        action:
+            options:
+                comment: 方法
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        menu:
+            options:
+                comment: 推送分类
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        urlparams:
+            options:
+                comment: 筛选条件
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        isadd:
+            options:
+                comment: 允许手动添加
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+        checked:
+            options:
+                comment: 是否审核
+                unsigned: false
+            nullable: false
+            type: boolean
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

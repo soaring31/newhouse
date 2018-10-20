@@ -1,0 +1,209 @@
+﻿/*!
+ * @name <%= name %>
+ * @author <%= author %>
+ * @date <%= date %>
+ */
+// 变量
+$mainW: 930px !default;
+
+
+// 公用样式
+.main {
+	float: left;
+	width: $mainW;
+}
+
+// 个人房源的选项卡内容
+.tag-middle {
+	height: 38px;
+	line-height: 38px;
+	padding-left: 15px;
+	background: #f8f8f8;
+	border-bottom: 1px solid #ddd;
+	@extend %clearfix;
+	.t-m-l {
+		float: left;
+		@extend %clearfix;
+		p {
+			float: left;
+			margin-right: 30px;
+		}
+		a:hover {
+			text-decoration: none;
+		}
+		.act { 
+			color: $major-color;
+		}
+		i {
+			vertical-align: -1px;
+		}
+	}
+
+	.t-m-r {
+		float: right;
+		font-size: 14px;
+		color: $text-color;
+		position: relative;
+		@extend %clearfix;
+
+		i {
+			margin-left: 3px;
+			font-size: 12px;
+		}
+		.font-esf-1 {
+			vertical-align: top;
+		}
+
+		ul {
+			position: absolute;
+			width: 100px;
+			border: 1px solid #ddd;
+			top: 48px;
+			left: -12px;
+			display: none;
+
+			li {
+				font-size: 13px;
+				line-height: 24px;
+				color: #333;
+			}
+			.checked {
+				color: $major-color;
+				line-height: 38px;
+			}
+		}
+		.sort {
+			@extend %clearfix;
+		}
+
+		i {
+			margin-left: 1px;
+		}
+		.sort-btn {
+			line-height: 32px;
+			border: none;
+			background: #f8f8f8;
+			&.act {
+				background: transparent;
+			}
+		}
+	}
+}
+
+// 二手房列表模块
+.sale-list-ex {
+	.sale-item-r {
+		.buy {
+			margin-top: 15px;
+		}
+	}
+}
+
+// 出租房列表模块
+.rent-list-ex {
+	.sale-item-r {
+		.buy {
+			margin-top: 15px;
+		}
+	}
+}
+
+.tag-contr {
+	width: 100%;
+}
+
+.tag-box-t:hover {
+	background: #f9f9f9;
+}
+
+
+// 只有文本的样式
+.tag-box-t {
+	border-bottom: 1px solid #eaeaea;
+	background: #fff;
+	padding-top: 30px;
+	@extend %clearfix;
+}
+
+
+// 只有文字的结构的样式
+.t-b-t-l {
+	float: left;
+	margin-left: 18px;
+	width: 500px;
+	margin-bottom: 18px;
+
+	h3 {
+		line-height: 24px;
+		color: #2c2c2c;
+		font-size: 14px;
+		font-weight: 700;
+	}
+
+	span {
+		font-size: 14px;
+		color: #ccc;
+	}
+
+
+
+	p {
+		font-size: 14px;
+		color: #2c2c2c;
+		line-height: 26px;
+	}
+
+	.place {
+		color: #2c2c2c;
+	}
+}
+
+.t-b-t-m {
+	float: left;
+	width: 120px;
+	p {
+		text-align: center;
+		font-size: 14px;
+		color: #2c2c2c;
+		line-height: 26px;
+	}
+}
+
+.t-b-t-r {
+	float: right;
+	width: 150px;
+
+	p {
+		font-size: 14px;
+		color: #666;
+		margin-bottom: 5px;
+	}
+
+	span {
+		color: #f60;
+
+		font-size: 14px;
+	}
+
+	.big {
+		font-size: 20px;
+	}
+}
+
+// 公用模块引进
+@import 'top-search'; // 搜索模块
+
+@import 'sale-filter-hd'; // 分类筛选头部
+@import 'filter'; // 筛选模块
+
+@import 'sale-aside'; // 侧栏
+
+@import 'font-lp'; // 楼盘图标
+
+@import 'sale-list-com'; // 列表
+
+@import 'list-hd'; // 列表顶部
+
+@import 'sort'; // 重新排序
+
+@import 'lp-compare'; // 对比弹窗样式

@@ -1,0 +1,83 @@
+// 首页导航
+.home-span span {
+    color: #fff;
+}
+
+// 主导航
+.popup-major-nav {
+    .col-25 {
+        border-bottom: 1px solid #f4f4f4;
+        padding: 10px 0;
+        margin-bottom: -1px;
+        text-align: center;
+        color: #3c3f46;
+        i {
+            display: block;
+            margin: 0 auto;
+            width: 45px;
+            height: 45px;
+            font-size: 24px;
+            line-height: 45px;
+            color: #fff;
+            border-radius: 50%;
+        }
+        p {
+            line-height: 1rem;
+            margin-top: 5px;
+        }
+    }
+}
+
+// 导航标题
+.mobile-dh {
+    line-height: 2rem;
+    font-size: .7rem;
+}
+// 当前导航
+.current-nav {
+    background: #f4f4f4; 
+    padding-bottom: 1px;
+    .item-title {
+        font-size: .7rem;
+        border-bottom: 1px solid #ddd;
+        color: #989898;
+    }
+    &-btn {
+        padding-top: .45rem;
+        .button {
+            margin-right: .45rem;
+            margin-bottom: .45rem;
+        }
+    }
+}
+
+// 底部
+.footer {
+    background: #fff;
+    text-align: center;
+    font-size: .7rem;
+    a {
+        color: #5f646e;
+    }
+    [class^="col-"] {
+        border-bottom: 1px solid #fafafa;
+        word-break: break-all;
+        overflow: hidden;
+        height: 42px;
+        line-height: 42px;
+        span{
+            border-right: 1px solid #eee;
+            display: block;
+        }
+        &:last-child {
+            span{
+                border-right: none;
+            }
+        }
+    }
+    .copyright {
+        color: #cccfd8;
+        line-height: 40px;
+        font-size: 12px;
+    }
+}

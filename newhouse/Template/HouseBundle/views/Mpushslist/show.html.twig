@@ -1,0 +1,13 @@
+{% extends "HouseBundle::base_show.html.twig" %}
+{% block js %}
+
+{% endblock %}
+{% block body %}
+{{ core_manage.form(form|default(''),'form') }}
+{% endblock %}
+{% block promptUl %}
+1. 加载过来的信息，前台调用原文档信息
+<br/>
+2. 如果要修改文档的信息在这里填写后会覆盖原文档的信息
+<br/>
+{% endblock %}

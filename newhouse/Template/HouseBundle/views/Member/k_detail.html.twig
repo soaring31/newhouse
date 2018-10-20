@@ -1,0 +1,181 @@
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% set detail_info = cident.detailinfo.data[0]|default('') %}
+
+{# 名称 公司名称 》公司简称 》昵称 》用户名 #}
+{% set detail_name = detail_info.company|default(detail_info.cpltd|default(detail_info.nicename|default(detail.username|default('')))) %}
+
+{% extends detail_info.usertype|default('') == 18 ? 'HouseBundle:Member:k_list.html.twig' : 'CoreBundle:Dispatch:errorcontent.html.twig' %}
+{# 说明
+* detail: 当前数据
+* detail_info: 当前数据附加属性
+* pinpaikaifashang:品牌开发商推送
+* hotpipai:热门开发商
+#}
+
+{% block title %}{{detail_name|default('')}}{% endblock title %}
+
+{% set hotpipai = ('db.userinfo')|getAll({orderBy: 'desc', order: 'clicks', usertype: 18, pageSize: 10, _multi: 1, uid: 'neq|' ~ detail.id|default('')}) %}
+
+{% set pinpaikaifashang = ('pinpaikaifashang')|getPush(10) %}
+
+{# 当前位置 #}
+{% block current_houses %}
+    {{parent()}}
+    <span>&gt;</span>
+    <span>{{detail_name|default('')}}</span>
+{% endblock current_houses %}
+
+{% block container %}
+    <div class="container">
+        <div class="busines-card">
+            <div class="logo fl">
+                <a href="{{('member/k_detail')|U({id: item.id|default('')})}}" title="" target="_blank">
+                    {{- core_global.img({
+                        src: detail_info.image|default(''),
+                        alt: detail_name|default(''),
+                        type: 2,
+                        width:200 ,
+                        height: 70
+                    }) -}}
+                </a>
+            </div>
+            <div class="info">
+                <div class="pt20">
+                    <h1>
+                        {{detail_name|default('')}}
+                        {% if detail_info.companynet|default('') %}
+                            <a href="{{detail_info.companynet|default('')}}" target="_blank">查看官网</a>
+                        {% endif %}
+                    </h1>
+                    <p>
+                        电话：{{detail.tel|default('')}}
+                    </p>
+                    <p>
+                        地址：{{detail_info.companyadr|default('')}}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="blank20"></div>
+        <!--详情-->
+        <div class="kfs-detail clearfix">
+            <!--body-->
+            <div class="kfs-body fl">
+                <div class="title">
+                    <span class="fr mt15">
+                        <i class="font-icons-18"></i>
+                        点击
+                        <span class="major-c"><span data-counts="{models: 'userinfo', service: 'db', field: 'clicks', id: '{{detail_info.id|default('')}}'}"></span></span>次
+                    </span>
+
+                    <h2>
+                        <i class="font-lp-28"></i>
+                         {{detail_name|default('')}}
+                    </h2>
+                </div>
+                <div class="con">
+                    {{core_global.content({content: detail_info.companyjs|default('')})}}
+                </div>
+            </div>
+            <!--/body-->
+            <!--aside-->
+            <div class="kfs-aside fr">
+                <div class="aside-tit">
+                    <h3>
+                        热门开发商
+                    </h3>
+                </div>
+                <div class="asdie-con" data-tag="clicks">
+                    <ul>
+                        {% if hotpipai.data is defined %}
+                            {% set hotpipai_ids = '' %}
+
+                            {% for item in hotpipai.data %}
+                                {% if loop.index != 1 %}
+                                    {% set dh = ',' %}
+                                {% endif %}
+                                {% set hotpipai_ids = hotpipai_ids ~ dh|default('') ~ item.id %}
+                            {% endfor %}
+
+                            {% set hotpipai_attr_data = ('db.user_attr')|getAll({mid: 'in|' ~ hotpipai_ids|default(''), pageSize: hotpipai.pageSize, name: 'company'}) %}
+
+                            {% set hotpipai_attr = {} %}
+
+                            {% for item in hotpipai_attr_data.data %}
+                                {% set hotpipai_attr = {
+                                    (item.name ~ item.mid): item.value
+                                }|merge(hotpipai_attr) %}
+                            {% endfor %}
+
+                            {% for item in hotpipai.data %}
+                                 <li>
+                                    <i class=" {% if loop.index < 4 %}red{% endif %}">{{ loop.index }}</i>
+                                    <a href="{{('member/k_detail')|U({id: item.uid|default('')})}}" target="_blank" class="word">
+                                        {{hotpipai_attr['company' ~ item.id]}}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="blank10"></div>
+                <div class="aside-tit">
+                    <h3>
+                        品牌开发商
+                    </h3>
+                </div>
+                <div class="asdie-con" data-tag="pinpaikaifashang">
+                    <ul>
+                        {% if pinpaikaifashang is defined %}
+                           {#  {% set pinpaikaifashang_ids = '' %}
+                            {% set pinpaikaifashang_info_ids = '' %}
+
+                            {% for item in pinpaikaifashang %}
+                                {% if loop.index != 1 %}
+                                    {% set dh = ',' %}
+                                {% endif %}
+                                {% set pinpaikaifashang_ids = pinpaikaifashang_ids ~ dh|default('') ~ item.fromid %}
+                            {% endfor %}
+
+                            {% set pinpaikaifashang_info_data = ('db.userinfo')|getAll({uid: 'in|' ~ pinpaikaifashang_ids}) %}
+
+                            {% for item in pinpaikaifashang_info_data.data %}
+                                {% if loop.index != 1 %}
+                                    {% set dh = ',' %}
+                                {% endif %}
+                                {% set pinpaikaifashang_info_ids = pinpaikaifashang_info_ids ~ dh|default('') ~ item.id %}
+                            {% endfor %}
+
+                            {% set pinpaikaifashang_attr_data = ('db.user_attr')|getAll({mid: 'in|' ~ pinpaikaifashang_info_ids|default(''), pageSize: pinpaikaifashang|length, name: 'company'}) %}
+
+                            {% set pinpaikaifashang_attr = {} %}
+
+                            {% for item in pinpaikaifashang_attr_data.data %}
+                                {% set pinpaikaifashang_attr = {
+                                    (item.name ~ item.mid): item.value
+                                }|merge(pinpaikaifashang_attr) %}
+                            {% endfor %} #}
+
+                            {% for item in pinpaikaifashang %}
+                                {% if item.fromid|default('') %}
+                                    {% set item_userinfo = ('db.userinfo')|getRow({uid: item.fromid}) %}
+                                {% endif %}
+                                <li>
+                                    <em>·</em>
+                                    <a href="{{core_global.url(item|merge({controller: 'member/k_detail', set_models: 1}))}}" target="_blank" class="word">
+                                       {{item_userinfo.attributes.company.value|default(item_userinfo.attributes.cpltd.value|default(item_userinfo.nicename|default(item.name|default(''))))}}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            <!--/aside-->
+        </div>
+        <!--/详情-->
+    </div>
+    <div class="blank20"></div>
+{% endblock container %}

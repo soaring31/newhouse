@@ -1,0 +1,94 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+
+{% set detail = ident.detail.data[0]|default({}) %}
+{% set url_id = app.request.get('id') %}
+{% block title %}
+    {{detail.name|default('')}}
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" Content="{{detail.keywords|default('')}}"/>
+<meta name="description" content="{{detail.abstract|default('')}}"/>
+{% endblock key_des %}
+
+{% block header_title %}
+{{core_mobile_global.title({title: '资讯详情'})}}
+{% endblock header_title %}
+
+{% block header_right %}
+{{ core_mobile_global.bar_nav_btn({
+    title: '分享',
+    icon: 'font-f-29',
+    class: 'share-actions',
+    attr: {
+        'data-text': detail.name|default(''),
+        'data-abstract': detail.abstract|default(''),
+        'data-url': ('news/detail')|U({id: detail.id|default('')}, true),
+        'data-pic': core_global.img_url({src: detail.thumb|default('')}),
+    }
+}) }}
+{% endblock header_right %}
+
+{% block popup %}
+    {# 点评 id浏览器用，bParams App端用 #}
+
+{{ housemobile_global.popup({
+    name: 'popup-news',
+    title: '资讯点评',
+    content: {
+        bParams: true,
+        ajax: {
+            url: ('bundlebindforms/comment')|U,
+            data: {
+                aid: url_id|default(''),
+                formflag: 'view_comment',
+                models: 'inter_comment',
+                arc_models: 'news'
+            }
+        }
+    }
+}) }} 
+{% endblock popup %}
+
+{% block container %}
+    {# 主体内容 #}
+    <div data-block="{
+        bParams: true,
+        ajax:{
+            url: '{{ ('news/detail')|U }}',
+            data: {
+                tpl: 'News:detailblock',
+                id: '{{ url_id|default('') }}'
+            }
+        }
+    }"></div>
+    {# 微信分享只能放当前页 #}
+{{ housemobile_global.weixin_share({
+    text    : detail.name|default,
+    abstract: detail.abstract|default,
+    url     : ('news/detail')|U({id: detail.id|default}, true),
+    thumb   : detail.thumb|default,
+}) }}
+{% endblock container %}
+
+{%  block js %}
+    <script>
+        seajs.use([], function() {
+            $(function () {
+                var cy = '';
+                var view = '';
+                 cy= zgCommon.getUrlParameter('cy');
+                view = zgCommon.getUrlParameter('cy');
+                if(cy || view){
+                    $("header").css("height",'0');
+                    $("header a").hide();
+                }
+
+                zgCommon.appZxxq();
+                //app跳转到h5如有传漾标识去掉返回键
+                zgCommon.cookieCy();
+            });
+        });
+    </script>
+{% endblock js %}

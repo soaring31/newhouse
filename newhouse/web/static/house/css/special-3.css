@@ -1,0 +1,471 @@
+@charset "UTF-8";
+/* CSS Document */
+/* 通用 */
+* {
+  padding: 0px;
+  margin: 0px;
+}
+
+body {
+  font-family: "微软雅黑";
+  font-size: 12px;
+  color: #666;
+  /* background: url(http://static.fangxiaoer.com/web/images/ico/head/head_jieri.jpg) no-repeat top  center;*/
+}
+
+ul, li {
+  list-style: none;
+}
+
+img {
+  border: none;
+}
+
+i, em, s {
+  font-style: normal;
+  text-decoration: none;
+}
+
+a {
+  text-decoration: none;
+  color: #666;
+}
+
+a:hover {
+  color: #ff5200;
+  text-decoration: underline;
+}
+
+.hid {
+  display: none;
+}
+
+h1 {
+  font-size: 16px;
+}
+
+h2 {
+  font-size: 14px;
+}
+
+h3 {
+  font-size: 12px;
+}
+
+h4 {
+  font-size: 20px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  font-size: 12px;
+}
+
+.cl {
+  clear: both;
+  font-size: 1px;
+  line-height: 0px;
+  height: 0px;
+}
+
+.w {
+  margin: 0 auto;
+  width: 990px;
+}
+
+.w1210 .w {
+  width: 1210px;
+}
+
+.w1210 .mt120 {
+  margin-top: 120px;
+}
+
+.more {
+  float: right;
+  margin-right: 10px;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.more a {
+  color: #999;
+}
+
+.more a:hover {
+  color: #F00;
+  text-decoration: none;
+}
+
+.button {
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  color: #7c7c7c;
+  display: block;
+  font-family: "微软雅黑";
+  font-size: 16px;
+  height: 44px;
+  line-height: 44px;
+  text-align: center;
+  width: 320px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin-top: 16px;
+}
+
+.button:hover {
+  color: #333;
+}
+
+.orange {
+  background: 0;
+  border: 0 none;
+  background: #ff6600;
+  color: #fff;
+  border: 1px solid #ff7549;
+}
+
+.orange:hover {
+  background: #ff4a00;
+  color: #FFF;
+}
+
+body {
+  background-color: #fbefbb;
+  font-size: 14px;
+  color: #666;
+}
+
+p {
+  line-height: 30px;
+}
+
+.banner {
+  height: 564px;
+  text-align: center;
+  background: url(../images/zt-3/banner.jpg) no-repeat center center;
+  *margin-bottom: 60px;
+  padding-top: 40px;
+  z-index: 1;
+}
+
+.text-banner {
+  width: 970px;
+  margin: -137px auto 100px;
+  color: #fbefbb;
+  z-index: 2;
+  margin-top: -143px;
+  *margin-top: -200px;
+}
+
+.text-banner p {
+  float: right;
+  width: 888px;
+}
+
+.text-banner img {
+  margin-top: 7px;
+}
+
+.tit-big {
+  text-align: center;
+  margin-bottom: 37px;
+}
+
+.w1170 {
+  padding: 40px 55px 20px;
+  width: 1060px;
+  margin: 0 auto;
+  background-color: #fff;
+  margin-bottom: 60px;
+}
+
+.xf .left {
+  float: left;
+  width: 353px;
+}
+
+.xf .middleimg {
+  float: left;
+  margin: 0 50px;
+}
+
+.xf .right {
+  float: left;
+  width: 359px;
+}
+
+.xf .left span {
+  font-size: 18px;
+  color: #d93124;
+}
+
+.xf .line1 {
+  margin-bottom: 25px;
+}
+
+.xf .right span {
+  font-size: 18px;
+  color: #22bc9e;
+}
+
+.tit-inner {
+  margin: 34px 0 33px 0;
+  font-weight: bold;
+}
+
+.tit-inner span {
+  float: left;
+  padding: 11px 33px;
+  background-color: #ea4745;
+  color: #fff;
+  font-size: 24px;
+}
+
+.xf2 {
+  padding-bottom: 70px;
+}
+
+.xf2 p {
+  text-indent: 2em;
+}
+
+.xf2 .kaung1 {
+  background: url(../images/zt-3/bg1.jpg) no-repeat right center;
+}
+
+.xf2 .kaung2 {
+  background: url(../images/zt-3/bg2.jpg) no-repeat right center;
+}
+
+.xf2 .kaung1 p {
+  width: 798px;
+}
+
+.xf2 .kaung2 p {
+  width: 728px;
+}
+
+.sf .left {
+  float: left;
+  width: 353px;
+}
+
+.sf .middleimg {
+  float: left;
+  margin: 0 32px;
+}
+
+.sf .right {
+  float: left;
+  width: 359px;
+}
+
+.sf span {
+  font-size: 18px;
+  color: #ea4745;
+}
+
+.sf p {
+  text-indent: 2em;
+}
+
+.fy {
+  padding-top: 47px;
+}
+
+.sj {
+  margin-bottom: 93px;
+}
+
+.sj li {
+  float: left;
+  width: 294px;
+  height: 277px;
+  margin-right: 52px;
+}
+
+.xx li {
+  height: 345px;
+}
+
+.xx li div {
+  background: none !important;
+}
+
+.sj li p {
+  text-indent: 2em;
+}
+
+.sj li div {
+  width: 132px;
+  height: 132px;
+  margin: 0 auto 20px;
+  border-radius: 64px;
+  text-align: center;
+  font-size: 30px;
+  color: #fff;
+  font-weight: bold;
+  line-height: 128px;
+}
+
+.sj li .left {
+  background-color: #86ccef;
+}
+
+.sj li .middle {
+  background-color: #62d0bb;
+}
+
+.sj li .right {
+  background-color: #ef8786;
+}
+
+.tit-bottom {
+  height: 55px;
+  border-bottom: solid 3px #ea4745;
+  text-align: center;
+  color: #fff;
+  font-size: 24px;
+  margin-bottom: 30px;
+  font-weight: bold;
+  *height: 55px;
+}
+
+.tit-bottom span {
+  padding: 10px 0;
+  width: 360px;
+  background-color: #ea4745;
+  display: block;
+  margin: 0 auto;
+}
+
+.text-fy {
+  line-height: 18px;
+  background-image: url(../images/zt-3/laba.jpg);
+  background-repeat: no-repeat;
+  background-position: left center;
+  padding-left: 28px;
+  margin-bottom: 30px;
+}
+
+.fyinfo {
+  color: #999;
+  margin-bottom: 52px;
+}
+
+.fyinfo .left {
+  float: left;
+  width: 340px;
+  margin-right: 22px;
+}
+
+.fyinfo .left img {
+  height: 504px;
+  width: 340px;
+  margin-bottom: 10px;
+}
+
+.fyinfo .left .name {
+  padding: 0 5px;
+  margin-bottom: 4px;
+}
+
+.fyinfo .left .name a {
+  color: #333;
+  font-size: 16px;
+}
+
+.fyinfo .left .name span {
+  float: right;
+  color: #ea4745;
+  font-size: 14px;
+}
+
+.fyinfo .right {
+  float: left;
+  width: 1090px;
+}
+
+.fyinfo .jiaofang {
+  padding: 0 5px;
+}
+
+.fyinfo .right ul {
+  width: 1090px;
+}
+
+.fyinfo .right li {
+  float: left;
+  height: 271px;
+  width: 339px;
+  margin: 0 22px 22px 0;
+}
+
+.fyinfo .right img {
+  height: 211px;
+  width: 339px;
+  margin-bottom: 10px;
+}
+
+.fyinfo .right .name {
+  padding: 0 5px;
+  margin-bottom: 4px;
+}
+
+.fyinfo .right .name a {
+  color: #333;
+  font-size: 16px;
+}
+
+.fyinfo .right .name span {
+  float: right;
+  color: #ea4745;
+  font-size: 14px;
+}
+
+.inner_txt {
+  line-height: 28px;
+  margin-bottom: 20px;
+  text-indent: 2em;
+  font-weight: bold;
+}
+
+.fcz table {
+  width: 710px;
+  font-size: 14px;
+  color: #333;
+  margin: 30px auto 20px;
+  border: 3px solid #fbefbb;
+}
+
+.fcz table td {
+  padding-left: 30px;
+  line-height: 34px;
+}
+
+.fcz .zysx {
+  width: 783px;
+  margin: 0 auto;
+}
+
+.fcz .zysx span {
+  background: #eb4545;
+  color: #fff;
+  padding: 0 4px;
+}
+
+.fzbz {
+  width: 783px;
+  margin: 0 auto;
+  text-indent: 2em;
+  line-height: 24px;
+}
+
+/*# sourceMappingURL=special-3.css.map */

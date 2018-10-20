@@ -1,0 +1,182 @@
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% extends detail|default('') ? 'HouseBundle:Topic:live.html.twig' : 'CoreBundle:Dispatch:errorcontent.html.twig' %}
+{#
+/**
+ * sort_category_live : 获取所有直播
+ * data : 当前直播的详细内容
+ * video : 视频
+ */
+ #}
+{% block title %}直播-{{detail.name|default('详情')}}{% endblock title %}
+
+{% block key_des %}
+    <meta name="keywords" content="{{ detail.keywords|default('') }}" />
+    <meta name="description" content="{{ detail.abstract|default('') }}" />
+{% endblock key_des%}
+
+{% set sort_category_live = ('house.topic')|getAll({checked: 1, category: 80, id: 'neq|' ~ detail.id|default('') }) %}
+
+{% set video = ('house.topic_arc')|getBlock({ename:'shipin'},{checked: 1, aid: detail.id|default(''), pageSize: 0}) %}
+    
+{% block body %}
+    <!--视频内容头部-->
+    <div class="all">
+        <!-- {tpl$head-} -->
+        <div class="blank1"></div>
+        <div class="container wrap-detail">
+            <div class="view-warp clearfix">
+                {{core_global.img({
+                    src: detail.atlas|default(''),
+                    alt: detail.name|default(''),
+                    attr: o.attr|default('class="card-cover"'),
+                    height: 180,
+                    width:960,
+                    type: 2
+                })}}
+                <div class="blank30"></div>
+                <div class="blank20"></div>
+                <div id="video" class="video">
+                    {{core_global.img({
+                        src: detail.thumb|default(''),
+                        alt: detail.name|default(''),
+                        attr: o.attr|default('class="card-cover"'),
+                        width:565,
+                        height: 445,
+                        type: 2
+                    })}}
+                    {# <embed src="{{(video.data[0].upvideo|default(''))}}" quality="high" width="100%" height="445" align="middle" allowscriptaccess="sameDomain" type="application/x-shockwave-flash" allowfullscreen="true"> #}
+                </div>
+                <div class="video-txt"> <strong>活动主题：</strong>
+                    {{detail.name|default('更新中...')}}
+                    <br> <strong>活动时间</strong>
+                    ：{{detail.subtime.date|default('更新中...')}}
+                    <br>
+                    <strong>活动地点</strong>
+                    ：{{core_global.address({data: data|default('待定')})}}
+                    <br>
+                    <strong>主题内容</strong>
+                    ：
+                    <span class="video-txt-con">
+                        <p>
+                            <span style="font-family:宋体">
+                               {{detail.content|default('更新中...')|raw}}
+                                <br>
+                            </span>
+                        </p>
+                    </span>
+                </div>
+            </div>
+
+            <!--文字直播-->
+            <div class="warps" id="text-live">
+                <div class="hd">
+                    <div class="fr r-t">
+                        <span>
+                            自动刷新：
+                            <select id="refresh">
+                                <option selected="selected" value="1">1分钟</option>
+                                <option value="5">5分钟</option>
+                                <option value="10">10分钟</option>
+                                <option value="15">15分钟</option>
+                                <option value="30">30分钟</option>
+                                <option value="0">手动刷新</option>
+                            </select>
+                            <a class="refresh-btn" href="#" rel="nofollow">刷新</a>
+                            排序：
+                            <select id="orderby">
+                                <option selected="selected" value="desc">倒序</option>
+                                <option value="asc">正序</option>
+                            </select>
+                        </span>
+                    </div>
+                </div>
+                <div class="bd clearfix">
+                    <div class="text-txt">
+                        <div class="text-live" id="zblist">
+                        </div>
+                        <div id="load-more" class="load-more text-btn" >显示更多&gt;&gt;</div>
+                        <div id="loading" class="loading" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+            <!--图片直播-->
+            {% if detail.imagelist|default('') %}
+            <div class="warps" id="pic-live">
+                <div class="hd"></div>
+                <div class="bd clearfix">
+                    <div id="G-Scroll" class="jqDuang" data-obj="dl" data-cell=".pages" data-effect="leftLoop" data-prevbtn=".prevBtn" data-nextbtn=".nextBtn" data-visible="3" data-speed="600" data-steps="3">
+                        <div class="pages">
+                        </div>
+                        <a class="prevBtn" href="javascript:;"></a>
+                        <div class="scrollWarp clearfix" >
+                            <div class="moveBox">
+                                    {% for item in detail.imagelist|sourceImg %}
+                                   <dl>
+                                        <dt>
+                                            <a href="javascript:;" data-lightbox="1" target="_blank">
+                                                {{- core_global.img({
+                                                    src: item.href|default(''),
+                                                    width: 252,
+                                                    height: 188,
+                                                    type: 2
+                                                }) -}}
+                                            </a>
+                                        </dt>
+                                        <dd></dd>
+                                    </dl>
+                                    {% endfor %}
+                            </div>
+                        </div>
+                        <a class="nextBtn" href="javascript:;"></a>
+                    </div>
+                </div>
+            </div>
+            <!--图片滚动JS-->
+            {% endif %}
+
+            {% if sort_category_live.data is defined and sort_category_live.pageCount|default(0) != 0 %}
+            <!-- 往期回顾 -->
+            <div class="warps" id="over-live">
+                <div class="hd">
+                    <div class="r r-t">
+                        <!--<a href="#">更多直播&gt;&gt;</a>-->
+                    </div>
+                </div>
+                <div class="bd clearfix">
+                    <ul>
+                        {% for item in sort_category_live.data %}
+                            <li>
+                                <a target="_blank" href="{{('topic/detail')|U({id:item.id|default('')})}}">
+                                     {{- core_global.lazy_img({
+                                        src: item.thumb|default(''),
+                                        alt: item.name|default(''),
+                                        width: 200,
+                                        height: 150,
+                                        type: 2
+                                    }) -}}
+                                </a>
+                                <p>
+                                    <a target="_blank" href="{{('topic/detail')|U({id:item.id|default('')})}}">{{item.name|default('')}}</a>
+                                </p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <!-- /往期回顾 -->
+            {% endif %}
+        </div>
+    </div>
+{% endblock body %}
+
+{% block js %}
+<script type="text/javascript">
+    seajs.use(['comment', 'jqduang'], function (comment, jqduang){
+        comment.zhibo({
+            url: '{{ ("clist/zblist")|U({checked: 1, topic:detail.id|default('')}) }}',
+            list: '#zblist'
+        });
+    });
+</script>
+{% endblock js %}

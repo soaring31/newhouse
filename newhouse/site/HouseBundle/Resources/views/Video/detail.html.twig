@@ -1,0 +1,95 @@
+{# *说明
+ * url_id: 获取当前url传回来的id
+ * detail：根据id获取当前数据的所有信息
+ * parentCate: 获取所属分类的数据
+#}
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% extends detail ? 'HouseBundle:Video:index.html.twig' : 'CoreBundle:Dispatch:errorcontent.html.twig' %}
+
+{% set nav_video_act = detail.category|default('') %}
+
+{% block title %}{{detail.name|default('')}}-视频中心{% endblock title %}
+
+{% block key_des %}
+    <base target="_blank" />
+    <meta name="keywords" Content="{{detail.keywords|default('')}}"/>
+    <meta name="description" content="{{detail.abstract|default('')}}"/>
+{% endblock key_des %}
+
+{% block current %}
+    {% set category = detail.category|default('')|getCategoryById() %}
+    <div class="current-location pb10">
+        <i class="font-icons-20"></i>
+        <a href="{{('index/index')|U}}">首页</a>
+        <span>&gt;</span>
+        <a href="{{('video/list')|U({category: category.id|default('')})}}">
+            {{category.name|default('')}}
+        </a>
+        <span>&gt;</span>
+        <span>{{detail.name|default('')}}</span>
+    </div>
+    <div class="blank20"></div>
+{% endblock current %}
+
+{% block container %}
+    <div class="pr20">
+        <h2 class="video-detail-title">{{detail.name|default('')}}</h2>
+        <div class="blank20"></div>
+        <!--video-->
+        <div id="video" class="video">
+            {% if detail.upvideo|default('') is not empty %}
+                <div id="videoPlay"></div>
+                {{core_global.video({url: "" ~ asset(detail.upvideo|default('')) ~ "", swf: "" ~ asset(corepath ~ '/js/ckplayer/ckplayer.swf') ~ ""})}}
+            {% elseif detail.code|default('') %}
+                {{detail.code|default('')|raw}}
+            {% else %}
+                <img width="100%" height="500" style="height: 500px; width: 100%;" src="{{assetImg('bundles/house/images/pp_sptu.gif')}}" alt="" />
+            {% endif %}
+        </div>
+        <!--/video-->
+        <div class="video-toolbar">
+            <div class="fr">更新时间：{{detail.update_time|default('')|date('Y-m-d')}}  来源：{{detail.source|default('')}}  点击:<i data-counts="{models: 'video', field: 'clicks', id: '{{detail.id|default('')}}'}"></i></div>
+            <!--share-->
+            <div class="bdsharebuttonbox">
+                <a href="#" class="bds_more" data-cmd="more"></a>
+                <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+                <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+                <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+                <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+                <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+            </div>
+            <script>
+                window._bd_share_config = {
+                    "common": {
+                        "bdSnsKey": {},
+                        "bdText": "",
+                        "bdMini": "2",
+                        "bdMiniList": false,
+                        "bdPic": "",
+                        "bdStyle": "0",
+                        "bdSize": "16"
+                    },
+                    "share": {},
+                    "selectShare": {
+                        "bdContainerClass": null,
+                        "bdSelectMiniList": ["qzone", "tsina", "tqq", "renren", "weixin"],
+                        "bdContainerClass": "con"
+                    }
+                };
+                with(document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5)];
+            </script>
+            <!--/share--> </div>
+        <div class="video-article">
+            {{detail.content|default('')|raw}}
+        </div>
+    </div>
+{% endblock container %}
+
+{% block js %}
+    <script type="text/javascript">
+      seajs.use([''], function () {
+        $('#video iframe').eq(0).attr({'height': '500', width: '100%'})
+      })
+    </script>
+{% endblock js %}

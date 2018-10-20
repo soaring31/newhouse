@@ -1,0 +1,20 @@
+{% extends 'HouseBundle::base.html.twig' %}
+{% set _action = '/' %}
+{% set cur_city =  null|getIpArea %}
+
+{% block title %}城市切换{% endblock title %}
+
+{% block body %}
+<div class="container">
+    <div class="city-head">
+        <p>您当前位置所在的城市&nbsp;:&nbsp;</p>
+        {{core_global.switch_area({
+            tpl: '<a class="city-btn" href="%url%">进入 <span>%name%</span></a>',
+            pageSize: 1,
+            sql_opt: {rulesarea: cur_city.area|default(0)}
+        })}}
+    </div>
+    {% include 'HouseBundle:Areachange:mchange.html.twig' %}
+</div>
+<div class="blank30"></div>
+{% endblock body %}

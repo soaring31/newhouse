@@ -1,0 +1,118 @@
+{% extends 'HouseBundle:Topic:index.html.twig' %}
+{# 说明
+ * nav_topic_act: 导航高亮
+ * url_name: url传递的name
+ * tpl_now: 当前时间时间戳
+#}
+
+{% set nav_topic_act = app.request.get("category", 82) %}
+{% block top_ad %}
+{% endblock top_ad %}
+{% block css %}
+    {{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/kft.css')}}
+{% endblock css %}
+
+{# 当前位置 #}
+{% block current_topic %}
+    <span>看房团</span>
+{% endblock current_topic %}
+
+{% block container %}
+    <div class="container">   
+        <!-- 左侧内容列表 -->
+        <div class="left-list" style="margin-top: 30px">
+            {% block group_left %}
+                {{house_global.topic_group({
+                    list: ident.list
+                })}}
+                <!--page-->
+                {{- core_global.page(ident.list) -}}
+                <!--page-->
+            {% endblock group_left %}
+        </div>
+        <!-- 左侧内容列表 -->
+
+        <!-- 右侧内容 -->
+        <div class="kf-right">
+            {% block group_right %}
+                {# 看房团活动流程 #}
+               {# <div class="r-flow bd-gray" data-tag="kanfangtuanliucheng">
+                    <h2 class="r-title">看房团活动流程</h2>
+                    {% set push_kanfangtuanliucheng = ('kanfangtuanliucheng')|getPush(10) %}
+                    <ul class="flow">
+                        {% if push_kanfangtuanliucheng is defined %}
+                            {% for item in push_kanfangtuanliucheng %}
+                                <li>
+                                    <div>
+                                        <h3>
+                                            <i class="font-number-{{loop.index}}"></i>
+                                            {{item.name|default('')}}
+                                        </h3>
+                                        <p>{{item.abstract|default('')}}</p>
+                                    </div>
+                                    <span class="point"></span>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>#}
+                {# 看房团活动流程 #}
+            {% endblock group_right %}
+        </div>
+        {% block group_extend %}{% endblock group_extend %}
+        <!-- 右侧内容 -->
+        <div class="blank20"></div>
+    </div>
+    {% include 'HouseBundle:house_list:alert_tour.html.twig' %}
+{% endblock container %}
+
+{% block js %}
+    <script type="text/javascript">
+        seajs.use('', function () {
+            $('[data-show]').hover(function () {
+                var $this = $(this);
+                var data = $this.data();
+                // 弹窗
+                var $show = $this.find(data.show);
+                // 当前相对浏览器左边的距离
+                var _left =  $this.offset().left;
+                // 弹窗的一半宽度
+                var _width = $show.outerWidth() / 2;
+                // 寻找相对的外框
+                var _wrap = $this.closest(data.wrap);
+                // 外框相对浏览器左边距离
+                var _wrapleft = _wrap.offset().left;
+                // 外框宽度
+                var _wrapwidth = _wrap.outerWidth();
+                // 相对左边距离
+                var _boxLeft = _left - _wrapleft;
+                // 相对右边距离
+                var _boxRight = _wrapwidth - _boxLeft;
+                var _cssleft = null;
+
+                $('[data-hover="1"]').hide();
+
+                // 判断小于
+                if (_boxLeft < _width) {
+                    _cssleft = _left - _wrapleft;
+                } else if (_boxRight < _width) {
+                // 判断大于
+                    _cssleft = _width * 2 - _boxRight + 10
+                } else {
+                    _cssleft = _width
+                };
+
+                $show.css({
+                    'margin-left': - _cssleft
+                }).show().siblings('.sanjiao').show();
+
+            }, function () {
+                var $this = $(this);
+                var data = $this.data();
+                var $show = $this.find(data.show);
+                $show.hide().siblings('.sanjiao').hide();
+            });
+        });
+    </script>
+    <script type="text/javascript" src="{{asset('static/house/js/search.js')}}"></script>
+{% endblock js %}

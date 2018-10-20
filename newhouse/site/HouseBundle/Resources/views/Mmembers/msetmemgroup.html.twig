@@ -1,0 +1,80 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set uid = app.request.get('uid') %}
+{% block js %}
+<script type="text/javascript">
+</script>
+{% endblock %}
+{% block mainMenu %}
+ {#    {{ parent() }}  #}
+{% endblock %}
+
+{% block mainleft %}
+   
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ core_manage.filter([
+    
+   
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            uid: '{{ uid }}'
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th class="pl10">名称</th>
+                    <th width="120" class="tac">操作</th>
+                </tr>
+                <tr>
+                    <td class="pl10">
+                        {% set gid = ('db.userinfo')|getOne( 'groupid',{ uid: uid}) %}
+                        {% set aid = ('db.userinfo')|getOne( 'usertype',{ uid: uid}) %}
+                        {% set accname = ('db.mem_group')|getOne( 'name',{ id: gid}) %}
+                        {{ accname }}
+                    </td>
+                    <td class="tar pr10">
+                        {{ core_manage.show({
+                            url: ('msetmemgroup/show')|U({ uid: uid, _aid: aid, group_id: gid })
+                        }) }}
+                    </td>
+
+                </tr>
+                {% set attrs = (uid|getMemAttach(aid)) %}
+                {% for vos in attrs %}
+                    <tr>
+                    <td class="pl10">{{ vos.name }} {{ vos.subname }}</td>
+                    <td></td>
+                    </tr>
+                {% endfor %}    
+            </tbody>
+        </table>
+    </div>
+    {# {{core_manage.page(ident.info)}} #}
+</section>
+
+{# {{ core_manage.oprate([
+   {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    } 
+    
+]) }} #}
+{% endblock %}
+
+{% block promptUl %}
+{# 提示说明 #}
+{% endblock %}
+
+
+
+

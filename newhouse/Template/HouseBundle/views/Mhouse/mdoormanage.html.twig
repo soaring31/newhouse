@@ -1,0 +1,104 @@
+{# 户型 #}
+{% extends 'HouseBundle:Mhouse:mhousesarc.html.twig' %}
+
+{% block tableMain %}
+{% if aid %}
+  {{ core_manage.filter([
+    {
+        method: 'selectFormField',
+        field: 'zlhx',
+        form: 'houses_door',
+        title: '主力户型',
+    },
+    {
+        method: 'selectCate',
+        title: '状态',
+        field: 'cate_status',
+        service: 'house.category',
+    },
+    {
+        method: 'search',
+        field: 'name',
+        title:'请搜索ID/名称'
+    }
+]) }}
+ {% else %}   
+{{ core_manage.filter([
+   
+    {
+        method: 'selectFormField',
+        title: '审核',
+        form: 'checked',
+        field: 'checked',
+    },
+    {
+        method: 'selectFormField',
+        field: 'zlhx',
+        form: 'houses_door',
+        title: '主力户型',
+    },
+    {
+        method: 'search',
+        field: 'name',
+    }
+]) }}
+{% endif %}    
+<div class="list-con" data-param="{{ params }}">
+    <div class="list list-thumb">
+        <ul>
+            {% if ident.info.data|length %}
+            {% for k, vo in ident.info.data %}  
+            <li data-id="{{ vo.id }}">
+                <div data-role="checkbox" class="img">
+                    <img src="{{assetImg(vo.thumb, {type: 2, width: 135, height: 135})}}" alt="">
+                    <i class="font-ico-1"></i>
+                </div>
+                <div class="bar">
+                    <span class="text">{{ vo.id|default('') }}</span>
+                    <a title="编辑" data-role="show" href="{{ (action ~ "/show")|U({id:vo.id}) }}" class="font-ico-2 is-edit"></a>
+                    <a title="删除" data-role="delete" href="#" class="font-ico-3"></a>                    
+                </div>
+                <a class="list-thumb-name" target="_blank" href="{{('door/detail')|U({id: vo.id})}}" title="{{ vo.name|default('') }}">[{{core_global.formField({value: vo.checked})}}]{{ vo.name|default('') }}
+                {{ ('house.houses')|getOne('name', {id: vo.aid}) }}</a>
+            </li>
+            {% endfor %}
+            {% else %}
+            <li class="tac">没有数据！</li>
+            {% endif %}
+        </ul>
+    </div>
+    {{core_manage.page(ident.info)}}
+</div>
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'checked',
+        title: '审核',
+    },
+    {
+        method: 'dropdownCate',
+        title: '状态',
+        field: 'cate_status',
+        service: 'house.category',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'zlhx',
+        form: 'houses_door',
+        title: '主力户型',
+    }
+]) }}
+{% endblock %}
+
+
+{% block promptUl %}
+
+{% endblock %}
+
+
+

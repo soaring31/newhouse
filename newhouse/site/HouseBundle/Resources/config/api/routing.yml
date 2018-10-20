@@ -1,0 +1,107 @@
+v1_ad:
+    resource: HouseBundle\Controller\Api\V1\AdController
+    type: rest
+    prefix: /v1/ad
+
+v1_area:
+    resource: HouseBundle\Controller\Api\V1\AreaController
+    type: rest
+    prefix: /v1
+
+v1_build:
+    resource: HouseBundle\Controller\Api\V1\BuildController
+    type: rest
+    prefix: /v1
+
+v1_cityitem:
+    resource: HouseBundle\Controller\Api\V1\CityItemController
+    type: rest
+    prefix: /v1/cityitem
+
+v1_collet:
+    resource: HouseBundle\Controller\Api\V1\ColletController
+    type: rest
+    prefix: /v1
+
+v1_house:
+    resource: HouseBundle\Controller\Api\V1\HouseController
+    type: rest
+    prefix: /v1
+
+v1_houseterm:
+    resource: HouseBundle\Controller\Api\V1\HouseTermController
+    type: rest
+    prefix: /v1/houseterm
+
+v1_info:
+    resource: HouseBundle\Controller\Api\V1\NewsInfoController
+    type: rest
+    prefix: /v1
+
+v1_look_house:
+    resource: HouseBundle\Controller\Api\V1\LookHouseController
+    type: rest
+    prefix: /v1
+
+v1_newindex:
+    resource: HouseBundle\Controller\Api\V1\NewIndexController
+    type: rest
+    prefix: /v1
+
+v1_price_trend:
+    resource: HouseBundle\Controller\Api\V1\PriceTrendController
+    type: rest
+    prefix: /v1
+
+v1_promotion_order:
+    resource: HouseBundle\Controller\Api\V1\PromotionOrderController
+    type: rest
+    prefix: /v1/promotion/order
+
+v1_scribe:
+    resource: HouseBundle\Controller\Api\V1\SubscribeController
+    type: rest
+    prefix: /v1
+
+v1_sem:
+    resource: HouseBundle\Controller\Api\V1\SemController
+    type: rest
+    prefix: /v1
+
+v1_serach:
+    resource: HouseBundle\Controller\Api\V1\SearchController
+    type: rest
+    prefix: /v1
+
+v1_subway:
+    resource: HouseBundle\Controller\Api\V1\SubwayController
+    type: rest
+    prefix: /v1/subway
+
+v1_trend:
+    resource: HouseBundle\Controller\Api\V1\TrendController
+    type: rest
+    prefix: /v1
+
+v1_user:
+    resource: HouseBundle\Controller\Api\V1\UserController
+    type: rest
+    prefix: /v1
+
+
+front_house:
+    resource: HouseBundle\Controller\Api\Front\HouseController
+    type: rest
+    prefix: /front
+
+notify:
+    resource: HouseBundle\Controller\Api\NotifyController
+    type: rest
+    prefix: /notify
+
+synchronous:
+    resource: HouseBundle\Controller\Api\SynchronousController
+    type: rest
+    prefix: /synchronous
+
+

@@ -1,0 +1,115 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set category = app.request.get('category') %}
+{% set vote = app.request.get('vote') %}
+
+{% set aid = app.request.get('aid') %}
+{% block js %}
+<script type="text/javascript"></script>
+{% endblock %}
+
+{% block mainMenu %}
+    {% if aid == 0 %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}
+
+{% block mainleft %}
+    {% if aid == 0 %}
+    {{ core_manage.main_left({triggerNext : 1}) }}
+    {% endif %}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{% set filterOpt = [
+    {
+        method: 'selectFormField',
+        title: '审核',
+        form: 'checked',
+        field: 'checked',
+    },
+    {
+        method: 'search',
+        field: 'name',
+        title: '请搜索标题'
+    }
+] %}
+
+{% if aid or aid == 0 %}
+    {% set filterOpt = [{
+        method: 'show',
+        title: ' <i class="font-ico-plus mr5"></i>新增投票'
+    }]|merge(filterOpt) %}
+{% endif %}
+
+{{ core_manage.filter(filterOpt) }}
+<section class="list-con"  data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ "/show")|U({models: 'vote'}) }}',
+        submitUrl : '{{ (action ~ "/save")|U }}',
+        deleteUrl : '{{ (action ~ "/delete")|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+            aid: '{{ aid }}',
+            vote: '{{ vote }}'
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="50" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="50" data-role="sort" data-sort="id" class="sort">ID</th>
+                    {# {% if aid is null %}
+                    <th>文章</th>
+                    {% endif %} #}
+                    <th>投票标题</th>
+                    <th width="60"  data-sort="vote" class="sort">选项</th>
+                    <th width="60">审核</th>
+                    <th width="100" data-role="sort" data-sort="create_time" class="sort">添加时间</th>
+                    <th width="120" class="tac">操作</th>
+                </tr>
+                {% if ident.info2.data is defined and ident.info2.data|length != 0 %}
+                 {% for item in ident.info2.data %}
+                <tr data-id="{{ item.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td>{{ item.id|default('') }}</td>
+                    <td class="tov" title="{{ item.name|default('') }}">{{ item.name|default('') }}</td>
+                    <td class="pl10">
+                        <a data-role="show" title="{{item.name}}的选项" href="{{('votemanage/voteoptions')|U({vid: item.id|default('')})}}">[{{ core_global.count({ models: 'voteoptions', sql_opt: {vid: item.id} }) }}]</a>
+                    </td>
+                    <td>{{ core_global.formField({value: item.checked|default('')}) }}</td>
+                    <td>{{ item.create_time|default('0')|date('Y-m-d') }}</td>
+                    <td class="tar pr10">
+                        {{ core_manage.show() }}
+                        {{ core_manage.delete() }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="7" class="tac">没有数据！</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info2)}}
+</section>
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'checked',
+        title: '审核',
+    }
+]) }}
+{% endblock %}
+
+{% block promptUl %}
+    <p>1.只有当投票分类没有相关联的投票时才可以删除。</p>
+{% endblock %}

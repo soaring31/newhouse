@@ -1,0 +1,18 @@
+{% extends "CoreBundle:Dispatch:jump.html.twig" %}
+{% set tpl_title = "提示信息" %}
+{% set tpl_img = 3 %}
+{% set tpl_content = "请您登录会员中心，以方便管理" %}
+{% set tpl_btn_data = {
+	0: {
+        name: '会员登录',
+        url: ('house/login')|U
+    },
+    1: {
+        name: '注册会员',
+        url: ('house/register')|U
+    },
+    2: {
+        name: '关闭窗口',
+        url: 'javascript:window.close();'
+    }
+} %}

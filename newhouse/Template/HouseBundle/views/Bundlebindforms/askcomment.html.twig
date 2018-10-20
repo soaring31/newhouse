@@ -1,0 +1,71 @@
+{% extends 'CoreBundle::base_ajax.html.twig' %}
+
+{% block result %}
+{% set ask = app.request.get("ask") %}
+{% set formflag = app.request.get("formflag") %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/comment.css')}}
+<div id="comment" class="comment">
+    <div data-view-form="1" class="answer-form form-origin common-form comment-form">
+        <form class="comment-form-self  form-{{formflag}}" method="get" errorLabelContainer=".form-origin .numtip" action="{{ form.vars.action|default('') }}">
+            {{ form_widget(form.ask, {value: ask}) }}
+            {{ form_widget(form.toid) }}
+            {# {{ form_widget(form.isanswer) }} #}
+            {{ form_widget(form.uid) }}
+            {{ form_widget(form.user_agent, {value: app.request.headers.get('user-agent') }) }}
+            <div class="textarea">
+                {{ form_widget(form.content) }}
+            </div>
+            <div class="comment-sub">
+                <div class="btn-face">
+                    <span class="btn-c" data-id="f-list" data-assign="#content" data-path="{{ asset('bundles/'~ bundlepath ~'/images/face/', absolute=true) }}"> <i class="font-cmt-3" style="color:#e43"></i>
+                        表情
+                    </span>
+                </div>
+                <div class="fl">{{ form_widget(form.codeText) }}</div>
+                {{ form_widget(form.csrf_token) }}
+                <div class="fr">
+                    <span class="numtip"></span>
+                    <button type="submit" disabled="disabled" data-role="submit" class="answer-btn btn"> <i class="font-ask-12"></i>
+                        提交回答
+                    </button>
+                    <a class="answer-btn btn cancel">
+                        取消
+                    </a>
+                </div>
+            </div> 
+        </form>
+    </div>
+</div>
+{% set comment_url = ('intercomment/asklist')|U({
+                            title: '答案',
+                            ask: ask, 
+                            reply: 1
+                        }) %}
+<script type="text/javascript">
+    seajs.use(['comment'], function(comment) {
+
+        var $answerBtn = $('.answer-submit'),
+            $cancelBtn = $('.cancel')
+        // 点击显示回答下拉框
+        $answerBtn.on('click', function(){
+           $('.answer').hide();
+           $('.answer-form').show();
+        });
+        $cancelBtn.on('click', function(){
+            $('.answer-form').hide();
+            $('.answer').show();
+        });
+        // 点评
+        comment.init({
+            list: '#pl-list',
+            url: '{{ comment_url }}',
+            loadMore: '.load-more',
+            cache:false
+        });
+        // 启用按钮
+        $('.btn[disabled="disabled"]').prop('disabled', '');
+    })    
+</script>    
+{% endblock result %}
+
+

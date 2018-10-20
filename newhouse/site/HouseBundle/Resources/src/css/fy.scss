@@ -1,0 +1,13 @@
+﻿/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+*/
+
+@import 'static/ats';
+// 工具类 每个文件都要导入
+
+@import 'sale';
+// 二手模块公用样式
+@import 'filter';
+// 分类样式

@@ -1,0 +1,239 @@
+ManageBundle\Entity\Menus:
+    type: entity
+    table: menus
+    indexes:
+        pid:
+            columns:
+                - pid
+        bundle:
+            columns:
+                - bundle
+        controller:
+            columns:
+                - controller
+        status:
+            columns:
+                - status
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        pid:
+            options:
+                comment: 上级菜单ID
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        name:
+            options:
+                comment: 菜单名称
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        bundle:
+            options:
+                comment: 所属bundle
+                unsigned: false
+            nullable: false
+            type: string
+            length: 50
+        controller:
+            options:
+                comment: 所属控制器
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        action:
+            options:
+                comment: 所属动作
+                unsigned: false
+            nullable: false
+            type: string
+            length: 50
+        identifier:
+            options:
+                comment: Bundle标识
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        level:
+            options:
+                comment: 等级
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 3
+        title:
+            options:
+                comment: 备注
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        status:
+            options:
+                comment: 1有效，0无效
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+        is_hide:
+            options:
+                comment: 是否隐藏
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+        is_dev:
+            options:
+                comment: 仅开发者可见
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+        remark:
+            options:
+                comment: 图标
+                unsigned: false
+            nullable: false
+            type: string
+            length: 20
+        bindmenu:
+            options:
+                comment: 关联菜单
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        left_node:
+            options:
+                comment: 左节点
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        right_node:
+            options:
+                comment: 右节点
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        binary_tree:
+            options:
+                comment: '二叉树标识,1为启用'
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+        ename:
+            options:
+                comment: 标识
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        models:
+            options:
+                comment: 模型
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        urlparams:
+            options:
+                comment: 链接参数
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        category:
+            options:
+                comment: 栏目分类id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        category_models:
+            options:
+                comment: 分类方案
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        issystem:
+            options:
+                comment: '0为可删除 1为不可删除'
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+        genre:
+            options:
+                comment: 类型
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        url:
+            options:
+                comment: 链接
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        checked:
+            options:
+                comment: 开启
+                unsigned: false
+                default: '1'
+            nullable: false
+            default: '1'
+            type: integer
+            length: 10
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

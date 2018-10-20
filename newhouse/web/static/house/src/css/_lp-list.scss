@@ -1,0 +1,210 @@
+﻿/*!
+ * @name lp-list.css
+ * @author xying
+ * @date 2016-8-5
+ * @dec common lp list
+ */
+
+@import 'sort';//排序
+
+$lp-body-w:930px !default;
+$lp-price-color:#f50 !default;
+
+@import 'mixins/button'; // 按钮
+
+
+.lp-body{
+	width: $lp-body-w;
+}
+/*
+title
+*/
+.body-tit{
+	border-bottom: 2px solid $major-color;
+	h2{
+		a{
+			background: #fff;
+			// border: 1px solid $major-color;
+			// border-radius: 2px 2px 0 0;
+			// margin-bottom: -1px;
+			display: block;
+			float: left;
+			font-size: 18px;
+			// margin-right: 5px;
+			padding: 9px 20px;
+			&:hover{
+				text-decoration: none;
+				background-color: #fafafa;
+			}
+			&.act {
+				background: $major-color;
+				color: #fff;
+				.ico {
+					color: inherit;
+				}
+			}
+		}
+		.ico {
+			margin-right: 10px;
+			vertical-align: 0;
+			color: #f00;
+		}
+
+	}
+	.sort{
+		margin-top: 8px;
+	}
+}
+/*
+list
+*/
+ .list-item{
+	border-bottom: 1px dashed #ddd;
+	padding-top: 30px;
+	a{
+		color: #666;
+		text-decoration: none;
+		&:hover{
+			color: $hover-color;
+		}
+	}
+	.pic{
+		margin-left: 20px;
+		margin-right: 20px;
+		width: 180px;
+		position: relative;
+		img{
+			height: 135px;
+			width: 180px;
+		}
+        i {
+            border-radius: 3px;
+            background: $major-color;
+            color: #fff;
+            font-size: 12px;
+            font-family: simsun;
+            height: auto;
+            line-height: 20px;
+            padding: 0 5px;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+	}
+	.info{
+		width: 550px;
+		h3{
+			height: 27px;
+			overflow: hidden;
+			&.h40{
+				line-height: 40px;
+				height: 40px;
+
+			}
+		}
+		.fx{
+			font-size: 14px;
+		}
+		p{
+			line-height: 34px;
+			height: 34px;
+		}
+		.tag{
+			border-radius: 3px;
+			color: #fff;
+			display: inline-block;
+			font-size: 12px;
+			margin-left: 8px;
+			padding: 1px 6px;
+			&.on-sale{
+				background: #f60;
+			}
+			&.dis-sale{
+				background: #aaa;
+			}
+			&.on-sale-114 {
+			    background-color: #06a897;
+			}
+			&.on-sale-115 {
+			    background-color: #1cbaff;
+			}
+			&.on-sale-116 {
+			    background-color: #f60;
+			}
+			&.on-sale-117 {
+			    background-color: #ce9b86;
+			}
+			&.on-sale-118 {
+			    background-color: #afafaf;
+			}
+			&.on-sale-159 {
+			    background-color: #e43;
+			}
+		}
+	}
+	.tit{
+		color: #666;
+		font-size: 18px;
+		&:hover{
+			color: $hover-color;
+			text-decoration: none;
+		}
+	}
+	.ico-word{
+		margin-right: 15px;
+		i{
+			color: #e4e4e4;
+		}
+	}
+	.other{
+		text-align: right;
+		width: 160px;
+		.total-price{
+			color: $lp-price-color;
+			font-family: georgia;
+			font-size: 28px;
+			line-height: 18px;
+		}
+		.mj{
+			margin-left: 10px;
+		}
+		.dj{
+			line-height: 36px;
+		}
+		.btn{
+			border-radius: 3px;
+			float: right;
+			line-height: 30px;
+			height: 30px;
+			margin-top: 26px;
+			width: 151px;
+			i{
+				font-size: 16px;
+				margin-left: 5px;
+			}
+		}
+		.fill-btn{
+			cursor: pointer;
+			@include fill-btn($major-color,$major-color);
+		}
+		.disable-btn{
+			font-size: 12px;
+			@include fill-btn(#aaa,#aaa);
+		}
+	}
+	&:hover{
+		background: #f9f9f9;
+	}
+	.tags {
+        span {
+            border: 1px solid #ccc;
+            color: #666;
+            display: inline-block;
+            height: 22px;
+            line-height: 22px;
+            margin-right: 5px;
+            overflow: hidden;
+            padding: 0 5px;
+        }
+    }
+}

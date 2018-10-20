@@ -1,0 +1,75 @@
+﻿@charset "UTF-8";
+.common-form .code-wrap-outer {
+    display: inline-block;
+    vertical-align: middle;
+    width: 50%;
+}
+.comment-form .code-wrap {
+    float: left;
+    width: 200px !important;
+}
+.common-form .code-wrap {
+    display: table;
+    width: 100%;
+}
+.common-form .code-wrap .code-item {
+    display: table-cell;
+    width: 100%;
+    vertical-align: top;
+}
+.common-form .code-wrap input[type="text"], .common-form .code-wrap .code-txt {
+    width: 100% !important;
+    padding: 0;
+    text-indent: 10px;
+}
+#codeText{
+    height: 32px;
+    line-height: 32px;
+    border: 1px solid #ddd;
+    font-size: 12px;
+    font-family: simsun;
+    border-radius: 3px;
+    vertical-align: middle;
+}
+.common-form .code-wrap .code-item-img {
+    padding-left: 15px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+.comment-form .code-wrap img{
+	float: left;
+}
+.common-form .code-wrap .code-title {
+    padding-left: 5px;
+    text-decoration: none;
+    color: #999;
+}
+.common-form .error-wrap {
+    height: 14px;
+    line-height: 1;
+    display: inline-block;
+}
+.comment-form .btn {
+	width: 120px;
+    border-radius: 3px;
+    background: #e43;
+    line-height: 34px;
+    height: 34px;
+    border: none;
+    color: #fff;
+    padding: 0 10px;
+    outline: none;
+}
+.common-form .error-wrap {
+    height: 14px;
+    line-height: 1;
+    display: inline-block;
+}
+.common-form label.error {
+    color: #f00;
+    font-family: simsun;
+    font-size: 12px;
+    padding-right: 5px;
+    display: inline-block;
+}
+ .list_box{margin-top:29px;padding: 0 20px;} .list_box .tab li{float:left;font-size:14px;height:30px;line-height:30px;margin-right:10px;border-radius:2px;padding:0 12px;cursor:pointer} .list_box .tab li:hover{color:#fff;background-color:#333} .list_box .tab li span{font-size:12px;padding-left:6px} .list_box .tab li.active{color:#fff;background-color:#666;border-radius:2px} .list_box .list{width:900px;margin-top:5px} .list_box .list li{width:100%;color:#333;padding-top:30px;padding-bottom:30px;border-bottom:1px solid #eee} .list_box .list li .l_userpic{float:left;width:100px;text-align:center;padding-top:4px} .list_box .list li .l_userpic .pic{width:55px;margin:0 auto 13px;border-radius: 50%;overflow: hidden;} .list_box .list li .l_userpic .pic img{width:100%} .list_box .list li .l_userpic .info{font-size:12px;color:#999;line-height:20px} .list_box .list li .r_comment{float:right;position:relative;width:740px;padding:20px;font-size:14px;background-color:#f9f9f9;border-radius:2px} .list_box .list li .r_comment:after{content:'';position:absolute;top:14px;left:-35px;display:block;width:0;height:0;border:18px solid;border-color:transparent #f9f9f9 transparent transparent;transform:scale(1, .62)} .list_box .list li .r_comment .tag{position:absolute;right:20px;top:20px;height:20px;line-height:20px;font-size:12px;color:#849aae;padding:0 6px} .list_box .list li .r_comment .score .num{display:inline-block;color:#333;vertical-align:middle;padding-left:8px} .list_box .list li .r_comment .score .num span{padding-right:12px} .list_box .list li .r_comment .words-container{position:relative;max-height:96px;margin:13px 0 24px 2px;color:#333;line-height:24px;overflow:hidden} .list_box .list li .r_comment .show-all{position:absolute;right:0;bottom:0;display:inline-block;height:24px;padding-left:40px;line-height:24px;color:#00ae66;font-size:14px;background-image:url(../images/comment_sprite_v2.png);background-image:-webkit-image-set(url(../images/comment_sprite_v2.png) 1x, url(../../img/comment/comment_sprite_v2@2x.png) 2x);background-position:0 100%;cursor:pointer} .list_box .list li .r_comment .sepline{border-bottom:1px solid #e5e5e5} .list_box .list li .r_comment .picList{margin:4px 0 0 2px;width:540px} .list_box .list li .r_comment .picItem{float:left;position:relative;width:80px;height:80px;margin-right:10px;margin-top:16px;cursor:pointer} .list_box .list li .r_comment .picItem img{width:100%} .list_box .list li .r_comment .picCover{display:none;position:absolute;left:0;top:0;width:80px;height:80px;background-color:#000;opacity:.5;filter:alpha(opacity=50)} .list_box .list li .r_comment .largePic{display:none;position:absolute;left:0;bottom:90px;width:362px;height:232px} .list_box .list li .r_comment .info{margin:16px 0 0 2px;font-size:12px;color:#999;overflow:hidden} .list_box .list li .r_comment .info .time{float:left} .list_box .list li .r_comment .info .like{float:right;cursor:pointer} .list_box .list li .r_comment .info .like i{display:inline-block;vertical-align:middle;width:14px;height:14px;margin-right:5px;background-image:url(../images/comment_sprite.png);background-image:-webkit-image-set(url(../images/comment_sprite.png) 1x, url(../../img/comment/comment_sprite@2x.png) 2x);background-position:-15px -33px;background-repeat:no-repeat} .list_box .list li .r_comment .info .like span{display:inline-block;vertical-align:middle} .list_box .list li .r_comment .info .islike i{background-position:0 -33px}

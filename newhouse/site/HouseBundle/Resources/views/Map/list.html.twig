@@ -1,0 +1,274 @@
+{% extends 'HouseBundle::base.html.twig' %}
+
+{% block css %}
+<meta http-equiv="Pragma" contect="no-cache">
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/webmap.css')}}
+{% endblock css %}
+
+{% block title %}网站地图{% endblock title %}
+{% set category_data = 'category'|getCategory() %}
+{% block body %}
+<!--container-->
+<div class="map-container clearfix mt20">
+    <div class="body fl">
+        <div class="tags">
+            <div class="wrap-head">
+                <ul class="clearfix ">
+                    <li class="cur">
+                        <div>
+                            新房
+                            <span>·</span>
+                            二手房 <i></i>
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            出租
+                            <span>·</span>
+                            短租 <i></i>
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            专题
+                            <span>·</span>
+                            快讯
+                            <i></i>
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            服务
+                            <span>·</span>
+                            工具
+                            <i></i>
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            其他
+                            <span>·</span>
+                            相关
+                            <i></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="wrap-con" style="">
+                <div class="cons">
+                    <!--新房-二手房-->
+                    <div class="panel" id="0">
+                        <div class="panel-title">
+                            新房
+                            <span>·</span>
+                            二手房
+                        </div>
+                        <div class="panel-body">
+                            <dl>
+                                <dt>
+                                    <a href="{{('houses/list')|U}}" title="" target="_blank">新房中心</a>
+                                </dt>
+                                <dd>
+                                    <a href="{{('houses/list')|U}}" title="" target="_blank">楼盘大全</a>
+                                    <a href="{{('special/list')|U}}" title="" target="_blank">特价房</a>
+                                    <a href="{{('map/index')|U}}" title="" target="_blank">地图找房</a>
+                                    <a href="{{('groupbuy/list')|U}}" title="" target="_blank">团购</a>
+                                    <a href="{{('door/list')|U}}" title="" target="_blank">户型图库</a>
+                                    <a href="{{('member/k_list')|U}}" title="" target="_blank">开发商</a>
+                                    <a href="{{('topic/group')|U({category: 82})}}" title="" target="_blank">看房团</a>
+                                    <a href="{{('fenxiao/earn')|U}}" title="" target="_blank">赚佣金</a>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <a href="{{('sale/list')|U}}" title="" target="_blank">二手</a>
+                                </dt>
+                                <dd>
+                                    <a href="{{('sale/list')|U}}" title="" target="_blank">出售房源</a>
+                                    <a href="{{('sale/list')|U({})}}" title="" target="_blank">个人出售房源</a>
+                                    <a href="{{('sale/xqlist')|U}}" title="" target="_blank">小区</a>
+                                    <a href="{{('map/sale')|U}}" title="" target="_blank">地图找二手房</a>
+                                    <a href="{{('member/j_list')|U}}" title="" target="_blank">经纪人</a>
+                                    <a href="{{('member/list')|U}}" title="" target="_blank">经纪公司</a>
+                                    <a href="{{('demand/list')|U}}" title="" target="_blank">求购信息</a>
+                                    <a href="" title="" target="_blank">委托出售</a>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <!--/新房-二手房-->
+
+                    <!--出租-短租-->
+                    <div class="panel" id="1">
+                        <div class="panel-title">
+                            出租
+                            <span>·</span>
+                            短租
+                        </div>
+                        <div class="panel-body">
+                            <dl>
+                                <dt>
+                                    <a href="{{('rent/list')|U}}" title="" target="_blank">出租</a>
+                                </dt>
+                                <dd>
+                                    <a href="{{('rent/list')|U}}" title="" target="_blank">出租房源</a>
+                                    <a href="{{('rent/list')|U}}" title="" target="_blank">个人出租房源</a>
+                                    <a href="{{('rent/list')|U({shi: 146})}}" title="" target="_blank">一室出租</a>
+                                    <a href="{{('rent/list')|U({shi: 147})}}" title="" target="_blank">二室出租</a>
+                                    <a href="{{('map/rent')|U}}" title="" target="_blank">地图找租房</a>
+                                    <a href="{{('demand/list')|U({category: 298})}}" title="" target="_blank">求租信息</a>
+                                    <a href="#" title="" target="_blank">委托出租</a>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <a href="{{('business/list')|U}}" title="" target="_blank">
+                                        商业地产
+                                    </a>
+                                </dt>
+                                <dd>
+                                    <a href="{{('business/list')|U}}" title="" target="_blank">写字楼楼盘</a>
+                                    <a href="{{('business/xsalelist')|U}}" title="" target="_blank">写字楼出售</a>
+                                    <a href="{{('business/xrentlist')|U}}" title="" target="_blank">写字楼出租</a>
+                                    <a href="{{('business/slist')|U}}" title="" target="_blank">商铺楼盘</a>
+
+                                    <a href="{{('business/ssalelist')|U}}" title="" target="_blank">商铺出售</a>
+                                    <a href="{{('business/srentlist')|U}}" title="" target="_blank">商铺出售</a>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <!--/出租-短租-->
+
+                    <!--专业-快讯-->
+                    <div class="panel" id="2">
+                        <div class="panel-title">
+                            专业
+                            <span>·</span>
+                            快讯
+                        </div>
+                        <div class="panel-body">
+                            {% for item in category_data if item.pid|default('') == 0 and item.models in ['news', 'video', 'topic', 'photos'] %}
+                                <dl>
+                                    <dt>
+                                        <a href="{{(item.models ~ '/index')|U({})}}" title="" target="_blank">{{item.name|default('')}}</a>
+                                    </dt>
+                                    <dd>
+                                        {% for item2 in category_data if item2.pid|default('') == item.id|default('')  %}
+                                        <a href="{{(item.models ~ '/list')|U({category: item2.id|default('')})}}" title="" target="_blank">{{item2.name|default('')}}</a>
+                                        {% else %}
+                                            <a href="#">暂无分类</a>
+                                        {% endfor %}
+                                    </dd>
+                                </dl>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <!--/专业-快讯-->
+
+                    <!--服务-工具-->
+                    <div class="panel" id="3">
+                        <div class="panel-title">
+                            服务
+                            <span>·</span>
+                            工具
+                        </div>
+                        <div class="panel-body">
+                            {% for item in category_data if item.pid|default('') == 0 and item.models in ['ask', 'service'] %}
+                            <dl>
+                                <dt>
+                                    <a href="{{(item.models ~  '/index')|U({})}}" title="" target="_blank">{{item.name|default('')}}</a>
+                                </dt>
+                                <dd>
+                                    {% for item2 in category_data if item2.pid == item.id  %}
+                                    <a href="{{(item.models ~  '/list')|U({category: item2.id|default('')})}}" title="" target="_blank">{{item2.name|default('')}}</a>
+                                    {% endfor %}
+                                </dd>
+                            </dl>
+                            {% endfor %}
+                            <dl>
+                                <dt>
+                                    <a href="{{('tools/index')|U}}" title="" target="_blank">
+                                        购房工具
+                                    </a>
+                                </dt>
+                                <dd>
+                                    <a href="{{('tools/index')|U({id: 1})}}" title="" target="_blank">购房能力评估</a>
+                                    <a href="{{('tools/index')|U({id: 2})}}" title="" target="_blank">商业贷款</a>
+                                    {# <a href="{{('tools/index')|U({id: 3})}}" title="" target="_blank">公积金贷款额度</a> #}
+                                    <a href="{{('tools/index')|U({id: 4})}}" title="" target="_blank">公积金贷款</a>
+                                    <a href="{{('tools/index')|U({id: 5})}}" title="" target="_blank">组合贷款</a>
+                                    <a href="{{('tools/index')|U({id: 6})}}" title="" target="_blank">提前还款计算器</a>
+                                    <a href="{{('tools/index')|U({id: 7})}}" title="" target="_blank">税费计算</a>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <!--/服务-工具-->
+
+                    <!--其他-相关-->
+                    <div class="panel" id="4">
+                        <div class="panel-title">
+                            其他
+                            <span>·</span>
+                            相关
+                        </div>
+                        <div class="panel-body">
+                            <dl>
+                                <dt>
+                                    <a href="javascript:;" title="" target="_blank">地区分站</a>
+                                </dt>
+                                <dd>
+                                {{core_global.switch_area({
+                                    tpl: '<a href="%url%" title="%name%" target="_blank">%name%</a>'
+                                })}}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <!--/其他相关-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="aside fr">
+        <!--top-recommend-->
+        {% set wzdtrmtj = ('wzdtrmtj')|getPush(40) %}
+        <div class="panel top-recommend mb30" data-tag="wzdtrmtj">
+            <div class="panel-title">热门推荐</div>
+            <div class="panel-body">
+                <ul class="clearfix">
+                    {% if wzdtrmtj is defined %}
+                        {% for item in wzdtrmtj %}
+                            <li>
+                                <a href="{{item.url|default('')}}" title="{{item.name|default('')}}" target="_blank">{{item.name|default('')}}</a>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <!--/top-recommend-->
+        <!--ad-->
+        {{core_global.ads({tag: 'wzdtrmtjdxgg', width: 270, height: 270})}}
+        <!--/ad-->
+    </div>
+    <!--/container-->
+</div>
+</div>
+{% endblock body %}
+
+{% block js %}
+<script type="text/javascript">
+seajs.use(["pagecard"],function(pagecard){
+        //翻页点击调用
+        new PageCard({
+            btn:".wrap-head ul li",
+            con:".cons",
+            child:".panel",
+            hover:"cur"
+        });
+        //调用结束
+    })
+    </script>
+{% endblock js %}

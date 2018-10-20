@@ -1,0 +1,149 @@
+HouseBundle\Entity\MemTypes:
+    type: entity
+    table: mem_types
+    indexes:
+        mode:
+            columns:
+                - mode
+        ischeck:
+            columns:
+                - ischeck
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            options:
+                comment: 会员组名
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        checked:
+            options:
+                comment: 审核
+                unsigned: false
+                default: '1'
+            nullable: false
+            default: '1'
+            type: boolean
+            length: 1
+        form_id:
+            options:
+                comment: 指定表单
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        mode:
+            options:
+                comment: 升级模式
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 3
+        integral:
+            options:
+                comment: 相关积分类型
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        allow:
+            options:
+                comment: 是否允许注册
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        attach:
+            options:
+                comment: 附加会员类型
+                unsigned: false
+            nullable: false
+            type: string
+            length: 10
+        issystem:
+            options:
+                comment: '0为可删除 1为不可删除'
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+        ischeck:
+            options:
+                comment: 是否自动审核
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        usertplid:
+            options:
+                comment: 会员主题
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        autodown:
+            options:
+                comment: 根据积分自动降级
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+        urlparams:
+            options:
+                comment: 查询参数
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

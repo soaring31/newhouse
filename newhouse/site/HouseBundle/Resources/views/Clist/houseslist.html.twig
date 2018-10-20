@@ -1,0 +1,12 @@
+{% extends 'HouseBundle::base_list.html.twig' %}
+{# 说明
+ * item_block_lpdt: 资讯
+ * item_block_tuangou: 团购
+ * 使用页面
+ *      1. houses/list
+#}
+{% block list %}
+{{house_global.houses_list({
+    list: list
+})}}
+{% endblock list %}

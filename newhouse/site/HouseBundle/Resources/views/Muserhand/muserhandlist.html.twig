@@ -1,0 +1,208 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+
+{% if models is not defined %}
+    {% set models = app.request.get('models')|default('sale') %}
+{% endif %}
+
+{% set uid = app.user.id %}
+
+{% set category = app.request.get('category') %}
+
+{% set type = app.request.get('type') %}
+
+{# 删除时会传回来pageIndex=0 #}
+{% set pageIndex = app.request.get('pageIndex', 1) %}
+
+{# 是否有收藏 #}
+{% set no_collect = 1 %}
+
+{# 求租、求购筛选 #}
+{# 搜索值 #}
+{% set category_search = '' %}
+{# 筛选值 #}
+{% set category_opt = {} %}
+{% if models == 'demand' %}
+    {% set category_opt = {category: category ? category : 297} %}
+    {% set category_search = category %}
+{% endif %}
+{# 新房、小区筛选 #}
+{# 搜索值 #}
+{% set type_search = '' %}
+{# 筛选值 #}
+{% set type_opt = {} %}
+{% if models == 'houses' %}
+    {% set type_opt = {type: type ? type : 0} %}
+    {% set type_search = type %}
+{% endif %}
+
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+{% block mainMenu %}
+    {{ core_manage.jump(
+        {
+            class: 'on',
+           title: '出售房源',
+           url: (action)|U({models: 'sale'})       
+        }
+        ) }}
+      {{ core_manage.jump(
+        {
+           title: '出租房源',
+           url: (action)|U({models: 'rent'})       
+        }
+        ) }} 
+{% endblock %}
+{% block tableMain %}
+{{ core_manage.filter([
+    {
+        method: 'search',
+        title: "请搜索标题"
+    }
+]) }}
+
+<section class="list-con" data-param="{
+    defUrl    : '{{ (action)|U }}',
+    showUrl   : '{{ (action ~ '/show')|U }}',
+    submitUrl : '{{ ('muserhandlist/save')|U }}',
+    deleteUrl : '{{ ('muserhandlist/delete')|U }}',
+    fixed     : '.filter',
+    list      : '.list-con',
+    data      : {
+        models: '{{models}}',
+        type: '{{type_search}}',
+        category: '{{category_search}}'
+    }
+}">
+    {% set keyword = app.request.get('name')|default('') %}
+
+    {% set handlist = ('house.collects')|getAll({models: models,uid: uid, pageIndex: pageIndex ? pageIndex : 1, _multi: 1}) %}
+
+    {% set handlist_aid = ('house.collects')|getCol('aid', {models: models, uid: uid}) %}
+
+    {% if models != 'users' %}
+        {% set service = 'house' %}
+        {% set search_opt = {
+            name: 'orX|name,like,%' ~ keyword ~ '%'
+        } %}
+    {% else %}
+        {% set service = 'db' %}
+        {% set search_opt = {
+            username: 'orX|username,like,%' ~ keyword ~ '%'
+        } %}
+    {% endif %}
+
+    {% set formdata = ( service ~ '.' ~ models)|getAll({id: 'in|' ~ handlist_aid|join(',') , _multi: 1, pageIndex: pageIndex ? pageIndex : 1}|merge(search_opt)|merge(category_opt)|merge(type_opt) ) %}
+
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th >收藏标题</th>  
+                    {% if models not in ['ask', 'users'] %}
+                    <th width="100">区域</th>
+                    {% endif %}
+                    <th width="120" class="tac">收藏时间</th>
+                    <th width="120" class="tac">操作</th>
+                </tr>
+                {% if formdata.pageCount|default(0) != 0 %}
+                    {% for vo in formdata.data %}
+                        <tr data-id="{{ ('house.collects')|getOne('id', {models: models, uid: uid, aid: vo.id}) }}">
+                            <td class="tac">{{core_manage.checkbox()}}</td>
+                            {% if models == 'users' %}
+                                <td><a href="{{('member/j_detail')|U({id: vo.id})}}" target="_blank">{{vo.username|default('')}}</a></td>
+                            {% else %}
+                                <td><a href="{{(models ~ '/detail')|U({id: vo.id})}}" target="_blank">{{vo.name|default('')}}</a></td>
+                            {% endif %}
+                            {% if models not in ['ask', 'users'] %}
+                            <td>{{  vo.region|getAreaName|default('') }}</td>
+                            {% endif %}
+                            <td width="120" class="tac">
+                                {{ ('house.collects')|getOne('create_time', {models: models, uid: uid, aid: vo.id})|date('Y-m-d') }}
+                            </td>
+                            <td class="tac">
+                            {{ core_manage.delete({}) }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="tac">
+                            暂无收藏
+                        </td>
+                    </tr>
+                {% endif %}
+               {#  {% if handlist.data is defined and handlist.pageCount|default('') != 0 %}
+                    {% for item in handlist.data %}
+
+                        {% if models != 'users' %}
+                            {% set service = 'house' %}
+                            {% set search_opt = {
+                                name: 'orX|name,like,%' ~ keyword ~ '%'
+                            } %}
+                        {% else %}
+                            {% set service = 'db' %}
+                            {% set search_opt = {
+                                username: 'orX|username,like,%' ~ keyword ~ '%'
+                            } %}
+                        {% endif %}
+
+                        {% set formdata = ( service ~ '.' ~ models)|getAll({id: item.aid}|merge(search_opt)|merge(category_opt)|merge(type_opt) ) %}
+
+                        {% for vo in formdata.data %}
+                            {% set no_collect = null %}
+                            <tr data-id="{{ item.id }}">
+                                <td class="tac">{{core_manage.checkbox()}}</td>
+                                {% if models == 'users' %}
+                                    <td><a href="{{('member/j_detail')|U({id: vo.id})}}" target="_blank">{{vo.username|default('')}}</a></td>
+                                {% else %}
+                                    <td><a href="{{(models ~ '/detail')|U({id: vo.id})}}" target="_blank">{{vo.name|default('')}}</a></td>
+                                {% endif %}
+                                {% if models not in ['ask', 'users'] %}
+                                <td>{{  vo.region|getAreaName|default('') }}</td>
+                                {% endif %}
+                                <td width="120" class="tac">
+                                   {{ item.createTime|default('0')|date('Y-m-d') }}
+                                </td>
+                                <td class="tac">
+                                {{ core_manage.delete({}) }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                        {% if loop.last and no_collect %}
+                            {{block('noCollect')}}
+                        {% endif %}
+
+                    {% endfor %}
+                {% else %}
+                    {{ block('noCollect') }}
+                {% endif %} #}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(formdata)}}
+</section>
+   {{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    
+]) }}
+{% endblock tableMain %}
+
+
+{% block promptUl %}
+{% endblock %}
+
+{# {% block noCollect %}
+<tr>
+    <td colspan="6" class="tac">
+        暂无收藏
+    </td>
+</tr>
+{% endblock noCollect %} #}

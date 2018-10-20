@@ -1,0 +1,57 @@
+$font-esf-fz: inherit !default;
+
+@font-face {
+	font-family: "esf";
+    font-weight: normal;
+    font-style: normal;
+	src: url('../fonts/esf.eot');
+	src: url('../fonts/esf.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/esf.woff') format('woff');//,
+		//url('../fonts/esf.ttf') format('truetype'),
+		//url('../fonts/esf.svg#esf') format('svg');
+}
+$font-esf-fz: inherit !default;
+$font-esf-fl: none !default;
+$font-esf-m: 0 !default;
+$font-esf-va: -.25em !default;
+[class^="font-esf-"],
+[class*=" font-esf-"] {
+	font-family: "esf";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-size: $font-esf-fz;
+	float: $font-esf-fl;
+	margin: $font-esf-m;
+	vertical-align: $font-esf-va;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; only necessary if not using the private unicode range (firstdata option) 
+	text-decoration: none;
+	text-transform: none;
+}
+.font-esf-1:before {
+	content: "\EA01";
+}.font-esf-10:before {
+	content: "\EA02";
+}.font-esf-11:before {
+	content: "\EA03";
+}.font-esf-12:before {
+	content: "\EA04";
+}.font-esf-2:before {
+	content: "\EA05";
+}.font-esf-3:before {
+	content: "\EA06";
+}.font-esf-4:before {
+	content: "\EA07";
+}.font-esf-5:before {
+	content: "\EA08";
+}.font-esf-6:before {
+	content: "\EA09";
+}.font-esf-7:before {
+	content: "\EA0A";
+}.font-esf-8:before {
+	content: "\EA0B";
+}.font-esf-9:before {
+	content: "\EA0C";
+}

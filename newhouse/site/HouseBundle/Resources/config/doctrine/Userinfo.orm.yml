@@ -1,0 +1,241 @@
+HouseBundle\Entity\Userinfo:
+    type: entity
+    table: userinfo
+    indexes:
+        region:
+            columns:
+                - region
+        cid:
+            columns:
+                - cid
+        usertype:
+            columns:
+                - usertype
+        groupid:
+            columns:
+                - groupid
+        uid:
+            columns:
+                - uid
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        region:
+            options:
+                comment: 服务区域
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        cynx:
+            options:
+                comment: 从业年限
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        sales:
+            options:
+                comment: 二手房数量
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        rents:
+            options:
+                comment: 出租数量
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        crents:
+            options:
+                comment: 经纪公司出租数量
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        csales:
+            options:
+                comment: 经纪公司二手房数量
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        clicks:
+            options:
+                comment: 访问量
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        yongjin:
+            options:
+                comment: 佣金
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        cid:
+            options:
+                comment: 经纪公司id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        fxpid:
+            options:
+                comment: 分销上级id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        pnum:
+            options:
+                comment: 推荐朋友个数
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        unnum:
+            options:
+                comment: 推荐无效个数
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        image:
+            options:
+                comment: 头像
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        usertype:
+            options:
+                comment: 会员分类
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        groupid:
+            options:
+                comment: 会员组id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        uid:
+            options:
+                comment: 会员id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        usertplid:
+            options:
+                comment: 会员主题
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        nicename:
+            options:
+                comment: 姓名
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        tops:
+            options:
+                comment: 置顶数量
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        refreshs:
+            options:
+                comment: 刷新数量
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        checked:
+            options:
+                comment: 0是未审1是已审
+                unsigned: false
+                default: '1'
+            nullable: false
+            default: '1'
+            type: smallint
+            length: 2
+        duedate:
+            options:
+                comment: 到期时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        weixin:
+            options:
+                comment: 微信二维码
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

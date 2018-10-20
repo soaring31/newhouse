@@ -1,0 +1,32 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+
+{% block js %}
+<script type="text/javascript">
+{% if res['rec']>0 %}
+setTimeout('window.location.reload();',3000);
+{% else %}
+// Null
+{% endif %}
+</script>
+{% endblock %}
+
+{% block tableMain %}
+<p>
+	* 本批次处理：{{res['rec']}}条：<br>
+	&nbsp; - 成功：{{res.ok|length}}条，失败{{res.ng|length}}条 
+</p>
+<p>
+	* 
+	{% if res['rec']>=res['max'] %} 3秒后自动继续……
+	{% else %} 已经完成！
+	{% endif %}
+</p>
+{{ dump(res) }}
+{% endblock %}
+
+{% block promptUl %}
+	中断后，可继续打开本页运行，到完成即可。
+{% endblock %}
+
+{% block submit %}{% endblock %}
+{% block page %}{% endblock %}

@@ -1,0 +1,35 @@
+{% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:rentlist.html.twig' : 'HousemobileBundle:Member:j_detail.html.twig' %}
+{# {% extends 'HousemobileBundle:Member:j_detail.html.twig' %} #}
+{# 说明 
+* 经纪公司出租
+#}
+{# header_title #}
+{% set tpl_title = '出租' %}
+
+{% block nav %}
+	{% set nav_users_act = 3 %}
+	{{parent()}}
+{% endblock nav %}
+
+{% block container %}
+    {# 检索 #}
+    {% set list_header %}
+    <div class="filter" data-block="{
+        ajax: {
+            url: '{{ ('bundlebindforms/ajax')|U }}',
+            data: {
+                tpl: 'Common:filter',
+                tag: 'member_jjgs_rent'
+            }
+        }
+    }"></div>
+    {% endset %}
+
+    {# 列表链接 js调用列表需要 #}
+    {% set list_url = ('member/j_d_rent')|U({ajax: 1, id: detail.id|default(0)}) %}
+
+    {{core_mobile_global.list_scroll({
+	    list_header: list_header|default(''),
+	    url: list_url|default('')
+	})}}
+{% endblock container %}

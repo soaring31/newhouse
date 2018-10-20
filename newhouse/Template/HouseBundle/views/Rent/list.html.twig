@@ -1,0 +1,184 @@
+{% set tpl_extends = 'HouseBundle:Rent:rent_layout.html.twig' %}
+
+{% set tpl_extends_data = {
+    'search': 'HouseBundle:Rent:search.html.twig',
+    'ajax': 'HouseBundle:Clist:rentlist.html.twig'
+} %}
+
+{% for k,v in tpl_extends_data %}
+    {% if app.request.get(k) or app.request.headers.get(k) %}
+        {% set tpl_extends = v %}
+    {% endif %}
+{% endfor %}
+
+{% extends tpl_extends|default('') %}
+
+{# # 说明
+* cook_id: url参数
+* mchild: url参数
+** sort_data_opt:重新排序变量
+** 以下是筛选区域数据定义
+*      1、filter_rows： 横排显示筛选条件条数
+*      2、filter_opt：筛选条件数据#}
+
+{% block title %}【{{cur_area_data|default('')}}租房网_{{cur_area_data|default('')}}租房信息|房屋出租】{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data|default('')}}租房，{{cur_area_data|default('')}}租房网，{{cur_area_data|default('')}}出租房源租房，租房信息" />
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}租房网提供{{cur_area_data|default('')}}海量出租房源，实时更新，租房信息真实有效。{{cur_area_data|default('')}}租房子、找合租、个人房屋出租，就到{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}。" />
+{% endblock key_des %}
+
+{% block css %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/rentcss.css')}}
+{% endblock css %}
+
+{# 当前位置 #}
+{% block current_container %}
+<a href="{{('rent/list')|U}}">出租</a>
+{% block current_rent %}{% endblock current_rent %}
+{% endblock current_container %}
+
+{# 筛选头部 #}
+{% set head_data = {
+    quyu: {
+        title: '区域',
+        icons: 'font-lp-2',
+        url: ('rent/list')|U
+    },
+    map: {
+        title: '地图',
+        icons: 'font-lp-4',
+        url: ('map/rent')|U,
+        target: '_blank'
+    }
+} %}
+
+{# 列表筛选配置 #}
+{% set sort_data = {
+    def: {
+        title: '默认'
+    },
+    mj: {
+        title: '面积'
+    },
+    czj: {
+        title: '单价'
+    }
+} %}
+
+
+{% set filter_url_opt = {usertype: app.request.get('usertype'), cook_id: cook_id|default('')} %}
+
+{% set list_ident = ident.list|default('') %}
+
+
+{% block container %}
+    {# 检索数据源 #}
+    {% set cate_data = house_global.cate_data({ 
+                    tag: 'rent',
+                    switch: {
+                        cate_circle: 1,
+                        cate_line: 1,
+                        hxs: 1
+                    },
+                    url_opt: { 
+                        usertype: app.request.get('usertype'), 
+                        cook_id: cook_id|default('')
+                    } 
+                }).__toString|json_decode %}
+    {# 筛选条件 #}
+    {{house_global.filter_cfg({
+        show_selected: 1,
+        head_data: head_data,
+        action: action
+    }|merge(cate_data))}}
+
+<div class="blank30"></div>
+<div class="container">
+    <div class="main">
+        <div class="tag">
+            <div class="tag-head">
+                {{house_global.fy_title({
+                    is_act: app.request.get('usertype'),
+                    attr: 'data-name="usertype"',
+                    data: [
+                        {
+                            name: '出租房源',
+                            url: (action)|U,
+                            attr: 'data-clear="all"'
+                        },
+                        {
+                            name: '个人房源',
+                            url: (action)|U({usertype: 11}),
+                            attr: 'data-clear="all" data-value="1"',
+                            act: 11
+                        }
+                    ]
+                })}}
+            </div>
+            <div class="tag-middle">
+                <div class="t-m-l">
+                    {{ core_global.listType({
+                        action: action, 
+                        filter_opt: filter_opt|default([])|merge({usertype: {title: '用户分类'}, cook_id: {title: '图文列表'}}),
+                        data: [
+                            {
+                                title: '图文',
+                                icon: 'font-lp-56'
+                            },
+                            {
+                                title: '文本',
+                                icon: 'font-lp-35'
+                            }
+                        ]
+                    }) }}
+                </div>
+                <div class="t-m-r">
+                   <div class="sort fr">
+                        {% block list_sort %}
+                            {{ core_global.sort({
+                            action: action,
+                            data: sort_data|default('')
+                        }|merge(cate_data)) }}
+                        {% endblock list_sort %}
+                   </div>
+                </div>
+            </div>
+        </div>
+        {# 列表 #}
+        {{house_global.rent_list({
+            list: list_ident,
+            page: 1
+        })}}
+    </div>
+    {{house_global.sale_aside({models: 'rent'})}}
+</div>
+{% endblock container %}
+
+{% block js %}
+<script type="text/javascript">
+ seajs.use(['listPjax'],function(listPjax){
+    {% if '/rent/list' in (action)|U %}
+        listPjax.init({
+            url: "{{('rent/list')|U}}",
+            list: '[data-list]',
+            page: '.p-bar a',
+            filterShow: '[data-filter-show]',
+            level: {
+                region: {
+                    url: "{{('common/circle')|U}}",
+                    name: 'cate_circle',
+                    close: {{core_global.mconfigtostring({name: 'closesqcircle', ename: 'mother'}).__toString}}
+                },
+                cate_line: {
+                    url: "{{('common/metro')|U}}",
+                    name: 'cate_metro',
+                    close: {{core_global.mconfigtostring({name: 'closesubway', ename: 'mother'}).__toString}}
+                }
+            }
+        });
+    {% endif %}
+
+ })
+</script>
+{% endblock js %}

@@ -1,0 +1,2 @@
+{% extends 'CoreBundle::base_show.html.twig' %}
+{% block body %}{{ core_manage.form_cfg(form|default(''), {mailer_from:'mailer_from'|C }) }}{% endblock body %}

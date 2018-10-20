@@ -1,0 +1,15 @@
+{% extends 'HouseBundle::base_top_search.html.twig' %}
+
+{# 广告 #}
+{% set top_ad = {tag: 'rentads', default_tag: 'dbtsbs'} %}
+
+{# 导航高亮 #}
+{% set nav_act = 5 %}
+
+{# 热门关键词 #}
+{% set tpl_topsearch_hot = 'rentkeyword' %}
+
+{# 搜索 #}
+{% set tpl_topsearch_action = 'rent/list' %}
+
+{% set tpl_topsearch_placeholder = '请输入出租关键字/拼音' %}

@@ -1,0 +1,89 @@
+
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+
+{% set url_sitemapid = app.request.get('sitemapid') %}
+
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }}
+{% endblock %}
+
+{% block mainleft %}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ core_manage.filter([
+    {
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增绑定推送模型'
+    },
+    {
+        method: 'search',
+        field: 'name',
+    }
+]) }}
+<section class="list-con" data-param="{
+    defUrl    : '{{ (action)|U }}',
+    showUrl   : '{{ (action ~ '/show')|U() }}',
+    submitUrl : '{{ (action ~ '/save')|U }}',
+    deleteUrl : '{{ (action ~ '/delete')|U }}',
+    fixed     : '.filter',
+    list      : '.list-con',
+    data      : {
+        sitemapid: '{{url_sitemapid}}'
+    }
+}">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="40" data-role="sort" data-sort="id" class="sort">序号</th>
+                    <th width="100">服务名称</th>
+                    <th width="100">参数</th>
+                    <th width="100">访问链接</th>
+                    <th width="40">推送条数</th>
+                    <th width="40">是否生效</th>
+                    <th width="120" class="tac">操作</th>
+                </tr>
+                {% if ident.info.data is defined and ident.info.pageCount|default(0) != 0 %}
+                {% for k, vo in ident.info.data %}
+                <tr data-id="{{ vo.id }}">
+                    <td class="tac">{{core_manage.checkbox()}}</td>
+                    <td>{{ vo.id|default('') }}</td>
+                    <td>{{ vo.name|default('') }}</td>
+                    <td>{{ vo.paramts|default('') }}</td>
+                    <td>{{ vo.url|default('') }}</td>
+                    <td>{{ vo.numbers|default('') }}</td>
+                    <td align="center">{{ core_global.formField({value: vo.status, form: 'sitemapbindshow', field: 'status'}) }}</td>
+                    <td class="tar pr10">
+                        
+                        {{ core_manage.show() }}
+                        {{ core_manage.delete() }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    }
+]) }}
+{% endblock %}
+
+{% block promptUl %}
+{% endblock %}

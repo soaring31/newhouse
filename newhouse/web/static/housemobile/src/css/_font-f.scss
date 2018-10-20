@@ -1,0 +1,281 @@
+$font-f-fz: inherit !default;
+
+@font-face {
+	font-family: "f";
+    font-weight: normal;
+    font-style: normal;
+	src: url('../fonts/f.eot');
+	src: url('../fonts/f.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/f.woff') format('woff');//,
+		//url('../fonts/f.ttf') format('truetype'),
+		//url('../fonts/f.svg#f') format('svg');
+}
+$font-f-fz: inherit !default;
+$font-f-fl: none !default;
+$font-f-m: 0 !default;
+$font-f-va: -.25em !default;
+[class^="font-f-"],
+[class*=" font-f-"] {
+	font-family: "f";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-size: $font-f-fz;
+	float: $font-f-fl;
+	margin: $font-f-m;
+	vertical-align: $font-f-va;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; only necessary if not using the private unicode range (firstdata option) 
+	text-decoration: none;
+	text-transform: none;
+}
+.font-f-1:before {
+	content: "\EA01";
+}.font-f-10:before {
+	content: "\EA02";
+}.font-f-100:before {
+	content: "\EA03";
+}.font-f-101:before {
+	content: "\EA04";
+}.font-f-102:before {
+	content: "\EA05";
+}.font-f-103:before {
+	content: "\EA06";
+}.font-f-104:before {
+	content: "\EA07";
+}.font-f-105:before {
+	content: "\EA08";
+}.font-f-106:before {
+	content: "\EA09";
+}.font-f-107:before {
+	content: "\EA0A";
+}.font-f-108:before {
+	content: "\EA0B";
+}.font-f-109:before {
+	content: "\EA0C";
+}.font-f-11:before {
+	content: "\EA0D";
+}.font-f-110:before {
+	content: "\EA0E";
+}.font-f-111:before {
+	content: "\EA0F";
+}.font-f-112:before {
+	content: "\EA10";
+}.font-f-113:before {
+	content: "\EA11";
+}.font-f-114:before {
+	content: "\EA12";
+}.font-f-115:before {
+	content: "\EA13";
+}.font-f-116:before {
+	content: "\EA14";
+}.font-f-117:before {
+	content: "\EA15";
+}.font-f-118:before {
+	content: "\EA16";
+}.font-f-119:before {
+	content: "\EA17";
+}.font-f-120:before {
+	content: "\EA18";
+}.font-f-121:before {
+	content: "\EA19";
+}.font-f-122:before {
+	content: "\EA1A";
+}.font-f-123:before {
+	content: "\EA1B";
+}.font-f-124:before {
+	content: "\EA1C";
+}.font-f-125:before {
+	content: "\EA1D";
+}.font-f-13:before {
+	content: "\EA1E";
+}.font-f-14:before {
+	content: "\EA1F";
+}.font-f-15:before {
+	content: "\EA20";
+}.font-f-16:before {
+	content: "\EA21";
+}.font-f-17:before {
+	content: "\EA22";
+}.font-f-18:before {
+	content: "\EA23";
+}.font-f-19:before {
+	content: "\EA24";
+}.font-f-2:before {
+	content: "\EA25";
+}.font-f-20:before {
+	content: "\EA26";
+}.font-f-21:before {
+	content: "\EA27";
+}.font-f-22:before {
+	content: "\EA28";
+}.font-f-23:before {
+	content: "\EA29";
+}.font-f-24:before {
+	content: "\EA2A";
+}.font-f-25:before {
+	content: "\EA2B";
+}.font-f-26:before {
+	content: "\EA2C";
+}.font-f-27:before {
+	content: "\EA2D";
+}.font-f-28:before {
+	content: "\EA2E";
+}.font-f-29:before {
+	content: "\EA2F";
+}.font-f-3:before {
+	content: "\EA30";
+}.font-f-30:before {
+	content: "\EA31";
+}.font-f-31:before {
+	content: "\EA32";
+}.font-f-32:before {
+	content: "\EA33";
+}.font-f-33:before {
+	content: "\EA34";
+}.font-f-34:before {
+	content: "\EA35";
+}.font-f-35:before {
+	content: "\EA36";
+}.font-f-36:before {
+	content: "\EA37";
+}.font-f-37:before {
+	content: "\EA38";
+}.font-f-38:before {
+	content: "\EA39";
+}.font-f-39:before {
+	content: "\EA3A";
+}.font-f-4:before {
+	content: "\EA3B";
+}.font-f-40:before {
+	content: "\EA3C";
+}.font-f-41:before {
+	content: "\EA3D";
+}.font-f-42:before {
+	content: "\EA3E";
+}.font-f-43:before {
+	content: "\EA3F";
+}.font-f-44:before {
+	content: "\EA40";
+}.font-f-45:before {
+	content: "\EA41";
+}.font-f-46:before {
+	content: "\EA42";
+}.font-f-47:before {
+	content: "\EA43";
+}.font-f-48:before {
+	content: "\EA44";
+}.font-f-49:before {
+	content: "\EA45";
+}.font-f-5:before {
+	content: "\EA46";
+}.font-f-50:before {
+	content: "\EA47";
+}.font-f-51:before {
+	content: "\EA48";
+}.font-f-52:before {
+	content: "\EA49";
+}.font-f-53:before {
+	content: "\EA4A";
+}.font-f-54:before {
+	content: "\EA4B";
+}.font-f-55:before {
+	content: "\EA4C";
+}.font-f-56:before {
+	content: "\EA4D";
+}.font-f-57:before {
+	content: "\EA4E";
+}.font-f-58:before {
+	content: "\EA4F";
+}.font-f-59:before {
+	content: "\EA50";
+}.font-f-6:before {
+	content: "\EA51";
+}.font-f-60:before {
+	content: "\EA52";
+}.font-f-61:before {
+	content: "\EA53";
+}.font-f-62:before {
+	content: "\EA54";
+}.font-f-63:before {
+	content: "\EA55";
+}.font-f-64:before {
+	content: "\EA56";
+}.font-f-65:before {
+	content: "\EA57";
+}.font-f-66:before {
+	content: "\EA58";
+}.font-f-67:before {
+	content: "\EA59";
+}.font-f-68:before {
+	content: "\EA5A";
+}.font-f-69:before {
+	content: "\EA5B";
+}.font-f-7:before {
+	content: "\EA5C";
+}.font-f-70:before {
+	content: "\EA5D";
+}.font-f-71:before {
+	content: "\EA5E";
+}.font-f-72:before {
+	content: "\EA5F";
+}.font-f-73:before {
+	content: "\EA60";
+}.font-f-74:before {
+	content: "\EA61";
+}.font-f-75:before {
+	content: "\EA62";
+}.font-f-76:before {
+	content: "\EA63";
+}.font-f-77:before {
+	content: "\EA64";
+}.font-f-78:before {
+	content: "\EA65";
+}.font-f-79:before {
+	content: "\EA66";
+}.font-f-8:before {
+	content: "\EA67";
+}.font-f-80:before {
+	content: "\EA68";
+}.font-f-81:before {
+	content: "\EA69";
+}.font-f-82:before {
+	content: "\EA6A";
+}.font-f-83:before {
+	content: "\EA6B";
+}.font-f-84:before {
+	content: "\EA6C";
+}.font-f-85:before {
+	content: "\EA6D";
+}.font-f-86:before {
+	content: "\EA6E";
+}.font-f-87:before {
+	content: "\EA6F";
+}.font-f-88:before {
+	content: "\EA70";
+}.font-f-89:before {
+	content: "\EA71";
+}.font-f-9:before {
+	content: "\EA72";
+}.font-f-90:before {
+	content: "\EA73";
+}.font-f-91:before {
+	content: "\EA74";
+}.font-f-92:before {
+	content: "\EA75";
+}.font-f-93:before {
+	content: "\EA76";
+}.font-f-94:before {
+	content: "\EA77";
+}.font-f-95:before {
+	content: "\EA78";
+}.font-f-96:before {
+	content: "\EA79";
+}.font-f-97:before {
+	content: "\EA7A";
+}.font-f-98:before {
+	content: "\EA7B";
+}.font-f-99:before {
+	content: "\EA7C";
+}

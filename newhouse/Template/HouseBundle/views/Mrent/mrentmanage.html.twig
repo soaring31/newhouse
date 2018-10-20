@@ -1,0 +1,359 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{# 获取当前时间 #}
+{% set ctime = ('now')|date('U') %}  
+{% set aid = app.request.get('aid') %}
+{% set category = app.request.get('category') %}
+{% set czlx = app.request.get('czlx')|default('') %}
+{% set category_data = ('house.category')|getRow({id: czlx, findType: 1}) %}
+{% set models = category_data.models|default('rent') %}
+{% set form_id = category_data.form_id|default('') %}
+{% set ename = category_data.ename|default('') %}
+{% set uid = category_data.uid|default('') %}
+{% set usertplid = ('db.mem_types')|getOne('usertplid',{ id: app.user.usertype})|default('') %}
+{% set utel = ('db.users')|getOne('tel', { id: app.user.id})|default('') %}
+    
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {% if aid is null %}
+    {{ parent() }} 
+    {% if usertplid|default('') is empty %}
+    {{ core_manage.jump({
+            title: '<i class="font-ico-nr mr5"></i>意向',
+            url: ('msale/msalearc')|U({models: 'rent'})
+        })
+    }}
+    {% endif %}
+    {{ core_manage.jump({
+        title: '<i class="font-ico-33 mr5"></i>举报',
+        url: 'msale/msalereport'|U({models: 'rent'})
+    }) }}
+    {{ core_manage.jump({
+        title: '<i class="font-ico-10 mr5"></i>出租房委托',
+        url: 'msale/msalecon'|U({ models: 'rent'})
+    }) }}
+    {% endif %}
+{% endblock %}
+
+{% block tableMain %}
+{% if usertplid is empty  %}
+    {% set usertype_select = {
+        method: 'selectFilter',
+        title: '会员类型',
+        field: 'usertype',
+        data: [
+            {
+                id: 11,
+                name: '个人'
+            },
+            {
+                id: 15,
+                name: '中介'
+            }
+        ]
+    } %}
+{% else %}
+    {% set usertype_select = {} %}
+{% endif %}
+{% set filter_opt = [
+     {
+            method: 'selectFormField',
+            title: '审核',
+            form: 'checked',
+            field: 'checked',
+        },
+        {
+            method: 'selectFilter',
+            title: '上下架',
+            field: 'valid',
+            data: [
+                {
+                    id: 'gt|' ~ ctime|default(''),
+                    name: '上架'
+                },
+                {
+                    id: 'between|0,' ~ ctime|default(''),
+                    name: '下架'
+                }
+            ]
+        },
+        {
+            method: 'selectCate',
+            title: '区域',
+            field: 'region',
+            service: 'db.area',
+            where: {
+                pid: session_area|default(0)
+            }
+        },
+        usertype_select,
+        {
+            method: 'selectFilter',
+            title: '置顶',
+            field: 'zjdate',
+
+            data: [
+                {
+                    id: 'gt|' ~ ctime|default(''),
+                    name: '置顶'
+                },
+                {
+                    id: '',
+                    name: '取消'
+                }
+            ]
+        },
+        {
+            method: 'search',
+            field: 'name',
+            title: '请搜索ID/名称/小区名称',
+        }
+] %}
+{% if category_data.is_next|default(false) == false and (( action ~ '/show')|P)|default(false)  == true and aid is null  %}
+
+    {% set filter_opt = [{
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>新增出租'
+    }]|merge(filter_opt) %}
+{% endif %}
+{% if usertplid is not empty and utel is empty and ('sms_api')|C is not empty %}
+    <div class="mainBody-topDiv ml10 mt8" data-target="[data-content='1']">
+        <p class="mainBody-topDiv-fiP">
+            请认证手机号码, 再发布房源, <a href="{{- core_global.menu_url(496) -}}">点击认证手机</a>
+        </p>
+    </div>
+    <div class="blank10"></div>
+{% else %}
+{{ core_manage.filter(filter_opt) }}
+{% endif %}
+
+   <section class="list-con" data-param="{
+            defUrl    : '{{ (action)|U }}',
+            showUrl   : '{{ (action ~ '/show')|U({_form_id: form_id}) }}',
+            submitUrl : '{{ (action ~ "/save")|U }}',
+            deleteUrl : '{{ (action ~ "/delete")|U }}',
+            fixed     : '.filter',
+            list      : '.list-con',
+            data      : {
+                models: '{{ models }}', 
+                aid: '{{ aid }}', 
+                czlx: '{{ czlx }}'    
+            }
+        }">
+        <div class="list">
+
+            <table class="right-table table-hover">
+                <tbody>
+                    <tr data-id>
+                        <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                        <th width="40" data-role="sort" data-sort="id" class="sort">ID</th>
+                        <th>名称</th>
+                        {% if aid is null %}
+                        <th width="120">小区名称</th>
+                        {% if usertplid is empty  %}
+                        <th width="150">发布人</th>
+                        {% endif %}
+                        <th width="60">区域</th>
+                        {# <th width="80">房源置顶</th> #}
+                        <th width="90"data-role="sort" data-sort="zjdate" class="sort tac">置顶时间</th>
+                        <th width="50" class="tac">意向</th>
+                        {% endif %}
+                        <th width="50" data-role="sort" data-sort="clicks" class="sort">点击</th>
+                        <th width="50">审核</th>
+                        <th width="90" data-role="sort" data-sort="enddate" class="sort">失效时间</th>
+                         {# <th width="90" data-role="sort" data-sort="refreshdate" class="sort">发布时间</th> #}
+                        <th width="90" data-role="sort" data-sort="refreshdate" class="sort tac">刷新时间</th>
+                        {# <th width="50">刷新</th> #}
+                        <th width="110" class="tac">操作</th>
+                    </tr>
+                    {% if ident.info.data is defined and ident.info.pageCount|default('') != 0 %}
+                    {% for k, vo in ident.info.data %}
+                    <tr data-id="{{ vo.id }}">
+                        <td class="tac">
+                            {{core_manage.checkbox()}}
+                        </td>
+                        <td>
+                            {{ vo.id }}
+                        </td>
+                        <td class="tov" title="{{ vo.name|default('') }}">
+                            {% set url = vo.czlx in [129, 130] ? ('business/rdetail')|U({id: vo.id}) : ('rent/detail')|U({id: vo.id}) %}
+                            <a href="{{url}}" target="_blank">
+                                {% if vo.thumb %}<i class="font-ico-tp mr5 fcr"></i>{% endif %}{{core_global.substr(vo.name|default(''),18,1)}}
+                            </a>
+                        </td>
+                        {% if aid is null %}
+                        <td>
+                            {{core_global.substr(vo.lpmc|default(''),10,1)}}
+                        </td>
+                        {% if usertplid is empty  %}
+                        <td>
+                            {% set usertype = '' %}
+                            {% if vo.usertype == 11 %}
+                                {% set usertype = '(个人)' %}
+                            {% elseif vo.usertype == 15 %}
+                                {% set usertype = '(中介)' %}
+                            {% endif %}
+                           {{ usertype ~ ('db.users')|getOne('username', {id: vo.uid})|default('-') }}
+                        </td>
+                        {% endif %}
+                        <td>
+                            {{vo.region|getAreaName}}
+                        </td> 
+                       
+                        {# <td> <a href="{{('msale/top')|U({ models: 'sale', aid: vo.id})}}" data-role="show">{{core_global.formData({value: vo.top})}}</a>/<a href="{{('msale/chongzhi')|U()}}" data-role="show">充值</a>
+                        </td>  #}
+                        <td class="tac">
+                            {% if usertplid %}
+
+                             <a href="{{('msale/top')|U({ models: 'rent', aid: vo.id})}}" data-role="show" >
+                                设置
+                             </a><br>
+                            {% endif %}
+
+                            <span  {% if ctime > vo.zjdate %}class="fcr"{% endif %} >
+
+                                {% if vo.zjdate %}
+                                {{ (vo.zjdate)|default('0')|date('Y-m-d')}}
+                                {% else %}
+                                    -
+                                {% endif %}
+
+                            </span>
+
+
+                        </td>
+                        {# <td><a title="{{ vo.name }}的区块" data-role="show" href="{{ (controller ~ '/msalearc')|U({type: 'sale_arc', aid:  vo.id, models: models}) }}">[管理]</a></td> #} 
+                        <td  class="tac"><a title="{{ vo.name }}的意向" data-role="show" href="{{ ('msale/msalearc')|U({aid:  vo.id, models: 'sale'}) }}">[{{core_global.count({models: 'inter_intention', sql_opt: {aid: vo.id|default(''),models: vo.models|default('rent')}})}}]</a></td>
+                        {% endif %}
+                        <td class="tac"><span data-role="itemEdit" data-name="clicks" class="edit">{{ vo.clicks|default('0') }}</span></td>
+                        <td>{{ core_global.formField({value: vo.checked}) }}</td>
+                        <td>{{ core_manage.valid_date(vo.valid, 'Y-m-d') }} </td>
+                        <td class="tac">{# {{ vo.refreshdate|default('0')|date('Y-m-d') }} #}
+                            {% if usertplid %}
+                            <a href="{{ ('msale/refresh')|U({ models: 'rent', aid: vo.id})}}" data-role='show' >刷新</a><br>
+                            {% endif %}
+                            {% if vo.refreshdate %}
+                               <span>{{ vo.refreshdate|date('Y-m-d') }}</span> 
+                            {% else %}
+                            -   
+                            {% endif %}
+                            
+                        </td>
+                        {# <td><a href="{{ ('msale/refresh')|U({})}}" data-role='show'>刷新</a></td> #}
+                        <td  class="tac">
+                            {{ core_manage.show() }}
+                            {{ core_manage.delete() }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr><td colspan="14" class="tac">没有数据！</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        {{core_manage.page(ident.info)}}
+    </section>
+   {% if usertplid is empty %}
+        {% set list_oprate_opt = [
+        {
+            method: 'delete',
+            title: '<i class="font-ico-del mr5"></i>批量删除',
+        },
+        {
+            method: 'dropdownFormField',
+            field: 'checked',
+            form: 'relchecked',
+            title: '审核',
+            params: '{ _form_id: 383 }'
+        },
+        {
+            method: 'dropdownCate',
+            title: '区域',
+            field: 'region',
+            service: 'db.area',
+            where: {
+                pid: session_area|default(0)
+            }
+        }
+    ] %}
+    {% if aid is null %}
+        {% set list_oprate_opt = list_oprate_opt|merge([
+        {
+            method: 'btn_date',
+            field: 'zjdate',
+            title: '置顶时间',
+        },
+        {
+            method: 'submit',
+            title: '刷新',
+            ico: 'font-ico-41 mr5',
+            params: { refreshdate: ctime, _form_id: 385 }
+        },
+        {
+            method: 'dropdownFormField',
+            title: '上下架',
+            field: 'valid',
+            form: 'rvalid',
+            params: '{ _form_id: 378 }'
+        }    
+        ]) %}
+    {% endif %}
+    {% else %}
+        {% set list_oprate_opt = [
+            {
+                method: 'delete',
+                title: '<i class="font-ico-del mr5"></i>批量删除',
+            },
+            {
+                method: 'show',
+                url: ('msale/handref')|U({ models:'rent'}),
+                title: '<i class="font-ico-41 mr5"></i>刷新',
+                attr: {
+                    'data-fields' : {
+                            aid: 'id'
+                    }       
+                }
+
+            },
+            {
+                method: 'dropdownCate',
+                title: '区域',
+                field: 'region',
+                service: 'db.area',
+                where: {
+                    pid: session_area|default(0)
+                }
+            },
+            {
+                method: 'dropdownFormField',
+                title: '上下架',
+                field: 'valid',
+                form: 'rvalid',
+                params: '{ _form_id: 378 }'
+            },
+            {
+                method: 'dropdownFormField',
+                title: '店铺推荐',
+                field: 'jian',
+                form: 'srv_common'
+            }   
+        ] %}
+    {% endif %}
+    {% if (action ~ '/show')|P %}
+    {{ core_manage.oprate(list_oprate_opt) }}
+    {% endif %}
+{% endblock %}
+
+
+{% block promptUl %}
+{# 提示说明 #}
+{% endblock %}
+
+
+
+

@@ -1,0 +1,579 @@
+{#
+* tpl_extends: 模板变量
+* d_models：当前模型
+* detail：当前数据
+* detail_tujis： 当前数据图集
+* detail_houses：小区数据
+* detail_houses_ablum: 小区相册
+* detail_school: 所属学区
+* detail_houses_prices：小区价格
+* detail_same_houses: 同楼盘出租、出售
+* detail_same_prices: 同价格出租、出售
+* detail_same_area: 同区域出租、出售
+#}
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% extends detail ? 'HouseBundle:Sale:list.html.twig' : 'CoreBundle:Dispatch:errorcontent.html.twig' %}
+
+{% block title %}{{detail.name|default('')}}，{{detail.address|default('')}}二手房{{house_global.huxing({data: detail|default(''), tpl: '%shi%%ting%%wei%%chu%'})}}{% endblock title %}
+
+
+{% block key_des %}
+<meta name="keywords" Content="{{cur_area_data|default('')}}二手房出售,{{detail.lpmc|default('')}}二手房,{{- house_global.huxing({data: detail|default(''), tpl: '%shi%%ting%%wei%%chu%'}) -}} 二手房"/>
+<meta name="description" content="{{cur_area_data|default('')}}二手房-{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}提供{{cur_area_data|default('')}}{{detail.lpmc|default('')}}二手房出售信息，{{detail.address|default('')}}，{{detail.lpmc|default('')}}二手房出售，{{- house_global.huxing({data: detail|default(''), tpl: '%shi%%ting%%wei%%chu%'}) -}}。找更多{{cur_area_data|default('')}}{{detail.lpmc|default('')}}二手房信息就到{{cur_area_data|default('')}}二手房-{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}。"/>
+{% endblock key_des %}
+
+{% block css %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/sale-detail.css')}}
+{% endblock css %}
+
+{% block current_container %}
+    <a href="{{('sale/list')|U}}">二手</a>
+    <span>&gt;</span>
+    <span>{{detail.name|default('')}}</span>
+{% endblock current_container %}
+{# 获取当前时间戳 #}
+{% set now_time = ('now')|date('U') %}
+
+{# 幻灯片 #}
+{% set detail_tujis = detail.tujis|default('')|sourceImg %}
+
+{# 小区数据 #}
+{% set detail_houses = ('house.houses')|getRow({id: detail.aid|default(''), checked: 1}) %}
+
+{% block container %}
+    <div class="container">
+        {# 头部 #}
+        {{house_global.sale_rent_header(detail|default({})|merge({models: 'sale'}))}}
+
+        <div class="blank20"></div>
+
+        {# 幻灯片 #}
+        {{house_global.sale_rent_hdp({data: detail_tujis|default({})})}}
+
+        {# 信息 #}
+        <div class="detail-info fr">
+            <div class="info1 clearfix">
+                <div class="i-label mt5">
+                    总<span class="t-index2"></span>价:
+                </div>
+                <div class="i-txt">
+                    <span class="c-f50 fz28 mr20">{{house_global.if_wy({value: detail.zj|default(''), tpl: '%value%%danwei%'})}}</span>
+                    <span>({{house_global.if_dj({value: detail.dj|default(''), tpl: '%value%%danwei%'})}})</span>
+                    <a href="{{('tools/index')|U}}" target="_blank" class="ico-word ml30">
+                        <i class="font-lp-24"></i>
+                        房贷计算器
+                    </a>
+                </div>
+            </div>
+
+            <div class="info1 clearfix">
+                <div class="i-label">参考首付:</div>
+                <div class="i-txt"><span id="cksf">-</span>万元</div>
+                <div class="i-label">参考月供:</div>
+                <div class="i-txt"><span id="ckyg">-</span>元</div>
+            </div>
+
+            <div class="info1 clearfix">
+                <div class="i-label">
+                    面<span class="t-index2"></span>积:
+                </div>
+                <div class="i-txt">
+                    {{house_global.if_mj({value: detail.mj|default(''),default_tips: '-'})}}
+                </div>
+                <div class="i-label">
+                    朝<span class="t-index2"></span>向:
+                </div>
+
+                <div class="i-txt">{{ core_global.formData({value: detail.cx|default('')}) }}</div>
+                <div class="i-label">
+                    户<span class="t-index2"></span>型:
+                </div>
+                <div class="i-txt">
+                    {{- house_global.huxing({data: detail|default(''), tpl: '%shi%%ting%%wei%'}) -}}
+                </div>
+            </div>
+
+            <div class="info1 clearfix">
+                <div class="i-label">
+                    楼<span class="t-index2"></span>层:
+                </div>
+                <div class="i-txt">{{detail.szlc|default('-')}}/{{detail.zlc|default('-')}}层</div>
+                <div class="i-label">建筑年代:</div>
+                {# 这里的字段是房龄 #}
+                <div class="i-txt">{{ core_global.formData({value: detail.fl|default('')}) }}</div>
+                <div class="i-label">
+                    区<span class="t-index2"></span>域:
+                </div>
+                <div class="i-txt">
+                    {{core_global.region({id: detail.region|default(''),  tpl: '%value%'})}}
+                </div>
+            </div>
+
+            <div class="info1 clearfix">
+                <div class="i-label">房屋装修:</div>
+                <div class="i-txt">{{ core_global.formData({value: detail.zxcd|default('')}) }}</div>
+                <div class="i-label">房屋类型:</div>
+                <div class="i-txt">{{ core_global.formData({value: detail.esflx|default('')}) }}</div>
+            </div>
+
+            <div class="info1 clearfix">
+                <div class="i-label">
+                    小<span class="t-index2"></span>区:
+                </div>
+                <div class="i-txt">
+                    {{detail.lpmc|default('')}}
+                </div>
+            </div>
+
+            <div class="info1 clearfix">
+                <div class="i-label">
+                    地<span class="t-index2"></span>址:
+                </div>
+                <div class="i-txt czpt">
+                    {{detail.address|default('-')}}
+                </div>
+            </div>
+
+            <div class="info2">
+                <div class="icon-tel fl">
+                    <i class="font-lp-13"></i>
+                </div>
+                <p class="fz28">
+                    {{detail.tel|default('更新中')}}<span class="ml5 fz16">{{detail.xingming|default('游客')}}</span></p>
+                <p>信息来源：{{- core_global.mconfig({name: 'hostname', ename: 'mwebset'}) -}}</p>
+                <em>电话联系TA</em>
+            </div>
+            {# 按钮区域 #}
+            {{house_global.sale_rent_btn_info({
+                id: detail.id|default(0),
+                models: 'sale',
+                name: detail.name|default(''),
+                thumb: detail.thumb|default(''),
+            })}}
+        </div>
+
+        <div class="blank20"></div>
+
+        <div class="d-left fl">
+            {# 所属学区 #}
+            {% set detail_school = ('house.houses_arc')|getBlock({ename: 'zhoubian'}, {pageSize: 100, checked: 1, aid: detail_houses.id|default(''), findType: 1}) %}
+
+            {# 小区价格 #}
+            {% set detail_houses_prices = ('house.houses_price')|getAll({checked: 1, type: detail_houses.type|default(''), aid: detail_houses.id|default(''), findType: 1, order: 'jtime', orderBy: 'desc', pageSize: 10}) %}
+            <!--住宅概况-->
+            <div class="panel" id="fy">
+                <!--title-->
+                {% set fixed_fy = [] %}
+                {% if detail_houses|default('') %}
+                    {% set fixed_fy = {
+                        'ssxq': '小区简介'
+                    } %}
+                {% endif %}
+                {% set fixed_fy = {
+                    'fy': '住宅概况',
+                    'yg': '参考月供',
+                    'zbpt': '地图',
+                    'jgzs': '价格趋势'
+                }|merge(fixed_fy) %}
+
+                {{house_global.sale_rent_daohang({
+                    name: detail.xingming|default(''),
+                    tel: detail.tel|default(''),
+                    data: fixed_fy
+                })}}
+                <!--/title-->
+                <!--body-->
+                <div class="panel-bd bd-gray">
+                    <div class="house_infor">
+                        <div class="infor1">
+                            <div class="name">
+                                <a target="_blank" href="{{('')|U('')}}">{{detail.name|default('')}}</a>
+
+                            </div>
+                        </div>
+                        <!-- 房源参数 ok -->
+                        <div class="infor2">
+                            <ul class="infor2-list">
+                                <li class="hack-style"> <b>面积：</b>
+                                    {{house_global.if_mj({value: detail.mj|default('')})}}
+                                </li>
+                                <li > <b>总价：</b>
+                                    <span class="style-hack">{{house_global.if_wy({value: detail.zj|default(''), tpl: '%value%<span>%danwei%</span>'})}}</span>
+                                </li>
+                                <li> <b>单价：</b>
+                                    {{house_global.if_dj({value: detail.dj|default(''), tpl: '%value%%danwei%'})}}
+                                </li>
+                                <!-- 类型 ok-->
+                                <li> <b>类型：</b>
+                                    {{- core_global.formData({value: detail.esflx|default('') ,tpl: '%value%'}) -}}
+                                </li>
+                                <!-- 楼层 ok-->
+                                <li>
+                                    <b>楼层：</b>
+                                    {{detail.szlc|default('1')}}/{{detail.zlc|default('1')}}
+                                </li>
+                                <!-- 户型 ok-->
+                                <li>
+                                    <b>户型：</b>{{- house_global.huxing({id: detail.id|default(''), models: 'sale', tpl: '%shi%%ting%%wei%%chu%'}) -}}
+                                </li>
+                                <li class="addr">
+                                    <b>地址：</b>
+                                     {{core_global.address({data: detail|default(''), num: 100})}}
+
+                                </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="infor4">
+                            <div class="xqY">
+                                <i class="img-sale-detail-22 fl"></i>
+                                <div class="ssxq">
+                                    <h3>所属学区</h3>
+                                        <ul>
+                                            {% if detail_school.data is defined %}
+                                                {% for item in detail_school.data if item.category|default('') == 55 %}
+                                                    {% if loop.index <= 5 %}
+                                                        <li>
+                                                            <a target="_blank" href="{{('sale/xdetail')|U({id: item.fromid|default('')})}}">{{item.name|default('')}}</a>
+                                                        </li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        </ul>
+                                    <a target="_blank" href="{{('sale/xlist')|U}}" class="xqzf img-sale-detail-24"></a>
+                                </div>
+                                <div class="spritelist">
+                                    <ul>
+                                        <li class="first">
+                                            <a target="_blank" href="{{('tools/index')|U({})}}" class="tool">
+                                                <i class="img-sale-detail-19"></i>
+                                                购房工具
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#sjkf" data-css='{"width": 250}' class="sent btn-jqModal">
+                                                <i class="img-sale-detail-17"></i>
+                                                手机看房
+                                            </a>
+                                        </li>
+                                        <li class="bdsharebuttonbox" share-text="{{detail.name|default('')}}"
+                                     share-desc="{{detail.name|default('')}}"
+                                     share-pic="{{core_global.img_url({src: detail.thumb|default(''), type: 0, absolute:1 })}}"
+                                     share-url="{{('houses/detail')|U({id:detail.id|default('')}, 1)}}">
+                                            <a data-cmd="more" class="share bds_more" href="javascript:void(0);" style="padding-left: 0; background: none;">
+                                                <i class="img-sale-detail-15"></i>
+                                                给力的分享
+                                            </a>
+                                        </li>
+                                        <li>
+                                            {{house_global.modal_btn({
+                                                id: 'jbao',
+                                                class: 'complain',
+                                                title: '投诉房源',
+                                                icon: 'img-sale-detail-13',
+                                            })}}
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                        <!-- 特色与描述 ok -->
+                        <div class="describe">
+                            {{core_global.content({content: detail.content|default(''), default: '暂无说明'})}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--参考月供-->
+            <div class="panel" id="yg">
+                <!--title-->
+                <div class="panel-hd">
+                    <h2>参考月供</h2>
+                </div>
+                <!--/title-->
+                <!--body-->
+                <div class="panel-bd bd-gray clearfix">
+                    <div class="house_yuegong_input">
+                        <dl>
+                            <dd>
+                                <label>估计总价</label>
+                                <b><span id="total_p" class="c-f50">{{detail.zj|default('0')}}</span>
+                                    万元</b>
+                            </dd>
+                            <dd>
+                                <label>购房记录</label>
+                                <div class="input-model">
+                                    <span>首次购房</span>
+                                    <i class="font-lp-11"></i>
+                                    <input type="hidden" tabindex="999" id="guofang" value="0" name="guofang">
+                                    <ol class="slt slt_long" sname="guofang">
+                                        <li val="0" class="on">首次购房</li>
+                                        <li val="1" class="">二次购房</li>
+                                        <li val="2" class="">三套及以上</li>
+                                    </ol>
+                                </div>
+                                <a class="ico-tip img-sale-detail-20 btn-jqModal" data-type="popover" data-placement="right" data-content="以家庭为单位,在这个城市的房产交易中心查询不到这个家庭成员的名下有房子,就可以算是首次购房"></a>
+                            </dd>
+                            <dd>
+                                <label>按揭成数</label>
+                                <div class="input-model">
+                                    <span>8成</span>
+                                    <i class="font-lp-11"></i>
+                                    <input type="hidden" tabindex="999" id="percent_p" value="8" name="percent_p">
+                                    <ol class="slt slt_long" sname="percent_p">
+                                        <li class="dis" val="0">0成</li>
+                                        <li class="" val="2">2成</li>
+                                        <li class="" val="3">3成</li>
+                                        <li class="" val="4">4成</li>
+                                        <li class="" val="5">5成</li>
+                                        <li class="" val="6">6成</li>
+                                        <li class="" val="7">7成</li>
+                                        <li class="on" val="8">8成</li>
+                                    </ol>
+                                </div>
+                                <a class="ico-tip img-sale-detail-20 btn-jqModal" data-type="popover" data-placement="right" data-content="是指所贷款的额度总额占房款总额的比例。按揭成数=贷款的额度/房款总额"></a>
+                            </dd>
+                            <dd>
+                                <label>贷款类别</label>
+                                <div class="input-model">
+                                    <span>商业贷款</span>
+                                    <i class="font-lp-11"></i>
+                                    <input type="hidden" tabindex="999" id="yg_type" value="0" name="yg_type">
+                                    <ol class="slt slt_long" sname="yg_type">
+                                        <li class="on" val="0">商业贷款</li>
+                                        <li val="1">公积金贷款</li>
+                                        <li val="2">组合贷款</li>
+                                    </ol>
+                                </div>
+                                <small class="mix">
+                                    &nbsp;&nbsp;(贷款总额
+                                    <i id="daikuan_z" class="c-f50">88.80</i>
+                                    万)
+                                </small>
+                                <div class="zhdk mix">
+                                    <label>公积金</label>
+                                    <input type="text" class="ipt_d" autocomplete="off" id="yg_gjj" maxlength="10">
+                                    <b>万元</b>
+                                    <label>商业性</label>
+                                    <input type="text" class="ipt_d" autocomplete="off" id="yg_syx" maxlength="10">
+                                    <b>万元</b>
+                                </div>
+                            </dd>
+                            <dd>
+                                <label>贷款时间</label>
+                                <div class="input-model">
+                                    <span>20年(240期)</span>
+                                    <i class="font-lp-11"></i>
+                                    <input type="hidden" tabindex="999" id="year_p" value="240" name="year_p">
+                                    <ol class="slt slt_long" sname="year_p">
+                                        <li class="dis" val="0">不分期</li>
+                                        <li class="" val="12">1年(12期)</li>
+                                        <li class="" val="24">2年(24期)</li>
+                                        <li class="" val="36">3年(36期)</li>
+                                        <li class="" val="48">4年(48期)</li>
+                                        <li class="" val="60">5年(60期)</li>
+                                        <li class="" val="72">6年(72期)</li>
+                                        <li class="" val="84">7年(84期)</li>
+                                        <li class="" val="96">8年(96期)</li>
+                                        <li class="" val="108">9年(108期)</li>
+                                        <li class="" val="120">10年(120期)</li>
+                                        <li class="" val="132">11年(132期)</li>
+                                        <li class="" val="144">12年(144期)</li>
+                                        <li class="" val="156">13年(156期)</li>
+                                        <li class="" val="168">14年(168期)</li>
+                                        <li class="" val="180">15年(180期)</li>
+                                        <li class="" val="192">16年(192期)</li>
+                                        <li class="" val="204">17年(204期)</li>
+                                        <li class="" val="216">18年(216期)</li>
+                                        <li class="" val="228">19年(228期)</li>
+                                        <li class="on" val="240">20年(240期)</li>
+                                        <li class="" val="252">21年(252期)</li>
+                                        <li class="" val="264">22年(264期)</li>
+                                        <li class="" val="276">23年(276期)</li>
+                                        <li class="" val="288">24年(288期)</li>
+                                        <li class="" val="300">25年(300期)</li>
+                                        <li class="" val="312">26年(312期)</li>
+                                        <li class="" val="324">27年(324期)</li>
+                                        <li class="" val="336">28年(336期)</li>
+                                        <li class="" val="348">29年(348期)</li>
+                                        <li class="" val="360">30年(360期)</li>
+                                    </ol>
+                                </div>
+                            </dd>
+                        </dl>
+                        <a id="ygbtn" class="btn_start pie btn">开始计算</a><a href="{{('tools/index')|U}}" class="btn more-btn" target="_blank">更多</a>
+                    </div>
+                    <div class="house_yuegong_show">
+                        <div id="bingtu"  style="min-width:380px;height:300px;"></div>
+                        <div class="house_yuegong_result">
+                           {#  <div>
+                                参考首付
+                                <b id="shoufu" class="C2487e4"></b>
+                                万元
+                            </div>
+                            <div>
+                                月均还款
+                                <b id="yuegong" class="Cff802b"></b>
+                                元
+                            </div>
+                            <ul>
+                                <li class="circle1">
+                                    贷款金额：
+                                    <b id="daikuan"></b>
+                                    万(
+                                    <b id="chengshu"></b>
+                                    成)
+                                </li>
+                                <li class="circle2">
+                                    支付利息：
+                                    <b id="lixi"></b>
+                                    万
+                                </li>
+                            </ul> #}
+                            <p id="lilv_txt">
+                                (
+                                <span>利率商业性4.90%</span>
+                                )
+                            </p>
+                            <p>备注：以等额本息计算结果，数据仅供参考</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--/参考月供-->
+            <div id="zbpt">
+                {{
+                    house_global.map({
+                        detail: detail,
+                        data: detail,
+                        arr_round : [
+                            {ico: 42, name: '学校'},
+                            {ico: 43, name: '医院'},
+                            {ico: 44, name: '银行'},
+                            {ico: 45, name: '餐饮'},
+                            {ico: 46, name: '购物'},
+                            {ico: 47, name: '公交'},
+                            {ico: 49, name: '公园'},
+                            {ico: 50, name: '机场'},
+                            {ico: 51, name: '加油站'},
+                        ]
+
+                    })
+                }}
+            </div>
+            <!--价格趋势-->
+            <div class="panel" id="jgzs">
+                <!--title-->
+                <div class="panel-hd">
+                    <h2>价格趋势</h2>
+                </div>
+                <!--/title-->
+                <!--body-->
+                {% set now_month = detail_houses_prices.data[0].dj|default('') %}
+                {% set prev_month = detail_houses_prices.data[1].dj|default('') %}
+                <div class="panel-bd bd-gray">
+                    <div class="average_price">
+                        <p>
+                            <b>本月均价：</b>
+                            <span id="coavg">{{now_month}}</span>
+                            元/㎡
+                        </p>
+                        <p>
+                            <b>环比上月：</b>
+                            {% if prev_month %}
+                                <i id="cotremark">
+                                    <i class="price_{{detail_houses_prices.data[0].trend|default('0')}}"></i>
+                                </i>
+                                <i id="cotre">{{ ((now_month - prev_month)|abs / prev_month)|round(2)}}</i>%
+                            {% endif %}
+                        </p>
+                        {# <div class="average_price_select">
+                            <ul>
+                                <li>
+                                    <a class="zhuzhai pie  current">
+                                        住宅
+                                        <i></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="bieshu pie">
+                                        别墅
+                                        <i></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="shangpu pie">
+                                        商铺
+                                        <i></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="xiezilou pie">
+                                        写字楼
+                                        <i></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div> #}
+                    </div>
+                    {{house_global.prices_info({
+                        aid: detail_houses.id|default(''),
+                        chart: 1,
+                        name: detail_houses.name|default('')
+                    })}}
+                </div>
+            </div>
+
+            {{house_global.sale_rent_xiaoqu({
+                aid: detail.aid|default(0)
+            })}}
+
+            {# 同区域房源 #}
+            {% set detail_same_area = ('house.sale')|getAll({checked: 1, region: detail.region|default(''), type: detail.type|default(''), orderBy: 'desc', order: 'id', id: 'neq|' ~ detail.id|default(0), valid: 'gt|' ~ now_time|default('')}) %}
+            {{house_global.sale_rent_recommend({
+                list: detail_same_area,
+                action: action,
+                title: '同区域二手房推荐',
+                tag: 'lparea'
+            })}}
+            {# 同价格房源
+                出售  +-10万
+             #}
+            {% set detail_same_prices = ('house.sale')|getAll({checked: 1, orderBy: 'desc', order: 'id', id: 'neq|' ~ detail.id|default(0), valid: 'gt|' ~ now_time|default(''), zj: 'between|' ~ (detail.zj|default('') - 10) ~ '|' ~ (detail.zj|default('') + 10) ~ ''}) %}
+            {{house_global.sale_rent_recommend({
+                list: detail_same_prices,
+                action: action,
+                title: '同价格二手房推荐',
+                tag: 'lpprice'
+            })}}
+        </div>
+
+        {# 右侧 #}
+        {# 同小区房源 #}
+        {% set detail_same_houses = ('house.sale')|getAll({checked: 1, aid: detail.aid|default(0), id: 'neq|' ~ detail.id|default(0), valid: 'gt|' ~ now_time|default('') }) %}
+        {{house_global.sale_aside({
+            models: 'sale',
+            btn: 0,
+            tpl_tjj: detail.usertype|default(''),
+            tpl_sale: detail_same_houses|default({})
+        })}}
+    </div>
+    <div class="blank20"></div>
+{% endblock container %}
+
+{% block js %}
+<script type="text/javascript">
+    seajs.use(['gftools', 'browserRecord'], function (gftools, browserRecord) {
+        $.yg_func();
+        browserRecord.save({
+            id : '{{detail.id|default('')}}',
+            models: '{{detail.models|default("sale")}}'
+        });
+        $('.info2,.hideTel').on('click',function(){
+            $(this).addClass('move');
+        });
+    })
+</script>
+{% endblock js %}

@@ -1,0 +1,116 @@
+{% extends 'LhomeBundle:Houses:dnews.html.twig' %}
+
+{% set detail = detail|default(cident[tpl_getrow|default('detail')].data[0]|default('')) %}
+{% set page = app.request.get('pageIndex')|default('1') %}
+{% set block_huxing = ('house.door')|getAll({pageSize: 8,pageIndex: page,_multi: 1,checked: 1, findType: 1,aid:detail.id|default('')}) %}
+{# 推荐楼盘 #}
+{% set sort_area_houses = ('house.houses')|getAll({checked: 1, region: detail.region|default(''), pageSize: 4, type: detail.type|default('')}) %}
+
+{% block title_houses %}户型图{% endblock title_houses %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}户型,{{detail.name|default('')}}户型图,{{detail.name|default('')}}户型大全" />
+<meta name="description" content="{{detail.name|default('')}}户型图,{{cur_area_data|default('')}}{{detail.name|default('')}}小区网为您提供最新、最全的{{detail.name|default('')}}户型图，包含一居室户型、二居室户型、三居室户型等所有大小户型图，查找{{detail.name|default('')}}户型图就上{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}。 "/>
+{% endblock key_des %}
+
+{% block css %}
+	{{core_global.linkcss('bundles/LhomeBundle/css/banner.css')}}
+{{core_global.linkcss('bundles/LhomeBundle/css/huxingtu.css')}}
+{% endblock css %}
+
+{% block detail_sm %}
+    {# 高亮 #}
+    {% set menu_act = 3 %}
+    {{parent()}}
+{% endblock detail_sm %}
+
+{% block body %}
+<div class="news-glob">
+    <div class="main-wrap huxingtu">
+        <ul class="tab-wrap">
+            {# {{- house_global.detail_planintro_common({aid: detail.id|default(0), ajax_url: action|U}) -}} #}
+        </ul>
+
+        <div class="item-list-wrap">
+            <ul class="item-list clear">
+            	{% for item in block_huxing.data %}
+	                <li class="huxing-item">
+						<a href="{{('door/detail')|U({ id: item.id })}}">
+	                    <div class="thumb" >
+	                        <span>{{- house_global.if_mj({value: item.mj|default(''), tpl: '%value%%danwei%'}) -}}户型</span>
+	                        <div class="hxt-img">
+	                         {{- core_global.img({
+                                src: item.thumb|default(''),
+                                alt: item.name|default(''),
+                                type: 1,
+                                width: 309,
+                                height: 232
+                            }) -}} 
+	                            <i class="hxt-mask"></i>
+	                        </div>
+	                    </div>
+	                    <div class="info clear">
+	                        <ul>
+	                            <li>居室：{{- house_global.huxing({data: item|default(''),tpl: "%shi%%ting%%mj%"}) -}}</li>
+	                            <li>建面：{{- house_global.if_mj({value: item.mj|default(''), tpl: '%value%%danwei%'}) -}}</li>
+	                        </ul>
+	                        <span class="price">
+	                            均价
+	                            <i>{{house_global.if_dj({value: item.dj|default(''), tpl: '%value%%danwei%'})}}</i>
+	                         
+	                        </span>
+	                        <span class="status on-sell">{{ core_global.formData({value: item.cate_type, tpl: '%value%'}) }}</span>
+	                    </div>
+					</a>
+	                </li>
+            	{% endfor %}          
+            </ul>
+
+            <div class="page-wrap">
+                <div class="page-box comment-lst-page-box" comp-module='page' page-url="/loupan/p_ttgjggaaayg/huxingtu/pg{page}" page-data='{"totalPage":1,"curPage":1}'></div>
+            </div>
+        </div>
+		
+		{% block tjhouse %}
+        <div class="mod-wrap">
+            <div class='clear mod-panel' id="house-push">
+                <h2>推荐楼盘</h2>
+                <div class="img-list">
+                    <div class="show-content">
+                        <ul>
+                         	{% if sort_area_houses.data is defined %}
+                         		{% for item in sort_area_houses.data %}
+		                            <li class="">
+		                                <a class="pic" href="{{('houses/detail')|U({id:item.id|default('')})}}" >
+		                                    <span class="coverpic-type coverpic-pos-rt">效果图</span>
+		                                    {{- core_global.img({
+			                                        src: item.thumb|default(''),
+			                                        type: 2
+			                                    }) -}}
+
+		                                    <span class="tip">均价 {{house_global.if_dj({value: item.dj|default(''), tpl: '<em class="arial">%value%</em>%danwei%'})}}</span>
+		                                </a>
+		                                <a class="house-name" href="{{('houses/detail')|U({id:item.id|default('')})}}" >
+		                                   {{item.name|default('')}}
+		                                </a>
+		                                <span class="zhuzhai"></span>
+		                                <P></P>
+		                            </li>
+                         		{% endfor %}
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+		{% endblock tjhouse %}
+
+    </div>
+</div>
+<div class="blank20"></div>
+<!--page-->
+{{core_global.page(block_huxing)}}
+<!--page-->
+<div class="blank20"></div>
+{% endblock body %}

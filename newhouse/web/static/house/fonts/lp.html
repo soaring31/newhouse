@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title>lp</title>    
+    <style type="text/css">
+        @font-face {
+        font-family: "lp";
+        font-weight: normal;
+        font-style: normal;
+        src: url('lp.eot');
+        src: url('lp.eot?#iefix') format('embedded-opentype'),
+            url('lp.woff') format('woff');/*,
+            url('lp.ttf') format('truetype'),
+            url('lp.svg#lp') format('svg');*/
+    }
+
+    [class^="font-lp-"], [class*=" font-lp-"]:before {
+        font-family: "lp";
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        font-style: normal;
+        font-variant: normal;
+        font-weight: normal;
+        font-size: 32px;
+        /* speak: none; only necessary if not using the private unicode range (firstdata option) */
+        text-decoration: none;
+        text-transform: none;
+    }
+    
+    .font-lp-1:before {
+        content: "\EA01";
+    }
+    
+    .font-lp-10:before {
+        content: "\EA02";
+    }
+    
+    .font-lp-11:before {
+        content: "\EA03";
+    }
+    
+    .font-lp-12:before {
+        content: "\EA04";
+    }
+    
+    .font-lp-13:before {
+        content: "\EA05";
+    }
+    
+    .font-lp-14:before {
+        content: "\EA06";
+    }
+    
+    .font-lp-15:before {
+        content: "\EA07";
+    }
+    
+    .font-lp-16:before {
+        content: "\EA08";
+    }
+    
+    .font-lp-17:before {
+        content: "\EA09";
+    }
+    
+    .font-lp-18:before {
+        content: "\EA0A";
+    }
+    
+    .font-lp-19:before {
+        content: "\EA0B";
+    }
+    
+    .font-lp-2:before {
+        content: "\EA0C";
+    }
+    
+    .font-lp-20:before {
+        content: "\EA0D";
+    }
+    
+    .font-lp-21:before {
+        content: "\EA0E";
+    }
+    
+    .font-lp-22:before {
+        content: "\EA0F";
+    }
+    
+    .font-lp-23:before {
+        content: "\EA10";
+    }
+    
+    .font-lp-24:before {
+        content: "\EA11";
+    }
+    
+    .font-lp-25:before {
+        content: "\EA12";
+    }
+    
+    .font-lp-26:before {
+        content: "\EA13";
+    }
+    
+    .font-lp-27:before {
+        content: "\EA14";
+    }
+    
+    .font-lp-28:before {
+        content: "\EA15";
+    }
+    
+    .font-lp-29:before {
+        content: "\EA16";
+    }
+    
+    .font-lp-3:before {
+        content: "\EA17";
+    }
+    
+    .font-lp-30:before {
+        content: "\EA18";
+    }
+    
+    .font-lp-31:before {
+        content: "\EA19";
+    }
+    
+    .font-lp-32:before {
+        content: "\EA1A";
+    }
+    
+    .font-lp-33:before {
+        content: "\EA1B";
+    }
+    
+    .font-lp-34:before {
+        content: "\EA1C";
+    }
+    
+    .font-lp-35:before {
+        content: "\EA1D";
+    }
+    
+    .font-lp-36:before {
+        content: "\EA1E";
+    }
+    
+    .font-lp-37:before {
+        content: "\EA1F";
+    }
+    
+    .font-lp-38:before {
+        content: "\EA20";
+    }
+    
+    .font-lp-39:before {
+        content: "\EA21";
+    }
+    
+    .font-lp-4:before {
+        content: "\EA22";
+    }
+    
+    .font-lp-40:before {
+        content: "\EA23";
+    }
+    
+    .font-lp-41:before {
+        content: "\EA24";
+    }
+    
+    .font-lp-42:before {
+        content: "\EA25";
+    }
+    
+    .font-lp-43:before {
+        content: "\EA26";
+    }
+    
+    .font-lp-44:before {
+        content: "\EA27";
+    }
+    
+    .font-lp-45:before {
+        content: "\EA28";
+    }
+    
+    .font-lp-46:before {
+        content: "\EA29";
+    }
+    
+    .font-lp-47:before {
+        content: "\EA2A";
+    }
+    
+    .font-lp-48:before {
+        content: "\EA2B";
+    }
+    
+    .font-lp-49:before {
+        content: "\EA2C";
+    }
+    
+    .font-lp-5:before {
+        content: "\EA2D";
+    }
+    
+    .font-lp-50:before {
+        content: "\EA2E";
+    }
+    
+    .font-lp-51:before {
+        content: "\EA2F";
+    }
+    
+    .font-lp-52:before {
+        content: "\EA30";
+    }
+    
+    .font-lp-53:before {
+        content: "\EA31";
+    }
+    
+    .font-lp-54:before {
+        content: "\EA32";
+    }
+    
+    .font-lp-55:before {
+        content: "\EA33";
+    }
+    
+    .font-lp-56:before {
+        content: "\EA34";
+    }
+    
+    .font-lp-6:before {
+        content: "\EA35";
+    }
+    
+    .font-lp-7:before {
+        content: "\EA36";
+    }
+    
+    .font-lp-8:before {
+        content: "\EA37";
+    }
+    
+    .font-lp-9:before {
+        content: "\EA38";
+    }
+    
+
+    * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    .container {
+        font-family: microsoft yahei;
+        width: 1200px;
+        margin: 20px auto;
+    }
+    li {
+        float: left;
+        padding: 5px;
+        margin: 5px;
+        border: 1px solid #eee;
+        text-align: center;
+        font-family: arial;
+        color: #555;
+        line-height: 1.5;
+    }
+    pre {
+        margin: 15px 0;
+        color: #FD8520;
+        font-family: Consolas;
+        font-size: 14px;
+        padding: 15px;
+        background-color: #272822;
+    }
+    </style>
+</head>
+<body>
+<div class="container">
+<div class="row">
+    <h2>
+        调用方式
+    </h2>
+    <h3>css</h3>
+<pre class="text">
+ @import 'font-lp'; //导入css 标识-文件名
+</pre> 
+    <h3>html</h3>
+<pre>
+ &lt;i class=&quot;font-demo-xxx&quot;&gt;&lt;/i&gt; // class 标识-合成后文件名-单独文件名 不兼容ie6,7(推荐)
+</pre> 
+<pre>
+ &lt;i class=&quot;font-demo&quot;&gt;&amp;#xEA01;&lt;/i&gt; // class 标识-合成后文件名 内容为单个文件名 兼容ie6,7
+</pre> 
+    <h3>详细代码</h3>点击下面文字直接复制到剪切板
+</div>
+    <ul>
+        
+        <li>
+            <i class="font-lp-1"></i>
+            <div class="class">font-lp-1</div>
+            <div class="text"><span>&</span>#xEA01;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-10"></i>
+            <div class="class">font-lp-10</div>
+            <div class="text"><span>&</span>#xEA02;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-11"></i>
+            <div class="class">font-lp-11</div>
+            <div class="text"><span>&</span>#xEA03;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-12"></i>
+            <div class="class">font-lp-12</div>
+            <div class="text"><span>&</span>#xEA04;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-13"></i>
+            <div class="class">font-lp-13</div>
+            <div class="text"><span>&</span>#xEA05;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-14"></i>
+            <div class="class">font-lp-14</div>
+            <div class="text"><span>&</span>#xEA06;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-15"></i>
+            <div class="class">font-lp-15</div>
+            <div class="text"><span>&</span>#xEA07;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-16"></i>
+            <div class="class">font-lp-16</div>
+            <div class="text"><span>&</span>#xEA08;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-17"></i>
+            <div class="class">font-lp-17</div>
+            <div class="text"><span>&</span>#xEA09;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-18"></i>
+            <div class="class">font-lp-18</div>
+            <div class="text"><span>&</span>#xEA0A;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-19"></i>
+            <div class="class">font-lp-19</div>
+            <div class="text"><span>&</span>#xEA0B;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-2"></i>
+            <div class="class">font-lp-2</div>
+            <div class="text"><span>&</span>#xEA0C;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-20"></i>
+            <div class="class">font-lp-20</div>
+            <div class="text"><span>&</span>#xEA0D;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-21"></i>
+            <div class="class">font-lp-21</div>
+            <div class="text"><span>&</span>#xEA0E;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-22"></i>
+            <div class="class">font-lp-22</div>
+            <div class="text"><span>&</span>#xEA0F;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-23"></i>
+            <div class="class">font-lp-23</div>
+            <div class="text"><span>&</span>#xEA10;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-24"></i>
+            <div class="class">font-lp-24</div>
+            <div class="text"><span>&</span>#xEA11;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-25"></i>
+            <div class="class">font-lp-25</div>
+            <div class="text"><span>&</span>#xEA12;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-26"></i>
+            <div class="class">font-lp-26</div>
+            <div class="text"><span>&</span>#xEA13;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-27"></i>
+            <div class="class">font-lp-27</div>
+            <div class="text"><span>&</span>#xEA14;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-28"></i>
+            <div class="class">font-lp-28</div>
+            <div class="text"><span>&</span>#xEA15;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-29"></i>
+            <div class="class">font-lp-29</div>
+            <div class="text"><span>&</span>#xEA16;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-3"></i>
+            <div class="class">font-lp-3</div>
+            <div class="text"><span>&</span>#xEA17;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-30"></i>
+            <div class="class">font-lp-30</div>
+            <div class="text"><span>&</span>#xEA18;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-31"></i>
+            <div class="class">font-lp-31</div>
+            <div class="text"><span>&</span>#xEA19;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-32"></i>
+            <div class="class">font-lp-32</div>
+            <div class="text"><span>&</span>#xEA1A;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-33"></i>
+            <div class="class">font-lp-33</div>
+            <div class="text"><span>&</span>#xEA1B;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-34"></i>
+            <div class="class">font-lp-34</div>
+            <div class="text"><span>&</span>#xEA1C;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-35"></i>
+            <div class="class">font-lp-35</div>
+            <div class="text"><span>&</span>#xEA1D;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-36"></i>
+            <div class="class">font-lp-36</div>
+            <div class="text"><span>&</span>#xEA1E;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-37"></i>
+            <div class="class">font-lp-37</div>
+            <div class="text"><span>&</span>#xEA1F;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-38"></i>
+            <div class="class">font-lp-38</div>
+            <div class="text"><span>&</span>#xEA20;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-39"></i>
+            <div class="class">font-lp-39</div>
+            <div class="text"><span>&</span>#xEA21;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-4"></i>
+            <div class="class">font-lp-4</div>
+            <div class="text"><span>&</span>#xEA22;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-40"></i>
+            <div class="class">font-lp-40</div>
+            <div class="text"><span>&</span>#xEA23;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-41"></i>
+            <div class="class">font-lp-41</div>
+            <div class="text"><span>&</span>#xEA24;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-42"></i>
+            <div class="class">font-lp-42</div>
+            <div class="text"><span>&</span>#xEA25;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-43"></i>
+            <div class="class">font-lp-43</div>
+            <div class="text"><span>&</span>#xEA26;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-44"></i>
+            <div class="class">font-lp-44</div>
+            <div class="text"><span>&</span>#xEA27;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-45"></i>
+            <div class="class">font-lp-45</div>
+            <div class="text"><span>&</span>#xEA28;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-46"></i>
+            <div class="class">font-lp-46</div>
+            <div class="text"><span>&</span>#xEA29;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-47"></i>
+            <div class="class">font-lp-47</div>
+            <div class="text"><span>&</span>#xEA2A;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-48"></i>
+            <div class="class">font-lp-48</div>
+            <div class="text"><span>&</span>#xEA2B;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-49"></i>
+            <div class="class">font-lp-49</div>
+            <div class="text"><span>&</span>#xEA2C;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-5"></i>
+            <div class="class">font-lp-5</div>
+            <div class="text"><span>&</span>#xEA2D;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-50"></i>
+            <div class="class">font-lp-50</div>
+            <div class="text"><span>&</span>#xEA2E;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-51"></i>
+            <div class="class">font-lp-51</div>
+            <div class="text"><span>&</span>#xEA2F;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-52"></i>
+            <div class="class">font-lp-52</div>
+            <div class="text"><span>&</span>#xEA30;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-53"></i>
+            <div class="class">font-lp-53</div>
+            <div class="text"><span>&</span>#xEA31;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-54"></i>
+            <div class="class">font-lp-54</div>
+            <div class="text"><span>&</span>#xEA32;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-55"></i>
+            <div class="class">font-lp-55</div>
+            <div class="text"><span>&</span>#xEA33;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-56"></i>
+            <div class="class">font-lp-56</div>
+            <div class="text"><span>&</span>#xEA34;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-6"></i>
+            <div class="class">font-lp-6</div>
+            <div class="text"><span>&</span>#xEA35;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-7"></i>
+            <div class="class">font-lp-7</div>
+            <div class="text"><span>&</span>#xEA36;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-8"></i>
+            <div class="class">font-lp-8</div>
+            <div class="text"><span>&</span>#xEA37;</div>
+        </li>
+        
+        <li>
+            <i class="font-lp-9"></i>
+            <div class="class">font-lp-9</div>
+            <div class="text"><span>&</span>#xEA38;</div>
+        </li>
+        
+    </ul>
+</div>
+<script type="text/javascript">
+    var BASE_URL = window.location.href.replace('/fonts/lp.html'.replace('./', ''), '') + '/';
+</script>
+<script type="text/javascript">document.write('<script src="' + BASE_URL + '/js/seajs.js"><\/script>');</script>
+<script type="text/javascript">
+if (BASE_URL.indexOf('http') == 0) {
+    seajs.use(['clipboard'], function() {
+        $('.index').click(function(event) {
+            location.href = BASE_URL;
+        });
+        var $icons = $('.class, .text');
+        $('body').on('copy', '.class, .text', function(e) {
+                $icons.removeAttr('style');
+                e.clipboardData.clearData();
+                e.clipboardData.setData("text/plain", $(this).css({color:'#f00'}).text());
+                e.preventDefault();
+            })
+    })
+};
+</script>
+</body>
+</html>

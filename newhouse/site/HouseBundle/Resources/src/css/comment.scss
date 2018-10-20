@@ -1,0 +1,450 @@
+/**
+ * @name <%= name %>
+ * @author <%= author %>
+ * @date <%= date %>
+ */
+
+@import 'static/ats'; // 工具类, 每个文件都要导入
+@import 'font-cmt'; //导入css 标识-文件名
+@import 'img-f'; //导入css 标识-文件名
+@include img-f($img-f); //调用全部样式， 标识-文件名($标识-文件名);
+
+$c-h: 34px; // 表单项的高
+$c-bdrs: 3px; // 表单项圆角
+$space: 15px;
+[class^="font-cmt-"],
+[class*=" font-cmt-"] {
+    vertical-align: -2px;
+}
+.comment {
+    margin-top: 10px;
+    .comment-inner {
+        border: 1px solid #d8d8d8;
+    }
+    .tit {
+        line-height: 34px;
+
+        position: relative;
+        z-index: 9;
+        height: 34px;
+        padding: 0 $space 0 150px;
+         em {
+            font: 100 14px/34px Microsoft yahei;
+
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            z-index: 10;
+            height: 34px;
+            padding: 0 15px;
+
+            color: #fff;
+            border-radius: 0 0 5px 0;
+            background: linear-gradient(to top left, #e43 * .9 5%, #e43);
+
+            box-shadow: 0 0 10px rgba(0, 0, 0, .3);
+        }
+        i {
+            font-size: 14px;
+        }
+    }
+    .num-info {
+        font-family: Microsoft yahei;
+        font-size: 14px;
+
+        position: absolute;
+        top: 0;
+        right: $space;
+
+        color: #999;
+        
+        &:hover {
+            text-decoration: none;
+
+            color: #e43;
+        }
+    }
+
+    /*** 评论列表 
+    --------------------- ***/
+    .pl-list {
+        position: relative;
+        z-index: 5;
+    }
+    .pl-box {
+        line-height: 22px;
+
+        padding: 15px;
+        margin: 0 $space;
+        color: #666;
+        border-top: 1px dashed #ddd;
+        &:first-child {
+            border-top: none;
+        }
+        .plcon-hd {
+            position: relative;
+
+            // margin-left: -28px;
+            font-size: 12px;
+            .name {
+                float: left;
+            }
+            .time {
+                float: right;
+            }
+            .colorbl {
+                color: #e43;
+            }
+            &-tip {
+                font-weight: bold;
+
+             margin-right: 5px;
+            }
+        }
+        .plcon-bd {
+            font-size: 14px;
+            line-height: 24px;
+
+            text-align: justify;
+
+            color: #444;
+            word-break:break-all; 
+        }
+        .zc_btn {
+            position: relative;
+
+            text-align: right;
+            .icon {
+                font-size: 15px;
+            }
+
+            span {
+                // margin-right: 420px;
+                color: #999;
+                font-size: 12px;
+                float: left;
+            }
+            a {
+                font-size: 12px;
+                line-height: 21px;
+
+                position: relative;
+
+                display: inline-block;
+
+                height: 21px;
+                margin-top: 4px;
+                margin-left: 10px;
+                cursor: pointer;
+
+                color: #999;
+            }
+            a:hover {
+                text-decoration: none;
+
+                color: #555;
+            }
+            a:hover .ico08 {
+                color: #e43;
+            }
+            a em {
+                font-style: normal;
+
+                padding: 0 2px;
+            }
+            .tip {
+                font-family: Arial, sans-serif;
+                font-weight: bold;
+                line-height: 16px;
+
+                position: absolute;
+                top: 0;
+                right: 0;
+
+                width: 30px;
+                height: 16px;
+
+                text-align: center;
+
+                color: #f00;
+                border: 1px solid #ddd;
+            }
+        }
+        
+        .hfcon {
+            padding: 10px;
+
+            border-top: 1px solid #fff;
+            border-bottom: 1px solid #eee;
+            background: #fafafa;
+        }
+    }
+}
+
+.comment-form {
+    font-size: 12px;
+
+    position: relative;
+    z-index: 10;
+    .code-wrap {
+        input,
+        img {
+            float: left;
+        }
+    }
+    input:focus {
+        box-shadow: 0 0 1px #1d5fc1 inset;
+    }
+    .other-fields {
+        @extend %clearfix;
+        display: table;
+        width: 60%;
+        .field {
+            display: table-cell;
+            padding: $space $space 0;
+            width: 50%;
+        }
+        input,
+        select {
+            width: 100%;
+        }
+    }
+    .textarea {
+        margin: $space;
+        padding: 5px;
+        border: 1px solid #ddd;
+        border-radius: $c-bdrs; 
+        textarea {
+            line-height: 25px;
+            border: none;
+            width: 100%;
+            min-height: 75px;
+            padding: 0;
+            outline: none;
+        }
+    }
+    .comment-sub {
+        line-height: $c-h;
+        height: $c-h;
+        margin: $space;
+        @extend %clearfix;
+    }
+    .txt {
+        height: $c-h - 12;
+        line-height: $c-h - 12;
+        padding: 5px;
+        box-sizing: content-box;
+        border: 1px solid #ddd;
+        border-radius: $c-bdrs;
+    }
+    .btn {
+        border-radius: $c-bdrs;
+        background: #e43;
+        line-height: $c-h;
+        height: $c-h;
+        border: none;
+        color: #fff;
+        padding: 0 10px;
+        outline: none;
+    }
+    .btn-face {
+        position: relative;
+
+        float: left;
+
+        margin-right: 10px;
+        .btn-c {
+            float: left;
+            // padding: 0 5px;
+            background-color: #fff;
+            color: #e43;
+            border-bottom: none;
+            position: relative;
+            cursor: pointer;
+            z-index: 1010;
+            i {
+                font-size: 18px;
+
+                float: left;
+                margin-right: 2px;
+            }
+
+            &.act:before {
+                content: ' ';
+                position: absolute;
+                left: 25px;
+                bottom: 0;
+                 @include triangle(10px, #bbb, up);
+            }
+            &.act:after {
+                content: ' ';
+                position: absolute;
+                left: 25px;
+                bottom: -1px;
+                 @include triangle(10px, #fff, up);
+            }
+        }
+        
+    }
+    .code-wrap {
+        float: left;
+        width: 200px !important;
+    }
+    #f-list {
+        position: absolute;
+        z-index: 900;
+        top: 30px;
+        left: 0;
+
+        display: none;
+
+        border: 1px solid #ddd;
+        padding: 5px;
+        background: #fff;
+        td {
+            padding: 3px;
+        }
+        
+    }
+    .tipwrap {
+        line-height: 1.4;
+    }
+    .numtip {
+        b {
+            color: #f00;
+        }
+    }
+    
+    .hover .bqface {
+        display: block;
+    }
+    .tipkuan {
+        font-size: 20px;
+        font-weight: bold;
+        line-height: 146px;
+
+        position: absolute;
+        z-index: 9999;
+        top: 0;
+        left: 0;
+
+        overflow: hidden;
+
+        width: 100%;
+        height: 146px;
+
+        text-align: center;
+
+        color: #bbb;
+        border: 1px solid #dcdcdc;
+        background: #eee;
+    }
+    .tipkuan .tipkuan a {
+        font-size: 12px;
+        font-weight: normal;
+
+        color: #244a99;
+    }
+}
+
+
+/*more*/
+.load-more {
+    line-height: 30px;
+
+    display: none;
+
+    height: 30px;
+
+    cursor: pointer;
+    text-align: center;
+
+    background: #f5f5f5;
+    &-ing {
+        line-height: 1000px;
+
+        overflow: hidden;
+
+        background: url(../images/page_loading.gif) center no-repeat #f5f5f5;
+    }
+}
+
+// 楼盘点评
+.start {
+    margin-left: 28px;
+    display: inline-block;
+    img {
+        width: 18px;
+    }
+}
+
+//楼盘点评
+.pingfeng {
+    margin: $space;
+    @extend %clearfix;
+    .pf-left {
+        width: 500px;
+        float: left;
+    }
+
+    .item {
+        vertical-align: middle;
+        margin: 10px 0;
+        span {
+            display: inline-block;
+        }
+    }
+
+    .item-name {
+        font-weight: 600;
+    }
+
+    .item-start {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .item-fen {
+        color: red;
+        margin-right: 20px;
+    }
+
+    .item-info {
+        font-size: 13px;
+        color: #999;
+    }
+
+    .pf-right {
+        margin-left: 500px;
+        border-left: 1px solid #ccc;
+        padding: 5px 0 10px 20px;
+    
+        .title {
+            color: #666;
+            font-size: 16px;
+            line-height: 2;
+        }
+
+        .overall {
+            color: red;
+            line-height: 32px;
+
+            span {
+                font-size: 30px;
+
+            }
+        }
+
+        .info {
+            color: #999;
+        }
+    }
+
+    .inputarea {
+        width:100%;
+    }
+}
+.dp-opt {
+   font-size: 13px;
+   color: #999; 
+}

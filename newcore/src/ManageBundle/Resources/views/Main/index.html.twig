@@ -1,0 +1,45 @@
+{% extends "CoreBundle::layout.html.twig" %}
+{% block title %}后台管理{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{{ asset('./bundles/manage/css/main.css') }}" />
+{% endblock %}
+{% block js %}
+<script>
+seajs.use(["{{ bundlepath }}/js/main.js", "dialog"],function(main,dialog){
+	window.dialog = dialog;
+	//js入口	    
+	main.init('main');
+});
+</script>
+{% endblock %}
+{% block body %}
+<div class="bezel" id="bezel-id">
+	<div class="head">
+		<div class="hleft"><span class="head-icon">{{product}}管理平台</span></div>
+		<div class="htop">
+        	<span> 
+        		<ul>
+	        		{% if channel is defined %}				
+					{% for item in channel%}
+					<li id="mainchannel_{{item.id}}"><a href="javascript:void(0);">{{item.name}}</a></li>
+					{% endfor %}				
+					{% endif %}
+					<li class="outLogin"><a href="javascript:void(0);">修改密码</a></li>
+					<li class="outLogin"><a href="{{ path('manage_logout') }}">退出</a></li>
+				</ul>
+				{{app.user.rolename|default('游客')}}：{{app.user.username|default('')}} 您好，欢迎使用{{product|default('')}}！
+        	</span>
+        </div>
+		<div class="hbottom" id="topmenu">{{ render(controller('ManageBundle:Main:topmenu')) }}</div>        
+    </div>
+    <div class="center">
+        <div class="cleft" id="cleft-id">	
+            {{ render(controller('ManageBundle:Main:leftmenu', {'menuId':0})) }}
+        </div>
+		<!-- <div id="showHideMenu"><div></div></div> -->
+		<div class="rleft" id="rleft">
+			<div class="pagenav" id="page"></div>	
+		</div>		
+	</div>
+</div>
+{% endblock %}

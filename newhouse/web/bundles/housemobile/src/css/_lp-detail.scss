@@ -1,0 +1,92 @@
+/*!
+ * @name lp-detail.css
+ * @author xying
+ * @date 2016-1-15
+ */
+
+.lp-bar-detail {
+	background: $bg;
+	margin-left: -1px;
+	a.tab-item {
+		border-left: 1px solid #fff;
+		color: #fff;
+		font-size: 14px;
+	}
+	.ico {
+		font-size: rem(34px);
+		margin-right: rem(15px);
+	}
+}
+// 新房详情
+.p-middle{
+	margin-left: 1rem;
+}
+// 学区房
+.titlt-but{
+	// border-bottom: 1px solid #e7e7e7;
+}
+
+// houses_nav
+.horizontal-nav {
+	background: #fff;
+	height: 32px;
+	line-height: 32px;
+	font-size: 16px;
+	padding-bottom: 0;
+	.active {
+		color: $major-color;
+		font-size: 18px;
+	}
+	a {
+		color: #666;
+		padding: 0 12px;
+	}
+}
+
+// 历史价格
+.lsjg-item {
+	.item-subtitle {
+		font-size: 12px;
+		margin-top: 3px;
+	}
+	.dqjg {
+		color: $major-color;
+		font-size: 16px;
+	}
+}
+.house-price {
+	color: #5f646e;
+	padding:.35rem .35rem .35rem .55556rem;
+}
+
+.zst {
+	padding-left: .55556rem;
+}
+
+// 相册
+.xiangce-item {
+	width: 50%;
+	float: left;
+	&:nth-child(even) {
+		.card{
+			margin-left: 0;
+		}
+	}
+	.card {
+		overflow: hidden;
+		text-align: center;
+		color: #3d4145;
+		display: block;
+		img {
+			max-height: 100%;
+			max-width: 100%;
+			margin: 0 auto;
+		}
+	}
+	.card-content {
+		padding: 3px;
+		overflow: hidden;
+		height: 27px;
+	}
+}
+

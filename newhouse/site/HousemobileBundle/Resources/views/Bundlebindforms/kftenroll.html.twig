@@ -1,0 +1,14 @@
+{% extends 'HousemobileBundle:Bundlebindforms:bundlebase.html.twig' %}
+{# 看房团 #}
+{% set popup = app.request.get("popup")|default('') %}
+{% set topic = app.request.get("topic")|default('') %}
+{% set title = app.request.get("title")|default('看房团报名') %}
+{% block result %}
+{{- core_mobile_forms.popup_form({
+    popup: popup,
+    title: title,
+    formName: formName,
+    Form: Form,
+    topic: topic
+}) -}}
+{% endblock result %}

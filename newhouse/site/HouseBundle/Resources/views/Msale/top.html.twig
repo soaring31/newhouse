@@ -1,0 +1,26 @@
+{% extends 'HouseBundle:Msale:mpay.html.twig' %}
+{% set models = app.request.get('models') %}
+{% set category = app.request.get('category') %}
+{% set aid = app.request.get('aid')|default(0) %}
+{% set usertype = app.request.get('usertype') %}
+{% set unit = ('house.rtconfig')|getOne('price', { unit: 1, type: 1 })|default(0) %} {# 置顶单价 #}
+{% set rmb = app.user.currency.rmb|default(0) %}   
+
+{% block mainMenu %}
+    {{ core_manage.jump({
+        title: '立即置顶',
+        class: 'active',
+        url: (controller ~ '/top')|U({ aid: aid, models: models }),
+        target: '.mainpay'
+    }) }}
+    {{ core_manage.jump({
+        title: '免费置顶',
+        url: (controller ~ '/handtop')|U({ aid: aid, models: models }),
+        target: '.mainpay'
+    }) }}
+    <div class="blank5" style="border-bottom: 1px solid #ddd"></div>
+{% endblock %}  
+
+{% block content %}
+{{ core_global.payment({ consume: 1, aid: aid, models: models }) }}
+{% endblock %}  

@@ -1,0 +1,32 @@
+{% extends app.request.get('ajax', 0) ? 'HousemobileBundle:Clist:brokeragelist.html.twig' : 'HousemobileBundle::list_layout.html.twig' %}
+
+{% block title %}
+    【{{cur_area_data|default('')}}我的佣金|{{cur_area_data|default('')}}佣金】_{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}我的佣金平台
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{cur_area_data|default('')}}我的佣金,{{cur_area_data|default('')}}我的佣金" />
+<meta name="description" content="{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}{{cur_area_data|default('')}}二手房网为您提供快速全面的{{cur_area_data|default('')}}二手房信息及新发布{{cur_area_data|default('')}}二手房价格。大量优质二手房实时更新，为您创造舒适二手房购房体验。" />
+{% endblock key_des %}
+
+{% block header_title %}
+{{core_mobile_global.title({title: '我的佣金'})}}
+{% endblock header_title %}
+
+{% block container %}
+	{% set list_header %}
+	    <div data-block="{
+	        ajax: {
+	            url: '{{ ('bundlebindforms/ajax')|U }}',
+	            data: {
+	                tpl: 'Muserbrokerage:topmenublock',
+	                action: 0
+	            }
+	        }
+	    }"></div>
+    {% endset %}
+
+	{% set list_url = ('muserbrokerage/muserbrokeragelist')|U({ajax: 1}) %}
+    {{ parent() }}
+{% endblock container %}
+

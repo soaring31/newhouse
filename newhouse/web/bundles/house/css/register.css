@@ -1,0 +1,631 @@
+@charset "UTF-8";
+/*!
+ * @name <%= name %>
+ * @author <%= author %>
+ * @date <%= date %>
+ */
+/**
+ * @method 清除浮动 %clearfix 
+ * @description 清除浮动
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %clearfix;
+ * }
+ * ```
+ * 
+ * ```css
+ * 	div {
+	    *zoom: 1;
+	}
+	div:after {
+	    display: block;
+	    clear: both;
+
+	    height: 0;
+
+	    content: '\20';
+	}
+ * ```
+ */
+.regter, .regter .checks, .regter .row {
+    *zoom: 1;
+}
+
+.regter:after, .regter .checks:after, .regter .row:after {
+    display: block;
+    clear: both;
+    height: 0;
+    content: '\20';
+}
+
+/**
+ * @method 去掉虚线框 %outline 
+ * @description 去掉虚线框
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @ extend %outline;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		outline: thin dotted;
+		outline: 5px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
+ * ```
+ */
+/**
+ * @method 文字不换行后面加省略号 %text-overflow 
+ * @description 文字不换行后面加省略号
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %text-overflow;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+ * ```
+ */
+/**
+ * @method 内容换行 %word-wrap 
+ * @description 内容换行
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %word-wrap;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+	    word-wrap: break-word;
+	    white-space: pre-wrap;
+	    word-break: break-all;
+	}
+ * ```
+ */
+/**
+ * @method 透明层opacity 
+ * @description 透明层 内容也透明
+ * @param {number} $opacity - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include opacity(.5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+	  opacity: .5;
+	  filter: alpha(opacity=50);
+ * }
+ * ```
+ */
+/**
+ * @method 背景透明层transparent 
+ * @description 透明层只处理背景透明
+ * @param {string} $color - 背景透明层的颜色
+ * @param {number} $alpha - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include transparent(#000, .5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+ *    	background-color: transparent;
+		background-color: (0,0,0,.5);
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7fffffff, endColorstr=#7fffffff,);
+		zoom: 1;
+ * }
+ * ```
+ */
+/**
+ * @method triangle 
+ * @description 生成一个三角形图标
+ * @param {string} $size - 三角的大小
+ * @param {string} $color - 三角颜色
+ * @param {string} $direction - 三角的方向 up, down, left, right
+ * @example 调用
+ * 
+ * ```scss
+ * i {
+ *    @include triangle(5px, #bbb, up); 
+ * }
+ * ```
+ * 
+ * ```css
+ * i {
+ *    width: 0;
+      height: 0;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent;
+      border-bottom-color: #bbb;
+ * }
+ * ```
+ */
+/**
+* @method 水平线hr nav-divider 
+* @description 透明层 内容也透明
+* @param {string} $color=#e5e5e5 - 线的颜色
+* @param {string} $line-height-computed - 线的高度，空间
+* @example 调用
+* 
+* ```scss
+* div {
+*    @include nav-divider(#e5e5e5, 24px);
+* }
+* ```
+* 
+* ```css
+* div {
+	  height: 1px;
+	  margin: 11px 0;
+	  overflow: hidden;
+	  background-color: #e5e5e5;
+* }
+* ```
+*/
+.img-re-1, .img-re-2, .img-re-3, .img-re-4, .img-re-5, .regter .checks .active span, .img-re-6, .img-re-7 {
+    display: inline-block;
+    *zoom: 1;
+    *display: inline;
+    vertical-align: middle;
+    line-height: 300px;
+    overflow: hidden;
+    background-image: url(../images/re.png);
+}
+
+.img-re-1 {
+    width: 19px;
+    height: 18px;
+    background-position: 0 0;
+}
+
+.img-re-2 {
+    width: 19px;
+    height: 18px;
+    background-position: -29px 0;
+}
+
+.img-re-3 {
+    width: 19px;
+    height: 18px;
+    background-position: 0 -28px;
+}
+
+.img-re-4 {
+    width: 19px;
+    height: 18px;
+    background-position: -29px -28px;
+}
+
+.img-re-5, .regter .checks .active span {
+    width: 14px;
+    height: 14px;
+    background-position: 0 -56px;
+}
+
+.img-re-6 {
+    width: 17px;
+    height: 17px;
+    background-position: -58px 0;
+}
+
+.img-re-7 {
+    width: 17px;
+    height: 17px;
+    background-position: -58px -27px;
+}
+
+.img-p-2, .img-p-3, .img-p-4, .img-p-5, .img-p-6, .img-p-7, .img-p-8, .img-p-9, .img-p-10, .img-p-11, .img-p-12, .img-p-13 {
+    display: inline-block;
+    *zoom: 1;
+    *display: inline;
+    vertical-align: middle;
+    line-height: 300px;
+    overflow: hidden;
+    background-image: url(../images/p.png);
+}
+
+.img-p-2 {
+    width: 45px;
+    height: 45px;
+    background-position: 0 -55px;
+}
+
+.img-p-3 {
+    width: 45px;
+    height: 45px;
+    background-position: -55px -55px;
+}
+
+.img-p-4 {
+    width: 45px;
+    height: 45px;
+    background-position: 0 0;
+}
+
+.img-p-5 {
+    width: 45px;
+    height: 45px;
+    background-position: -55px 0;
+}
+
+.img-p-6 {
+    width: 15px;
+    height: 14px;
+    background-position: -144px -110px;
+}
+
+.img-p-7 {
+    width: 38px;
+    height: 45px;
+    background-position: -48px -110px;
+}
+
+.img-p-8 {
+    width: 39px;
+    height: 44px;
+    background-position: -159px 0;
+}
+
+.img-p-9 {
+    width: 38px;
+    height: 45px;
+    background-position: -96px -110px;
+}
+
+.img-p-10 {
+    width: 39px;
+    height: 45px;
+    background-position: -110px -55px;
+}
+
+.img-p-11 {
+    width: 38px;
+    height: 45px;
+    background-position: -159px -54px;
+}
+
+.img-p-12 {
+    width: 39px;
+    height: 45px;
+    background-position: -110px 0;
+}
+
+.img-p-13 {
+    width: 38px;
+    height: 45px;
+    background-position: 0 -110px;
+}
+
+@font-face {
+    font-family: "re";
+    font-weight: normal;
+    font-style: normal;
+    src: url("../fonts/re.eot");
+    src: url("../fonts/re.eot?#iefix") format("embedded-opentype"), url("../fonts/re.woff") format("woff");
+}
+
+[class^="font-re-"],
+[class*=" font-re-"] {
+    font-family: "re"!important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: inherit;
+    float: none;
+    margin: 0;
+    vertical-align: -0.25em;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    text-decoration: none;
+    text-transform: none;
+}
+
+.font-re-1:before {
+    content: "\EA01";
+}
+
+.font-re-2:before {
+    content: "\EA02";
+}
+
+.font-re-3:before {
+    content: "\EA03";
+}
+
+.font-re-4:before {
+    content: "\EA04";
+}
+
+.font-re-QQ:before {
+    content: "\EA05";
+}
+
+.font-re-baidu:before {
+    content: "\EA06";
+}
+
+.font-re-sina:before {
+    content: "\EA07";
+}
+
+.font-re-weix:before {
+    content: "\EA08";
+}
+
+.regter {
+    padding: 0 50px;
+}
+
+.regter input {
+    outline: none;
+}
+
+.regter .register {
+    margin-top: 32px;
+    width: 500px;
+    float: left;
+}
+
+.regter .register-head {
+    font-size: 0;
+    line-height: 2.4;
+    width: 100%;
+    height: 47px;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+.regter .register-head a {
+    text-align: center;
+    font-size: 20px;
+    display: inline-block;
+    width: 33.33%;
+    height: 47px;
+    text-decoration: none;
+    color: #999;
+}
+
+.regter .register-head .active {
+    height: 46px;
+    color: #2ea821;
+    border-bottom: 2px solid #999;
+}
+
+.regter .checks {
+    position: relative;
+    margin: 20px -250px 20px 0;
+}
+
+.regter .checks label {
+    float: left;
+    margin-right: 15px;
+    padding: 0 15px;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 40px;
+    position: relative;
+    color: #666;
+    border: 1px solid #ddd;
+}
+
+.regter .checks label input {
+    display: none;
+}
+
+.regter .checks label i {
+    font-size: 18px;
+    display: inline-block;
+    margin-right: 4px;
+}
+
+.regter .checks label span {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+}
+
+.regter .checks .active {
+    color: #2ea821;
+    border: 1px solid #2ea821;
+}
+
+.regter .checks .mess {
+    position: absolute;
+    top: 13px;
+    left: 422px;
+    display: none;
+    width: 17px;
+    height: 17px;
+}
+
+.regter .tag {
+    width: 400px;
+}
+
+.regter .item > label {
+    float: left;
+    clear: both;
+    width: 80px;
+    line-height: 45px;
+    text-align: right;
+}
+
+.regter .input {
+    margin-left: 95px;
+}
+
+.regter .code-btn {
+    background-color: #ddd;
+    color: #555;
+}
+
+.regter .btn {
+    background: #2ea821;
+    border: 1px solid #2ea821;
+    color: #fff;
+    width: 100%;
+    height: 46px;
+    line-height: 44px;
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.regter .btn.disabled {
+    border-color: #ddd;
+    background: #ddd;
+    color: #333;
+}
+
+.regter .login {
+    float: right;
+    width: 440px;
+    height: 460px;
+    margin-top: 102px;
+    padding-left: 60px;
+    background: url(../images/ri_bg.png) 0 0 no-repeat;
+}
+
+.regter .login p {
+    font-size: 14px;
+    margin: 20px 0 30px 0;
+    color: #535353;
+}
+
+.regter .login h3 {
+    font-size: 14px;
+    margin-top: 30px;
+    color: #999;
+}
+
+.regter .login h4 {
+    font-size: 14px;
+    display: block;
+    margin-top: 18px;
+    color: #999;
+}
+
+.regter .login .email {
+    display: none;
+}
+
+.regter .login .phone {
+    display: block;
+}
+
+.regter .login-header {
+    font-size: 15px;
+    line-height: 2;
+    height: 30px;
+}
+
+.regter .login-header span {
+    margin-right: 10px;
+    color: #999;
+}
+
+.regter .login-header a {
+    display: inline-block;
+    width: 95px;
+    height: 30px;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    background: #d63333;
+}
+
+.regter .row {
+    margin: 15px;
+}
+
+.regter .row .icon {
+    line-height: 45px;
+    float: left;
+    width: 130px;
+}
+
+.regter .row a {
+    font-size: 14px;
+    color: #333;
+}
+
+.regter .row a:hover {
+    text-decoration: none;
+    color: #e40;
+}
+
+.regter .row .pic {
+    font-size: 45px;
+    margin-right: 10px;
+    vertical-align: -15px;
+}
+
+.regter .row .pic1 {
+    color: #eb7464;
+}
+
+.regter .row .pic2 {
+    color: #3aabd9;
+}
+
+.regter .row .pic3 {
+    color: #4b9c36;
+}
+
+.regter .row .pic4 {
+    color: #5b61ab;
+}
+
+.view-form .usertplid {
+    display: none;
+}
+
+.resetpwd .register-head {
+    margin-bottom: 30px;
+}
+
+.resetpwd .lable {
+    display: none;
+}
+
+.username input, .password input {
+    font-size: 14px;
+    line-height: 1.3333333;
+    height: 44px;
+    text-indent: 15px;
+    border-radius: 6px;
+    display: block;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.username {
+    margin-top: 40px;
+}
+
+/*# sourceMappingURL=register.css.map */

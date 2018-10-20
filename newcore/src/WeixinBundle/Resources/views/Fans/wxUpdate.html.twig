@@ -1,0 +1,15 @@
+{% extends "ManageBundle::poplayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+seajs.use("jquery",function($){
+$(function(){
+    $(".wk-pop-close").trigger("click");
+	$("#flushbtn").trigger('click');
+})
+});
+</script>
+{% endblock %}
+{% block body %}
+{% import "ManageBundle:Form:popedit.html.twig" as forms %}
+{{ forms.popEdit(form|default(''),'form') }}
+{% endblock %}

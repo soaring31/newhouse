@@ -1,0 +1,124 @@
+HouseBundle\Entity\Answer:
+    type: entity
+    table: answer
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        uid:
+            options:
+                comment: 会员id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        toid:
+            options:
+                comment: 补充的回答id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        content:
+            options:
+                comment: 回答内容
+                unsigned: false
+            nullable: false
+            type: string
+            length: 255
+        isanswer:
+            options:
+                comment: 是否最佳答案
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 100
+        category:
+            options:
+                comment: 栏目分类id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        ask:
+            options:
+                comment: 问答id
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        vote:
+            options:
+                comment: 点赞
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        user_agent:
+            options:
+                comment: 浏览器类型
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        checked:
+            options:
+                comment: 是否审核
+                unsigned: false
+            nullable: false
+            type: boolean
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

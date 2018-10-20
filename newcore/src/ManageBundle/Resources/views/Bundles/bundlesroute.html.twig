@@ -1,0 +1,55 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% block js %}
+<script>
+seajs.use("{{ bundlepath }}/js/bundles",function(c){
+	//js入口	    
+	c.init('main');
+});
+</script>
+{% endblock %}
+{% block tableMain %}
+<span class="tableDesc">
+        路由列表>><input type="button" id="btnfun_edit" data="{{ (action~'/show')|U('bundle='~routebundle) }}" class="search-btn" value="新增路由" />
+  &nbsp;&nbsp;
+  <select id="bundlename">
+      {% if bundles is defined %}
+      {% for key,vo in bundles %}
+      <option value="{{ key }}" {{ (routebundle|isSelected(key)) }}>{{ key }}</option>
+      {% endfor %}
+      {% endif %}
+  </select>
+</span>
+<table class="right-table">
+	<tbody>
+		<tr>
+			<th class="w30"></th>
+			<th class="w200 txtleft">唯一标识</th>
+			<th class="w350 txtleft">路由URL</th>
+			<th class="w350 txtleft">控制器路径</th>
+			<th class="w150">操作</th>
+			<th></th>
+		</tr>
+		{% if routeData.data is defined %}
+		{% for key,vo in routeData.data %}
+		<tr>
+		    <td></td>
+			<td>{{ key }}</td>
+			<td>{{ (key)|newpath|default('') }}</td>
+			<td>{{ vo.defaults._controller }}</td>
+			<td class="txtcenter">
+				<input type="button" id="btnfun_edit" data="{{ (action~'/show')|U('bundle='~routebundle~'&routename='~key) }}" class="search-btn" value="修改" />&nbsp;&nbsp;
+				<input type="button" id="btnfun_delete" data="{{ (action~'/delete')|U('bundle='~routebundle~'&routename='~key) }}" class="search-btn" value="删除" />
+			</td>
+			<td></td>
+		</tr>
+		{% endfor %}
+		{% endif %}
+	</tbody>
+</table>
+{% endblock %}
+{% block submit %}{% endblock %}
+{% if routeData is defined %}
+{% block pageIndex %}{{ routeData.pageIndex|default(1) }}{% endblock %}
+{% block pageCount %}{{ routeData.pageCount|default(1) }}{% endblock %}
+{% endif %}
+{% block promptUl %}{% endblock %}

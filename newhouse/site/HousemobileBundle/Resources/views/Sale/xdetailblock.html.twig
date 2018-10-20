@@ -1,0 +1,184 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明 
+ * detail: 当前数据
+#}
+
+{% set detail = cident.xdetail.data[0]|default('') %}
+
+{% block result %}
+<div class="content">
+    {{- core_mobile_global.swiper_one(detail) -}}
+    <div class="list-block list-block-rent list-block-rent-mt0">
+        <ul>
+            <li class="item-content">
+                <div class="item-inner">
+                    <div class="m">
+                        <div class="t">
+                            {{detail.name|default('')}}
+                        </div>
+                        <div class="p">
+                            二手房：<span class="l p-red">{{ house_global.around_count({id: detail.id|default(''), field: 'sales'}) }}</span>&nbsp;套&nbsp;&nbsp;
+                            出租房：<span class="l p-red">{{ house_global.around_count({id: detail.id|default(''), field: 'rents'}) }}</span>&nbsp;套
+                        </div>
+                        <div class="p p-gray">
+                            {# <span class="pull-right ml10">浏览：<span data-counts="{models: 'around', field: 'clicks', id: '{{detail.id|default('')}}'}"></span>人</span> #}
+                            发布日期：{{detail.update_time|default('')|date('Y-m-d')}}
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    {# 学校概况 #}
+    <div class="list-block panel-block">
+        {{- housemobile_global.panel_title({title:'学校概况'})-}}
+        <div class="item-content1 p-gray">
+            <div class="item-inner2">
+                <div class="row">
+                    <div class="col-100">
+                        所属性质：{{- core_global.formfield({value: detail.leibie|default(''), form: 'around_school', field: 'leibie'}) -}}
+                    </div>
+                    <div class="col-100">
+                        学校分类：{{- core_global.formfield({value: detail.school_type|default(''), form: 'around_school', field: 'school_type'}) -}}
+                    </div>
+                    <div class="col-100">
+                        级别：{{- core_global.formfield({value: detail.jibie|default(''), form: 'around_school', field: 'jibie'}) -}}
+                    </div>
+                    <div class="col-100">
+                        联系电话：{{detail.tel|default('-')}}
+                    </div>
+                    <div class="col-100">
+                        地址：{{detail.address|default('-')}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {# 学校介绍 #}
+    {{housemobile_global.content({
+        title: '学校介绍',
+        content: detail.abstract|default('')
+    })}}
+    {# 学校地图 #}
+    <div class="list-block panel-block">
+        {{- housemobile_global.panel_title({title:'学校地图'})-}}
+        <div class="item-inner">
+            {{housemobile_global.map({
+                title: detail.name|default(''),
+                map: detail.map|default(''),
+                popup : '.popup-map'
+            })}}
+        </div>
+    </div>
+    <div class="buttons-tab">
+        <a href="#tab1" class="tab-link button active">对口小区</a>
+        <a href="#tab2" class="tab-link button ">二手房</a>
+        <a href="#tab3" class="tab-link button">出租房</a>
+    </div>
+    <div class="tabs list-block media-list list-block-m0">
+        {% set houses_id = ('house.houses_arc')|getCol('aid',{form: 'houses_around', fromid: detail.id|default(''), checked: 1, pageSize: 50})|default('')|join(',') %}
+        <ul id="tab1" class="tab active">
+            {% set xiaoqu_data = ('house.houses')|getAll({id: 'in|' ~ houses_id, type: 1, pageSize: 10}) %}
+            {% if xiaoqu_data.data is defined and xiaoqu_data.data|default('') %}
+                {% for item in xiaoqu_data.data %}
+                    <li>
+                        <a href="{{('sale/qdetail')|UU({id: item.id|default('')})}}" class="item-link item-content">
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    {{housemobile_global.list_title({title: item.name|default('')})}}
+                                    <div class="item-after">{{item.update_time|default('')|date('Y-m-d')}}</div>
+                                </div>
+                                <div class="item-subtitle">
+                                    <span class="button button-danger button-sm">售</span>&nbsp;
+                                    <span class="l p-red fam">{{item.sales|default('')}}</span>&nbsp;套&nbsp;&nbsp;&nbsp;
+                                    <span class="button button-sm">租</span>&nbsp;
+                                    <span class="l p-red fam">{{item.rents|default('')}}</span>&nbsp;套
+                                    <span class="pull-right">
+                                        {{house_global.if_dj({value: item.dj|default(''), class: "c-e43"})}}
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                {% endfor %}
+            {% else %}
+                <li class='mobile-list-none'>暂无小区</li>
+            {% endif %}
+        </ul>
+        <ul id="tab2" class="tab">
+            {% set sale_data = ('house.sale')|getAll({pageSize: 10, aid: 'in|' ~ houses_id, checked: 1, valid: 'gt|' ~ ('now')|date('U') }) %}
+            {% if sale_data.data is defined and sale_data.data|default('') %}
+                {% for item in sale_data.data %}
+                    <li>
+                        <a href="{{('sale/detail')|UU({id: item.id|default('')})}}" class="item-link item-content">
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    {{housemobile_global.list_title({title: item.name|default('')})}}
+                                    <div class="item-after">{{item.update_time|default('')|date('Y-m-d')}}</div>
+                                </div>
+                                <div class="item-subtitle">
+                                    {{house_global.huxing({id: item.id|default(''), models: 'sale', tpl: '%shi%%ting%%wei%-%mj%m&sup2;'})}}
+                                    <span class="pull-right">
+                                        {{house_global.if_wy({value: item.zj|default(''), class: 'c-e43'})}}     
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                {% endfor %}
+            {% else %}
+                <li class='mobile-list-none'>暂无二手房</li>
+            {% endif %}
+        </ul>
+        <ul id="tab3" class="tab">
+            {% set rent_data = ('house.rent')|getAll({pageSize: 10, aid: 'in|' ~ houses_id, checked: 1, valid: 'gt|' ~ ('now')|date('U') }) %}
+            {% if rent_data.data is defined and rent_data.data|default('') %}
+                {% for item in rent_data.data %}
+                    <li>
+                        <a href="{{('rent/detail')|UU({id: item.id|default('')})}}" class="item-link item-content">
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    {{housemobile_global.list_title({title: item.name|default('')})}}
+                                    <div class="item-after">{{item.update_time|default('')|date('Y-m-d')}}</div>
+                                </div>
+                                <div class="item-subtitle">
+                                    {{house_global.huxing({data: item|default(''), tpl: '%shi%%ting%%wei%-%mj%m&sup2;'})}}
+                                    <span class="pull-right">
+                                        {{house_global.if_czj({value: item.czj|default(''), class: "c-e43"})}}
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                {% endfor %}
+            {% else %}
+                <li class='mobile-list-none'>暂无出租</li>
+            {% endif %}
+        </ul>
+    </div>
+    {{ render(controller('HouseBundle:Common:footer', {_isApp: url_isApp})) }}
+</div>
+<script type="text/javascript">
+    seajs.use(['mapSimple'], function (mapSimple){
+        var Switch = {};
+        Switch.pop = true;
+        Switch.map = true;
+
+         $(document).on('tap', '.map-open', function(){
+             console.log(00);
+             if(Switch.pop){
+                $.popup('.popup-map');
+                Switch.pop= false;
+             }
+             if(Switch.map){
+                mapSimple.initMap();
+                Switch.map = false;
+             }
+         });
+         $(document).on('tap', '.map-close', function(){
+                $.closeModal('.popup-map');
+                Switch.pop= true;
+         });
+    });
+</script>
+{% endblock result %}

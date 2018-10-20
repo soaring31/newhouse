@@ -1,0 +1,23 @@
+weixin_return:
+    path:     /return/{token}/{appid}
+    defaults: { _controller: 'WeixinBundle:Call:return', appid: null}
+weixin_notify:
+    path:     /notify/{token}
+    defaults: { _controller: 'WeixinBundle:Call:notify' }
+    requirements:
+        token: .+
+weixin_index:
+    path:     /
+    defaults: { _controller: 'WeixinBundle:Default:index' }
+weixin_register:
+    path:     /register
+    defaults: { _controller: 'WeixinBundle:Register:index' }
+weixin_login:
+    path:     /login
+    defaults: { _controller: 'WeixinBundle:Default:login' }
+weixin_logout:
+    path:     /logout
+    defaults: { _controller: 'WeixinBundle:Default:logout' }
+weixin_main:
+    path:     /main
+    defaults: { _controller: 'WeixinBundle:Default:main' }

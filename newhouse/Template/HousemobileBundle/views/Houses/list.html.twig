@@ -1,0 +1,734 @@
+{% set tpl_extends = 'HousemobileBundle::list_layout.html.twig' %}
+
+{% set tpl_extends_data = {
+    'ajax': 'HousemobileBundle:Clist:houseslist.html.twig',
+    'search': 'HousemobileBundle:Houses:search.html.twig'
+} %}
+
+{% for k, v in tpl_extends_data %}
+    {% if app.request.get(k) %}
+        {% set tpl_extends = v %}
+    {% endif %}
+{% endfor %}
+
+{% extends tpl_extends | default('') %}
+
+{% block tkd %}
+{# {% set catyarea_name = ('db.area')|getRow({id: region,checked:1}) %} #}
+{# {% set catyarea2_name = ('house.cate_circle')|getRow({id: cate_circle,checked:1}) %} #}
+{# % set seoConts = ('db.mconfig_seo')|getAll({status:1,page_type:1,is_delete:0}) % #}
+{# % if seoConts.data[0]|default % #}
+{{- housemobile_global.tkd({
+   type:'1',
+   city:cur_area_data,
+   pageCount:ident.list.pageCount
+}) -}}
+{# % else % #}
+{#{ parent() }#}
+{# % endif % #}
+{% endblock tkd %}
+
+
+{% block header_title %}
+    {{core_mobile_global.title_list({title: '新房'})}}
+    <ul class="drop_down">
+    </ul>
+{% endblock header_title %}
+
+{% block header_right %}
+    {{ core_mobile_global.bar_nav_btn({
+    title: '',
+    icon: 'font-f-8',
+    popup: {
+        placeholder: '楼盘名称/拼音/地址',
+        title: '新房搜索',
+        popup: '.popup-search',
+    }
+}) }}
+{% endblock header_right %}
+
+{% block header_bottom %}
+    <div class="header_sx">
+        <!-- 筛选 -->
+        <div
+            class="filter"
+            data-block="{
+              ajax: {
+                  url: '{{ ('bundlebindforms/ajax')|U }}',
+                  data: {
+                      tpl: 'Common:filter',
+                      tag: 'houses',
+                      switch_circle: 1,
+                      switch_line: 1,
+                      switch_hxs: 1
+                  }
+              }
+          }"></div>
+    </div>
+{% endblock header_bottom %}
+
+{% block container %}
+
+    {% set list_header %}
+
+    <div class="selected-tags" id="j_selectedTags"></div>
+    <!-- 广告 -->
+        <div class="cy-swiper">
+            <style rel="stylesheet">
+                .cy-swiper,.cy-info{
+                    width: 94%;
+                    margin: 0.75rem auto 0;
+                }
+                .swiper-container {
+                    height: 5.7rem;
+                    width: 100%;
+                }
+                .cy-info{
+                    height: 5.7rem;
+                    width: 94%;
+                    margin: 0 auto;
+                    display: block;
+                }
+            </style>
+            <div data-swiper-cy="1" class="swiper-container cy-swiper" id="detailSwiper"
+                 data-autoplay="5000" data-pagination=".swiper-hdp"
+                 data-lazyloading="true" data-lazy-loading-in-prev-next='true'>
+                <div class="swiper-wrapper" style="height: 100%;">
+
+                    <div class="swiper-slide house-ad">
+                        <!-- AdSame ShowCode: WAP / 新房列表页 / 横幅(轮播1) Begin -->
+                        <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c=10112102101" charset="gbk" ></script>
+                        <!-- AdSame ShowCode: WAP / 新房列表页 / 横幅(轮播1) End -->
+                        <div class="ad-txt"></div>
+                    </div>
+
+                    <div class="swiper-slide house-ad">
+                        <!-- AdSame ShowCode: WAP / 新房列表页 / 横幅(轮播2) Begin -->
+                        <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c=10112102102" charset="gbk" ></script>
+                        <!-- AdSame ShowCode: WAP / 新房列表页 / 横幅(轮播2) End -->
+                        <div class="ad-txt"></div>
+                    </div>
+
+                </div>
+
+            </div>
+            <script type="text/javascript">
+                // 重新启用swiper
+                seajs.use(['sm'], function(sm) {
+                    $('[data-swiper-cy="1"]').swiper();
+                    $('[data-swiper-cy="1"]').swiper().defaults.autoplay=true;
+                })
+            </script>
+        </div>
+
+        {#CY 列表置顶房源#}
+
+        <div style="display: none">
+            <div class="cy-4">
+                <!-- AdSame ShowCode: WAP / 新房列表页 / 信息流1 Begin -->
+                <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~'12102111' }}" charset="gbk" ></script>
+                <!-- AdSame ShowCode: WAP / 新房列表页 / 信息流1 End -->
+            </div>
+            <div class="cy-8">
+                <!-- AdSame ShowCode: WAP / 新房列表页 / 信息流2 Begin -->
+                <script type="text/javascript" src="http://tf.zhuge.com/s?z=zgf&c={{ cYCity_id~'12102112' }}" charset="gbk" ></script>
+                <!-- AdSame ShowCode: WAP / 新房列表页 / 信息流2 End -->
+            </div>
+        </div>
+
+
+        {% set cy_id = cy_h5_array|default %}
+
+        {% if cy_id|length>0 %}
+            {% set cy_list = ('house.houses')|getAll({id: 'in|'~cy_id|join(',')}) %}
+
+            {% if cy_list and cy_list.data|length>0 %}
+                    <ul class="list-block media-list">
+                        {% for item in cy_list.data %}
+                            <li>
+                                <a href="{{core_global.url(item|merge({set_models:1}))}}" class="item-content p-default">
+                                    <div class="item-media por">
+                                        {{- core_global.img({
+                                            src: item.thumb|default(''),
+                                            alt: item.name|default(''),
+                                            type: 2,
+                                            width: 214,
+                                            height: 160
+                                        }) -}}
+                                        {% if tpl_top|default('1') %}
+                                            {% if item.top|default('') == 159 %}
+                                                <div class="item-zd">精选楼盘</div>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                    <div class="item-inner">
+                                        <div class="item-title-row">
+                                            {{housemobile_global.list_title({title: item.name|default('')})}}
+                                            {% if item.cate_status != '' %}
+                                                {# 销售状态 #}
+                                                {% set sale_status = ('house.category')|getOne('name', {id:item.cate_status}) %}
+                                                <span class="tag-sale-status on-sale-{{item.cate_status}}">
+                            {{ sale_status }}
+                        </span>
+                                            {% endif %}
+                                        </div>
+
+                                        {# 地址 #}
+                                        {% if item.address %}
+                                            <div class="item-subtitle item-subtitle-ex">
+                                                {% set catyarea_name = ('db.area')|getRow({id: item.region,checked:1}) %}
+                                                {% set catyarea2_name = ('house.cate_circle')|getRow({id: item.cate_circle,checked:1}) %}
+                                                {% if catyarea_name.name|default('') or catyarea2_name.name|default('') %}
+                                                    [ {{catyarea_name.name|default('')}} {% if catyarea_name.name|default('') and catyarea2_name.name|default('')  %} - {% endif %} {{catyarea2_name.name|default('')}} ]
+                                                {% endif %}
+                                                {{item.address|default('地址')}}
+                                            </div>
+                                        {% endif %}
+                                        {# 价格 #}
+                                        <div class="item-after">
+                                            {#{{house_global.if_dj({value: item.dj|default(''),class: 'l p-red'})}}#}
+                                            {% if item.dj|default('') %}
+                                                <span class="l p-red">{{ item.dj|default('') }}</span> 元/平
+                                            {% elseif item.tdj|default('') %}
+                                                <span class="l p-red">{{item.tdj|default('')}}</span> 万元/套起
+                                            {% else %}
+                                                <span class="arial">待定</span>
+                                            {% endif %}
+                                        </div>
+                                        {#
+                                            {% if kft|default('1') %}
+                                                {% if item.bdsm|default('') %}
+                                                <div class="item-subtitle item-subtitle-ex">
+                                                    <span class="p-red">{{item.bdsm|default('-')}}</span>
+                                                </div>
+                                                {% endif %}
+                                            {% else %}
+                                                <div class="item-subtitle item-subtitle-ex">
+                                                    主力户型：{{- house_global.huxing({aid: item.fromid|default(''),zlhx: 0, tpl: "
+                                                        <span class='mr10'>%shi%%ting%%mj%m&sup2;</span>
+                                                        "}) -}}
+                                                </div>
+                                            {% endif %}
+                                        #}
+
+                                        <div class="item-subtitle item-subtitle-ex">
+                                            {{ housemobile_global.lptag({value: item, tpl: '<span>%value%</span>', con: 'cate_type,zxcd,tslp'})}}
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="cy-info" id="cy-4">
+
+                    </div>
+            {% endif %}
+        {% endif %}
+
+    {% endset %}
+
+    {# 列表链接 js调用列表需要 #}
+    {% set list_url = ('houses/list') | U({ajax: 1}) %}
+    {{ parent() }}
+    <div class="j_tips-alert"></div>
+    {# 排序 #}
+    <a class="sort-btn element_content" id="sortBtn"></a>
+    {# 底部切换暂时隐藏 #}
+    <ul class="footer-enter" style="display: none">
+        <li class="open-loupan">
+            <a href="/app_dev.php/xinfang#order=kpdate|desc" class="one p-default">
+                <span></span>
+                <p>新开楼盘</p>
+            </a>
+        </li>
+        <li class="condo-tour">
+            <a href="/app_dev.php/topic/group" class="p-default">
+                <span></span>
+                <p>看房团</p>
+            </a>
+        </li>
+        <li class="price-findhouse">
+            <a href="/app_dev.php/houses/prices" class="p-default">
+                <span></span>
+                <p>房价找房</p>
+            </a>
+        </li>
+        <li class="brand-area">
+            <a href="/app_dev.php/news/list" class="p-default">
+                <span></span>
+                <p>资讯</p>
+            </a>
+        </li>
+    </ul>
+    {#列表页弹窗#}
+    {% include 'HousemobileBundle:Clist:alert_popup.html.twig' %}
+{% endblock container %}
+
+{# 重置底部 #}
+{% block footer %}
+<div id="sortList" class="house-type-list-box  "  data-buttons-tab="1" data-condition="1">
+    <ul id="" class="condition">
+        <li class="border-bottom-e7e7e7">
+            <label data-condition-item="1" class="label-checkbox item-content default"><input type="radio" value="" checked="checked" name="order">
+                <a class="item-inner element_content">
+                    <div class="item-title">
+                        默认排序
+                    </div>
+                </a>
+            </label>
+        </li>
+        <li class="border-bottom-e7e7e7">
+            <label data-condition-item="1" class="label-checkbox item-content"><input type="radio" value="dj|asc" name="order">
+                <a class="item-inner element_content">
+                    <div class="item-title">
+                        单价由低到高
+                    </div>
+                </a>
+            </label>
+        </li>
+        <li class="border-bottom-e7e7e7">
+            <label data-condition-item="1" class="label-checkbox item-content"><input type="radio" value="dj|desc" name="order">
+                <a class="item-inner element_content">
+                    <div class="item-title">
+                        单价由高到低
+                    </div>
+                </a>
+            </label>
+        </li>
+        <li class="border-bottom-e7e7e7">
+            <label data-condition-item="1" class="label-checkbox item-content"><input type="radio" value="kpdate|desc" name="order">
+                <a class="item-inner element_content">
+                    <div class="item-title">
+                        开盘时间由近及远
+                    </div>
+                </a>
+            </label>
+        </li>
+        <li class="border-bottom-e7e7e7">
+            <label data-condition-item="1" class="label-checkbox item-content"><input type="radio" value="kpdate|asc" name="order">
+                <a class="item-inner element_content">
+                    <div class="item-title">
+                        开盘时间由远到近
+                    </div>
+                </a>
+            </label>
+        </li>
+    </ul>
+</div>
+{% endblock footer %}
+{% block download %}
+    <div id="homeAppLink" class="down-app-fixed animated fast fadeInDown down-app-fixed-shadow">
+        <i class="down-logo-fixed"></i>
+        <span>下载诸葛找房APP</span>
+        <i id="closeAppBtnFixed" class="close-app-btn"></i>
+        <a href="javascript:;" id="homeAppLinkFixed" class="app-down-link-fixed">立即下载</a>
+    </div>
+{% endblock download %}
+{# 导航里面的自定义区块 #}
+{% block popup_nav %}
+    {% set current_nav = {
+        title: '新房',
+        data: [
+            {
+                name: '所有楼盘',
+                url: ('houses/list') | UU
+            }, {
+                name: '房价',
+                url: ('houses/cfj') | UU
+            }, {
+                name: '团购',
+                url: ('groupbuy/list') | UU
+            }, {
+                name: '特价房',
+                url: ('special/list') | UU
+            }, {
+                name: '户型',
+                url: ('door/list') | UU
+            }, {
+                name: '开发商',
+                url: ('member/k_list') | UU
+            }
+        ]
+    } %}
+    {{ parent() }}
+{% endblock popup_nav %}
+
+{% block href_a %}
+    <a href='javascript:;' class="button-link button-nav pull-left click-back">
+        <span class="icon font-f-10"></span>
+    </a>
+{% endblock %}
+{%block js%}
+    <script>
+        seajs.use([], function() {
+            $(function() {
+                //筛选项逻辑
+                $(document).on('click', '.screen-box a', function() {
+                    $('#popLayer').css({'top':'10rem','z-index':6,'opacity': .6}).show();
+                    var _this = $(this);
+                    var type = _this.attr('id');
+                    var controList = _this.attr('listType');
+                    var tag = _this.attr('tag');
+                    if ($('#' + controList).css('display') == 'none') {
+                        //打开筛选项
+                        openScreen(tag);
+                    } else {
+                        //关闭筛选项
+                        closePopAndScreen();
+                    }
+                });
+                //排序
+                $(document).on("click", "#sortBtn", function() {
+                    $('#popLayer').removeClass('outOpa').addClass('inOpa').css({'top':0,'z-index':9999,'opacity': .4}).show();
+                    $("#sortList").removeClass('slideOutDown').addClass('slideInUp').show();
+                });
+
+                //点击遮罩层关闭筛选项
+                $(document).on("click", "#popLayer", function() {
+                    //关闭筛选项
+                    closePopAndScreen();
+                });
+                function openScreen(id) {
+                    $(".container").css("z-index", "50");
+                    $('#popLayer').removeClass('outOpa').addClass('inOpa').show();
+                    $('.screen-box a').removeClass('hover');
+                    $("#" + id).addClass("hover");
+
+                    //需要显示的list
+                    switch (id) {
+                        case "areaTag":
+                            $("#screenBox,#areaList").show();
+                            // 处理有第三级选项
+                            var contro = false;
+                            $('.levelThree').each(function(k, v) {
+                                if ($(this).css('display') == 'block') {
+                                    contro = true
+                                }
+                            });
+                            if (contro) {
+                                $("#levelOne").removeClass("w-50-item").removeClass("w-100-item").addClass("w-30-item");
+                                $(".levelTow").removeClass("w-50-item").removeClass("w-100-item").addClass("w-30-item");
+                                $(".levelThree").addClass("w-30-item");
+                            } else {
+                                $("#levelOne").removeClass("w-30-item").removeClass("w-100-item").addClass("w-50-item");
+                                $(".levelTow").removeClass("w-30-item").removeClass("w-100-item").addClass("w-50-item");
+                                $(".levelThree").addClass("w-30-item");
+                            }
+                            $("#rentList,#houseTypeList,#moreList").hide();
+                            break;
+                        case "rentTag":
+                            $("#screenBox,#rentList").show();
+                            $("#areaList,#houseTypeList,#moreList").hide();
+                            break;
+                        case "houseTypeTag":
+                            $("#screenBox,#houseTypeList").show();
+                            $("#rentList,#areaList,#moreList").hide();
+                            break;
+                        case "moreTag":
+                            $("body").css({"height": "100%", "overflow": "hidden"});
+                            $("#screenBox,#moreList").show();
+                            var height = $(window).height()-$(".header_sx").height()-$("#listDeviation").height()-$(".more-bottom-list-box").height();
+                            var heightBox = $(window).height()-$(".header_sx").height()-$("#listDeviation").height();
+                            $("#moreList").css("height",(heightBox/20) +"rem");
+                            $("#moreDataBox").css("height",(height/20) +"rem");
+                            $("#areaList,#rentList,#houseTypeList").hide();
+                            break;
+                    }
+                };
+                function defShow() {
+                    $("#naItem").addClass("hover");
+                    //隐藏后两级选项  一级选项置为100%
+                    $("#levelOne").removeClass("w-30-item").removeClass("w-100-item").addClass("w-50-item");
+                    $(".levelTow").removeClass("w-30-item").addClass("w-50-item");
+                    $(".levelThree").removeClass("w-30-item").addClass("display-no");
+                    areaOneClick();
+                }
+                function closePopAndScreen() {
+                    $("#areaTag,#rentTag,#houseTypeTag,#moreTag").removeClass("hover");
+                    $('.footer-box').show();
+                    $("#screenBox,#rentList,#houseTypeList,#areaList,#moreList").hide();
+                    $('#popLayer,#sortList').hide();
+                };
+                // 区域、地铁切换
+                $(document).on('click', '#itemList li', function() {
+                    var _this = $(this);
+                    var tagType = _this.attr('type');
+                    if (tagType == 'region') {
+                        $('#areaTag').html('区域');
+                    } else if (tagType == 'cate_line') {
+                        $('#areaTag').html('地铁');
+                    }
+                    $('#itemList li').removeClass('hover');
+                    _this.addClass('hover');
+                    // $('#itemList li .item-title').css('color','#333'); _this.find('.item-title').css('color','#ff8400');
+                    $('.levelTow').hide();
+                    $('.levelThree').hide();
+                    //一级选项置为50% 二级选项50%
+                    $("#levelOne").removeClass("w-30-item").removeClass("w-100-item").addClass("w-50-item");
+                    $(".levelTow").removeClass("w-100-item").removeClass("w-30-item").addClass("w-50-item");
+                    $("." + tagType).show();
+                });
+                // 选择城区、铁路线路切换
+                $(document).on('click', '.areaClassOne li', function() {
+                    if($(this).find('.item-title').text().trim() == '不限'){
+                        $('.areaClassTow li .item-title').removeClass('hover');
+                        $('.areaClassTow li:first-child .item-title').addClass('hover');
+                    }
+                    var _this = $(this);
+                    var controClass = _this.attr('contro');
+                    var type = _this.attr('type');
+                    var pid = _this.attr('pid');
+                    $('.areaClassOne li .item-title').removeClass('hover');
+                    _this.find('.item-title').addClass('hover');
+                    $('.' + type + '-all').attr('name', type).val(pid);
+                    $("#levelOne").removeClass("w-50-item").removeClass("w-100-item").addClass("w-30-item");
+                    $(".levelTow").removeClass("w-100-item").removeClass("w-50-item").addClass("w-30-item");
+                    $('.levelThree').removeClass("w-100-item").removeClass("w-50-item").addClass("w-30-item");
+                    $('.levelThree').hide();
+                    $('.' + controClass).show();
+                });
+
+                $(document).on('click', '.levelThree li', function() {
+                    var _this = $(this);
+                    var type = _this.attr('type');
+                    var name = _this.attr('name');
+                    $('.' + type + '-all').attr('name', name).val('');
+                    $('.levelThree li .item-title').removeClass('hover');
+                    _this.find('.item-title').addClass('hover');
+                });
+                //地铁点击
+                subwayClick();
+
+                function subwayClick() {
+                    $(document).on("click", "#subwayItem", function() {
+                        if ($(this).hasClass("hover")) {
+                            return false;
+                        }
+
+                        $("#itemList").find("li").removeClass("hover");
+                        $(this).addClass("hover");
+                        $("#naItem").addClass("hover");
+                        //隐藏后两级选项  一级选项置为100%
+                        $("#levelOne").removeClass("w-30-item").removeClass("w-100-item").addClass("w-50-item");
+                        $(".levelTow").removeClass("display-no").removeClass("w-30-item").addClass("w-50-item");
+                        $(".levelThree").removeClass("w-30-item").addClass("display-no");
+
+                        //一级区域点击
+                        areaOneClick();
+                    });
+                }
+                //一级区域点击
+                function areaOneClick() {
+                    $(document).on("click", ".areaClassOne li", function() {
+                        if ($(this).hasClass("hover")) {
+                            if ($(this).attr("typeData") == "nearby") {
+                                //关闭遮罩and筛选
+                                closePopAndScreen();
+                            }
+                            return false;
+                        }
+
+                        $(".areaClassOne").find("li").removeClass("hover");
+                        $(this).addClass("hover");
+                        $(".unlimited li").removeClass("hover");
+                        $("#areaClassTow li").eq(0).addClass("hover");
+                        switch ($(this).attr("typeData")) {
+                            case "area": //区域
+                                //隐藏后两级选项  一级选项置为100%
+                                $("#levelOne").removeClass("w-50-item").removeClass("w-100-item").addClass("w-30-item");
+                                $(".levelTow").removeClass("w-50-item").addClass("w-30-item");
+                                $(".levelThree").removeClass("display-no").addClass("w-30-item");
+
+                                //二级区域点击
+                                areaTowClick();
+                                break;
+                            case "subway": //地铁
+                                //隐藏后两级选项  一级选项置为100%
+                                $("#levelOne").removeClass("w-50-item").removeClass("w-100-item").addClass("w-30-item");
+                                $(".levelTow").removeClass("w-50-item").addClass("w-30-item");
+                                $(".levelThree").removeClass("display-no").addClass("w-30-item");
+                                //二级区域点击
+                                areaTowClick();
+                                break;
+                            case "nearby": //附近
+                                var nearby = $(this).attr("nearby");
+                                $(".area_factor").html($(this).html());
+                                $(".area_factor").show();
+                                if (window.navigator.geolocation) {
+                                    window.navigator.geolocation.getCurrentPosition(function(position) {
+                                        zurl.set("i", nearby);
+                                        //成功获取到地理位置信息时所执行的回调函数 删除地铁筛选
+                                        delete filter["subwayline"];
+                                        delete filter["subway"];
+
+                                        //删除区域筛选
+                                        delete filter["cityarea_id"];
+                                        delete filter["cityarea2_id"];
+
+                                        // 赋值地理位置
+                                        pos_obj["longitude"] = position.coords.longitude;
+                                        pos_obj["latitude"] = position.coords.latitude;
+
+                                        WapCookie.setCookie('pos', JSON.stringify(pos_obj));
+                                        //$.cookie('pos', JSON.stringify(pos_obj), { expires:7,path:'/'});
+                                        urlParam(true);
+
+                                        //关闭遮罩and筛选
+                                        closePopAndScreen();
+
+                                    }, function(error) {
+                                        switch (error.code) {
+                                            case 1:
+                                                alert("位置服务被拒绝！");
+                                                break;
+                                            case 2:
+                                                alert("暂时获取不到位置信息！");
+                                                break;
+                                            case 3:
+                                                alert("获取位置信息超时！");
+                                                break;
+                                            default:
+                                                alert("未知错误！");
+                                                break;
+                                        }
+                                        //关闭遮罩and筛选
+                                        closePopAndScreen();
+                                    }, {
+                                        // 指示浏览器获取高精度的位置，默认为false
+                                        enableHighAcuracy: false,
+                                        // 指定获取地理位置的超时时间，默认不限时，单位为毫秒
+                                        timeout: 2000,
+                                        // 最长有效期，在重复获取地理位置时，此参数指定多久再次获取位置。
+                                        maximumAge: 60000
+                                    });
+                                } else {
+                                    alert("您的浏览器不支持定位服务！~");
+                                    //关闭遮罩and筛选
+                                    closePopAndScreen();
+                                }
+                                break;
+                        }
+                        $(".level_3").addClass("hover");
+
+                    });
+                };
+
+                //价格自定义筛选
+                function setPrice(){
+                    $(document).on('click','.j_priceConfirm',function(){
+                        var minPrice = $('#minPriceTxt').val();
+                        var maxPrice = $('#maxPriceTxt').val();
+                        if(minPrice > maxPrice){
+                            minPrice = $('#maxPriceTxt').val();
+                            maxPrice = $('#minPriceTxt').val();
+                        }
+                        if(minPrice && maxPrice){
+                            var priceStr = 'between|'+ minPrice + ',' + maxPrice;
+                            $('.j_priceValue').val(priceStr);
+                        }
+                    })
+                }
+                setPrice();
+                //新房列表页content top值
+                $(".infinite-scroll").css("top", "4.6445rem");
+                var urlForm = '', //url上参数
+                    cookieForm = ''; //从cookie上获取的参数
+                var u = navigator.userAgent;
+                var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+                var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+                var isApp = 1; //是否是端上的逻辑
+                var isNotch = false; //判断是否是有刘海
+
+                //获取cookie方法
+                function getCookie(name) {
+                    var arr,
+                        reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+                    if (arr = document.cookie.match(reg)) {
+                        return unescape(arr[2]);
+                    } else {
+                        return null;
+                    }
+                }
+                //调用android方法
+                function callapp() {
+                    window.app.closeBrowser();
+                }
+                //获取url参数
+                {% set urlForm = app.request.get("form") %}
+                urlForm = '{{urlForm}}'
+                //获取cookie
+                cookieForm = getCookie("form");
+
+                //判断isApp判断是否端上还是h5
+                if (cookieForm == "app" || urlForm == "app") {
+                    isApp = 1
+                } else {
+                    isApp = 0
+                }
+                //设置cookie
+                if (urlForm == 'app' && cookieForm == null) {
+                    document.cookie = "form=" + urlForm;
+                }
+                //获取cookie
+                cookieForm = getCookie("form");
+                //h5和android ios交互
+                if (isApp) {
+                    if (isiOS) {
+                        $(".footer-enter li p").css("font-size", ".5rem");
+                        if (eval(getCookie("isNotch"))) {
+                            $(".footer-enter").css("height", "4rem");
+                        }
+                        $(".click-back").attr("href", "zgzf://closeBrowser");
+                        var Notch = app.hasNotchInScreen();
+                        document.cookie = "isNotch=" + Notch;
+                        if (eval(getCookie("isNotch"))) {
+                            $(".footer-enter").css("height", "4rem");
+                        }
+                    } else if (isAndroid) {
+                        var Notch;
+                        function hasNotchInScreen() {
+                            Notch = window.app.hasNotchInScreen();
+                        }
+                        hasNotchInScreen();
+                        $(".click-back").click(function() {
+                            callapp();
+                        })
+                    }
+
+                } else {
+                    if (isiOS) {
+                        $(".footer-enter li p").css("font-size", ".5rem");
+                    }
+                    var homePage_url = '';
+                    {% set sess_area = app.session.get('area')|default(0) %}
+                    {% set city = ('db.auth_group_area')|getAll({
+                        rulesarea:sess_area,
+                        pageSize: 1,
+                        order   : 'sort',
+                        orderBy : 'asc'
+                    }) %}
+                    {% set cityName = city.data[0].city %}
+                    homePage_url = "{{ 'http://m.zhuge.com/'~cityName}}";
+                    $(".click-back").click(function() {
+                        window.location.href = homePage_url
+                    });
+                    var friends = $(".footer-enter li");
+                    for (var i = 0; i < friends.length; i++) {
+                        (function(a) {
+                            friends[a].ontouchstart = function() {
+                                $(this).find('span').addClass('bg');
+                                $(this).find('p').css('color', '#333333');
+                            };
+                            friends[a].ontouchend = function() {
+                                $(this).find('span').removeClass('bg');
+                                $(this).find('p').css('color', '#BBBBBB');
+                            };
+                        })(i);
+
+                    }
+                }
+                zgCommon.checkList();
+            })
+        })
+    </script>
+    {%endblock%}

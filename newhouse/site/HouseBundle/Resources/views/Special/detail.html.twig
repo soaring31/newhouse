@@ -1,0 +1,141 @@
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% extends detail ? 'HouseBundle:Special:list.html.twig' : 'CoreBundle:Dispatch:errorcontent.html.twig' %}
+{# 说明
+ * detail: 当前数据
+ * sort_shi_ting_special:　同室同厅楼特价房
+ #}
+{% set sort_shi_ting_special = ('house.special')|getAll({ting: detail.ting|default(''), shi: detail.shi|default(''), checked: 1}) %}
+
+{% block title %}{{detail.name|default('特价房详情')}}{% endblock title %}
+
+{% block current_houses %}
+{{parent()}}
+<span>&gt;</span>
+<span>{{detail.name|default('')}}</span>
+{% endblock current_houses %}
+
+{% block container %}
+<div class="container" style="line-height:2;">
+	<div class="lpintro clearfix">
+		{% if detail is defined %}
+			<div class="lpintrot">
+				<div class="lpintrotr fr">发布时间： {{item.create_time|default('')|date('Y-m-d')}}</div>
+				<div class="lpintrotl"><i class="fl">
+					{{ core_global.formData({value: detail.cate_status|default(''), tpl: '<span>%value%</span>'}) }}
+				</i>
+					<h2>{{detail.name|default('')}}</h2>
+				</div>
+			</div>
+			<div class="h-d-img">
+				<a href="javascript:;">
+					{{- core_global.img({
+					    src: detail.thumb|default(''),
+					    alt: detail.name|default(''),
+					    width:551 ,
+					    height: 366,
+					    watermark: 'giffun'
+					}) -}}
+				</a>
+			</div>
+			<div class="lpintror fr">
+				<ul>
+					<li class="clearfix">
+						<span class="fr lh">
+							<a href="{{('tools/index')|U({})}}" target="_blank"> <i class="font-lp-24"></i>
+								<i class="i1">贷款计算器&gt;&gt;</i>
+							</a>
+						</span>
+						<span class="fl">
+							参考总价: {{ house_global.if_wy({value: detail.zj|default(''), tpl: '<em>%value%</em><i class="i2">%danwei%</i>'}) }}
+						</span>
+					</li>
+					<li>
+						<i>面&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;积:</i>
+						{{house_global.if_mj({value: detail.mj|default(''), tpl: '<em>%value%%danwei%</em>'})}}
+					</em>
+					</li>
+					<li>
+						<i>户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型:</i>
+						<em>
+							{{- house_global.huxing({data: detail|default(''), tpl: '%shi%%ting%%wei%%chu%'}) -}}
+                        </em>
+					</li>
+					<li>
+						<i>楼&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;层:</i>
+						<em>第{{detail.szlc|default('')}}层/共{{detail.zlc|default('')}}层</em>
+					</li>
+					<li>
+						<i>朝&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;向:</i>
+						{{ core_global.formData({value: detail.cx|default(''), form: 'house.category', tpl: '<em>%value%</em>'}) }}
+					</li>
+					<li>
+						<i>装修程度:</i>
+						{{ core_global.formData({value: detail.zxcd|default(''), form: 'house.category', tpl: '<em>%value%</em>'}) }}
+					</li>
+					<li>
+						<i>房&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;间:</i>
+						<em>{{detail.lh|default('-')}}号楼 {{detail.fh|default('-')}}室</em>
+					</li>
+					<li class="tel clearfix">
+						<i class="font-lp-13 fl"></i>
+						<p class="fr">
+							<i>{{detail.tel|default('')}}</i>
+							联系人：{{detail.xingming|default('')}} 联系时请告知信息来自本站,谢谢。
+						</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+	<div class="blank20"></div>
+
+	<!--相同房源-->
+	<div class="xt">
+		<div class="xtt clearfix">
+			<div class="xttl fl">这些楼盘相同居室</div>
+			<div class="xttr fr">
+				<a href="{{('special/list')|U({})}}">查看更多相同户型楼盘>></a>
+			</div>
+		</div>
+		<div class="xtb">
+			<ul class="clearfix" data-tag="tejiafang">
+				{% if sort_shi_ting_special.data is defined and sort_shi_ting_special.data|length >1 %}
+				    {% for item in sort_shi_ting_special.data %}
+				    	{% if item.id != detail.id %}
+							<li>
+								<a href="{{('special/detail')|U({id:item.id})}}">
+									{{- core_global.img({
+									    src: item.thumb|default(''),
+									    alt: item.name|default(''),
+									    type: 2,
+									    width: 220,
+									    height: 157
+									}) -}}
+									<h4>
+										<span class="fr fz12">
+											{{ core_global.formData({value: item.cx|default(''), form: 'house.category', tpl: '<em>%value%</em>'}) }}
+										</span>
+										<span>{{item.name|default('')}}</span>
+									</h4>
+									<h5>
+										{{house_global.if_wy({value: item.zj|default(''), tpl: '<i>%value%</i>%danwei%'})}}
+									</h5>
+								</a>
+							</li>
+				    	{% endif %}
+				    {% endfor %}
+					{% else %}
+					<p style="font-size:18px;line-height:3">
+						暂时没有相同的居室
+					</p>
+				{% endif %}
+			</ul>
+		</div>
+	</div>
+	<!--/相同房源-->
+	{% endif %}
+</div>
+<div class="blank20"></div>
+<div class="blank20"></div>
+{% endblock container %}

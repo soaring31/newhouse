@@ -1,0 +1,1175 @@
+
+{# 
+/**
+* @method forms(o)
+* @description 手机表单
+* @param {String} o.sumbit_id 提交按钮id
+* @param {object} o.buttons 提交按钮
+* @param {Number} o.aid aid关联
+* @param {Number} o.topic topic关联(看房团报名)
+* @param {Object} o.form 表单数据
+* @param {String} o.cate_pushs 标识
+* @param {String} o.class=bm-form 默认class
+* @param {String} o.formcls=form 表单样式
+* @示例 调用
+* ```twig
+* {{- core_mobile_forms.forms({
+*     action: '###',
+*     submit: 'groupbuy',
+*     data: {
+*         0: {
+*             name: '姓名',
+*             placeholder: '请输入姓名'
+*         },
+*         1: {
+*             name: '手机',
+*             placeholder: '请输入手机号'
+*         },
+*         2: {
+*             name: '验证码',
+*             placeholder: '请输入短信验证码'
+*         },
+*     }
+* }) -}}
+* ```
+*/
+#}
+{%- macro forms(o) -%}
+{% from "CoreBundle:Macro:global.html.twig" import h5_attr %}
+    {% set opt = {
+        aid: null,
+        topic:null,
+        cate_pushs: null,
+        class: '',
+        exclude: [],
+        form_block: '',
+        sumbit_id: '',
+        buttons: [
+            {
+                class: 'button-success',
+                name: '提交',
+                attr: {
+                    'data-role': 'submit'
+                }
+            }
+        ],
+        formcls: 'form'
+    }|merge(o) %}
+
+    {% set form = opt.form|default({}) %}
+<div data-view-form="1" class="mobile-form {{ opt.class }}">
+{% if form is defined and form is not empty %}
+    <form action="{{ form.vars.action|default('')|U({}, true) }}" method="{{ form.vars.method }}" class="{{ opt.formcls }}" {{ form_enctype(form) }} {{opt.formattr|default('')|raw}}>
+        {{ opt.form_block }}
+        <div class="list-block">
+            <ul>
+            {% for key, v in form.children %}
+                {% if key != 'submit' %}
+                    {% set type = v.vars.block_prefixes[v.vars.block_prefixes|length - 2] %}
+                    {# 表单项的name #}
+                    {% set item_name = v.vars.name %}
+                    {% if item_name in opt.exclude %}
+                        {# 扩展接口，可以自定义表单内容 #}
+                    {% elseif v.children %}
+                        {# 有下级的 #}
+                        {% for key1, v1 in v.children %}
+                            {% if v1.children %}
+                                {% for key2, v2 in v1.children %}
+                                    {{_self.forms_childer(key2, v2, opt)}}
+                                {% endfor %}
+                            {% else %}
+                                {{_self.forms_childer(key1, v1, opt)}}
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <li class="item-content {{ type }} field-{{item_name}}">
+                            <div class="item-inner">
+                                <div class="item-title label">
+                                    {{- form_label(v) -}}
+                                </div>
+                                <div class="item-input item-input-flex">
+                                    {{attribute(_self, type ~ '_form', [v.vars|merge({opt: opt})])}}
+                                </div>
+                                {{ _self.form_password_see(v) }}
+                            </div>
+                        </li>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="content-block">
+            <div class="row">
+                {% set buttons_len = opt.buttons|length %}
+                {% if buttons_len %}
+                    {% for item in opt.buttons %}
+                        <div class="col-{{100 / buttons_len}}">
+                            <a href="javascript:;" class="button button-big button-fill {{item.class|default('')}}" id="{{item.id|default('')}}" {% if item.attr|default('') %}{{ h5_attr(item.attr|default(''))|raw }}{% endif %}>
+                                {{item.name|default('')}}
+                            </a>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="blank1"></div>
+    </form>
+{% endif %}
+</div>
+<script type="text/javascript">
+    seajs.use(['common'], function(common) {
+        common.formInit();
+    })    
+</script>
+{%- endmacro forms -%}
+{%- macro forms_childer(key, val, opt) -%}
+    {# 表单项类型 #}
+    {% set type1 = val.vars.block_prefixes[val.vars.block_prefixes|length - 2] %}
+    <li class="item-content {{ type1 }}" >
+        <div class="item-inner">
+            <div class="item-title label">
+                {{- form_label(val) -}}
+            </div>
+            <div class="item-input item-input-flex">
+                {{attribute(_self, type1 ~ '_form', [val.vars|merge({opt: opt})])}}
+            </div>
+            {{ _self.form_password_see(val) }}
+        </div>
+    </li>
+{%- endmacro -%}
+{# 
+/**
+* @method form_select(o)
+* @description 多选单选选项循环 其余参数参考`forms`方法
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.form_select({
+*     data: {
+*         0: {
+*             name: '姓名',
+*             placeholder: '请输入姓名'
+*         },
+*         1: {
+*             name: '手机',
+*             placeholder: '请输入手机号'
+*         },
+*         2: {
+*             name: '验证码',
+*             placeholder: '请输入短信验证码'
+*         },
+*     }
+* }) -}}
+* ```
+*/
+#}
+{%- macro form_select(o) -%}
+    {% if o.data|default('') %}
+    {% for item in o.data if item.type|default('') in ['radio', 'checkbox'] %}
+        {% if item.form|default('') %}
+            {% set data = (item.form)|getFormField(item.field) %}
+        {% else %}
+            {% set data = (item.service|default('house.category'))|getAll({ename: item.field, pid:'neq|0'}|merge(item.sql_opt|default({}))).data %}
+        {% endif %}
+        <div data-id="{{item.field}}" style="display:none;">
+            <div class="list-block">
+                <ul class="">
+                    {% if data|default('') %}
+                        {% for v in data %}
+                        <li>
+                            <label class="label-checkbox item-content">
+                                {{_self.form_input({
+                                    type: item.type|default(''),
+                                    value: v.id|default(''),
+                                    name: item.field|default('') ~ '[]'
+                                })}}
+                                <div class="item-media"><i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                    <div class="item-title">{{v.name|default('')}}</div>
+                                </div>
+                            </label>
+                        </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
+{%- endmacro form_select -%}
+
+{# 
+/**
+* @method form_input(o)
+* @description 表单输入框
+* @param {String} o.type 输入框类型 默认: text
+* @param {String} o.class 样式
+* @param {String} o.id id
+* @param {String} o.value 值
+* @param {String} o.name name
+* @param {String} o.attr 其他属性
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.form_input({
+*   id: 'submit',
+*   value: '提交' 
+* }) -}}
+* ```
+*/
+#}
+{%- macro form_input(o) -%}
+{% spaceless %}
+    <input type="{{o.type|default('text')}}" 
+        {% if o.class|default('') %}
+            class="{{o.class|default('')}}"
+        {% endif %} 
+        {% if o.id|default('') %}
+            id="{{o.id|default('')}}"
+        {% endif %} 
+        {% if o.value|default('') or o.value|default('') != '' %}
+            value="{{o.value|default('')}}"
+        {% endif %} 
+        {% if o.name|default('') %}
+            name="{{o.name|default('')}}"
+        {% endif %}
+        {% if o.attr|default('') %}
+            {{o.attr|default('')|raw}}
+        {% endif %} 
+    />
+{% endspaceless %}
+{%- endmacro form_input -%}
+
+{# 
+/**
+* @method form_select(o)
+* @description 单选、多选弹层数据  详细参数参考`_self.forms(o)`
+* @param {Array} o 要显示选择弹层的字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.form_select(o) -}}
+* ```
+#}
+{%- macro form_select(o) -%}
+<div data-id="{{o.id|default('')}}" style="display:none;">
+    <div class="list-block">
+        <ul class="">
+            {% if o.choices|default('') %}
+                {% for kc,vc in o.choices|default('') %}
+                    <li>
+                        <label class="label-checkbox item-content">
+                            {{_self.form_input({
+                                type: o.type|default(''),
+                                value: vc.value|default(kc|default('')),
+                                attr: 'data-name="' ~ o.id|default('') ~ '"'
+                            })}}
+                            <div class="item-media"><i class="icon icon-form-checkbox"></i>
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">{{vc.label|default(vc|default(''))}}</div>
+                            </div>
+                        </label>
+                    </li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{%- endmacro form_select -%}
+{# 
+/**
+* @method radio_form(o)
+* @description 单选、多选弹层按钮  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.form_select_title(o) -}}
+* ```
+#}
+{%- macro form_select_title(o) -%}
+{% set opt = {
+    class: 'select',
+    attr: null,
+    default: '请选择'
+}|merge(o) %}
+<div class="{{opt.class}}" data-select="{{opt.id|default('')}}" {{opt.attr|raw}}>{{opt.value|default(opt.default)}}</div>
+{%- endmacro -%}
+{# 
+/**
+* @method radio_form(o)
+* @description 表单——单选框  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.radio_form(o) -}}
+* ```
+#}
+{%- macro radio_form(o) -%}
+{# {{_self.form_input({
+    type: 'text',
+    class: 'select',
+    attr: _self.form_attr(o|merge({full_name: ''})) ~ 'data-select=' ~ o.id|default('') ~ ' value=请选择'
+})}} #}
+{{ _self.form_select_title({
+    id: o.id|default(''),
+    value: _self.form_value(o),
+    attr: _self.form_attr(o|merge({full_name: ''}))
+}) }}
+{{_self.form_input({
+    type: 'hidden',
+    name: o.id|default(''),
+    id: o.id|default('')
+})}}
+<span class="rico"></span>
+{{_self.form_select({
+    type: 'radio',
+    choices: o.choices,
+    id: o.id
+})}}
+{%- endmacro radio_form -%}
+{# 
+/**
+* @method checkbox_form(o)
+* @description 表单——多选框  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.checkbox_form(o) -}}
+* ```
+#}
+{%- macro checkbox_form(o) -%}
+{# {{_self.form_input({
+    type: 'text',
+    class: 'select',
+    attr: _self.form_attr(o|merge({full_name: ''})) ~ 'data-select=' ~ o.id|default('') ~ ' value='~ _self.form_value(o)|default('请选择') ~' data-multiple=1'
+})}} #}
+{{ _self.form_select_title({
+    id: o.id|default(''),
+    value: _self.form_value(o),
+    attr: _self.form_attr(o|merge({full_name: ''}))  ~' data-multiple=1'
+}) }}
+{{_self.form_input({
+    type: 'hidden',
+    name: o.id|default(''),
+    id: o.id|default(''),
+    value: o.value|default('')
+})}}
+<span class="rico"></span>
+{{_self.form_select({
+    type: o.block_prefixes[1],
+    choices: o.choices,
+    id: o.id
+})}}
+{%- endmacro checkbox_form -%}
+{# 
+/**
+* @method choice_form(o)
+* @description 表单——下拉框  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.choice_form(o) -}}
+* ```
+#}
+
+{%- macro choice_form(o) -%}
+{# {{_self.form_input({
+    type: 'text',
+    class: 'select',
+    attr: _self.form_attr(o|merge({full_name: ''})) ~ 'data-select=' ~ o.id|default('') ~ ' value='~ _self.form_value(o)|default('请选择') ~' '
+})}} #}
+
+{# 单选多选判断 #}
+{% if o.multiple|default('') %}
+    {% set multiple = 'data-multiple=1' %}
+{% endif %}
+{# 已有值 #}
+{% set _value = '' %}
+{% if o.value is not empty %}
+    {% for item in o.value|split(',') %}
+        {% if loop.index != 1 %}
+            {% set tpl_connect = _value|default('') ~ ',' %}
+        {% endif %}
+        {% for v in o.choices if item == v.value|default('') %}
+            {% set _value = tpl_connect|default('') ~ v.label %}
+        {% endfor %}
+    {% endfor %}
+{% endif %}
+
+{{ _self.form_select_title({
+    id: o.id|default(''),
+    value: _value,
+    attr: _self.form_attr(o|merge({full_name: ''})) ~ multiple|default('')
+}) }}
+{{_self.form_input({
+    type: 'hidden',
+    name: o.id|default(''),
+    id: o.id|default(''),
+    value: o.value|default('')
+})}}
+<span class="rico"></span>
+{{_self.form_select({
+    type: 'radio',
+    choices: o.choices,
+    id: o.id
+})}}
+{%- endmacro choice_form -%}
+{# 
+/**
+* @method entity_form(o)
+* @description 表单——entity源  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.entity_form(o) -}}
+* ```
+#}
+{%- macro entity_form(o) -%}
+{% set _value = '' %}
+{% set type = o.type|default('radio') %}
+{% if type|default('') == 'checkbox' %}
+    {% set multiple = 'data-multiple=1' %}
+{% endif %}
+{# {{_self.form_input({
+    type: 'text',
+    class: 'select',
+    attr: _self.form_attr(o|merge({full_name: ''})) ~ 'data-select=' ~ o.id|default('') ~ ' value='~ _self.form_value(o)|default('请选择') ~' ' ~ multiple|default('')
+})}} #}
+{{ _self.form_select_title({
+    id: o.id|default(''),
+    value: _self.form_value(o),
+    attr: _self.form_attr(o|merge({full_name: ''}))  ~ ' ' ~ multiple|default('')
+}) }}
+{{_self.form_input({
+    type: 'hidden',
+    name: o.id|default(''),
+    id: o.id|default(''),
+    value: o.value|default('')
+})}}
+<span class="rico"></span>
+{{_self.form_select({
+    type: type,
+    choices: o.choices,
+    id: o.id
+})}}
+{%- endmacro entity_form -%}
+{# 
+/**
+* @method push_form(o)
+* @description 表单——推送源标题读取  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.push_form(o) -}}
+* ```
+#}
+{%- macro push_form(o) -%}
+{% set type = o.type|default('radio') %}
+{% if type|default('') == 'checkbox' %}
+    {% set multiple = 'data-multiple=1' %}
+{% endif %}
+{{_self.form_input({
+    type: 'text',
+    class: 'select',
+    attr: _self.form_attr(o|merge({full_name: ''})) ~ 'data-select=' ~ o.id|default('') ~ ' value='~ _self.form_value(o)|default('请选择') ~' ' ~ multiple|default('')
+})}}
+{{_self.form_input({
+    type: 'hidden',
+    name: o.id|default(''),
+    id: o.id|default(''),
+    value: o.value|default('')
+})}}
+<span class="rico"></span>
+{{_self.form_select({
+    type: type,
+    choices: o.choices,
+    id: o.id
+})}}
+{%- endmacro push_form -%}
+{# 
+/**
+* @method text_form(o)
+* @description 表单——文本框  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.text_form(o) -}}
+* ```
+#}
+{%- macro text_form(o) -%}
+{{_self.form_input({
+    type: 'text',
+    name: o.id|default(''),
+    attr: _self.form_attr(o),
+    value: o.value|default('')
+})}}
+{%- endmacro text_form -%}
+{# 
+/**
+* @method password_form(o)
+* @description 表单——密码框  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.password_form(o) -}}
+* ```
+#}
+{%- macro password_form(o) -%}
+{{_self.form_input({
+    type: 'password',
+    name: o.id|default(''),
+    attr: _self.form_attr(o)
+})}}
+{%- endmacro password_form -%}
+{# 
+/**
+* @method captcha_form(o)
+* @description 表单——隐藏域  详细参数参考`_self.forms(o)`
+* @param {Array} hidden_field 隐藏字段默认值 
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.hidden_form(o) -}}
+* ```
+#}
+{%- macro hidden_form(o) -%}
+{% set hidden_field = ['aid', 'cate_pushs', 'topic', 'models', 'ask', 'uid'] %}
+{% if o.id in hidden_field %}
+    {% set value = o.opt[o.id]|default(app.user.id|default('')) %}
+ {% elseif o.id == 'user_agent' %}
+    {% set value = app.request.headers.get('user-agent') %}
+{% else %}
+    {% set value = o.value %}
+{% endif %}
+{{_self.form_input({
+    type: 'hidden',
+    id: o.id|default(''),
+    name: o.id|default(''),
+    value: value|default(''),
+    attr: _self.form_attr(o)
+})}}
+{%- endmacro hidden_form -%}
+{# 
+/**
+* @method textarea_form(o)
+* @description 表单——多行文本框  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.textarea_form(o) -}}
+* ```
+#}
+{%- macro textarea_form(o) -%}
+<textarea {{_self.form_attr(o)}}>{% if o.value|default('') %}{{o.value|default('')}}{% endif %}</textarea>
+{%- endmacro textarea_form -%}
+{# 
+/**
+* @method ueditor_form(o)
+* @description 表单——编辑器  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.ueditor_form(o) -}}
+* ```
+#}
+{%- macro ueditor_form(o) -%}
+编辑器
+{%- endmacro ueditor_form -%}
+{# 
+/**
+* @method captcha_form(o)
+* @description 表单——图形验证码  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.captcha_form(o) -}}
+* ```
+#}
+{%- macro captcha_form(o) -%}
+{% set url = path('manage_captcha', {name:o.name})|U({}, true) %}
+<div class="code-wrap">
+    <div class="code-item code-item-input">{{_self.text_form(o)}}</div>
+    <div class="code-item code-item-img" data-code-{{o.name}}="1">
+        <img id='codeImg' src="{{ url }}" data-src="{{ url }}" class="code-img" align="absbottom" alt="验证码" title="点击更换验证码" />{% if o.attr|default({})[('data-title')]|default('') %}<a href="javascript:;" class="code-title">{{o.attr|default({})[('data-title')]}}</a>{% endif %}
+    </div>
+</div>
+<script type="text/javascript">
+    seajs.use([], function() {
+        $('[data-code-{{o.name}}="1"]')
+            .off('click')
+            .on('click', function() {
+                $(this).find('img').attr('src', function(i, v) {
+                    return $(this).data('src') + '&t=' + Math.floor(Math.random() * (1000 + 1));
+                });
+            })
+    })    
+</script>
+{%- endmacro captcha_form -%}
+{# 
+/**
+* @method geetestlib_form(o)
+* @description 表单——滑动验证码  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.geetestlib_form(o) -}}
+* ```
+#}
+{%- macro geetestlib_form(o) -%}
+滑动验证码
+{%- endmacro geetestlib_form -%}
+{# 
+/**
+* @method telcode_form(o)
+* @description 表单——电话验证码  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.telcode_form(o) -}}
+* ```
+#}
+{%- macro telcode_form(o) -%}
+{{_self.text_form(o)}}
+{% set tel_code = o.attr[('data-codetpl')]|default('comcode') %}
+{% set tel_code_data = ('db.smstpls')|getRow({ename: tel_code}) %}
+{% set _params = {
+    tpl: tel_code_data.tid|default(tel_code_data.ename|default('comcode')),
+    id: 'smscode', 
+    open: tel_code_data.checked|default(0),
+    reg: attr[('reg')]|default('')
+} %}
+{% set url = ('sms/smstpl')|U({}, true) %}
+{% set title = o.attr[('data-title')]|default('获取验证码') %}
+<button type="button" class="btn code-btn" data-code="tel" data-tel="{{o.attr[('data-tel')]|default('tel')}}" data-title="{{title}}" title="点击{{title}}" data-src="{{ url }}" data-params="{{_params|json_encode()}}"><i class="font-icons-31 mr5 fz14"></i><span class="code-btn-text">{{title}}</span></button>
+{%- endmacro telcode_form -%}
+{# 
+/**
+* @method mailcode_form(o)
+* @description 表单——邮箱验证码  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.mailcode_form(o) -}}
+* ```
+#}
+{%- macro mailcode_form(o) -%}
+{{_self.text_form(o)}}
+{% set attr_tpl = o.attr[('data-codetpl')]|default('emailcode') %}
+{% set email_tpl = ('db.emailtpls')|getRow({tid: attr_tpl}) %}
+{% set _params = {
+    tpl: attr_tpl,
+    id: 'smscode', 
+    open: email_tpl.checked|default(0),
+    reg: attr[('reg')]|default('')
+} %}
+{% set url = ('sms/mailtpl')|U({}, true) %}
+{% set title = o.attr[('data-title')]|default('获取验证码') %}
+<button type="button" class="btn code-btn" data-code="mail" data-mail="{{o.attr[('data-mail')]|default('mail')}}" data-title="{{title}}" title="点击{{title}}" data-src="{{ url }}" data-params="{{_params|json_encode()}}"><i class="font-icons-31 mr5 fz14"></i><span class="code-btn-text">{{title}}</span></button>
+{%- endmacro mailcode_form -%}
+{# 
+/**
+* @method datetime_form(o)
+* @description 表单——时间日期  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.datetime_form(o) -}}
+* ```
+#}
+{%- macro datetime_form(o) -%}
+时间日期
+{%- endmacro datetime_form -%}
+{# 
+/**
+* @method date_form(o)
+* @description 表单——日期  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.date_form(o) -}}
+* ```
+#}
+{%- macro date_form(o) -%}
+日期
+{%- endmacro date_form -%}
+{# 
+/**
+* @method idate_form(o)
+* @description 表单——时间戳  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.idate_form(o) -}}
+* ```
+#}
+{%- macro idate_form(o) -%}
+时间戳
+{%- endmacro idate_form -%}
+{# 
+/**
+* @method email_form(o)
+* @description 表单——邮箱格式  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.email_form(o) -}}
+* ```
+#}
+{%- macro email_form(o) -%}
+邮箱格式
+{%- endmacro email_form -%}
+{# 
+/**
+* @method switch_form(o)
+* @description 表单——开关按钮  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.switch_form(o) -}}
+* ```
+#}
+{%- macro switch_form(o) -%}
+开关按钮
+{%- endmacro switch_form -%}
+{# 
+/**
+* @method file_form(o)
+* @description 表单——上传附件  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.file_form(o) -}}
+* ```
+#}
+{%- macro file_form(o) -%}
+    {# 使用图片上传 #}
+    <script type="text/javascript">
+        seajs.use([''], function () {
+            $('.mobile-form .file').hide();
+        })
+    </script>
+{%- endmacro file_form -%}
+{# 
+/**
+* @method image_form(o)
+* @description 表单——上传图片  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.image_form(o) -}}
+* ```
+#}
+{%- macro image_form(o) -%}
+{% set url_isapp = app.request.get('_isApp', 0) %}
+<div class="img-upload">
+    <div class="img-list row">
+        {% for item in o.value|default('') %}
+            <div id="upload_list_{{loop.index}}" class="img_list col-33">
+                <div class="img_box">
+                    <img id="upload_img_{{o.id|default('')}}" src="{{assetImg(item.href|default(''))}}" class="uploadImg"/>
+                    <input type="text" class="des" name="imagesdesc[]" value="{{item.desc|default('')}}" placeholder="请输入描述"/>
+                    <a class="delete" href="javascript:;" data-deletes="{{loop.index}}"><i class="icon font-f-21"></i></a>
+                    <input type="hidden" name="{{o.name|default('')}}source[]" value="{{item.href|default('')}}">
+                    <input type="hidden" name="{{o.name|default('')}}[]" value="{{item.href|default('')}}">
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="row">
+        <div class="file-input col-33" data-upfile="1" data-cfg="{url: '{{('attachment/upload')|U({}, true)}}', imgBox: '.img-list', bundle: '/', temp: '#img_temp', name: '{{o.name|default('')}}', maxSize: {{ 'up_image_size'|C * 1000000 }} }" {% if o.multiple|default('') %}data-multiple="{{o.multiple}}"{% endif %}>
+            {% if url_isapp == 0 %}
+                <input type="file"  {% if o.multiple|default('') %}multiple="{{o.multiple}}"{% endif %} id="{{o.id|default('')}}" name="{{o.name|default('')}}[]">
+            {% endif %}
+        </div>
+    </div>
+</div>
+<script id="img_temp" type="text/html">
+    <img id="upload_img_<%= data.i %>" src="<%= data.bundle %><%= data.msg %>" class="uploadImg"/>
+    <input type="text" class="des" name="imagesdesc[]" value="" placeholder="请输入描述"/>
+    <a class="delete" href="javascript:;" data-deletes="<%= data.i %>"><i class="icon font-f-21"></i></a>
+    <input type="hidden" name="<%= data.name %>source[]" value="<%= data.msg %>">
+    <input type="hidden" name="<%= data.name %>[]" value="<%= data.msg %>">
+</script>
+<script type="text/javascript">
+{% if url_isapp == 0 %}
+    seajs.use('mUpfile', function (mUpfile){
+       
+    });
+{% else %}
+    seajs.use(['approot', 'appimage'], function (approot, appimage) {
+        appimage.init();
+        console.log($('.img-list').find('img'));
+        $.each($('.img-list').find('img'), function(index, el) {
+            var $this = $(this);
+            var _src = $this.attr('src');
+            if (_src.indexOf('http') == -1) {
+                _src = approot.url + _src;
+            }
+            console.log(_src);
+            $this.attr('src', _src);
+        });
+    })
+{% endif %}
+</script>
+{%- endmacro image_form -%}
+{# 
+/**
+* @method baidumap_form(o)
+* @description 表单——百度地图  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.baidumap_form(o) -}}
+* ```
+#}
+{%- macro baidumap_form(o) -%}
+    <script type="text/javascript">
+        seajs.use([''], function () {
+            $('.mobile-form .baidumap').hide();
+        })
+    </script>
+{%- endmacro baidumap_form -%}
+{# 
+/**
+* @method ueditor_form(o)
+* @description 表单——ymlfile源  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.ueditor_form(o) -}}
+* ```
+#}
+{%- macro ueditor_form(o) -%}
+    {# 手机端强制转换成textarea格式编辑 #}
+    {{_self.textarea_form(o)}}
+{%- endmacro ueditor_form -%}
+{# 
+/**
+* @method ajaxbind_form(o)
+* @description 表单——ajax绑定  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.ajaxbind_form(o) -}}
+* ```
+#}
+{%- macro ajaxbind_form1(o) -%}
+    {# 文档数据 #}
+    {% set base_data = o.label_attr['base-data'] %}
+    {# 总配置 #}
+    {% set cfg = {
+            service   : o.entitypath|default('house.category'),
+            name      : o.name,
+            value     : o.value ? : o.base_data[o.name]|default(''),
+            limitlevel: o.attr['limitlevel']|default(''),
+            values    : [],
+            field     : 'pid'
+        } %}
+    {# 不同分类的配置 #}
+    {% set sub_cfg = {} %}
+    {% if o.attr['src-name']|default('') %}
+        {% set sub_cfg = {
+            service: o.attr['src-service']|default(''),
+            name   : o.attr['src-name']|default(''),
+            value  : o.base_data[attr['src-name']|default('')]|default(''),
+            field  : 'pid'
+        } %}
+    {% endif %}
+
+    {% set type = o.attr['type']|default(1) %}
+    {# 处理前的数据 #}
+    {% set arr_params = o.query_builder|getQuery %}
+    {# 排除相关字段 #}
+    {% set new_arr_params = {} %}
+    {% for k, v in arr_params if k not in [] %}
+        {% set new_arr_params = new_arr_params|merge({(k): v}) %}
+    {% endfor %}
+    {# 区域单独处理 #}
+    {% if cfg.service == 'db.area' %}
+        {% set cfg = cfg|merge({pid: app.session.get('area', 0)}) %}
+    {% endif %}
+    {% set menus_data = (cfg.service)|getAll({checked: 1, pageSize: 300, order: 'sort|asc'}|merge(new_arr_params)).data %}
+
+    {# type=2 ajax联动 不需要二级 #}
+    {% if sub_cfg|default('') and type != 2 %} 
+    {# 不同字段 #}
+        {% set sub_data = (sub_cfg.service)|getAll({checked: 1, pageSize: 300}).data %}
+    {% endif %}
+    {# ajax绑定 #}
+    {# 一级数据 #}
+    {% set displayValues_first = '' %}
+    {% set values_first = '' %}
+    {% for item in menus_data %}
+        {% if loop.index > 1 %}
+            {% set douhao = "," %}
+        {% endif %}
+        {% set displayValues_first = displayValues_first ~ douhao|default('') ~ "'" ~ item.name ~ "'" %}
+        {% set values_first = values_first ~ douhao|default('') ~ item.id %}
+    {% endfor %}
+    {% set srcvalue = '' %}
+    {% for item in sub_data if item.id == o.srcvalue %}
+        {% set srcvalue = item.name %}
+    {% endfor %}
+    <input type="text" id='{{o.id}}' name="{{o.name}}" value="{{o.value|default('')}}" style="opacity: 0; width: 100%; height: 19px; background: red; position: absolute; left: 0; top: 0; display: block;" />
+    <div class="select" id="{{o.id ~ '_select'}}">
+        {% if o.valuetext or srcvalue %}
+            {{o.valuetext ~ ',' ~ srcvalue}}
+        {% else %}
+            请选择
+        {% endif %}
+    </div>
+    <span class="rico"></span>
+    {% if sub_cfg|default('') %}
+        <input id="{{sub_cfg.name}}" name="{{sub_cfg.name}}" value="{{o.srcvalue|default('')}}" style="display:none; text-align: right;" />
+    {% endif %}
+    <style type="text/css">
+        .picker-items-col {
+            width: 100%;
+        }
+    </style>
+    <script type="text/javascript">
+        seajs.use(['sm'], function (sm) {
+            $("#{{o.id}}").ajaxPicker({
+                data: {{sub_data|json_encode|raw}},
+                ele: '{{sub_cfg.name}}',
+                type: {{ type }},
+                showEle: "#{{o.id ~ '_select'}}",
+                picker: {
+                    toolbarTemplate: '<header class="bar bar-nav">\
+                    <button class="button button-link pull-right close-picker">确定</button>\
+                    <h1 class="title">{{o.label ~ "选择"}}</h1>\
+                    </header>',
+                    cols: [
+                        {
+                            textAlign: 'center',
+                            displayValues: [{{displayValues_first|raw}}],
+                            values: [{{values_first|raw}}]
+                        },
+                        {
+                            textAlign: 'center',
+                            displayValues: ['{{srcvalue}}'],
+                            values: [{{o.srcvalue|default(0)}}]
+                        }
+                    ]
+                }
+            })
+        })
+    </script>
+{%- endmacro ajaxbind_form1 -%}
+
+{%- macro ajaxbind_form(o) -%}
+    {# 手机端只做了两级联动 #}
+    {# 文档数据 #}
+    {% set base_data = o.label_attr['base-data'] %}
+    {# 总配置 #}
+    {% set cfg = {
+            service   : o.entitypath|default('house.category'),
+            name      : o.name,
+            value     : o.value ? : o.base_data[o.name]|default(''),
+            limitlevel: o.attr['limitlevel']|default(''),
+            values    : [],
+            field     : 'pid'
+        } %}
+    {# 不同分类的配置 #}
+    {% set sub_cfg = {} %}
+    {% if o.attr['src-name']|default('') %}
+        {% set sub_cfg = {
+            service: o.attr['src-service']|default(''),
+            name   : o.attr['src-name']|default(''),
+            value  : o.base_data[attr['src-name']|default('')]|default(''),
+            field  : 'pid'
+        } %}
+    {% endif %}
+
+    {% set type = o.attr['type']|default(1) %}
+    {# 处理前的数据 #}
+    {% set arr_params = o.query_builder|getQuery %}
+    {# 排除相关字段 #}
+    {% set new_arr_params = {} %}
+    {% for k, v in arr_params if k not in [] %}
+        {% set new_arr_params = new_arr_params|merge({(k): v}) %}
+    {% endfor %}
+    {# 区域单独处理 #}
+    {% if cfg.service == 'db.area' %}
+        {% set cfg = cfg|merge({pid: app.session.get('area', 0)}) %}
+    {% endif %}
+    {% set menus_data = (cfg.service)|getAll({checked: 1, pageSize: 300, order: 'sort|asc'}|merge(new_arr_params)).data %}
+
+    {# type=2 ajax联动 不需要二级 #}
+    {% if sub_cfg|default('') and type != 2 %} 
+    {# 不同字段 #}
+        {% set sub_data = (sub_cfg.service)|getAll({checked: 1, pageSize: 300}).data %}
+    {% endif %}
+    {# ajax绑定 #}
+    {% set data = [] %}
+    {% set default_id = 0 %}
+    {% set default_name = '请选择' %}
+    {% set second_name = '' %}
+    {% for item in menus_data %}
+        {% if loop.first %}
+            {% set default_id = item.id %}
+        {% endif %}
+        {% if item.id == o.value %}
+            {% set default_name = item.name %}
+        {% endif %}
+        {% set sub = [{
+            name: '请选择',
+            id: 0,
+            pid: 0
+        }] %}
+        {# 下级数据关联 #}
+        {% if sub_data|default('') %}
+            {# 不同模型关联 #}
+            {% set bind_data = sub_data %}
+        {% else %}
+            {# 统一模型下数据 #}
+            {% set bind_data = menus_data %}
+        {% endif %}
+        {# 下级数据循环 #}
+        {% for item1 in bind_data if item.id == item1.pid %}
+            {% set sub = sub|merge({
+                (item1.id): {
+                    name: item1.name,
+                    id: item1.id,
+                    pid: item1.pid
+                }
+            }) %}
+            {% if item1.id == o.srcvalue %}
+                {% set second_name = item1.name %}
+            {% endif %}
+        {% endfor %}
+
+        {% set data = data|merge({
+            (item.id): {
+                name: item.name,
+                id: item.id,
+                pid: item.pid|default(0),
+                sub: sub
+            }
+        }) %}
+    {% endfor %}
+    <style type="text/css">
+        .picker-items-col {
+            width: 100%;
+        }
+    </style>
+    {# 提交input #}
+    <input id="{{o.id}}" name="{{o.id}}" value="{{o.value|default('')}}" style="display: none;" />
+    {% if sub_cfg|default('') %}
+        <input id="{{o.attr['src-name']|default('')}}" name="{{o.attr['src-name']|default('')}}" value="{{o.srcvalue|default('')}}" style="display: none;" />
+    {% endif %}
+    {% set id = o.attr['src-name']|default(o.id) %}
+    {# 执行块 #}
+    <input id="{{o.id ~ '_select'}}" name="{{o.id ~ '_select'}}" value="{{o.value|default(default_id)}} {{o.srcvalue|default(0)}}" data-show="{{o.id ~ '_show'}}" data-first="{{o.id}}" data-second="{{id}}" style="opacity: 0; width: 100%; height: 24px; position: absolute; left: 0; top: 0;" />
+    {# 显示块 #}
+    <div id="{{o.id ~ '_show'}}" class="select">
+        {{default_name ~ ',' ~ second_name}}
+    </div>
+    <span class="rico"></span>
+    <script type="text/javascript">
+        seajs.use([''], function () {
+            $('#{{o.id ~ "_select"}}').ajaxBind({
+                toolbarTemplate: '<header class="bar bar-nav">\
+                    <button class="button button-link pull-right close-picker">确定</button>\
+                    <h1 class="title">{{o.label ~ "选择"}}</h1>\
+                    </header>'
+            }, {{data|json_encode|raw}})
+        })
+    </script>
+{%- endmacro ajaxbind_form -%}
+{# 
+/**
+* @method integer_form(o)
+* @description 表单——数字文本框  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.integer_form(o) -}}
+* ```
+#}
+{%- macro integer_form(o) -%}
+{% set attr = o.attr|merge({min: 0}) %}
+{{_self.form_input({
+    type: o.type|default('number'),
+    id: o.id|default(''),
+    name: o.id|default(''),
+    value: o.value|default(''),
+    attr: _self.form_attr(o|merge({attr: attr}))
+})}}
+{%- endmacro integer_form -%}
+{# 
+/**
+* @method form_attr(o)
+* @description 表单——属性  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.form_attr(o) -}}
+* ```
+#}
+{%- macro form_attr(o) -%}
+{% if o.id is defined %} id="{{ o.id }}"{% endif %}
+{%- if o.full_name is defined and o.full_name %} name="{{ o.full_name }}"{% endif -%}
+{%- if o.read_only is defined and o.read_only %} readonly="readonly"{% endif -%}
+{%- if o.disabled is defined and o.disabled %} disabled="disabled"{% endif -%}
+{%- if o.required is defined and o.required %}data-msg-required="{{o.label}}不能为空" required="required"{% endif -%}
+{% if o.attr|default('') %}
+    {% for attr, value in o.attr %}
+        {%- if attr in ['placeholder', 'title'] -%}
+            {{- attr }}="{{ value|trans({}, translation_domain|default('')) }}"
+        {%- elseif value is same as(true) -%}
+            {{- attr }}="{{ attr }}"
+        {%- elseif value is not same as(false) -%}
+            {{- attr }}="{{ value }}"
+        {%- endif -%}
+    {% endfor %}
+{% endif %}
+{%- endmacro form_attr -%}
+{# 
+/**
+* @method form_value(o)
+* @description 表单——字段取值  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.form_value(o) -}}
+* ```
+#}
+{%- macro form_value(o) -%}
+{% set _value = '' %}
+{% if o.value|default('') %}
+    {% for item in o.value|split(',') %}
+        {% if loop.index != 1 %}
+            {% set tpl_connect = _value|default('') ~ ',' %}
+        {% endif %}
+        {% set _value = tpl_connect|default('') ~ o.choices[item]|default('') %}
+    {% endfor %}
+{% endif %}
+{{- _value -}}
+{%- endmacro form_value -%}
+
+{# 
+/**
+* @method form_password_see(o)
+* @description 表单——密码查看  详细参数参考`_self.forms(o)`
+* @param {Array} o 字段数据
+* @example 调用
+* ```twig
+* {{- core_mobile_forms.form_password_see(o) -}}
+* ```
+#}
+{%- macro form_password_see(o) -%}
+
+{% set see_value = o.vars.block_prefixes[o.vars.block_prefixes|length - 2]|default('text') %}
+
+{% if see_value == 'password' %}
+    <div class="item-after">
+        <div class="label-switch label-switch-password">
+            <input type="checkbox" checked="checked">
+            <div class="checkbox">
+                <span class="icon1 font-f-16"></span>
+                <span class="icon1 font-f-42"></span>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{%- endmacro form_password_see -%}

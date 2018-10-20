@@ -1,0 +1,159 @@
+{% extends "ManageBundle::poplayout.html.twig" %}
+{% block js %}
+<script>
+seajs.use("{{ bundlepath }}/js/controllerident",function(c){
+	//js入口	    
+	c.init('show');
+});
+</script>
+{% endblock %}
+{% block body %}
+<table class="popup-table" style="width:100%;margin-bottom:10px;">
+    <tbody>
+        <tr>
+            <th class="w150 rtd txtright">标识名称：</th>
+            <td class="txtleft">{{ app.request.get('id') }}</td>
+        </tr>
+        <tr>
+            <th class="rtd txtright">主表名称：</th>
+            <td class="txtleft">{{ info.tableName|default('') }}</td>
+        </tr>
+        <tr>
+            <th class="rtd txtright">主表别名：</th>
+            <td class="txtleft">{{ info.aliasName|default('') }}</td>
+        </tr>
+    </tbody>
+</table>
+{% if info.join is defined and info.join is not empty %}
+{% for key, vo in info.join %}
+<form action="{{ 'save1'|U('pid='~app.request.get('pid')) }}" method="POST" class="form_{{ loop.index  }}">
+    <input type="hidden" name="identName" value="{{ app.request.get('id') }}" />
+    <table class="popup-table" style="width:100%;margin-bottom:10px;border-top:1px solid rgba(0, 0, 0, 0.4);">
+        <tbody>
+            <tr>
+                <th class="w150 rtd txtright">表名称：</th>
+                <td class="txtleft"><input type="text" name="tableName" required="required" value="{{ key|default('') }}" class="w200" /></td>
+            </tr>
+            <tr>
+                <th class="rtd txtright">表别名：</th>
+                <td class="txtleft"><input type="text" name="aliasName" required="required" value="{{ vo.aliasName|default('') }}" class="w200" /></td>
+            </tr>
+            <tr>
+                <th class="rtd txtright">关联类型：</th>
+                <td class="txtleft">
+                    <select class="w100" name="jointype">
+                        <option value="join" {{ vo.joinType|default('')|isSelected('join') }}>join</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="rtd txtright">字段别名：</th>
+                <td class="txtleft">
+                    {% if vo.alias is defined %}
+                    {% for k, v in vo.alias %}
+                    <div>
+                        <input class="w100" name="dataAliasK[]" value="{{ k }}" type="text">-
+                        <select name="dataAliasV[]">
+                            {% if vo.fieldInfo.data is defined %}
+                            {% for kk, item in vo.fieldInfo.data %}
+                            <option value="{{ kk }}" {{ v|default('')|isSelected(kk) }}>{{ item }}</option>
+                            {% endfor %}
+                            {% endif %}
+                        </select>                    
+                        <input class="detail-btn" id="node_alias_delete_{{ v }}" value="删除" type="button">
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    <div><input class="search-btn" id="node_alias_add" data-url="{{ ('getjson')|U }}" value="添加别名" type="button"></div>
+                </td>
+            </tr>
+            <tr>
+                <th class="rtd txtright">查询参数：</th>
+                <td class="txtleft">
+                    {% if vo.query is defined %}
+                    {% for k, v in vo.query %}
+                    <div>
+                        <select name="dataQueryS[]">
+                            {% if vo.fieldInfo.data is defined %}
+                            {% for kk, item in vo.fieldInfo.data %}
+                            <option value="{{ kk }}" {{ k|default('')|isSelected(kk) }}>{{ item }}</option>
+                            {% endfor %}
+                            {% endif %}
+                        </select>
+                        
+                        {% for koo, voo in v %}
+                        <select name="dataQueryK[]">
+                            {% if vo.fieldInfo.symbol is defined %}
+                            {% for kk, item in vo.fieldInfo.symbol %}
+                            <option value="{{ kk }}" {{ koo|default('')|isSelected(kk) }}>{{ item }}</option>
+                            {% endfor %}
+                            {% endif %}
+                        </select>
+                        <input class="w100" name="dataQueryV[]" type="text" value="{{ voo }}" />
+                        {% endfor %}
+                        <input class="detail-btn" value="删除" id="node_query_delete" type="button" />
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    <div><input id="node_query_add" data-url="{{ ('getjson')|U }}" class="search-btn" value="添加查询" type="button"></div>
+                </td>
+            </tr>
+            <tr>
+                <th class="rtd txtright">操作：</th>
+                <td>
+                    <button type="submit" name="submit" class="search-btn ajax-post" target-form="form_{{ loop.index  }}">保存</button>
+                    <input id="node_join_delete" data-url="{{ ('delete1')|U('pid='~app.request.get('pid')) }}" class="detail-btn" value="删除" type="button">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <input name="csrf_token" value="{{ csrf_token }}" type="hidden">
+</form>
+{% endfor %}
+{% else %}
+<form action="{{ 'save1'|U('pid='~app.request.get('pid')) }}" method="POST" class="form_1">
+    <input type="hidden" name="identName" value="{{ app.request.get('id') }}" />
+    <table class="popup-table" style="width:100%;margin-bottom:10px;border-top:1px solid rgba(0, 0, 0, 0.4);">
+        <tbody>
+            <tr>
+                <th class="w150 rtd txtright">表名称：</th>
+                <td class="txtleft"><input type="text" name="tableName" required="required" class="w200" /></td>
+            </tr>
+            <tr>
+                <th class="rtd txtright">表别名：</th>
+                <td class="txtleft"><input type="text" name="aliasName" required="required" class="w200" /></td>
+            </tr>
+            <tr>
+                <th class="rtd txtright">关联类型：</th>
+                <td class="txtleft">
+                    <select class="w100" name="jointype">
+                        <option value="join">join</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="rtd txtright">字段别名：</th>
+                <td class="txtleft">
+                    <div><input class="search-btn" id="node_alias_add" data-url="{{ ('getjson')|U }}" value="添加别名" type="button" /></div>
+                </td>
+            </tr>
+            <tr>
+                <th class="rtd txtright">查询参数：</th>
+                <td class="txtleft">
+                    <div><input id="node_query_add" data-url="{{ ('getjson')|U }}" class="search-btn" value="添加查询" type="button" /></div>
+                </td>
+            </tr>
+            <tr>
+                <th class="rtd txtright">操作：</th>
+                <td>
+                    <button type="submit" name="submit" class="search-btn ajax-post" target-form="form_1">保存</button>
+                    <input id="node_join_delete" data-url="{{ ('delete1')|U('pid='~app.request.get('pid')) }}" class="detail-btn" value="删除" type="button" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <input name="csrf_token" value="{{ csrf_token }}" type="hidden">
+</form>
+{% endif %}
+<div class="popup-submit"><input id="node_join_add" class="search-btn" value="添加关联" type="button"></div>
+{% endblock %}

@@ -1,0 +1,224 @@
+﻿/*!
+* @name <%= name %>
+* @author <%= author %>
+* @date <%= date %>
+*/
+
+@import 'static/ats';
+// 工具类 每个文件都要导入
+
+@import 'lp';
+// 楼盘公用模块
+@import 'font-tools';
+@import 'img-fj'; //导入css 标识-文件名
+@include img-fj($img-fj); //调用全部样式， 标识-文件名($标识-文件名);
+.top-bar {
+	background: #fff;
+	margin-top: 20px\9;
+}
+body {
+	background: #f4f4f4;
+}
+.fj-container {
+	.container {
+		background: #fff;
+	}
+}
+.fj-tit {
+	font-size: 18px;
+	height: 42px;
+	line-height: 42px;
+}
+ 
+/* ==========
+箭头
+========== */
+.trend {
+	background-image: url('../images/fj/fj.gif');
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 11px;
+	overflow: hidden;
+	width: 11px;
+	&.i0 {
+		@extend .img-fj-2;
+		//不变
+	}
+	&.i1 {
+		@extend .img-fj-3;
+		//上箭头
+	}
+	&.i2 {
+		@extend .img-fj-1;
+		//下箭头
+	}
+}
+
+/* ==========
+chart
+========== */
+.chart {
+	height: 400px;
+	margin-right: 26px;
+	width: 620px;
+}
+.chart-con {
+	padding: 40px 0;
+}
+#zst {
+	height: 260px;
+	width: 600px;
+}
+
+/* ==========
+data
+========== */
+.data,
+.compute {
+	width: 520px;
+}
+.data {
+	margin-bottom: 30px;
+	.duibi{
+		margin-left: 70px;
+	}
+	.price {		
+		width: 250px;
+	}
+	em {
+		padding: 0 3px;
+	}
+	p {
+		line-height: 32px;
+		height: 32px;
+		overflow: hidden;
+		.big{
+			font-weight: 800;
+		}
+	}
+	.blod {
+		font-weight: 700;
+	}
+}
+
+/* ==========
+compute
+========== */
+.compute {
+	ul {
+		margin-left: -20px;
+		margin-top: 10px;
+	}
+	li {
+		float: left;
+		text-align: center;
+		width: 130px;	
+	}
+	.li03,.li06 {
+		width: 114px;
+	}
+	p {
+		&.ico {
+			font-size: 22px;
+			height: 40px;
+			line-height: 40px;
+		}
+		&.txt {
+			line-height: 40px;
+		}
+	}
+	a:hover {
+		text-decoration: none;
+	}
+}
+
+/* ==========
+热销楼盘
+========== */
+.fj-area {
+	.item {
+		float: left;
+		height: 427px;
+		margin: 10px 30px 0;
+		overflow: hidden;
+		width: 340px;
+	}
+	.fj-tit {
+		overflow: hidden;
+		h3 {
+			border-bottom: 3px solid #f90303;
+			float: left;
+			font-size: 18px;
+			height: 40px;
+		}
+	}
+	.con {
+		border-top: 1px solid #ddd;
+		height: 367px;
+		margin-top: -1px;
+		li {
+			border-bottom: 1px dashed #ddd;
+			height: 45px;
+			line-height: 45px;
+			overflow: hidden;
+		}
+	}
+	.ico,
+	.txt,
+	.price,
+	.trend {
+		display: block;
+		float: left;
+		overflow: hidden;
+	}
+	.ico {
+		background: #b2b2b2;
+		height: 4px;
+		margin-top: 22px;
+		width: 4px;
+	}
+	.txt {
+		margin-left: 12px;
+		width: 200px;
+	}
+	.price {
+		margin-left: 6px;
+		width: 86px;
+	}
+	.trend {
+		margin-top: 18px;
+	}
+}
+
+/* ==========
+推荐列表
+========== */
+.tj-wrap {
+	margin: 0 auto;
+	width: 1140px;
+	.fj-tit {
+		text-indent: 10px;
+	}
+}
+.tj-list {
+	height: 220px;
+	overflow: hidden;
+	ul {
+		margin-left: -7px;
+	}
+	li {
+		float: left;
+		margin-left: 25px;
+		width: 200px;
+	}
+	.img {
+		display: block;
+		height: 150px;
+		width: 200px;
+	}
+	p {
+		line-height: 50px;
+		height: 50px;
+		overflow: hidden;
+	}
+}

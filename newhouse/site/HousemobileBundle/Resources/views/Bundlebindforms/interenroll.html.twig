@@ -1,0 +1,13 @@
+{% extends 'HousemobileBundle:Bundlebindforms:bundlebase.html.twig' %}
+{% set aid = app.request.get("aid")|default() %}
+{% block result %}
+{{- core_mobile_forms.popup_form({
+    aid: aid,
+    popup: 'popup-yxiang',
+    title: '楼盘订阅',
+    Form: Form,
+    submit: 'intent',
+    form: 'houses_intent',
+    cate_pushs: 'yixiang'
+}) -}}
+{% endblock result %}

@@ -1,0 +1,73 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明
+** ajax调用：开发商列表
+#}
+{% block result %}
+    {% if ident.list is defined %}
+        {% set list = ident.list %}
+    {% endif %}
+    {% spaceless %}  
+      {% if list.data is defined and list.pageCount|default(0) != 0 %}
+        {# users id合集变量 #}
+        {% set userinfo_uids = '' %}
+        {# users data #}
+        {% set users_data = '' %}
+        {# users data all #}
+        {% set user_data = {} %}
+
+        {# 获取user id合集 #}
+        {% for item in list.data %}
+            {% if loop.index != 1 %}
+                {% set dh = ',' %}
+            {% endif %}
+            {% set userinfo_uids = userinfo_uids ~ dh|default('') ~ item.uid %}
+        {% endfor %}
+
+        {% set users_data = ('db.users')|getAll({id: 'in|' ~ userinfo_uids, pageSize: list.pageSize}) %}
+
+        {% for item in users_data.data %}
+            {% set user_data = user_data|merge({
+                ('user' ~ item.id): {
+                    tel: item.tel,
+                    username: item.username
+                }
+            }) %}
+        {% endfor %}
+
+        {% for item in list.data %}
+            {# 名称 公司名称 》公司简称 》昵称 》用户名 #}
+            {% set item_name = item.company|default(item.cpltd|default(item.nicename|default(user_data['user' ~ item.uid].username|default('')))) %}
+            <li {% if loop.last %}data-page="{
+                            pageIndex: {{list.pageIndex}},
+                            pageCount: {{list.pageCount}},
+                            pageSize: {{list.pageSize}}
+                                }" {% endif %} class="item">
+                <a href="{{('member/k_detail')|UU({id: item.uid|default('')})}}" class="item-content">
+                  <div class="item-media">
+                      {{- core_global.img({
+                            src: item.image|default(''),
+                            alt: item_name|default(''),
+                            type: 2,
+                            width:120 ,
+                            height: 60
+                      }) -}}
+                  </div>
+                  <div class="item-inner">
+                    <div class="item-title item-title-ex">
+                        {{item_name|default('')}}
+                    </div>
+                    <div class="item-subtitle item-subtitle-ex mt5">
+                        {{user_data['user' ~ item.uid].tel|default('')}}
+                    </div>
+                    <div class="item-subtitle item-subtitle-ex mt5">
+                        {{item.companyadr|default('')}}
+                    </div>
+                  </div>
+                </a>
+            </li>
+        {% endfor %}
+    {% else %}
+        <li class="mobile-list-none">暂无开发商数据</li>
+    {% endif %}
+    {% endspaceless %}
+{% endblock result %}

@@ -1,0 +1,450 @@
+@charset "UTF-8";
+/*!
+ * @name <%= name %>
+ * @author <%= author %>
+ * @date <%= date %>
+ */
+/**
+ * @method 清除浮动 %clearfix 
+ * @description 清除浮动
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %clearfix;
+ * }
+ * ```
+ * 
+ * ```css
+ * 	div {
+	    *zoom: 1;
+	}
+	div:after {
+	    display: block;
+	    clear: both;
+
+	    height: 0;
+
+	    content: '\20';
+	}
+ * ```
+ */
+.common-form .select-wrap, .common-form .form-control .telcode, .common-form .form-control .mailcode {
+    *zoom: 1;
+}
+
+.common-form .select-wrap:after, .common-form .form-control .telcode:after, .common-form .form-control .mailcode:after {
+    display: block;
+    clear: both;
+    height: 0;
+    content: '\20';
+}
+
+/**
+ * @method 去掉虚线框 %outline 
+ * @description 去掉虚线框
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @ extend %outline;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		outline: thin dotted;
+		outline: 5px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
+ * ```
+ */
+/**
+ * @method 文字不换行后面加省略号 %text-overflow 
+ * @description 文字不换行后面加省略号
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @extend %text-overflow;
+ * }
+ * ```
+ * 
+ * ```css
+	div {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+ * ```
+ */
+/**
+ * @method 透明层opacity 
+ * @description 透明层 内容也透明
+ * @param {number} $opacity - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include opacity(.5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+	  opacity: .5;
+	  filter: alpha(opacity=50);
+ * }
+ * ```
+ */
+/**
+ * @method 背景透明层transparent 
+ * @description 透明层只处理背景透明
+ * @param {string} $color - 背景透明层的颜色
+ * @param {number} $alpha - 透明度 0 ~ 1之间
+ * @example 调用
+ * 
+ * ```scss
+ * div {
+ *    @include transparent(#000, .5);
+ * }
+ * ```
+ * 
+ * ```css
+ * div {
+ *    	background-color: transparent;
+		background-color: (0,0,0,.5);
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7fffffff, endColorstr=#7fffffff,);
+		zoom: 1;
+ * }
+ * ```
+ */
+/**
+ * @method triangle 
+ * @description 生成一个三角形图标
+ * @param {string} $size - 三角的大小
+ * @param {string} $color - 三角颜色
+ * @param {string} $direction - 三角的方向 up, down, left, right
+ * @example 调用
+ * 
+ * ```scss
+ * i {
+ *    @include triangle(5px, #bbb, up); 
+ * }
+ * ```
+ * 
+ * ```css
+ * i {
+ *    width: 0;
+      height: 0;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent;
+      border-bottom-color: #bbb;
+ * }
+ * ```
+ */
+/**
+* @method 水平线hr nav-divider 
+* @description 透明层 内容也透明
+* @param {string} $color=#e5e5e5 - 线的颜色
+* @param {string} $line-height-computed - 线的高度，空间
+* @example 调用
+* 
+* ```scss
+* div {
+*    @include nav-divider(#e5e5e5, 24px);
+* }
+* ```
+* 
+* ```css
+* div {
+	  height: 1px;
+	  margin: 11px 0;
+	  overflow: hidden;
+	  background-color: #e5e5e5;
+* }
+* ```
+*/
+@font-face {
+    font-family: "validate";
+    font-weight: normal;
+    font-style: normal;
+    src: url("../fonts/validate.eot");
+    src: url("../fonts/validate.eot?#iefix") format("embedded-opentype"), url("../fonts/validate.woff") format("woff");
+}
+
+[class^="font-validate-"], .common-form label.error:before,
+[class*=" font-validate-"] {
+    font-family: "validate"!important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: inherit;
+    float: none;
+    margin: 0;
+    vertical-align: -0.25em;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    text-decoration: none;
+    text-transform: none;
+}
+
+.font-validate-13:before {
+    content: "\EA01";
+}
+
+.font-validate-33:before, .common-form label.error:before {
+    content: "\EA02";
+}
+
+.common-form .input-lg, .common-form-lg input.btn,
+.common-form-lg button.btn,
+.common-form-lg input.text {
+    font-size: 14px;
+    line-height: 1.3333333;
+    height: 46px;
+    text-indent: 15px;
+    border-radius: 6px;
+}
+
+.common-form .input-sm, .common-form-sm input.btn,
+.common-form-sm button.btn,
+.common-form-sm input.text {
+    font-size: 12px;
+    line-height: 1.5;
+    height: 30px;
+    text-indent: 10px;
+    border-radius: 3px;
+}
+
+.common-form .hidden, .common-form .csrf_token, .common-form .fxpid, .common-form .type {
+    display: none;
+}
+
+.common-form .text,
+.common-form textarea,
+.common-form select {
+    font-size: 12px;
+    font-family: simsun;
+    border-radius: 3px;
+}
+
+.common-form .text {
+    text-indent: 10px;
+}
+
+.common-form .btn {
+    background: #e43;
+    line-height: 1.2;
+    text-indent: 0 !important;
+}
+
+.common-form .btn:before {
+    vertical-align: -2px;
+    margin-right: 5px;
+}
+
+.common-form .btn:focus {
+    outline: none;
+}
+
+.common-form .btn:hover {
+    opacity: .8;
+}
+
+.common-form textarea {
+    text-indent: 10px;
+    resize: none;
+}
+
+.common-form .select-item {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 10px;
+}
+
+.common-form .select-item input {
+    margin-right: 5px;
+    vertical-align: -1px;
+}
+
+.common-form .label-group {
+    line-height: 2;
+}
+
+.common-form .label-group label {
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.common-form .label-group input {
+    font-family: simsun;
+    width: 13px;
+    height: 13px;
+    margin-right: 5px;
+    vertical-align: -2px;
+}
+
+.common-form .form-inline .form-control {
+    display: inline-block;
+    width: auto;
+    vertical-align: middle;
+}
+
+.common-form .form-control {
+    display: block;
+    width: 100%;
+}
+
+.common-form .form-control .btn,
+.common-form .form-control select,
+.common-form .form-control textarea,
+.common-form .form-control button,
+.common-form .form-control .text {
+    display: block;
+    width: 100%;
+}
+
+.common-form .form-control .telcode input, .common-form .form-control .mailcode input {
+    text-indent: 10px;
+    width: 100%;
+}
+
+.common-form .form-control .telcode button, .common-form .form-control .mailcode button {
+    font-size: 12px;
+    font-family: simsun;
+    padding: 0 8px;
+    margin: 0;
+    height: 34px;
+    line-height: 34px;
+    vertical-align: top;
+}
+
+.common-form .form-control .telcode .error, .common-form .form-control .mailcode .error {
+    display: block;
+}
+
+.common-form .code-wrap {
+    display: table;
+    width: 100%;
+}
+
+.common-form .code-wrap .input {
+    margin-right: -50px;
+}
+
+.common-form .code-item {
+    display: table-cell;
+    width: 100%;
+    vertical-align: top;
+}
+
+.common-form .code-item-img {
+    padding-left: 15px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.common-form .code-item-input .txt, .common-form .code-item-input .text {
+    width: 100%;
+}
+
+.common-form .code-img {
+    width: 90px;
+    height: 32px;
+    vertical-align: middle;
+    border: 1px solid #e3e3e3;
+}
+
+.common-form .code-title {
+    padding-left: 5px;
+    text-decoration: none;
+    color: #999;
+}
+
+.common-form .code-btn {
+    font-size: 12px;
+    line-height: 43px;
+    width: auto;
+    height: 45px;
+    padding: 0 15px;
+    vertical-align: middle;
+}
+
+.common-form .code-btn.disabled {
+    cursor: no-drop;
+}
+
+.common-form .item {
+    min-height: 38px;
+    margin-bottom: 10px;
+}
+
+.common-form .item-last {
+    min-height: auto !important;
+    margin-bottom: 5px;
+}
+
+.common-form .item .label {
+    margin-bottom: 5px;
+}
+
+.common-form-lg .code-img {
+    width: 123px;
+    height: 43px;
+}
+
+.common-form-lg .code-btn {
+    height: 45px !important;
+}
+
+.common-form-lg button[data-role="submit"] {
+    font-size: 16px;
+}
+
+.common-form-lg .item {
+    min-height: 70px;
+}
+
+.common-form-lg .embed-captcha {
+    padding-top: 10px;
+}
+
+.common-form-sm .code-img {
+    width: 80px;
+    height: 28px;
+}
+
+.common-form-sm .item {
+    min-height: 40px;
+}
+
+.common-form label.error {
+    color: #f00;
+    font-family: simsun;
+    font-size: 12px;
+    padding-right: 5px;
+    display: inline-block;
+}
+
+.common-form label.error:before {
+    font-size: 16px !important;
+    margin-left: 3px !important;
+    margin-right: 3px !important;
+    vertical-align: -4px !important;
+}
+
+.common-form .error-wrap {
+    height: 14px;
+    line-height: 1;
+    display: inline-block;
+}
+
+.common-form .required:before {
+    content: "* ";
+    color: #f00;
+    vertical-align: middle;
+}
+
+/*# sourceMappingURL=common-form.css.map */

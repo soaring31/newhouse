@@ -1,0 +1,188 @@
+HouseBundle\Entity\Promotion:
+    type: entity
+    table: promotion
+    indexes:
+        aid:
+            columns:
+                - aid
+        area:
+            columns:
+                - area
+    id:
+        id:
+            id: true
+            type: integer
+            options:
+                comment: ''
+                unsigned: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            options:
+                comment: 活动标题
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        subname:
+            options:
+                comment: 子标题
+                unsigned: false
+            nullable: false
+            type: string
+            length: 200
+        thumb:
+            options:
+                comment: 缩略图
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        content:
+            options:
+                comment: 活动说明
+                unsigned: false
+            nullable: false
+            type: text
+            length: 0
+        tel:
+            options:
+                comment: 咨询电话
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        checked:
+            options:
+                comment: 审核
+                unsigned: false
+            nullable: false
+            type: smallint
+            length: 2
+        hdadr:
+            options:
+                comment: 活动地址
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        hdnum:
+            options:
+                comment: 活动人数
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        description:
+            options:
+                comment: 活动说明
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        keywords:
+            options:
+                comment: 关键词
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        abstract:
+            options:
+                comment: 摘要
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        enddate:
+            options:
+                comment: 结束时间
+                unsigned: false
+            nullable: false
+            type: date
+            length: 10
+        models:
+            options:
+                comment: 模型
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        aid:
+            options:
+                comment: '楼盘 id'
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        lpmc:
+            options:
+                comment: 楼盘名称
+                unsigned: false
+            nullable: false
+            type: string
+            length: 100
+        area:
+            options:
+                comment: 分站
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 100
+        clicks:
+            options:
+                comment: 点击数
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        attributes:
+            options:
+                comment: 属性表字段
+                unsigned: false
+            nullable: false
+            length: 10
+            type: string
+        sort:
+            options:
+                comment: 排序
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 5
+        issystem:
+            options:
+                comment: 是否系统字段
+                unsigned: false
+            nullable: false
+            type: boolean
+        identifier:
+            options:
+                comment: 唯一标识
+                unsigned: false
+            nullable: false
+            length: 100
+            type: string
+        create_time:
+            options:
+                comment: 创建时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        update_time:
+            options:
+                comment: 更新时间
+                unsigned: false
+            nullable: false
+            type: integer
+            length: 10
+        is_delete:
+            options:
+                comment: 0正常，1假删除
+                unsigned: false
+            nullable: false
+            type: boolean
+            length: 1
+    lifecycleCallbacks: {  }

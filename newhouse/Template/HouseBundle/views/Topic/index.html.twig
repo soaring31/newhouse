@@ -1,0 +1,235 @@
+{% extends 'HouseBundle:Topic:topic_layout.html.twig' %}
+{# 说明
+ * url_category: 获取url传送的分类
+ * category: 当前分类数据
+ * tpl_topsearch_action: 搜索链接
+ * tpl_topsearch_placeholder: 搜索提示
+ * topic_hot: 热门专题
+#}
+
+{% set url_category = app.request.get('category', 77) %}
+
+{% set category = (url_category)|getCategoryById() %}
+
+{% block title %}{{category.name|default('')}}{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" Content="{{category.keywords|default('')}}"/>
+<meta name="description" content="{{category.description|default('')}}"/>
+{% endblock key_des %}
+
+{% block css %}
+{{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/zt.css')}}
+{% endblock css %}
+
+{# 搜索相关 #}
+{% set tpl_topsearch_action = 'topic/list' %}
+
+{% set tpl_topsearch_placeholder = '请输入相关专题名称/关键字' %}
+
+{% set tpl_topsearch_hot = 'topickeyword' %}
+
+{% set category_topic = ('house.category')|getAll({checked: 1, models: 'topic'}) %}
+
+{# 广告 #}
+{% if url_category == 79 %}
+    {% set top_ad = {tag: 'topictopad02'} %}
+{% elseif url_category == 80 %}
+    {% set top_ad = {tag: 'topictopad03'} %}
+{% else %}
+    {% set top_ad = {tag: 'topictopad'} %}
+{% endif %}
+
+{% block current %}
+
+<div class="container">
+    {#
+    <div class="photo-nav fr">
+    {% for item in category_topic.data %}
+    {% if item.id|default('') == 77 %}
+        {% set nav_topic_url = ('topic/index')|U %}
+    {% elseif item.id|default('') == 80 %}
+        {% set nav_topic_url = ('topic/live')|U({category: item.id|default('')}) %}
+    {% elseif item.id|default('') == 82 %}
+        {% set nav_topic_url = ('topic/group')|U({category: item.id|default('')}) %}
+    {% else %}
+        {% set nav_topic_url = ('topic/list')|U({category: item.id|default('')}) %}
+    {% endif %}
+    {% if item.id|default('') == 82 %}
+        <a href="{{nav_topic_url|default('#')}}" title="{{item.name|default('')}}" class="{% if nav_topic_act|default(77) == item.id|default('') %}act{% endif %}">
+        {{item.name|default('')}}
+    </a>
+    {% endif %}
+    {% endfor %}
+    </div>
+    #}
+    <div class="current-location">
+        {{block('current_default')}}
+        {% block current_topic %}
+            <span>
+                {{category.name|default('')}}
+            </span>
+        {% endblock current_topic %}
+    </div>
+</div>
+
+<div class="blank20"></div>
+
+{% endblock current %}
+
+{% block container %}
+    <div class="container">
+        {# 推送位 #}
+        {% block push_topic %}
+            {% set push_ztsyts = ('ztsyts')|getPush(10) %}
+            <div id="focus" class="focus jqDuang" data-duang="1" data-obj=".focus-view li" data-prevbtn=".prev" data-nextbtn=".next" data-effect="left" data-cell=".mask ul" data-showtit="1" data-autoplay="0" data-lazyload="src">
+                <div id="focusView" class="focus-view" data-tag="ztsyts">
+                    <ul>
+                        {% if push_ztsyts is defined and push_ztsyts|default('') %}
+                            {% for item in push_ztsyts %}
+                                <li data-url="{{item.url|default('#')}}" data-title="{{item.name|default('')}}" {% if item.ad|default('') %}class="house-ad right-top"{% endif %}>
+                                    {% if item.ad|default('') %}
+                                        <div class="ad-txt"></div>
+                                    {% endif %}
+                                    <a href="{{item.url|default('#')}}" target="_blank">
+                                        {{- core_global.data_src_img({
+                                            src: item.thumb|default(''),
+                                            alt: item.name|default(''),
+                                            type: 1,
+                                            width: 1200,
+                                            height: 550
+                                        }) -}}
+                                    </a>
+                                    <h3>
+                                        <a href="{{item.url|default('#')}}" target="_blank">{{item.name|default('')}}</a>
+                                    </h3>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            {{- core_global.data_src_img({
+                                src: '',
+                                alt: '专题',
+                                type: 1,
+                                width: 1200,
+                                height: 550
+                            }) -}}
+                        {% endif %}
+                    </ul>
+                </div>
+                <!-- 小图 -->
+                <div id="focusSlider" class="focus-slider jqDuang" data-obj=".mask li" data-visible="7" data-steps="7" data-autoplay="0" data-effect="left">
+                    <div>
+                        <span id="prev" class="prev"></span>
+                    </div>
+                    <div class="mask">
+                        <ul>
+                            {% if push_ztsyts is defined %}
+                                {% for item in push_ztsyts %}
+                                    <li class="{% if loop.index == 1 %}act{% endif %}">
+                                        <a href="{{item.url|default('#')}}" target="_blank">
+                                            {{- core_global.img({
+                                                src: item.thumb|default(''),
+                                                alt: item.name|default(''),
+                                                type: 2,
+                                                width: 75,
+                                                height: 50
+                                            }) -}}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div>
+                        <span id="next" class="next"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="blank30"></div>
+        {% endblock push_topic %}
+
+        {% block container_topic %}
+        {# 左边 #}
+        <div class="chief">
+            <div id="news">
+                <div class="content">
+                    {{house_global.topic_list({
+                        list: ident.list
+                    })}}
+                    <div class="blank30"></div>
+                    {{core_global.page(ident.list)}}
+                    <div class="blank30"></div>
+                </div>
+            </div>
+        </div>
+        {# 左边 #}
+        {% endblock container_topic %}
+
+        {# 右边 #}
+        <div class="extra">
+            <div class="emodule jqDuang" data-tag="zttjtw" data-cell=".header-tab span" data-obj=".content" data-autoplay="0" data-actclass="cur" data-lazyload="src" data-tpl="clicks,zttjtw">
+                <div class="header-tab clearfix">
+                    <span>
+                        <a class="cur">
+                            热门排行
+                        </a>
+                        <a class="cur">
+                            推荐图文
+                        </a>
+                    </span>
+                    <a class="module-more" href="{{('topic/list')|U({})}}" target="_blank">更多</a>
+                </div>
+                <ul class="content gj">
+                    {% set topic_hot = ('house.topic')|getAll({checked: 1, pageSize: 4, order: 'clicks', orderBy: 'desc'}) %}
+                    {% if topic_hot.data is defined %}
+                        {% for item in topic_hot.data %}
+                            <li class="first">
+                                <a class="content-img" target="_blank" href="{{('topic/detail')|U({id: item.id})}}">
+                                    {{- core_global.data_src_img({
+                                        src: item.thumb|default(''),
+                                        alt: item.name|default(''),
+                                        type: 2,
+                                        width: 300,
+                                        height: 170
+                                    }) -}}
+                                </a>
+                                    <a class="first-txt" target="_blank" href="{{('topic/detail')|U({id: item.id})}}">
+                                    {{item.name|default('')}}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+                {% set push_zttjtw = ('house.pushs')|getBlock('zttjtw', {pageSize: 4, checked: 1}) %}
+                <ul class="content fht" style="display:none;">
+                    {% if push_zttjtw.data is defined %}
+                        {% for item in push_zttjtw.data %}
+                            <li class="first">
+                                <a class="content-img" target="_blank" href="{{ core_global.url(item|merge({ models: 'topic', set_models: 1 })) }}">
+                                    {{- core_global.data_src_img({
+                                        src: item.thumb|default(''),
+                                        alt: item.name|default(''),
+                                        type: 2,
+                                        width:300 ,
+                                        height: 200
+                                    }) -}}
+                                </a>
+                                <a class="first-txt" target="_blank" href="{{ core_global.url(item|merge({ models: 'topic', set_models: 1 })) }}">
+                                {{item.name|default('')}}
+                              </a>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        {# 右边 #}
+        <div class="blank20"></div>
+    </div>
+{% endblock container %}
+
+{% block js %}
+    <script type="text/javascript">
+        seajs.use(['jqduang'], function(jqduang) {})
+    </script>
+{% endblock js %}

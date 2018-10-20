@@ -1,0 +1,38 @@
+{% extends "ManageBundle::poplayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+
+</script>
+{% endblock %}
+{% block body %}
+{% import "ManageBundle:Form:popedit.html.twig" as forms %}
+{{ forms.popEdit(form|default(''),'form') }}
+
+<div class="promptTitle">提示说明</div>
+<ul class="promptUl">
+<li><b class="fB">* 关联pid - 格式：svid:key</b><br>
+ &nbsp; - svid是服务名称,如：house.newstest<br>
+ &nbsp; - key是字段名，如：id<br>
+ &nbsp; - 用于08cms旧系统合辑导入
+ <li>
+<li><b class="fB">* 扩展方法 - 格式：svid:method:param</b><br>
+ &nbsp; - svid是服务名称,如：core.eximphouse<br>
+ &nbsp; - method是方法名，如：testFunc<br>
+ &nbsp; - param为参数，如：4，如果参数为 (row) 表示已当前行资料为参数<br>
+ &nbsp; - 目前支持：core.eximpbase:str2time : 时间字串转时间戳; <br>
+ &nbsp; &nbsp; core.eximpbase:stampfmt:date : 时间戳转时间字串,可选full|date|time参数<br>
+ &nbsp; - 扩展方法参考：\src\CoreBundle\Services\DataTrans\: EximpBase.php,EximpHouse.php<li>
+<li><b class="fB">* 替换表 - 格式：vold=vnew，一行一个</b><br>
+ &nbsp; - 文本/选择/08集合：直接添加替换表<br>
+ &nbsp; - 格式: `norel=8`, 如果无对应关系,默认为8<br>
+ &nbsp; - 关联pid/扩展方法：第一行设置参数，可另起一行添加替换表<br>
+ &nbsp; - 先执行`替换表`,再执行扩展参数<li>
+<li><b class="fB">* 设置固定值 - 格式如下：</b><br>
+ &nbsp; - stamp() : 时间戳;<br>
+ &nbsp; - rand(13,97) : 随机值,13,97为参数，超过两个参数表示随机候选如(2,3,a,b,t,f)<br>
+ &nbsp; - stfmt(date) : 时间格式化,可选full|date|time参数<br>
+ &nbsp; - 其他视为：直接设置固定值<li>
+</ul>
+
+{% endblock %}
+

@@ -1,0 +1,29 @@
+info:
+    tableName: model_form
+    aliasName: p
+    listGrid:
+        - 'id:ID|txtcenter w50'
+        - 'name[EDITSPAN]:表单名称|txtleft w250'
+        - 'title[EDITSPAN]:表单描述|txtleft'
+        - 'model_id[GETMODELBYTITLE]:所属模型|txtleft w150'
+        - 'model_id[GETMODELSBYSERVICE]:所属服务|txtleft w150'
+        - 'status[GETSTATUS]:是否启用|txtleft w100'
+        - 'id:操作|txtcenter w250:[EDIT]修改|btn,[JUMP]表单项|btn|modelsformattr,[DELETE]删除|btn,[EDIT]预览|btn|modelsform/preview,[EDIT]生成文件|btn confirm|modelsform/createfile'
+    storagetype: 3
+    pageIndex: 1
+    pageSize: 8
+    order: name
+    orderBy: asc
+    dataModel: 0
+    alias: {  }
+    query:
+        name:
+            orX: 'name,like,%[name]%|id,eq,[name]'
+    subTableName: ''
+    listDesc: ''
+    subJoinField: ''
+    query1: {  }
+    searchFun: EXISTS
+    autoQuery: '0'
+    groupBy: ''
+    attribute: '0'

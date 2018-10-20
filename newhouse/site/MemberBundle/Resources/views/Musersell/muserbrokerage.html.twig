@@ -1,0 +1,87 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+{% set mid = app.user.id|default('') %}
+{% set info_money = 0 %}
+
+
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block mainMenu %}
+    {{ parent() }}
+{% endblock %}
+{% block mainleft %}
+{% endblock mainleft %}
+
+{% block tableMain %}
+{{ core_manage.filter([{
+        method: 'show',
+        title: '<i class="font-ico-plus mr5"></i>提取佣金'
+    },
+    {
+        method: 'selectFormField',
+        title: '状态',
+        form: 'recommend',
+        field: 'status',
+    },
+    {
+        method: 'search',
+        field: 'name',
+    }
+]) }}
+<section class="list-con" data-param="{
+        defUrl    : '{{ (action)|U }}',
+        showUrl   : '{{ (action ~ '/show')|U }}',
+        submitUrl : '{{ (action ~ '/save')|U }}',
+        deleteUrl : '{{ (action ~ '/delete')|U }}',
+        fixed     : '.filter',
+        list      : '.list-con',
+        data      : {
+           
+        }
+    }">
+    <div class="list">
+        <table class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="30">{{core_manage.checkbox()}}</th>
+                    <th>被推荐人姓名</th>
+                    <th>联系电话</th>
+                    <th>楼盘名称</th>
+                    <th>佣金(元)</th>
+                    <th>状态</th>
+                </tr>
+
+                {% if ident.info.data is defined and ident.info.pageCount|default('0') != 0 %}
+                {% for k, vo in ident.info.data %}
+                    {# 楼盘id #}
+                    {% set vo_houses = ('house.houses_arc')|getOne('aid', {id: vo.aid|default('')}) %}
+
+                    <tr data-id="{{ vo.id }}">
+                        <td >{{core_manage.checkbox()}}</td>
+                        <td >{{vo.name|default('')}}</td>
+                        <td >{{vo.tel|default('')}}</td>
+                        <td >
+                            {{ ('house.houses')|getOne('name', {id: vo_houses}) }}
+                        </td>
+                        <td >{{ vo.yongjin|default('') }}</td>
+                        <td >{{ core_global.formField({value: vo.status|default(''), field: 'status', form: 'recommend'}) }}</td>
+                    </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="10" class="tac">没有数据！</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {{core_manage.page(ident.info)}}
+</section>
+
+ 
+{% endblock %}
+
+{% block promptUl %}
+提示说明
+{% endblock %}

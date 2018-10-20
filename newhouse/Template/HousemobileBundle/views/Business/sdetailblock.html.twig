@@ -1,0 +1,93 @@
+{% extends 'HousemobileBundle:Sale:detailblock.html.twig' %}
+
+{% block s_r_attr %}
+{% if detail.officetype|default('') %}
+        {# 写字楼 #}
+        <div class="col-50">
+        写字楼类型：{{- house_global.lptag({value: detail|default(''), con: 'officetype'}) -}}
+        </div>
+        <div class="col-50">
+        写字楼级别：{{- house_global.lptag({value: detail|default(''), con: 'officelevel'}) -}}
+        </div>
+    {% else %}
+        {# 商铺 #}
+        <div class="col-100">
+        商铺类型：{{- house_global.lptag({value: detail|default(''), con: 'shoptype'}) -}}
+        </div>
+        <div class="col-100">
+        商铺行业：{{- house_global.lptag({value: detail|default(''), con: 'shopindustry'}) -}}
+        </div>
+    {% endif %}
+    <div class="col-50">
+    建筑面积：{{house_global.if_mj({value: detail.mj|default('')})}}
+    </div>
+    <div class="col-50">
+    区域：{{core_global.region({id: detail.region|default(''), tpl: '%value%'})}}
+    </div>
+    <div class="col-50">
+    装修程度：{{- house_global.lptag({value: detail, tpl: '%value%', con: 'zxcd'}) -}}
+    </div>
+    <div class="col-50">
+    朝向：{{- house_global.lptag({value: detail, tpl: '%value%', con: 'cx'}) -}}
+    </div>
+    <div class="col-50">
+    房龄：{{ core_global.formData({value: detail.fl|default('')}) }}
+    </div>
+    <div class="col-50">
+    楼层：{{detail.szlc|default('')}}/{{detail.zlc|default('')}}层
+    </div>
+    <div class="col-100">
+    特色：{% if detail.officetype|default('') %}
+        {# 写字楼 #}
+        {{ core_global.formField({value: detail.office_ts|default(''), form: 'office_ts', field:'office_ts', tpl: '<span class="mr5">%title%</span>'}) }}
+        {% else %}
+        {# 商铺 #}
+        {{ core_global.formField({value: detail.shops_ts|default(''), form: 'shops_ts', field:'shops_ts', tpl: '<span class="mr5">%title%</span>'}) }}
+        {% endif %}
+    </div>
+{% endblock s_r_attr %}
+
+{% block tpl_tj %}
+    {# 新盘推荐 #}
+    {% if sort_area_houses.data is defined and sort_area_houses.pageCount > 0 %}
+        <div class="list-block panel-block media-list">
+            {{- housemobile_global.panel_title({title:'新盘推荐'})-}}
+            <ul id="xptj" class="attr-con">
+                {{ render(controller('HouseBundle:Clist:houseslist', {_isApp: url_isApp, list: sort_area_houses})) }}
+            </ul>
+            {{- core_mobile_global.more_con({id: 'xptj'})-}}
+        </div>
+    {% endif %}
+    {# 同小区 #}
+    {% if sort_houses_models.data is defined and sort_houses_models.pageCount > 0 %}
+    <div class="list-block panel-block media-list">
+        {{- housemobile_global.panel_title({title:'同小区' ~ tpl_title})-}}
+        <ul id="xqRent" class="attr-con">
+            {{ render(controller('HouseBundle:Clist:business_list', {_isApp: url_isApp, list: sort_houses_models, b_models: 'xsale', tpl_url: 'sdetail'})) }}
+        </ul>
+        {{- core_mobile_global.more_con({id: 'xqRent'}) -}}
+    </div>
+    {% endif %}
+    {# 同区域 #}
+    {% if sort_area_models is defined and sort_area_models.pageCount > 0 %}
+        <div class="list-block panel-block media-list">
+            {{- housemobile_global.panel_title({title:'同区域' ~ tpl_title})-}}
+            <ul id="tqy" class="attr-con">
+                {{ render(controller('HouseBundle:Clist:business_list', {_isApp: url_isApp, list: sort_area_models, b_models: 'xsale', tpl_url: 'sdetail'})) }}
+            </ul>
+             {{- core_mobile_global.more_con({id: 'tqy'}) -}}
+        </div> 
+    {% endif %}
+    {# 同价格 #}
+    {% if sort_prices_models is defined and sort_prices_models.pageCount > 0 %}
+        <div class="list-block panel-block media-list">
+            {{- housemobile_global.panel_title({title:'同价格' ~ tpl_title})-}}
+            <ul id="tjg" class="attr-con">
+                {{ render(controller('HouseBundle:Clist:business_list', {_isApp: url_isApp, list: sort_prices_models, b_models: 'xsale', tpl_url: 'sdetail'})) }}
+            </ul>
+             {{- core_mobile_global.more_con({id: 'tjg'}) -}}
+        </div> 
+    {% endif %}
+{% endblock tpl_tj %}
+
+{# {% block tpl_map %}{% endblock tpl_map %} #}

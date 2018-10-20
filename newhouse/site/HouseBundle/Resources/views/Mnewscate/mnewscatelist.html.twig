@@ -1,0 +1,167 @@
+{% extends 'HouseBundle::base_manage_block.html.twig' %}
+
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+{% block mainMenu %} {% endblock %}
+{# 获取当前方案的数据 #}
+{% set catemodel_data = ('db.category_models')|getRow({ename: app.request.get('ename'), findType: 1}) %}
+{% block tableMain %}
+    {{ core_manage.filter([
+        {
+            method: 'show',
+            title: '<i class="font-ico-plus mr5"></i>新增分类'
+        }
+    ]) }}
+
+<section class="list-con" data-param="{
+    defUrl    : '{{ (action)|U }}',
+    showUrl   : '{{ (action ~ "/show")|U({
+            _form_id: catemodel_data.form_id|default('')
+        }) }}',
+    submitUrl : '{{ (action ~ "/save")|U }}',
+    deleteUrl : '{{ (action ~ "/delete")|U }}',
+    fixed     : '.filter',
+    list      : '.list-con',
+    data      : {
+        ename: '{{ catemodel_data.ename|default('category') }}'
+    }
+}">
+    <div class="list">
+        <table data-level="top" data-type="singleToggle" class="right-table table-hover">
+            <tbody>
+                <tr data-id>
+                    <th width="40" class="tac">{{core_manage.checkbox()}}</th>
+                    <th width="50" class="tac">ID</th>
+                    <th width="40">&nbsp;</th>
+                    <th>分类名称</th>
+                    <th width="50">状态</th>
+                    <th width="200">备注</th>
+                    <th width="80">排序</th>
+                    <th width="200" class="tac">操作</th>
+                </tr>
+                {% if ident.info.data is defined %}
+                {# 一级 #}
+                {% for key,item in ident.info.data %}
+                <tr data-level="1" data-id="{{item.menu.id}}">
+                    <td width="40" class="tac">{{core_manage.checkbox()}}</td>
+                    <td width="50" class="tac">{{item.menu.id}}</td>
+                    <td width="40" class="tac {% if item.nodes %}plusico{% endif %}">&nbsp;</td>
+                    <td><span data-role="itemEdit" data-name="name" class="edit">{{item.menu.name}}</span></td>
+                    <td width="50">
+                        {{core_global.formField({
+                            value: item.menu.checked,
+                            form: 'checked',
+                            field: 'checked'
+                        })}} 
+                    </td>
+                    <td width="200"><span data-role="itemEdit" data-name="remark" data-size="5" class='edit'>{{item.menu.remark|default('-')}}</span></td>
+                    <td width="80"><span data-role="itemEdit" data-name="sort" data-size="5" class='edit'>{{item.menu.sort|default(0)}}</span></td>
+                    <td width="200">
+                        {{core_manage.show()}}
+                        {{core_manage.delete()}}
+                        {# 有下一层 #}
+                        {% if item.menu.is_next|default(0) == 1 %}
+                        {{core_manage.show({
+                            url: (action~'/show')|U({pid: item.menu.id, models: item.menu.models,ename:item.menu.ename}),
+                            title: '添加子菜单'
+                        })}}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% if item.nodes is defined %}
+                <tr data-level="next" class="subtr">
+                    <td colspan="9">
+                        <table class="subright-table">
+                            {# 二级 #}
+                            {% for item1 in item.nodes %}
+                            <tr data-level="1" data-id="{{ item1.menu.id}}">
+                                <td width="40" class="tac">{{core_manage.checkbox()}}</td>
+                                <td width="50" class="tac">{{item1.menu.id}}</td>
+                                <td width="40" class="tac pl20 {% if item1.nodes %}plusico{% endif %}">&nbsp;</td>
+                                <td><span data-role="itemEdit" data-name="name" class='edit'>{{item1.menu.name}}</span></td>
+                                <td width="50">
+                                    {{core_global.formField({
+                                        value: item1.menu.checked,
+                                        form: 'checked',
+                                        field: 'checked'
+                                    })}} 
+                                </td>
+                                <td width="200"><span data-role="itemEdit" data-name="remark" data-size="5" class='edit'>{{item1.menu.remark|default('-')}}</span></td>
+                                <td width="80"><span data-role="itemEdit" data-name="sort" data-size="5" class='edit'>{{item1.menu.sort|default(0)}}</span></td>
+                                <td width="200">
+                                    {{core_manage.show()}}
+                                    {{core_manage.delete()}}
+                                    
+                                    {% if item1.menu.is_next|default(0) == 1 %}
+                                    {{core_manage.show({
+                                        url: (action~'/show')|U({pid: item1.menu.id, models: item1.menu.models,ename: item1.menu.ename}),
+                                        title: '添加子菜单'
+                                    })}}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr data-level="next" class="subtr">
+                                <td colspan="9" >
+                                    <table class="subright-table">
+                                        {% if item1.nodes is defined %}
+                                        {# 三级 #}
+                                        {% for item2 in item1.nodes %}
+                                            <tr data-id="{{item2.menu.id}}">
+                                                <td width="40" class="tac">{{core_manage.checkbox()}}</td>
+                                                <td width="50" class="tac">{{item2.menu.id}}</td>
+                                                <td width="40" class="pl40">&nbsp;</td>
+                                                <td><span data-role="itemEdit" data-name="name" class='edit'>{{item2.menu.name}}</span></td>
+                                                <td width="200"><span data-role="itemEdit" data-name="remark" data-size="5" class='edit'>{{item2.menu.remark|default('-')}}</span></td>
+                                                <td width="80"><span data-role="itemEdit" data-name="sort" data-size="5" class='edit'>{{item2.menu.sort|default(0)}}</span></td>
+                                                <td width="200">
+                                                    {{core_manage.show()}}
+                                                    {{core_manage.delete()}}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        {% endif %}
+                                    </table>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+     {{core_manage.page(ident.info)}}
+</section>
+{{ core_manage.oprate([
+    {
+        method: 'delete',
+        title: ' <i class="font-ico-del mr5"></i>批量删除',
+    },
+    {
+        method: 'dropdownFormField',
+        field: 'checked',
+        form: 'checked',
+        title: '设置状态',
+    },
+    {
+        method: 'submit',
+        url: ('mnewscatelist/structure')|U ,
+        title: '重置栏目结构',
+        ico: 'font-ico-jg mr5',
+        id: 'clear-cache',
+        'data-ajax-title': '重置中...',
+        'data-ajax': 1
+    }
+]) }}
+
+{% endblock %}
+
+
+{% block promptUl %}
+{% endblock %}

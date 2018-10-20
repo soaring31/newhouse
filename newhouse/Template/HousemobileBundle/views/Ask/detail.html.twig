@@ -1,0 +1,72 @@
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default(':base') ~ '.html.twig' %}
+{# 
+ * detail : 获取问答的详细内容
+ #}
+
+{% set detail = cident.detail.data[0]|default('') %}
+
+{% block key_des %}
+
+    <meta name="keywords" content="{{detail.keywords|default('')}}" />
+    <meta name="description" content="{{detail.abstract|default('')}}" />
+{% endblock key_des%}
+
+{% block title %}
+    {{detail.name|default('')}}
+{% endblock title %}
+
+{% block header_title %}
+    {{core_mobile_global.title({title: '问答详情'})}}
+{% endblock header_title %}
+
+{% block popup %}
+{# 我要回答 #}
+    {{ housemobile_global.popup({
+        name: 'popup-ask',
+        title: '我要回答',
+        content: {
+            bParams: true,
+            ajax:{
+                url: ('ask/detail')|U,
+                data: {
+                    id: detail.id|default(''),
+                    formflag: 'view_answer',
+                    tpl: 'Bundlebindforms:comment',
+                    models: 'answer',
+                    ask: detail.id|default('')
+                }
+            }
+        }
+    }) }} 
+
+    {# 我要举报 #}
+    {{ housemobile_global.popup({
+        name: 'popup-report',
+        title: '我要举报',
+        content: {
+            bParams: true,
+            ajax:{
+                url: ('ask/detail')|U,
+                data: {
+                    id: detail.id|default(''),
+                    formflag: 'view_ask_report',
+                    tpl: 'Common:forms',
+                }
+            }
+        }
+    }) }} 
+{% endblock popup %}
+
+{% block container %}
+    <div data-block="{
+        bParams: true,
+        ajax:{
+            url: '{{ ('ask/detail')|U }}',
+            data: {
+                id: '{{ detail.id|default('') }}',
+                tpl: 'Ask:detailblock'
+            }
+        }
+    }"></div>
+{% endblock container %}

@@ -1,0 +1,44 @@
+{% extends app.request.get('app') ? 'HousemobileBundle::base_ajax.html.twig' : 'HousemobileBundle::base.html.twig' %}
+{% block title %}
+    手机客户端
+{% endblock title %}
+
+{% block header_title %}
+    {{core_mobile_global.title({title: '手机客户端'})}}
+{% endblock header_title %}
+
+{% block result %}
+{% block container %}
+    <div class="content">
+        {# logo #}
+        <a href="#" class="item-content">
+            <div class="item-media khd-logo">
+                <i class="img-mobiledown-05"></i>
+            </div>
+            <div class="item-inner">
+                <div class="item-title-row">
+                  <div class="item-title p-title">
+                        {# 08cms房产 #}
+                      {{ core_global.mconfig({name: 'hostname', ename: 'mwebset'}) }}  
+                  </div>
+                </div>
+            </div>
+        </a>
+        {# bg #}
+        <div class="item-content">
+            <div class="item-media khd-bg">
+                <i class="img-mobiledown-01"></i>
+            </div>
+        </div>
+        {# 点击下载 #}
+        <div class="item-content downlink">
+            <a href="{{core_global.img_url({src: core_global.mconfig({name: 'ios_ipa', ename: 'mbasecfg'})})}}" class="item-media iosdown">
+               <i class="img-mobiledown-02"></i>
+            </a>
+             <a href="{{core_global.img_url({src: core_global.mconfig({name: 'android_apk', ename: 'mbasecfg'})})}}" class="item-media addown">
+                <i class="img-mobiledown-03"></i>
+            </a>
+        </div>
+    </div>
+{% endblock container %}
+{% endblock result %}

@@ -1,0 +1,41 @@
+{#周边楼盘#}
+{{core_global.linkcss('static/house/css/newhouse-details/public.css?time=201804201145')}}
+{{core_global.linkcss('static/house/css/newhouse-details/newhouse-common.css?time=201804201145')}}
+{{core_global.linkcss('static/house/css/newhouse-details/newhouseDetail.css?time=201804201145')}}
+<style>
+    .vhg-recommend-txt.t{height:auto!important;}
+    .vhg-recommend.zhou{width:285px;border-radius:0;}
+    .build_{overflow:hidden;}
+    .build_>li{height:46px;border-bottom:1px dashed #efefef;width:100%;color:#333;line-height:46px;}
+    .build_>li:first-child>a{color:#636363;}
+    .build_>li>a{display:block;overflow:hidden;}
+    .build_>li>a>i{width:20%;text-align:center;display:block;float:left;}
+    .build_>li>a>i:last-child{width:30%;color:orange;}
+    .build_>li>a>i:first-child{width:50%;text-align:left;height: 46px;overflow: hidden;}
+</style>
+
+{% if sort_area_houses and sort_area_houses.data|length>0 %}
+    <div class="vhg-recommend zhou">
+        <p class="vhg-recommend-title col-333 fb fz22">周边楼盘</p>
+        <a href="{{ '/xinfang' }}" class="vhg-recommend-more fz12 col-333">更多&gt;&gt;</a>
+        <ul class="build_">
+            <li>
+                <a>
+                    <i>楼盘名称</i>
+                    <i>城区</i>
+                    <i>价格</i>
+                </a>
+            </li>
+            {% for item in sort_area_houses.data %}
+            {% set catyarea_name = ('db.area')|getRow({id: item.region|default,checked:1}) %}
+            <li>
+                <a href="{{(item.models ~ '/detail')|U({id: item.id|default('')})}}" target="_blank">
+                    <i>{{ item.name }}</i>
+                    <i>{{ catyarea_name.name|default('--') }}</i>
+                    <i>{{house_global.if_dj({value: i.dj|default(''), tpl: '<b>%value%</b>%danwei%'})}}</i>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}

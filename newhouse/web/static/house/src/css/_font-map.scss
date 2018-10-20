@@ -1,0 +1,59 @@
+$font-map-fz: inherit !default;
+
+@font-face {
+	font-family: "map";
+    font-weight: normal;
+    font-style: normal;
+	src: url('../fonts/map.eot');
+	src: url('../fonts/map.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/map.woff') format('woff');//,
+		//url('../fonts/map.ttf') format('truetype'),
+		//url('../fonts/map.svg#map') format('svg');
+}
+$font-map-fz: inherit !default;
+$font-map-fl: none !default;
+$font-map-m: 0 !default;
+$font-map-va: -.25em !default;
+[class^="font-map-"],
+[class*=" font-map-"] {
+	font-family: "map";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-size: $font-map-fz;
+	float: $font-map-fl;
+	margin: $font-map-m;
+	vertical-align: $font-map-va;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; only necessary if not using the private unicode range (firstdata option) 
+	text-decoration: none;
+	text-transform: none;
+}
+.font-map-20:before {
+	content: "\EA01";
+}.font-map-all:before {
+	content: "\EA02";
+}.font-map-big:before {
+	content: "\EA03";
+}.font-map-f5:before {
+	content: "\EA04";
+}.font-map-guangzhu:before {
+	content: "\EA05";
+}.font-map-history:before {
+	content: "\EA06";
+}.font-map-jian:before {
+	content: "\EA07";
+}.font-map-liebiao:before {
+	content: "\EA08";
+}.font-map-pic:before {
+	content: "\EA09";
+}.font-map-school:before {
+	content: "\EA0A";
+}.font-map-search:before {
+	content: "\EA0B";
+}.font-map-shouzhan:before {
+	content: "\EA0C";
+}.font-map-small:before {
+	content: "\EA0D";
+}

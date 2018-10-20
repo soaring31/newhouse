@@ -1,0 +1,77 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明 
+ * detail: 当前数据
+ * user_usertype: 当前登录用户类型
+#}
+{% set detail = ident.detail.data[0]|default('') %}
+
+{# 当前用户分组 #}
+{% set user_usertype = app.user.userinfo.usertype|default('') %}
+
+{% block result %}
+<nav class="bar bar-tools">
+    {% if user_usertype|default('') != 15 %}
+        <span class="conact1">没有浏览权限,请升级为经纪人!</span>
+        <a class="external" href="javascript:;"><span class="icon font-f-19"></span>拨打电话</a>
+    {% else %}
+        <span class="conact1">{{detail.xingming|default('')}}<br>{{detail.tel|default('更新中...')}}</span>
+        <a class="external" href="tel:{{detail.tel|default('')}}"><span class="icon font-f-19"></span>拨打电话</a>
+    {% endif %}
+</nav>
+
+<div class="content">
+    <div class="list-block list-block-rent list-block-rent-mt0">
+        <ul>
+            <li class="item-content">
+                <div class="item-inner">
+                    <div class="m">
+                        <div class="t">
+                            {{detail.name|default('')}}
+                        </div>
+                        <div class="p p-gray mt5">
+                            发布日期：{{detail.create_time|default('')|date('Y-m-d')}}
+                        </div>
+                    </div>
+                    <div class="s">
+                        {# 收藏按钮 #}
+                        {{core_global.collect_btn({
+                            aid: detail.id|default(''),
+                            models: detail.models|default('demand'),
+                            class: 'button-ver external',
+                            icons: 'icon font-f-30 icon-cent'
+                        })}}
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="list-block panel-block">
+        {{- housemobile_global.panel_title({title: '基本需求'})-}}
+        <div class="item-content1 p-gray">
+            <div class="item-inner2">
+                <div class="row">
+                    <div class="col-100">
+                        更新时间：<span class="new">{{core_global.timeformat({time: detail.update_time|default('')})}}</span>
+                    </div>
+                    <div class="col-100">
+                        意向面积：{{house_global.if_mj({value: detail.mj|default('')})}}
+                    </div>
+                    <div class="col-100">
+                        意向价格：
+                        {% if detail.category|default('') != 297 %}
+                            {{house_global.if_czj({value: detail.zj|default('')})}}
+                        {% else %}
+                            {{house_global.if_wy({value: detail.zj|default('')})}}
+                        {% endif %}
+                    </div>
+                    <div class="col-100">
+                        <label style="width: 220px;">具体需求：</label>
+                        <span>{{core_global.content({content: detail.jtyq|default('')})}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ render(controller('HouseBundle:Common:footer', {_isApp: url_isApp})) }}
+</div>
+{% endblock result %}

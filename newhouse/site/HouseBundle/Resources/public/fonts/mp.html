@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title>mp</title>    
+    <style type="text/css">
+        @font-face {
+        font-family: "mp";
+        font-weight: normal;
+        font-style: normal;
+        src: url('mp.eot');
+        src: url('mp.eot?#iefix') format('embedded-opentype'),
+            url('mp.woff') format('woff');/*,
+            url('mp.ttf') format('truetype'),
+            url('mp.svg#mp') format('svg');*/
+    }
+
+    [class^="font-mp-"], [class*=" font-mp-"]:before {
+        font-family: "mp";
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        font-style: normal;
+        font-variant: normal;
+        font-weight: normal;
+        font-size: 32px;
+        /* speak: none; only necessary if not using the private unicode range (firstdata option) */
+        text-decoration: none;
+        text-transform: none;
+    }
+    
+    .font-mp-2:before {
+        content: "\EA01";
+    }
+    
+    .font-mp-home:before {
+        content: "\EA02";
+    }
+    
+    .font-mp-menu:before {
+        content: "\EA03";
+    }
+    
+    .font-mp-phone:before {
+        content: "\EA04";
+    }
+    
+    .font-mp-sc:before {
+        content: "\EA05";
+    }
+    
+    .font-mp-search:before {
+        content: "\EA06";
+    }
+    
+    .font-mp-tel:before {
+        content: "\EA07";
+    }
+    
+    .font-mp-xin:before {
+        content: "\EA08";
+    }
+    
+
+    * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    .container {
+        font-family: microsoft yahei;
+        width: 1200px;
+        margin: 20px auto;
+    }
+    li {
+        float: left;
+        padding: 5px;
+        margin: 5px;
+        border: 1px solid #eee;
+        text-align: center;
+        font-family: arial;
+        color: #555;
+        line-height: 1.5;
+    }
+    pre {
+        margin: 15px 0;
+        color: #FD8520;
+        font-family: Consolas;
+        font-size: 14px;
+        padding: 15px;
+        background-color: #272822;
+    }
+    </style>
+</head>
+<body>
+<div class="container">
+<div class="row">
+    <h2>
+        调用方式
+    </h2>
+    <h3>css</h3>
+<pre class="text">
+ @import 'font-mp'; //导入css 标识-文件名
+</pre> 
+    <h3>html</h3>
+<pre>
+ &lt;i class=&quot;font-demo-xxx&quot;&gt;&lt;/i&gt; // class 标识-合成后文件名-单独文件名 不兼容ie6,7(推荐)
+</pre> 
+<pre>
+ &lt;i class=&quot;font-demo&quot;&gt;&amp;#xEA01;&lt;/i&gt; // class 标识-合成后文件名 内容为单个文件名 兼容ie6,7
+</pre> 
+    <h3>详细代码</h3>点击下面文字直接复制到剪切板
+</div>
+    <ul>
+        
+        <li>
+            <i class="font-mp-2"></i>
+            <div class="class">font-mp-2</div>
+            <div class="text"><span>&</span>#xEA01;</div>
+        </li>
+        
+        <li>
+            <i class="font-mp-home"></i>
+            <div class="class">font-mp-home</div>
+            <div class="text"><span>&</span>#xEA02;</div>
+        </li>
+        
+        <li>
+            <i class="font-mp-menu"></i>
+            <div class="class">font-mp-menu</div>
+            <div class="text"><span>&</span>#xEA03;</div>
+        </li>
+        
+        <li>
+            <i class="font-mp-phone"></i>
+            <div class="class">font-mp-phone</div>
+            <div class="text"><span>&</span>#xEA04;</div>
+        </li>
+        
+        <li>
+            <i class="font-mp-sc"></i>
+            <div class="class">font-mp-sc</div>
+            <div class="text"><span>&</span>#xEA05;</div>
+        </li>
+        
+        <li>
+            <i class="font-mp-search"></i>
+            <div class="class">font-mp-search</div>
+            <div class="text"><span>&</span>#xEA06;</div>
+        </li>
+        
+        <li>
+            <i class="font-mp-tel"></i>
+            <div class="class">font-mp-tel</div>
+            <div class="text"><span>&</span>#xEA07;</div>
+        </li>
+        
+        <li>
+            <i class="font-mp-xin"></i>
+            <div class="class">font-mp-xin</div>
+            <div class="text"><span>&</span>#xEA08;</div>
+        </li>
+        
+    </ul>
+</div>
+<script type="text/javascript">
+    var BASE_URL = window.location.href.replace('/fonts/mp.html'.replace('./', ''), '') + '/';
+</script>
+<script type="text/javascript">document.write('<script src="' + BASE_URL + '/js/seajs.js"><\/script>');</script>
+<script type="text/javascript">
+if (BASE_URL.indexOf('http') == 0) {
+    seajs.use(['clipboard'], function() {
+        $('.index').click(function(event) {
+            location.href = BASE_URL;
+        });
+        var $icons = $('.class, .text');
+        $('body').on('copy', '.class, .text', function(e) {
+                $icons.removeAttr('style');
+                e.clipboardData.clearData();
+                e.clipboardData.setData("text/plain", $(this).css({color:'#f00'}).text());
+                e.preventDefault();
+            })
+    })
+};
+</script>
+</body>
+</html>

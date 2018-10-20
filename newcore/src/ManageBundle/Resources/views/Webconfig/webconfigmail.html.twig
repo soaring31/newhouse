@@ -1,0 +1,54 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% block js %}
+<script type="text/javascript">
+{# 加载JS #}
+seajs.use("{{bundlepath}}/js/webconfig.js",function(l){
+	l.init('main');
+});
+</script>
+{% endblock %}
+{% block tableMain %}
+<form class="form" action="{{ (action)|U }}" method="post" name="form">
+<table class="right-table">
+	<tr>
+		<th colspan="2" class="conlist">Email设置</th>
+	</tr>
+	<tr>
+		<td class="w300 txtright fB pright10">Email发送方式</td>
+		<td>
+			<div><input type="radio" name="mailer_transport" {{ 'mailer_transport'|C|isChecked('gmail') }} value="gmail" /><label>gamil邮箱</label></div>
+			<div><input type="radio" name="mailer_transport" {{ 'mailer_transport'|C|isChecked('smtp') }} value="smtp" /><label>smtp服务器</label></div>
+		</td>
+	</tr>
+	<tr>
+		<td class="txtright fB pright10">SMTP 服务器</td>
+		<td><input class="w200" type="text" name="mailer_host" value="{{ 'mailer_host'|C  }}" /></td>
+	</tr>
+	<tr>
+		<td class="txtright fB pright10">SMTP 端口</td>
+		<td><input class="w200" type="text" name="mailer_port" value="{{ 'mailer_port'|C }}" /></td>
+	</tr>
+	<tr>
+		<td class="txtright fB pright10">发信人邮件地址</td>
+		<td><input class="w200" type="text" name="mailer_from" value="{{ 'mailer_from'|C }}" /></td>
+	</tr>
+	<tr>
+		<td class="txtright fB pright10">SMTP 身份验证帐户</td>
+		<td><input class="w200" type="text" name="mailer_user" value="{{ 'mailer_user'|C }}" /></td>
+	</tr>
+	<tr>
+		<td class="txtright fB pright10">SMTP 身份验证密码</td>
+		<td><input class="w200" type="password" name="mailer_password" value="{{ 'mailer_password'|C }}" /></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>
+            <input class="submit-btn ajax-post confirm" target-form="form" value="保 存" type="submit">
+            <input id="mainsubmit_mail" data-url="{{ (action~"/mail")|U }}" class="submit-btn" value="邮箱测试" type="button">
+		</td>
+	</tr>
+</table>
+</form>
+{% endblock %}
+{% block submit %}{% endblock %}
+{% block promptUl %}<li></li>{% endblock %}

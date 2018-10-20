@@ -1,0 +1,55 @@
+{% extends "ManageBundle::mainlayout.html.twig" %}
+{% block js %}
+<script>
+seajs.use("{{ bundlepath }}/js/bundles",function(c){
+	//js入口	    
+	c.init('main');
+});
+</script>
+{% endblock %}
+{% block tableMain %}
+<span class="tableDesc">
+  Bundle列表>><input type="button" id="btnfun_edit_{{ action }}" data="{{ (action~'/show')|U }}" class="btn" value="新增Bundle" />
+</span>
+<table class="right-table">
+	<tbody>
+		<tr>
+			<th class="w30"></th>
+            <th class="txtleft w200">Bundle名称</th>
+			<th class="txtleft">Bundle路径</th>
+			<th class="w400">操作</th>
+		</tr>
+		<tr>
+		    <td></td>
+			<td>CoreBundle</td>
+			<td>CoreBundle\CoreBundle</td>
+			<td class="txtcenter">
+			    <input type="button" id="btnfun_edit_bundlesmanage" data="{{ ('bundlesmanage/upresource')|U('id=CoreBundle') }}" class="search-btn" value="更新资源包" />
+			</td>
+		</tr>
+		{% if bundles is defined %}
+		{% for key,vo in bundles %}
+		<tr>
+		    <td></td>
+			<td>{{ key }}</td>
+			<td>{{ vo }}</td>
+			<td class="txtcenter">
+			    <input type="button" id="btnfun_edit_{{ action }}" data="{{ (action~'/upresource')|U('id='~key) }}" class="search-btn" value="更新资源包" />
+			    <input type="button" id="btnfun_edit_{{ action }}" data="{{ (action~'/upentity')|U('id='~key) }}" class="search-btn" value="更新Entity" />
+				<input type="button" id="btnfun_jump_synmods" class="btn" data-url="{{ ('bundles/synmods')|U('id='~key) }}" value="同步Models">
+			</td>
+		</tr>
+		{% endfor %}
+		{% endif %}
+	</tbody>
+</table>
+{% endblock %}
+{% block submit %}{% endblock %}
+{% if info is defined %}
+{% block pageIndex %}{{ info.pageIndex|default(1) }}{% endblock %}
+{% block pageCount %}{{ info.pageCount|default(1) }}{% endblock %}
+{% endif %}
+{% block promptUl %}
+<li>更新资源包可以更新css、js</li>
+<li>更新Entity更新的是数据文件</li>
+{% endblock %}

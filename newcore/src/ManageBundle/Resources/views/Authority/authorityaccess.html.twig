@@ -1,0 +1,29 @@
+{% extends 'ManageBundle::mainlayout.html.twig' %}
+{% import 'ManageBundle:Form:lists.html.twig' as lists %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+{% block mainMenu %}
+{{ parent() }}
+<li title='{{ (action)|U('id='~app.request.get('_id')) }}' class="on"><a href="javascript:void(0);">成员列表</a></li>
+{% endblock %}
+{% block tableMain %}
+<section>
+    <span class="tableDesc">
+              成员列表&gt;&gt;
+    <input type="button" id="btnfun_edit" data="{{ (action~"/show")|U("group_id="~app.request.get('_id')) }}"
+    class="search-btn" value="新增{{ ('db.auth_group')|getOne('name',{'id':app.request.get('_id')}) }}" />
+    </span>
+    {{ lists.list(ident.info) }}
+</section>
+{% endblock %}
+
+{% block page %}
+{{lists.page(ident.info)}}
+{% endblock %}
+{% block submit %}{% endblock %}
+{% block promptUl %}
+提示说明
+{% endblock %}

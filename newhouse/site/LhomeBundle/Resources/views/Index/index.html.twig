@@ -1,0 +1,641 @@
+{% extends 'LhomeBundle::base.html.twig' %}
+
+{% set now_time = 'now'|date('U') %}
+
+{% block css %}
+    {{core_global.linkcss('bundles/LhomeBundle/css/main.css')}}
+{% endblock css %}
+
+{% block key_des %}
+<meta name="keywords" content="{{ core_global.mconfig({name: 'cmskeyword', ename: 'mwebset'}) }}" />
+<meta name="description" content="{{ core_global.mconfig({name: 'cmsdescription', ename: 'mwebset'}) }}" />
+{% endblock key_des %}
+
+{% block default_title %}
+    {{- core_global.mconfig({name: 'cmstitle', ename: 'mwebset'}) -}}
+{% endblock default_title %}
+
+{% block header %}
+    {% set area_name = app.session.get('area')|getAreaName %}
+    {% set autharea = ('db.auth_group_area')|getCol( 'id', { checked: 1 })|length %}
+    {% set _action = _action|default('/main') %}
+    <div class="header" data-stellar-background-ratio="0.07"style="background: url(bundles/LhomeBundle/images/bannerv2.jpg){# url(http://app.08cms.com/bundles/house/images/defaultad/5.jpg) #} no-repeat">
+        <div class="wrapper">
+            <div class="fl">
+                <a href="{{'index/index'|U}}" class="logo"><img width="140" height="40" alt="{{ core_global.mconfig({name: 'hostname', ename: 'mwebset'}) }}" src="{{ core_global.img_url({src: core_global.mconfig({name: 'cmslogo', ename: 'mwebset'}), type: 0}) }}"/></a>
+                <div class="exchange s-city dropdown" data-hover="dropdown"> <i></i>
+                    {{cur_area_data|default('主站')}}
+                    <ul class="dropdown-menu">
+                        {{core_global.switch_area({
+                            act_class: 'active',
+                            pageSize: 10,
+                            is_manage: 1,
+                            tpl: '<li class="%act_class%"><a href="%url%">%name%</a></li>'
+                        })}}
+                         
+                    </ul>
+                </div>
+            </div>
+            {{lhome_global.switch_area()}}
+            <div class="fr">
+                <div class="nav typeUserInfo">
+                    <ul>
+                    {% if majorNav.data is defined %}
+                        {% for item in majorNav.data %}
+                            <li>
+                                <a target="_blank" href="{{item.menu.url|default('')|U(item.menu.urlparams|getQuery)}}" data-obj=".nav-list" data-direction="bottom" data-offsetx="50%">
+                                    {{item.menu.name|default('')}}
+                                </a>
+                                {% if item.nodes|length > 1 and item.nodes|default('') %}
+                                <div class="nav-list">
+                                    <dd> 
+                                        <i></i>
+                                        {% for second in item.nodes %}
+                                        <dl>
+                                            <a target="_blank" href="{{second.menu.url|default('')|U(second.menu.urlparams|getQuery)}}" >{{second.menu.name|default('')}}</a>
+                                        </dl>
+                                        {% endfor %}
+                                    </dd>
+                                </div>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                    </ul>
+                </div>
+                <div class="index_log">
+                    {{ render(controller('HouseBundle:Common:login')) }}
+                </div>
+            </div>
+            <div class="clear"></div>
+            <div class="header-wrap">
+                <div class="wrap-ico"></div>
+                <div class="house-num">
+                    <ul>
+                        <li>{{cur_area_data|default('主站')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}真实在售二手房 {{core_global.count({models: 'sale', sql_opt: {valid: 'gte|' ~ now_time, checked: 1} })}} 套</li>
+                        <li>{{cur_area_data|default('主站')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}真实租房 {{core_global.count({models: 'rent', sql_opt: {valid: 'gte|' ~ now_time, checked: 1} })}} 套</li>
+                        <li>{{cur_area_data|default('主站')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}在售新房楼盘 {{core_global.count({models: 'houses', sql_opt: {checked: 1,type:0} })}} 个</li>
+                    </ul>
+                </div>
+                <div class="search-box-wrap" >
+                    <form action="{{ ('sale/list')|U }}" target="_blank">
+                    <div class="search-box-con">
+                        <div class="menu search-cate">
+                            <ul>
+                            <li class="tab check"  data-formact="{{ ('sale/list')|U }}" data-left="40" data-pama='{"searchword":"{{'请输入二手/小区' }}"}'>
+                                <span>找二手房</span>
+                            </li>
+                            <li class="tab" data-formact="{{ ('houses/list')|U }}" data-left="102"  data-pama='{"searchword":"{{'请输入楼盘名称/地址/拼音' }}"}'>
+                                <span>新房</span>
+                            </li>
+                            <li class="tab" data-formact="{{ ('rent/list')|U }}" data-left="150"  data-pama='{"searchword":"{{'请输入出租/小区' }}"}'>
+                                <span> 租房</span>                           
+                            </li>
+                            <li class="tab"  data-formact="{{ ('sale/xqlist')|U }}" data-left="198"  data-pama='{"searchword":"{{'请输入小区关键字' }}", "autocomplete": 0}'>
+                                <span>房价</span>
+                            </li>
+                            </ul>
+                            <i></i>
+                        </div>
+
+                        <div class="search clear">
+                            <div class="box">
+                                <div class="clear searchBox" >
+                                    {{ core_global.search_input({
+                                        autocomplete : 1,
+                                        placeholderie: 1,
+                                        placeholder  : "请输入二手房名称/地址/拼音",
+                                        class: "text left txt searchVal search-input "
+                                    }) }}
+
+                                   {#  <input class="text left txt searchVal" name="keyword" autocomplete="off" placeholder="请输入区域、商圈或小区名开始找房" id="keyword-box"> #}
+                                    <input class="btn home-ico ico-search left" id="findHouse" type="submit" value="开始找房"  daty-id="110000">
+                                    <div id="userNews" class="savesearch"></div>
+                                </div>
+                                <div id="suggest-cont" class="suggest-wrap" data-bl="sug" data-el="sug"></div>
+                            </div>
+                          
+                        </div>
+                    </div>
+                     </form>
+                </div>
+            </div>
+            <div class="wrap-video">
+                {% set toutiao = ('toutiao')|getPush(3) %}
+                {% if toutiao|default('') %}
+                    {% for item in toutiao %}
+                        <div class="pen">
+                            <a href="{{item.url}}" title="{{item.name}}" target="_blank">
+                                {{item.name}}
+                            </a>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="fix-right-v3" id="back-top" daty-id="index" log-mod="sidebar">
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="sidebar-wrap">
+                            
+                            <ul>
+                                <li class="myfav sidebar-item">
+                                    <a title="我关注的房源" data-url="" data-bl="myfav">我关注的房源</a>
+                                    <span class="popup">
+                                        <i></i>
+                                        我关注的房源
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="sidebar-line"></div>
+                        <ul>
+                            <li class="sell sidebar-item">
+                                <a title="在线卖房"href="{{('release/usale')|U()}}" target="_blank">在线卖房</a>
+                                <span class="popup">
+                                    <i></i>
+                                    在线卖房
+                                </span>
+                            </li>
+                            <li class="tool sidebar-item">
+                                <a title="房贷计算器" href="{{('tools/index')|U()}}"target="_blank">房贷计算器</a>
+                                <span class="popup">
+                                    <i></i>
+                                    房贷计算器
+                                </span>
+                            </li>
+                            <ul>
+                                <li class="download sidebar-item">
+                                    <a href="{{('download/index')|U()}}" title="" target="_blank" data-bl="client">下载app</a>
+                                    <span class="popup popup-qr">
+                                        <i></i>
+                                        <div id="ewm" data-qrcode="1" data-text="{{('download/index')|U({})}}" data-size="94" data-logo="{{core_global.img_url({src: core_global.mconfig({name: 'qrcodelogo', ename: 'mvariables_user'})})}}"></div><em class="qr-title">Android二维码下载</em>
+                                        
+                                        <div id="ewm" data-qrcode="1" data-text="{{('download/index')|U({})}}" data-size="94" data-logo="{{core_global.img_url({src: core_global.mconfig({name: 'qrcodelogo', ename: 'mvariables_user'})})}}"></div> <em class="qr-title">iPhone二维码下载</em>
+                                    </span>
+                                </li>
+                                <li class="phone sidebar-item">
+                                    <a href="{{ ('service/list')|U({ category: 308 })}}" title="联系我们">联系我们</a>
+                                    <span class="popup">
+                                        <i></i>
+                                        联系我们
+                                    </span>
+                                </li>
+                                <li class="feedback sidebar-item" id="feedback">
+                                    <a href="{{ ('service/ask')|U({ category: 12 })}}" title="反馈/投诉" data-bl="feedback"></a>
+                                    <span class="popup">
+                                        <i></i>
+                                        反馈/投诉
+                                    </span>
+                                </li>
+                            </ul>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <ul>
+            <li class="gotop sidebar-item" id="gotop" style="display: list-item;">
+                <a title="返回顶部">返回顶部</a>
+                <span class="popup">
+                    <i></i>
+                    返回顶部
+                </span>
+            </li>
+        </ul>
+    </div>
+    <div class="app_daoliu_layer">
+        <div class="app_content">
+            <div class="app_img">
+                {{- core_global.img({
+                    src: 'bundles/LhomeBundle/images/iphone.png',
+                    type: 2
+                }) -}}
+            </div>
+            <div class="app_desc_c">
+                <div class="app_title">扫描下载APP</div>
+                <div class="app_desc">随时随地查看新上房源</div>
+            </div>
+            <div class="app_qr">
+                <div id="ewm" data-qrcode="1" data-text="{{('download/index')|U({})}}" data-size="94" data-logo="{{core_global.img_url({src: core_global.mconfig({name: 'qrcodelogo', ename: 'mvariables_user'})})}}"></div>
+                
+                <div id="ewm" data-qrcode="1" data-text="{{('download/index')|U({})}}" data-size="94" data-logo="{{core_global.img_url({src: core_global.mconfig({name: 'qrcodelogo', ename: 'mvariables_user'})})}}"></div> 
+            </div>
+            <div class="app_close closeAppLayer">
+                {{- core_global.img({
+                    src: 'bundles/LhomeBundle/images/icon-close.png',
+                    type: 2
+                }) -}}
+            </div>
+        </div>
+    </div>
+  <script type="text/javascript">
+         /*
+            = jqhoverS:左侧详情筛选
+            = jqduang：幻灯片、选项卡、slider
+            = placeholder：兼容低版本输入框文字提示
+            = autocomplete：搜索框自动补全提示
+        */
+        seajs.use([
+            'jqhoverS', 
+            'jqduang', 
+            'advertise', 
+            'lazyload'
+            ], function (jqhoverS, jqduang, advertise, lazyload) {
+            //搜索选择
+             $('.search-cate').on('click', 'li', function() {
+                var $this = $(this);
+                var pama = $this.data("pama");
+                var $searchInput = $(pama.target || '.search-input');
+                var url = $this.data('formact');
+                var $i = $('.menu').find('i');
+                 $i.animate({
+                   left: $(this).data('left'),
+                }, 10);
+                $this.addClass("check").siblings().removeClass("check")
+                    .closest('form').attr('action', url);
+
+                $searchInput
+                    .val('')
+                    .attr('placeholder', pama.searchword)
+                    .autocomplete('hide')
+                    // 是否启用自动完成
+                if (pama.autocomplete === 0) {
+                    $searchInput.autocomplete('disable');
+                } else {
+                    $searchInput.autocomplete('enable')
+                        .autocomplete('setOptions', {
+                            serviceUrl: url
+                        });
+                };
+            });
+            //
+            //  $(document)
+            //// tab选项卡
+            //.on('click', '.menu .tab', function () {
+            //    var $this = $(this);
+            //    var $i = $('.menu').find('i');
+            //    var _data = $this.data();
+            //    var url = $this.data('formact');
+            //    $this.addClass('check').siblings().removeClass('check');
+            //    $i.animate({
+            //        left: _data.left,
+            //    }, 10);
+            //    $('.searchVal').val('')
+            //    $('.searchVal').attr('placeholder', _data.type),
+            //    $('.search-box-wrap').find('form').attr('action',_data.formact)
+            //})
+            //// 搜索框获取焦点
+            //.on('focus', '#keyword-box', function () {
+            //    var $this = $(this);
+            //    var $tab = $('.tab.check');
+            //    var _data = $tab.data();
+            //    $('.sug-tips ul').hide();
+            //    $('#' + _data.id).show();
+            //})
+            //// 搜索框失去焦点
+            //.on('blur', '#keyword-box', function () {
+            //    $('.sug-tips ul').hide();
+            //})
+//
+
+
+            // 广告
+            $('.app_close').click(function() {
+                $('.app_daoliu_layer').hide();
+            });
+            // 返回顶部
+            $('#gotop').click(function() {
+                $('body,html').animate({scrollTop:0},500);
+            });
+            // 侧栏
+            $('.sidebar-item').each(function(i,e) {
+                $(this).hover(function() {
+                    $('.popup').eq(i).css({"display":"block","opacity":"1","right":"38px"});
+                }, function() {
+                    $('.popup').css({"display":"none","opacity":"0","right":"48px"});
+                });      
+            });
+
+
+        });
+    </script>
+
+{% endblock header %}
+
+{% block body %}
+    <div class="home-nav">
+        <ul class="count-4">
+            <li class="hvr-bob">
+                <a  href="{{('sale/list')|U()}}">
+                        {{- core_global.img({
+                            src: 'bundles/LhomeBundle/picture/phpe022we.png',
+                            type: 2
+                        }) -}} <b>找二手房</b>
+                    <p>真实二手房源，{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}承诺真实在售所见即真</p>
+                </a>
+            </li>
+            <li class="hvr-bob">
+                <a  href="{{('houses/list')|U()}}">
+                        {{- core_global.img({
+                            src: 'bundles/LhomeBundle/picture/php6ifmls.png',
+                            type: 2
+                        }) -}} <b>找新房</b>
+                    <p>全新房屋，全新生活，给您满意的优质新盘</p>
+                </a>
+            </li>
+            <li class="hvr-bob">
+                <a  href="{{('map/index')|U()}}">
+                        {{- core_global.img({
+                            src: 'bundles/LhomeBundle/picture/php4ttmto.png',
+                            type: 2
+                        }) -}}
+                    <b>地图找房</b>
+                    <p>为您精准定位，位置周边配套设施一览无余</p>
+                </a>
+            </li>
+            <li class="hvr-bob">
+                <a  href="{{('tools/index')|U()}}">
+                        {{- core_global.img({
+                            src: 'bundles/LhomeBundle/picture/phphnmv10.png',
+                            type: 2
+                        }) -}}
+                    <b>房屋估价</b>
+                    <p>基于海量成交数据，帮您合理定价预估市值</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="hand-lianjia">
+        <div class="wrapper">
+            <div class="fl">
+                <div class="titles"></div>
+                <p>
+                    集二手、新房、租房功能于一体，随时随地任性找房。IM匿名咨询让您放心，消息动态推送让您省心，服务承诺让您安心，数据百科锦囊让您感受贴心漫漫找房路，我们努力为您想更多。
+                </p>
+                <div class="download">
+                    <div class="hand-app">
+                        <a href="{{ core_global.mconfig({name: 'android_apk', ename: 'mbasecfg'})|default('javascript:;') }}" target="_blank">
+                            <img src="{{ asset('bundles/'~bundlepath~'/images/download/down-ad.gif')}}" alt="">
+                        </a>
+                        <a href="{{ core_global.mconfig({name: 'ios_ipa', ename: 'mbasecfg'})|default('javascript:;') }}" target="_blank">
+                            <img src="{{ asset('bundles/'~bundlepath~'/images/download/down-ip.gif')}}" alt="">
+                        </a>
+                    </div>
+                    <div class="erweima" style="background: none;">
+                        <img style="width: 100%;" src="picture/63b5742e8bbf4f0a89ce7b471b50712a.gif">
+                    </div>
+                    <div class="video-img-btn" style="display:none;">
+                        <div class="video-img-btn-bg"></div>
+                        <div class="video-btn-normal"></div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="fr phone"></div>
+        </div>
+    </div>
+    {% set indexArr = ('index_ershoufang,index_chuzufangyuan')|getPushMuti(4) %}
+    {% set indexHouses = ('index_remenxiaoqu,index_dazheyouhui')|getPushMuti(3) %}
+    <div class="ershoufang" id="ershoufanglist" log-mod="site_ershoufang">
+        <div class="wrapper">
+            <div class="fl">
+                <div class="name"></div>
+                <p>
+                    好房源那么多，我们为你精选，{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}会越来越懂你
+                    <a href='{{('sale/list')|U()}}' target="_blank">更多{{cur_area_data|default('')}}二手房</a>
+                </p>
+            </div>
+            <div class="clear"></div>
+            <ul>
+                {% set sale_data = indexArr['index_ershoufang']|default({}) %}
+                {% if sale_data|default('') %}
+                    {% for item in sale_data %}
+                        <li>
+                            <a href='{{item.url|default('')}}' target="_blank" class="LOGCLICK">
+                                <div class="wra">
+                                    {{- core_global.img({
+                                        src: item.thumb|default(''),
+                                        alt: item.name|default(''),
+                                        type: 2,
+                                        height: 192,
+                                        width: 250
+                                    }) -}}
+                                    <span class="price">
+                                        {{house_global.if_wy({value: item.zj|default(''), tpl: '<i>%value%</i>%danwei%'})}}
+                                    </span>
+                                    <div class="bottom">
+                                        <p class="p01">{{item.name|default('')}}</p>
+                                        <p class="tips">
+                                            <span>{{item.lpmc|default('')}}</span>
+                                            <span>
+                                                {{- house_global.huxing({data: item|default(''),tpl: "%shi%%ting%%mj%"}) -}}
+                                            </span>
+                                            <span>
+                                                {{- house_global.if_mj({value: item.mj|default(''), tpl: '%value%%danwei%'}) -}}
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="tips">
+                                    <p>
+                                        <span>近期关注度较高房源</span>
+                                    </p>
+                                    <label></label>
+                                </div>
+                            </a>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+                <div class="clear"></div>
+            </ul>
+        </div>
+    </div>
+    <div class="ershoufang" id="rent" style="background: #eeeef1">
+        <div class="wrapper">
+            <div class="fl">
+                <div class="rentname"></div>
+                <p>
+                    好房源那么多，我们为你精选，{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}会越来越懂你
+                    <a href='{{('rent/list')|U()}}' target="_blank">更多{{cur_area_data|default('')}}出租</a>
+                </p>
+            </div>
+            <div class="clear"></div>
+            <ul>
+                {% set rent_data = indexArr['index_chuzufangyuan']|default({}) %}
+                {% if rent_data|default('') %}
+                    {% for item in rent_data %}
+                        <li>
+                            <a href='{{item.url|default('')}}' target="_blank" class="LOGCLICK">
+                                <div class="wra">
+                                    {{- core_global.img({
+                                        src: item.thumb|default(''),
+                                        alt: item.name|default(''),
+                                        type: 2,
+                                        height: 192,
+                                        width: 250,
+                                        attr: 'style="display: block;"'
+                                    }) -}}
+                                    <span class="price">
+                                        {{house_global.if_czj({value: item.czj|default(''), tpl: '<i>%value%</i>%danwei%'})}}
+                                    </span>
+                                    <div class="bottom">
+                                        <p class="p01">{{item.name|default('')}}</p>
+                                        <p class="tips">
+                                            <span>{{item.lpmc|default('')}}</span>
+                                            <span>
+                                                {{- house_global.huxing({data: item|default(''),tpl: "%shi%%ting%%mj%"}) -}}
+                                            </span>
+                                            <span>
+                                                {{- house_global.if_mj({value: item.mj|default(''), tpl: '%value%%danwei%'}) -}}
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="tips">
+                                    <p>
+                                        <span>近期关注度较高房源</span>
+                                    </p>
+                                    <label></label>
+                                </div>
+                            </a>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+    <div class="new-house">
+        <div class="wrapper">
+            <div class="fl">
+                <div class="name"></div>
+                <p>
+                    真实信息准确同步，楼盘动态一手掌握
+                    <a href='{{('houses/list')|U()}}' target="_blank">更多{{cur_area_data|default('')}}新房</a>
+                </p>
+            </div>
+            <div class="newhose-list">
+                <ul>
+                    {% set houses_data_0 = indexHouses['index_dazheyouhui']|default({}) %}
+                    {% for item in houses_data_0 %}
+                        <li>
+                            <a href='{{item.url|default('')}}' target="_blank">
+                                {{- core_global.img({
+                                    src: item.thumb|default(''),
+                                    alt: item.name|default(''),
+                                    type: 2,
+                                    height: 260,
+                                    width: 350
+                                }) -}}
+                                <div class="bg"></div>
+                                <div class="title">
+                                    {{item.name|default('')}}
+                                    <span>
+                                        <label>
+                                            {{house_global.if_dj({value: item.dj|default(''), tpl: '%value%%danwei%'})}}
+                                        </label>
+                                    </span>
+                                </div>
+                                <div class="title01">
+                                    <span title="{{item.address|default('')}}">
+                                        {{item.address|default('')}}
+                                    </span>
+                                </div>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="xiaoqu-list" id="modXiaoqu" style="">
+        <div class="wrapper">
+            <div class="fl">
+                <div class="name"></div>
+                <p>
+                    纵览小区，恋上这座城
+                    <a href='{{('sale/xqlist')|U()}}' target="_blank">更多{{cur_area_data|default('')}}小区</a>
+                </p>
+            </div>
+            <div class="xiaoqu-list">
+                <ul id="xiaoqulist">
+                    {% set houses_data_1 = indexHouses['index_remenxiaoqu']|default({}) %}
+                    {% if houses_data_1|default('') %}
+                        {% for item in houses_data_1 %}
+                            <li>
+                                <a href='{{core_global.url(item|merge({controller: 'sale/qdetail', set_models: 1}) )}}' target="_blank">
+                                    {{- core_global.img({
+                                        src: item.thumb|default(''),
+                                        alt: item.name|default(''),
+                                        type: 2,
+                                        height: 200,
+                                        width: 350
+                                    }) -}}
+                                    <div class="title">
+                                        <div class="resblock-name">
+                                            {{item.name|default('')}}
+                                        </div>
+                                        <div class="resblock-desc">
+                                            <span>
+                                                <label>
+                                                    {{house_global.if_dj({value: item.dj|default(''), tpl: '%value%%danwei%'})}}
+                                                </label>
+                                            </span>
+                                            <span class="resblock-year">
+                                                {{core_global.time_date({time: item.jgdate|default('')})}}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% include 'LhomeBundle::footer.html.twig'  %}
+{% endblock body %}
+
+{% block footer %}
+    
+{% endblock footer %}
+{% block js %}
+    {{parent()}}
+    <script type="text/javascript">
+    seajs.use([],function(){
+        $(function () {
+            // 轮播广告
+            function scroll_news(time) {
+                var _newsLi = $('.house-num').find('li:first');
+                _newsLi.animate({
+                    height: 0
+                }, time || 1000, function () {
+                    $('.house-num ul').append(_newsLi);
+                    _newsLi.height('35px');
+                })
+            }
+            // 每8秒切换一次
+            setInterval(scroll_news, 8000);
+
+          
+            // 点击搜索
+            //.on('click', '#findHouse', function () {
+            //    var $tab = $('.tab.check');
+            //    var _data = $tab.data();
+            //    var _val = $('#keyword-box').val();
+            //    location.href = _data.formact + '?name=' + $.trim(_val);
+            //});
+            $('.exchange').hover(function() {
+                $('.dropdown-menu').show();
+            }, function() {
+                $('.dropdown-menu').hide();
+            });
+
+        });
+    })
+    </script>
+{% endblock js %}

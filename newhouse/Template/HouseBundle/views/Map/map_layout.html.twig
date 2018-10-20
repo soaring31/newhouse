@@ -1,0 +1,629 @@
+ {% extends 'HouseBundle::base.html.twig' %}
+
+{% block css %}
+    {# <link rel="stylesheet" type="text/css" href="{{ asset('bundles/'~bundlepath~'/css/address.css', absolute=true) }}"> #}
+    {{core_global.linkcss('bundles/' ~ bundlepath ~ '/css/address.css')}}
+{% endblock css %}
+
+{% block header %}
+    
+{% endblock header %}
+
+{% set filter_rows = 3 %}
+
+{% set sort_data = {
+    def: {
+        title: '默认'
+    }
+}|merge(sort_data_opt) %}
+
+{% block body %}
+    <!-- 顶部内容 -->
+    <div class="top">
+        <div class="container">
+            <a href="" class="logo">地图<i class="font-lp-3"></i></a>
+
+            <div class="models">
+                <div class="models-sel hoverslider" data-obj=".models-option">
+                <span class="txt">
+                    {% if models|default('houses') == 'houses' %}
+                    新房
+                    {% elseif models|default('houses') == 'sale' %}                        
+                    二手房
+                    {% elseif models|default('houses') == 'rent' %}
+                    出租
+                    {% endif %}
+                </span>
+                <i class='font-icons-1'></i> 
+                </div>
+                <ul class="models-option">
+                    <li>
+                        <a href="{{('map/houses')|U}}">新房</a>
+                    </li>
+                    <li>
+                        <a href="{{('map/sale')|U}}">二手房</a>
+                    </li>
+                    <li>
+                        <a href="{{('map/rent')|U}}">出租</a>
+                    </li>
+                </ul>
+            </div>
+            {{ core_global.search({
+                action: '',
+                placeholder: '请输入视频关键词',
+            }) }}
+            {{house_global.filter_cfg({
+                filter_opt: filter_opt|default({}),
+                filter_type: 0
+                action: action
+            })}}
+
+            <a href="{{(models|default('houses') ~ '/list')|U}}" target="_blank" class="back-list">
+                <i class="font-lp-2"></i>
+                列表
+            </a>
+
+        </div>
+    </div>
+    <div class="map" id='container'></div>
+    <!-- 侧栏内容 -->
+    <div class="con-box">  
+        <div class="infor fl jqDuang" data-obj=".icon1" data-cell=".icon-nav" data-autoplay="0"  data-actclass='active1' data-trigger="click">
+            <!-- 内左 图标 -->
+            <ul class="icon-nav fl">
+                <li class="active1">
+                    <a href="#"><i class="font-map-search"></i><br>搜索</a>
+                </li>
+                <li>
+                    <a href="#"><i class="font-map-school"></i><br>学区</a>
+                </li>
+                <li>
+                    <a href="#"><i class="font-map-guangzhu"></i><br>关注</a>
+                </li>
+                <li>
+                    <a href="#"><i class="font-map-history"></i><br>历史</a>
+                </li>
+                <li>
+                     <div class="icon-sz">
+                        <a href="#" ><i class="font-map-shouzhan"></i><br><span>收起</span></a>
+                        <!-- <a href="#"class=""><i class="font-icon-shouzhan"></i><br>展开</a> -->
+                    </div>
+                </li>
+            </ul>
+            <!-- 内容 -->
+            <div class="icon-box">
+                <div class="icon1" style="display: block;">
+                   <!-- 内右 文字 -->
+                    <div class="con fr">
+                        <div class="con-top ">
+                            <h2>东莞市</h2>
+                            <p>共有7个区域</p>
+                        </div>
+                        <div class="con-list">
+                            <ul class="con-nav sort">
+                                {{ core_global.sort({
+                                    action: action,
+                                    filter_opt: filter_opt,
+                                    data: sort_data
+                                }) }}
+                            </ul>
+                            <div class="text-box">
+                                <div class="item" style="display: block;">
+                                    <ul id='detaillist'></ul>
+                                    <ul id='alldatalist'>
+                                        {% block datalist %}
+
+                                        {% endblock datalist %}
+                                        <!-- <li>
+                                            <div class="img fl">
+                                                <img width="120" height="90" alt="" src=""/>
+                                                <div class="img-sm">
+                                                    <i class="font-map-pic"></i>
+                                                    <span>6</span>
+                                                </div>
+                                            </div>
+                                            <div class="item-text fr">
+                                                <h3>国际公共二期 &nbsp顶楼复式三层 &nbsp南北向</h3>
+                                                <div class="text-l fl">
+                                                    <p>
+                                                        3室2厅 / 146平米 / 东南 <br>
+                                                        世纪城国际公馆二期
+                                                    </p>
+                                                    <span><a href="#">现房</a> </span>
+                                                    <span><a href="#">多图</a></span>
+                                                </div>
+                                                <div class="text-r fr">
+                                                    <span>160万</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="img fl">
+                                                <img width="120" height="90" alt="" src=""/>
+                                                <div class="img-sm">
+                                                    <i class="font-map-pic"></i>
+                                                    <span>6</span>
+                                                </div>
+                                            </div>
+                                            <div class="item-text fr">
+                                                <h3>国际公共二期 &nbsp顶楼复式三层 &nbsp南北向</h3>
+                                                <div class="text-l fl">
+                                                    <p>
+                                                        3室2厅 / 146平米 / 东南 <br>
+                                                        世纪城国际公馆二期
+                                                    </p>
+                                                    <span><a href="#">现房</a> </span>
+                                                    <span><a href="#">多图</a></span>
+                                                </div>
+                                                <div class="text-r fr">
+                                                    <span>160万</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        
+                                        <li>
+                                            <div class="img fl">
+                                                <img width="120" height="90" alt="" src=""/>
+                                                <div class="img-sm">
+                                                    <i class="font-map-pic"></i>
+                                                    <span>6</span>
+                                                </div>
+                                            </div>
+                                            <div class="item-text fr">
+                                                <h3>国际公共二期 &nbsp顶楼复式三层 &nbsp南北向</h3>
+                                                <div class="text-l fl">
+                                                    <p>
+                                                        3室2厅 / 146平米 / 东南 <br>
+                                                        世纪城国际公馆二期
+                                                    </p>
+                                                    <span><a href="#">现房</a> </span>
+                                                    <span><a href="#">多图</a></span>
+                                                </div>
+                                                <div class="text-r fr">
+                                                    <span>160万</span>
+                                                </div>
+                                            </div>
+                                        </li> -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>   
+                    </div> 
+                </div>
+                <div class="icon1">学区</div>
+                <div class="icon1">关注</div>
+                <div class="icon1">历史</div>
+            </div>
+        </div>
+    </div>
+    <!-- 右侧图标 -->
+    <ul class="con-r fr">
+        <li><a href="#"><i class="font-map-all"></i>全屏</a></li>
+        <li><a href="#"><i class="font-map-big"></i>放大</a></li>
+        <li><a href="#"><i class="font-map-small"></i>缩小</a></li>
+        <li class="long">    
+        </li>
+    </ul>
+{% endblock body %}
+{% block footer %}{% endblock footer %}
+
+{% block js %}
+<script type="text/javascript">
+seajs.use(['jqduang', 'map'] , function () {
+    // 收缩展开
+    $('body').on('click', '.icon-sz', function () {
+        var $contain = $('.icon-box');
+        var $this = $(this);
+        if ($contain.is(':hidden')) {
+            $contain.show();
+            $this.removeClass('shou').find('span').text('收起');
+        } else {
+            $contain.hide();
+            $this.addClass('shou').find('span').text('展开');
+        }
+    });
+
+/*    function mapH() {
+        var w = $(window).height();
+        var maph = w - 60;
+        $('.map').height(maph);
+        $('.infor, .icon-nav').height(maph - 20);
+        $('.text-box').height(maph - 20 - 105)
+    }
+    mapH();
+    $(window).resize(function () {
+        mapH();
+    })*/
+});
+
+
+
+
+// //定义自定义方形覆盖物的构造函数
+// function SquareOverlay(point, text, mouseoverText){
+//     this._point = point;
+//     this._text = text;
+//     this._overText = mouseoverText;
+// }
+
+// //定义自定义圆形覆盖物的构造函数
+// function CircleOverlay(center, length, text, num){
+//     this._center = center;
+//     this._length = length;
+//     this._text = text;
+//     this._num = num;
+// }
+
+
+// //seajs.use("core/js/baidumap", function(baidumap) {
+// seajs.use("jquery", function($) {
+//     var t = new Date().getTime();
+
+//     //存放圆形标记物
+//     var arr_circle = new Array();
+//     //存放矩形标记物
+//     var arr_square = new Array();
+
+//     //$.getScript("http://api.map.baidu.com/getscript?v=1.4&ak=&services=&t="+t,function(){
+//     //$.getScript("http://api.map.baidu.com/api?v=2.0&ak=xrRoFHqALtMPNGXGIk6ONfKE&services=&t="+t,function(){
+//     $.getScript("http://api.map.baidu.com/getscript?v=2.0&ak=xrRoFHqALtMPNGXGIk6ONfKE&services=&t="+t,function(){
+//         window.BMap_loadScriptTime = (new Date).getTime();
+        
+//         //***********************方形覆盖物定义开始***********************************
+//         SquareOverlay.prototype = new BMap.Overlay();
+//         SquareOverlay.prototype.initialize = function(map){
+//           this._map = map;
+//           var div = this._div = document.createElement("div");
+//           div.style.position = "absolute";
+//           div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
+//           div.style.backgroundColor = "#EE5D5B";
+//           div.style.border = "0px solid #BC3B3A";
+//           div.style.color = "white";
+//           div.style.height = "18px";
+//           div.style.padding = "2px 5px";
+//           div.style.paddingRight = '0';
+//           div.style.lineHeight = "18px";
+//           div.style.whiteSpace = "nowrap";
+//           div.style.MozUserSelect = "none";
+//           div.style.fontSize = "12px"
+//           var span = this._span = document.createElement("span");
+//           // span.style.backgroundColor = "#EE5D5B";
+//           span.style.paddingRight = '5px';
+//           div.appendChild(span);
+//           span.appendChild(document.createTextNode(this._text));      
+//           var that = this;
+//           var span2 = document.createElement('span');
+//           span2.style.backgroundColor = "white";
+//           span2.style.color = 'black';
+//           span2.style.height = '18px';
+//           span2.style.lineHeight = '18px';
+//           span2.style.width = '100%';
+//           span2.style.padding = '3px 5px';
+//           span2.innerHTML = this._overText + '套';
+
+//           var arrow = this._arrow = document.createElement("div");
+//           arrow.style.background = "url({{ asset('bundles/'~bundlepath~'/images/map-label.png') }}) no-repeat";
+//           arrow.style.position = "absolute";
+//           arrow.style.width = "11px";
+//           arrow.style.height = "10px";
+//           arrow.style.top = "22px";
+//           arrow.style.left = "10px";
+//           arrow.style.overflow = "hidden";
+//           div.appendChild(arrow);
+         
+//           div.onmouseover = function(){
+//             this.style.backgroundColor = "#6caeca";
+//             this.style.cursor = 'pointer';
+//             sp1 = this.getElementsByTagName("span")[0];
+//             sp1.innerHTML = that._text;
+//             div.appendChild(span2);
+//             arrow.style.backgroundPosition = "0px -20px";
+//             $(div).css('z-index',1000);
+//           }
+
+//           div.onmouseout = function(){
+//             this.style.backgroundColor = "#EE5D5B";
+//             // this.style.borderColor = none;
+//             this.getElementsByTagName("span")[0].innerHTML = that._text;
+//             div.removeChild(span2);
+//             arrow.style.backgroundPosition = "0px 0px";
+//             $(div).css('z-index',-1000);
+//           }
+
+//           div.onclick = function(){
+//             alert('he')
+//           }
+
+//           map.getPanes().labelPane.appendChild(div);
+          
+//           return div;
+//         }
+//         SquareOverlay.prototype.draw = function(){
+//           var map = this._map;
+//           var pixel = map.pointToOverlayPixel(this._point);
+//           this._div.style.left = pixel.x - parseInt(this._arrow.style.left) + "px";
+//           this._div.style.top  = pixel.y - 30 + "px";
+//         }
+//         //实现显示方法    
+//         SquareOverlay.prototype.show = function(){    
+//             if (this._div)
+//                 this._div.style.display = "";
+//         }
+
+//         // 实现隐藏方法  
+//         SquareOverlay.prototype.hide = function(){    
+//             if (this._div)
+//                 this._div.style.display = "none";
+//         }
+
+//         //返回x坐标
+//         SquareOverlay.prototype.getX = function(){
+//             return this._point.lng;
+//         }
+
+//         //返回y坐标
+//         SquareOverlay.prototype.getY = function(){
+//             return this._point.lat;
+//         }
+//         //*************************方形覆盖物定义结束*********************************
+
+
+
+//         //*************************圆形覆盖物定义开始*********************************
+//         CircleOverlay.prototype = new BMap.Overlay();
+//         CircleOverlay.prototype.initialize = function(map){
+//             var point = this._center;
+//             this._map = map;        
+//             // 创建div元素，作为自定义覆盖物的容器   
+//             var div = document.createElement("div");
+//             var span = document.createElement('span');
+//             var span2 = document.createElement('span');
+//             span.innerText = this._text;
+//             span.style.display = 'block';
+//             span.style.paddingTop = '20px';
+//             span2.innerText = this._num + '套';    
+
+//             div.style.position = "absolute";
+//             div.style.textAlign = 'center'; 
+//             //鼠标变成手型 
+//             div.style.cursor = 'pointer';   
+//             div.style.width = this._length + "px";    
+//             div.style.height = this._length + "px";
+
+//             div.style.background = "url({{ asset('bundles/'~bundlepath~'/images/map-circle.png') }}) no-repeat";
+//             //设置鼠标经过事件
+//             $(div).mouseover(
+//                 function(){
+//                     div.style.background = "url({{ asset('bundles/'~bundlepath~'/images/map-circle1.png') }}) no-repeat"; 
+//                     $(div).css('z-index',1000);
+//                 }
+//             );
+//             //设置鼠标离开事件
+//             $(div).mouseout(
+//                 function(){
+//                     div.style.background = "url({{ asset('bundles/'~bundlepath~'/images/map-circle.png') }}) no-repeat";
+//                     $(div).css('z-index',-1000);
+//                 }
+//             );
+//             //鼠标点击事件
+//             div.onclick = function(){
+//                 map.centerAndZoom(point, 15); 
+//             }
+
+//             div.style.color = 'white';
+//             div.appendChild(span);
+//             div.appendChild(span2);    
+//             // 将div添加到覆盖物容器中   
+//             map.getPanes().markerPane.appendChild(div);      
+//             // 保存div实例   
+//             this._div = div;      
+//             // 需要将div元素作为方法的返回值，当调用该覆盖物的show、   
+//             // hide方法，或者对覆盖物进行移除时，API都将操作此元素。   
+
+//             return div;  
+//         }
+//         //实现绘制方法   
+//         CircleOverlay.prototype.draw = function(){    
+//             // 根据地理坐标转换为像素坐标，并设置给容器    
+//             var position = this._map.pointToOverlayPixel(this._center);    
+//             this._div.style.left = position.x - this._length / 2 + "px";    
+//             this._div.style.top = position.y - this._length / 2 + "px";    
+//         }
+
+//         //实现显示方法    
+//         CircleOverlay.prototype.show = function(){    
+//             if (this._div)
+//                 this._div.style.display = "";
+//         }
+
+//         // 实现隐藏方法  
+//         CircleOverlay.prototype.hide = function(){    
+//             if (this._div)
+//                 this._div.style.display = "none";
+//         }
+
+//         //添加自定义方法   
+//         CircleOverlay.prototype.toggle = function(){    
+//             if (this._div){
+//                 if (this._div.style.display == "")
+//                     this.hide();
+//                 else
+//                     this.show();
+//             }
+//         }
+//         //*************************圆形覆盖物定义结束*********************************
+
+
+
+
+
+//         map = new BMap.Map("container",{minZoom:10,maxZoom:18});      // 创建地图实例，并限定最大与最小级别
+//         var point = new BMap.Point(113.763434, 23.043024);  // 创建点坐标  
+//         map.centerAndZoom(point, 15);                 // 初始化地图，设置中心点坐标和地图级别 
+//         map.enableScrollWheelZoom();   //启用滚轮放大缩小，默认禁用
+//         map.enableContinuousZoom();    //启用地图惯性拖拽，默认禁用
+//         map.setZoom(14);
+
+//         //鼠标
+
+//         //地图等级改变事件
+//         map.addEventListener('zoomend',function(){//alert(map.getZoom())
+//             if(map.getZoom()<15){
+//                 //把原始全部数据显示出来
+//                 document.getElementById('alldatalist').style.display = '';
+//                 removeSquare();
+//                 //圆形标记物显示
+//                 for(var i=0; i<arr_circle.length; i++){
+//                     arr_circle[i].show();
+//                 }
+//                 //矩形标记物隐藏
+//                 for(var i=0; i<arr_square.length; i++){
+//                     arr_square[i].hide();
+//                 }
+//             }else{//alert('co')
+//                 //把原始全部数据隐藏
+//                 document.getElementById('alldatalist').style.display = 'none';
+//                 ScreenChange();
+//                 //圆形标记物隐藏
+//                 for(var i=0; i<arr_circle.length; i++){
+//                     arr_circle[i].hide();
+//                 }
+//                 //矩形标记物显示
+//                 for(var i=0; i<arr_square.length; i++){
+//                     arr_square[i].show();
+//                 }
+//             }
+//         });
+
+//         //地图移动结束事件
+//         map.addEventListener('moveend',function(){
+//             if(map.getZoom()>=15)
+//                 ScreenChange();
+//         });
+
+//         var opts = {type: BMAP_NAVIGATION_CONTROL_SMALL,anchor: BMAP_ANCHOR_TOP_RIGHT };
+//         map.addControl(new BMap.NavigationControl(opts));    
+//         map.addControl(new BMap.ScaleControl());    
+//         map.addControl(new BMap.OverviewMapControl());  
+//         map.setCurrentCity("东莞"); // 仅当设置城市信息时，MapTypeControl的切换功能才能可用
+
+//         {% block inner_js %}
+//         {% endblock inner_js %}
+
+
+//     });
+
+//     //左边的数据列表随着当前的屏幕显示大小而变化
+//     function ScreenChange(){
+//         //获取当前屏幕的左上角坐标还有右下角坐标
+//         var start_point = map.pixelToPoint(new BMap.Pixel(0,0));
+//         var end_point = map.pixelToPoint(new BMap.Pixel(document.body.clientWidth , document.body.clientHeight));
+//         $.ajax({
+//             url:{% block url %}{% endblock url %},
+//             data:{
+//                 start_x : start_point.lng,
+//                 start_y : start_point.lat,
+//                 end_x : end_point.lng,
+//                 end_y : end_point.lat,
+//             },
+//             dataType:'json',
+//             type:'post',
+//             success:function(data){//alert('success'+data.length);
+//                 //将左边的楼房显示列表全部隐藏
+//                 // $('[data]').hide();
+//                 removeSquare();
+
+//                 //遍历是否在显示区域内，是的话则显示出来
+//                 for(var i=0; i<data.length; i++){//alert(i)
+//                     //$('li#'+data[i]).show();
+//                     createSquare(data[i]);
+//                 }
+//             },
+//             beforeSend:function(){//alert("{{('map/houses')|U}}")
+//             },
+//             error:function(data){//alert(data)
+//             }   
+//         });
+//     }
+
+//     //创建列表
+//     function createSquare(data){
+//         var str = '';
+//         str += "<li id='" + data.identifier + "' data='" + data.map + "'>";
+//         str += "<div class='img fl'>";
+//         str += "<img width='120' height='90' alt='' src='/newcore/web" + data.thumb + "'/>";
+//         str += "<div class='img-sm'>";
+//         str += "<i class='font-map-pic'></i>";
+//         str += "<span>6</span>";
+//         str += "</div>";
+//         str += "</div>";
+//         str += "<div class='item-text fr'>";
+//         str += "<h3>" + data.name + "</h3>";
+//         str += "<div class='text-l fl'>";
+//         str += "<p>";
+//         str += data.map;
+//         str += "<!-- 3室2厅 / 146平米 / 东南 <br>世纪城国际公馆二期 -->";
+//         str += "</p>";
+//         str += "<span><a href='#'>现房</a> </span>";
+//         str += "<span><a href='#'>多图</a></span>";
+//         str += "</div>";
+//         str += "<div class='text-r fr'>";
+//         str += "<span>160万</span>";
+//         str += "</div>";
+//         str += "</div>";
+//         str += "</li>";
+
+//         $('#detaillist').append(str);
+
+//         var flag = true;
+//         var arr = data.map.split(',');
+
+//         // alert(arr);
+//         for(var i=0; i<arr_square.length; i++){
+//             // console.log(arr_square[i].getX());
+//             if(arr_square[i].getX()==arr[0] && arr_square[i].getY()==arr[1]){
+//                 //表示数据已经存在，则不必再创建
+//                 flag = true;
+//                 break;
+//             }else{
+//                 //表示数据不存在，
+//                 flag = false;
+//             }
+//         }
+//         if(!flag || arr_square.length ==0){
+//             //创建数据
+//             var marker_square = new SquareOverlay(new BMap.Point(arr[0], arr[1]), data.name, 1000);
+//             arr_square[arr_square.length] = marker_square;
+//             map.addOverlay(marker_square);
+//         }
+//     }
+
+
+//     //移除列表
+//     function removeSquare(){
+//         $('#detaillist').children('li').remove();
+//     }
+
+
+//     //获取当前可用屏幕可见大小，返回BMap.Point类型
+//     function getScreenSize(location = 'start'){
+//         if(location == 'start'){
+//             //返回左上角的坐标
+//             return map.pixelToPoint(new BMap.Pixel(0,0));
+//         }
+//         //返回右下角的坐标
+//         return map.pixelToPoint(new BMap.Pixel(document.body.clientWidth , document.body.clientHeight));
+//     }
+
+//     // 定义一个控件类，即function    
+//     function ZoomControl(){    
+//         // 设置默认停靠位置和偏移量  
+//         this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;    
+//         this.defaultOffset = new BMap.Size(10, 10);    
+//     }    
+//     // 通过JavaScript的prototype属性继承于BMap.Control   
+//     //ZoomControl.prototype = new BMap.Control();
+
+// });
+</script>
+{% endblock js %}

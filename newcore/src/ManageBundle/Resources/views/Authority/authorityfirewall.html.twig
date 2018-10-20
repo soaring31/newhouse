@@ -1,0 +1,25 @@
+{% extends 'ManageBundle::mainlayout.html.twig' %}
+{% import 'ManageBundle:Form:lists.html.twig' as lists %}
+{% block js %}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+
+{% block tableMain %}
+<section>
+    <span class="tableDesc">
+    {{ ident.info.listDesc|default('')|raw }}&gt;&gt;
+    <input type="button" id="btnfun_edit" data="{{ (action~"/show")|U }}" class="search-btn" value="新增防火墙规则" />
+    </span>
+    {{ lists.list(ident.info) }}
+</section>
+{% endblock %}
+
+{% block page %}
+{{lists.page(ident.info)}}
+{% endblock %}
+{% block submit %}{% endblock %}
+{% block promptUl %}
+提示说明
+{% endblock %}

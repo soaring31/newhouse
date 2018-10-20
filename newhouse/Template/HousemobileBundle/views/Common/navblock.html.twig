@@ -1,0 +1,82 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{%- block result -%}
+{% set navs_data = ('house.navs')|getAll({cate_pushs: 'mobile_zdh', checked: 1, pid: 0, pageSize: 100, order: "sort", orderBy: 'asc'}) %}
+{# {% set mobile_zdh = ('mobile_zdh')|getPush(100) %} #}
+<div class="popup popup-major-nav">
+    <header class="bar bar-nav">
+        {{core_mobile_global.go_back({class: 'pull-right close-popup', href: 'javascript:;',icon: 'font-f-21'})}}
+        {{core_mobile_global.title({title: '频道导航'})}}
+    </header>
+    <div class="content">
+        {% if current_nav|default('') %}
+            {% include 'HousemobileBundle:Clist:current_nav.html.twig' ignore missing with {current_nav: current_nav|default('')} %}
+        {% endif %}
+        <div class="list-block media-list mobile-dh list-block-m0">
+            <ul>
+                <li class="item-content item-link">
+                    <div class="item-inner">
+                        <div class="item-title-row">
+                            <a href="{{('index/index')|UU }}" class="item-title item-title-p0">
+                                <img alt="{{ core_global.mconfig({name: 'hostname', ename: 'mwebset'}) }}" style="display: inherit;" width="140" height="20" src="{{ core_global.img_url({src: core_global.mconfig({name: 'user_mobilelogo', ename: 'mvariables_user'}), type: 0}) }}"/>
+                            </a>
+                            <a href="{{('main/mindex')|UU }}" class="item-after " style="line-height: 28px;">
+                                个人中心
+                            </a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="list-block panel-block menu-block"></div>
+        {% if navs_data.data is defined %}
+            <div class="list-block panel-block">
+                <div class="row no-gutter">
+            {% for item in navs_data.data %}
+                <a href="{{item.url|UU|default('')}}" data-title="{{ item.url }}" class="col-25">
+                    <i class="icon {{item.navicon|default('')}} m-ico-color{{loop.index0}}"></i>
+                    <p>
+                        {{item.name|default('')}}
+                    </p>
+                </a>
+            {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script id="menus" type="template">
+
+<div class="row no-gutter">
+    <% for(var i=0;i<data.length;i++){ %>
+        <a href="<%= data[i].url %>" data-title="<%= data[i].name %>" class="col-25">
+            <i class="icon <%= data[i].icon %> m-ico-color<%= i %>"></i>
+            <p>
+                <%= data[i].name %>
+            </p>
+     </a>
+    <% } %>
+</div>
+</script>
+
+<script>
+    // seajs.use(['ajax', 'template', 'sm'], function(ajax, template, sm){
+    //     ajax({
+    //         url: "{{('ajaxdata/menu')|UU({menu:1})}}",
+    //         type: "GET",
+    //         localCache: true,
+    //         crossDomain:crossDomain,
+    //         dataType: 'json',
+    //         success: function(data){
+    //             var temp = template('menus',{
+    //                 data
+    //             });
+    //             $('.menu-block').html(temp);
+    //         },
+    //         error: function(){
+    //             console.log('error');
+    //         }
+    //     });
+    // });
+</script>
+{%- endblock result -%}

@@ -1,0 +1,98 @@
+{% extends 'HouseBundle::base.html.twig' %}
+{% block top_search %}{% endblock top_search %}
+{% block title %}
+    {{"关于我们"|default('')}}{% block title_houses %}{% endblock title_houses %}
+{% endblock title %}
+{# 样式 #}
+{% block css %}
+    {{ core_global.linkcss('static/' ~ bundlepath ~ '/css/lp-detail.css') }}
+    {{ core_global.linkcss('static/' ~ bundlepath ~ '/css/newhouse-details/public.css') }}
+    {{ core_global.linkcss('static/' ~ bundlepath ~ '/css/newhouse-details/newhouse-common.css') }}
+    {{ core_global.linkcss('static/' ~ bundlepath ~ '/css/newhouse-details/newhouseDetail.css') }}
+{% endblock css %}
+{% block body %}
+{#详情页公共头部#}
+ {% block logo_header %}
+     <div class="user-header-search header-search">
+         <div class="header-search-box">
+             <i class="header-search-logo"></i>
+             <div class="nav_go_wrap">
+                 <div class="nav_go">
+                     <a href="/">{{ city.data[0].name~"房地产网" }}</a>
+                     <span>&gt;</span>
+                     <span class="now_span">关于我们</span>
+                 </div>
+             </div>
+         </div>
+     </div>
+
+ {% endblock logo_header %}
+{% block container %}
+    <div class="container">
+        {% block container_houses %}
+            <div class="about-content content">
+                <!--关于诸葛介绍开始-->
+                <!--<div class="strip"></div>-->
+                <div class="title">北京诸葛找房信息技术有限公司</div>
+                <div class="brief"><span>诸葛找房</span>是国内领先的房产大数据和房产人工智能创业公司，为用户提供所在城市的房产信息搜索服务。诸葛自行研发的房产大数据搜索引擎（Zhuge-HBSE System），可以每10分钟更新频次将全网房源数据进行清洗和重组一遍，来确保房源的全面性和有效性。因此，北京诸葛找房信息技术有限公司可以从微观来洞察每个房源数据的变化，进而见微知著了解整个房产市场方方面面的趋势。
+                </div>
+                <!--关于诸葛介绍结束-->
+                <!--分步骤介绍开始-->
+                <ul class="list">
+                    <li class="search">
+                        <div class="search_img"></div>
+                        <div class="search_articl">
+                            <span class="one"></span>
+                            <div class="one_title">搜索全网所有真实房源</div>
+                            <div class="one_articl">诸葛是房产行业首个智能搜索引擎，在您搜索全网房源的同时，可以有效过滤90%的虚假重复房源，确保搜索结果的全面性和真实性，让您的线上找房的效率大幅提升。</div>
+                        </div>
+                    </li>
+                    <li class="offer">
+                        <div class="offer_img"></div>
+                        <div class="offer_articl">
+                            <span class="two"></span>
+                            <div class="two_title">客观展示多渠道报价和中介费</div>
+                            <div class="two_articl">中国绝大部分的房屋都会委托多家中介公司来出售，诸葛可以客观展示多渠道报价、历史报价变更和中介费等市场真实情况，消除信息的不对称，让您拥有前所未有的选择权。</div>
+                        </div>
+                    </li>
+                    <li class="label">
+                        <div class="label_img"></div>
+                        <div class="label_articl">
+                            <span class="three"></span>
+                            <div class="three_title">订阅属于您的个性化标签</div>
+                            <div class="three_articl">您可以随意组合各种标签来实现房源订阅，有任何适合您需求的房源，都会即时通知到您，在您漫长而辛劳的找房之旅，始终有小诸葛的爱心提示。</div>
+                        </div>
+                    </li>
+                    <li class="mark">
+                        <div class="mark_img"></div>
+                        <div class="mark_articl">
+                            <span class="four"></span>
+                            <div class="four_title">客观真实的诸葛指数</div>
+                            <div class="four_articl">只有全面而真实的房源数据基础，才有客观而可信的市场分析，基于诸葛智能搜索引擎，为您提供即时的房产市场监测，要知道，24小时内涨价/降价房源量就是一晴雨表。</div>
+                        </div>
+                    </li>
+                </ul>
+                <!--分步骤介绍结束-->
+                <!--底部logo开始-->
+                <div class="zg_logo">
+                    <span></span>
+                </div>
+                <!--底部logo结束-->
+            </div>
+        {% endblock container_houses %}
+    </div>
+{% endblock container %}
+{% endblock %}
+{% block js %}
+    <script>
+        seajs.use([],function () {
+            $(".speed_open_list li a").removeClass("act");
+            $(".speed_open_list li").each(function () {
+                if ($(this).hasClass("关于我们")) {
+                    $(this).find('a').addClass("act");
+                }
+            });
+        });
+
+    </script>
+{% endblock js %}

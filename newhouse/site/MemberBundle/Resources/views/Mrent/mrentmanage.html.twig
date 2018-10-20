@@ -1,0 +1,13 @@
+{% extends 'HouseBundle:Mrent:mrentmanage.html.twig' %}
+{% block mainMenu %}
+{% endblock mainMenu %}	
+{% block promptUl %}
+{% set groupname = ('db.mem_group')|getOne('name',{id: app.user.groupid}) %}
+{% set rentdrenum = ('house.userconfig')|getOne('rentdrenum',{ role: app.user.groupid }) %}    
+当前为{{ groupname }}, 每天可发布<span class="fcr">{{ rentdrenum }}</span>条房源信息
+{% if app.user.usertype == 11 %}
+<a href="#/default/69/1" class="fcr" data-target="[data-content='1']">升级经纪人</a>发布更多房源    
+{% elseif app.user.usertype == 15 %}
+<a href="#/default/71" class="fcr" data-target="[data-content='1']">升级高级经纪人</a>发布更多房源, 赠送免费置顶和免费刷新   
+{% endif %}
+{% endblock %}

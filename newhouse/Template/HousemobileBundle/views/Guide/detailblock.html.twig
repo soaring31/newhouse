@@ -1,0 +1,49 @@
+{% extends 'HousemobileBundle::base_ajax.html.twig' %}
+{# 说明 
+ * url_id: url中传递的id
+ * detail: 当前数据
+ * push_cnxh: 猜你喜欢推送位
+#}
+{% block result %}
+{% set push_cnxh = ('cnxh')|getPush(5) %}
+<div class="content">
+    {# 资讯详情 #}
+    <div class="con">
+      <!-- Slider -->
+        <div class="content-padded" style="margin-top: 0px;">
+            <div class="con-title">
+                <h3>{{detail.name|default('')}}</h3>
+                <p>
+                    <span>{{detail.update_time|default('')|date('Y-m-d')}}</span>
+                </p>
+            </div>
+
+            <div id="con" class="con-text detail-con">
+                {{detail.content|default('')|raw}}
+            </div>
+
+            <div class="list-block panel-block">
+                {{- core_mobile_global.more_con({id: 'con'})-}}
+            </div>
+        </div>
+        {# 热文排行 #}
+        {% if push_cnxh|default('') %}
+        <div class="guide-list list-block panel-block">
+            {{housemobile_global.panel_title({title: '猜你喜欢'})}}
+            <ul id="youlike" class="list-con">   
+            {% for item in push_cnxh %}
+                <li>
+                    <a href="{{('guide/detail')|UU({id:item.id|default()})}}" class="anone">{{item.name|default('')}}</a>
+                    <p>
+                        {{core_global.keywords({keywords: item.keywords|default(''), tpl: '<span class="btns mr5">%keywords%</span>'})}}
+                    </p>
+                </li>
+            {% endfor %}
+            </ul>
+            {{- core_mobile_global.more_con({id: 'youlike'})-}}
+        </div>
+        {% endif %}
+    </div>
+    {{ render(controller('HouseBundle:Common:footer', {_isApp: url_isApp})) }}
+</div>
+{% endblock result %}

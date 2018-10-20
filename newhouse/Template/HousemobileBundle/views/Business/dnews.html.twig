@@ -1,0 +1,36 @@
+{# {% extends app.request.get('ajax') ? 'HousemobileBundle:Clist:newslist.html.twig' : 'HousemobileBundle::list_layout.html.twig' %} #}
+{% set tpl = app.request.get('tpl', app.request.get('ajax', '')) %}
+{% extends 'HousemobileBundle:' ~ tpl|default('Business:detail') ~ '.html.twig' %}
+{# 说明 
+* 
+#}
+{% block title %}
+    {{detail.name|default('')}}-
+    {% block b_title %}
+    楼盘详情
+    {% endblock b_title %}
+{% endblock title %}
+
+{% block key_des %}
+<meta name="keywords" content="{{detail.name|default('')}}楼盘动态{{detail.name|default('')}}最新楼盘新闻{{detail.name|default('')}}最新消息" />
+<meta name="description" content="{{detail.name|default('')}}楼盘动态{{cur_area_data|default('')}}{{core_global.mconfig({name: 'hostname', ename: 'mwebset'})}}为您提供{{detail.name|default('')}}实时楼盘动态，包括实时楼盘新闻，实时开盘时间信息、户型房源价格信息，为您选房、看房提供参考！"/>
+{% endblock key_des %}
+
+{# 导航 #}
+{% block secondary %}
+    {% set nav_active = 2 %}
+    {{ parent() }}
+{% endblock secondary %}
+
+{% block container %}
+
+    {% set list_url = ('business/dnews')|U({
+        tpl: 'Clist:newslist',
+        id: detail.id|default(''),
+    }) %}
+
+    {{core_mobile_global.list_scroll({
+        url: list_url|default('')
+    })}}
+
+{% endblock container %}
